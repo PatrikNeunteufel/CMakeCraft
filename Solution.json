@@ -1,0 +1,157 @@
+{
+    "schemaVersion": "0.1",
+
+    "solution": {
+        "name": "MySolution",
+        "version": "0.1.0",
+        "description": "Multi-Project Solution für CMake Architecture V2 Development",
+        "authors": ["Patrik Neunteufel"]
+    },
+
+  "settings": {
+    "standards": {
+      "cxx_standard": 20,
+      "cxx_standard_required": true,
+      "cxx_extensions": false,
+      "c_standard": 17,
+      "c_standard_required": true,
+      "c_extensions": false
+    },
+    "defaults": {
+      "library_type": "STATIC",
+      "executable_type": "CONSOLE"
+    },
+    "sources": {
+      "mode": "auto"
+    }
+  },
+
+    "externalsPolicy": {
+        "cacheRoot": ".externals",
+        "updatePolicy": "if-missing"
+    },
+
+    "externals": {
+        "bass": {
+            "path": "externals/bass",
+            "description": "Professional audio library for playback, recording and streaming",
+            "license": "Commercial (free for non-commercial)"
+        },
+        "lua": {
+            "path": "externals/lua",
+            "description": "Lightweight scripting language",
+            "license": "MIT"
+        },
+        "doctest": {
+            "path": "externals/doctest",
+            "description": "Fast, header-only C++ testing framework",
+            "license": "MIT"
+        },
+        "imgui": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "tag": "v1.91.6",
+            "description": "Immediate mode GUI library",
+            "license": "MIT"
+        },
+        "imgui-docking": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "branch": "docking",
+            "description": "Dear ImGui with docking/viewport support",
+            "license": "MIT"
+        },
+        "glad": {
+            "git": "https://github.com/Dav1dde/glad.git",
+            "tag": "v0.1.36",
+            "description": "OpenGL loader generator",
+            "license": "MIT"
+        },
+        "glfw": {
+            "git": "https://github.com/glfw/glfw.git",
+            "tag": "3.3.9",
+            "cmake_args": ["-DGLFW_BUILD_EXAMPLES=OFF", "-DGLFW_BUILD_TESTS=OFF", "-DGLFW_BUILD_DOCS=OFF"],
+            "description": "Multi-platform OpenGL library",
+            "license": "Zlib"
+        },
+        "spdlog": {
+            "git": "https://github.com/gabime/spdlog.git",
+            "tag": "v1.12.0",
+            "shallow": true,
+            "cmake_args": ["-DSPDLOG_BUILD_EXAMPLES=OFF", "-DSPDLOG_BUILD_TESTS=OFF"],
+            "description": "Fast C++ logging library",
+            "license": "MIT"
+        }
+    },
+
+    "libraries": [],
+
+    "executables": [
+        {
+            "name": "DefaultExe",
+            "displayName": "Default Executable",
+            "description": "Basic executable for testing the build pipeline",
+            "version": "0.1.0",
+            "path": "projects/exec/DefaultExe/src",
+            "type": "CONSOLE",
+            "skip": true,
+            "pch": {
+                "enabled": true,
+                "header": "pch.h"
+            },
+            "externals": ["bass"],
+            "external_options": {
+                "bass": {
+                    "BASS_FLAC": true,
+                    "BASS_FX": true
+                }
+            }
+        },
+        {
+            "name": "GladExe",
+            "displayName": "OpenGL Demo Application",
+            "description": "GUI application demonstrating OpenGL with ImGui",
+            "version": "0.1.0",
+            "path": "projects/exec/Glad/src",
+            "type": "GUI",
+            "skip": true,
+            "pch": {
+                "enabled": true,
+                "header": "pch.h"
+            },
+            "externals": ["bass", "imgui-docking", "glad", "glfw", "lua"],
+            "external_options": {
+                "bass": {
+                    "BASS_FLAC": true
+                },
+                "lua": {
+                    "LUA_EMBEDDED": true
+                }
+            },
+            "platforms": ["windows", "linux", "macos"]
+        },
+        {
+            "name": "MinimalConsole",
+            "displayName": "Minimal Console App",
+            "description": "Simplest possible console application for Phase 3 testing",
+            "version": "0.1.0",
+            "path": "projects/exec/MinimalConsole/src",
+            "type": "CONSOLE",
+            "skip": false
+        }
+    ],
+
+    "tests": [
+        {
+            "name": "CoreTests",
+            "displayName": "Core Functionality Tests",
+            "description": "Unit tests for core functionality",
+            "path": "projects/tests/CoreTests/src",
+            "type": "UNIT",
+            "externals": ["doctest"],
+            "framework": "doctest",
+            "labels": ["unit", "core", "fast"],
+            "parallel": true,
+            "timeout": 30,
+            "skip": true
+        }
+    ]
+}
