@@ -361,3 +361,16 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# custom ignores #
+
+
+# no zip
+*.zip
+
+#no bak
+*.bak
+
+# no old folder
+old/
+/Archive
