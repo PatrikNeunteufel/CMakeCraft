@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMake Architecture V2
-# Version:      0.1.0
-# Date:         2025-12-05
+# Version:      0.1.1
+# Date:         2025-12-07
 #
 # Description:
 #   Top-level CMake configuration for the modular build system.
@@ -12,7 +12,7 @@
 #
 # Options:
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests
-#   -DTEST_PHASE=1|2|3|...        Specific phase to test (default: all)
+#   -DTEST_PHASE=1|2|3|4|...      Specific phase to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
@@ -41,6 +41,7 @@ include(cmake/core/Debug.cmake)
 include(cmake/core/Json.cmake)
 include(cmake/core/Validation.cmake)
 include(cmake/core/Context.cmake)
+include(cmake/core/SourceCollect.cmake)
 include(cmake/core/OutputDirs.cmake)
 include(cmake/core/Warnings.cmake)
 include(cmake/core/CompilerOptions.cmake)
@@ -78,17 +79,19 @@ project(
 dbg(${DBG_COMMON} "Project: ${PROJECT_NAME} v${PROJECT_VERSION}" ID CMAKE_MAIN)
 
 # ==============================================================================
-# Phase 3: Project Pipelines
+# Phase 4: Libraries (must come BEFORE Executables!)
 # ==============================================================================
 
-# Libraries (must come BEFORE Executables!)
-# include(cmake/project/Libraries.cmake)
+include(cmake/project/Libraries.cmake)
 
-# Executables
+# ==============================================================================
+# Phase 3: Executables
+# ==============================================================================
+
 include(cmake/project/Executables.cmake)
 
 # ==============================================================================
-# Phase 4+: Tests (when implemented)
+# Phase 7: Tests (when implemented)
 # ==============================================================================
 
 # include(cmake/project/Tests.cmake)
@@ -134,10 +137,16 @@ if(RUN_BUILD_SYSTEM_TESTS)
         include(cmake/buildSystemTest/phase3.cmake)
     endif()
     
-    # Phase 4+ Tests (when implemented)
-    # if("${TEST_PHASE}" STREQUAL "" OR "4" IN_LIST TEST_PHASE)
+    # Phase 4 Test: Library Pipeline
+    if("${TEST_PHASE}" STREQUAL "" OR "4" IN_LIST TEST_PHASE)
+        dbgspace(ID BUILD_TEST)
+        include(cmake/buildSystemTest/phase4.cmake)
+    endif()
+    
+    # Phase 5+ Tests (when implemented)
+    # if("${TEST_PHASE}" STREQUAL "" OR "5" IN_LIST TEST_PHASE)
     #     dbgspace(ID BUILD_TEST)
-    #     include(cmake/buildSystemTest/phase4.cmake)
+    #     include(cmake/buildSystemTest/phase5.cmake)
     # endif()
     
     dbgspace(ID BUILD_TEST)

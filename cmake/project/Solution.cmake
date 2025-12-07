@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Module:       Solution.cmake
-# Version:      0.1.0
-# Date:         2025-12-05
+# Version:      0.1.1
+# Date:         2025-12-07
 # Part of:      CMake Architecture V2
 #
 # Description:
@@ -26,6 +26,8 @@
 #     SOLUTION_AUTHORS                 - Authors list (semicolon-separated)
 #     SOLUTION_SCHEMA_VERSION          - Schema version
 #     SOLUTION_EXTERNALS_JSON          - externals block as JSON
+#     SOLUTION_LIBRARIES_JSON          - libraries array as JSON (NEW in v0.1.1)
+#     SOLUTION_EXECUTABLES_JSON        - executables array as JSON (NEW in v0.1.1)
 #     SOLUTION_SETTINGS_JSON           - settings block as JSON
 #     SOLUTION_CXX_STANDARD            - C++ Standard (e.g. 20)
 #     SOLUTION_C_STANDARD              - C Standard (e.g. 17)
@@ -279,6 +281,26 @@ endif()
 dbg(${DBG_COMMON} "Externals defined: ${_ext_count}" ID SOLUTION)
 
 # ==============================================================================
+# Extract Libraries Array (NEW in v0.1.1 - for Libraries.cmake)
+# ==============================================================================
+
+string(JSON _libraries_json ERROR_VARIABLE _err GET "${_solution_json_raw}" "libraries")
+if(_err)
+    set(_libraries_json "[]")
+endif()
+set_property(GLOBAL PROPERTY SOLUTION_LIBRARIES_JSON "${_libraries_json}")
+
+# ==============================================================================
+# Extract Executables Array (NEW in v0.1.1 - for Executables.cmake)
+# ==============================================================================
+
+string(JSON _executables_json ERROR_VARIABLE _err GET "${_solution_json_raw}" "executables")
+if(_err)
+    set(_executables_json "[]")
+endif()
+set_property(GLOBAL PROPERTY SOLUTION_EXECUTABLES_JSON "${_executables_json}")
+
+# ==============================================================================
 # Count Executables/Libraries/Tests (for info)
 # ==============================================================================
 
@@ -309,3 +331,5 @@ unset(_sources_obj)
 unset(_source_mode)
 unset(_externals_policy_obj)
 unset(_externals_obj)
+unset(_libraries_json)
+unset(_executables_json)

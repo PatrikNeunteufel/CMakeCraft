@@ -313,7 +313,7 @@ endfunction()
     collect_files(OUT_VAR
         DIRECTORY <path>
         EXTENSIONS <ext1> [ext2...]
-        [EXCLUDE <pattern1> [pattern2...]]
+        [EXCLUDE <pattern1> [pattern2...] ]
     )
     
     Collects files with controlled wildcards.

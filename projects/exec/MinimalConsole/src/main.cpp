@@ -1,15 +1,32 @@
 // projects/exec/MinimalConsole/src/main.cpp
 // ==========================================
-// Minimal Console Application for Phase 3 Testing
+// Minimal console application demonstrating BasicLogger
 //
-// This is the simplest possible executable to verify
-// that the CMake Architecture V2 Executable Pipeline works.
+// Version: 1.1.0
+// Date:    2025-12-07
 
+#include <BasicLogger.h>
 #include <iostream>
 
-int main()
-{
-    std::cout << "Hello from MinimalConsole!" << std::endl;
-    std::cout << "CMake Architecture V2 - Phase 3 Test" << std::endl;
+int main() {
+    // Create logger with file output
+    BasicLogger::Logger logger("minimal_console.log");
+    logger.setLevel(BasicLogger::Level::Debug);
+    
+    // Log to both console and file
+    logger.info("MinimalConsole started");
+    logger.debug("Debug mode enabled");
+    
+    std::cout << "Hello World from MinimalConsole!" << std::endl;
+    
+    logger.info("Processing complete");
+    logger.warning("This is a test warning");
+    
+    // Also demonstrate global logger
+    BasicLogger::setLogLevel(BasicLogger::Level::Info);
+    BasicLogger::logInfo("Using global logger");
+    
+    logger.info("MinimalConsole finished");
+    
     return 0;
 }
