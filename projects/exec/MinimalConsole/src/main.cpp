@@ -2,7 +2,7 @@
 // ==========================================
 // Minimal console application demonstrating BasicLogger
 //
-// Version: 1.1.0
+// Version: 0.2.0
 // Date:    2025-12-07
 
 #include <BasicLogger.h>
