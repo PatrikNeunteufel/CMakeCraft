@@ -4,7 +4,7 @@
 > **Datum:** 2025-12-03  
 > **Typ:** Referenz-Doku  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** CMakePresets_Manual v0.1
+> **Basiert auf:** CMakePresets_Manual v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/References/CMakePresets_Reference_v0_1_0.md)
 

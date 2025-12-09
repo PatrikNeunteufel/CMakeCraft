@@ -3,7 +3,7 @@
 > **Version:** 0.1.0  
 > **Datum:** 2025-12-03  
 > **Typ:** Konzept-Doku  
-> **Status:** In Entwicklung (Pre-Release)
+> **Status:** In Entwicklung (Pre-Release)  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/Concepts/master_concept_v0_1_0.md)
 

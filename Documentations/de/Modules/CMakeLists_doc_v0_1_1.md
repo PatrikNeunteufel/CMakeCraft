@@ -5,7 +5,8 @@
 > **Datum:** 2025-12-07  
 > **Pfad:** `CMakeLists.txt`  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** master_concept v0.1, guidelines v0.1
+> **Basiert auf:** master_concept v0.1, guidelines v0.1  
+> **Sprache:** Deutsch  
 
 ---
 

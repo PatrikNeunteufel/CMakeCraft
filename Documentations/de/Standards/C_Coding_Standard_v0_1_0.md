@@ -5,7 +5,8 @@
 > **Typ:** Standard  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle C-Projekte (Embedded, Firmware)  
-> **Bezug:** CMake_Standard v0.1, Cpp_Coding_Standard v0.1
+> **Bezug:** CMake_Standard v0.1, Cpp_Coding_Standard v0.1  
+> **Sprache:** Deutsch  
 
 ---
 

@@ -5,7 +5,8 @@
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle `.clang-tidy`-Konfigurationen  
-> **Bezug:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1, ClangFormat_Blueprint v0.1
+> **Bezug:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1, ClangFormat_Blueprint v0.1  
+> **Sprache:** Deutsch  
 
 ---
 

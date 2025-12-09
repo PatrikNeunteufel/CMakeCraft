@@ -5,7 +5,8 @@
 > **Typ:** Standard  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle CMake-basierten Projekte  
-> **Bezug:** CMake_Blueprint v0.1, Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1
+> **Bezug:** CMake_Blueprint v0.1, Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1  
+> **Sprache:** Deutsch  
 
 ---
 

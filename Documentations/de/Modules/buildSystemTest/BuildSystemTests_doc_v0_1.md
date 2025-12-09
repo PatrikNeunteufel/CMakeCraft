@@ -4,7 +4,8 @@
 > **Datum:** 2025-12-05  
 > **Pfad:** `cmake/buildSystemTest/`  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** master_concept v0.1, guidelines v0.1
+> **Basiert auf:** master_concept v0.1, guidelines v0.1  
+> **Sprache:** Deutsch  
 
 ---
 

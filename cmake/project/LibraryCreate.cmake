@@ -74,6 +74,8 @@ function(_create_library_target CTX)
                 "${CMAKE_SOURCE_DIR}/${_public_headers}"
             )
             dbg(${DBG_RARE} "    Include: ${_public_headers}" ID LIBRARIES)
+            # Nach Zeile 76 in LibraryCreate.cmake:
+            message(STATUS "[DEBUG] ${_name} INTERFACE include: ${CMAKE_SOURCE_DIR}/${_public_headers}")
         endif()
         
         # Link dependencies (INTERFACE only)

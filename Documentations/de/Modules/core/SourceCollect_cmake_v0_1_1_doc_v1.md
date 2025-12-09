@@ -6,7 +6,7 @@
 > **Status:** In Entwicklung (Pre-Release)  
 > **Modul:** cmake/core/SourceCollect.cmake  
 > **Modul-Version:** 0.1.1  
-> **Basiert auf:** master_concept v0.1, guidelines v0.1
+> **Basiert auf:** master_concept v0.1, guidelines v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/Modules/core/SourceCollect_cmake_v0_1_0.md)
 

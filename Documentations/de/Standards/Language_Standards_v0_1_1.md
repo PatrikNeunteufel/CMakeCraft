@@ -4,7 +4,7 @@
 > **Datum:** 2025-12-04  
 > **Typ:** Unternehmens-Doku  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Geltungsbereich:** Alle Projekte, Code, Dokumentation, Git
+> **Geltungsbereich:** Alle Projekte, Code, Dokumentation, Git  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/Standards/Language_Standards_v0_1_1.md)
 

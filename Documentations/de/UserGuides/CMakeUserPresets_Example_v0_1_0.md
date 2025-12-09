@@ -4,7 +4,7 @@
 > **Datum:** 2025-12-03  
 > **Typ:** Benutzer-Doku  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** CMakePresets_Manual v0.1
+> **Basiert auf:** CMakePresets_Manual v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/UserGuides/CMakeUserPresets_Example_v0_1_0.md)
 

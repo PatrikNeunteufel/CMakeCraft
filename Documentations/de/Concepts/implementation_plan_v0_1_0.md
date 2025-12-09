@@ -4,7 +4,7 @@
 > **Datum:** 2025-12-03  
 > **Typ:** Konzept-Doku  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** master_concept v0.1, Solution_Schema v0.1, ErrorCodes v0.1
+> **Basiert auf:** master_concept v0.1, Solution_Schema v0.1, ErrorCodes v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/Concepts/implementation_plan_v0_1_0.md)
 
@@ -298,18 +298,18 @@ target_link_libraries(MyApp PRIVATE CoreLib)
 
 ### Phase 4
 
-- [ ] Libraries.cmake
-- [ ] LibraryCollect.cmake
-- [ ] LibraryCreate.cmake
-- [ ] Dependencies.cmake
-- [ ] Executable linkt gegen Library
+- ✅ Libraries.cmake
+- ✅ LibraryCollect.cmake
+- ✅ LibraryCreate.cmake
+- ✅ Dependencies.cmake
+- ✅ Executable linkt gegen Library
 
 ### Phase 5
 
-- [ ] Orchestrator.cmake
-- [ ] Local/Attach.cmake
-- [ ] BASS lädt korrekt
-- [ ] W103/W104 Prüfung
+- ✅ Orchestrator.cmake
+- ✅ Local/Attach.cmake
+- ✅ BASS lädt korrekt
+- ✅ W103/W104 Prüfung
 
 ### Phase 6
 

@@ -2,12 +2,14 @@
 // ==========================================
 // Minimal Window application demonstrating BasicLogger
 //
-// Version: 0.1.0
-// Date:    2025-12-07
+// Version: 0.1.1
+// Date:    2025-12-09
 
 #include <windows.h>
 #include <iostream>
 #include <cstdio>
+
+#include "BasicLogger.h"   // Neuer Logger-Header
 
 // Menu command IDs
 enum : UINT {
@@ -28,33 +30,36 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         switch (id)
         {
         case ID_FILE_EXIT:
-            std::cout << "[Logger] Menu: File -> Exit\n";
+            BasicLogger::logInfo("Menu: File -> Exit");
             PostMessage(hwnd, WM_CLOSE, 0, 0);
             return 0;
 
         case ID_ACTION_ONE:
-            std::cout << "[Logger] Menu: Action -> Action One\n";
+            BasicLogger::logInfo("Menu: Action -> Action One");
             return 0;
 
         case ID_ACTION_TWO:
-            std::cout << "[Logger] Menu: Action -> Action Two\n";
+            BasicLogger::logInfo("Menu: Action -> Action Two");
             return 0;
 
         case ID_HELP_ABOUT:
-            std::cout << "[Logger] Menu: Help -> About\n";
-            MessageBoxW(hwnd, L"MinimalWindow\nwith Logger Console", L"About", MB_OK | MB_ICONINFORMATION);
+            BasicLogger::logInfo("Menu: Help -> About");
+            MessageBoxW(hwnd,
+                L"MinimalWindow\nwith BasicLogger console",
+                L"About",
+                MB_OK | MB_ICONINFORMATION);
             return 0;
         }
         break;
     }
 
     case WM_CLOSE:
-        std::cout << "[Logger] WM_CLOSE received\n";
+        BasicLogger::logInfo("WM_CLOSE received");
         DestroyWindow(hwnd);
         return 0;
 
     case WM_DESTROY:
-        std::cout << "[Logger] Window closed (WM_DESTROY)\n";
+        BasicLogger::logInfo("Window closed (WM_DESTROY)");
         PostQuitMessage(0);
         return 0;
 
@@ -76,7 +81,8 @@ void CreateLoggingConsole()
     freopen_s(&fp, "CONOUT$", "w", stderr);
     freopen_s(&fp, "CONIN$", "r", stdin);
 
-    std::cout << "[Logger] Console initialized\n";
+    // Ab hier ist stdout/stderr mit der neuen Konsole verbunden
+    BasicLogger::logInfo("Console initialized (UTF-8)");
 }
 
 // Create a simple menu
@@ -107,8 +113,15 @@ HMENU CreateMainMenu()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
+    // Konsole für Ausgabe erstellen
     CreateLoggingConsole();
-    std::cout << "[Logger] WinMain started...\n";
+
+    // BasicLogger konfigurieren
+    BasicLogger::setLogLevel(BasicLogger::Level::Debug);
+    // Optional: Logfile aktivieren, falls gewünscht
+    // BasicLogger::setLogFile("MinimalWindow.log");
+
+    BasicLogger::logInfo("WinMain started...");
 
     const wchar_t CLASS_NAME[] = L"MinimalWindowClass";
 
@@ -122,8 +135,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 
     if (!RegisterClassW(&wc))
     {
-        std::cout << "[Logger] RegisterClassW failed\n";
-        std::cout << "[Logger] Press Enter to exit...\n";
+        BasicLogger::logError("RegisterClassW failed");
+        BasicLogger::logInfo("Press Enter to exit...");
         std::cin.get();
         return 1;
     }
@@ -134,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     HWND hwnd = CreateWindowExW(
         0,
         CLASS_NAME,
-        L"MinimalWindow mit Logger-Konsole",
+        L"MinimalWindow mit BasicLogger-Konsole",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 800, 500,
         nullptr,
@@ -145,8 +158,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 
     if (!hwnd)
     {
-        std::cout << "[Logger] CreateWindowExW failed\n";
-        std::cout << "[Logger] Press Enter to exit...\n";
+        BasicLogger::logError("CreateWindowExW failed");
+        BasicLogger::logInfo("Press Enter to exit...");
         std::cin.get();
         return 1;
     }
@@ -162,10 +175,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
         DispatchMessageW(&msg);
     }
 
-    std::cout << "[Logger] Message loop ended, wParam = " << msg.wParam << "\n";
-    std::cout << "[Logger] Application will now exit. Press Enter to close this console..." << std::endl;
+    {
+        std::ostringstream oss;
+        oss << "Message loop ended, wParam = " << msg.wParam;
+        BasicLogger::logInfo(oss.str());
+    }
 
-    // Konsole offen halten, bis du Enter drückst
+    BasicLogger::logInfo("Application will now exit. Press Enter to close this console...");
     std::cin.get();
 
     // Kein FreeConsole(), damit bis zum Exit alles sichtbar bleibt

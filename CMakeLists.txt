@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMake Architecture V2
-# Version:      0.1.1
-# Date:         2025-12-07
+# Version:      0.1.2
+# Date:         2025-12-08
 #
 # Description:
 #   Top-level CMake configuration for the modular build system.
@@ -12,7 +12,7 @@
 #
 # Options:
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests
-#   -DTEST_PHASE=1|2|3|4|...      Specific phase to test (default: all)
+#   -DTEST_PHASE=1|2|3|4|5|...    Specific phase to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
@@ -23,7 +23,7 @@
 #
 # ==============================================================================
 
-cmake_minimum_required(VERSION 3.25) 
+cmake_minimum_required(VERSION 3.25)
 
 # ==============================================================================
 # Options
@@ -77,6 +77,12 @@ project(
 )
 
 dbg(${DBG_COMMON} "Project: ${PROJECT_NAME} v${PROJECT_VERSION}" ID CMAKE_MAIN)
+
+# ==============================================================================
+# Phase 5: Externals (must come BEFORE Libraries and Executables!)
+# ==============================================================================
+
+include(cmake/project/Externals.cmake)
 
 # ==============================================================================
 # Phase 4: Libraries (must come BEFORE Executables!)
@@ -143,10 +149,16 @@ if(RUN_BUILD_SYSTEM_TESTS)
         include(cmake/buildSystemTest/phase4.cmake)
     endif()
     
-    # Phase 5+ Tests (when implemented)
-    # if("${TEST_PHASE}" STREQUAL "" OR "5" IN_LIST TEST_PHASE)
+    # Phase 5 Test: Externals Pipeline
+    if("${TEST_PHASE}" STREQUAL "" OR "5" IN_LIST TEST_PHASE)
+        dbgspace(ID BUILD_TEST)
+        include(cmake/buildSystemTest/phase5.cmake)
+    endif()
+    
+    # Phase 6+ Tests (when implemented)
+    # if("${TEST_PHASE}" STREQUAL "" OR "6" IN_LIST TEST_PHASE)
     #     dbgspace(ID BUILD_TEST)
-    #     include(cmake/buildSystemTest/phase5.cmake)
+    #     include(cmake/buildSystemTest/phase6.cmake)
     # endif()
     
     dbgspace(ID BUILD_TEST)

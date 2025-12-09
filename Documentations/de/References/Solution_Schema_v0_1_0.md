@@ -4,7 +4,7 @@
 > **Datum:** 2025-12-03  
 > **Typ:** Referenz-Doku  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** master_concept v0.1, guidelines v0.1
+> **Basiert auf:** master_concept v0.1, guidelines v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/References/Solution_Schema_v0_1_0.md)
 

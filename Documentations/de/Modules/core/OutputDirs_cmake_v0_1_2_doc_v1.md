@@ -6,7 +6,7 @@
 > **Status:** In Entwicklung (Pre-Release)  
 > **Modul:** cmake/core/OutputDirs.cmake  
 > **Modul-Version:** 0.1.2  
-> **Basiert auf:** master_concept v0.1, guidelines v0.1
+> **Basiert auf:** master_concept v0.1, guidelines v0.1  
 > **Sprache:** Deutsch
 
 ---

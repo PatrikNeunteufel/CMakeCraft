@@ -5,7 +5,8 @@
 > **Typ:** Standard  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle C++-Projekte (PC-Applikationen)  
-> **Bezug:** CMake_Standard v0.1, ClangFormat_Blueprint v0.1, ClangTidy_Blueprint v0.1
+> **Bezug:** CMake_Standard v0.1, ClangFormat_Blueprint v0.1, ClangTidy_Blueprint v0.1  
+> **Sprache:** Deutsch  
 
 ---
 

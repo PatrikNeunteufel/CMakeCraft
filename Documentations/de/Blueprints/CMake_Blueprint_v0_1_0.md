@@ -4,7 +4,7 @@
 > **Datum:** 2025-12-03  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung (Pre-Release)  
-> **Basiert auf:** Documentation_Blueprint v0.1
+> **Basiert auf:** Documentation_Blueprint v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/Blueprints/CMake_Blueprint_v0_1_0.md)
 

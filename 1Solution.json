@@ -1,0 +1,93 @@
+{
+    "schemaVersion": "0.1",
+    "solution": {
+        "name": "MinimalSolution",
+        "version": "0.4.0"
+    },
+    "settings": {
+        "standards": {
+            "cxx_standard": 20
+        },
+        "defaults": {
+            "library_type": "INTERFACE",
+            "executable_type": "CONSOLE"
+        },
+        "sources": {
+            "mode": "auto"
+        }
+    },
+    "externals": {
+        "bass": {
+            "path": "externals/bass"
+        },
+        "lua54": {
+            "path": "externals/lua54"
+        },
+        "doctest": {
+            "path": "externals/doctest"
+        },
+        "imgui": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "tag": "v1.91.6",
+            "cmakeSupport": false
+        },
+        "glad": {
+            "git": "https://github.com/Dav1dde/glad.git",
+            "tag": "v2.0.8"
+        },
+        "glfw": {
+            "git": "https://github.com/glfw/glfw.git",
+            "tag": "3.4"
+        }
+    },
+    "libraries": [
+        {
+            "name": "BasicLogger",
+            "version": "1.0.0",
+            "type": "INTERFACE",
+            "public_headers": "projects/libs/BasicLogger/include"
+        }
+    ],
+    "executables": [
+        {
+            "name": "MinimalConsole",
+            "version": "2.0.0",
+            "dependencies": ["BasicLogger"],
+            "externals": ["bass"],
+            "external_options": {
+                "bass": {
+                    "BASS_FLAC": true
+                }
+            }
+        },
+        {
+            "name": "consolePlayer",
+            "version": "1.0.0",
+            "dependencies": ["BasicLogger"],
+            "externals": ["bass"],
+            "external_options": {
+                "bass": {
+                    "BASS_FLAC": true,
+                    "BASS_FX": true
+                }
+            }
+        },
+        {
+            "name": "MinimalWindow",
+            "version": "0.1.0",
+            "type": "GUI",
+            "path": "projects/exec/MinimalWindow/src",
+            "skip": false,
+            "dependencies": ["BasicLogger"]
+        },
+      {
+        "name": "imGuiApp",
+        "version": "0.1.0",
+        "type": "GUI",
+        "path": "projects/exec/imGuiApp/src",
+        "skip": false,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "imgui", "glad", "glfw" ]
+      }
+    ]
+}

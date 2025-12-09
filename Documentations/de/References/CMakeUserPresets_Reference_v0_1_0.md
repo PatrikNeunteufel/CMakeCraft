@@ -5,7 +5,7 @@
 > **Typ:** Referenz-Doku  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Autor:** Patrik Neunteufel  
-> **Basiert auf:** CMakePresets_Manual v0.1, CMakePresets_Reference v0.1
+> **Basiert auf:** CMakePresets_Manual v0.1, CMakePresets_Reference v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/References/CMakeUserPresets_Reference_v0_1_0.md)
 

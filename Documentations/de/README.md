@@ -2,7 +2,8 @@
 
 > **Version:** 0.1.5  
 > **Datum:** 2025-12-04  
-> **Status:** In Entwicklung (Pre-Release)
+> **Status:** In Entwicklung (Pre-Release)  
+> **Sprache:** Deutsch  
 
 Willkommen im Dokumentations-Verzeichnis des CMake Architecture V2 Projekts. Dieses README dient als **zentraler Einstiegspunkt** für alle Projektdokumentationen.
 

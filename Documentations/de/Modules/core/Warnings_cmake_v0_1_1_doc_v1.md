@@ -6,7 +6,7 @@
 > **Status:** In Entwicklung (Pre-Release)  
 > **Modul:** cmake/core/Warnings.cmake  
 > **Modul-Version:** 0.1.1  
-> **Basiert auf:** master_concept v0.1, guidelines v0.1
+> **Basiert auf:** master_concept v0.1, guidelines v0.1  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../../en/Modules/core/Warnings_cmake_v0_1_0.md)
 

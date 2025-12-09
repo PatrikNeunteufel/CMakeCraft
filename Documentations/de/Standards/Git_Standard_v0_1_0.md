@@ -5,7 +5,8 @@
 > **Typ:** Standard  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle Git-Repositories im Unternehmen  
-> **Bezug:** CMake_Standard v0.1, Language_Standards v0.1.1
+> **Bezug:** CMake_Standard v0.1, Language_Standards v0.1.1  
+> **Sprache:** Deutsch  
 
 ---
 
@@ -385,6 +386,9 @@ CMakeFiles/
 # Dependencies (falls lokal)
 .externals/
 vcpkg_installed/
+
+# backup files
+*.bak
 ```
 
 ### 7.2 Optional (projektabhängig)

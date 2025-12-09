@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Module:       ExecutableCreate.cmake
-# Version:      0.1.0
-# Date:         2025-12-05
+# Version:      0.1.1
+# Date:         2025-12-08
 # Part of:      CMake Architecture V2
 #
 # Description:
@@ -19,13 +19,19 @@
 #   - cmake/core/OutputDirs.cmake
 #   - cmake/core/Warnings.cmake
 #   - cmake/core/CompilerOptions.cmake
+#   - cmake/externals/Orchestrator.cmake (for apply_external_to_target)
 #
 # Provides:
 #   _create_executable_target(CTX)
 #
 # Expected Context Keys (set by ExecutableCollect):
 #   NAME, PATH, TYPE, PCH_ENABLED, PCH_HEADER,
-#   DEPENDENCIES, EXTERNALS, DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
+#   DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS,
+#   DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
+#
+# Changes in v0.1.1:
+#   - Full externals integration via apply_external_to_target()
+#   - External options passed to Include.cmake
 #
 # Based on:
 #   - master_concept v0.1
@@ -59,6 +65,7 @@ function(_create_executable_target CTX)
     ctx_get(${CTX} PCH_HEADER _pch_header)
     ctx_get(${CTX} DEPENDENCIES _dependencies)
     ctx_get(${CTX} EXTERNALS _externals)
+    ctx_get(${CTX} EXTERNAL_OPTIONS _external_options)
     ctx_get(${CTX} DEFINES _defines)
     ctx_get(${CTX} COMPILE_OPTIONS _compile_options)
     ctx_get(${CTX} LINK_OPTIONS _link_options)
@@ -164,8 +171,7 @@ function(_create_executable_target CTX)
     endforeach()
     
     # --------------------------------------------------------------------------
-    # External Dependencies (Externals)
-    # Note: Full integration happens in Phase 5/6
+    # External Dependencies (via Orchestrator)
     # --------------------------------------------------------------------------
     
     foreach(_ext IN LISTS _externals)
@@ -177,15 +183,18 @@ function(_create_executable_target CTX)
             cmake_fatal("E010" "External '${_ext}' not defined in externals block")
         endif()
         
-        # If external target already exists, link it
-        # (will be created by Externals pipeline)
-        if(TARGET ${_ext})
-            target_link_libraries(${_name} PRIVATE ${_ext})
-            dbg(${DBG_RARE} "    Link: ${_ext} (external)" ID EXECUTABLES)
+        # Get options for this external from the target's external_options
+        _json_has_key("${_external_options}" "${_ext}" _has_ext_opts)
+        if(_has_ext_opts)
+            _json_get_object("${_external_options}" "${_ext}" _ext_opts)
         else()
-            # External will be processed later by Dependencies.cmake
-            dbg(${DBG_RARE} "    External pending: ${_ext}" ID EXECUTABLES)
+            set(_ext_opts "{}")
         endif()
+        
+        # Apply external via Orchestrator
+        apply_external_to_target("${_name}" "${_ext}" "${_ext_opts}")
+        
+        dbg(${DBG_RARE} "    External: ${_ext} applied" ID EXECUTABLES)
     endforeach()
     
     # --------------------------------------------------------------------------

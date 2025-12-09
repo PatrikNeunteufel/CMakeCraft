@@ -1,18 +1,12 @@
 {
     "schemaVersion": "0.1",
-    
     "solution": {
         "name": "MinimalSolution",
-        "version": "0.2.0",
-        "description": "Minimal solution demonstrating Library Pipeline",
-        "authors": ["Build System Team"]
+        "version": "0.3.0"
     },
-    
     "settings": {
         "standards": {
-            "cxx_standard": 20,
-            "cxx_standard_required": true,
-            "cxx_extensions": false
+            "cxx_standard": 20
         },
         "defaults": {
             "library_type": "INTERFACE",
@@ -22,9 +16,11 @@
             "mode": "auto"
         }
     },
-    
-    "externals": {},
-    
+    "externals": {
+        "bass": {
+            "path": "externals/bass"
+        }
+    },
     "libraries": [
         {
             "name": "BasicLogger",
@@ -33,24 +29,37 @@
             "public_headers": "projects/libs/BasicLogger/include"
         }
     ],
-
   "executables": [
     {
       "name": "MinimalConsole",
-      "version": "0.2.0",
-      "type": "CONSOLE",
-      "path": "projects/exec/MinimalConsole/src",
-      "dependencies": [ "BasicLogger" ]
+      "version": "2.0.0",
+      "dependencies": [ "BasicLogger" ],
+      "externals": [ "bass" ],
+      "external_options": {
+        "bass": {
+          "BASS_FLAC": true
+        }
+      }
+    },
+    {
+      "name": "consolePlayer",
+      "version": "1.0.0",
+      "dependencies": [ "BasicLogger" ],
+      "externals": [ "bass" ],
+      "external_options": {
+        "bass": {
+          "BASS_FLAC": true,
+          "BASS_FX": true
+        }
+      }
     },
     {
       "name": "MinimalWindow",
       "version": "0.1.0",
       "type": "GUI",
       "path": "projects/exec/MinimalWindow/src",
-      "skip" :  false,
+      "skip": false,
       "dependencies": [ "BasicLogger" ]
     }
-  ],
-    
-    "tests": []
+  ]
 }
