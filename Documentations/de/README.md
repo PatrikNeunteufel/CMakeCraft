@@ -1,11 +1,24 @@
 # Dokumentation – CMake Architecture V2
 
-> **Version:** 0.1.5  
-> **Datum:** 2025-12-04  
+> **Version:** 0.2.0  
+> **Datum:** 2025-12-09  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Sprache:** Deutsch  
+> **English:** [English Version](../en/README.md)
 
 Willkommen im Dokumentations-Verzeichnis des CMake Architecture V2 Projekts. Dieses README dient als **zentraler Einstiegspunkt** für alle Projektdokumentationen.
+
+---
+
+## Aktueller Stand
+
+| Phase | Status | Beschreibung |
+|-------|--------|--------------|
+| Phase 1-3 | ✅ Abgeschlossen | Core-Module, Basis-Infrastruktur |
+| Phase 4 | ✅ Abgeschlossen | Executable/Library Pipeline |
+| Phase 5 | ✅ Abgeschlossen | Lokale Externals (BASS, Lua, doctest) |
+| Phase 6 | ✅ Abgeschlossen | Git Externals (glfw, imgui), Hook-System |
+| Phase 7+ | ⬜ Geplant | vcpkg, Tests, erweiterte Features |
 
 ---
 
@@ -17,12 +30,18 @@ Documentations/
 ├── Blueprints/                  # Meta-Dokumentationen (Standards)
 ├── Concepts/                    # Architektur, Design, Planung
 ├── References/                  # Nachschlagewerke (ErrorCodes, Schema)
+├── Standards/                   # Coding Standards (C++, CMake, Git)
 ├── Modules/                     # CMake-Modul-Dokumentationen
 │   ├── core/                    # cmake/core/ Module
-│   ├── project/                 # cmake/project/ Module (geplant)
-│   └── externals/               # cmake/externals/ Module (geplant)
+│   ├── project/                 # cmake/project/ Module
+│   ├── Externals/               # cmake/externals/ Module
+│   └── buildSystemTest/         # Build-System Tests
 ├── UserGuides/                  # Benutzer-Anleitungen
-└── Enterprise/                  # Unternehmensweite Standards
+└── externals/                   # External-spezifische Dokumentationen
+    ├── bass/
+    ├── lua54/
+    ├── doctest/
+    └── glad/
 ```
 
 ---
@@ -34,9 +53,9 @@ Documentations/
 | **Blueprint** | `Blueprints/` | Doku-Ersteller | Standards für Dokumente und Code |
 | **Konzept-Doku** | `Concepts/` | Build-System-Dev | Architektur, Design-Entscheidungen |
 | **Referenz-Doku** | `References/` | Build-System-Dev | Nachschlagewerke, Spezifikationen |
+| **Standard-Doku** | `Standards/` | Alle Entwickler | Coding Standards |
 | **Modul-Doku** | `Modules/` | Build-System-Dev | CMake-Modul-Dokumentationen |
 | **Benutzer-Doku** | `UserGuides/` | C++ Entwickler | Anleitungen zur Nutzung |
-| **Unternehmens-Doku** | `Enterprise/` | Alle Entwickler | Team-/Unternehmensstandards |
 
 ---
 
@@ -44,89 +63,98 @@ Documentations/
 
 ### Blueprints/
 
-Standards die definieren, wie Dokumentationen und Code strukturiert werden.
-
 | Dokument | Version | Beschreibung |
 |----------|---------|--------------|
 | [Documentation_Blueprint](Blueprints/Documentation_Blueprint_v0_1_0.md) | 0.1.0 | Struktur für alle Dokumentationen |
 | [CMake_Blueprint](Blueprints/CMake_Blueprint_v0_1_0.md) | 0.1.0 | Struktur für CMake-Module |
+| [ClangFormat_Blueprint](Blueprints/ClangFormat_Blueprint_v0_1_0.md) | 0.1.0 | .clang-format Standard |
+| [ClangTidy_Blueprint](Blueprints/ClangTidy_Blueprint_v0_1_0.md) | 0.1.0 | .clang-tidy Standard |
 
 ### Concepts/
 
-| Dokument | Version | Status | Beschreibung |
-|----------|---------|--------|--------------|
-| [master_concept](Concepts/master_concept_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | Architektur-Übersicht, Vision |
-| [guidelines](Concepts/guidelines_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | CMake Coding-Konventionen |
-| [implementation_plan](Concepts/implementation_plan_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | Phasen-basierter Plan |
+| Dokument | Version | Beschreibung |
+|----------|---------|--------------|
+| [master_concept](Concepts/master_concept_v0_1_0.md) | 0.1.0 | Architektur-Übersicht, Vision |
+| [guidelines](Concepts/guidelines_v0_1_0.md) | 0.1.0 | CMake Coding-Konventionen |
+| [implementation_plan](Concepts/implementation_plan_v0_1_0.md) | 0.1.0 | Phasen-basierter Plan |
 
 ### References/
 
-| Dokument | Version | Status | Beschreibung |
-|----------|---------|--------|--------------|
-| [ErrorCodes](References/ErrorCodes_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | Alle Fehlercodes mit Erklärungen |
-| [Solution_Schema](References/Solution_Schema_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | JSON-Schema für Solution.json |
-| [CMakePresets_Manual](References/CMakePresets_Manual_v0_1_1.md) | 0.1.1 | ✅ Vorhanden | Preset-Konzepte und Best Practices |
-| [CMakePresets_Reference](References/CMakePresets_Reference_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | Alle Team-Presets im Detail |
-| [CMakeUserPresets_Reference](References/CMakeUserPresets_Reference_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | User-Presets Dokumentation |
-| [Externals](References/Externals_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | Verfügbare Externals |
+| Dokument | Version | Beschreibung |
+|----------|---------|--------------|
+| [ErrorCodes](References/ErrorCodes_v0_1_1.md) | 0.1.1 | Alle Fehlercodes (E001-E217, W001-W201) |
+| [Solution_Schema](References/Solution_Schema_v0_1_1.md) | 0.1.1 | JSON-Schema für Solution.json |
+| [Externals](References/Externals_v0_2_0.md) | 0.2.0 | Alle Externals (lokal + Git) |
+| [CMakePresets_Manual](References/CMakePresets_Manual_v0_1_1.md) | 0.1.1 | Preset-Konzepte |
+| [CMakePresets_Reference](References/CMakePresets_Reference_v0_1_0.md) | 0.1.0 | Team-Presets |
+| [CMakeUserPresets_Reference](References/CMakeUserPresets_Reference_v0_1_0.md) | 0.1.0 | User-Presets |
+| [Glossar](References/Glossar_v0_1_0.md) | 0.1.0 | Begriffsdefinitionen |
 
-### Modules/
+### Standards/
 
-CMake-Modul-Dokumentationen folgen dem Namensschema:  
-`[ModulName]_cmake_v[X]_[Y]_[Z]_doc_v[N].md`
+| Dokument | Version | Beschreibung |
+|----------|---------|--------------|
+| [Language_Standards](Standards/Language_Standards_v0_1_1.md) | 0.1.1 | C/C++ Standards |
+| [Cpp_Coding_Standard](Standards/Cpp_Coding_Standard_v0_1_0.md) | 0.1.0 | C++ Coding-Konventionen |
+| [C_Coding_Standard](Standards/C_Coding_Standard_v0_1_0.md) | 0.1.0 | C Coding-Konventionen |
+| [CMake_Standard](Standards/CMake_Standard_v0_1_0.md) | 0.1.0 | CMake Coding-Konventionen |
+| [Git_Standard](Standards/Git_Standard_v0_1_0.md) | 0.1.0 | Git Workflow |
 
-#### Modules/core/
+### Modules/core/
 
-| Modul | Version | Status | Beschreibung |
-|-------|---------|--------|--------------|
-| [Errors.cmake](Modules/core/Errors_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Fehlerbehandlung |
-| [Debug.cmake](Modules/core/Debug_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Debug-System (Zwei-Achsen-Filterung) |
-| [Context.cmake](Modules/core/Context_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Context-Objekt-Pattern |
-| [Json.cmake](Modules/core/Json_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | JSON-Hilfsfunktionen |
-| [Validation.cmake](Modules/core/Validation_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Schema-Validierung |
-| [SourceCollect.cmake](Modules/core/SourceCollect_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Source-Datei-Management |
-| [OutputDirs.cmake](Modules/core/OutputDirs_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Output-Verzeichnisse |
-| [Warnings.cmake](Modules/core/Warnings_cmake_v0_1_0_doc_v1.md) | 0.1.0 (doc v1) | ✅ Vorhanden | Warning-Level |
-| [CompilerOptions.cmake](Modules/core/CompilerOptions_cmake_v0_1_0_doc_v1_1.md) | 0.1.0 (doc v1.1) | ✅ Vorhanden | Compiler-Konfiguration |
+| Modul | Version | Beschreibung |
+|-------|---------|--------------|
+| [Errors.cmake](Modules/core/Errors_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Fehlerbehandlung (E/W/ASSERT) |
+| [Debug.cmake](Modules/core/Debug_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Debug-System (Zwei-Achsen) |
+| [Context.cmake](Modules/core/Context_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Context-Objekt-Pattern |
+| [Json.cmake](Modules/core/Json_cmake_v0_1_1_doc_v1.md) | 0.1.1 | JSON-Hilfsfunktionen |
+| [Validation.cmake](Modules/core/Validation_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Schema-Validierung |
+| [SourceCollect.cmake](Modules/core/SourceCollect_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Source-Datei-Management |
+| [OutputDirs.cmake](Modules/core/OutputDirs_cmake_v0_1_3_doc_v1.md) | 0.1.3 | Output-Verzeichnisse |
+| [Warnings.cmake](Modules/core/Warnings_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Warning-Level |
+| [CompilerOptions.cmake](Modules/core/CompilerOptions_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Compiler-Konfiguration |
 
-#### Modules/project/ (geplant)
+### Modules/project/
 
-| Modul | Version | Status | Beschreibung |
-|-------|---------|--------|--------------|
-| Solution.cmake | - | ⬜ Ausstehend | Solution.json laden |
-| Executables.cmake | - | ⬜ Ausstehend | Executable-Pipeline |
-| ExecutableCollector.cmake | - | ⬜ Ausstehend | JSON → Context für Executables |
-| ExecutableCreate.cmake | - | ⬜ Ausstehend | Executable-Target erstellen |
-| Libraries.cmake | - | ⬜ Ausstehend | Library-Pipeline |
-| LibraryCollector.cmake | - | ⬜ Ausstehend | JSON → Context für Libraries |
-| Tests.cmake | - | ⬜ Ausstehend | Test-Pipeline |
-| TestCollector.cmake | - | ⬜ Ausstehend | JSON → Context für Tests |
+| Modul | Version | Beschreibung |
+|-------|---------|--------------|
+| [Solution.cmake](Modules/project/Solution_cmake_v0_1_1_doc_v0_1.md) | 0.1.1 | Solution.json laden |
+| [Executables.cmake](Modules/project/Executables_cmake_v0_1_0_doc_v0_1.md) | 0.1.0 | Executable-Pipeline |
+| [ExecutableCollect.cmake](Modules/project/ExecutableCollect_cmake_v0_1_0_doc_v0_1.md) | 0.1.0 | JSON → Context |
+| [ExecutableCreate.cmake](Modules/project/ExecutableCreate_cmake_v0_1_2_doc_v1.md) | 0.1.2 | Target erstellen + APP_WINDOWS_GUI |
+| [Libraries.cmake](Modules/project/Libraries_cmake_v0_1_0_doc_v0_1.md) | 0.1.0 | Library-Pipeline |
+| [LibraryCollect.cmake](Modules/project/LibraryCollect_cmake_v0_1_0_doc_v0_1.md) | 0.1.0 | JSON → Context |
+| [LibraryCreate.cmake](Modules/project/LibraryCreate_cmake_v0_1_0_doc_v0_1.md) | 0.1.0 | Library-Target erstellen |
+| [Externals.cmake](Modules/project/Externals_cmake_v0_1_0_doc_v1.md) | 0.1.0 | External-Integration |
 
-#### Modules/externals/ (geplant)
+### Modules/Externals/
 
-| Modul | Version | Status | Beschreibung |
-|-------|---------|--------|--------------|
-| Orchestrator.cmake | - | ⬜ Ausstehend | External-Dispatch |
-| Fetch.cmake | - | ⬜ Ausstehend | Git-Fetch |
-| Registry.cmake | - | ⬜ Ausstehend | Target-Registry |
-| HookLoader.cmake | - | ⬜ Ausstehend | Hook-System |
+| Modul | Version | Beschreibung |
+|-------|---------|--------------|
+| [Orchestrator.cmake](Modules/Externals/Orchestrator_cmake_v0_2_0_doc_v1.md) | 0.2.0 | External-Dispatch (lokal/fetched) |
+| [Attach.cmake](Modules/Externals/Attach_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Lokale External-Behandlung |
+| [Fetch.cmake](Modules/Externals/Fetch_cmake_v0_1_0_doc_v1.md) | 0.1.0 | FetchContent-Wrapper |
+| [Handler.cmake](Modules/Externals/Handler_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Fetched External Pipeline |
+| [HookLoader.cmake](Modules/Externals/HookLoader_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Hook-System |
+| [Targets.cmake](Modules/Externals/Targets_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Target-Registry |
+
+### externals/ (Hook-Dokumentationen)
+
+| Dokument | Version | Beschreibung |
+|----------|---------|--------------|
+| [bass/Include.cmake](externals/bass/Include_cmake_v0_1_1_doc_v1_.md) | 0.1.1 | BASS Audio Integration |
+| [lua54/Include.cmake](externals/lua54/Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Lua 5.4 Integration |
+| [doctest/Include.cmake](externals/doctest/Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | doctest Framework |
+| [glad/Include.cmake](externals/glad/Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | GLAD OpenGL Loader |
+| glfw/PreFetch.cmake | 0.1.0 | GLFW Build-Optionen |
+| imgui/PostFetch.cmake | 0.2.0 | ImGui Target-Erstellung |
 
 ### UserGuides/
 
-| Dokument | Version | Status | Beschreibung |
-|----------|---------|--------|--------------|
-| [CMakeUserPresets_Example](UserGuides/CMakeUserPresets_Example_v0_1_0.md) | 0.1.0 | ✅ Vorhanden | Template für User-Presets |
-| UserManual | - | ⬜ Ausstehend | Vollständige Benutzeranleitung |
-| QuickStart | - | ⬜ Ausstehend | Schnelleinstieg |
-| FAQ | - | ⬜ Ausstehend | Häufig gestellte Fragen |
-
-### Enterprise/
-
-| Dokument | Version | Status | Beschreibung |
-|----------|---------|--------|--------------|
-| CodingStandards | - | ⬜ Ausstehend | C++ Coding-Konventionen |
-| ReviewGuidelines | - | ⬜ Ausstehend | Code Review Richtlinien |
-| GitWorkflow | - | ⬜ Ausstehend | Branch-Strategie, Commits |
+| Dokument | Version | Beschreibung |
+|----------|---------|--------------|
+| [Externals_UserGuide](UserGuides/Externals_UserGuide_v0_2_0.md) | 0.2.0 | External-Verwendung (lokal + Git) |
+| [CMakeUserPresets_Example](UserGuides/CMakeUserPresets_Example_v0_1_0.md) | 0.1.0 | Template für User-Presets |
 
 ---
 
@@ -143,13 +171,32 @@ CMake-Modul-Dokumentationen folgen dem Namensschema:
    - [guidelines](Concepts/guidelines_v0_1_0.md)
 
 3. **Module nachschlagen** – Spezifische CMake-Module:
-   - Siehe `Modules/` Ordner
+   - Core: `Modules/core/`
+   - Project: `Modules/project/`
+   - Externals: `Modules/Externals/`
 
 ### Für C++ Entwickler (Endnutzer)
 
-1. **CMakeUserPresets_Example** – [Template für eigene Presets](UserGuides/CMakeUserPresets_Example_v0_1_0.md)
-2. **UserManual** – Vollständige Anleitung (ausstehend)
-3. **QuickStart** – Schneller Einstieg (ausstehend)
+1. **Externals_UserGuide** – [External-Bibliotheken verwenden](UserGuides/Externals_UserGuide_v0_2_0.md)
+2. **CMakeUserPresets_Example** – [Template für eigene Presets](UserGuides/CMakeUserPresets_Example_v0_1_0.md)
+3. **Solution_Schema** – [JSON-Format für Solution.json](References/Solution_Schema_v0_1_1.md)
+
+### GUI-Anwendung erstellen (OpenGL/ImGui)
+
+```json
+{
+    "externals": {
+        "glad": { "path": "externals/glad" },
+        "glfw": { "git": "https://github.com/glfw/glfw.git", "tag": "3.4" },
+        "imgui": { "git": "https://github.com/ocornut/imgui.git", "tag": "v1.90.1", "cmakeSupport": false }
+    },
+    "executables": [
+        { "name": "MyApp", "type": "GUI", "externals": ["glad", "glfw", "imgui"] }
+    ]
+}
+```
+
+Siehe [Externals_UserGuide](UserGuides/Externals_UserGuide_v0_2_0.md) für vollständige Anleitung.
 
 ---
 
@@ -160,8 +207,8 @@ CMake-Modul-Dokumentationen folgen dem Namensschema:
 | Typ | Format | Beispiel |
 |-----|--------|----------|
 | Blueprint | `[Name]_Blueprint_v[X]_[Y]_[Z].md` | `Documentation_Blueprint_v0_1_0.md` |
-| Modul-Doku | `[Modul]_cmake_v[X]_[Y]_[Z]_doc_v[N].md` | `Context_cmake_v0_1_0_doc_v1.md` |
-| Andere | `[Name]_v[X]_[Y]_[Z].md` | `ErrorCodes_v0_1_0.md` |
+| Modul-Doku | `[Modul]_cmake_v[X]_[Y]_[Z]_doc_v[N].md` | `Context_cmake_v0_1_1_doc_v1.md` |
+| Andere | `[Name]_v[X]_[Y]_[Z].md` | `ErrorCodes_v0_1_1.md` |
 
 ### Semantic Versioning
 
@@ -191,8 +238,9 @@ Neue Dokumentationen erstellen:
 1. Blueprint lesen: [Documentation_Blueprint](Blueprints/Documentation_Blueprint_v0_1_0.md)
 2. Richtigen Ordner wählen (siehe Ordnerstruktur)
 3. Dateinamen-Konvention beachten
-4. Review-Checkliste im Blueprint durchgehen
-5. Diese README aktualisieren
+4. **Blockquote-Header verwenden** (nicht Tabelle!)
+5. Changelog am Ende (neueste Version fett)
+6. Diese README aktualisieren
 
 ---
 
@@ -200,9 +248,10 @@ Neue Dokumentationen erstellen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.5** | **2025-12-04** | **SourceCollect.cmake erstellt; Collector-Namenskonvention für project/ Module** |
-| 0.1.4 | 2025-12-04 | Validation.cmake, OutputDirs.cmake hinzugefügt; Modules/ Subfolder-Struktur (core/, project/, externals/) |
-| 0.1.3 | 2025-12-04 | Errors.cmake und Warnings.cmake hinzugefügt |
-| 0.1.2 | 2025-12-04 | Debug.cmake hinzugefügt, Core-Module erstellt (Context, Json, CompilerOptions) |
-| 0.1.1 | 2025-12-03 | Preset-Dokumentationen hinzugefügt, Schnellstart aktualisiert |
-| 0.1.0 | 2025-12-03 | Initial: Ordnerstruktur, Dokumentations-Übersicht, Verlinkung zu Blueprints |
+| **0.2.0** | **2025-12-09** | **Phase 6 komplett: Git Externals, Hook-System, alle Module dokumentiert, Standards-Ordner** |
+| 0.1.5 | 2025-12-04 | SourceCollect.cmake; Collector-Namenskonvention |
+| 0.1.4 | 2025-12-04 | Validation, OutputDirs; Modules/ Subfolder |
+| 0.1.3 | 2025-12-04 | Errors.cmake, Warnings.cmake |
+| 0.1.2 | 2025-12-04 | Debug.cmake, Core-Module |
+| 0.1.1 | 2025-12-03 | Preset-Dokumentationen |
+| 0.1.0 | 2025-12-03 | Initial: Ordnerstruktur |

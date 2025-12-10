@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # Module:       Handler.cmake
-# Version:      0.1.1
+# Version:      0.1.0
 # Date:         2025-12-09
 # Part of:      CMake Architecture V2
 #
@@ -15,7 +15,7 @@
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
-#   - cmake/externals/Core/Fetch.cmake (v0.2.0+)
+#   - cmake/externals/Core/Fetch.cmake
 #   - cmake/externals/Hooks/HookLoader.cmake
 #   - cmake/externals/Registry/Targets.cmake
 #
@@ -25,7 +25,7 @@
 # Process:
 #   1. Declare external (FetchContent_Declare)
 #   2. Load PreFetch hook (if exists)
-#   3. Make available (FetchContent_MakeAvailable) - uses .externals/ cache
+#   3. Make available (FetchContent_MakeAvailable)
 #   4. Load PostFetch hook (if exists)
 #   5. Auto-register targets
 #   6. Validate targets exist
@@ -33,11 +33,6 @@
 # Based on:
 #   - master_concept v0.1
 #   - guidelines v0.1
-#
-# Changes v0.1.1:
-#   - Compatible with Fetch.cmake v0.2.0 (.externals/ caching)
-#   - Source directory now in .externals/${EXT_NAME}/
-#   - Improved status messages
 #
 # ==============================================================================
 
@@ -64,26 +59,22 @@ include(cmake/externals/Registry/Targets.cmake)
         EXT_JSON - JSON definition of the external
     
     Pipeline:
-        1. Declare (FetchContent_Declare) - checks .externals/ cache
+        1. Declare (FetchContent_Declare)
         2. PreFetch hook
-        3. MakeAvailable - downloads only if not cached
+        3. MakeAvailable
         4. PostFetch hook
         5. Auto-register targets
         6. Validate
-    
-    Source Directory:
-        ${CMAKE_SOURCE_DIR}/.externals/${EXT_NAME}/
-        (shared across all build presets)
     
     Example:
         _handle_fetched_external("spdlog" "{\"git\":\"https://...\",\"tag\":\"v1.12.0\"}")
 ]]
 function(_handle_fetched_external EXT_NAME EXT_JSON)
     
-    message(STATUS "[Externals] Processing: ${EXT_NAME}")
+    message(STATUS "[Externals] --- Fetching: ${EXT_NAME} ---")
     
     # ==========================================================================
-    # Step 1: Declare External (checks cache)
+    # Step 1: Declare External
     # ==========================================================================
     
     _fetch_git_external("${EXT_NAME}" "${EXT_JSON}")
@@ -95,14 +86,10 @@ function(_handle_fetched_external EXT_NAME EXT_JSON)
     _load_prefetch_hook("${EXT_NAME}" "${EXT_JSON}")
     
     # ==========================================================================
-    # Step 3: Make Available (Download if not cached)
+    # Step 3: Make Available (Download & Configure)
     # ==========================================================================
     
     _make_external_available("${EXT_NAME}")
-    
-    # Get source directory for logging
-    _get_external_source_dir("${EXT_NAME}" _source_dir)
-    dbg(${DBG_RARE} "[${EXT_NAME}] Source: ${_source_dir}" ID EXTERNALS)
     
     # ==========================================================================
     # Step 4: PostFetch Hook
@@ -139,7 +126,7 @@ function(_handle_fetched_external EXT_NAME EXT_JSON)
     
     set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_READY TRUE)
     
-    message(STATUS "[Externals] ${EXT_NAME}: Ready")
+    message(STATUS "[Externals] --- ${EXT_NAME}: Ready ---")
     
 endfunction()
 

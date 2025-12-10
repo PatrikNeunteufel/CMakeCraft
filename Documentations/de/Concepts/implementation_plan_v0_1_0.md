@@ -313,12 +313,12 @@ target_link_libraries(MyApp PRIVATE CoreLib)
 
 ### Phase 6
 
-- [ ] Core/Fetch.cmake
-- [ ] Hooks/HookLoader.cmake
-- [ ] Registry/Targets.cmake
-- [ ] Git-External wird gefetcht
-- [ ] Hook-System funktioniert
-- [ ] E216 bei fehlendem Hook
+- ✅ Core/Fetch.cmake
+- ✅ Hooks/HookLoader.cmake
+- ✅ Registry/Targets.cmake
+- ✅ Git-External wird gefetcht
+- ✅ Hook-System funktioniert
+- ✅ E216 bei fehlendem Hook
 
 ### Phase 7
 

@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Module:       ExecutableCreate.cmake
-# Version:      0.1.2
-# Date:         2025-12-09
+# Version:      0.1.1
+# Date:         2025-12-08
 # Part of:      CMake Architecture V2
 #
 # Description:
@@ -28,10 +28,6 @@
 #   NAME, PATH, TYPE, PCH_ENABLED, PCH_HEADER,
 #   DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS,
 #   DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
-#
-# Changes in v0.1.2:
-#   - Added APP_WINDOWS_GUI define for Windows GUI applications
-#   - Enables WinMain entry point pattern
 #
 # Changes in v0.1.1:
 #   - Full externals integration via apply_external_to_target()
@@ -259,9 +255,6 @@ function(_create_executable_target CTX)
         set_target_properties(${_name} PROPERTIES
             WIN32_EXECUTABLE TRUE
         )
-        # Define APP_WINDOWS_GUI for WinMain entry point
-        target_compile_definitions(${_name} PRIVATE APP_WINDOWS_GUI)
-        dbg(${DBG_RARE} "    Windows GUI: APP_WINDOWS_GUI defined" ID EXECUTABLES)
     endif()
     
     # --------------------------------------------------------------------------

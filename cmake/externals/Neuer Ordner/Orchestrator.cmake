@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Module:       Orchestrator.cmake
-# Version:      0.2.0
-# Date:         2025-12-09
+# Version:      0.1.0
+# Date:         2025-12-08
 # Part of:      CMake Architecture V2
 #
 # Description:
@@ -19,16 +19,10 @@
 #
 # Auto-loads:
 #   - cmake/externals/Local/Attach.cmake
-#   - cmake/externals/Fetched/Handler.cmake (Phase 6)
 #
 # Type Detection:
 #   - "path" field → Local External
-#   - "git" field  → Fetched External
-#
-# Changes in v0.2.0:
-#   - Added Fetched/Handler.cmake integration
-#   - Full Git external support
-#   - Registry integration
+#   - "git" field  → Fetched External (Phase 6)
 #
 # Based on:
 #   - master_concept v0.1
@@ -44,7 +38,6 @@ include_guard(GLOBAL)
 # ==============================================================================
 
 include(cmake/externals/Local/Attach.cmake)
-include(cmake/externals/Fetched/Handler.cmake)
 
 # ==============================================================================
 # _orchestrate_external - Main Dispatch Function
@@ -55,17 +48,16 @@ include(cmake/externals/Fetched/Handler.cmake)
     Detects the external type and dispatches to the appropriate handler.
     
     Parameters:
-        EXT_NAME - Name of the external (e.g. "bass", "spdlog")
+        EXT_NAME - Name of the external (e.g. "bass", "lua")
         EXT_JSON - JSON definition of the external
     
     Type Detection:
         - "path" present → _attach_local_external()
-        - "git" present  → _handle_fetched_external()
+        - "git" present  → _fetch_external() (Phase 6, not yet implemented)
         - Neither        → Error E012
     
     Example:
         _orchestrate_external("bass" "{\"path\":\"externals/bass\"}")
-        _orchestrate_external("spdlog" "{\"git\":\"https://...\",\"tag\":\"v1.12.0\"}")
 ]]
 function(_orchestrate_external EXT_NAME EXT_JSON)
     
@@ -92,7 +84,8 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
         
     elseif(_is_fetched)
         dbg(${DBG_RARE} "  Type: FETCHED (git)" ID EXTERNALS)
-        _handle_fetched_external("${EXT_NAME}" "${EXT_JSON}")
+        # Phase 6: _fetch_external("${EXT_NAME}" "${EXT_JSON}")
+        cmake_warn("W002" "Fetched externals not yet implemented (Phase 6): ${EXT_NAME}")
         
     else()
         # Should not reach here if validate_external_source works correctly
@@ -156,16 +149,15 @@ endfunction()
 #[[
     apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
     
-    Loads and applies an external to a target.
-    For local externals: Includes Include.cmake
-    For fetched externals: Links the registered target
+    Loads and applies an external's Include.cmake to a target.
+    Called by ExecutableCreate/LibraryCreate when processing externals.
     
     Parameters:
         TARGET_NAME - CMake target to apply external to
         EXT_NAME    - Name of the external
         EXT_OPTIONS - JSON options for this external
     
-    Sets variables for Local Include.cmake:
+    Sets variables for Include.cmake:
         EXTERNAL_NAME    - Name of the external
         EXTERNAL_ROOT    - Root path of the external
         EXTERNAL_OPTIONS - JSON options string
@@ -173,7 +165,6 @@ endfunction()
     
     Example:
         apply_external_to_target("MyApp" "bass" "{\"BASS_FLAC\":true}")
-        apply_external_to_target("MyApp" "spdlog" "{}")
 ]]
 function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
     # Get external definition from global property
@@ -188,13 +179,8 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
     
     # Check type
     _json_has_key("${_ext_json}" "path" _is_local)
-    _json_has_key("${_ext_json}" "git" _is_fetched)
     
     if(_is_local)
-        # =======================================================================
-        # Local External: Include Include.cmake
-        # =======================================================================
-        
         _json_get_string("${_ext_json}" "path" _path)
         set(_ext_root "${CMAKE_SOURCE_DIR}/${_path}")
         
@@ -222,28 +208,18 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
         set(EXTERNAL_ELEMENT_OPTIONS "${EXT_OPTIONS}")
         set(EXECUTABLE_NAME "${TARGET_NAME}")
         
-        dbg(${DBG_RARE} "    Applying ${EXT_NAME} to ${TARGET_NAME} (local)" ID EXTERNALS)
+        dbg(${DBG_RARE} "    Applying ${EXT_NAME} to ${TARGET_NAME}" ID EXTERNALS)
         
         # Include the external's setup
         include("${_include_file}")
         
-    elseif(_is_fetched)
-        # =======================================================================
-        # Fetched External: Link registered target
-        # =======================================================================
-        
-        dbg(${DBG_RARE} "    Applying ${EXT_NAME} to ${TARGET_NAME} (fetched)" ID EXTERNALS)
-        
-        # Check if external is ready
-        _is_external_ready("${EXT_NAME}" _is_ready)
-        if(NOT _is_ready)
-            cmake_warn("W101" "External '${EXT_NAME}' not ready when applying to ${TARGET_NAME}")
-        endif()
-        
-        # Link using registry
-        _link_external_to_target("${TARGET_NAME}" "${EXT_NAME}" SCOPE PRIVATE)
-        
     else()
-        cmake_fatal("E012" "External '${EXT_NAME}': Unknown type")
+        # Fetched external - target should already exist
+        if(TARGET ${EXT_NAME})
+            target_link_libraries(${TARGET_NAME} PRIVATE ${EXT_NAME})
+            dbg(${DBG_RARE} "    Linked ${EXT_NAME} to ${TARGET_NAME}" ID EXTERNALS)
+        else()
+            cmake_warn("W101" "External '${EXT_NAME}' target not found for ${TARGET_NAME}")
+        endif()
     endif()
 endfunction()
