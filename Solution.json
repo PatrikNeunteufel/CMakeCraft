@@ -35,8 +35,14 @@
     },
     "imgui": {
       "git": "https://github.com/ocornut/imgui.git",
-      "tag": "v1.91.6-docking",
+      "tag": "v1.91.6",
       "cmakeSupport": false
+    },
+    "imgui_docking": {
+      "git": "https://github.com/ocornut/imgui.git",
+      "tag": "v1.91.6-docking",
+      "cmakeSupport": false,
+      "hook": "imgui"
     }
   },
     "libraries": [
@@ -91,7 +97,7 @@
         "type": "GUI",
         "path": "projects/demos/exec/imGuiApp/src",
         "dependencies": [ "BasicLogger" ],
-        "externals": [ "glad", "glfw", "imgui" ]
+        "externals": [ "glad", "glfw", "imgui_docking" ]
       }
     ]
 }

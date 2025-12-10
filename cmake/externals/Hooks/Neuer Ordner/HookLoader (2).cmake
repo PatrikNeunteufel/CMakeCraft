@@ -3,15 +3,13 @@
 # ==============================================================================
 #
 # Module:       HookLoader.cmake
-# Version:      0.2.0
-# Date:         2025-12-10
+# Version:      0.1.0
+# Date:         2025-12-09
 # Part of:      CMake Architecture V2
 #
 # Description:
 #   Loads PreFetch and PostFetch hooks for externals.
 #   Implements Convention over Configuration pattern.
-#   Supports hook reuse via "hook" field in Solution.json.
-#   Automatic lock prevents duplicate hook execution per external.
 #
 # Dependencies (must be loaded before):
 #   - cmake/core/Errors.cmake
@@ -22,28 +20,11 @@
 #   - PreFetch:  cmake/externals/Hooks/PreFetch/${name}.cmake
 #   - PostFetch: cmake/externals/Hooks/PostFetch/${name}.cmake
 #
-# Hook Override (Solution.json):
-#   "imgui_docking": {
-#       "git": "...",
-#       "hook": "imgui"   ← Uses imgui's hooks instead
-#   }
-#
-# Hook Variables (available in hooks):
-#   - HOOK_EXTERNAL_NAME  - Name of the external (use for target names!)
-#   - HOOK_EXTERNAL_JSON  - JSON definition of the external
-#   - HOOK_SOURCE_DIR     - Source directory (PostFetch only)
-#
 # Hook Behavior:
 #   - No hooks in JSON, no convention file → No hook loaded
 #   - No hooks in JSON, convention file exists → Auto-load
 #   - Hooks explicitly defined, file exists → Load
 #   - Hooks explicitly defined, file missing → Error E216
-#   - Hook already executed for this external → Skip (automatic lock)
-#
-# Changes v0.2.0:
-#   - Added "hook" field support for hook reuse
-#   - Automatic lock per external (prevents duplicate execution)
-#   - Improved debug output
 #
 # Based on:
 #   - master_concept v0.1
@@ -61,36 +42,6 @@ set(HOOKS_PREFETCH_DIR "${CMAKE_SOURCE_DIR}/cmake/externals/Hooks/PreFetch")
 set(HOOKS_POSTFETCH_DIR "${CMAKE_SOURCE_DIR}/cmake/externals/Hooks/PostFetch")
 
 # ==============================================================================
-# _get_hook_name - Determine which hook to use
-# ==============================================================================
-#[[
-    _get_hook_name(EXT_NAME EXT_JSON OUT_HOOK_NAME)
-    
-    Determines the hook name to use. If "hook" field is present in JSON,
-    uses that name; otherwise uses the external's own name.
-    
-    Parameters:
-        EXT_NAME      - Name of the external
-        EXT_JSON      - JSON definition of the external
-        OUT_HOOK_NAME - Output: Name of the hook to use
-    
-    Example:
-        # External "imgui_docking" with "hook": "imgui"
-        # → Returns "imgui"
-]]
-function(_get_hook_name EXT_NAME EXT_JSON OUT_HOOK_NAME)
-    _json_has_key("${EXT_JSON}" "hook" _has_hook_override)
-    
-    if(_has_hook_override)
-        _json_get_string("${EXT_JSON}" "hook" _hook_name)
-        dbg(${DBG_COMMON} "[${EXT_NAME}] Using hook override: ${_hook_name}" ID EXTERNALS)
-        set(${OUT_HOOK_NAME} "${_hook_name}" PARENT_SCOPE)
-    else()
-        set(${OUT_HOOK_NAME} "${EXT_NAME}" PARENT_SCOPE)
-    endif()
-endfunction()
-
-# ==============================================================================
 # _load_prefetch_hook - Load PreFetch hook if applicable
 # ==============================================================================
 #[[
@@ -98,8 +49,6 @@ endfunction()
     
     Loads a PreFetch hook based on convention or explicit configuration.
     PreFetch hooks run BEFORE FetchContent_MakeAvailable.
-    
-    Automatic lock prevents duplicate execution for the same external.
     
     Parameters:
         EXT_NAME - Name of the external
@@ -110,35 +59,14 @@ endfunction()
         - Disable examples/tests in the external
         - Set up cache variables
     
-    Hook Variables:
-        HOOK_EXTERNAL_NAME - Name of the external (use for target names!)
-        HOOK_EXTERNAL_JSON - JSON definition
-    
-    Example Hook (cmake/externals/Hooks/PreFetch/glfw.cmake):
-        set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-        set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-        set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    Example Hook (cmake/externals/Hooks/PreFetch/spdlog.cmake):
+        set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+        set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 ]]
 function(_load_prefetch_hook EXT_NAME EXT_JSON)
     
     # ==========================================================================
-    # Lock Check: Skip if already executed for this external
-    # ==========================================================================
-    
-    get_property(_hook_done GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PREFETCH_DONE)
-    if(_hook_done)
-        dbg(${DBG_COMMON} "[${EXT_NAME}] PreFetch hook already executed, skipping" ID EXTERNALS)
-        return()
-    endif()
-    
-    # ==========================================================================
-    # Determine hook name (own name or override via "hook" field)
-    # ==========================================================================
-    
-    _get_hook_name("${EXT_NAME}" "${EXT_JSON}" _hook_name)
-    
-    # ==========================================================================
-    # Check for explicit hook path in "hooks" object
+    # Check for explicit hook path
     # ==========================================================================
     
     _json_has_key("${EXT_JSON}" "hooks" _has_hooks)
@@ -161,26 +89,26 @@ function(_load_prefetch_hook EXT_NAME EXT_JSON)
     # ==========================================================================
     
     if(_is_explicit)
-        # Explicit path specified in "hooks" object
+        # Explicit path specified
         set(_hook_file "${CMAKE_SOURCE_DIR}/${_explicit_path}")
         
         if(NOT EXISTS "${_hook_file}")
             cmake_fatal("E216" "External '${EXT_NAME}': preFetch hook not found: ${_explicit_path}")
         endif()
         
-        message(STATUS "[Externals]     PreFetch hook (explicit): ${_explicit_path}")
+        dbg(${DBG_COMMON} "    PreFetch hook (explicit): ${_explicit_path}" ID EXTERNALS)
         
     else()
-        # Convention path (using hook name, not external name)
-        set(_hook_file "${HOOKS_PREFETCH_DIR}/${_hook_name}.cmake")
+        # Convention path
+        set(_hook_file "${HOOKS_PREFETCH_DIR}/${EXT_NAME}.cmake")
         
         if(NOT EXISTS "${_hook_file}")
             # No convention hook - this is fine
-            dbg(${DBG_ULTRA_RARE} "[${EXT_NAME}] No PreFetch hook found" ID EXTERNALS)
+            dbg(${DBG_ULTRA_RARE} "    No PreFetch hook for ${EXT_NAME}" ID EXTERNALS)
             return()
         endif()
         
-        message(STATUS "[Externals]     PreFetch hook (convention): ${_hook_name}.cmake")
+        dbg(${DBG_COMMON} "    PreFetch hook (convention): ${EXT_NAME}.cmake" ID EXTERNALS)
     endif()
     
     # ==========================================================================
@@ -196,12 +124,6 @@ function(_load_prefetch_hook EXT_NAME EXT_JSON)
     
     include("${_hook_file}")
     
-    # ==========================================================================
-    # Set lock AFTER successful execution
-    # ==========================================================================
-    
-    set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PREFETCH_DONE TRUE)
-    
 endfunction()
 
 # ==============================================================================
@@ -213,8 +135,6 @@ endfunction()
     Loads a PostFetch hook based on convention or explicit configuration.
     PostFetch hooks run AFTER FetchContent_MakeAvailable.
     
-    Automatic lock prevents duplicate execution for the same external.
-    
     Parameters:
         EXT_NAME - Name of the external
         EXT_JSON - JSON definition of the external
@@ -224,41 +144,19 @@ endfunction()
         - Register targets in the registry
         - Apply additional configuration to targets
     
-    Hook Variables:
-        HOOK_EXTERNAL_NAME - Name of the external (use for target names!)
-        HOOK_EXTERNAL_JSON - JSON definition
-        HOOK_SOURCE_DIR    - Path to source directory
-    
-    IMPORTANT: Always use ${HOOK_EXTERNAL_NAME} for target names!
-    This allows hook reuse for variants (e.g. imgui / imgui_docking).
-    
     Example Hook (cmake/externals/Hooks/PostFetch/imgui.cmake):
-        add_library(${HOOK_EXTERNAL_NAME} STATIC
-            ${HOOK_SOURCE_DIR}/imgui.cpp
+        FetchContent_GetProperties(imgui)
+        add_library(imgui STATIC
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
             ...
         )
-        _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMARY)
+        target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
 ]]
 function(_load_postfetch_hook EXT_NAME EXT_JSON)
     
     # ==========================================================================
-    # Lock Check: Skip if already executed for this external
-    # ==========================================================================
-    
-    get_property(_hook_done GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_POSTFETCH_DONE)
-    if(_hook_done)
-        dbg(${DBG_COMMON} "[${EXT_NAME}] PostFetch hook already executed, skipping" ID EXTERNALS)
-        return()
-    endif()
-    
-    # ==========================================================================
-    # Determine hook name (own name or override via "hook" field)
-    # ==========================================================================
-    
-    _get_hook_name("${EXT_NAME}" "${EXT_JSON}" _hook_name)
-    
-    # ==========================================================================
-    # Check for explicit hook path in "hooks" object
+    # Check for explicit hook path
     # ==========================================================================
     
     _json_has_key("${EXT_JSON}" "hooks" _has_hooks)
@@ -281,26 +179,26 @@ function(_load_postfetch_hook EXT_NAME EXT_JSON)
     # ==========================================================================
     
     if(_is_explicit)
-        # Explicit path specified in "hooks" object
+        # Explicit path specified
         set(_hook_file "${CMAKE_SOURCE_DIR}/${_explicit_path}")
         
         if(NOT EXISTS "${_hook_file}")
             cmake_fatal("E216" "External '${EXT_NAME}': postFetch hook not found: ${_explicit_path}")
         endif()
         
-        message(STATUS "[Externals]     PostFetch hook (explicit): ${_explicit_path}")
+        dbg(${DBG_COMMON} "    PostFetch hook (explicit): ${_explicit_path}" ID EXTERNALS)
         
     else()
-        # Convention path (using hook name, not external name)
-        set(_hook_file "${HOOKS_POSTFETCH_DIR}/${_hook_name}.cmake")
+        # Convention path
+        set(_hook_file "${HOOKS_POSTFETCH_DIR}/${EXT_NAME}.cmake")
         
         if(NOT EXISTS "${_hook_file}")
             # No convention hook - this is fine for externals with CMakeLists.txt
-            dbg(${DBG_ULTRA_RARE} "[${EXT_NAME}] No PostFetch hook found" ID EXTERNALS)
+            dbg(${DBG_ULTRA_RARE} "    No PostFetch hook for ${EXT_NAME}" ID EXTERNALS)
             return()
         endif()
         
-        message(STATUS "[Externals]     PostFetch hook (convention): ${_hook_name}.cmake")
+        dbg(${DBG_COMMON} "    PostFetch hook (convention): ${EXT_NAME}.cmake" ID EXTERNALS)
     endif()
     
     # ==========================================================================
@@ -318,12 +216,6 @@ function(_load_postfetch_hook EXT_NAME EXT_JSON)
     # ==========================================================================
     
     include("${_hook_file}")
-    
-    # ==========================================================================
-    # Set lock AFTER successful execution
-    # ==========================================================================
-    
-    set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_POSTFETCH_DONE TRUE)
     
 endfunction()
 

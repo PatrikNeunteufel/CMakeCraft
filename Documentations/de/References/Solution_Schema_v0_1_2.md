@@ -1,12 +1,12 @@
 # Solution Schema – CMake Architecture V2
 
-> **Version:** 0.1.1  
-> **Datum:** 2025-12-09  
+> **Version:** 0.1.2  
+> **Datum:** 2025-12-10  
 > **Typ:** Referenz-Doku  
-> **Status:** In Entwicklung (Pre-Release)  
+> **Status:** Stabil  
 > **Basiert auf:** master_concept v0.1, guidelines v0.1  
 > **Sprache:** Deutsch  
-> **English:** [English Version](../../en/References/Solution_Schema_v0_1_1.md)
+> **English:** [English Version](../../en/References/Solution_Schema_v0_1_2.md)
 
 Diese Dokumentation beschreibt das vollständige Schema der Solution.json für das CMake Architecture V2 Build-System.
 
@@ -139,6 +139,7 @@ Die Solution.json ist das Herzstück der deklarativen Konfiguration. Sie definie
 | `branch` | ❌* | Git-Branch |
 | `commit` | ❌* | Commit-Hash |
 | `cmakeSupport` | ❌ | Hat CMakeLists.txt (default: true) |
+| `hook` | ❌ | Hook-Wiederverwendung (siehe 4.5) |
 | `preFetchHook` | ❌ | Expliziter PreFetch Hook Pfad |
 | `postFetchHook` | ❌ | Expliziter PostFetch Hook Pfad |
 
@@ -156,7 +157,7 @@ Die Solution.json ist das Herzstück der deklarativen Konfiguration. Sie definie
 "externals": {
     "imgui": {
         "git": "https://github.com/ocornut/imgui.git",
-        "tag": "v1.90.1",
+        "tag": "v1.91.6",
         "cmakeSupport": false
     }
 }
@@ -180,6 +181,67 @@ cmake/externals/Hooks/PostFetch/${name}.cmake
     }
 }
 ```
+
+### 4.5 hook Feld (Hook-Wiederverwendung)
+
+Das `hook` Feld ermöglicht die Wiederverwendung von Hooks für Varianten desselben Externals:
+
+```json
+"externals": {
+    "imgui": {
+        "git": "https://github.com/ocornut/imgui.git",
+        "tag": "v1.91.6",
+        "cmakeSupport": false
+    },
+    "imgui_docking": {
+        "git": "https://github.com/ocornut/imgui.git",
+        "tag": "v1.91.6-docking",
+        "cmakeSupport": false,
+        "hook": "imgui"
+    }
+}
+```
+
+| Aspekt | Beschreibung |
+|--------|--------------|
+| **Typ** | `string` |
+| **Optional** | Ja |
+| **Default** | Name des Externals selbst |
+| **Wert** | Name des Hooks (Dateiname ohne .cmake) |
+
+**Verhalten:**
+
+Wenn `hook` angegeben ist:
+1. PreFetch Hook wird von `Hooks/PreFetch/${hook}.cmake` geladen
+2. PostFetch Hook wird von `Hooks/PostFetch/${hook}.cmake` geladen
+3. `HOOK_EXTERNAL_NAME` enthält trotzdem den **eigenen** Namen (für Target-Erstellung)
+
+**Ergebnis-Beispiel:**
+
+| External | Hook-Datei | `HOOK_EXTERNAL_NAME` | Target |
+|----------|------------|----------------------|--------|
+| `imgui` | `imgui.cmake` | `"imgui"` | `imgui` |
+| `imgui_docking` | `imgui.cmake` | `"imgui_docking"` | `imgui_docking` |
+
+**Wichtig für Hook-Autoren:**
+
+Hooks müssen `${HOOK_EXTERNAL_NAME}` für Target-Namen verwenden:
+
+```cmake
+# ✅ Richtig - dynamischer Name
+add_library(${HOOK_EXTERNAL_NAME} STATIC ${sources})
+
+# ❌ Falsch - hardcoded
+add_library(imgui STATIC ${sources})
+```
+
+**Priorität:**
+
+| Angabe | Verwendeter Hook |
+|--------|------------------|
+| `preFetchHook` / `postFetchHook` | Expliziter Pfad (höchste Priorität) |
+| `hook` | Hooks vom referenzierten External |
+| (keine) | Konvention: `Hooks/{Pre,Post}Fetch/${name}.cmake` |
 
 ---
 
@@ -290,7 +352,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 ---
 
-## 8. Vollständiges Beispiel (GUI App)
+## 8. Vollständiges Beispiel (GUI App mit Hook-Wiederverwendung)
 
 ```json
 {
@@ -314,8 +376,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         },
         "imgui": {
             "git": "https://github.com/ocornut/imgui.git",
-            "tag": "v1.90.1",
+            "tag": "v1.91.6",
             "cmakeSupport": false
+        },
+        "imgui_docking": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "tag": "v1.91.6-docking",
+            "cmakeSupport": false,
+            "hook": "imgui"
         },
         "doctest": {
             "path": "externals/doctest"
@@ -323,10 +391,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     },
     "executables": [
         {
-            "name": "imGuiApp",
-            "path": "src/imGuiApp",
+            "name": "BasicApp",
+            "path": "projects/exec/BasicApp/src",
             "type": "GUI",
             "externals": ["glad", "glfw", "imgui"]
+        },
+        {
+            "name": "DockingApp",
+            "path": "projects/exec/DockingApp/src",
+            "type": "GUI",
+            "externals": ["glad", "glfw", "imgui_docking"]
         }
     ],
     "tests": [
@@ -348,17 +422,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 | E002 | Solution.json nicht gefunden |
 | E010 | External nicht definiert |
 | E012 | Kein/mehrere Source-Felder |
-| E201 | Fetched External: kein Target |
+| E201 | Fetched External: kein Target registriert |
 | E215 | Kein tag/branch/commit |
 | E216 | Hook nicht gefunden |
 | E217 | PostFetch Hook erforderlich (cmakeSupport=false) |
+| E218 | External nicht gecached und Offline-Modus |
+| W302 | Version-Mismatch aber Offline-Modus (cached verwendet) |
 
 ---
 
 ## 10. Siehe auch
 
 - [Externals](Externals_v0_2_0.md) – External-Referenz
-- [ErrorCodes](ErrorCodes_v0_1_1.md) – Fehlercodes
+- [ErrorCodes](ErrorCodes_v0_1_2.md) – Fehlercodes
+- [HookLoader.cmake](../Modules/HookLoader_cmake_v0_2_0_doc_v1.md) – Hook-System
 - [Externals_UserGuide](../UserGuides/Externals_UserGuide_v0_2_0.md) – Verwendung
 
 ---
@@ -367,5 +444,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.1** | **2025-12-09** | **Externals: cmakeSupport, preFetchHook, postFetchHook Felder, Hook-Konvention, APP_WINDOWS_GUI** |
+| **0.1.2** | **2025-12-10** | **`hook` Feld für Hook-Wiederverwendung, E218/W302 Error Codes, erweitertes Beispiel** |
+| 0.1.1 | 2025-12-09 | Externals: cmakeSupport, preFetchHook, postFetchHook, Hook-Konvention, APP_WINDOWS_GUI |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Schema aus v1.2 |
