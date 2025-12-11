@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # Hook:         imgui.cmake
-# Version:      0.3.0
+# Version:      0.4.0
 # Date:         2025-12-10
 # Part of:      CMake Architecture V2
 #
@@ -34,6 +34,9 @@
 #   Always use ${HOOK_EXTERNAL_NAME} for target names!
 #   This allows hook reuse for variants.
 #
+# Changes v0.4.0:
+#   - Remove examples/ folder to avoid VS project clutter
+#
 # Changes v0.3.0:
 #   - Dynamic target name via ${HOOK_EXTERNAL_NAME}
 #   - Supports hook reuse for imgui variants (imgui_docking, etc.)
@@ -49,6 +52,15 @@
 # ==============================================================================
 
 message(STATUS "[${HOOK_EXTERNAL_NAME}] Creating target from: ${HOOK_SOURCE_DIR}")
+
+# ==============================================================================
+# Cleanup: Remove examples folder (avoids VS Solution clutter)
+# ==============================================================================
+
+if(EXISTS "${HOOK_SOURCE_DIR}/examples")
+    message(STATUS "[${HOOK_EXTERNAL_NAME}]   Removing examples/ folder (VS cleanup)")
+    file(REMOVE_RECURSE "${HOOK_SOURCE_DIR}/examples")
+endif()
 
 # ==============================================================================
 # Collect Source Files

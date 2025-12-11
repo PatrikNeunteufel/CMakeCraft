@@ -77,18 +77,22 @@ Documentations/
 | [master_concept](Concepts/master_concept_v0_1_0.md) | 0.1.0 | Architektur-Übersicht, Vision |
 | [guidelines](Concepts/guidelines_v0_1_0.md) | 0.1.0 | CMake Coding-Konventionen |
 | [implementation_plan](Concepts/implementation_plan_v0_1_0.md) | 0.1.0 | Phasen-basierter Plan |
+| [Future_Enhancements](Concepts/Future_Enhancements_v0_1_0.md) | 0.1.0 | Geplante Features |
+| [Fetch_v0_2_1_Konzept](Concepts/Fetch_v0_2_1_Konzept.md) | 0.1.0 | Konzept zur Verbesserung des Handling von gefetchten Externals. ✅ Abgeschlossen |
+
 
 ### References/
 
 | Dokument | Version | Beschreibung |
 |----------|---------|--------------|
 | [ErrorCodes](References/ErrorCodes_v0_1_1.md) | 0.1.1 | Alle Fehlercodes (E001-E217, W001-W201) |
-| [Solution_Schema](References/Solution_Schema_v0_1_1.md) | 0.1.1 | JSON-Schema für Solution.json |
+| [Solution_Schema](References/Solution_Schema_v0_1_2.md) | 0.1.2 | JSON-Schema für Solution.json |
 | [Externals](References/Externals_v0_2_0.md) | 0.2.0 | Alle Externals (lokal + Git) |
 | [CMakePresets_Manual](References/CMakePresets_Manual_v0_1_1.md) | 0.1.1 | Preset-Konzepte |
 | [CMakePresets_Reference](References/CMakePresets_Reference_v0_1_0.md) | 0.1.0 | Team-Presets |
 | [CMakeUserPresets_Reference](References/CMakeUserPresets_Reference_v0_1_0.md) | 0.1.0 | User-Presets |
 | [Glossar](References/Glossar_v0_1_0.md) | 0.1.0 | Begriffsdefinitionen |
+| [Git_Externals](References/Git_Externals_Reference_v0_1_0.md) |0.1.0| Git Externals Einbindung (vorhandene und zukünftige)|
 
 ### Standards/
 
