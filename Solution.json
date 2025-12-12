@@ -2,7 +2,7 @@
     "schemaVersion": "0.1",
     "solution": {
         "name": "MinimalSolution",
-        "version": "0.4.0"
+        "version": "0.5.0"
     },
     "settings": {
         "standards": {
@@ -16,43 +16,51 @@
             "mode": "auto"
         }
     },
-  "externals": {
-    "bass": {
-      "path": "externals/bass"
+    "externals": {
+        "bass": {
+            "path": "externals/bass"
+        },
+        "lua54": {
+            "path": "externals/lua54"
+        },
+        "doctest": {
+            "path": "externals/doctest"
+        },
+        "glad": {
+            "path": "externals/glad"
+        },
+        "glfw": {
+            "git": "https://github.com/glfw/glfw.git",
+            "tag": "3.4"
+        },
+        "imgui": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "tag": "v1.91.6",
+            "cmakeSupport": false
+        },
+        "imgui_docking": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "tag": "v1.91.6-docking",
+            "cmakeSupport": false,
+            "hook": "imgui"
+        },
+        "googletest": {
+            "git": "https://github.com/google/googletest.git",
+            "tag": "v1.14.0"
+        },
+        "catch2": {
+            "git": "https://github.com/catchorg/Catch2.git",
+            "tag": "v3.5.2"
+        },
+        "qt6": {
+            "path": "externals/qt6",
+            "options": {
+                "hint": "${QT_ROOT}",
+                "backup": "I:/Qt/6.10.1/msvc2022_64",
+                "components": ["Core", "Widgets", "Gui"]
+            }
+        }
     },
-    "lua54": {
-      "path": "externals/lua54"
-    },
-    "doctest": {
-      "path": "externals/doctest"
-    },
-    "glad": {
-      "path": "externals/glad"
-    },
-    "glfw": {
-      "git": "https://github.com/glfw/glfw.git",
-      "tag": "3.4"
-    },
-    "imgui": {
-      "git": "https://github.com/ocornut/imgui.git",
-      "tag": "v1.91.6",
-      "cmakeSupport": false
-    },
-    "imgui_docking": {
-      "git": "https://github.com/ocornut/imgui.git",
-      "tag": "v1.91.6-docking",
-      "cmakeSupport": false,
-      "hook": "imgui"
-    },
-    "qt6": {
-      "path": "externals/qt6",
-      "options": {
-        "hint": "${QT_ROOT}",
-        "backup": "I:/Qt/6.10.1/msvc2022_64",
-        "components": [ "Core", "Widgets", "Gui" ]
-      }
-    }
-  },
     "libraries": [
         {
             "name": "BasicLogger",
@@ -61,61 +69,143 @@
             "public_headers": "projects/demos/libs/BasicLogger/include"
         }
     ],
-  "executables": [
-    {
-      "name": "MinimalConsole",
-      "displayName": "Console_Demo_Minimal",
-      "version": "2.0.0",
-      "path": "projects/demos/exec/MinimalConsole/src",
-      "dependencies": [ "BasicLogger" ],
-      "externals": [ "bass" ],
-      "external_options": {
-        "bass": {
-          "BASS_FLAC": true
+    "executables": [
+        {
+            "name": "MinimalConsole",
+            "displayName": "Console_Demo_Minimal",
+            "version": "2.0.0",
+            "path": "projects/demos/exec/MinimalConsole/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["bass"],
+            "external_options": {
+                "bass": {
+                    "BASS_FLAC": true
+                }
+            }
+        },
+        {
+            "name": "consolePlayer",
+            "displayName": "Console_Demo_Player",
+            "version": "1.0.0",
+            "path": "projects/demos/exec/consolePlayer/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["bass"],
+            "external_options": {
+                "bass": {
+                    "BASS_FLAC": true,
+                    "BASS_FX": true
+                }
+            }
+        },
+        {
+            "name": "MinimalWindow",
+            "displayName": "Window_Demo_Minimal",
+            "version": "0.1.0",
+            "type": "GUI",
+            "path": "projects/demos/exec/MinimalWindow/src",
+            "skip": false,
+            "dependencies": ["BasicLogger"]
+        },
+        {
+            "name": "imGuiApp",
+            "displayName": "imGui_Demo",
+            "version": "0.1.0",
+            "type": "GUI",
+            "path": "projects/demos/exec/imGuiApp/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["glad", "glfw", "imgui_docking"]
+        },
+        {
+            "name": "QtMarkdownViewer",
+            "skip": false,
+            "displayName": "MarkdownViewer",
+            "version": "0.1.0",
+            "type": "GUI",
+            "path": "projects/demos/exec/QtMarkdownViewer/src",
+            "dependencies": [],
+            "externals": ["qt6"]
         }
-      }
-    },
-    {
-      "name": "consolePlayer",
-      "displayName": "Console_Demo_Player",
-      "version": "1.0.0",
-      "path": "projects/demos/exec/consolePlayer/src",
-      "dependencies": [ "BasicLogger" ],
-      "externals": [ "bass" ],
-      "external_options": {
-        "bass": {
-          "BASS_FLAC": true,
-          "BASS_FX": true
+    ],
+    "tests": [
+        {
+            "name": "BasicLogger_UnitTests",
+            "displayName": "BasicLogger Unit Tests (doctest)",
+            "type": "unit",
+            "framework": "doctest",
+            "path": "projects/tests/unit/BasicLogger_Tests/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["doctest"],
+            "labels": ["unit", "logger", "fast"],
+            "timeout": 30
+        },
+        {
+            "name": "StringUtils_UnitTests",
+            "displayName": "StringUtils Unit Tests (GoogleTest)",
+            "type": "unit",
+            "framework": "googletest",
+            "path": "projects/tests/unit/StringUtils_Tests/src",
+            "externals": ["googletest"],
+            "labels": ["unit", "utils", "fast"],
+            "timeout": 30
+        },
+        {
+            "name": "MathUtils_UnitTests",
+            "displayName": "MathUtils Unit Tests (Catch2)",
+            "type": "unit",
+            "framework": "catch2",
+            "path": "projects/tests/unit/MathUtils_Tests/src",
+            "externals": ["catch2"],
+            "labels": ["unit", "math", "fast"],
+            "timeout": 30
+        },
+        {
+            "name": "AudioPipeline_IntegrationTests",
+            "displayName": "Audio Pipeline Integration (doctest)",
+            "type": "integration",
+            "framework": "doctest",
+            "path": "projects/tests/integration/AudioPipeline_Tests/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["doctest", "bass"],
+            "external_options": {
+                "bass": { "BASS_FLAC": true }
+            },
+            "labels": ["integration", "audio", "slow"],
+            "timeout": 120,
+            "parallel": false
+        },
+        {
+            "name": "System_EndToEndTests",
+            "displayName": "System E2E Tests (GoogleTest)",
+            "type": "system",
+            "framework": "googletest",
+            "path": "projects/tests/system/E2E_Tests/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["googletest"],
+            "labels": ["system", "e2e", "slow"],
+            "timeout": 180,
+            "parallel": false
+        },
+        {
+            "name": "Performance_Benchmarks",
+            "displayName": "Performance Benchmarks (Catch2)",
+            "type": "performance",
+            "framework": "catch2",
+            "path": "projects/tests/performance/Benchmarks/src",
+            "externals": ["catch2"],
+            "labels": ["performance", "benchmark", "slow"],
+            "timeout": 300,
+            "parallel": false
+        },
+        {
+            "name": "Smoke_Tests",
+            "displayName": "Smoke Tests (doctest)",
+            "type": "smoke",
+            "framework": "doctest",
+            "path": "projects/tests/smoke/Smoke_Tests/src",
+            "dependencies": ["BasicLogger"],
+            "externals": ["doctest"],
+            "labels": ["smoke", "critical", "fast"],
+            "timeout": 10
         }
-      }
-    },
-    {
-      "name": "MinimalWindow",
-      "displayName": "Window_Demo_Minimal",
-      "version": "0.1.0",
-      "type": "GUI",
-      "path": "projects/demos/exec/MinimalWindow/src",
-      "skip": false,
-      "dependencies": [ "BasicLogger" ]
-    },
-    {
-      "name": "imGuiApp",
-      "displayName": "imGui_Demo",
-      "version": "0.1.0",
-      "type": "GUI",
-      "path": "projects/demos/exec/imGuiApp/src",
-      "dependencies": [ "BasicLogger" ],
-      "externals": [ "glad", "glfw", "imgui_docking" ]
-    },
-    {
-      "name": "QtMarkdownViewer",
-      "skip": false,
-      "displayName": "MarkdownViewer",
-      "version": "0.1.0",
-      "type": "GUI",
-      "path": "projects/demos/exec/QtMarkdownViewer/src",
-      "dependencies": [],
-      "externals": [ "qt6" ]
-    }
-  ]
+    ]
 }

@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # Module:       Targets.cmake
-# Version:      0.2.1
+# Version:      0.2.0
 # Date:         2025-12-12
 # Part of:      CMake Architecture V2
 #
@@ -11,16 +11,9 @@
 #   Registry for external targets. Tracks which targets belong to which
 #   externals and provides lookup functionality.
 #
-# v0.2.1 Changes:
-#   - Removed hardcoded target mappings (moved to PreFetch hooks)
-#   - Fixed target_link_libraries keyword consistency
-#   - Added HOOK_PRIMARY_TARGET and HOOK_KNOWN_TARGETS support
-#
-# Principle:
-#   Target mappings are NOT hardcoded here. Instead:
-#   - CMake-supported externals: Targets auto-detected
-#   - Non-CMake externals: PostFetch hook creates targets
-#   - Special target names: PreFetch hook sets HOOK_PRIMARY_TARGET
+# v0.2.0 Changes:
+#   - Added framework-specific target patterns (Catch2, GoogleTest)
+#   - Enhanced auto-detection for common libraries
 #
 # Provides:
 #   _register_external_target(EXT_NAME TARGET_NAME [PRIMARY])
@@ -34,6 +27,38 @@
 # ==============================================================================
 
 include_guard(GLOBAL)
+
+# ==============================================================================
+# Framework-Specific Target Mappings
+# ==============================================================================
+#
+# Some libraries create targets with names different from the external name.
+# This map defines known patterns for auto-detection.
+#
+
+# Catch2 v3 targets
+set(_KNOWN_TARGETS_catch2 "Catch2;Catch2WithMain;Catch2::Catch2;Catch2::Catch2WithMain")
+set(_PRIMARY_TARGET_catch2 "Catch2WithMain")
+
+# GoogleTest targets
+set(_KNOWN_TARGETS_googletest "gtest;gtest_main;gmock;gmock_main;GTest::gtest;GTest::gtest_main;GTest::gmock;GTest::gmock_main")
+set(_PRIMARY_TARGET_googletest "gtest_main")
+
+# GLFW targets
+set(_KNOWN_TARGETS_glfw "glfw;glfw3;glfw::glfw")
+set(_PRIMARY_TARGET_glfw "glfw")
+
+# spdlog targets
+set(_KNOWN_TARGETS_spdlog "spdlog;spdlog::spdlog;spdlog::spdlog_header_only")
+set(_PRIMARY_TARGET_spdlog "spdlog::spdlog")
+
+# fmt targets
+set(_KNOWN_TARGETS_fmt "fmt;fmt::fmt;fmt::fmt-header-only")
+set(_PRIMARY_TARGET_fmt "fmt::fmt")
+
+# nlohmann_json targets
+set(_KNOWN_TARGETS_nlohmann_json "nlohmann_json;nlohmann_json::nlohmann_json")
+set(_PRIMARY_TARGET_nlohmann_json "nlohmann_json::nlohmann_json")
 
 # ==============================================================================
 # _register_external_target - Register a target for an external
@@ -77,34 +102,33 @@ endfunction()
     _auto_register_external_targets(EXT_NAME)
     
     Attempts to auto-detect targets created by an external.
-    
-    Detection sources (in order):
-        1. HOOK_KNOWN_TARGETS - Set by PreFetch hook for special externals
-        2. HOOK_PRIMARY_TARGET - Set by PreFetch hook
-        3. Generic patterns: ${EXT_NAME}, ${EXT_NAME}::${EXT_NAME}, etc.
+    Uses common naming conventions and framework-specific patterns.
     
     Parameters:
         EXT_NAME - Name of the external
+    
+    Detection order:
+        1. Framework-specific known targets (Catch2, GoogleTest, etc.)
+        2. Generic patterns: ${EXT_NAME}, ${EXT_NAME}::${EXT_NAME}, lowercase
 ]]
 function(_auto_register_external_targets EXT_NAME)
     string(TOLOWER "${EXT_NAME}" _ext_lower)
-    string(TOUPPER "${EXT_NAME}" _ext_upper)
     
     # ==========================================================================
-    # Step 1: Check for hook-defined targets (from PreFetch)
+    # Step 1: Check for framework-specific targets
     # ==========================================================================
     
-    # Check if PreFetch hook defined known targets via GLOBAL PROPERTY
-    get_property(_hook_targets GLOBAL PROPERTY HOOK_KNOWN_TARGETS_${EXT_NAME})
-    get_property(_hook_primary GLOBAL PROPERTY HOOK_PRIMARY_TARGET_${EXT_NAME})
-    
-    if(_hook_targets)
-        dbg(${DBG_RARE} "  Using hook-defined targets for ${EXT_NAME}" ID EXTERNALS)
+    if(DEFINED _KNOWN_TARGETS_${_ext_lower})
+        set(_known_targets "${_KNOWN_TARGETS_${_ext_lower}}")
+        set(_primary_target "${_PRIMARY_TARGET_${_ext_lower}}")
         
+        dbg(${DBG_RARE} "  Using known targets for ${EXT_NAME}: ${_known_targets}" ID EXTERNALS)
+        
+        # Try to find and register known targets
         set(_found_any FALSE)
-        foreach(_candidate IN LISTS _hook_targets)
+        foreach(_candidate IN LISTS _known_targets)
             if(TARGET ${_candidate})
-                if("${_candidate}" STREQUAL "${_hook_primary}")
+                if("${_candidate}" STREQUAL "${_primary_target}")
                     _register_external_target("${EXT_NAME}" "${_candidate}" PRIMARY)
                 else()
                     _register_external_target("${EXT_NAME}" "${_candidate}")
@@ -113,20 +137,13 @@ function(_auto_register_external_targets EXT_NAME)
             endif()
         endforeach()
         
-        # Set primary if defined but not yet registered
+        # If primary wasn't found but others were, set first as primary
         if(_found_any)
             get_property(_current_primary GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PRIMARY_TARGET)
-            if("${_current_primary}" STREQUAL "" AND _hook_primary)
-                if(TARGET ${_hook_primary})
-                    set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PRIMARY_TARGET "${_hook_primary}")
-                else()
-                    # Primary not found, use first registered
-                    get_property(_targets GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_TARGETS)
-                    if(_targets)
-                        list(GET _targets 0 _first)
-                        set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PRIMARY_TARGET "${_first}")
-                    endif()
-                endif()
+            if("${_current_primary}" STREQUAL "")
+                get_property(_targets GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_TARGETS)
+                list(GET _targets 0 _first)
+                set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PRIMARY_TARGET "${_first}")
             endif()
             return()
         endif()
@@ -136,20 +153,11 @@ function(_auto_register_external_targets EXT_NAME)
     # Step 2: Generic auto-detection patterns
     # ==========================================================================
     
-    # Common naming patterns for CMake targets
     set(_candidates
-        # Exact name
         "${EXT_NAME}"
-        "${_ext_lower}"
-        "${_ext_upper}"
-        # Namespaced
         "${EXT_NAME}::${EXT_NAME}"
+        "${_ext_lower}"
         "${_ext_lower}::${_ext_lower}"
-        # Common variations
-        "${EXT_NAME}::${_ext_lower}"
-        "${_ext_lower}::${EXT_NAME}"
-        # lib prefix
-        "lib${_ext_lower}"
     )
     
     set(_found_primary FALSE)
@@ -174,6 +182,15 @@ endfunction()
 # ==============================================================================
 # _get_external_targets - Get all targets for an external
 # ==============================================================================
+#[[
+    _get_external_targets(EXT_NAME OUT_VAR)
+    
+    Gets list of all registered targets for an external.
+    
+    Parameters:
+        EXT_NAME - Name of the external
+        OUT_VAR  - Output variable for target list
+]]
 function(_get_external_targets EXT_NAME OUT_VAR)
     get_property(_targets GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_TARGETS)
     set(${OUT_VAR} "${_targets}" PARENT_SCOPE)
@@ -182,6 +199,15 @@ endfunction()
 # ==============================================================================
 # _get_external_primary_target - Get primary target for an external
 # ==============================================================================
+#[[
+    _get_external_primary_target(EXT_NAME OUT_VAR)
+    
+    Gets the primary (main) target for an external.
+    
+    Parameters:
+        EXT_NAME - Name of the external
+        OUT_VAR  - Output variable for target name
+]]
 function(_get_external_primary_target EXT_NAME OUT_VAR)
     get_property(_primary GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_PRIMARY_TARGET)
     
@@ -199,6 +225,15 @@ endfunction()
 # ==============================================================================
 # _has_external_target - Check if external has registered targets
 # ==============================================================================
+#[[
+    _has_external_target(EXT_NAME OUT_VAR)
+    
+    Checks if an external has at least one registered target.
+    
+    Parameters:
+        EXT_NAME - Name of the external
+        OUT_VAR  - Output variable (TRUE/FALSE)
+]]
 function(_has_external_target EXT_NAME OUT_VAR)
     get_property(_targets GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_TARGETS)
     
@@ -212,6 +247,15 @@ endfunction()
 # ==============================================================================
 # _validate_external_targets - Validate external has usable targets
 # ==============================================================================
+#[[
+    _validate_external_targets(EXT_NAME)
+    
+    Validates that an external has at least one usable target.
+    Issues E201 if no targets found.
+    
+    Parameters:
+        EXT_NAME - Name of the external
+]]
 function(_validate_external_targets EXT_NAME)
     _has_external_target("${EXT_NAME}" _has_targets)
     
@@ -222,7 +266,7 @@ function(_validate_external_targets EXT_NAME)
     # Log registered targets
     _get_external_targets("${EXT_NAME}" _targets)
     _get_external_primary_target("${EXT_NAME}" _primary)
-    dbg(${DBG_COMMON} "  Validated: ${EXT_NAME} (primary: ${_primary})" ID EXTERNALS)
+    dbg(${DBG_COMMON} "  Validated: ${EXT_NAME} (primary: ${_primary}, all: ${_targets})" ID EXTERNALS)
     
 endfunction()
 
@@ -230,10 +274,9 @@ endfunction()
 # _link_external_to_target - Link external's targets to a consumer target
 # ==============================================================================
 #[[
-    _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE <scope>])
+    _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE])
     
     Links an external's primary target to a consumer target.
-    ALWAYS uses keyword signature for consistency.
     
     Parameters:
         CONSUMER_TARGET - Target that will use the external
@@ -241,31 +284,26 @@ endfunction()
         SCOPE           - Link scope (PUBLIC/PRIVATE/INTERFACE), default PRIVATE
     
     Example:
-        _link_external_to_target(MyApp glfw SCOPE PRIVATE)
+        _link_external_to_target(MyApp glfw PRIVATE)
 ]]
 function(_link_external_to_target CONSUMER_TARGET EXT_NAME)
-    # Parse arguments with SCOPE as named parameter
-    set(_options "")
-    set(_one_value SCOPE)
-    cmake_parse_arguments(_ARG "${_options}" "${_one_value}" "" ${ARGN})
-    
-    # Default to PRIVATE if not specified
-    if(NOT _ARG_SCOPE)
-        set(_ARG_SCOPE PRIVATE)
+    # Parse optional scope
+    set(_scope PRIVATE)
+    if(ARGC GREATER 2)
+        set(_scope ${ARGV2})
     endif()
     
     # Get primary target
     _get_external_primary_target("${EXT_NAME}" _primary)
     
-    if("${_primary}" STREQUAL "")
-        cmake_warn("W101" "External '${EXT_NAME}': No target to link")
-        return()
+    if(NOT _primary)
+        cmake_fatal("E202" "External '${EXT_NAME}' has no registered targets")
     endif()
     
-    # Link - ALWAYS use keyword signature
+    # Link
     if(TARGET ${_primary})
-        target_link_libraries(${CONSUMER_TARGET} ${_ARG_SCOPE} ${_primary})
-        dbg(${DBG_RARE} "  Linked: ${CONSUMER_TARGET} <- ${_primary} (${_ARG_SCOPE})" ID EXTERNALS)
+        target_link_libraries(${CONSUMER_TARGET} ${_scope} ${_primary})
+        dbg(${DBG_RARE} "  Linked: ${CONSUMER_TARGET} <- ${_primary} (${_scope})" ID EXTERNALS)
     else()
         cmake_fatal("E203" "Target '${_primary}' for external '${EXT_NAME}' not found")
     endif()
@@ -273,8 +311,22 @@ function(_link_external_to_target CONSUMER_TARGET EXT_NAME)
 endfunction()
 
 # ==============================================================================
-# _get_all_external_targets - Get all targets for linking
+# _get_all_external_targets - Get all targets for linking (for complex externals)
 # ==============================================================================
+#[[
+    _get_all_external_targets(EXT_NAME OUT_VAR)
+    
+    Gets all linkable targets for an external. Useful for externals
+    with multiple targets that should all be linked.
+    
+    Parameters:
+        EXT_NAME - Name of the external
+        OUT_VAR  - Output variable for target list
+    
+    Example:
+        _get_all_external_targets("googletest" _gtest_targets)
+        # Returns: gtest_main;gmock;... (all available)
+]]
 function(_get_all_external_targets EXT_NAME OUT_VAR)
     get_property(_targets GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_TARGETS)
     

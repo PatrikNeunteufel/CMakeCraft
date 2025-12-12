@@ -3,23 +3,28 @@
 # ==============================================================================
 #
 # Project:      CMake Architecture V2
-# Version:      0.1.2
-# Date:         2025-12-08
+# Version:      0.2.0
+# Date:         2025-12-12
 #
 # Description:
 #   Top-level CMake configuration for the modular build system.
 #   All console output is handled through the Debug module.
 #
 # Options:
+#   -DBUILD_TESTS=ON|OFF          Build project tests (default: OFF)
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests
-#   -DTEST_PHASE=1|2|3|4|5|...    Specific phase to test (default: all)
+#   -DTEST_PHASE=1|2|3|4|5|6|7    Specific phase to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Based on:
 #   - master_concept v0.1
 #   - guidelines v0.1
-#   - Solution_Schema v0.1
+#   - Solution_Schema v0.1.4
+#
+# Changelog:
+#   v0.2.0 (2025-12-12): Phase 6 (Git Externals) + Phase 7 (Tests)
+#   v0.1.2 (2025-12-08): Phase 5 (Local Externals)
 #
 # ==============================================================================
 
@@ -29,6 +34,7 @@ cmake_minimum_required(VERSION 3.25)
 # Options
 # ==============================================================================
 
+option(BUILD_TESTS "Build project tests" OFF)
 option(RUN_BUILD_SYSTEM_TESTS "Run build system phase tests" ON)
 set(TEST_PHASE "" CACHE STRING "Specific phase to test (empty = all completed phases)")
 
@@ -55,6 +61,7 @@ dbg_init(ID CMAKE_MAIN LEVEL ${DBG_SHOW_MUCH} SWITCH ON TAG "CMake")
 dbg(${DBG_OFTEN} "=== CMake Architecture V2 ===" ID CMAKE_MAIN)
 dbg(${DBG_COMMON} "CMake Version: ${CMAKE_VERSION}" ID CMAKE_MAIN)
 dbg(${DBG_COMMON} "Generator: ${CMAKE_GENERATOR}" ID CMAKE_MAIN)
+dbg(${DBG_COMMON} "Build Tests: ${BUILD_TESTS}" ID CMAKE_MAIN)
 dbg(${DBG_COMMON} "Build System Tests: ${RUN_BUILD_SYSTEM_TESTS}" ID CMAKE_MAIN)
 
 # ==============================================================================
@@ -79,13 +86,15 @@ project(
 dbg(${DBG_COMMON} "Project: ${PROJECT_NAME} v${PROJECT_VERSION}" ID CMAKE_MAIN)
 
 # ==============================================================================
-# Phase 5: Externals (must come BEFORE Libraries and Executables!)
+# Phase 5 & 6: Externals (Local + Fetched)
+# Must come BEFORE Libraries and Executables!
 # ==============================================================================
 
 include(cmake/project/Externals.cmake)
 
 # ==============================================================================
-# Phase 4: Libraries (must come BEFORE Executables!)
+# Phase 4: Libraries
+# Must come BEFORE Executables!
 # ==============================================================================
 
 include(cmake/project/Libraries.cmake)
@@ -97,10 +106,13 @@ include(cmake/project/Libraries.cmake)
 include(cmake/project/Executables.cmake)
 
 # ==============================================================================
-# Phase 7: Tests (when implemented)
+# Phase 7: Tests
+# Only when BUILD_TESTS is enabled
 # ==============================================================================
 
-# include(cmake/project/Tests.cmake)
+if(BUILD_TESTS)
+    include(cmake/project/Tests.cmake)
+endif()
 
 # ==============================================================================
 # Close Main Debug Block
@@ -149,17 +161,23 @@ if(RUN_BUILD_SYSTEM_TESTS)
         include(cmake/buildSystemTest/phase4.cmake)
     endif()
     
-    # Phase 5 Test: Externals Pipeline
+    # Phase 5 Test: Local Externals Pipeline
     if("${TEST_PHASE}" STREQUAL "" OR "5" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
         include(cmake/buildSystemTest/phase5.cmake)
     endif()
     
-    # Phase 6+ Tests (when implemented)
-    # if("${TEST_PHASE}" STREQUAL "" OR "6" IN_LIST TEST_PHASE)
-    #     dbgspace(ID BUILD_TEST)
-    #     include(cmake/buildSystemTest/phase6.cmake)
-    # endif()
+    # Phase 6 Test: Git Externals + Hooks
+    if("${TEST_PHASE}" STREQUAL "" OR "6" IN_LIST TEST_PHASE)
+        dbgspace(ID BUILD_TEST)
+        include(cmake/buildSystemTest/phase6.cmake)
+    endif()
+    
+    # Phase 7 Test: Test Pipeline
+    if("${TEST_PHASE}" STREQUAL "" OR "7" IN_LIST TEST_PHASE)
+        dbgspace(ID BUILD_TEST)
+        include(cmake/buildSystemTest/phase7.cmake)
+    endif()
     
     dbgspace(ID BUILD_TEST)
     dbg(${DBG_OFTEN} "Build System Tests completed" ID BUILD_TEST)

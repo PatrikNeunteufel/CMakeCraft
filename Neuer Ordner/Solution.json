@@ -1,0 +1,121 @@
+{
+    "schemaVersion": "0.1",
+    "solution": {
+        "name": "MinimalSolution",
+        "version": "0.4.0"
+    },
+    "settings": {
+        "standards": {
+            "cxx_standard": 20
+        },
+        "defaults": {
+            "library_type": "INTERFACE",
+            "executable_type": "CONSOLE"
+        },
+        "sources": {
+            "mode": "auto"
+        }
+    },
+  "externals": {
+    "bass": {
+      "path": "externals/bass"
+    },
+    "lua54": {
+      "path": "externals/lua54"
+    },
+    "doctest": {
+      "path": "externals/doctest"
+    },
+    "glad": {
+      "path": "externals/glad"
+    },
+    "glfw": {
+      "git": "https://github.com/glfw/glfw.git",
+      "tag": "3.4"
+    },
+    "imgui": {
+      "git": "https://github.com/ocornut/imgui.git",
+      "tag": "v1.91.6",
+      "cmakeSupport": false
+    },
+    "imgui_docking": {
+      "git": "https://github.com/ocornut/imgui.git",
+      "tag": "v1.91.6-docking",
+      "cmakeSupport": false,
+      "hook": "imgui"
+    },
+    "qt6": {
+      "path": "externals/qt6",
+      "options": {
+        "hint": "${QT_ROOT}",
+        "backup": "I:/Qt/6.10.1/msvc2022_64",
+        "components": [ "Core", "Widgets", "Gui" ]
+      }
+    }
+  },
+    "libraries": [
+        {
+            "name": "BasicLogger",
+            "version": "1.0.0",
+            "type": "INTERFACE",
+            "public_headers": "projects/demos/libs/BasicLogger/include"
+        }
+    ],
+  "executables": [
+    {
+      "name": "MinimalConsole",
+      "displayName": "Console_Demo_Minimal",
+      "version": "2.0.0",
+      "path": "projects/demos/exec/MinimalConsole/src",
+      "dependencies": [ "BasicLogger" ],
+      "externals": [ "bass" ],
+      "external_options": {
+        "bass": {
+          "BASS_FLAC": true
+        }
+      }
+    },
+    {
+      "name": "consolePlayer",
+      "displayName": "Console_Demo_Player",
+      "version": "1.0.0",
+      "path": "projects/demos/exec/consolePlayer/src",
+      "dependencies": [ "BasicLogger" ],
+      "externals": [ "bass" ],
+      "external_options": {
+        "bass": {
+          "BASS_FLAC": true,
+          "BASS_FX": true
+        }
+      }
+    },
+    {
+      "name": "MinimalWindow",
+      "displayName": "Window_Demo_Minimal",
+      "version": "0.1.0",
+      "type": "GUI",
+      "path": "projects/demos/exec/MinimalWindow/src",
+      "skip": false,
+      "dependencies": [ "BasicLogger" ]
+    },
+    {
+      "name": "imGuiApp",
+      "displayName": "imGui_Demo",
+      "version": "0.1.0",
+      "type": "GUI",
+      "path": "projects/demos/exec/imGuiApp/src",
+      "dependencies": [ "BasicLogger" ],
+      "externals": [ "glad", "glfw", "imgui_docking" ]
+    },
+    {
+      "name": "QtMarkdownViewer",
+      "skip": false,
+      "displayName": "MarkdownViewer",
+      "version": "0.1.0",
+      "type": "GUI",
+      "path": "projects/demos/exec/QtMarkdownViewer/src",
+      "dependencies": [],
+      "externals": [ "qt6" ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+also besteht im Prinzip eine App immer aus einem Projekt exec (main) und einer lib(wohl eine statische lib). 
+
+sollte dann evtl. eine zusätzliche (alternative) struktur für z.b. App gebildet werden, welche in sich exec, libs( und tests) beinhalten kann, aber auch externe dependencies (libs) haben kann, was wohl eher öffentliche libs, welche mit andern apps geshared werden können. (diese werden wohl am ehesten dependencies in app.libs sein.
+
+
+
+das wird nun aber etwas kompliziert und muss genau besprochen werden

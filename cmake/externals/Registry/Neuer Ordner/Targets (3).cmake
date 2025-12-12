@@ -230,7 +230,7 @@ endfunction()
 # _link_external_to_target - Link external's targets to a consumer target
 # ==============================================================================
 #[[
-    _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE <scope>])
+    _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE])
     
     Links an external's primary target to a consumer target.
     ALWAYS uses keyword signature for consistency.
@@ -241,31 +241,26 @@ endfunction()
         SCOPE           - Link scope (PUBLIC/PRIVATE/INTERFACE), default PRIVATE
     
     Example:
-        _link_external_to_target(MyApp glfw SCOPE PRIVATE)
+        _link_external_to_target(MyApp glfw PRIVATE)
 ]]
 function(_link_external_to_target CONSUMER_TARGET EXT_NAME)
-    # Parse arguments with SCOPE as named parameter
-    set(_options "")
-    set(_one_value SCOPE)
-    cmake_parse_arguments(_ARG "${_options}" "${_one_value}" "" ${ARGN})
-    
-    # Default to PRIVATE if not specified
-    if(NOT _ARG_SCOPE)
-        set(_ARG_SCOPE PRIVATE)
+    # Parse optional scope - ALWAYS default to PRIVATE for keyword consistency
+    set(_scope PRIVATE)
+    if(ARGC GREATER 2)
+        set(_scope ${ARGV2})
     endif()
     
     # Get primary target
     _get_external_primary_target("${EXT_NAME}" _primary)
     
-    if("${_primary}" STREQUAL "")
-        cmake_warn("W101" "External '${EXT_NAME}': No target to link")
-        return()
+    if(NOT _primary)
+        cmake_fatal("E202" "External '${EXT_NAME}' has no registered targets")
     endif()
     
     # Link - ALWAYS use keyword signature
     if(TARGET ${_primary})
-        target_link_libraries(${CONSUMER_TARGET} ${_ARG_SCOPE} ${_primary})
-        dbg(${DBG_RARE} "  Linked: ${CONSUMER_TARGET} <- ${_primary} (${_ARG_SCOPE})" ID EXTERNALS)
+        target_link_libraries(${CONSUMER_TARGET} ${_scope} ${_primary})
+        dbg(${DBG_RARE} "  Linked: ${CONSUMER_TARGET} <- ${_primary} (${_scope})" ID EXTERNALS)
     else()
         cmake_fatal("E203" "Target '${_primary}' for external '${EXT_NAME}' not found")
     endif()
