@@ -164,6 +164,8 @@ if(WIN32)
         "D:/Qt/6.10.0/msvc2022_64"
         "D:/Qt/6.8.0/msvc2022_64"
         "D:/Qt/6.7.0/msvc2022_64"
+        "I:/Qt/6.10.1/msvc2022_64"
+        "E:/Qt/6.10.1/msvc2022_64"
     )
 elseif(APPLE)
     list(APPEND _QT6_SEARCH_PATHS
@@ -243,7 +245,7 @@ endif()
 # ==============================================================================
 # Error if not found
 # ==============================================================================
-
+message("QtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQt")
 if(NOT _QT6_FOUND)
     # Build helpful error message with searched paths
     set(_searched_paths_msg "")
@@ -252,6 +254,7 @@ if(NOT _QT6_FOUND)
     endforeach()
     if(_backup_path)
         string(APPEND _searched_paths_msg "    - ${_backup_path} (backup)\n")
+        message("looking BACKUP path: ${_backup_path}")
     endif()
     
     message(FATAL_ERROR 

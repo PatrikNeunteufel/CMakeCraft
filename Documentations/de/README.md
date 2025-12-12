@@ -1,7 +1,7 @@
 # Dokumentation – CMake Architecture V2
 
-> **Version:** 0.2.0  
-> **Datum:** 2025-12-09  
+> **Version:** 0.3.0  
+> **Datum:** 2025-12-12  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Sprache:** Deutsch  
 > **English:** [English Version](../en/README.md)
@@ -50,16 +50,28 @@ Documentations/
 
 | Typ | Ordner | Zielgruppe | Beschreibung |
 |-----|--------|------------|--------------|
+| **Standard-Doku** | `Standards/` | Alle Entwickler | Coding Standards |
 | **Blueprint** | `Blueprints/` | Doku-Ersteller | Standards für Dokumente und Code |
 | **Konzept-Doku** | `Concepts/` | Build-System-Dev | Architektur, Design-Entscheidungen |
 | **Referenz-Doku** | `References/` | Build-System-Dev | Nachschlagewerke, Spezifikationen |
-| **Standard-Doku** | `Standards/` | Alle Entwickler | Coding Standards |
 | **Modul-Doku** | `Modules/` | Build-System-Dev | CMake-Modul-Dokumentationen |
 | **Benutzer-Doku** | `UserGuides/` | C++ Entwickler | Anleitungen zur Nutzung |
+| **Tutorials** | `Tutorials/` | C++ Entwickler | Tutorials |
 
 ---
 
 ## Vorhandene Dokumente
+
+### Standards/
+
+| Dokument | Version | Beschreibung |
+|----------|---------|--------------|
+| [Language_Standards](Standards/Language_Standards_v0_1_1.md) | 0.1.1 | C/C++ Standards |
+| [Cpp_Coding_Standard](Standards/Cpp_Coding_Standard_v0_1_0.md) | 0.1.0 | C++ Coding-Konventionen |
+| [C_Coding_Standard](Standards/C_Coding_Standard_v0_1_0.md) | 0.1.0 | C Coding-Konventionen |
+| [CMake_Standard](Standards/CMake_Standard_v0_1_0.md) | 0.1.0 | CMake Coding-Konventionen |
+| [Git_Standard](Standards/Git_Standard_v0_1_0.md) | 0.1.0 | Git Workflow |
+
 
 ### Blueprints/
 
@@ -79,14 +91,14 @@ Documentations/
 | [implementation_plan](Concepts/implementation_plan_v0_1_0.md) | 0.1.0 | Phasen-basierter Plan |
 | [Future_Enhancements](Concepts/Future_Enhancements_v0_1_0.md) | 0.1.0 | Geplante Features |
 | [Fetch_v0_2_1_Konzept](Concepts/Fetch_v0_2_1_Konzept.md) | 0.1.0 | Konzept zur Verbesserung des Handling von gefetchten Externals. ✅ Abgeschlossen |
-
+| [System_Externals_Concept](Concepts/System_Externals_Concept_v0_1_0c.md)|0.1.0| Konzept für System Externals |
 
 ### References/
 
 | Dokument | Version | Beschreibung |
 |----------|---------|--------------|
 | [ErrorCodes](References/ErrorCodes_v0_1_1.md) | 0.1.1 | Alle Fehlercodes (E001-E217, W001-W201) |
-| [Solution_Schema](References/Solution_Schema_v0_1_2.md) | 0.1.2 | JSON-Schema für Solution.json |
+| [Solution_Schema](References/Solution_Schema_v0_1_3.md) | 0.1.3 | JSON-Schema für Solution.json |
 | [Externals](References/Externals_v0_2_0.md) | 0.2.0 | Alle Externals (lokal + Git) |
 | [CMakePresets_Manual](References/CMakePresets_Manual_v0_1_1.md) | 0.1.1 | Preset-Konzepte |
 | [CMakePresets_Reference](References/CMakePresets_Reference_v0_1_0.md) | 0.1.0 | Team-Presets |
@@ -94,17 +106,18 @@ Documentations/
 | [Glossar](References/Glossar_v0_1_0.md) | 0.1.0 | Begriffsdefinitionen |
 | [Git_Externals](References/Git_Externals_Reference_v0_1_0.md) |0.1.0| Git Externals Einbindung (vorhandene und zukünftige)|
 
-### Standards/
+### Modules/
 
-| Dokument | Version | Beschreibung |
-|----------|---------|--------------|
-| [Language_Standards](Standards/Language_Standards_v0_1_1.md) | 0.1.1 | C/C++ Standards |
-| [Cpp_Coding_Standard](Standards/Cpp_Coding_Standard_v0_1_0.md) | 0.1.0 | C++ Coding-Konventionen |
-| [C_Coding_Standard](Standards/C_Coding_Standard_v0_1_0.md) | 0.1.0 | C Coding-Konventionen |
-| [CMake_Standard](Standards/CMake_Standard_v0_1_0.md) | 0.1.0 | CMake Coding-Konventionen |
-| [Git_Standard](Standards/Git_Standard_v0_1_0.md) | 0.1.0 | Git Workflow |
+Module sind alle CMake-Skripte im `cmake/` Verzeichnis des Build-Systems. Sie sind in drei Hauptkategorien unterteilt: `core/`, `project/` und `Externals/`. 
+Eine zusätzliche Gruppe ist `buildSystemTest/`, die für Testmodule zum Testen des Buildsystem reserviert ist. 
 
-### Modules/core/
+Als Einstiegspunkt dient das Hauptmodul `CMakeLists.txt` und ist immer im Root-Verzeichnis zu finden.
+
+| Modul | Version | Beschreibung |
+|-------|---------|--------------|
+| [CMakeLists](Modules/CMakeLists_doc_v0_1_1.md) | 0.1.1 | Haupt-CMakeLists Struktur |
+
+#### core/
 
 | Modul | Version | Beschreibung |
 |-------|---------|--------------|
@@ -118,7 +131,7 @@ Documentations/
 | [Warnings.cmake](Modules/core/Warnings_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Warning-Level |
 | [CompilerOptions.cmake](Modules/core/CompilerOptions_cmake_v0_1_1_doc_v1.md) | 0.1.1 | Compiler-Konfiguration |
 
-### Modules/project/
+#### project/
 
 | Modul | Version | Beschreibung |
 |-------|---------|--------------|
@@ -131,25 +144,30 @@ Documentations/
 | [LibraryCreate.cmake](Modules/project/LibraryCreate_cmake_v0_1_0_doc_v0_1.md) | 0.1.0 | Library-Target erstellen |
 | [Externals.cmake](Modules/project/Externals_cmake_v0_1_0_doc_v1.md) | 0.1.0 | External-Integration |
 
-### Modules/Externals/
+#### Externals/
 
 | Modul | Version | Beschreibung |
 |-------|---------|--------------|
 | [Orchestrator.cmake](Modules/Externals/Orchestrator_cmake_v0_2_0_doc_v1.md) | 0.2.0 | External-Dispatch (lokal/fetched) |
-| [Attach.cmake](Modules/Externals/Attach_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Lokale External-Behandlung |
-| [Fetch.cmake](Modules/Externals/Fetch_cmake_v0_1_0_doc_v1.md) | 0.1.0 | FetchContent-Wrapper |
-| [Handler.cmake](Modules/Externals/Handler_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Fetched External Pipeline |
-| [HookLoader.cmake](Modules/Externals/HookLoader_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Hook-System |
-| [Targets.cmake](Modules/Externals/Targets_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Target-Registry |
+| [Local/Attach.cmake](Modules/Externals/Local/Attach_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Lokale External-Behandlung |
+| [Core/Fetch.cmake](Modules/Externals/Core/Fetch_cmake_v0_2_0_doc_v2.md) | 0.2.0 | FetchContent-Wrapper |
+| [Fetched/Handler.cmake](Modules/Externals/Fetched/Handler_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Fetched External Pipeline |
+| [Hooks/HookLoader.cmake](Modules/Externals/Hooks/HookLoader_cmake_v0_2_0_doc_v1.md) | 0.2.0 | Hook-System |
+| [Registry/Targets.cmake](Modules/Externals/Registry/Targets_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Target-Registry |
+
+#### buildSystemTest/
+| Modul | Version | Beschreibung |
+|-------|---------|--------------|
+| [BuildSystemTest.cmake](Modules/buildSystemTest/BuildSystemTests_doc_v0_1.md) | 0.1.0 | Build-System Testmodule |
 
 ### externals/ (Hook-Dokumentationen)
 
 | Dokument | Version | Beschreibung |
 |----------|---------|--------------|
-| [bass/Include.cmake](externals/bass/Include_cmake_v0_1_1_doc_v1_.md) | 0.1.1 | BASS Audio Integration |
+| [bass/Include.cmake](externals/bass/Include_cmake_v0_1_1_doc_v1.md) | 0.1.1 | BASS Audio Integration |
 | [lua54/Include.cmake](externals/lua54/Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | Lua 5.4 Integration |
 | [doctest/Include.cmake](externals/doctest/Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | doctest Framework |
-| [glad/Include.cmake](externals/glad/Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | GLAD OpenGL Loader |
+| [glad/Include.cmake](externals/glad/glad_Include_cmake_v0_1_0_doc_v1.md) | 0.1.0 | GLAD OpenGL Loader |
 | glfw/PreFetch.cmake | 0.1.0 | GLFW Build-Optionen |
 | imgui/PostFetch.cmake | 0.2.0 | ImGui Target-Erstellung |
 
@@ -159,6 +177,9 @@ Documentations/
 |----------|---------|--------------|
 | [Externals_UserGuide](UserGuides/Externals_UserGuide_v0_2_0.md) | 0.2.0 | External-Verwendung (lokal + Git) |
 | [CMakeUserPresets_Example](UserGuides/CMakeUserPresets_Example_v0_1_0.md) | 0.1.0 | Template für User-Presets |
+| [how_to_build_new_project](UserGuides/how_to_build_new_project_v0_1_0.md) | 0.1.0 | Neues Executable/Library hinzufügen |
+| [Adding Externals](UserGuides/Adding_Externals_UserGuide_v0_1_0.md) | 0.1.0 | Neue Externals hinzufügen |
+| [Qt6_Integration_UserGuide](UserGuides/Qt6_Integration_UserGuide_v0_2_0.md) | 0.2.0 | Qt6 in Projekte integrieren |
 
 ---
 
@@ -183,7 +204,7 @@ Documentations/
 
 1. **Externals_UserGuide** – [External-Bibliotheken verwenden](UserGuides/Externals_UserGuide_v0_2_0.md)
 2. **CMakeUserPresets_Example** – [Template für eigene Presets](UserGuides/CMakeUserPresets_Example_v0_1_0.md)
-3. **Solution_Schema** – [JSON-Format für Solution.json](References/Solution_Schema_v0_1_1.md)
+3. **Solution_Schema** – [JSON-Format für Solution.json](References/Solution_Schema_v0_1_3.md)
 
 ### GUI-Anwendung erstellen (OpenGL/ImGui)
 
@@ -252,7 +273,8 @@ Neue Dokumentationen erstellen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.2.0** | **2025-12-09** | **Phase 6 komplett: Git Externals, Hook-System, alle Module dokumentiert, Standards-Ordner** |
+| **0.3.0** | **2025-12-12** | **Updated diverse Versions/links; Added new Documentations** |
+| 0.2.0 | 2025-12-09 | Phase 6 komplett: Git Externals, Hook-System, alle Module dokumentiert, Standards-Ordner |
 | 0.1.5 | 2025-12-04 | SourceCollect.cmake; Collector-Namenskonvention |
 | 0.1.4 | 2025-12-04 | Validation, OutputDirs; Modules/ Subfolder |
 | 0.1.3 | 2025-12-04 | Errors.cmake, Warnings.cmake |

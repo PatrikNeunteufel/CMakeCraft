@@ -48,7 +48,7 @@
       "path": "externals/qt6",
       "options": {
         "hint": "${QT_ROOT}",
-        "backup": "E:/Backup/Qt/6.7.0/msvc2022_64",
+        "backup": "I:/Qt/6.10.1/msvc2022_64",
         "components": [ "Core", "Widgets", "Gui" ]
       }
     }

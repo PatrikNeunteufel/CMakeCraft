@@ -75,6 +75,9 @@ cmake --build --preset build
 
 ## 📚 Weiterführende Dokumentation
 
+weiterführende Dokumentationen werden unter [Documentations](Documentations/de/README.md) bereitgestellt.  
+
+
 | Thema | Datei |
 |-------|------|
 | Funktionsweise der Presets | `/Documentations/References/CMakePresets_Manual.md` |
