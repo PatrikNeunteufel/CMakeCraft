@@ -677,8 +677,8 @@ Vor Commit eines CMake-Moduls prüfen:
 ## 12. Siehe auch
 
 - [Documentation_Blueprint](Documentation_Blueprint_v0_1_0.md) – Struktur für Dokumentationen
-- [guidelines](guidelines_v0_1_0.md) – CMake Coding-Konventionen
-- [ErrorCodes](ErrorCodes_v0_1_0.md) – Alle Fehlercodes
+- [guidelines](../Concepts/guidelines_v0_1_0.md) – CMake Coding-Konventionen
+- [ErrorCodes](../References/ErrorCodes_v0_1_1.md) – Alle Fehlercodes
 
 ---
 

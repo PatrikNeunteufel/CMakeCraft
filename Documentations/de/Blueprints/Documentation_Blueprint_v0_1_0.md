@@ -518,7 +518,7 @@ Vor Fertigstellung einer Dokumentation prüfen:
 ## 8. Siehe auch
 
 - [CMake_Blueprint](CMake_Blueprint_v0_1_0.md) – Struktur für CMake-Module
-- [guidelines](guidelines_v0_1_0.md) – CMake Coding-Konventionen
+- [guidelines](../Concepts/guidelines_v0_1_0.md) – CMake Coding-Konventionen
 
 ---
 

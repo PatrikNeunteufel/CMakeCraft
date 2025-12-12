@@ -254,9 +254,9 @@ Im Web-Generator "Generate Debug" aktivieren für zusätzliche Fehlerprüfung.
 
 ## 11. Siehe auch
 
-- [Attach.cmake](../Modules/Externals/Attach_cmake_v0_1_0_doc_v1.md) – Local Handler
-- [imgui PostFetch Hook](../Hooks/imgui_PostFetch_v0_2_0_doc_v1.md) – GLAD-Linking
-- [glfw PreFetch Hook](../Hooks/glfw_PreFetch_v0_1_0_doc_v1.md) – Window/Context
+- [Attach.cmake](../../Modules/Externals/Local/Attach_cmake_v0_1_0_doc_v1.md) – Local Handler
+- [imgui PostFetch Hook](../../Modules/Externals/Hooks/postfetch/imgui_PostFetch_v0_2_0_doc_v1.md) – GLAD-Linking
+- [glfw PreFetch Hook](../../Modules/Externals/Hooks/prefetch/glfw_PreFetch_v0_1_0_doc_v1.md) – Window/Context
 - https://glad.dav1d.de/ – GLAD Generator
 
 ---
