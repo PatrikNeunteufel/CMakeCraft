@@ -1,6 +1,6 @@
 # Solution Schema — Referenz
 
-> **Version:** 0.5.1  
+> **Version:** 0.5.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -161,6 +161,7 @@ Der zentrale Ort für alle External-Definitionen.
 | **System** | `path` + `options` | Große externe Installationen (Qt6, Boost) |
 
 ### 5.2 Local Externals
+
 ```json
 "externals": {
     "bass": {
@@ -172,38 +173,8 @@ Der zentrale Ort für alle External-Definitionen.
 | Feld | Pflicht | Beschreibung |
 |------|---------|--------------|
 | `path` | ✅ | Pfad relativ zu CMAKE_SOURCE_DIR |
-| `include` | — | Pfad zur Include.cmake (optional) |
 
-#### Include.cmake Convention
-
-**Default-Pfad (Convention over Configuration):**
-
-```markdown
-cmake/externals/includes/{name}/Include.cmake
-```
-Wobei `{name}` der External-Schlüssel ist (z.B. `bass`, `lua54`).
-
-**Beispiele:**
-
-| External | Convention-Pfad |
-|----------|-----------------|
-| `"bass": {...}` | `cmake/externals/includes/bass/Include.cmake` |
-| `"lua54": {...}` | `cmake/externals/includes/lua54/Include.cmake` |
-| `"doctest": {...}` | `cmake/externals/includes/doctest/Include.cmake` |
-
-**Custom Include (optional):**
-
-Nur verwenden wenn vom Default abgewichen werden muss:
-```json
-"externals": {
-    "mylib": {
-        "path": "externals/mylib",
-        "include": "cmake/custom/mylib_special.cmake"
-    }
-}
-```
-
-> **Empfehlung:** Immer die Convention verwenden. Das `include` Feld nur für Sonderfälle.
+**Include.cmake wird geladen von:** `${path}/Include.cmake`
 
 ### 5.3 Fetched Externals
 
@@ -486,7 +457,7 @@ ctest -j8            # 8 parallele Jobs
 | executables[] | `name` |
 | libraries[] | `name` |
 | tests[] | `name` |
-| externals (local) | `path` (include optional) |
+| externals (local) | `path` |
 | externals (fetched) | `git`, (tag\|branch\|commit) |
 
 ### 9.2 Defaults
@@ -578,7 +549,6 @@ ctest -j8            # 8 parallele Jobs
     ]
 }
 ```
-> **Hinweis:** Für lokale externals ist **kein** `include` Feld nötig — die Convention `cmake/externals/includes/{name}/Include.cmake` wird automatisch verwendet.
 
 ---
 
@@ -623,8 +593,7 @@ ctest -j8            # 8 parallele Jobs
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-15** | **Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben** |
-| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert |
+| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert** |
 | 0.1.4 | 2025-12-12 | tests Array dokumentiert: Typen, Frameworks, source_from, CTest |
 | 0.1.3 | 2025-12-11 | System Externals: options Feld (hint, backup, components) |
 | 0.1.2 | 2025-12-10 | Hook-Wiederverwendung (hook Feld) |

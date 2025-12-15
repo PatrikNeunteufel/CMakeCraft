@@ -1,0 +1,327 @@
+# Offene Abklärungen — Build-System Module
+
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-15  
+> **Typ:** Abklärung  
+> **Status:** In Bearbeitung  
+> **Zielgruppe:** Build-System-Entwickler  
+> **Sprache:** Deutsch
+
+---
+
+## Inhaltsverzeichnis
+
+1. [Übersicht](#1-übersicht)
+2. [Dokumentations-Status](#2-dokumentations-status)
+3. [Core-Module Abklärungen](#3-core-module-abklärungen)
+4. [Project-Module Abklärungen](#4-project-module-abklärungen)
+5. [Offene Architektur-Fragen](#5-offene-architektur-fragen)
+6. [Empfehlungen](#6-empfehlungen)
+7. [Entscheidungsmatrix](#7-entscheidungsmatrix)
+8. [Changelog](#8-changelog)
+
+---
+
+## 1. Übersicht
+
+Dieses Dokument trackt **offene Abklärungspunkte** und den **Dokumentations-Status** aller Build-System Module nach der Migration auf Blueprint v0.5.0.
+
+### Hintergrund
+
+Am 2025-12-15 wurden alle Modul-Dokumentationen auf Blueprint v0.5.0 migriert:
+- Neuer Header mit Zielgruppe, Sprache, English-Link, Modul-Link
+- Nummeriertes Inhaltsverzeichnis mit funktionierenden Ankern
+- Kapitel-Nummerierung
+- Einheitliche Modul-Version 0.5.0
+
+---
+
+## 2. Dokumentations-Status
+
+### 2.1 Core-Module (9/9 dokumentiert) ✅
+
+| Modul | Doku-Version | CMake-Version | Debug | Errors | Status |
+|-------|--------------|---------------|-------|--------|--------|
+| CompilerOptions.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ✅ | ✅ W201 | ✅ Fertig |
+| Context.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ❌ | ❌ | ⚪ Abklären |
+| Debug.cmake | 0.5.0 | 0.1.1 → 0.5.0 | — | — | ✅ Fertig |
+| Errors.cmake | 0.5.0 | 0.1.2 → 0.5.0 | — | — | ✅ Fertig |
+| Json.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ❌ | ❌ | ⚪ Abklären |
+| OutputDirs.cmake | 0.5.0 | 0.1.3 → 0.5.0 | ❌ | ❌ | ⚪ Abklären |
+| SourceCollect.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| Validation.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ❌ | ✅ | ✅ Fertig |
+| Warnings.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ❌ | ❌ | ⚪ Abklären |
+
+### 2.2 Project-Module (11/11 dokumentiert) ✅
+
+| Modul | Doku-Version | CMake-Version | Debug | Errors | Status |
+|-------|--------------|---------------|-------|--------|--------|
+| Solution.cmake | 0.5.0 | 0.1.1 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| Executables.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| ExecutableCollect.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| ExecutableCreate.cmake | 0.5.0 | 0.1.2 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| Libraries.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| LibraryCollect.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ❌ | ✅ Fertig |
+| LibraryCreate.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+| Externals.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ❌ | ✅ Fertig |
+| Tests.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ❌¹ | ❌ | ✅ Fertig |
+| TestCollect.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ❌ | ✅ Fertig |
+| TestCreate.cmake | 0.5.0 | 0.1.0 → 0.5.0 | ✅ | ✅ | ✅ Fertig |
+
+**Anmerkung:**
+- ¹ Tests.cmake verwendet `message(STATUS ...)` statt `dbg()` — Konsistenz-Abklärung nötig
+
+### 2.3 Externals-Module (noch nicht dokumentiert)
+
+| Modul | Doku-Version | Status |
+|-------|--------------|--------|
+| Orchestrator.cmake | — | 🔲 Ausstehend |
+| Fetch.cmake | — | 🔲 Ausstehend |
+| Fetched_Handler.cmake | — | 🔲 Ausstehend |
+| Local_Attach.cmake | — | 🔲 Ausstehend |
+| Registry_Targets.cmake | — | 🔲 Ausstehend |
+| HookLoader.cmake | — | 🔲 Ausstehend |
+
+### 2.4 Fortschritt
+
+```
+Core-Module:      [█████████████████████] 9/9   (100%)
+Project-Module:   [█████████████████████] 11/11 (100%)
+Externals-Module: [░░░░░░░░░░░░░░░░░░░░░] 0/6   (0%)
+─────────────────────────────────────────────────────
+Gesamt:           [██████████████░░░░░░░] 20/26 (77%)
+```
+
+---
+
+## 3. Core-Module Abklärungen
+
+### 3.1 Context.cmake — Basis-Modul ohne Debug/Errors
+
+**Aktueller Zustand:**
+- Nur `DEBUG_CONTEXT` Cache-Variable für `ctx_dump()`
+- Keine `dbg()` Ausgaben
+- Keine Parameter-Validierung
+
+**Design-Entscheidung:** Context.cmake bleibt ohne Debug/Errors-Abhängigkeit, da:
+- Es von Debug.cmake verwendet wird (indirekte Abhängigkeit)
+- Echtes Basis-Modul ohne zirkuläre Abhängigkeiten
+- Einfacher zu testen
+
+**Potenzielle Verbesserungen (optional):**
+
+| Situation | Aktuelle Behandlung | Alternative |
+|-----------|---------------------|-------------|
+| `ctx_create("")` | Stille Ausführung | cmake_assert? |
+| `ctx_get()` nicht-existent | Leerer String | Warnung? |
+
+---
+
+### 3.2 Json.cmake — Fehlertolerantes Design
+
+**Aktueller Zustand:**
+- Keine Debug-Ausgaben
+- Keine expliziten Fehler-Codes
+- Fehler werden durch leere Rückgabewerte signalisiert
+
+**Design-Entscheidung:** Json.cmake bleibt ohne Debug/Errors, da:
+- Validierung erfolgt durch aufrufende Module (Validation.cmake)
+- Fehlertolerantes Design ist gewollt (Defaults statt Exceptions)
+- CMake 3.19+ JSON-Fehler werden intern behandelt
+
+---
+
+### 3.3 OutputDirs.cmake — Minimalistisches Modul
+
+**Aktueller Zustand:**
+- Keine Debug-Ausgaben
+- Keine Fehlerbehandlung
+- CMake-Fehler werden durchgereicht
+
+**Empfehlung:** Optional `dbg()` für Tracing hinzufügen:
+```cmake
+dbg(${DBG_ULTRA_RARE} "  Output: ${_target_base}/bin" ID OUTPUT_DIRS)
+```
+
+---
+
+### 3.4 Warnings.cmake — Sehr einfaches Modul
+
+**Aktueller Zustand:**
+- Keine Debug-Ausgaben
+- Keine Fehlerbehandlung
+- 72 Zeilen Code
+
+**Empfehlung:** Bleibt ohne Debug/Errors — zu simpel für Overhead.
+
+---
+
+### 3.5 Wichtige Klarstellung: Errors.cmake vs Warnings.cmake
+
+| Modul | Zweck | Funktionen |
+|-------|-------|------------|
+| **Errors.cmake** | Build-System Fehler/Warnungen | `cmake_fatal()`, `cmake_warn()`, `cmake_assert()` |
+| **Warnings.cmake** | Compiler-Warnungen | `apply_warnings()` → `-Wall`, `/W4` |
+
+⚠️ **Namensverwirrung:** `cmake_warn()` ist in **Errors.cmake** definiert, nicht in Warnings.cmake!
+
+---
+
+## 4. Project-Module Abklärungen
+
+### 4.1 Tests.cmake — Inkonsistente Debug-Verwendung
+
+**Problem:** Tests.cmake verwendet `message(STATUS "[Tests] ...")` statt `dbg()`:
+
+```cmake
+message(STATUS "[Tests] === Test Pipeline Start ===")
+message(STATUS "[Tests] Processing ${_tests_count} test(s)...")
+```
+
+**Empfehlung:** Migration zu `dbg()` für Konsistenz mit Executables.cmake und Libraries.cmake:
+
+```cmake
+dbg_init(ID TESTS LEVEL ${DBG_SHOW_MUCH} SWITCH ON TAG "Tests")
+dbg(${DBG_OFTEN} "=== Test Pipeline Start ===" ID TESTS)
+```
+
+---
+
+### 4.2 LibraryCollect.cmake — Keine Errors-Integration
+
+**Aktueller Zustand:** Nur `cmake_fatal("E001" ...)` für fehlendes name-Feld.
+
+**Status:** ✅ Ausreichend — Weitere Validierung erfolgt in LibraryCreate.
+
+---
+
+### 4.3 Externals.cmake — Minimale Fehlerbehandlung
+
+**Aktueller Zustand:** Delegiert an Orchestrator.cmake.
+
+**Status:** ✅ Ausreichend — Orchestrator übernimmt Validierung.
+
+---
+
+## 5. Offene Architektur-Fragen
+
+### A1: CMake-Module auf v0.5.0 aktualisieren
+
+**Frage:** Sollen die CMake-Module selbst auf Version 0.5.0 aktualisiert werden?
+
+**Status:** Die Dokumentation ist bereits auf v0.5.0, die CMake-Dateien noch auf 0.1.x.
+
+**Empfehlung:** Ja, mit folgenden Änderungen:
+- Header aktualisieren (Version, Datum, "Based on: v0.5")
+- Keine funktionalen Änderungen nötig
+
+---
+
+### A2: Externals-Module dokumentieren
+
+**Frage:** Wann sollen die Externals-Module (Orchestrator, Fetch, etc.) dokumentiert werden?
+
+**Ausstehend:**
+- Orchestrator.cmake
+- Fetch.cmake
+- Fetched_Handler.cmake
+- Local_Attach.cmake
+- Registry_Targets.cmake
+- HookLoader.cmake
+- Pre/PostFetch Hooks
+
+---
+
+### A3: Tests.cmake Debug-Migration
+
+**Frage:** Soll Tests.cmake von `message()` auf `dbg()` migriert werden?
+
+**Pro:**
+- Konsistenz mit Executables.cmake, Libraries.cmake
+- Kontrollierbare Verbosity
+
+**Contra:**
+- Funktioniert aktuell
+- Niedriger Aufwand
+
+**Empfehlung:** Migration in v0.5.0 oder v0.6.0
+
+---
+
+## 6. Empfehlungen
+
+### Sofort (v0.5.0)
+
+| Aktion | Priorität | Status |
+|--------|-----------|--------|
+| Core-Module Dokumentation | Hoch | ✅ Fertig |
+| Project-Module Dokumentation | Hoch | ✅ Fertig |
+| CMake-Module Header auf v0.5.0 | Mittel | 🔲 Ausstehend |
+
+### Kurzfristig (v0.5.x)
+
+| Aktion | Priorität | Status |
+|--------|-----------|--------|
+| Externals-Module dokumentieren | Hoch | 🔲 Ausstehend |
+| Tests.cmake → dbg() Migration | Niedrig | 🔲 Optional |
+| OutputDirs.cmake dbg() hinzufügen | Niedrig | 🔲 Optional |
+
+### Mittelfristig (v0.6.x)
+
+| Aktion | Priorität |
+|--------|-----------|
+| Guidelines-Update für Basis-Module | Mittel |
+| Error-Code-Dokumentation vervollständigen | Mittel |
+| English Translations | Niedrig |
+
+---
+
+## 7. Entscheidungsmatrix
+
+### Core-Module
+
+| Modul | Doku v0.5.0 | Debug hinzufügen? | Errors hinzufügen? |
+|-------|-------------|-------------------|-------------------|
+| CompilerOptions.cmake | ✅ | 🟢 Vorhanden | 🟢 Vorhanden |
+| Context.cmake | ✅ | 🔴 Nein (Basis) | 🔴 Nein (Basis) |
+| Debug.cmake | ✅ | — | — |
+| Errors.cmake | ✅ | — | — |
+| Json.cmake | ✅ | 🔴 Nein (Design) | 🔴 Nein (Design) |
+| OutputDirs.cmake | ✅ | 🟡 Optional | ⚪ Optional |
+| SourceCollect.cmake | ✅ | 🟢 Vorhanden | 🟢 Vorhanden |
+| Validation.cmake | ✅ | ⚪ Optional | 🟢 Vorhanden |
+| Warnings.cmake | ✅ | ⚪ Optional | ⚪ Optional |
+
+### Project-Module
+
+| Modul | Doku v0.5.0 | Debug | Errors | Aktion nötig? |
+|-------|-------------|-------|--------|---------------|
+| Solution.cmake | ✅ | ✅ | ✅ | ❌ |
+| Executables.cmake | ✅ | ✅ | ✅ | ❌ |
+| ExecutableCollect.cmake | ✅ | ✅ | ✅ | ❌ |
+| ExecutableCreate.cmake | ✅ | ✅ | ✅ | ❌ |
+| Libraries.cmake | ✅ | ✅ | ✅ | ❌ |
+| LibraryCollect.cmake | ✅ | ✅ | ❌ | ⚪ Optional |
+| LibraryCreate.cmake | ✅ | ✅ | ✅ | ❌ |
+| Externals.cmake | ✅ | ✅ | ❌ | ❌ |
+| Tests.cmake | ✅ | ❌¹ | ❌ | 🟡 Migration |
+| TestCollect.cmake | ✅ | ✅ | ❌ | ❌ |
+| TestCreate.cmake | ✅ | ✅ | ✅ | ❌ |
+
+**Legende:**
+- ✅ Fertig / Vorhanden
+- 🟢 Bereits vorhanden
+- 🟡 Empfohlen
+- ⚪ Optional
+- 🔴 Nicht empfohlen
+- ❌ Keine Aktion nötig
+- ¹ Verwendet message() statt dbg()
+
+---
+
+## 8. Changelog
+
+| Version | Datum | Änderungen |
+|---------|-------|------------|
+| **0.5.0** | **2025-12-15** | **Erweitert auf alle Module (Core + Project), Dokumentations-Status-Tracking, Fortschrittsanzeige, aktualisierte Entscheidungsmatrix** |
+| 0.1.0 | 2025-12-15 | Initial: Analyse der Core-Module auf Debug/Error-Konsistenz |

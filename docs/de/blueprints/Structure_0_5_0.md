@@ -1,6 +1,6 @@
 # Structure — Standard für Dokumentations-Organisation
 
-> **Version:** 0.5.1  
+> **Version:** 0.5.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -59,10 +59,7 @@ Dieser Blueprint gilt für:
 **Nicht abgedeckt:**
 
 - Dokumentations-Inhalt → siehe [Doc.md](Doc.md)
-- Datei- und Ordnernamen-Konventionen → siehe [Doc.md](Doc.md)
-
-> **Hinweis:** Ordnernamen werden immer kleingeschrieben.  
-> Details siehe [Doc.md § 8.8](Doc.md#88-ordnernamen-konvention)
+- Dateinamen-Konventionen → siehe [Doc.md](Doc.md)
 
 ---
 
@@ -96,8 +93,7 @@ docs/
 └── en/                              # Englische Dokumentation
     └── [gleiche Struktur]
 ```
-> **Konvention:** Alle Ordnernamen sind kleingeschrieben.  
-> Siehe [Doc.md § 8.8](Doc.md#88-ordnernamen-konvention)
+
 ---
 
 ## 4. Verwendung vs. Erstellung
@@ -388,5 +384,4 @@ START: Was dokumentiere ich?
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-15** | **Verweis auf Ordnernamen-Konvention (Doc.md § 8.8)** |
 | **0.5.0** | **2025-12-13** | **Initial: Ordnerstruktur, Verwendung vs. Erstellung, Entscheidungsbaum** |
