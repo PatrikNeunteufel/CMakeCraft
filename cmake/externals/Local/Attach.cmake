@@ -78,17 +78,13 @@ function(_attach_local_external EXT_NAME EXT_JSON)
     # ==========================================================================
     
     _json_has_key("${EXT_JSON}" "include" _has_custom_include)
-    
     if(_has_custom_include)
         _json_get_string("${EXT_JSON}" "include" _include_path)
         set(_include_file "${CMAKE_SOURCE_DIR}/${_include_path}")
-        dbg(${DBG_RARE} "  Include: ${_include_path} (custom)" ID EXTERNALS)
     else()
-        # Convention: ${path}/Include.cmake
-        set(_include_file "${_ext_root}/Include.cmake")
-        dbg(${DBG_RARE} "  Include: ${_path}/Include.cmake (convention)" ID EXTERNALS)
+        # Convention: cmake/externals/includes/{name}/Include.cmake
+        set(_include_file "${CMAKE_SOURCE_DIR}/cmake/externals/includes/${EXT_NAME}/Include.cmake")
     endif()
-    
     # ==========================================================================
     # Validate Include.cmake Exists
     # ==========================================================================

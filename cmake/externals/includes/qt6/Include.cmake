@@ -215,7 +215,6 @@ endif()
 # ==============================================================================
 # Error if not found
 # ==============================================================================
-message("QtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQtQt")
 if(NOT _QT6_FOUND)
     # Build helpful error message with searched paths
     set(_searched_paths_msg "")

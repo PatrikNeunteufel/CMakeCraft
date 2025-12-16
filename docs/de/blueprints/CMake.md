@@ -364,8 +364,8 @@ Vor Merge eines CMake-Moduls prüfen:
 
 - [Cpp.md](Cpp.md) — C++/C Dateistruktur
 - [ModuleDoc.md](ModuleDoc.md) — Dokumentation für Module
-- [guidelines.md](../concepts/guidelines.md) — CMake Coding-Konventionen
-- [ErrorCodes.md](../reference/ErrorCodes.md) — Alle Fehlercodes
+- [CMake.md](../standards/CMake_Standard.md) — CMake Coding-Standard
+- [ErrorCodes.md](../references/ErrorCodes.md) — Alle Fehlercodes
 
 ---
 

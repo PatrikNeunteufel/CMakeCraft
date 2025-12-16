@@ -910,7 +910,7 @@ Vor Commit einer Code-Datei prüfen:
 ## 13. Siehe auch
 
 - [Cpp_Coding_Standard.md](../standards/Cpp_Coding_Standard.md) — Namenskonventionen, Stil
-- [ClangFormat_Blueprint.md](ClangFormat_Blueprint.md) — Automatische Formatierung
+- [ClangFormat_Blueprint.md](ClangFormat.md) — Automatische Formatierung
 - [CMake.md](CMake.md) — CMake-Dateistruktur
 
 ---

@@ -140,19 +140,19 @@ if(RUN_BUILD_SYSTEM_TESTS)
     # Phase 1 Test: Core Modules
     if("${TEST_PHASE}" STREQUAL "" OR "1" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
-        include(cmake/buildSystemTest/phase1.cmake)
+        include(cmake/buildSystemTest/Phase1.cmake)
     endif()
     
     # Phase 2 Test: Solution Configuration
     if("${TEST_PHASE}" STREQUAL "" OR "2" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
-        include(cmake/buildSystemTest/phase2.cmake)
+        include(cmake/buildSystemTest/Phase2.cmake)
     endif()
     
     # Phase 3 Test: Executable Pipeline
     if("${TEST_PHASE}" STREQUAL "" OR "3" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
-        include(cmake/buildSystemTest/phase3.cmake)
+        include(cmake/buildSystemTest/Phase3.cmake)
     endif()
     
     # Phase 4 Test: Library Pipeline
@@ -164,19 +164,19 @@ if(RUN_BUILD_SYSTEM_TESTS)
     # Phase 5 Test: Local Externals Pipeline
     if("${TEST_PHASE}" STREQUAL "" OR "5" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
-        include(cmake/buildSystemTest/phase5.cmake)
+        include(cmake/buildSystemTest/Phase5.cmake)
     endif()
     
     # Phase 6 Test: Git Externals + Hooks
     if("${TEST_PHASE}" STREQUAL "" OR "6" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
-        include(cmake/buildSystemTest/phase6.cmake)
+        include(cmake/buildSystemTest/Phase6.cmake)
     endif()
     
     # Phase 7 Test: Test Pipeline
     if("${TEST_PHASE}" STREQUAL "" OR "7" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
-        include(cmake/buildSystemTest/phase7.cmake)
+        include(cmake/buildSystemTest/Phase7.cmake)
     endif()
     
     dbgspace(ID BUILD_TEST)

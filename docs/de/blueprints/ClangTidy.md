@@ -241,9 +241,9 @@ set_target_properties(ThirdPartyLib PROPERTIES
 
 ## 11. Siehe auch
 
-- [Cpp_Coding_Standard](../Standards/Cpp_Coding_Standard_v0_1_0.md) – C++ Stil-Richtlinien
-- [C_Coding_Standard](../Standards/C_Coding_Standard_v0_1_0.md) – C Stil-Richtlinien
-- [ClangFormat_Blueprint](ClangFormat_Blueprint_v0_1_0.md) – Formatierung
+- [Cpp_Coding_Standard](../standards/Cpp_Coding_Standard.md) – C++ Stil-Richtlinien
+- [C_Coding_Standard](../standards/C_Coding_Standard.md) – C Stil-Richtlinien
+- [ClangFormat_Blueprint](ClangFormat.md) – Formatierung
 
 ---
 

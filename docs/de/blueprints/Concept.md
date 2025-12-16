@@ -362,8 +362,8 @@ ctx_get(EXE_MyApp NAME _var)
 
 ## 8. Siehe auch
 
-- [Context.cmake](../modules/core/Context_cmake_v0_1_1_doc_v1.md)
-- [ExecutableCollect.cmake](../modules/project/ExecutableCollect_cmake_v0_1_0_doc_v1.md)
+- [Context.cmake](../modules/core/Context.md)
+- [ExecutableCollect.cmake](../modules/project/ExecutableCollect.md)
 
 ---
 
@@ -398,7 +398,6 @@ Zusätzlich zur Doc.md Checkliste:
 
 - [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
 - [ModuleDoc.md](ModuleDoc.md) — Für Modul-Details
-- [master_concept.md](../concepts/master_concept.md) — Architektur-Übersicht
 
 ---
 

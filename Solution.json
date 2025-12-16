@@ -18,20 +18,16 @@
     },
   "externals": {
     "bass": {
-      "path": "externals/bass",
-      "include": "cmake/externals/includes/bass/Include.cmake"
+      "path": "externals/bass"
     },
     "lua54": {
-      "path": "externals/lua54",
-      "include": "cmake/externals/includes/lua54/Include.cmake"
+      "path": "externals/lua54"
     },
     "doctest": {
-      "path": "externals/doctest",
-      "include": "cmake/externals/includes/doctest/Include.cmake"
+      "path": "externals/doctest"
     },
     "glad": {
-      "path": "externals/glad",
-      "include": "cmake/externals/includes/glad/Include.cmake"
+      "path": "externals/glad"
     },
     "glfw": {
       "git": "https://github.com/glfw/glfw.git",
@@ -58,7 +54,6 @@
     },
     "qt6": {
       "path": "externals/qt6",
-      "include": "cmake/externals/includes/qt6/Include.cmake",
       "options": {
         "components": [ "Core", "Widgets", "Gui", "OpenGL" ],
         "hint": "${QT_ROOT}",

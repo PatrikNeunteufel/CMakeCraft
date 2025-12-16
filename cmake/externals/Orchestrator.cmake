@@ -38,8 +38,8 @@ include_guard(GLOBAL)
 # Load Sub-Modules
 # ==============================================================================
 
-include(cmake/externals/Local/Attach.cmake)
-include(cmake/externals/Fetched/Handler.cmake)
+include(cmake/externals/local/Attach.cmake)
+include(cmake/externals/fetched/Handler.cmake)
 
 # ==============================================================================
 # _orchestrate_external - Main Dispatch Function
@@ -199,7 +199,8 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
             _json_get_string("${_ext_json}" "include" _include_path)
             set(_include_file "${CMAKE_SOURCE_DIR}/${_include_path}")
         else()
-            set(_include_file "${_ext_root}/Include.cmake")
+            # Convention: cmake/externals/includes/{name}/Include.cmake
+            set(_include_file "${CMAKE_SOURCE_DIR}/cmake/externals/includes/${EXT_NAME}/Include.cmake")
         endif()
         
         # Validate Include.cmake exists
