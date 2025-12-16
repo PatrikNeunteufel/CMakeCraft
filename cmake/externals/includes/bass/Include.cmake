@@ -2,7 +2,7 @@
 # ============================================
 # BASS Audio Library integration - links libraries and copies DLLs
 #
-# Version: 0.5.0
+# Version: 0.5.1
 # Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
@@ -124,7 +124,7 @@ elseif(UNIX)
 endif()
 
 # Include directory
-target_include_directories(${EXECUTABLE_NAME} PRIVATE
+target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE
     "${_bass_root}/bass24/${_bass_include_dir}"
 )
 
@@ -144,21 +144,21 @@ function(_bass_enable_plugin PLUGIN_NAME PLUGIN_DIR)
     
     # Add plugin include directory for the header file
     if(WIN32)
-        target_include_directories(${EXECUTABLE_NAME} PRIVATE
+        target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE
             "${_bass_root}/${PLUGIN_DIR}/win/${_plugin_include_subdir}"
         )
     elseif(APPLE)
-        target_include_directories(${EXECUTABLE_NAME} PRIVATE
+        target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE
             "${_bass_root}/${PLUGIN_DIR}/osx"
         )
     elseif(UNIX)
         # Linux may use C or c depending on plugin
         if(EXISTS "${_bass_root}/${PLUGIN_DIR}/linux/C")
-            target_include_directories(${EXECUTABLE_NAME} PRIVATE
+            target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE
                 "${_bass_root}/${PLUGIN_DIR}/linux/C"
             )
         else()
-            target_include_directories(${EXECUTABLE_NAME} PRIVATE
+            target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE
                 "${_bass_root}/${PLUGIN_DIR}/linux"
             )
         endif()

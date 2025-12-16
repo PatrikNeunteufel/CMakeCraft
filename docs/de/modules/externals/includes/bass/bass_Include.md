@@ -1,6 +1,6 @@
 # bass/Include.cmake — BASS Audio Library Integration
 
-> **Version:** 0.5.0  
+> **Version:** 0.5.1  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -8,8 +8,8 @@
 > **Zielgruppe:** Build-System-Entwickler, C++ Entwickler  
 > **Sprache:** Deutsch  
 > **English:** [bass_Include.md](../../en/modules/externals/includes/bass_Include.md)  
-> **Modul:** [cmake/externals/includes/bass/Include.cmake](../../../../cmake/externals/includes/bass/Include.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul:** [cmake/externals/includes/bass/Include.cmake](../../../../../../cmake/externals/includes/bass/Include.cmake)  
+> **Modul-Version:** 0.5.1
 
 ---
 
@@ -261,9 +261,9 @@ externals/bass/
 
 ## 9. Siehe auch
 
-- [Externals_Reference.md](../../../reference/Externals_Reference.md) — Alle Options im Detail
-- [Externals_UserGuide.md](../../../guides/Externals_UserGuide.md) — Verwendungsanleitung
-- [Attach_cmake.md](../Attach_cmake.md) — Local External Handler
+- [Externals_Reference.md](../../../../references/Externals.md) — Alle Options im Detail
+- [Externals_UserGuide.md](../../../../userguides/Externals.md) — Verwendungsanleitung
+- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local External Handler
 
 ---
 
@@ -271,6 +271,7 @@ externals/bass/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/bass/`** |
+| **0.5.1** | **2025-12-16** | **SYSTEM-Includes für Compiler-Warnungsunterdrückung** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/bass/` |
 | 0.1.1 | 2025-12-09 | Plugin-System mit Options, Encoder-Targets |
 | 0.1.0 | 2025-12-05 | Initial: BASS Core Target |
