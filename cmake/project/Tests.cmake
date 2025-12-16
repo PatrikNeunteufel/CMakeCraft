@@ -1,33 +1,28 @@
-# ==============================================================================
-# Tests.cmake – Test Pipeline Orchestrator
-# ==============================================================================
+# cmake/project/Tests.cmake
+# ==========================
+# Test pipeline orchestrator - iterates over tests and creates targets
 #
-# Module:       Tests.cmake
-# Version:      0.1.0
-# Date:         2025-12-11
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Orchestrates the test pipeline by iterating over the tests array
-#   in Solution.json and creating test targets.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Context.cmake
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
+#   - cmake/project/Solution.cmake
+#
+# Auto-loads:
 #   - cmake/project/TestCollect.cmake
 #   - cmake/project/TestCreate.cmake
 #
 # Activation:
-#   Tests are only built when BUILD_TESTS=ON
+#   - Tests are only built when BUILD_TESTS=ON
 #
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1.4
-#   - Test_Pipeline_Concept v0.1
-#
-# ==============================================================================
+# Used by:
+#   - CMakeLists.txt (main build)
 
 include_guard(GLOBAL)
 

@@ -1,56 +1,44 @@
-# ==============================================================================
-# Solution.cmake – Project Configuration Loader
-# ==============================================================================
+# cmake/project/Solution.cmake
+# ============================
+# Project configuration loader - reads Solution.json and sets global properties
 #
-# Module:       Solution.cmake
-# Version:      0.1.1
-# Date:         2025-12-07
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Reads Solution.json and sets global properties for the build system.
-#   This is the central configuration module that all other modules depend on.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
 #   - cmake/core/Validation.cmake
 #
 # Provides:
-#   Global Properties:
-#     SOLUTION_JSON                    - Complete JSON string
-#     SOLUTION_NAME                    - Project name
-#     SOLUTION_VERSION                 - Project version (string)
-#     SOLUTION_DESCRIPTION             - Project description
-#     SOLUTION_AUTHORS                 - Authors list (semicolon-separated)
-#     SOLUTION_SCHEMA_VERSION          - Schema version
-#     SOLUTION_EXTERNALS_JSON          - externals block as JSON
-#     SOLUTION_LIBRARIES_JSON          - libraries array as JSON (NEW in v0.1.1)
-#     SOLUTION_EXECUTABLES_JSON        - executables array as JSON (NEW in v0.1.1)
-#     SOLUTION_SETTINGS_JSON           - settings block as JSON
-#     SOLUTION_CXX_STANDARD            - C++ Standard (e.g. 20)
-#     SOLUTION_C_STANDARD              - C Standard (e.g. 17)
-#     SOLUTION_DEFAULT_LIBRARY_TYPE    - Default for libraries
-#     SOLUTION_DEFAULT_EXECUTABLE_TYPE - Default for executables
-#     SOLUTION_SOURCE_MODE             - Source collection mode (explicit/glob/auto)
-#     SOLUTION_EXTERNALS_CACHE_ROOT    - Cache directory
-#     SOLUTION_EXTERNALS_UPDATE_POLICY - Update policy
+#   - SOLUTION_JSON                    (Global Property)
+#   - SOLUTION_NAME                    (Global Property)
+#   - SOLUTION_VERSION                 (Global Property)
+#   - SOLUTION_DESCRIPTION             (Global Property)
+#   - SOLUTION_AUTHORS                 (Global Property)
+#   - SOLUTION_SCHEMA_VERSION          (Global Property)
+#   - SOLUTION_EXTERNALS_JSON          (Global Property)
+#   - SOLUTION_LIBRARIES_JSON          (Global Property)
+#   - SOLUTION_EXECUTABLES_JSON        (Global Property)
+#   - SOLUTION_SETTINGS_JSON           (Global Property)
+#   - SOLUTION_CXX_STANDARD            (Global Property)
+#   - SOLUTION_C_STANDARD              (Global Property)
+#   - SOLUTION_DEFAULT_LIBRARY_TYPE    (Global Property)
+#   - SOLUTION_DEFAULT_EXECUTABLE_TYPE (Global Property)
+#   - SOLUTION_SOURCE_MODE             (Global Property)
+#   - SOLUTION_EXTERNALS_CACHE_ROOT    (Global Property)
+#   - SOLUTION_EXTERNALS_UPDATE_POLICY (Global Property)
+#   - CMAKE_CXX_STANDARD               (Cache Variable)
+#   - CMAKE_C_STANDARD                 (Cache Variable)
 #
-#   CMake Cache Variables:
-#     CMAKE_CXX_STANDARD
-#     CMAKE_CXX_STANDARD_REQUIRED
-#     CMAKE_CXX_EXTENSIONS
-#     CMAKE_C_STANDARD
-#     CMAKE_C_STANDARD_REQUIRED
-#     CMAKE_C_EXTENSIONS
-#
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Executables.cmake
+#   - Libraries.cmake
+#   - Tests.cmake
+#   - Externals.cmake
 
 include_guard(GLOBAL)
 

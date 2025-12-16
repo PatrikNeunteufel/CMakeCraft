@@ -2,8 +2,8 @@
 # ========================
 # Context object pattern for isolated namespaces
 #
-# Version: 0.1.1
-# Date:    2025-12-05
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #

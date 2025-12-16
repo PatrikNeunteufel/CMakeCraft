@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Data.md](../../en/reference/Git_Externals_Data.md)
+> **English:** [Git_Externals_Data.md](../../en/references/externals/Git_Externals_Data.md)
 
 ---
 
@@ -347,7 +347,7 @@ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
 
 ## 7. Siehe auch
 
-- [Git_Externals_Reference.md](Git_Externals_Reference.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Logging & Testing
 - [Git_Externals_Network.md](Git_Externals_Network.md) — Networking
 

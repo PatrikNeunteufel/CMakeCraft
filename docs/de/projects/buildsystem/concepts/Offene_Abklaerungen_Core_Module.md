@@ -5,7 +5,7 @@
 > **Typ:** Abklärung  
 > **Status:** In Bearbeitung  
 > **Zielgruppe:** Build-System-Entwickler  
-> **Sprache:** Deutsch
+> **Sprache:** Deutsch  
 
 ---
 
@@ -84,23 +84,53 @@ Am 2025-12-15 wurden alle Modul-Dokumentationen auf Blueprint v0.5.0 migriert:
 | hooks/prefetch/glfw.cmake | glfw_PreFetch.md | 0.5.0 | ✅ Fertig |
 | hooks/postfetch/imgui.cmake | imgui_PostFetch.md | 0.5.0 | ✅ Fertig |
 
-### 2.4 Externals-Referenz ✅
+### 2.4 Include.cmake Dokumentationen (4/4 dokumentiert) ✅
 
-| Dokument | Dateiname | Status |
-|----------|-----------|--------|
-| Externals Referenz | Externals_Reference.md | ✅ Fertig |
+| External | Dateiname | Modul-Version | Status |
+|----------|-----------|---------------|--------|
+| includes/bass/Include.cmake | bass_Include.md | 0.5.0 | ✅ Fertig |
+| includes/lua54/Include.cmake | lua54_Include.md | 0.5.0 | ✅ Fertig |
+| includes/doctest/Include.cmake | doctest_Include.md | 0.5.0 | ✅ Fertig |
+| includes/glad/Include.cmake | glad_Include.md | 0.5.0 | ✅ Fertig |
 
-Enthält: BASS, Lua, doctest, GLAD Verzeichnisstrukturen, qt6 Fetch-Helper, Convention-over-Configuration für Include.cmake
+### 2.5 Externals-Referenz (v0.5.2 - 8 Kategorien parallel) ✅
 
-### 2.5 Fortschritt
+**Hauptübersicht:**
+
+| Dokument | Dateiname | Inhalt | Status |
+|----------|-----------|--------|--------|
+| Externals | Externals.md | Alle Externals nach Kategorie | ✅ v0.5.2 |
+
+**Übersichts-Dokumente:**
+
+| Typ | Dateiname | Inhalt | Status |
+|-----|-----------|--------|--------|
+| Local | Local_Externals.md | Übersicht Local Externals | ✅ v0.5.2 |
+| Git | Git_Externals.md | Übersicht Git Externals | ✅ v0.5.2 |
+
+**Kategorie-Dokumente (8 Kategorien, parallel):**
+
+| Kategorie | Local | Git | Status |
+|-----------|-------|-----|--------|
+| Testing | Local_Externals_Testing.md (doctest) | Git_Externals_Testing.md (googletest, catch2) | ✅ v0.5.2 |
+| Scripting | Local_Externals_Scripting.md (lua54) | Git_Externals_Scripting.md (sol2, pybind11) | ✅ v0.5.2 |
+| GUI | Local_Externals_GUI.md (glad) | Git_Externals_GUI.md (glfw, imgui) | ✅ v0.5.2 |
+| Media | Local_Externals_Media.md (BASS) | Git_Externals_Media.md (miniaudio, stb) | ✅ v0.5.2 |
+| Core | — | Git_Externals_Core.md (spdlog, fmt, abseil) | ✅ v0.5.2 |
+| Data | — | Git_Externals_Data.md | ✅ (Project Knowledge) |
+| Network | — | Git_Externals_Network.md | ✅ (Project Knowledge) |
+| AI | — | Git_Externals_AI.md | ✅ (Project Knowledge) |
+
+### 2.6 Fortschritt
 
 ```
 Core-Module:      [█████████████████████] 9/9   (100%)
 Project-Module:   [█████████████████████] 11/11 (100%)
 Externals-Module: [█████████████████████] 8/8   (100%)
-Externals-Ref:    [█████████████████████] 1/1   (100%)
+Include.cmake:    [█████████████████████] 4/4   (100%)
+Externals-Ref:    [█████████████████████] 13/13 (100%)
 ─────────────────────────────────────────────────────────
-Gesamt:           [█████████████████████] 29/29 (100%)
+Gesamt:           [█████████████████████] 45/45 (100%)
 ```
 
 ---

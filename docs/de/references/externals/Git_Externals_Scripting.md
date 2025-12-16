@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Scripting.md](../../en/reference/Git_Externals_Scripting.md)
+> **English:** [Git_Externals_Scripting.md](../../en/references/externals/Git_Externals_Scripting.md)
 
 ---
 
@@ -335,7 +335,7 @@ int main() {
 
 ## 6. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Git_Externals.md](Git_Externals.md) — Git Externals Übersicht
 - [Local_Externals_Scripting.md](Local_Externals_Scripting.md) — Local Scripting (lua54)
 

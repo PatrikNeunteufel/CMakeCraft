@@ -1,15 +1,11 @@
-# ==============================================================================
-# TestCreate.cmake – Test Target Creation
-# ==============================================================================
+# cmake/project/TestCreate.cmake
+# ===============================
+# Creates test targets from prepared Context
 #
-# Module:       TestCreate.cmake
-# Version:      0.1.0
-# Date:         2025-12-11
-# Part of:      CMake Architecture V2
-#
-# Description:
-#   Creates a test target from a prepared Context.
-#   Handles framework integration, CTest registration, and dependencies.
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
 # Dependencies:
 #   - cmake/core/Context.cmake
@@ -21,9 +17,11 @@
 #   - cmake/externals/Orchestrator.cmake
 #
 # Provides:
-#   _create_test_target(CTX)
+#   - _create_test_target(CTX)
+#   - _check_platform_filter(PLATFORMS OUT_VAR)
 #
-# ==============================================================================
+# Used by:
+#   - Tests.cmake
 
 include_guard(GLOBAL)
 

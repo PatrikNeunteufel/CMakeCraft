@@ -2,8 +2,8 @@
 # ========================
 # Unified error handling for the entire build system
 #
-# Version: 0.1.2
-# Date:    2025-12-09
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #

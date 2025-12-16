@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals_Scripting.md](../../en/reference/Local_Externals_Scripting.md)
+> **English:** [Local_Externals_Scripting.md](../../en/references/externals/Local_Externals_Scripting.md)
 
 ---
 
@@ -223,13 +223,13 @@ int main() {
 
 ### Detail-Dokumentation
 
-→ [lua54_Include.md](../modules/externals/includes/lua54_Include.md)
+→ [lua54_Include.md](../../modules/externals/includes/lua54/Lua54_Include.md)
 
 ---
 
 ## 3. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Local_Externals.md](Local_Externals.md) — Local Externals Übersicht
 - [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — Git Scripting-Externals (sol2, pybind11)
 - [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/) — Offizielle Dokumentation

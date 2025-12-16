@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Solution_Schema.md](../../en/reference/Solution_Schema.md)
+> **English:** [Solution_Schema.md](../../en/references/Solution_Schema.md)
 
 ---
 
@@ -615,7 +615,7 @@ ctest -j8            # 8 parallele Jobs
 
 - [Externals.md](Externals.md) — External Libraries Referenz
 - [ErrorCodes.md](ErrorCodes.md) — Vollständige Fehlercode-Referenz
-- [CMakePresets_Reference.md](CMakePresets_Reference.md) — Build-Presets
+- [CMakePresets Reference](CMakePresets.md) — Build-Presets
 
 ---
 

@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_GUI.md](../../en/reference/Git_Externals_GUI.md)
+> **English:** [Git_Externals_GUI.md](../../en/references/externals/Git_Externals_GUI.md)
 
 ---
 
@@ -356,10 +356,10 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## 7. Siehe auch
 
-- [Git_Externals_Reference.md](Git_Externals_Reference.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Logging & Testing
 - [Git_Externals_Media.md](Git_Externals_Media.md) — Audio & Math
-- [Externals.md](Externals.md) — Local Externals (glad)
+- [Externals.md](../Externals.md) — Local Externals (glad)
 
 ---
 

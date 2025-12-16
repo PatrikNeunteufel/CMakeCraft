@@ -1,17 +1,13 @@
-# ==============================================================================
-# Orchestrator.cmake – External Type Dispatcher
-# ==============================================================================
+# cmake/externals/Orchestrator.cmake
+# ===================================
+# External type dispatcher - detects type and routes to appropriate handler
 #
-# Module:       Orchestrator.cmake
-# Version:      0.2.0
-# Date:         2025-12-09
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Detects external type based on JSON fields and dispatches
-#   to the appropriate handler module.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
@@ -19,23 +15,22 @@
 #
 # Auto-loads:
 #   - cmake/externals/Local/Attach.cmake
-#   - cmake/externals/Fetched/Handler.cmake (Phase 6)
+#   - cmake/externals/Fetched/Handler.cmake
+#
+# Provides:
+#   - _orchestrate_external(EXT_NAME EXT_JSON)
+#   - _get_external_options_for_target(TARGET_NAME EXT_NAME TARGET_JSON OUT_VAR)
+#   - apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 #
 # Type Detection:
 #   - "path" field → Local External
 #   - "git" field  → Fetched External
 #
-# Changes in v0.2.0:
-#   - Added Fetched/Handler.cmake integration
-#   - Full Git external support
-#   - Registry integration
-#
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Externals.cmake
+#   - ExecutableCreate.cmake
+#   - LibraryCreate.cmake
+#   - TestCreate.cmake
 
 include_guard(GLOBAL)
 

@@ -6,7 +6,7 @@
 > **Status:** Sammlung  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [Future_Enhancements.md](../../en/concepts/Future_Enhancements.md)
+> **English:** [Future_Enhancements.md](../../en/projects/buildsystem/concepts/Future_Enhancements.md)
 
 ---
 
@@ -655,7 +655,7 @@ cmake --generate-ci github
 **Fertige Konzepte (nicht in diesem Dokument):**
 - [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8: Testbare App-Architektur
 - [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9: System-Pakete (Qt6, Boost, etc.)
-- [Test_Pipeline_Concept.md](Test_Pipeline_Concept.md) — Test-Framework Integration
+
 
 **Architektur:**
 - [master_concept.md](master_concept.md) — Architektur-Übersicht

@@ -368,7 +368,7 @@ Bei dauerhaften Abweichungen:
 - [CMake.md](../blueprints/CMake.md) — CMake-Modul-Struktur
 - [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md) — C++ Stil
 - [C_Coding_Standard.md](C_Coding_Standard.md) — C Stil
-- [CMakePresets_Manual.md](../reference/CMakePresets_Manual.md) — Presets-Dokumentation
+- [CMakePresets References](../references/CMakePresets.md) — Presets-Dokumentation
 
 ---
 

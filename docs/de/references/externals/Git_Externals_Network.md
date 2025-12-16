@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Network.md](../../en/reference/Git_Externals_Network.md)
+> **English:** [Git_Externals_Network.md](../../en/references/externals/Git_Externals_Network.md)
 
 ---
 
@@ -355,7 +355,7 @@ if (q.try_dequeue(item)) {
 
 ## 7. Siehe auch
 
-- [Git_Externals_Reference.md](Git_Externals_Reference.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Logging & Testing
 - [Git_Externals_Data.md](Git_Externals_Data.md) — JSON & Database
 

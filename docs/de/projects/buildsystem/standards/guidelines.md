@@ -8,7 +8,7 @@
 > **Geltungsbereich:** Alle CMake-Module in `cmake/`  
 > **Durchsetzung:** Code Review, Build-System-Tests  
 > **Sprache:** Deutsch  
-> **English:** [guidelines.md](../../en/standards/guidelines.md)
+> **English:** [guidelines.md](../../en/projects/buildsystem/standards/Guidelines.md)
 
 Dieses Dokument enthält Coding-Konventionen, Stil-Entscheidungen und Best Practices für die Implementierung des CMake Build-Systems.
 
@@ -477,8 +477,8 @@ Vor Code Review prüfen:
 
 - [master_concept.md](../concepts/master_concept.md) — Architektur
 - [implementation_plan.md](../concepts/implementation_plan.md) — Phasen-Plan
-- [CMake_Standard.md](CMake_Standard.md) — Allgemeiner CMake-Stil
-- [ErrorCodes](../reference/ErrorCodes.md) — Fehlercodes-Referenz
+- [CMake_Standard.md](../../../standards/CMake_Standard.md) — Allgemeiner CMake-Stil
+- [ErrorCodes](../../../references/ErrorCodes.md) — Fehlercodes-Referenz
 
 ---
 

@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals_Testing.md](../../en/reference/Local_Externals_Testing.md)
+> **English:** [Local_Externals_Testing.md](../../en/references/externals/Local_Externals_Testing.md)
 
 ---
 
@@ -163,16 +163,16 @@ TEST_SUITE("Math") {
 
 ### Detail-Dokumentation
 
-→ [doctest_Include.md](../modules/externals/includes/doctest_Include.md)
+→ [doctest_Include.md](../../modules/externals/includes/doctest/Doctest_Include.md)
 
 ---
 
 ## 3. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Local_Externals.md](Local_Externals.md) — Local Externals Übersicht
 - [Git_Externals_Testing.md](Git_Externals_Testing.md) — Git Testing-Externals (googletest, catch2)
-- [Testing_UserGuide.md](../guides/Testing_UserGuide.md) — Test-Anleitung
+- [Testing_UserGuide.md](../../userguides/Testing.md) — Test-Anleitung
 
 ---
 

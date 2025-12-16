@@ -1,37 +1,30 @@
-# ==============================================================================
-# Targets.cmake – External Target Registry
-# ==============================================================================
+# cmake/externals/Registry/Targets.cmake
+# =======================================
+# External target registry - tracks targets and provides lookup
 #
-# Module:       Targets.cmake
-# Version:      0.2.1
-# Date:         2025-12-12
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Registry for external targets. Tracks which targets belong to which
-#   externals and provides lookup functionality.
-#
-# v0.2.1 Changes:
-#   - Removed hardcoded target mappings (moved to PreFetch hooks)
-#   - Fixed target_link_libraries keyword consistency
-#   - Added HOOK_PRIMARY_TARGET and HOOK_KNOWN_TARGETS support
-#
-# Principle:
-#   Target mappings are NOT hardcoded here. Instead:
-#   - CMake-supported externals: Targets auto-detected
-#   - Non-CMake externals: PostFetch hook creates targets
-#   - Special target names: PreFetch hook sets HOOK_PRIMARY_TARGET
+# Dependencies:
+#   - cmake/core/Errors.cmake
+#   - cmake/core/Debug.cmake
 #
 # Provides:
-#   _register_external_target(EXT_NAME TARGET_NAME [PRIMARY])
-#   _auto_register_external_targets(EXT_NAME)
-#   _get_external_targets(EXT_NAME OUT_VAR)
-#   _get_external_primary_target(EXT_NAME OUT_VAR)
-#   _has_external_target(EXT_NAME OUT_VAR)
-#   _validate_external_targets(EXT_NAME)
-#   _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE])
+#   - _register_external_target(EXT_NAME TARGET_NAME [PRIMARY])
+#   - _auto_register_external_targets(EXT_NAME)
+#   - _get_external_targets(EXT_NAME OUT_VAR)
+#   - _get_external_primary_target(EXT_NAME OUT_VAR)
+#   - _has_external_target(EXT_NAME OUT_VAR)
+#   - _validate_external_targets(EXT_NAME)
+#   - _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE])
+#   - _get_all_external_targets(EXT_NAME OUT_VAR)
 #
-# ==============================================================================
+# Used by:
+#   - Handler.cmake
+#   - Orchestrator.cmake
+#   - PostFetch Hooks
 
 include_guard(GLOBAL)
 

@@ -1,55 +1,34 @@
-# ==============================================================================
-# Hooks/HookLoader.cmake – Hook System for Externals
-# ==============================================================================
+# cmake/externals/Hooks/HookLoader.cmake
+# =======================================
+# Hook system for externals - loads PreFetch and PostFetch hooks
 #
-# Module:       HookLoader.cmake
-# Version:      0.2.0
-# Date:         2025-12-10
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Loads PreFetch and PostFetch hooks for externals.
-#   Implements Convention over Configuration pattern.
-#   Supports hook reuse via "hook" field in Solution.json.
-#   Automatic lock prevents duplicate hook execution per external.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
+#
+# Provides:
+#   - _get_hook_name(EXT_NAME EXT_JSON OUT_HOOK_NAME)
+#   - _load_prefetch_hook(EXT_NAME EXT_JSON)
+#   - _load_postfetch_hook(EXT_NAME EXT_JSON)
+#   - _check_hook_requirements(EXT_NAME EXT_JSON OUT_NEEDS_POSTFETCH)
 #
 # Convention Paths:
 #   - PreFetch:  cmake/externals/Hooks/PreFetch/${name}.cmake
 #   - PostFetch: cmake/externals/Hooks/PostFetch/${name}.cmake
 #
-# Hook Override (Solution.json):
-#   "imgui_docking": {
-#       "git": "...",
-#       "hook": "imgui"   ← Uses imgui's hooks instead
-#   }
-#
 # Hook Variables (available in hooks):
-#   - HOOK_EXTERNAL_NAME  - Name of the external (use for target names!)
-#   - HOOK_EXTERNAL_JSON  - JSON definition of the external
+#   - HOOK_EXTERNAL_NAME  - Name of the external
+#   - HOOK_EXTERNAL_JSON  - JSON definition
 #   - HOOK_SOURCE_DIR     - Source directory (PostFetch only)
 #
-# Hook Behavior:
-#   - No hooks in JSON, no convention file → No hook loaded
-#   - No hooks in JSON, convention file exists → Auto-load
-#   - Hooks explicitly defined, file exists → Load
-#   - Hooks explicitly defined, file missing → Error E216
-#   - Hook already executed for this external → Skip (automatic lock)
-#
-# Changes v0.2.0:
-#   - Added "hook" field support for hook reuse
-#   - Automatic lock per external (prevents duplicate execution)
-#   - Improved debug output
-#
-# Based on:
-#   - master_concept v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Handler.cmake
 
 include_guard(GLOBAL)
 

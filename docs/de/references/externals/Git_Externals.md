@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals.md](../../en/reference/Git_Externals.md)
+> **English:** [Git_Externals.md](../../en/references/externals/Git_Externals.md)
 
 ---
 
@@ -333,10 +333,10 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## 7. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht (Local + Git)
+- [Externals.md](../Externals.md) — Hauptübersicht (Local + Git)
 - [Local_Externals.md](Local_Externals.md) — Local Externals Übersicht
-- [Solution_Schema.md](Solution_Schema.md) — External-Konfiguration
-- [HookLoader_cmake.md](../modules/externals/HookLoader_cmake.md) — Hook-System
+- [Solution_Schema.md](../Solution_Schema.md) — External-Konfiguration
+- [HookLoader_cmake.md](../../modules/externals/hooks/HookLoader_cmake.md) — Hook-System
 
 ### Kategorie-Dokumente
 

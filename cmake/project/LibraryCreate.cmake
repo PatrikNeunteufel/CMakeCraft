@@ -1,18 +1,13 @@
-# ==============================================================================
-# LibraryCreate.cmake – Library Target Creation
-# ==============================================================================
+# cmake/project/LibraryCreate.cmake
+# ==================================
+# Creates library targets from prepared Context
 #
-# Module:       LibraryCreate.cmake
-# Version:      0.1.0
-# Date:         2025-12-07
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Creates a library target from a prepared Context.
-#   This module handles the actual CMake target creation with all
-#   necessary configurations.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Context.cmake
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
@@ -21,29 +16,35 @@
 #   - cmake/core/CompilerOptions.cmake
 #
 # Provides:
-#   _create_library_target(CTX)
+#   - _create_library_target(CTX)
 #
-# Expected Context Keys (set by LibraryCollect):
-#   NAME, PATH, TYPE, PUBLIC_HEADERS, DEPENDENCIES, EXTERNALS
-#
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Libraries.cmake
 
 include_guard(GLOBAL)
 
-# ==============================================================================
-# Main Function: _create_library_target
-# ==============================================================================
-#
-# Creates the CMake library target from the Context.
-#
-# Parameters:
-#   CTX  - Context prefix (e.g. LIB_0, LIB_1, ...)
-#
+# ============================================================================
+# _create_library_target - Creates CMake library from Context
+# ============================================================================
+#[[
+    _create_library_target(CTX)
+    
+    Creates the CMake library target from a prepared Context.
+    Handles STATIC/SHARED/INTERFACE distinction, sources, dependencies,
+    externals, and applies standard modules (Warnings, CompilerOptions, OutputDirs).
+    
+    Parameters:
+        CTX - Mandatory: Context prefix (e.g. LIB_0, LIB_1)
+    
+    Expected Context Keys:
+        NAME, PATH, TYPE, VERSION, PUBLIC_HEADERS,
+        DEPENDENCIES, EXTERNALS
+    
+    Example:
+        ctx_create(LIB_0)
+        _collect_library("${_lib_json}" LIB_0)
+        _create_library_target(LIB_0)
+]]
 function(_create_library_target CTX)
     
     # --------------------------------------------------------------------------
@@ -75,7 +76,7 @@ function(_create_library_target CTX)
             )
             dbg(${DBG_RARE} "    Include: ${_public_headers}" ID LIBRARIES)
             # Nach Zeile 76 in LibraryCreate.cmake:
-            message(STATUS "[DEBUG] ${_name} INTERFACE include: ${CMAKE_SOURCE_DIR}/${_public_headers}")
+            dbg(${DBG_RARE} "  INTERFACE include: ${CMAKE_SOURCE_DIR}/${_public_headers}" ID LIBRARIES)
         endif()
         
         # Link dependencies (INTERFACE only)

@@ -1,20 +1,21 @@
-# ==============================================================================
-# PreFetch/glfw.cmake – GLFW PreFetch Hook
-# ==============================================================================
+# cmake/externals/Hooks/PreFetch/glfw.cmake
+# ==========================================
+# PreFetch hook for GLFW - disables examples, tests, and documentation
 #
-# Hook:         glfw.cmake
-# Version:      0.1.0
-# Date:         2025-12-09
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   PreFetch hook for GLFW.
-#   Disables examples, tests, and documentation.
+# Hook Variables (from HookLoader):
+#   - HOOK_EXTERNAL_NAME - Name of the external
+#   - HOOK_EXTERNAL_JSON - JSON definition
 #
-# Based on:
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Sets:
+#   - GLFW_BUILD_EXAMPLES OFF
+#   - GLFW_BUILD_TESTS OFF
+#   - GLFW_BUILD_DOCS OFF
+#   - GLFW_INSTALL OFF
 
 message(STATUS "[glfw] PreFetch hook: Setting options")
 

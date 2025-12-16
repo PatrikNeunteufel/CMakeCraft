@@ -7,7 +7,7 @@
 > **Basiert auf:** master_concept v0.5, Solution_Schema v0.1, ErrorCodes v0.1  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [implementation_plan.md](../../en/concepts/implementation_plan.md)
+> **English:** [implementation_plan.md](../../en/projects/buildsystem/concepts/Implementation_Plan.md)
 
 Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 
@@ -511,11 +511,11 @@ ctest --test-dir build
 ## 12. Siehe auch
 
 - [master_concept.md](master_concept.md) — Architektur
-- [guidelines.md](../../standards/guidelines.md) — Konventionen
+- [guidelines.md](../standards/guidelines.md) — Konventionen
 - [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8 Detail
 - [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 Detail
-- [Solution_Schema](../../reference/Solution_Schema.md) — JSON-Schema
-- [ErrorCodes](../../reference/ErrorCodes.md) — Fehlercodes
+- [Solution_Schema](../../../references/Solution_Schema.md) — JSON-Schema
+- [ErrorCodes](../../../references/ErrorCodes.md) — Fehlercodes
 
 ---
 

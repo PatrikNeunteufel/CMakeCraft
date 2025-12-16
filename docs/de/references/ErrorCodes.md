@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [ErrorCodes.md](../../en/reference/ErrorCodes.md)
+> **English:** [ErrorCodes.md](../../en/references/ErrorCodes.md)
 
 ---
 
@@ -749,8 +749,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 ## 7. Siehe auch
 
-- [Errors.cmake](../modules/core/Errors_cmake.md) — Fehler-Modul Dokumentation
-- [Debug.cmake](../modules/core/Debug_cmake.md) — Debug-System
+- [Errors.cmake](../modules/core/Errors.md) — Fehler-Modul Dokumentation
+- [Debug.cmake](../modules/core/Debug.md) — Debug-System
 - [Solution_Schema.md](Solution_Schema.md) — JSON-Schema Referenz
 
 ---

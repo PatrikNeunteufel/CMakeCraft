@@ -1,32 +1,25 @@
-# ==============================================================================
-# PreFetch/catch2.cmake – Catch2 PreFetch Hook
-# ==============================================================================
+# cmake/externals/Hooks/PreFetch/catch2.cmake
+# ============================================
+# PreFetch hook for Catch2 v3 - configures build and defines target mappings
 #
-# Hook:         catch2.cmake
-# Version:      0.2.0
-# Date:         2025-12-12
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   PreFetch hook for Catch2 v3.
-#   Disables tests, examples, and installation.
-#   Defines target mappings for auto-registration.
+# Hook Variables (from HookLoader):
+#   - HOOK_EXTERNAL_NAME - Name of the external
+#   - HOOK_EXTERNAL_JSON - JSON definition
 #
-# Targets provided by Catch2:
-#   - Catch2         : Catch2 without main()
-#   - Catch2WithMain : Catch2 with main() (recommended)
+# Target Mapping:
+#   - HOOK_KNOWN_TARGETS: Catch2, Catch2WithMain
+#   - HOOK_PRIMARY_TARGET: Catch2WithMain
 #
-# Note:
-#   Catch2 v3 is NOT header-only anymore!
-#   Use Catch2WithMain for simplest integration.
-#
-# Usage in Solution.json:
-#   "catch2": {
-#       "git": "https://github.com/catchorg/Catch2.git",
-#       "tag": "v3.5.2"
-#   }
-#
-# ==============================================================================
+# Sets:
+#   - CATCH_BUILD_TESTING OFF
+#   - CATCH_BUILD_EXAMPLES OFF
+#   - CATCH_INSTALL_DOCS OFF
+#   - CATCH_INSTALL_EXTRAS OFF
 
 message(STATUS "[${HOOK_EXTERNAL_NAME}] PreFetch: Configuring Catch2")
 

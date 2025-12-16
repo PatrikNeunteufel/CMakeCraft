@@ -2,8 +2,8 @@
 # ============================
 # Standardized output directories for all targets
 #
-# Version: 0.1.3
-# Date:    2025-12-07
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #

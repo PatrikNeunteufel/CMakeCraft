@@ -7,7 +7,7 @@
 > **Phase:** 9 (geplant)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [System_Externals_Concept.md](../../en/concepts/System_Externals_Concept.md)
+> **English:** [System_Externals_Concept.md](../../en/projects/buildsystem/concepts/System_Externals_Concept.md)
 
 ---
 
@@ -502,7 +502,6 @@ endfunction()
 
 - [master_concept.md](master_concept.md) — Architektur-Übersicht
 - [implementation_plan.md](implementation_plan.md) — Phasen-Plan
-- [Fetch_Concept.md](../../reference/Fetch_Concept.md) — Fetched Externals (Phase 6)
 - [Future_Enhancements.md](Future_Enhancements.md) — vcpkg/Conan Integration
 
 ---

@@ -1,45 +1,34 @@
-# ==============================================================================
-# Fetched/Handler.cmake – Handler for Git-based Externals
-# ==============================================================================
+# cmake/externals/Fetched/Handler.cmake
+# ======================================
+# Handler for git-based externals - orchestrates fetch process with hooks
 #
-# Module:       Handler.cmake
-# Version:      0.1.1
-# Date:         2025-12-09
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Main handler for fetched (git-based) externals.
-#   Orchestrates the fetch process with hooks.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
-#   - cmake/externals/Core/Fetch.cmake (v0.2.0+)
+#   - cmake/externals/Core/Fetch.cmake
 #   - cmake/externals/Hooks/HookLoader.cmake
 #   - cmake/externals/Registry/Targets.cmake
 #
 # Provides:
-#   _handle_fetched_external(EXT_NAME EXT_JSON)
+#   - _handle_fetched_external(EXT_NAME EXT_JSON)
+#   - _is_external_ready(EXT_NAME OUT_VAR)
 #
-# Process:
-#   1. Declare external (FetchContent_Declare)
-#   2. Load PreFetch hook (if exists)
-#   3. Make available (FetchContent_MakeAvailable) - uses .externals/ cache
-#   4. Load PostFetch hook (if exists)
+# Pipeline:
+#   1. Declare (FetchContent_Declare)
+#   2. PreFetch hook
+#   3. MakeAvailable
+#   4. PostFetch hook
 #   5. Auto-register targets
-#   6. Validate targets exist
+#   6. Validate
 #
-# Based on:
-#   - master_concept v0.1
-#   - guidelines v0.1
-#
-# Changes v0.1.1:
-#   - Compatible with Fetch.cmake v0.2.0 (.externals/ caching)
-#   - Source directory now in .externals/${EXT_NAME}/
-#   - Improved status messages
-#
-# ==============================================================================
+# Used by:
+#   - Orchestrator.cmake
 
 include_guard(GLOBAL)
 

@@ -1,17 +1,13 @@
-# ==============================================================================
-# Libraries.cmake – Library Pipeline Orchestrator
-# ==============================================================================
+# cmake/project/Libraries.cmake
+# ==============================
+# Library pipeline orchestrator - iterates over libraries and creates targets
 #
-# Module:       Libraries.cmake
-# Version:      0.1.0
-# Date:         2025-12-07
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Iterates over all libraries in Solution.json and creates targets.
-#   This is the main entry point for the library pipeline.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
@@ -22,12 +18,8 @@
 #   - cmake/project/LibraryCollect.cmake
 #   - cmake/project/LibraryCreate.cmake
 #
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - CMakeLists.txt (main build)
 
 include_guard(GLOBAL)
 

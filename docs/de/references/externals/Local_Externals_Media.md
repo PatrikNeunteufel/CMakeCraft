@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals_Media.md](../../en/reference/Local_Externals_Media.md)
+> **English:** [Local_Externals_Media.md](../../en/references/externals/Local_Externals_Media.md)
 
 ---
 
@@ -215,13 +215,13 @@ int main() {
 
 ### Detail-Dokumentation
 
-→ [bass_Include.md](../modules/externals/includes/bass_Include.md)
+→ [bass_Include.md](../../modules/externals/includes/bass/Bass_Include.md)
 
 ---
 
 ## 3. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Local_Externals.md](Local_Externals.md) — Local Externals Übersicht
 - [Git_Externals_Media.md](Git_Externals_Media.md) — Git Media-Externals (miniaudio, openal-soft, stb)
 

@@ -1,34 +1,24 @@
-# ==============================================================================
-# PreFetch/googletest.cmake – GoogleTest PreFetch Hook
-# ==============================================================================
+# cmake/externals/Hooks/PreFetch/googletest.cmake
+# ================================================
+# PreFetch hook for GoogleTest - configures build and fixes Windows CRT
 #
-# Hook:         googletest.cmake
-# Version:      0.2.1
-# Date:         2025-12-12
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   PreFetch hook for Google Test / Google Mock.
-#   Configures build options and fixes Windows CRT issues.
-#   Defines target mappings for auto-registration.
+# Hook Variables (from HookLoader):
+#   - HOOK_EXTERNAL_NAME - Name of the external
+#   - HOOK_EXTERNAL_JSON - JSON definition
 #
-# Targets provided by GoogleTest:
-#   - gtest       : Google Test without main()
-#   - gtest_main  : Google Test with main()
-#   - gmock       : Google Mock without main()
-#   - gmock_main  : Google Mock with main()
+# Target Mapping:
+#   - HOOK_KNOWN_TARGETS: gtest, gtest_main, gmock, gmock_main
+#   - HOOK_PRIMARY_TARGET: gmock_main
 #
-# Include paths (automatically added by targets):
-#   - googletest/include  (for <gtest/gtest.h>)
-#   - googlemock/include  (for <gmock/gmock.h>)
-#
-# Usage in Solution.json:
-#   "googletest": {
-#       "git": "https://github.com/google/googletest.git",
-#       "tag": "v1.14.0"
-#   }
-#
-# ==============================================================================
+# Sets:
+#   - BUILD_GMOCK ON
+#   - INSTALL_GTEST OFF
+#   - gtest_force_shared_crt ON (Windows only)
 
 message(STATUS "[${HOOK_EXTERNAL_NAME}] PreFetch: Configuring GoogleTest")
 

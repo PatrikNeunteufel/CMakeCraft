@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Testing.md](../../en/reference/Git_Externals_Testing.md)
+> **English:** [Git_Externals_Testing.md](../../en/references/externals/Git_Externals_Testing.md)
 
 ---
 
@@ -289,10 +289,10 @@ BENCHMARK_MAIN();
 
 ## 6. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Git_Externals.md](Git_Externals.md) — Git Externals Übersicht
 - [Local_Externals_Testing.md](Local_Externals_Testing.md) — Local Testing (doctest)
-- [Testing_UserGuide.md](../guides/Testing_UserGuide.md) — Test-Anleitung
+- [Testing_UserGuide.md](../../userguides/Testing.md) — Test-Anleitung
 
 ---
 

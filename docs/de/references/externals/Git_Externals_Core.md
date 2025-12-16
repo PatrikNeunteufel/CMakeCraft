@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Core.md](../../en/reference/Git_Externals_Core.md)
+> **English:** [Git_Externals_Core.md](../../en/references/externals/Git_Externals_Core.md)
 
 ---
 
@@ -315,7 +315,7 @@ int main(int argc, char* argv[]) {
 
 ## 5. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Git_Externals.md](Git_Externals.md) — Git Externals Übersicht
 - [Git_Externals_Testing.md](Git_Externals_Testing.md) — Testing (googletest, catch2)
 - [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — Scripting (sol2, pybind11)

@@ -6,7 +6,7 @@
 > **Status:** Stabil (Phase 1-7 abgeschlossen)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [master_concept.md](../../en/concepts/master_concept.md)
+> **English:** [master_concept.md](../../en/projects/buildsystem/concepts/Master_Concept.md)
 
 Dieses Dokument dient als **zentrale Referenz** für das CMake Build-System. Es definiert die Struktur, Prinzipien und das technische Fundament.
 
@@ -474,7 +474,7 @@ System-Bibliotheken via `find_package()` (Qt, Boost, OpenCV).
 ## 16. Siehe auch
 
 - [implementation_plan.md](implementation_plan.md) — Phasen-basierter Plan
-- [guidelines.md](../../standards/guidelines.md) — Konventionen
+- [guidelines.md](../standards/guidelines.md) — Konventionen
 - [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8 Detail
 - [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 Detail
 - [Future_Enhancements.md](Future_Enhancements.md) — Post-Release Features

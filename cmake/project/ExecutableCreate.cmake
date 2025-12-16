@@ -1,60 +1,52 @@
-# ==============================================================================
-# ExecutableCreate.cmake – Executable Target Creation
-# ==============================================================================
+# cmake/project/ExecutableCreate.cmake
+# =====================================
+# Creates executable targets from prepared Context
 #
-# Module:       ExecutableCreate.cmake
-# Version:      0.1.2
-# Date:         2025-12-09
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Creates an executable target from a prepared Context.
-#   This module handles the actual CMake target creation with all
-#   necessary configurations.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Context.cmake
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/OutputDirs.cmake
 #   - cmake/core/Warnings.cmake
 #   - cmake/core/CompilerOptions.cmake
-#   - cmake/externals/Orchestrator.cmake (for apply_external_to_target)
+#   - cmake/externals/Orchestrator.cmake
 #
 # Provides:
-#   _create_executable_target(CTX)
+#   - _create_executable_target(CTX)
 #
-# Expected Context Keys (set by ExecutableCollect):
-#   NAME, PATH, TYPE, PCH_ENABLED, PCH_HEADER,
-#   DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS,
-#   DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
-#
-# Changes in v0.1.2:
-#   - Added APP_WINDOWS_GUI define for Windows GUI applications
-#   - Enables WinMain entry point pattern
-#
-# Changes in v0.1.1:
-#   - Full externals integration via apply_external_to_target()
-#   - External options passed to Include.cmake
-#
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Executables.cmake
 
 include_guard(GLOBAL)
 
-# ==============================================================================
-# Main Function: _create_executable_target
-# ==============================================================================
-#
-# Creates the CMake executable target from the Context.
-#
-# Parameters:
-#   CTX  - Context prefix (e.g. EXE_0, EXE_1, ...)
-#
+# ============================================================================
+# _create_executable_target - Creates CMake executable from Context
+# ============================================================================
+#[[
+    _create_executable_target(CTX)
+    
+    Creates the CMake executable target from a prepared Context.
+    Handles GUI/CONSOLE distinction, sources, dependencies, externals,
+    and applies standard modules (Warnings, CompilerOptions, OutputDirs).
+    
+    Parameters:
+        CTX - Mandatory: Context prefix (e.g. EXE_0, EXE_1)
+    
+    Expected Context Keys:
+        NAME, PATH, TYPE, VERSION, PCH_ENABLED, PCH_HEADER,
+        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS,
+        DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
+    
+    Example:
+        ctx_create(EXE_0)
+        _collect_executable("${_exe_json}" EXE_0)
+        _create_executable_target(EXE_0)
+]]
 function(_create_executable_target CTX)
     
     # --------------------------------------------------------------------------

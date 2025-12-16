@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals.md](../../en/reference/Local_Externals.md)
+> **English:** [Local_Externals.md](../../en/references/externals/Local_Externals.md)
 
 ---
 
@@ -137,10 +137,10 @@ Audio-Verarbeitung und Multimedia.
 
 | Library | Kategorie | Typ | Options | Detail-Dok |
 |---------|-----------|-----|---------|------------|
-| **doctest** | Testing | 📄 Header-Only | — | [doctest_Include.md](../modules/externals/includes/doctest_Include.md) |
-| **lua54** | Scripting | 📝 Source | LUA_EMBEDDED | [lua54_Include.md](../modules/externals/includes/lua54_Include.md) |
-| **glad** | GUI | 🔧 Generiert | — | [glad_Include.md](../modules/externals/includes/glad_Include.md) |
-| **BASS** | Media | 📦 Vorkompiliert | BASS_FLAC, BASS_FX, ... | [bass_Include.md](../modules/externals/includes/bass_Include.md) |
+| **doctest** | Testing | 📄 Header-Only | — | [doctest_Include.md](../../modules/externals/includes/doctest/Doctest_Include.md) |
+| **lua54** | Scripting | 📝 Source | LUA_EMBEDDED | [lua54_Include.md](../../modules/externals/includes/lua54/Lua54_Include.md) |
+| **glad** | GUI | 🔧 Generiert | — | [glad_Include.md](../../modules/externals/includes/glad/Glad_Include.md) |
+| **BASS** | Media | 📦 Vorkompiliert | BASS_FLAC, BASS_FX, ... | [bass_Include.md](../../modules/externals/includes/bass/Bass_Include.md) |
 
 ### 4.2 Kategorie-Mapping (Local ↔ Git)
 

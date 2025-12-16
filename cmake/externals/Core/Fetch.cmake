@@ -1,44 +1,29 @@
-# ==============================================================================
-# Core/Fetch.cmake – FetchContent Wrapper with .externals/ Caching
-# ==============================================================================
+# cmake/externals/Core/Fetch.cmake
+# =================================
+# FetchContent wrapper with .externals/ caching
 #
-# Module:       Fetch.cmake
-# Version:      0.2.0
-# Date:         2025-12-09
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Wrapper around CMake's FetchContent for fetching Git-based externals.
-#   Uses central .externals/ directory shared across all presets.
-#   Supports offline mode and force-fetch options.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
 #
 # Provides:
-#   _fetch_git_external(EXT_NAME EXT_JSON)
-#   _make_external_available(EXT_NAME)
-#   _is_external_populated(EXT_NAME OUT_VAR)
-#   _get_external_source_dir(EXT_NAME OUT_VAR)
+#   - _fetch_git_external(EXT_NAME EXT_JSON)
+#   - _make_external_available(EXT_NAME)
+#   - _is_external_populated(EXT_NAME OUT_VAR)
+#   - _get_external_source_dir(EXT_NAME OUT_VAR)
 #
-# Options:
-#   EXTERNALS_OFFLINE      - Use only cached externals, no network access
-#   EXTERNALS_FORCE_FETCH  - Force re-fetch of all externals
+# Options (CMake Cache):
+#   - EXTERNALS_OFFLINE      - Use only cached externals
+#   - EXTERNALS_FORCE_FETCH  - Force re-fetch all externals
 #
-# Based on:
-#   - master_concept v0.1
-#   - guidelines v0.1
-#
-# Changes v0.2.0:
-#   - Central .externals/ directory for all presets
-#   - Skip fetch if already cached
-#   - Offline mode support (EXTERNALS_OFFLINE)
-#   - Force fetch option (EXTERNALS_FORCE_FETCH)
-#   - Version checking for tags/commits
-#
-# ==============================================================================
+# Used by:
+#   - Handler.cmake
 
 include_guard(GLOBAL)
 

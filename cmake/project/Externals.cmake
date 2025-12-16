@@ -1,19 +1,13 @@
-# ==============================================================================
-# Externals.cmake – External Dependencies Pipeline
-# ==============================================================================
+# cmake/project/Externals.cmake
+# ==============================
+# External dependencies pipeline - processes all externals from Solution.json
 #
-# Module:       Externals.cmake
-# Version:      0.1.0
-# Date:         2025-12-08
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Processes all externals defined in Solution.json and dispatches
-#   to the appropriate handler (local or fetched).
-#   This module runs BEFORE Libraries and Executables to ensure
-#   all external targets are available for linking.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
@@ -22,12 +16,8 @@
 # Auto-loads:
 #   - cmake/externals/Orchestrator.cmake
 #
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - CMakeLists.txt (main build, runs before Libraries/Executables)
 
 include_guard(GLOBAL)
 

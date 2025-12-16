@@ -1,58 +1,51 @@
-# ==============================================================================
-# LibraryCollect.cmake – Library Data Collection
-# ==============================================================================
+# cmake/project/LibraryCollect.cmake
+# ===================================
+# Collects library data from JSON into a Context
 #
-# Module:       LibraryCollect.cmake
-# Version:      0.1.0
-# Date:         2025-12-07
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Collects all data for a library from JSON into a Context.
-#   This module is responsible for parsing and normalizing library
-#   definitions from Solution.json.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Json.cmake
 #   - cmake/core/Context.cmake
 #   - cmake/core/Debug.cmake
 #
 # Provides:
-#   _collect_library(LIB_JSON CTX)
+#   - _collect_library(LIB_JSON CTX)
 #
 # Context Keys Set:
-#   Mandatory:
-#     NAME              - Target name
+#   - NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS
+#   - SKIP, DEPENDENCIES, EXTERNALS, PLATFORM
 #
-#   Optional:
-#     VERSION           - Version (default: Solution version)
-#     PATH              - Source path (default: projects/libs/{name}/src)
-#     TYPE              - STATIC, SHARED, INTERFACE (default: from settings)
-#     PUBLIC_HEADERS    - Public header directory
-#     SKIP              - Boolean whether to skip
-#     DEPENDENCIES      - List of internal dependencies (other libraries)
-#     EXTERNALS         - List of external dependencies
-#     PLATFORM          - Target platform (single value, empty = all)
-#
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Libraries.cmake
 
 include_guard(GLOBAL)
 
-# ==============================================================================
-# Main Function: _collect_library
-# ==============================================================================
-#
-# Collects all fields of a library from JSON into a Context.
-#
-# Parameters:
-#   LIB_JSON  - JSON string of the library
-#   CTX       - Context prefix (e.g. LIB_0, LIB_1, ...)
-#
+# ============================================================================
+# _collect_library - Collects library data from JSON into Context
+# ============================================================================
+#[[
+    _collect_library(LIB_JSON CTX)
+    
+    Parses a library definition from JSON and stores all fields
+    in a Context for later processing by LibraryCreate.
+    
+    Parameters:
+        LIB_JSON - Mandatory: JSON string of the library
+        CTX      - Mandatory: Context prefix (e.g. LIB_0, LIB_1)
+    
+    Context Keys Set:
+        NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS,
+        SKIP, DEPENDENCIES, EXTERNALS, PLATFORM
+    
+    Example:
+        ctx_create(LIB_0)
+        _collect_library("${_lib_json}" LIB_0)
+        ctx_get(LIB_0 NAME _name)
+]]
 function(_collect_library LIB_JSON CTX)
     
     # --------------------------------------------------------------------------

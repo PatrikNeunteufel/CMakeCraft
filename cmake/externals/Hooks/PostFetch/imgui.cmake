@@ -1,55 +1,23 @@
-# ==============================================================================
-# PostFetch/imgui.cmake – ImGui PostFetch Hook
-# ==============================================================================
+# cmake/externals/Hooks/PostFetch/imgui.cmake
+# ============================================
+# PostFetch hook for Dear ImGui - creates target manually (no CMakeLists.txt)
 #
-# Hook:         imgui.cmake
-# Version:      0.4.0
-# Date:         2025-12-10
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   PostFetch hook for Dear ImGui.
-#   ImGui has no CMakeLists.txt, so we create the target manually.
+# Hook Variables (from HookLoader):
+#   - HOOK_EXTERNAL_NAME - Target name (e.g. "imgui" or "imgui_docking")
+#   - HOOK_SOURCE_DIR    - Path to imgui source
+#   - HOOK_EXTERNAL_JSON - JSON definition
 #
-#   Creates a combined target that includes:
-#   - Core ImGui
-#   - OpenGL3 backend
-#   - GLFW backend
-#   - Win32 backend (Windows only)
+# Creates:
+#   - ${HOOK_EXTERNAL_NAME} target with core + backends (OpenGL3, GLFW, Win32)
 #
 # Hook Reuse:
-#   This hook can be reused for ImGui variants via "hook" field:
-#   
-#   "imgui": { "git": "...", "tag": "v1.91.6", "cmakeSupport": false }
-#   "imgui_docking": { "git": "...", "tag": "v1.91.6-docking", "cmakeSupport": false, "hook": "imgui" }
-#
-#   Each variant gets its own target (imgui, imgui_docking) using HOOK_EXTERNAL_NAME.
-#
-# Provided Variables (from HookLoader):
-#   HOOK_EXTERNAL_NAME - Name of the external (e.g. "imgui" or "imgui_docking")
-#   HOOK_SOURCE_DIR    - Path to imgui source
-#   HOOK_EXTERNAL_JSON - JSON definition
-#
-# IMPORTANT:
-#   Always use ${HOOK_EXTERNAL_NAME} for target names!
-#   This allows hook reuse for variants.
-#
-# Changes v0.4.0:
-#   - Remove examples/ folder to avoid VS project clutter
-#
-# Changes v0.3.0:
-#   - Dynamic target name via ${HOOK_EXTERNAL_NAME}
-#   - Supports hook reuse for imgui variants (imgui_docking, etc.)
-#   - Lock handled by HookLoader (no manual lock needed)
-#
-# Changes v0.2.0:
-#   - Combined target with backends
-#   - Auto-link glad and glfw
-#
-# Based on:
-#   - guidelines v0.1
-#
-# ==============================================================================
+#   Supports variants via "hook" field in Solution.json:
+#   "imgui_docking": { "git": "...", "hook": "imgui" }
 
 message(STATUS "[${HOOK_EXTERNAL_NAME}] Creating target from: ${HOOK_SOURCE_DIR}")
 

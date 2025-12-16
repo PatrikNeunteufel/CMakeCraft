@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Glossar.md](../../en/reference/Glossar.md)
+> **English:** [Glossar.md](../../en/references/Glossar.md)
 
 ---
 

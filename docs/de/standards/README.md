@@ -38,10 +38,11 @@ Alle Entwickler im Unternehmen.
 
 | Datei | Zielgruppe | Geltungsbereich |
 |-------|------------|-----------------|
-| [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md) | C++ Entwickler | PC-Applikationen |
-| [C_Coding_Standard.md](C_Coding_Standard.md) | Embedded-Entwickler | Firmware, MCUs |
+| [Language_Standard.md](Language_Standard.md)|Alle Entwickler|Global|
 | [CMake_Standard.md](CMake_Standard.md) | Alle Entwickler | Build-System |
 | [Git_Standard.md](Git_Standard.md) | Alle Entwickler | Versionskontrolle |
+| [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md) | C++ Entwickler | PC-Applikationen |
+| [C_Coding_Standard.md](C_Coding_Standard.md) | Embedded-Entwickler | Firmware, MCUs |
 
 > **Hinweis:** Keine Versionen im Dateinamen. Version steht nur im Header.  
 > Archivierte Versionen: `Cpp_Coding_Standard_v0_1_0.md` etc.
@@ -54,10 +55,11 @@ Alle Entwickler im Unternehmen.
 Standards (Konventionen)              Blueprints (Dokumentation)
 ========================              =========================
 
-Cpp_Coding_Standard ◄──────────────── Standard.md (Blueprint)
-C_Coding_Standard   ◄──────────────── Standard.md (Blueprint)
+Language_Standard   ◄──────────────── Standard.md (Blueprint)
 CMake_Standard      ◄──────────────── Standard.md (Blueprint)
 Git_Standard        ◄──────────────── Standard.md (Blueprint)
+Cpp_Coding_Standard ◄──────────────── Standard.md (Blueprint)
+C_Coding_Standard   ◄──────────────── Standard.md (Blueprint)
         │
         │ referenziert
         ▼
@@ -111,8 +113,8 @@ ClangTidy_Blueprint   ─────────────► .clang-tidy (To
 
 - [blueprints/Standard.md](../blueprints/Standard.md) — Blueprint für Standards
 - [blueprints/README.md](../blueprints/README.md) — Blueprint-Übersicht
-- [ClangFormat_Blueprint.md](../blueprints/ClangFormat_Blueprint.md) — Formatierung
-- [ClangTidy_Blueprint.md](../blueprints/ClangTidy_Blueprint.md) — Statische Analyse
+- [ClangFormat_Blueprint.md](../blueprints/ClangFormat.md) — Formatierung
+- [ClangTidy_Blueprint.md](../blueprints/ClangTidy.md) — Statische Analyse
 
 ---
 

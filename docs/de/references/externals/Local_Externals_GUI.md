@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals_GUI.md](../../en/reference/Local_Externals_GUI.md)
+> **English:** [Local_Externals_GUI.md](../../en/references/externals/Local_Externals_GUI.md)
 
 ---
 
@@ -175,16 +175,16 @@ int main() {
 
 ### Detail-Dokumentation
 
-→ [glad_Include.md](../modules/externals/includes/glad_Include.md)
+→ [glad_Include.md](../../modules/externals/includes/glad/Glad_Include.md)
 
 ---
 
 ## 3. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht aller Externals
+- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
 - [Local_Externals.md](Local_Externals.md) — Local Externals Übersicht
 - [Git_Externals_GUI.md](Git_Externals_GUI.md) — Git GUI-Externals (glfw, imgui, SDL2)
-- [Externals_UserGuide.md](../guides/Externals_UserGuide.md) — GUI-App Anleitung
+- [Externals_UserGuide.md](../../userguides/Externals.md) — GUI-App Anleitung
 
 ---
 

@@ -1,17 +1,13 @@
-# ==============================================================================
-# Executables.cmake – Executable Pipeline Orchestrator
-# ==============================================================================
+# cmake/project/Executables.cmake
+# ================================
+# Executable pipeline orchestrator - iterates over executables and creates targets
 #
-# Module:       Executables.cmake
-# Version:      0.1.0
-# Date:         2025-12-05
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Iterates over all executables in Solution.json and creates targets.
-#   This is the main entry point for the executable pipeline.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
@@ -22,12 +18,8 @@
 #   - cmake/project/ExecutableCollect.cmake
 #   - cmake/project/ExecutableCreate.cmake
 #
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - CMakeLists.txt (main build)
 
 include_guard(GLOBAL)
 

@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CMakeUserPresets_Reference.md](../../en/reference/CMakeUserPresets_Reference.md)
+> **English:** [CMakeUserPresets_Reference.md](../../en/references/CMakeUserPresets_Reference.md)
 
 ---
 
@@ -284,9 +284,9 @@ cmake --workflow --preset wf-vs-x64-release-inno+sign
 
 ## 12. Siehe auch
 
-- [CMakePresets_Manual.md](CMakePresets_Manual.md) — Konzepte
-- [CMakePresets_Reference.md](CMakePresets_Reference.md) — Team-Presets
-- [CMakeUserPresets_Example.md](../guides/CMakeUserPresets_Example.md) — Template
+- [CMakePresets_Manual.md](../userguides/CMakePresets.md) — Konzepte
+- [CMakePresets_Reference.md](CMakePresets.md) — Team-Presets
+- [CMakeUserPresets_Example.md](../userguides/CMakeUserPresets.md) — Template
 
 ---
 

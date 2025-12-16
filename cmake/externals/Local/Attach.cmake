@@ -1,33 +1,25 @@
-# ==============================================================================
-# Local/Attach.cmake – Local External Handler
-# ==============================================================================
+# cmake/externals/Local/Attach.cmake
+# ===================================
+# Local external handler - validates and registers path-based externals
 #
-# Module:       Attach.cmake
-# Version:      0.1.0
-# Date:         2025-12-08
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Handles local externals by validating paths and preparing
-#   for Include.cmake loading. The actual Include.cmake is loaded
-#   when an executable/library requests the external.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Errors.cmake
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
 #   - cmake/core/Validation.cmake
 #
 # Provides:
-#   - _attach_local_external()
-#   - _validate_include_cmake()
+#   - _attach_local_external(EXT_NAME EXT_JSON)
+#   - _validate_include_cmake(INCLUDE_FILE EXT_NAME)
+#   - is_external_registered(EXT_NAME OUT_VAR)
 #
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Orchestrator.cmake
 
 include_guard(GLOBAL)
 

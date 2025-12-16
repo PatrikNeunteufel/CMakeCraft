@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_AI.md](../../en/reference/Git_Externals_AI.md)
+> **English:** [Git_Externals_AI.md](../../en/references/externals/Git_Externals_AI.md)
 
 ---
 
@@ -361,7 +361,7 @@ Für onnxruntime und komplexe CUDA-Projekte:
 
 ## 7. Siehe auch
 
-- [Git_Externals_Reference.md](Git_Externals_Reference.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Testing & Benchmarking
 - [Git_Externals_Network.md](Git_Externals_Network.md) — Threading
 

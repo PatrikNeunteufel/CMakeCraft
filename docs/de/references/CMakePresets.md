@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CMakePresets_Reference.md](../../en/reference/CMakePresets_Reference.md)
+> **English:** [CMakePresets_Reference.md](../../en/references/CMakePresets_Reference.md)
 
 ---
 
@@ -353,7 +353,7 @@ cmake --list-presets=test
 
 - [CMakePresets_Manual.md](CMakePresets_Manual.md) — Konzepte und Best Practices
 - [CMakeUserPresets_Reference.md](CMakeUserPresets_Reference.md) — User-Presets
-- [CMakeUserPresets_Example.md](../guides/CMakeUserPresets_Example.md) — Template
+- [CMakeUserPresets_Example.md](../userguides/CMakeUserPresets.md) — Template
 
 ---
 

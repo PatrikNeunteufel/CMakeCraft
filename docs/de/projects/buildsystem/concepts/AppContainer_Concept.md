@@ -7,7 +7,7 @@
 > **Phase:** 8 (geplant)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [AppContainer_Concept.md](../../en/concepts/AppContainer_Concept.md)
+> **English:** [AppContainer_Concept.md](../../en/projects/buildsystem/concepts/AppContainer_Concept.md)
 
 ---
 
@@ -601,8 +601,7 @@ Executables und App-Container können parallel existieren:
 
 - [master_concept.md](master_concept.md) — Architektur-Übersicht
 - [implementation_plan.md](implementation_plan.md) — Phasen-Plan
-- [Test_Pipeline_Concept.md](../../reference/Test_Pipeline_Concept.md) — Test-Framework-Integration
-- [guidelines.md](../../standards/guidelines.md) — Coding-Konventionen
+- [guidelines.md](../standards/guidelines.md) — Coding-Konventionen
 
 ---
 

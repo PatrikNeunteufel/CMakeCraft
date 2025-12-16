@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Media.md](../../en/reference/Git_Externals_Media.md)
+> **English:** [Git_Externals_Media.md](../../en/references/externals/Git_Externals_Media.md)
 
 ---
 
@@ -334,9 +334,9 @@ for (auto [entity, pos, vel] : view.each()) {
 
 ## 7. Siehe auch
 
-- [Git_Externals_Reference.md](Git_Externals_Reference.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
 - [Git_Externals_GUI.md](Git_Externals_GUI.md) — GUI & Graphics
-- [Externals.md](Externals.md) — Local Externals (BASS Audio)
+- [Externals.md](../Externals.md) — Local Externals (BASS Audio)
 
 ---
 

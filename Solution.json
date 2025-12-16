@@ -16,51 +16,56 @@
             "mode": "auto"
         }
     },
-    "externals": {
-        "bass": {
-            "path": "externals/bass"
-        },
-        "lua54": {
-            "path": "externals/lua54"
-        },
-        "doctest": {
-            "path": "externals/doctest"
-        },
-        "glad": {
-            "path": "externals/glad"
-        },
-        "glfw": {
-            "git": "https://github.com/glfw/glfw.git",
-            "tag": "3.4"
-        },
-        "imgui": {
-            "git": "https://github.com/ocornut/imgui.git",
-            "tag": "v1.91.6",
-            "cmakeSupport": false
-        },
-        "imgui_docking": {
-            "git": "https://github.com/ocornut/imgui.git",
-            "tag": "v1.91.6-docking",
-            "cmakeSupport": false,
-            "hook": "imgui"
-        },
-        "googletest": {
-            "git": "https://github.com/google/googletest.git",
-            "tag": "v1.14.0"
-        },
-        "catch2": {
-            "git": "https://github.com/catchorg/Catch2.git",
-            "tag": "v3.5.2"
-        },
-        "qt6": {
-            "path": "externals/qt6",
-            "options": {
-                "hint": "${QT_ROOT}",
-                "backup": "I:/Qt/6.10.1/msvc2022_64",
-                "components": ["Core", "Widgets", "Gui"]
-            }
-        }
+  "externals": {
+    "bass": {
+      "path": "externals/bass",
+      "include": "cmake/externals/includes/bass/Include.cmake"
     },
+    "lua54": {
+      "path": "externals/lua54",
+      "include": "cmake/externals/includes/lua54/Include.cmake"
+    },
+    "doctest": {
+      "path": "externals/doctest",
+      "include": "cmake/externals/includes/doctest/Include.cmake"
+    },
+    "glad": {
+      "path": "externals/glad",
+      "include": "cmake/externals/includes/glad/Include.cmake"
+    },
+    "glfw": {
+      "git": "https://github.com/glfw/glfw.git",
+      "tag": "3.4"
+    },
+    "imgui": {
+      "git": "https://github.com/ocornut/imgui.git",
+      "tag": "v1.91.6",
+      "cmakeSupport": false
+    },
+    "imgui_docking": {
+      "git": "https://github.com/ocornut/imgui.git",
+      "tag": "v1.91.6-docking",
+      "cmakeSupport": false,
+      "hook": "imgui"
+    },
+    "googletest": {
+      "git": "https://github.com/google/googletest.git",
+      "tag": "v1.14.0"
+    },
+    "catch2": {
+      "git": "https://github.com/catchorg/Catch2.git",
+      "tag": "v3.5.2"
+    },
+    "qt6": {
+      "path": "externals/qt6",
+      "include": "cmake/externals/includes/qt6/Include.cmake",
+      "options": {
+        "components": [ "Core", "Widgets", "Gui", "OpenGL" ],
+        "hint": "${QT_ROOT}",
+        "backup": "E:/Backup/Qt/6.7.0/msvc2022_64"
+      }
+    }
+  },
     "libraries": [
         {
             "name": "BasicLogger",

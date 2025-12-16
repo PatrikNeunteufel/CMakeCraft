@@ -1,65 +1,54 @@
-# ==============================================================================
-# ExecutableCollect.cmake – Executable Data Collection
-# ==============================================================================
+# cmake/project/ExecutableCollect.cmake
+# ======================================
+# Collects executable data from JSON into a Context
 #
-# Module:       ExecutableCollect.cmake
-# Version:      0.1.0
-# Date:         2025-12-05
-# Part of:      CMake Architecture V2
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
-# Description:
-#   Collects all data for an executable from JSON into a Context.
-#   This module is responsible for parsing and normalizing executable
-#   definitions from Solution.json.
-#
-# Dependencies (must be loaded before):
+# Dependencies:
 #   - cmake/core/Json.cmake
 #   - cmake/core/Context.cmake
 #   - cmake/core/Debug.cmake
 #
 # Provides:
-#   _collect_executable(EXE_JSON CTX)
+#   - _collect_executable(EXE_JSON CTX)
 #
 # Context Keys Set:
-#   Mandatory:
-#     NAME              - Target name
+#   - NAME, DISPLAY_NAME, DESCRIPTION, VERSION, PATH, TYPE
+#   - SKIP, PCH_ENABLED, PCH_HEADER
+#   - DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS
+#   - PLATFORMS, DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
 #
-#   Optional:
-#     DISPLAY_NAME      - Display name (default: NAME)
-#     DESCRIPTION       - Description
-#     VERSION           - Version (default: Solution version)
-#     PATH              - Source path (default: projects/exec/{name}/src)
-#     TYPE              - CONSOLE, GUI, CLI, HEADLESS, WORKER (default: from settings)
-#     SKIP              - Boolean whether to skip
-#     PCH_ENABLED       - Precompiled header enabled
-#     PCH_HEADER        - PCH header file (default: pch.h)
-#     DEPENDENCIES      - List of internal dependencies (libraries)
-#     EXTERNALS         - List of external dependencies
-#     EXTERNAL_OPTIONS  - JSON block with external-specific options
-#     PLATFORMS         - List of supported platforms (empty = all)
-#     DEFINES           - Preprocessor definitions
-#     COMPILE_OPTIONS   - Additional compiler options
-#     LINK_OPTIONS      - Additional linker options
-#
-# Based on:
-#   - master_concept v0.1
-#   - Solution_Schema v0.1
-#   - guidelines v0.1
-#
-# ==============================================================================
+# Used by:
+#   - Executables.cmake
 
 include_guard(GLOBAL)
 
-# ==============================================================================
-# Main Function: _collect_executable
-# ==============================================================================
-#
-# Collects all fields of an executable from JSON into a Context.
-#
-# Parameters:
-#   EXE_JSON  - JSON string of the executable
-#   CTX       - Context prefix (e.g. EXE_0, EXE_1, ...)
-#
+# ============================================================================
+# _collect_executable - Collects executable data from JSON into Context
+# ============================================================================
+#[[
+    _collect_executable(EXE_JSON CTX)
+    
+    Parses an executable definition from JSON and stores all fields
+    in a Context for later processing by ExecutableCreate.
+    
+    Parameters:
+        EXE_JSON - Mandatory: JSON string of the executable
+        CTX      - Mandatory: Context prefix (e.g. EXE_0, EXE_1)
+    
+    Context Keys Set:
+        NAME, DISPLAY_NAME, DESCRIPTION, VERSION, PATH, TYPE,
+        SKIP, PCH_ENABLED, PCH_HEADER, DEPENDENCIES, EXTERNALS,
+        EXTERNAL_OPTIONS, PLATFORMS, DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
+    
+    Example:
+        ctx_create(EXE_0)
+        _collect_executable("${_exe_json}" EXE_0)
+        ctx_get(EXE_0 NAME _name)
+]]
 function(_collect_executable EXE_JSON CTX)
     
     # --------------------------------------------------------------------------

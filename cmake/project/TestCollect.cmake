@@ -1,15 +1,11 @@
-# ==============================================================================
-# TestCollect.cmake – Test Data Collection
-# ==============================================================================
+# cmake/project/TestCollect.cmake
+# ================================
+# Collects test data from JSON into a Context
 #
-# Module:       TestCollect.cmake
-# Version:      0.1.0
-# Date:         2025-12-11
-# Part of:      CMake Architecture V2
-#
-# Description:
-#   Collects test data from JSON and stores it in a Context.
-#   Handles default values and path conventions.
+# Version: 0.5.0
+# Date:    2025-12-16
+# Status:  Development
+# Author:  CMake Architecture V2 Team
 #
 # Dependencies:
 #   - cmake/core/Context.cmake
@@ -17,15 +13,20 @@
 #   - cmake/core/Debug.cmake
 #
 # Provides:
-#   _collect_test(TEST_JSON CTX)
+#   - _collect_test(TEST_JSON CTX)
+#   - _json_get_int_or_default()
+#   - _json_get_bool_or_default()
+#   - _json_get_string_or_default()
+#   - _json_get_array_as_list()
 #
 # Context Keys Set:
-#   NAME, DISPLAY_NAME, VERSION, TYPE, FRAMEWORK, PATH,
-#   TARGET, DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS,
-#   TIMEOUT, LABELS, PARALLEL, SKIP, PLATFORMS,
-#   DEFINES, COMPILE_OPTIONS
+#   - NAME, DISPLAY_NAME, VERSION, TYPE, FRAMEWORK, PATH
+#   - TARGET, DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS
+#   - TIMEOUT, LABELS, PARALLEL, SKIP, PLATFORMS
+#   - DEFINES, COMPILE_OPTIONS, SOURCE_FROM, EXCLUDE_SOURCES
 #
-# ==============================================================================
+# Used by:
+#   - Tests.cmake
 
 include_guard(GLOBAL)
 

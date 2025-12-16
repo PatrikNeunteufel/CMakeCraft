@@ -2,8 +2,8 @@
 # =================================
 # Compiler-specific options and code quality tools
 #
-# Version: 0.1.1
-# Date:    2025-12-05
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -278,10 +278,14 @@ endfunction()
 # ============================================================================
 # _add_clang_format_check_target - Clang-Format check target (Phase 7)
 # ============================================================================
-#-----------------------------------------------
-# _add_clang_format_check_target(TARGET_NAME)
-# Creates custom target for format checks - Phase 7 placeholder
-#-----------------------------------------------
+#[[
+    _add_clang_format_check_target(TARGET_NAME)
+    
+    Creates custom target for format checks - Phase 7 placeholder.
+    
+    Parameters:
+        TARGET_NAME - Mandatory: CMake target
+]]
 function(_add_clang_format_check_target TARGET_NAME)
     # TODO Phase 7: Implement format check
     #
