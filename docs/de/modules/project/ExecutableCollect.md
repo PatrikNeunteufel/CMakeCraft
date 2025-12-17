@@ -1,7 +1,7 @@
 # ExecutableCollect.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-15  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-18  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [ExecutableCollect.md](../../en/modules/project/ExecutableCollect.md)  
 > **Modul:** [`cmake/project/ExecutableCollect.cmake`](../../../../cmake/project/ExecutableCollect.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 0.5.2
 
 ---
 
@@ -106,7 +106,8 @@ ctx_get(EXE_0 PATH _path)
 | `TYPE` | Enum | Aus settings | CONSOLE, GUI, CLI, HEADLESS, WORKER |
 | `SKIP` | Bool | FALSE | Überspringen |
 | `PCH_ENABLED` | Bool | FALSE | PCH aktiviert |
-| `PCH_HEADER` | String | "pch.h" | PCH Header-Datei |
+| `PCH_HEADER` | String | `pch.h` | PCH Header-Datei |
+| `PCH_PATH` | String | "" | Custom PCH-Pfad (relativ zu projects/) |
 | `DEPENDENCIES` | List | "" | Interne Abhängigkeiten |
 | `EXTERNALS` | List | "" | Externe Abhängigkeiten |
 | `EXTERNAL_OPTIONS` | JSON | "{}" | Externe-spezifische Optionen |
@@ -114,6 +115,8 @@ ctx_get(EXE_0 PATH _path)
 | `DEFINES` | List | "" | Präprozessor-Definitionen |
 | `COMPILE_OPTIONS` | List | "" | Zusätzliche Compiler-Optionen |
 | `LINK_OPTIONS` | List | "" | Zusätzliche Linker-Optionen |
+
+**Hinweis:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
 
 ---
 
@@ -195,9 +198,10 @@ Fehlende optionale Felder führen nicht zu Fehlern, sondern werden mit sinnvolle
 
 ---
 
-## Changelog
+## 8. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **0.5.1** | **2025-12-18** | **PCH_PATH hinzugefügt, implizite PCH-Aktivierung dokumentiert** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.0 | 2025-12-05 | Initial (Clean Start): JSON zu Context Mapping |

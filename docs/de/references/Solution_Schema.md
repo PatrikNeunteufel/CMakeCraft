@@ -1,7 +1,7 @@
 # Solution Schema — Referenz
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-14  
+> **Version:** 0.5.2  
+> **Datum:** 2025-12-18  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -321,7 +321,7 @@ Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV:
 | `type` | `CONSOLE` | `CONSOLE`, `GUI`, `WORKER` |
 | `path` | `projects/exec/{name}/src` | Source-Verzeichnis |
 | `skip` | `false` | Build überspringen |
-| `pch` | – | Precompiled Headers Config |
+| `pch` | – | Precompiled Headers Config (siehe [§ 6.5](#65-pch-object-precompiled-headers)) |
 | `dependencies` | `[]` | Interne Libraries |
 | `externals` | `[]` | External-Referenzen |
 | `external_options` | `{}` | Per-External Options |
@@ -351,6 +351,39 @@ Per-Target Options für Externals:
 }
 ```
 
+### 6.5 pch Object (Precompiled Headers)
+
+```json
+"pch": {
+    "enabled": true,
+    "header": "stdafx.h",
+    "path": "common/pch"
+}
+```
+
+| Feld | Default | Beschreibung |
+|------|---------|--------------|
+| `enabled` | `false` | PCH aktivieren |
+| `header` | `pch.h` | Name der PCH-Datei |
+| `path` | – | Custom-Pfad (relativ zu `projects/`) |
+
+**Aktivierung (implizit):**
+
+PCH wird automatisch aktiviert wenn:
+- `enabled: true` explizit gesetzt ist, ODER
+- `header` angegeben ist und `enabled` nicht `false`, ODER
+- `path` angegeben ist und `enabled` nicht `false`
+
+**Suchpfad-Priorität** (wenn `path` nicht angegeben):
+
+| Priorität | Pfad |
+|-----------|------|
+| 1 | `{target-path}/pch/{header}` |
+| 2 | `{target-path}/src/{header}` |
+| 3 | `{target-path}/{header}` |
+
+Wenn `path` angegeben: `projects/{path}/{header}`
+
 ---
 
 ## 7. libraries Array
@@ -374,6 +407,7 @@ Per-Target Options für Externals:
 | `type` | Settings-Default | `STATIC`, `SHARED`, `INTERFACE` |
 | `path` | Convention | Source-Verzeichnis |
 | `public_headers` | – | Public Include-Verzeichnis |
+| `pch` | – | Precompiled Headers Config (siehe [§ 6.5](#65-pch-object-precompiled-headers)) |
 
 ---
 
@@ -623,7 +657,8 @@ ctest -j8            # 8 parallele Jobs
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-15** | **Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben** |
+| **0.5.2** | **2025-12-18** | **PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt** |
+| 0.5.1 | 2025-12-15 | Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert |
 | 0.1.4 | 2025-12-12 | tests Array dokumentiert: Typen, Frameworks, source_from, CTest |
 | 0.1.3 | 2025-12-11 | System Externals: options Feld (hint, backup, components) |

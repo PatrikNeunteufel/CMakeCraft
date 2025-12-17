@@ -2,8 +2,8 @@
 # ======================================
 # Collects executable data from JSON into a Context
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.5.2
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -17,7 +17,7 @@
 #
 # Context Keys Set:
 #   - NAME, DISPLAY_NAME, DESCRIPTION, VERSION, PATH, TYPE
-#   - SKIP, PCH_ENABLED, PCH_HEADER
+#   - SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH
 #   - DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS
 #   - PLATFORMS, DEFINES, COMPILE_OPTIONS, LINK_OPTIONS
 #
@@ -117,17 +117,44 @@ function(_collect_executable EXE_JSON CTX)
     # PCH (Precompiled Headers)
     # --------------------------------------------------------------------------
     
+    set(_pch_enabled FALSE)
+    set(_pch_header "pch.h")
+    set(_pch_path "")
+    
     _json_has_key("${EXE_JSON}" "pch" _has_pch)
     if(_has_pch)
         _json_get_object("${EXE_JSON}" "pch" _pch_obj)
-        _json_get_bool_from_key("${_pch_obj}" "enabled" _pch_enabled)
-        _json_get_string_or_default("${_pch_obj}" "header" "pch.h" _pch_header)
-    else()
-        set(_pch_enabled FALSE)
-        set(_pch_header "pch.h")
+        
+        # Check for explicit enabled field
+        _json_has_key("${_pch_obj}" "enabled" _has_enabled)
+        if(_has_enabled)
+            _json_get_bool_from_key("${_pch_obj}" "enabled" _pch_enabled)
+        endif()
+        
+        # Check for header field
+        _json_has_key("${_pch_obj}" "header" _has_header)
+        if(_has_header)
+            _json_get_string("${_pch_obj}" "header" _pch_header)
+            # Implicit enable if header specified and not explicitly disabled
+            if(NOT _has_enabled)
+                set(_pch_enabled TRUE)
+            endif()
+        endif()
+        
+        # Check for path field
+        _json_has_key("${_pch_obj}" "path" _has_path)
+        if(_has_path)
+            _json_get_string("${_pch_obj}" "path" _pch_path)
+            # Implicit enable if path specified and not explicitly disabled
+            if(NOT _has_enabled)
+                set(_pch_enabled TRUE)
+            endif()
+        endif()
     endif()
+    
     ctx_set(${CTX} PCH_ENABLED "${_pch_enabled}")
     ctx_set(${CTX} PCH_HEADER "${_pch_header}")
+    ctx_set(${CTX} PCH_PATH "${_pch_path}")
     
     # --------------------------------------------------------------------------
     # Dependencies (internal libraries)
@@ -234,7 +261,7 @@ function(_collect_executable EXE_JSON CTX)
     dbg(${DBG_RARE} "    PATH: ${_path}" ID EXECUTABLES)
     dbg(${DBG_RARE} "    TYPE: ${_type}" ID EXECUTABLES)
     dbg(${DBG_RARE} "    SKIP: ${_skip}" ID EXECUTABLES)
-    dbg(${DBG_RARE} "    PCH: ${_pch_enabled} (${_pch_header})" ID EXECUTABLES)
+    dbg(${DBG_RARE} "    PCH: ${_pch_enabled} (header=${_pch_header}, path=${_pch_path})" ID EXECUTABLES)
     dbg(${DBG_ULTRA_RARE} "    DEPENDENCIES: ${_dependencies}" ID EXECUTABLES)
     dbg(${DBG_ULTRA_RARE} "    EXTERNALS: ${_externals}" ID EXECUTABLES)
     dbg(${DBG_ULTRA_RARE} "    PLATFORMS: ${_platforms}" ID EXECUTABLES)

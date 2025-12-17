@@ -1,7 +1,7 @@
 # LibraryCollect.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-15  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-18  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [LibraryCollect.md](../../en/modules/project/LibraryCollect.md)  
 > **Modul:** [`cmake/project/LibraryCollect.cmake`](../../../../cmake/project/LibraryCollect.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 0.5.1
 
 ---
 
@@ -92,9 +92,14 @@ _collect_library(<LIB_JSON> <CTX>)
 | `TYPE` | Enum | Aus settings | STATIC, SHARED, INTERFACE |
 | `PUBLIC_HEADERS` | Path | "" | Öffentliche Header-Verzeichnis |
 | `SKIP` | Bool | FALSE | Überspringen |
+| `PCH_ENABLED` | Bool | FALSE | PCH aktivieren |
+| `PCH_HEADER` | String | `pch.h` | PCH-Header-Name |
+| `PCH_PATH` | String | "" | Custom PCH-Pfad (relativ zu projects/) |
 | `DEPENDENCIES` | List | "" | Interne Abhängigkeiten |
 | `EXTERNALS` | List | "" | Externe Abhängigkeiten |
 | `PLATFORM` | String | "" (= alle) | Ziel-Plattform |
+
+**Hinweis:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
 
 ---
 
@@ -118,6 +123,10 @@ _collect_library(<LIB_JSON> <CTX>)
     "type": "STATIC",
     "public_headers": "include/core",
     "skip": false,
+    "pch": {
+        "enabled": true,
+        "header": "pch.h"
+    },
     "dependencies": ["UtilLib"],
     "externals": ["boost"],
     "platform": "windows"
@@ -142,9 +151,10 @@ _collect_library(<LIB_JSON> <CTX>)
 
 ---
 
-## Changelog
+## 8. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0** |
+| **0.5.1** | **2025-12-18** | **PCH-Support hinzugefügt: PCH_ENABLED, PCH_HEADER, PCH_PATH** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-07 | Initial (Clean Start): JSON zu Context Mapping |

@@ -127,32 +127,58 @@
         }
     ],
     "apps": [
-        {
-            "name": "DemoPlayer",
-            "displayName": "Demo Player Application",
-            "version": "0.5.0",
-            "description": "Phase 8 App-Container Demo",
-            
-            "core": {
-                "dependencies": [],
-                "externals": []
-            },
-            
-            "runner": {
-                "type": "CONSOLE",
-                "externals": []
-            },
-            
-            "tests": {
-                "framework": "doctest",
-                "unit": {
-                    "timeout": 30,
-                    "labels": ["unit", "demo", "fast"]
-                }
-            },
-            
-            "platforms": ["windows", "linux", "macos"]
-        }
+      {
+        "name": "MyVisualizer",
+        "displayName": "MyVizualizer",
+        "version": "0.1.0",
+        "description": "Audio Visualizer",
+
+        "core": {
+          "dependencies": [],
+          "externals": []
+        },
+
+        "runner": {
+          "type": "GUI",
+          "externals": []
+        },
+
+        "tests": {
+          "framework": "doctest",
+          "unit": {
+            "timeout": 30,
+            "labels": [ "unit", "demo", "fast" ]
+          }
+        },
+
+        "platforms": [ "windows", "linux", "macos" ]
+      },
+      {
+        "name": "DemoPlayer",
+        "displayName": "Demo Player Application",
+        "version": "0.5.0",
+        "description": "Phase 8 App-Container Demo",
+
+        "core": {
+          "dependencies": [],
+          "externals": []
+        },
+
+        "runner": {
+          "type": "CONSOLE",
+          "externals": []
+        },
+
+        "tests": {
+          "framework": "doctest",
+          "unit": {
+            "timeout": 30,
+            "labels": [ "unit", "demo", "fast" ]
+          }
+        },
+
+        "platforms": [ "windows", "linux", "macos" ]
+      }
     ],
     "tests": [
         {

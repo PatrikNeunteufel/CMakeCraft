@@ -1,9 +1,9 @@
 # Implementation Plan — CMake Architecture V2
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-14  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-17  
 > **Typ:** Concept  
-> **Status:** Phase 1-7 abgeschlossen  
+> **Status:** Phase 1-7 abgeschlossen, Phase 8 in Arbeit  
 > **Basiert auf:** master_concept v0.5, Solution_Schema v0.1, ErrorCodes v0.1  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
@@ -44,7 +44,7 @@ Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 | 5 | Lokale Externals | ✅ Abgeschlossen |
 | 6 | Fetched Externals + Hooks | ✅ Abgeschlossen |
 | 7 | Test-Pipeline | ✅ Abgeschlossen |
-| 8 | AppContainer | 🔄 Geplant |
+| 8 | AppContainer | 🔄 In Arbeit |
 | 9 | System-Externals | 🔄 Geplant |
 
 ### Phasen-Flow
@@ -384,25 +384,59 @@ ctest --test-dir build
 
 ---
 
-## 9. Phase 8: AppContainer (geplant)
+## 9. Phase 8: AppContainer (in Arbeit)
 
-**Status:** 🔄 Geplant
+**Status:** 🔄 In Arbeit
 
 **Ziel:** Testbare App-Architektur mit Core/Runner-Trennung.
 
 → **Detail-Konzept:** [AppContainer_Concept.md](AppContainer_Concept.md)
 
-### Kernpunkte
+### Module
 
-- Trennung: AppCore (Logik, testbar) + AppRunner (Entry Point)
-- Dependency Injection über IAppCore Interface
-- Headless-Testing ohne GUI-Abhängigkeiten
+| Modul | Status | Beschreibung |
+|-------|--------|--------------|
+| `Apps.cmake` | ✅ Implementiert | Pipeline-Orchestrator, Filter (skip, platform, BUILD_ONLY) |
+| `AppCollect.cmake` | ✅ Implementiert | JSON → Context Transformation |
+| `AppCreate.cmake` | ✅ Implementiert | Target-Erstellung (Core, Runner, Tests) |
+| `Phase8.cmake` | ✅ Implementiert | Build-System-Test |
+
+### Generierte Targets
+
+Pro App werden folgende Targets erstellt:
+
+| Target | Typ | Beschreibung |
+|--------|-----|--------------|
+| `{AppName}.Core` | STATIC Library | Business-Logik (testbar) |
+| `{AppName}` | Executable | Entry Point (main()) |
+| `{AppName}.UnitTests` | Executable | Unit Tests (optional) |
+| `{AppName}.IntegrationTests` | Executable | Integration Tests (optional) |
+
+### Verzeichnisstruktur
+
+```
+projects/apps/{AppName}/
+├── include/    → PUBLIC Headers (Core)
+├── src/        → Implementation (Core)
+├── main/       → Entry Point (Runner)
+├── pch/        → Precompiled Headers (optional)
+└── tests/
+    ├── unit/        → Unit Tests
+    └── integration/ → Integration Tests
+```
 
 ### Error-Code-Bereich
 
-| Bereich | Kategorie |
-|---------|-----------|
-| E4xx | AppContainer-spezifische Fehler |
+| Bereich | Codes | Kategorie |
+|---------|-------|-----------|
+| E4xx | E401-E407 | AppContainer-Fehler |
+| W4xx | W401-W403 | AppContainer-Warnungen |
+
+### Offene Punkte
+
+- [ ] SourceCollect.cmake Integration (aktuell GLOB)
+- [ ] UserGuide für App-Container
+- [ ] Englische Dokumentation
 
 ---
 
@@ -493,12 +527,18 @@ ctest --test-dir build
 - ✅ catch2 Support
 - ✅ Labels und Timeout
 
-### Phase 8 (geplant)
+### Phase 8 🔄
 
-- [ ] AppCore.cmake
-- [ ] AppRunner.cmake
-- [ ] Interface-Generation
-- [ ] Headless-Test-Integration
+- ✅ Apps.cmake
+- ✅ AppCollect.cmake
+- ✅ AppCreate.cmake
+- ✅ Phase8.cmake (Build-System-Test)
+- ✅ DemoPlayer Test-App
+- ✅ Core/Runner/Tests Trennung
+- ✅ Platform-Filter
+- ✅ Unit Tests mit doctest
+- [ ] SourceCollect.cmake Integration
+- [ ] UserGuide für App-Container
 
 ### Phase 9 (geplant)
 
@@ -523,5 +563,6 @@ ctest --test-dir build
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Phase 1-7 abgeschlossen, Fetch v0.2 Details integriert, Test-Pipeline Details integriert, Phase 8/9 als geplant referenziert, Blueprint v0.5.0 Format** |
+| **0.5.1** | **2025-12-17** | **Phase 8 in Arbeit: Apps.cmake, AppCollect.cmake, AppCreate.cmake implementiert, DemoPlayer Test-App, Core/Runner/Tests Trennung** |
+| 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 Details integriert, Test-Pipeline Details integriert, Phase 8/9 als geplant referenziert, Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Phasen aus v1.5 übernommen |

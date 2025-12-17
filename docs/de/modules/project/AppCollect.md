@@ -1,12 +1,12 @@
 # AppCollect.cmake — Dokumentation
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-17  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-18  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/project/AppCollect.cmake](../../../../cmake/project/AppCollect.cmake)  
-> **Modul-Version:** 0.5.0  
+> **Modul-Version:** 0.5.2  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [AppCollect.md](../../../en/modules/project/AppCollect.md)
@@ -110,7 +110,7 @@ Das Modul wendet folgende Defaults an:
 |------|---------|------------|
 | `path` | `projects/apps/{name}` | Convention over Configuration |
 | `runner.type` | `CONSOLE` | Häufigster Fall |
-| `pch.header` | `pch/pch.hpp` | Standard-Location |
+| `pch.header` | `pch.h` | Standard-Name, Pfad via Suchpriorität |
 | `tests.framework` | `doctest` | Schnell, Header-only |
 | `tests.unit.timeout` | `30` | Sekunden für Unit Tests |
 | `tests.integration.timeout` | `120` | Sekunden für Integration |
@@ -187,8 +187,10 @@ ctx_get(APP_0 RUNNER_TYPE _type)
 | Key | Typ | JSON-Pfad | Default |
 |-----|-----|-----------|---------|
 | `PCH_ENABLED` | Bool | `pch.enabled` | `FALSE` |
-| `PCH_HEADER` | String | `pch.header` | `pch/pch.hpp` |
-| `PCH_SOURCE` | String | `pch.source` | `pch/pch.cpp` |
+| `PCH_HEADER` | String | `pch.header` | `pch.h` |
+| `PCH_PATH` | String | `pch.path` | `""` (leer) |
+
+**Hinweis:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
 
 ### 5.5 Test-Keys
 
@@ -348,4 +350,5 @@ AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nich
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-17** | **Initial: Phase 8 App-Container JSON-Parsing, Core/Runner/Tests-Trennung, vollständige Context-Keys** |
+| **0.5.1** | **2025-12-18** | **PCH-Defaults korrigiert: header auf pch.h, PCH_SOURCE entfernt, PCH_PATH hinzugefügt, implizite Aktivierung dokumentiert** |
+| 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container JSON-Parsing, Core/Runner/Tests-Trennung, vollständige Context-Keys |

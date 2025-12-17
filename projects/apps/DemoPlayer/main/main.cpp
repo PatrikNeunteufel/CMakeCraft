@@ -1,14 +1,23 @@
+/**
+ ****************************************************************************************
+ * @file   main.cpp
+ * @brief  DemoPlayer Entry Point
+ *         This file contains ONLY the entry point.
+ *         All business logic is in DemoPlayer.Core (Application class).
+ *         This separation enables:
+ *          - Unit testing of Application without main() conflicts
+ *          - Clean dependency injection
+ *          - Headless testing
+ * @author Patrik Neunteufel
+ * @date   $MONTHNAME_EN $YEAR
+  ****************************************************************************************
+ */
+ 
 // ==============================================================================
-// main.cpp - DemoPlayer Entry Point
+//  - 
 // ==============================================================================
 //
-// This file contains ONLY the entry point.
-// All business logic is in DemoPlayer.Core (Application class).
-//
-// This separation enables:
-// - Unit testing of Application without main() conflicts
-// - Clean dependency injection
-// - Headless testing
+
 //
 // ==============================================================================
 

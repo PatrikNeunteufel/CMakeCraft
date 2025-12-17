@@ -2,8 +2,8 @@
 # ==================================
 # Creates library targets from prepared Context
 #
-# Version: 0.5.1
-# Date:    2025-12-17
+# Version: 0.5.2
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -38,6 +38,7 @@ include_guard(GLOBAL)
     
     Expected Context Keys:
         NAME, PATH, TYPE, VERSION, PUBLIC_HEADERS,
+        PCH_ENABLED, PCH_HEADER, PCH_PATH,
         DEPENDENCIES, EXTERNALS
     
     Example:
@@ -56,6 +57,9 @@ function(_create_library_target CTX)
     ctx_get(${CTX} TYPE _type)
     ctx_get(${CTX} VERSION _version)
     ctx_get(${CTX} PUBLIC_HEADERS _public_headers)
+    ctx_get(${CTX} PCH_ENABLED _pch_enabled)
+    ctx_get(${CTX} PCH_HEADER _pch_header)
+    ctx_get(${CTX} PCH_PATH _pch_custom_path)
     ctx_get(${CTX} DEPENDENCIES _dependencies)
     ctx_get(${CTX} EXTERNALS _externals)
     
@@ -181,6 +185,38 @@ function(_create_library_target CTX)
     # Additionally: If there is a pch/ subdirectory
     if(EXISTS "${_src_dir}/pch")
         target_include_directories(${_name} PRIVATE "${_src_dir}/pch")
+    endif()
+    
+    # --------------------------------------------------------------------------
+    # Precompiled Headers
+    # --------------------------------------------------------------------------
+    
+    if(_pch_enabled)
+        set(_pch_found_path "")
+        
+        # If custom path specified, use it (relative to CMAKE_SOURCE_DIR/projects/)
+        if(NOT "${_pch_custom_path}" STREQUAL "")
+            set(_custom_full_path "${CMAKE_SOURCE_DIR}/projects/${_pch_custom_path}/${_pch_header}")
+            if(EXISTS "${_custom_full_path}")
+                set(_pch_found_path "${_custom_full_path}")
+            endif()
+        else()
+            # Search priority: 1. pch/, 2. src/, 3. root
+            if(EXISTS "${_src_dir}/pch/${_pch_header}")
+                set(_pch_found_path "${_src_dir}/pch/${_pch_header}")
+            elseif(EXISTS "${_src_dir}/${_pch_header}")
+                set(_pch_found_path "${_src_dir}/${_pch_header}")
+            elseif(EXISTS "${CMAKE_SOURCE_DIR}/${_path}/${_pch_header}")
+                set(_pch_found_path "${CMAKE_SOURCE_DIR}/${_path}/${_pch_header}")
+            endif()
+        endif()
+        
+        if(_pch_found_path)
+            target_precompile_headers(${_name} PRIVATE "${_pch_found_path}")
+            dbg(${DBG_RARE} "    PCH: ${_pch_found_path}" ID LIBRARIES)
+        else()
+            cmake_warn("W101" "Library '${_name}': PCH enabled but '${_pch_header}' not found in pch/, src/, or root")
+        endif()
     endif()
     
     # --------------------------------------------------------------------------

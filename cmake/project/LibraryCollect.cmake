@@ -2,8 +2,8 @@
 # ===================================
 # Collects library data from JSON into a Context
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.5.1
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -17,7 +17,8 @@
 #
 # Context Keys Set:
 #   - NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS
-#   - SKIP, DEPENDENCIES, EXTERNALS, PLATFORM
+#   - SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH
+#   - DEPENDENCIES, EXTERNALS, PLATFORM
 #
 # Used by:
 #   - Libraries.cmake
@@ -39,7 +40,8 @@ include_guard(GLOBAL)
     
     Context Keys Set:
         NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS,
-        SKIP, DEPENDENCIES, EXTERNALS, PLATFORM
+        SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH,
+        DEPENDENCIES, EXTERNALS, PLATFORM
     
     Example:
         ctx_create(LIB_0)
@@ -129,6 +131,49 @@ function(_collect_library LIB_JSON CTX)
     ctx_set(${CTX} SKIP "${_skip}")
     
     # --------------------------------------------------------------------------
+    # PCH (Precompiled Headers)
+    # --------------------------------------------------------------------------
+    
+    set(_pch_enabled FALSE)
+    set(_pch_header "pch.h")
+    set(_pch_path "")
+    
+    _json_has_key("${LIB_JSON}" "pch" _has_pch)
+    if(_has_pch)
+        _json_get_object("${LIB_JSON}" "pch" _pch_obj)
+        
+        # Check for explicit enabled field
+        _json_has_key("${_pch_obj}" "enabled" _has_enabled)
+        if(_has_enabled)
+            _json_get_bool_from_key("${_pch_obj}" "enabled" _pch_enabled)
+        endif()
+        
+        # Check for header field
+        _json_has_key("${_pch_obj}" "header" _has_header)
+        if(_has_header)
+            _json_get_string("${_pch_obj}" "header" _pch_header)
+            # Implicit enable if header specified and not explicitly disabled
+            if(NOT _has_enabled)
+                set(_pch_enabled TRUE)
+            endif()
+        endif()
+        
+        # Check for path field
+        _json_has_key("${_pch_obj}" "path" _has_path)
+        if(_has_path)
+            _json_get_string("${_pch_obj}" "path" _pch_path)
+            # Implicit enable if path specified and not explicitly disabled
+            if(NOT _has_enabled)
+                set(_pch_enabled TRUE)
+            endif()
+        endif()
+    endif()
+    
+    ctx_set(${CTX} PCH_ENABLED "${_pch_enabled}")
+    ctx_set(${CTX} PCH_HEADER "${_pch_header}")
+    ctx_set(${CTX} PCH_PATH "${_pch_path}")
+    
+    # --------------------------------------------------------------------------
     # Dependencies (internal libraries)
     # --------------------------------------------------------------------------
     
@@ -174,6 +219,7 @@ function(_collect_library LIB_JSON CTX)
     dbg(${DBG_RARE} "    TYPE: ${_type}" ID LIBRARIES)
     dbg(${DBG_RARE} "    PUBLIC_HEADERS: ${_public_headers}" ID LIBRARIES)
     dbg(${DBG_RARE} "    SKIP: ${_skip}" ID LIBRARIES)
+    dbg(${DBG_RARE} "    PCH: ${_pch_enabled} (${_pch_header})" ID LIBRARIES)
     dbg(${DBG_ULTRA_RARE} "    DEPENDENCIES: ${_dependencies}" ID LIBRARIES)
     dbg(${DBG_ULTRA_RARE} "    EXTERNALS: ${_externals}" ID LIBRARIES)
     

@@ -1,7 +1,5 @@
-also besteht im Prinzip eine App immer aus einem Projekt exec (main) und einer lib(wohl eine statische lib). 
-
-sollte dann evtl. eine zusätzliche (alternative) struktur für z.b. App gebildet werden, welche in sich exec, libs( und tests) beinhalten kann, aber auch externe dependencies (libs) haben kann, was wohl eher öffentliche libs, welche mit andern apps geshared werden können. (diese werden wohl am ehesten dependencies in app.libs sein.
-
-
-
-das wird nun aber etwas kompliziert und muss genau besprochen werden
+wenn im pch objekt entweder 
+* nur "enabled" vorhanden und true. -> path und header auf default 
+* "header" angegeben und "enable" nicht false,. -> path kann fehlen und wäre default
+* "path" angegeben und "enable" nicht false. ->header kann fehlen und wäre default
+ich denke so wären alle möglichkeiten geklärt, oder? wenn ja, Korrekturen vornehmen. versionen hochziehen nicht vergessen
