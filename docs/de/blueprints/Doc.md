@@ -1,7 +1,7 @@
 # Doc — Standard für alle Dokumentationen
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-13  
+> **Version:** 0.5.2  
+> **Datum:** 2025-12-17  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Blueprint v0.5  
@@ -420,6 +420,35 @@ cmake/
 └── postfetch/     ✓ (nicht: PostFetch/)
 ```
 
+### 8.9 Ausnahme: Projekt-Ordner
+
+**Projekt-Ordner** folgen dem **Target-Namen**, nicht der Kleinschreibung:
+
+| Regel | Beispiel | Begründung |
+|-------|----------|------------|
+| Ordnername = Target-Name | `projects/apps/DemoPlayer/` | Konsistenz zwischen Ordner und CMake-Target |
+| Ordnername = Target-Name | `projects/exec/MinimalConsole/` | IDE-Navigation, Zuordnung |
+| Ordnername = Target-Name | `projects/libs/BasicLogger/` | Klare 1:1-Beziehung |
+
+**Betroffene Pfade:**
+```
+projects/
+├── apps/
+│   └── DemoPlayer/        ← Target: DemoPlayer, DemoPlayer.Core
+├── exec/
+│   └── MinimalConsole/    ← Target: MinimalConsole
+├── libs/
+│   └── BasicLogger/       ← Target: BasicLogger
+└── tests/
+    └── unit/
+        └── CoreLib_Tests/ ← Target: CoreLib_Tests
+```
+
+**Nicht betroffen** (weiterhin lowercase):
+
+- `projects/` selbst
+- Typ-Unterordner: `apps/`, `exec/`, `libs/`, `tests/`
+- Alle System-Ordner: `cmake/`, `docs/`, `externals/`
 
 ---
 
@@ -612,6 +641,7 @@ Vor Fertigstellung einer Dokumentation prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-15** | **Explizite Dateinamen-Konvention (§ 8.2): Title_Case. Neue Ordnernamen-Konvention (§ 8.8): immer kleingeschrieben** |
+| **0.5.2** | **2025-12-17** | **Zusatzartikel zu Ordnernamen für Projekte unter § 8.9** |
+| 0.5.1 | 2025-12-15 | Explizite Dateinamen-Konvention (§ 8.2): Title_Case. Neue Ordnernamen-Konvention (§ 8.8): immer kleingeschrieben |
 | 0.5.0 | 2025-12-13 | Neu: Pflicht-Inhaltsverzeichnis mit Ankern, Zielgruppe-Pflichtfeld im Header, English-Link im Header, Kapitel-Nummerierung, Anker-Konventionen |
 | 0.1.0 | 2025-12-03 | Initial (als Documentation_Blueprint) |

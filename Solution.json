@@ -126,6 +126,34 @@
             "externals": ["qt6"]
         }
     ],
+    "apps": [
+        {
+            "name": "DemoPlayer",
+            "displayName": "Demo Player Application",
+            "version": "0.5.0",
+            "description": "Phase 8 App-Container Demo",
+            
+            "core": {
+                "dependencies": [],
+                "externals": []
+            },
+            
+            "runner": {
+                "type": "CONSOLE",
+                "externals": []
+            },
+            
+            "tests": {
+                "framework": "doctest",
+                "unit": {
+                    "timeout": 30,
+                    "labels": ["unit", "demo", "fast"]
+                }
+            },
+            
+            "platforms": ["windows", "linux", "macos"]
+        }
+    ],
     "tests": [
         {
             "name": "BasicLogger_UnitTests",

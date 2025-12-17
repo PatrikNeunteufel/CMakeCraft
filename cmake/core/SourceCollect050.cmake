@@ -2,8 +2,8 @@
 # ================================
 # Source file management for executables, libraries, and tests
 #
-# Version: 0.5.1
-# Date:    2025-12-17
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -22,7 +22,7 @@
 # Source modes:
 #   - explicit: Source.cmake required (Default)
 #   - glob:     Automatic collection via wildcard
-#   - auto:     Source.cmake if present, else GLOB (with fallback)
+#   - auto:     Source.cmake if present, else GLOB
 #
 # File categories:
 #   - SOURCES:   .cpp, .cxx, .cc, .c (compilable)
@@ -143,8 +143,11 @@ function(_collect_sources_from_cmake TARGET_NAME SOURCE_DIR OUT_SOURCES OUT_HEAD
     list(APPEND _extras ${${TARGET_NAME}_INLINES})
     list(APPEND _extras ${${TARGET_NAME}_IMPL})
     
-    # Note: Validation for empty sources is done in collect_sources()
-    # to allow proper fallback handling in auto mode
+    # Validation: At least one source file?
+    list(LENGTH _sources _source_count)
+    if(_source_count EQUAL 0)
+        cmake_warn("W101" "Source.cmake for '${TARGET_NAME}' defines no compilable files")
+    endif()
     
     # Warning for C++20 modules
     list(LENGTH _modules _module_count)
@@ -153,7 +156,6 @@ function(_collect_sources_from_cmake TARGET_NAME SOURCE_DIR OUT_SOURCES OUT_HEAD
     endif()
     
     # Debug output
-    list(LENGTH _sources _source_count)
     dbg(${DBG_RARE} "  Source.cmake loaded for ${TARGET_NAME}:" ID SOURCE_COLLECT)
     dbg(${DBG_RARE} "    SOURCES: ${_source_count} files" ID SOURCE_COLLECT)
     dbg(${DBG_ULTRA_RARE} "    HEADERS: ${_headers}" ID SOURCE_COLLECT)
@@ -384,13 +386,8 @@ endfunction()
     
     Modes:
         explicit - Source.cmake required (E104 if missing)
-        glob     - Always GLOB, Source.cmake ignored (W110)
-        auto     - Source.cmake if present and non-empty, else GLOB
-    
-    Warnings:
-        W101 - Source.cmake defines no files (explicit mode only)
-        W110 - GLOB fallback active
-        W111 - Source.cmake exists but is empty (auto mode, with path)
+        glob     - Always GLOB, Source.cmake ignored
+        auto     - Source.cmake if present, else GLOB
     
     Example:
         collect_sources(MyApp "${_path}" _src _hdr _ext _mod _inc)
@@ -412,10 +409,6 @@ function(collect_sources TARGET_NAME SOURCE_DIR OUT_SOURCES OUT_HEADERS OUT_EXTR
             ${TARGET_NAME} "${SOURCE_DIR}"
             _sources _headers _extras _modules _includes
         )
-        # Warn if Source.cmake defines no sources (only in explicit mode)
-        if(NOT _sources)
-            cmake_warn("W101" "Source.cmake for '${TARGET_NAME}' defines no compilable files")
-        endif()
     elseif("${_mode}" STREQUAL "glob")
         # Always GLOB
         _collect_sources_glob(
@@ -424,22 +417,12 @@ function(collect_sources TARGET_NAME SOURCE_DIR OUT_SOURCES OUT_HEADERS OUT_EXTR
         )
         set(_includes "")
     elseif("${_mode}" STREQUAL "auto")
-        # Source.cmake if present AND defines files, else GLOB
+        # Source.cmake if present, else GLOB
         if(_has_source_cmake)
             _collect_sources_from_cmake(
                 ${TARGET_NAME} "${SOURCE_DIR}"
                 _sources _headers _extras _modules _includes
             )
-            # Fallback to GLOB if Source.cmake defines no sources
-            if(NOT _sources)
-                cmake_warn("W111" "Source.cmake exists but defines no files: ${_source_cmake}")
-                dbg(${DBG_COMMON} "  Falling back to GLOB" ID SOURCE_COLLECT)
-                _collect_sources_glob(
-                    "${SOURCE_DIR}"
-                    _sources _headers _extras _modules
-                )
-                set(_includes "")
-            endif()
         else()
             _collect_sources_glob(
                 "${SOURCE_DIR}"

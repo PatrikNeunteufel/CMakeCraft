@@ -1,7 +1,7 @@
 # SourceCollect.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-15  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-17  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [SourceCollect.md](../../en/modules/core/SourceCollect.md)  
 > **Modul:** [`cmake/core/SourceCollect.cmake`](../../../../cmake/core/SourceCollect.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 0.5.1
 
 ---
 
@@ -71,6 +71,8 @@ Explizite Source-Kontrolle als Standard, mit flexiblen Modi für verschiedene An
 | `explicit` | Source.cmake erforderlich (Default) | ✅ Ja |
 | `glob` | Automatisches Sammeln via Wildcard | ⚠️ Nur für Prototypen |
 | `auto` | Source.cmake wenn vorhanden, sonst GLOB | ⚪ Übergang |
+
+> Bei `auto`: Source.cmake wird verwendet wenn vorhanden **und nicht-leer**. Bei leerer Source.cmake → Fallback auf GLOB mit W111 + W110.
 
 ### 3.2 Datei-Kategorien
 
@@ -172,8 +174,9 @@ _collect_sources_glob(<SOURCE_DIR>
 
 | Code | Bedingung |
 |------|-----------|
-| W110 | GLOB Fallback aktiv |
-| W109 | C++20 Module gefunden |
+| W101 | Source.cmake defines no files | explicit-Modus |
+| W110 | GLOB fallback active | Immer bei GLOB |
+| W111 | Source.cmake exists but is empty | auto-Modus mit Pfad |
 
 ---
 
@@ -421,6 +424,7 @@ collect_files(_all DIRECTORY "${_dir}" ...)  # Besser: Explizit listen!
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): collect_sources, _collect_sources_from_cmake, _collect_sources_glob, _apply_sources_to_target, collect_files, _get_source_mode |

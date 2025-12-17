@@ -2,8 +2,8 @@
 # ==================================
 # Creates library targets from prepared Context
 #
-# Version: 0.5.1
-# Date:    2025-12-17
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -127,18 +127,20 @@ function(_create_library_target CTX)
     endif()
     
     # --------------------------------------------------------------------------
-    # Collect Sources (via SourceCollect.cmake)
+    # Collect Sources (GLOB)
     # --------------------------------------------------------------------------
     
-    # Mode is determined by SOLUTION_SOURCE_MODE (explicit/glob/auto)
-    collect_sources(
-        ${_name}
-        "${_src_dir}"
-        _sources
-        _headers
-        _extras
-        _modules
-        _includes
+    file(GLOB_RECURSE _sources
+        "${_src_dir}/*.cpp"
+        "${_src_dir}/*.cxx"
+        "${_src_dir}/*.cc"
+        "${_src_dir}/*.c"
+    )
+    
+    file(GLOB_RECURSE _headers
+        "${_src_dir}/*.h"
+        "${_src_dir}/*.hpp"
+        "${_src_dir}/*.hxx"
     )
     
     if(NOT _sources)
@@ -149,7 +151,7 @@ function(_create_library_target CTX)
     # Create Library Target
     # --------------------------------------------------------------------------
     
-    add_library(${_name} ${_type} ${_sources} ${_headers} ${_extras} ${_modules})
+    add_library(${_name} ${_type} ${_sources} ${_headers})
     
     dbg(${DBG_RARE} "    add_library(${_name} ${_type})" ID LIBRARIES)
     dbg(${DBG_RARE} "    Sources: ${_sources}" ID LIBRARIES)
@@ -160,15 +162,6 @@ function(_create_library_target CTX)
     
     # Private: source directory
     target_include_directories(${_name} PRIVATE "${_src_dir}")
-    
-    # Additional includes from Source.cmake
-    foreach(_inc IN LISTS _includes)
-        if(IS_ABSOLUTE "${_inc}")
-            target_include_directories(${_name} PRIVATE "${_inc}")
-        else()
-            target_include_directories(${_name} PRIVATE "${_src_dir}/${_inc}")
-        endif()
-    endforeach()
     
     # Public: public_headers if defined
     if(NOT "${_public_headers}" STREQUAL "")

@@ -14,7 +14,6 @@
 #   - cmake/core/Warnings.cmake
 #   - cmake/core/CompilerOptions.cmake
 #   - cmake/core/OutputDirs.cmake
-#   - cmake/core/SourceCollect.cmake
 #   - cmake/externals/Orchestrator.cmake
 #
 # Provides:

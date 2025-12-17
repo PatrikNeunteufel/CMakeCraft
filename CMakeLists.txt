@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMake Architecture V2
-# Version:      0.2.0
-# Date:         2025-12-12
+# Version:      0.5.0
+# Date:         2025-12-17
 #
 # Description:
 #   Top-level CMake configuration for the modular build system.
@@ -13,7 +13,7 @@
 # Options:
 #   -DBUILD_TESTS=ON|OFF          Build project tests (default: OFF)
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests
-#   -DTEST_PHASE=1|2|3|4|5|6|7    Specific phase to test (default: all)
+#   -DTEST_PHASE=1|2|3|4|5|6|7|8  Specific phase to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
@@ -23,6 +23,7 @@
 #   - Solution_Schema v0.1.4
 #
 # Changelog:
+#   v0.3.0 (2025-12-17): Phase 8 (App-Container)
 #   v0.2.0 (2025-12-12): Phase 6 (Git Externals) + Phase 7 (Tests)
 #   v0.1.2 (2025-12-08): Phase 5 (Local Externals)
 #
@@ -106,6 +107,12 @@ include(cmake/project/Libraries.cmake)
 include(cmake/project/Executables.cmake)
 
 # ==============================================================================
+# Phase 8: App-Container
+# ==============================================================================
+
+include(cmake/project/Apps.cmake)
+
+# ==============================================================================
 # Phase 7: Tests
 # Only when BUILD_TESTS is enabled
 # ==============================================================================
@@ -177,6 +184,12 @@ if(RUN_BUILD_SYSTEM_TESTS)
     if("${TEST_PHASE}" STREQUAL "" OR "7" IN_LIST TEST_PHASE)
         dbgspace(ID BUILD_TEST)
         include(cmake/buildSystemTest/Phase7.cmake)
+    endif()
+    
+    # Phase 8 Test: App-Container Pipeline
+    if("${TEST_PHASE}" STREQUAL "" OR "8" IN_LIST TEST_PHASE)
+        dbgspace(ID BUILD_TEST)
+        include(cmake/buildSystemTest/Phase8.cmake)
     endif()
     
     dbgspace(ID BUILD_TEST)

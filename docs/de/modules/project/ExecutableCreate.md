@@ -1,7 +1,7 @@
 # ExecutableCreate.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-15  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-17  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [ExecutableCreate.md](../../en/modules/project/ExecutableCreate.md)  
 > **Modul:** [`cmake/project/ExecutableCreate.cmake`](../../../../cmake/project/ExecutableCreate.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 0.5.1
 
 ---
 
@@ -241,7 +241,8 @@ Keine speziellen Anpassungen für GUI-Typ.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.2 | 2025-12-09 | APP_WINDOWS_GUI Define für Windows GUI |
 | 0.1.1 | 2025-12-07 | Externals-Integration via apply_external_to_target() |
 | 0.1.0 | 2025-12-05 | Initial (Clean Start): Target-Erstellung aus Context |

@@ -2,7 +2,7 @@
 # ======================
 # JSON helper functions for the CMake build system
 #
-# Version: 0.5.1
+# Version: 0.5.0
 # Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
@@ -14,8 +14,6 @@
 #   - _json_has_key()               - Check if key exists
 #   - _json_get_string()            - Read string value
 #   - _json_get_string_or_default() - String with fallback
-#   - _json_get_number()            - Read numeric value
-#   - _json_get_number_or_default() - Number with fallback
 #   - _json_get_bool_from_key()     - Read boolean value (robust)
 #   - _json_array_length()          - Get array length
 #   - _json_array_get()             - Read array element
@@ -108,60 +106,6 @@ endfunction()
 ]]
 function(_json_get_string_or_default JSON_STRING KEY DEFAULT OUT_VAR)
     _json_get_string("${JSON_STRING}" "${KEY}" _value)
-    if("${_value}" STREQUAL "")
-        set(${OUT_VAR} "${DEFAULT}" PARENT_SCOPE)
-    else()
-        set(${OUT_VAR} "${_value}" PARENT_SCOPE)
-    endif()
-endfunction()
-
-# ============================================================================
-# _json_get_number - Read numeric value
-# ============================================================================
-#[[
-    _json_get_number(JSON_STRING KEY OUT_VAR)
-    
-    Reads a numeric value from JSON.
-    
-    Parameters:
-        JSON_STRING - Mandatory: JSON object as string
-        KEY         - Mandatory: Key
-        OUT_VAR     - Mandatory: Output: Number value or ""
-    
-    Returns:
-        Number value on success, empty string if key is missing.
-    
-    Example:
-        _json_get_number("${_json}" "timeout" _timeout)
-]]
-function(_json_get_number JSON_STRING KEY OUT_VAR)
-    string(JSON _value ERROR_VARIABLE _err GET "${JSON_STRING}" "${KEY}")
-    if(_err)
-        set(${OUT_VAR} "" PARENT_SCOPE)
-    else()
-        set(${OUT_VAR} "${_value}" PARENT_SCOPE)
-    endif()
-endfunction()
-
-# ============================================================================
-# _json_get_number_or_default - Number with default
-# ============================================================================
-#[[
-    _json_get_number_or_default(JSON_STRING KEY DEFAULT OUT_VAR)
-    
-    Reads numeric value with fallback to default.
-    
-    Parameters:
-        JSON_STRING - Mandatory: JSON object as string
-        KEY         - Mandatory: Key
-        DEFAULT     - Mandatory: Fallback value if key missing
-        OUT_VAR     - Mandatory: Output: Number value or DEFAULT
-    
-    Example:
-        _json_get_number_or_default("${_json}" "timeout" 30 _timeout)
-]]
-function(_json_get_number_or_default JSON_STRING KEY DEFAULT OUT_VAR)
-    _json_get_number("${JSON_STRING}" "${KEY}" _value)
     if("${_value}" STREQUAL "")
         set(${OUT_VAR} "${DEFAULT}" PARENT_SCOPE)
     else()

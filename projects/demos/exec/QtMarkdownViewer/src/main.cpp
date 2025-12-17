@@ -1,4 +1,4 @@
-﻿#include <QApplication>
+#include <QApplication>
 #include <QMainWindow>
 #include <QTextBrowser>
 #include <QFileDialog>
@@ -26,6 +26,8 @@
 #include <QPainter>
 #include <QCheckBox>
 #include <QLineEdit>
+#include <QRegularExpression>
+#include <QTextBlock>
 #include <cmath>
 
 // ============================================================================
@@ -83,7 +85,7 @@ static QIcon createSunIcon(int sizePx = 16) {
 }
 
 // ============================================================================
-// MarkdownTextBrowser: QTextBrowser + Ctrl+Wheel Zoom + Reset + Zoom percent signal
+// MarkdownTextBrowser: QTextBrowser + Zoom + robust anchor navigation
 // ============================================================================
 class MarkdownTextBrowser : public QTextBrowser {
     Q_OBJECT
@@ -92,11 +94,73 @@ public:
         : QTextBrowser(parent)
         , m_zoomSteps(0)
     {
-        // Prevent Ctrl+Z/Ctrl+Y being consumed as undo/redo
         setUndoRedoEnabled(false);
+        setOpenLinks(false);
+        setOpenExternalLinks(false);
     }
 
     int zoomSteps() const { return m_zoomSteps; }
+
+    // Navigate to anchor by searching for the heading text
+    bool navigateToAnchor(const QString& anchor) {
+        if (anchor.isEmpty())
+            return false;
+        
+        // Convert anchor back to search pattern
+        // e.g. "1-uebersicht" -> search for "1. " at start of line
+        
+        // Extract leading number if present
+        QRegularExpression numRx("^(\\d+)-");
+        QRegularExpressionMatch numMatch = numRx.match(anchor);
+        
+        QString searchText;
+        if (numMatch.hasMatch()) {
+            // Numbered heading: search for "N. " (e.g., "1. ", "2. ")
+            searchText = numMatch.captured(1) + ". ";
+        } else {
+            // Non-numbered: convert anchor to approximate text
+            searchText = anchor;
+            searchText.replace("-", " ");
+        }
+        
+        // Search through document blocks for heading
+        QTextDocument* doc = document();
+        if (!doc)
+            return false;
+        
+        QTextBlock block = doc->begin();
+        while (block.isValid()) {
+            QString text = block.text().trimmed();
+            
+            // Check if this block starts with our search text
+            if (text.startsWith(searchText, Qt::CaseInsensitive)) {
+                // Found it! Scroll to this block
+                QTextCursor cursor(block);
+                setTextCursor(cursor);
+                
+                // Ensure it's visible near the top
+                ensureCursorVisible();
+                
+                // Additional scroll adjustment to put heading at top
+                QScrollBar* vbar = verticalScrollBar();
+                if (vbar) {
+                    QRect rect = cursorRect(cursor);
+                    int offset = rect.top() - 20; // 20px from top
+                    if (offset > 0) {
+                        vbar->setValue(vbar->value() + offset);
+                    }
+                }
+                
+                return true;
+            }
+            
+            block = block.next();
+        }
+        
+        // Fallback: try Qt's built-in scrollToAnchor
+        scrollToAnchor(anchor);
+        return false;
+    }
 
 public slots:
     void resetZoom() {
@@ -155,7 +219,6 @@ protected:
 
 private:
     int zoomPercent() const {
-        // Display-only mapping (font zoom is step-based)
         const double factor = std::pow(1.10, double(m_zoomSteps));
         return int(std::round(factor * 100.0));
     }
@@ -192,8 +255,6 @@ public:
         // Viewer
         // ------------------------------
         m_textBrowser = new MarkdownTextBrowser(this);
-        m_textBrowser->setOpenLinks(false);
-        m_textBrowser->setOpenExternalLinks(false);
 
         connect(m_textBrowser, &QTextBrowser::anchorClicked,
             this, &MarkdownViewerWindow::onAnchorClicked);
@@ -245,7 +306,7 @@ public:
         m_actZoomReset = m_toolbar->addAction(style()->standardIcon(QStyle::SP_BrowserStop), "Reset Zoom");
         m_toolbar->addSeparator();
 
-        // Theme toggle (Variante A)
+        // Theme toggle
         buildThemeButton();
         m_toolbar->addWidget(m_themeButton);
 
@@ -292,7 +353,6 @@ protected:
     }
 
 private slots:
-    // --- Navigation / actions
     void goBack() {
         if (m_textBrowser->isBackwardAvailable())
             m_textBrowser->backward();
@@ -324,7 +384,7 @@ private slots:
         QTimer::singleShot(0, this, [this, scrollValue]() {
             if (m_textBrowser && m_textBrowser->verticalScrollBar())
                 m_textBrowser->verticalScrollBar()->setValue(scrollValue);
-            });
+        });
     }
 
     void resetZoom() {
@@ -339,11 +399,22 @@ private slots:
 
     // --- Anchor handling
     void onAnchorClicked(const QUrl& url) {
+        QString urlStr = url.toString();
+        
+        // Internal anchor (fragment only)
+        if (urlStr.startsWith('#')) {
+            QString anchor = urlStr.mid(1);
+            m_textBrowser->navigateToAnchor(anchor);
+            return;
+        }
+        
+        // Handle relative URLs
         QUrl resolved = url;
-
-        if (resolved.isRelative())
+        if (resolved.isRelative()) {
             resolved = QUrl::fromLocalFile(m_currentDir + "/" + url.toString());
+        }
 
+        // Local markdown file
         if (resolved.isLocalFile()) {
             const QString path = resolved.toLocalFile();
             const QString fragment = resolved.fragment();
@@ -357,6 +428,7 @@ private slots:
             }
         }
 
+        // External URL
         if (resolved.scheme() == "http" || resolved.scheme() == "https") {
             QDesktopServices::openUrl(resolved);
             return;
@@ -365,7 +437,6 @@ private slots:
         m_textBrowser->setSource(resolved);
     }
 
-    // --- Find bar
     void showFindBar() {
         if (!m_findBar) return;
         m_findBar->setVisible(true);
@@ -397,11 +468,7 @@ private slots:
     void findNextForward() { findNext(true, true); }
     void findNextBackward() { findNext(false, true); }
 
-    // --- Theme
     void toggleLightDark() {
-        // Variante A: Icon zeigt Zielmodus.
-        // - Dark aktiv -> Klick = Light
-        // - Light/System -> Klick = Dark
         if (m_themeMode == ThemeMode::Dark)
             applyTheme(ThemeMode::Light);
         else
@@ -409,9 +476,6 @@ private slots:
     }
 
 private:
-    // ========================================================================
-    // Find logic
-    // ========================================================================
     void findNext(bool forward, bool wrap) {
         if (!m_textBrowser || !m_findEdit) return;
 
@@ -474,9 +538,6 @@ private:
         connect(m_findCloseBtn, &QToolButton::clicked, this, &MarkdownViewerWindow::hideFindBar);
     }
 
-    // ========================================================================
-    // Theme
-    // ========================================================================
     void buildThemeButton() {
         m_themeButton = new QToolButton(this);
         m_themeButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -514,14 +575,11 @@ private:
             qApp->setStyleSheet("");
 
             if (m_actThemeSystem) m_actThemeSystem->setChecked(true);
-
-            // System: click should enable Dark -> show Moon (target mode)
             m_themeButton->setIcon(createMoonIcon());
             m_themeButton->setToolTip("Switch to Dark Mode");
             return;
         }
 
-        // Use Fusion for consistent palette/menus across Windows
         qApp->setStyle("Fusion");
 
         if (mode == ThemeMode::Light) {
@@ -535,8 +593,6 @@ private:
             );
 
             if (m_actThemeLight) m_actThemeLight->setChecked(true);
-
-            // Light active -> show Moon (target is Dark)
             m_themeButton->setIcon(createMoonIcon());
             m_themeButton->setToolTip("Switch to Dark Mode");
             return;
@@ -570,15 +626,10 @@ private:
         );
 
         if (m_actThemeDark) m_actThemeDark->setChecked(true);
-
-        // Dark active -> show Sun (target is Light)
         m_themeButton->setIcon(createSunIcon());
         m_themeButton->setToolTip("Switch to Light Mode");
     }
 
-    // ========================================================================
-    // Menus
-    // ========================================================================
     void buildMenus() {
         auto* menuFile = menuBar()->addMenu("&File");
         menuFile->addAction(m_actOpen);
@@ -599,16 +650,13 @@ private:
         menuTheme->addAction(m_actThemeDark);
     }
 
-    // ========================================================================
-    // Shortcuts
-    // ========================================================================
     void installGlobalShortcuts() {
         auto makeGlobalShortcut = [this](const QKeySequence& seq, const char* slot) {
             auto* sc = new QShortcut(seq, this);
             sc->setContext(Qt::ApplicationShortcut);
             connect(sc, SIGNAL(activated()), this, slot);
             return sc;
-            };
+        };
 
         makeGlobalShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z), SLOT(goBack()));
         makeGlobalShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y), SLOT(goForward()));
@@ -627,9 +675,6 @@ private:
         connect(scEsc, &QShortcut::activated, this, &MarkdownViewerWindow::hideFindBar);
     }
 
-    // ========================================================================
-    // Settings
-    // ========================================================================
     void restoreSettings() {
         const int themeInt = m_settings.value("themeMode", int(ThemeMode::System)).toInt();
         ThemeMode mode = ThemeMode::System;
@@ -658,9 +703,6 @@ private:
             m_settings.setValue("lastFile", m_currentFile);
     }
 
-    // ========================================================================
-    // File loading
-    // ========================================================================
     void loadMarkdownFile(const QString& filePath, const QString& fragment = QString()) {
         QFileInfo fi(filePath);
         if (!fi.exists() || !fi.isFile())
@@ -669,14 +711,20 @@ private:
         m_currentFile = fi.absoluteFilePath();
         m_currentDir = fi.absolutePath();
 
+        // Use Qt's native markdown rendering via setSource
         QUrl url = QUrl::fromLocalFile(m_currentFile);
-        if (!fragment.isEmpty())
-            url.setFragment(fragment);
-
         m_textBrowser->setSource(url);
+        
         setWindowTitle(QString("Markdown Viewer - %1").arg(fi.fileName()));
 
         m_settings.setValue("lastFile", m_currentFile);
+
+        // Navigate to fragment after load
+        if (!fragment.isEmpty()) {
+            QTimer::singleShot(100, this, [this, fragment]() {
+                m_textBrowser->navigateToAnchor(fragment);
+            });
+        }
     }
 
 private:
@@ -696,7 +744,6 @@ private:
 
     QLabel* m_zoomLabel = nullptr;
 
-    // Find bar widgets
     QWidget* m_findBar = nullptr;
     QLineEdit* m_findEdit = nullptr;
     QCheckBox* m_cbCase = nullptr;
@@ -704,7 +751,6 @@ private:
     QToolButton* m_findCloseBtn = nullptr;
     QTimer* m_findTimer = nullptr;
 
-    // Theme
     QToolButton* m_themeButton = nullptr;
     QMenu* m_themeMenu = nullptr;
     QActionGroup* m_themeGroup = nullptr;

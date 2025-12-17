@@ -2,8 +2,8 @@
 # ===============================
 # Creates test targets from prepared Context
 #
-# Version: 0.5.1
-# Date:    2025-12-17
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -14,7 +14,6 @@
 #   - cmake/core/Warnings.cmake
 #   - cmake/core/CompilerOptions.cmake
 #   - cmake/core/OutputDirs.cmake
-#   - cmake/core/SourceCollect.cmake
 #   - cmake/externals/Orchestrator.cmake
 #
 # Provides:
@@ -75,8 +74,6 @@ function(_create_test_target CTX)
     
     set(_sources "")
     set(_headers "")
-    set(_extras "")
-    set(_modules "")
     set(_include_dirs "")
     
     # Option A: source_from (Sources von Executable übernehmen)
@@ -111,15 +108,18 @@ function(_create_test_target CTX)
         
         set(_exec_src_dir "${CMAKE_SOURCE_DIR}/${_exec_path}")
         
-        # Collect sources from executable (via SourceCollect.cmake)
-        collect_sources(
-            ${_source_from}
-            "${_exec_src_dir}"
-            _exec_sources
-            _exec_headers
-            _exec_extras
-            _exec_modules
-            _exec_includes
+        # Collect sources from executable
+        file(GLOB_RECURSE _exec_sources
+            "${_exec_src_dir}/*.cpp"
+            "${_exec_src_dir}/*.cxx"
+            "${_exec_src_dir}/*.cc"
+            "${_exec_src_dir}/*.c"
+        )
+        
+        file(GLOB_RECURSE _exec_headers
+            "${_exec_src_dir}/*.h"
+            "${_exec_src_dir}/*.hpp"
+            "${_exec_src_dir}/*.hxx"
         )
         
         # Filter excluded sources
@@ -139,16 +139,7 @@ function(_create_test_target CTX)
         endforeach()
         
         list(APPEND _headers ${_exec_headers})
-        list(APPEND _extras ${_exec_extras})
-        list(APPEND _modules ${_exec_modules})
         list(APPEND _include_dirs "${_exec_src_dir}")
-        foreach(_inc IN LISTS _exec_includes)
-            if(IS_ABSOLUTE "${_inc}")
-                list(APPEND _include_dirs "${_inc}")
-            else()
-                list(APPEND _include_dirs "${_exec_src_dir}/${_inc}")
-            endif()
-        endforeach()
         
         dbg(${DBG_RARE} "    Sources from ${_source_from}: ${_exec_path}" ID TESTS)
     endif()
@@ -157,29 +148,22 @@ function(_create_test_target CTX)
     set(_test_src_dir "${CMAKE_SOURCE_DIR}/${_path}")
     
     if(EXISTS "${_test_src_dir}")
-        # Collect test sources (via SourceCollect.cmake)
-        collect_sources(
-            ${_name}
-            "${_test_src_dir}"
-            _test_sources
-            _test_headers
-            _test_extras
-            _test_modules
-            _test_includes
+        file(GLOB_RECURSE _test_sources
+            "${_test_src_dir}/*.cpp"
+            "${_test_src_dir}/*.cxx"
+            "${_test_src_dir}/*.cc"
+            "${_test_src_dir}/*.c"
+        )
+        
+        file(GLOB_RECURSE _test_headers
+            "${_test_src_dir}/*.h"
+            "${_test_src_dir}/*.hpp"
+            "${_test_src_dir}/*.hxx"
         )
         
         list(APPEND _sources ${_test_sources})
         list(APPEND _headers ${_test_headers})
-        list(APPEND _extras ${_test_extras})
-        list(APPEND _modules ${_test_modules})
         list(APPEND _include_dirs "${_test_src_dir}")
-        foreach(_inc IN LISTS _test_includes)
-            if(IS_ABSOLUTE "${_inc}")
-                list(APPEND _include_dirs "${_inc}")
-            else()
-                list(APPEND _include_dirs "${_test_src_dir}/${_inc}")
-            endif()
-        endforeach()
     elseif(NOT _source_from)
         cmake_fatal("E303" "Test '${_name}': Source path does not exist: ${_path}")
     endif()
@@ -193,7 +177,7 @@ function(_create_test_target CTX)
     # ==========================================================================
     
     # Create test executable
-    add_executable(${_name} ${_sources} ${_headers} ${_extras} ${_modules})
+    add_executable(${_name} ${_sources} ${_headers})
     
     # Include directories
     foreach(_inc IN LISTS _include_dirs)

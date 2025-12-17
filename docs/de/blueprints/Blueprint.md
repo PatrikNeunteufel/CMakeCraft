@@ -12,7 +12,7 @@
 
 ## Inhaltsverzeichnis
 
-1. [Übersicht](#1-übersicht)
+1. [Übersicht](#1-uebersicht)
 2. [Blueprint-Hierarchie](#2-blueprint-hierarchie)
 3. [Kernprinzipien](#3-kernprinzipien)
 4. [Blueprint-Struktur](#4-blueprint-struktur)
@@ -21,7 +21,7 @@
 7. [Beispiel: Neuen Blueprint erstellen](#7-beispiel-neuen-blueprint-erstellen)
 8. [Review-Checkliste](#8-review-checkliste)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#10-changelogs)
 
 ---
 
@@ -346,9 +346,11 @@ Vor Freigabe eines Blueprints prüfen:
 - [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
 - [CMake.md](CMake.md) — CMake-Dateistruktur
 - [Cpp.md](Cpp.md) — C++/C Dateistruktur
-- [DokumentationsStruktur.md](../../DokumentationsStruktur.md) — Ordnerstruktur
+- [Strukture.md](Structure.md) — Ordnerstruktur
 
 ---
+
+<a id="10-changelogs"></a>
 
 ## Changelog
 

@@ -1,6 +1,6 @@
 # Module — CMake-Modul-Dokumentation
 
-> **Version:** 0.5.1  
+> **Version:** 0.5.0  
 > **Datum:** 2025-12-15  
 > **Sprache:** Deutsch  
 > **English:** [README.md](../../en/modules/README.md)
@@ -29,7 +29,7 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 | Kategorie | Beschreibung | Module |
 |-----------|--------------|--------|
 | **Core** | Grundlegende Funktionen | 9 Module |
-| **Project** | Projekt-Erstellung | 14 Module |
+| **Project** | Projekt-Erstellung | 11 Module |
 | **Externals** | Dependency-Management | 8+ Module |
 
 ---
@@ -46,10 +46,10 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 
 | Ordner | Beschreibung |
 |--------|--------------|
-| [buildSystemTest/](buildSystemTest/README.md) | Phasen-Testdokumentation (Phase 1-8) |
+| [buildSystemTest/](buildSystemTest/README.md) | Phasen-Testdokumentation (Phase 1-7) |
 | [core/](core/README.md) | Kern-Module (Errors, Debug, Context, etc.) |
 | [externals/](externals/README.md) | External-Management-System |
-| [project/](project/README.md) | Projekt-Pipeline (Executables, Libraries, Apps, Tests) |
+| [project/](project/README.md) | Projekt-Pipeline (Executables, Libraries, Tests) |
 
 ---
 
@@ -70,7 +70,7 @@ core/
 └── SourceCollect.cmake → Source-Sammlung
 ```
 
-### Project-Module (Phase 2-8)
+### Project-Module (Phase 2-5)
 
 ```
 project/
@@ -84,9 +84,6 @@ project/
 ├── Tests.cmake              → Test-Pipeline
 ├── TestCollect.cmake        → Test-Discovery
 ├── TestCreate.cmake         → Test-Erstellung
-├── Apps.cmake               → App-Container-Pipeline (Phase 8)
-├── AppCollect.cmake         → App-Discovery
-├── AppCreate.cmake          → App-Erstellung (Core/Runner/Tests)
 └── Externals.cmake          → Externals-Integration
 ```
 

@@ -2,8 +2,8 @@
 # =====================================
 # Creates executable targets from prepared Context
 #
-# Version: 0.5.1
-# Date:    2025-12-17
+# Version: 0.5.0
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -14,7 +14,6 @@
 #   - cmake/core/OutputDirs.cmake
 #   - cmake/core/Warnings.cmake
 #   - cmake/core/CompilerOptions.cmake
-#   - cmake/core/SourceCollect.cmake
 #   - cmake/externals/Orchestrator.cmake
 #
 # Provides:
@@ -97,25 +96,27 @@ function(_create_executable_target CTX)
     dbg(${DBG_RARE} "    add_executable(${_name}) [${_type}]" ID EXECUTABLES)
      
     # --------------------------------------------------------------------------
-    # Collect Sources (via SourceCollect.cmake)
+    # Collect Sources (GLOB)
     # --------------------------------------------------------------------------
     
-    # Mode is determined by SOLUTION_SOURCE_MODE (explicit/glob/auto)
-    collect_sources(
-        ${_name}
-        "${_src_dir}"
-        _sources
-        _headers
-        _extras
-        _modules
-        _includes
+    file(GLOB_RECURSE _sources
+        "${_src_dir}/*.cpp"
+        "${_src_dir}/*.cxx"
+        "${_src_dir}/*.cc"
+        "${_src_dir}/*.c"
+    )
+    
+    file(GLOB_RECURSE _headers
+        "${_src_dir}/*.h"
+        "${_src_dir}/*.hpp"
+        "${_src_dir}/*.hxx"
     )
     
     if(NOT _sources)
         cmake_warn("W101" "Executable '${_name}': No source files found in ${_path}")
     endif()
     
-    target_sources(${_name} PRIVATE ${_sources} ${_headers} ${_extras} ${_modules})
+    target_sources(${_name} PRIVATE ${_sources} ${_headers})
     
     dbg(${DBG_RARE} "    Sources: ${_sources}" ID EXECUTABLES)
     
@@ -124,15 +125,6 @@ function(_create_executable_target CTX)
     # --------------------------------------------------------------------------
     
     target_include_directories(${_name} PRIVATE "${_src_dir}")
-    
-    # Additional includes from Source.cmake
-    foreach(_inc IN LISTS _includes)
-        if(IS_ABSOLUTE "${_inc}")
-            target_include_directories(${_name} PRIVATE "${_inc}")
-        else()
-            target_include_directories(${_name} PRIVATE "${_src_dir}/${_inc}")
-        endif()
-    endforeach()
     
     # Additionally: If there is a pch/ subdirectory
     if(EXISTS "${_src_dir}/pch")

@@ -1,7 +1,7 @@
 # Json.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-17  
+> **Version:** 0.5.0  
+> **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Json.md](../../en/modules/core/Json.md)  
 > **Modul:** [`cmake/core/Json.cmake`](../../../../cmake/core/Json.cmake)  
-> **Modul-Version:** 0.5.1
+> **Modul-Version:** 0.5.0
 
 ---
 
@@ -38,7 +38,7 @@ Einheitliche, fehlertolerante JSON-Operationen für das gesamte Build-System.
 
 | Bereich | Beschreibung |
 |---------|--------------|
-| Lesen | Strings, Numbers, Booleans, Objekte, Arrays |
+| Lesen | Strings, Booleans, Objekte, Arrays |
 | Prüfen | Key-Existenz, Typ-Erkennung |
 | Fallbacks | Default-Werte bei fehlenden Keys |
 
@@ -47,7 +47,6 @@ Einheitliche, fehlertolerante JSON-Operationen für das gesamte Build-System.
 - Solution.cmake
 - ExecutableCollect.cmake
 - LibraryCollect.cmake
-- AppCollect.cmake
 - Validation.cmake
 
 ### Hinweis
@@ -343,56 +342,6 @@ elseif("${_vtype}" STREQUAL "OBJECT")
 endif()
 ```
 
-### 3.10 _json_get_number()
-
-Liest einen numerischen Wert.
-
-```cmake
-_json_get_number(<JSON_STRING> <KEY> <OUT_VAR>)
-```
-
-**Parameter:**
-
-| Parameter | Typ | Pflicht | Beschreibung |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key |
-| `OUT_VAR` | Variable | ✓ | Output: Numerischer Wert oder "" |
-
-**Beispiel:**
-
-```cmake
-_json_get_number("${_json}" "timeout" _timeout)
-if(NOT "${_timeout}" STREQUAL "")
-    message("Timeout: ${_timeout}s")
-endif()
-```
-
-### 3.11 _json_get_number_or_default()
-
-Liest einen numerischen Wert mit Fallback.
-
-```cmake
-_json_get_number_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
-```
-
-**Parameter:**
-
-| Parameter | Typ | Pflicht | Beschreibung |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key |
-| `DEFAULT` | Number | ✓ | Fallback-Wert |
-| `OUT_VAR` | Variable | ✓ | Output: Numerischer Wert oder Default |
-
-**Beispiel:**
-
-```cmake
-# Test-Timeout mit Default 30 Sekunden
-_json_get_number_or_default("${_json}" "timeout" 30 _timeout)
-message("Timeout: ${_timeout}s")
-```
-
 ---
 
 ## 4. Verwendungsbeispiele
@@ -512,7 +461,6 @@ endif()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **Neu: _json_get_number(), _json_get_number_or_default() für numerische Werte** |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
+| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): _json_has_key, _json_get_string, _json_get_string_or_default, _json_get_bool_from_key, _json_array_length, _json_array_get, _json_get_object, _json_get_object_or_empty, _json_get_type |
