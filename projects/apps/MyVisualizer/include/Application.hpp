@@ -1,64 +1,108 @@
+/**
+ ****************************************************************************************
+ * @file   Application.hpp
+ * @brief  Application Interface
+ *         CMake Architecture V2 - App-Container Template
+ *
+ * @author Patrik Neunteufel
+ * @date   December 2025
+ ****************************************************************************************
+ */
+
 #pragma once
-// ==============================================================================
-// Application.hpp - DemoPlayer Core Application
-// ==============================================================================
-//
-// Part of:     CMake Architecture V2 - Phase 8 Demo
-// Description: Main application class demonstrating App-Container pattern
-//
-// ==============================================================================
 
+#include <memory>
 #include <string>
-
-namespace DemoPlayer {
+#include <vector>
 
 /**
- * @brief Main application class
- * 
- * This class contains all business logic and is fully testable
- * because it's separated from the entry point (main()).
+ * @class Application
+ * @brief Central entry point for application logic.
+ *
+ * This class is instantiated and controlled by the generic main.cpp.
+ * All application-specific logic should be implemented here.
+ *
+ * For GUI applications (Qt):
+ *   - init(): Create QApplication, build MainWindow
+ *   - run():  QApplication::exec()
+ *   - shutdown(): Cleanup
+ *
+ * For Console applications:
+ *   - init(): Load configuration, start services
+ *   - run():  Main logic or event loop
+ *   - shutdown(): Cleanup
  */
-class Application {
+class Application
+{
 public:
     Application();
     ~Application();
-    
+
+    // Non-copyable, non-movable (singleton-like)
+    Application(const Application&) = delete;
+    Application& operator=(const Application&) = delete;
+    Application(Application&&) = delete;
+    Application& operator=(Application&&) = delete;
+
+    // =========================================================================
+    // Lifecycle
+    // =========================================================================
+
     /**
-     * @brief Initialize the application
-     * @param argc Argument count from main()
-     * @param argv Argument values from main()
-     * @return true if initialization successful
+     * @brief Initializes the application.
+     * @param argc Number of command line arguments
+     * @param argv Command line arguments
+     * @return true on success, false on error
      */
-    bool initialize(int argc, char* argv[]);
-    
+    [[nodiscard]] bool init(int argc, char* argv[]);
+
     /**
-     * @brief Run the main application loop
+     * @brief Starts the main loop.
      * @return Exit code (0 = success)
      */
-    int run();
-    
+    [[nodiscard]] int run();
+
     /**
-     * @brief Get application name
-     * @return Application name string
+     * @brief Shuts down the application and releases resources.
      */
-    std::string getName() const;
-    
+    void shutdown();
+
+    // =========================================================================
+    // Accessors
+    // =========================================================================
+
     /**
-     * @brief Get application version
-     * @return Version string
+     * @brief Gets the application name.
+     * @return Application name
      */
-    std::string getVersion() const;
-    
+    [[nodiscard]] const std::string& name() const noexcept;
+
     /**
-     * @brief Check if application is initialized
+     * @brief Gets the application version.
+     * @return Application version
+     */
+    [[nodiscard]] const std::string& version() const noexcept;
+
+    /**
+     * @brief Checks if the application is initialized.
      * @return true if initialized
      */
-    bool isInitialized() const;
+    [[nodiscard]] bool isInitialized() const noexcept;
+
+    /**
+     * @brief Checks if the application is running.
+     * @return true if running
+     */
+    [[nodiscard]] bool isRunning() const noexcept;
 
 private:
-    bool m_initialized;
-    std::string m_name;
-    std::string m_version;
-};
+    // =========================================================================
+    // Private Implementation (Pimpl)
+    // =========================================================================
 
-} // namespace DemoPlayer
+    struct Impl;
+    std::unique_ptr<Impl> m_impl;
+
+    bool m_initialized{false};
+    bool m_running{false};
+};

@@ -70,61 +70,64 @@
         }
     ],
     "executables": [
-        {
-            "name": "MinimalConsole",
-            "displayName": "Console_Demo_Minimal",
-            "version": "2.0.0",
-            "path": "projects/demos/exec/MinimalConsole/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["bass"],
-            "external_options": {
-                "bass": {
-                    "BASS_FLAC": true
-                }
-            }
-        },
-        {
-            "name": "consolePlayer",
-            "displayName": "Console_Demo_Player",
-            "version": "1.0.0",
-            "path": "projects/demos/exec/consolePlayer/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["bass"],
-            "external_options": {
-                "bass": {
-                    "BASS_FLAC": true,
-                    "BASS_FX": true
-                }
-            }
-        },
+      {
+        "name": "MinimalConsole",
+        "displayName": "Console_Demo_Minimal",
+        "version": "2.0.0",
+        "path": "projects/demos/exec/MinimalConsole/src",
+        "skip": false,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "bass" ],
+        "external_options": {
+          "bass": {
+            "BASS_FLAC": true
+          }
+        }
+      },
+      {
+        "name": "consolePlayer",
+        "displayName": "Console_Demo_Player",
+        "version": "1.0.0",
+        "path": "projects/demos/exec/consolePlayer/src",
+        "skip": true,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "bass" ],
+        "external_options": {
+          "bass": {
+            "BASS_FLAC": true,
+            "BASS_FX": true
+          }
+        }
+      },
         {
             "name": "MinimalWindow",
             "displayName": "Window_Demo_Minimal",
             "version": "0.1.0",
             "type": "GUI",
             "path": "projects/demos/exec/MinimalWindow/src",
-            "skip": false,
+            "skip": true,
             "dependencies": ["BasicLogger"]
         },
-        {
-            "name": "imGuiApp",
-            "displayName": "imGui_Demo",
-            "version": "0.1.0",
-            "type": "GUI",
-            "path": "projects/demos/exec/imGuiApp/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["glad", "glfw", "imgui_docking"]
-        },
-        {
-            "name": "QtMarkdownViewer",
-            "skip": false,
-            "displayName": "MarkdownViewer",
-            "version": "0.1.0",
-            "type": "GUI",
-            "path": "projects/demos/exec/QtMarkdownViewer/src",
-            "dependencies": [],
-            "externals": ["qt6"]
-        }
+      {
+        "name": "imGuiApp",
+        "displayName": "imGui_Demo",
+        "version": "0.1.0",
+        "type": "GUI",
+        "path": "projects/demos/exec/imGuiApp/src",
+        "skip": true,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "glad", "glfw", "imgui_docking" ]
+      },
+      {
+        "name": "QtMarkdownViewer",
+        "displayName": "MarkdownViewer",
+        "version": "0.1.0",
+        "type": "GUI",
+        "path": "projects/demos/exec/QtMarkdownViewer/src",
+        "skip": true,
+        "dependencies": [],
+        "externals": [ "qt6" ]
+      }
     ],
     "apps": [
       {
@@ -132,7 +135,9 @@
         "displayName": "MyVizualizer",
         "version": "0.1.0",
         "description": "Audio Visualizer",
-
+        "pch": {
+          "enabled": true
+        },
         "core": {
           "dependencies": [],
           "externals": []
@@ -145,16 +150,37 @@
 
         "tests": {
           "framework": "doctest",
-          "unit": {
-            "timeout": 30,
-            "labels": [ "unit", "demo", "fast" ]
-          }
+          "targets": [
+            {
+              "name": "UnitTests",
+              "type": "unit",
+              "path": "tests/unit/UnitTests",
+              "timeout": 30,
+              "labels": [ "unit", "demo", "fast" ]
+            },
+            {
+              "name": "IntegrationTests",
+              "type": "integration",
+              "path": "tests/integration/IntegrationTests",
+              "timeout": 120,
+              "labels": [ "integration", "demo", "slow" ]
+            },
+            {
+              "name": "PerformanceTests",
+              "skip": true,
+              "type": "performance",
+              "path": "tests/performance/PerformanceTests",
+              "timeout": 300,
+              "labels": [ "performance", "demo", "benchmark" ]
+            }
+          ]
         },
 
         "platforms": [ "windows", "linux", "macos" ]
       },
       {
         "name": "DemoPlayer",
+        "skip": false,
         "displayName": "Demo Player Application",
         "version": "0.5.0",
         "description": "Phase 8 App-Container Demo",
@@ -171,95 +197,108 @@
 
         "tests": {
           "framework": "doctest",
-          "unit": {
-            "timeout": 30,
-            "labels": [ "unit", "demo", "fast" ]
-          }
+          "skip": true,
+          "targets": [
+            {
+              "name": "UnitTests",
+              "type": "unit",
+              "path": "tests/unit/UnitTests",
+              "timeout": 30,
+              "labels": [ "unit", "demo", "fast" ]
+            }
+          ]
         },
 
         "platforms": [ "windows", "linux", "macos" ]
       }
     ],
     "tests": [
-        {
-            "name": "BasicLogger_UnitTests",
-            "displayName": "BasicLogger Unit Tests (doctest)",
-            "type": "unit",
-            "framework": "doctest",
-            "path": "projects/tests/unit/BasicLogger_Tests/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["doctest"],
-            "labels": ["unit", "logger", "fast"],
-            "timeout": 30
+      {
+        "name": "BasicLogger_UnitTests",
+        "displayName": "BasicLogger Unit Tests (doctest)",
+        "type": "unit",
+        "framework": "doctest",
+        "path": "projects/tests/unit/BasicLogger_Tests/src",
+        "skip": false,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "doctest" ],
+        "labels": [ "unit", "logger", "fast" ],
+        "timeout": 30
+      },
+      {
+        "name": "StringUtils_UnitTests",
+        "displayName": "StringUtils Unit Tests (GoogleTest)",
+        "type": "unit",
+        "framework": "googletest",
+        "path": "projects/tests/unit/StringUtils_Tests/src",
+        "skip": true,
+        "externals": [ "googletest" ],
+        "labels": [ "unit", "utils", "fast" ],
+        "timeout": 30
+      },
+      {
+        "name": "MathUtils_UnitTests",
+        "displayName": "MathUtils Unit Tests (Catch2)",
+        "type": "unit",
+        "framework": "catch2",
+        "path": "projects/tests/unit/MathUtils_Tests/src",
+        "skip": true,
+        "externals": [ "catch2" ],
+        "labels": [ "unit", "math", "fast" ],
+        "timeout": 30
+      },
+      {
+        "name": "AudioPipeline_IntegrationTests",
+        "displayName": "Audio Pipeline Integration (doctest)",
+        "type": "integration",
+        "framework": "doctest",
+        "path": "projects/tests/integration/AudioPipeline_Tests/src",
+        "skip": true,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "doctest", "bass" ],
+        "external_options": {
+          "bass": { "BASS_FLAC": true }
         },
-        {
-            "name": "StringUtils_UnitTests",
-            "displayName": "StringUtils Unit Tests (GoogleTest)",
-            "type": "unit",
-            "framework": "googletest",
-            "path": "projects/tests/unit/StringUtils_Tests/src",
-            "externals": ["googletest"],
-            "labels": ["unit", "utils", "fast"],
-            "timeout": 30
-        },
-        {
-            "name": "MathUtils_UnitTests",
-            "displayName": "MathUtils Unit Tests (Catch2)",
-            "type": "unit",
-            "framework": "catch2",
-            "path": "projects/tests/unit/MathUtils_Tests/src",
-            "externals": ["catch2"],
-            "labels": ["unit", "math", "fast"],
-            "timeout": 30
-        },
-        {
-            "name": "AudioPipeline_IntegrationTests",
-            "displayName": "Audio Pipeline Integration (doctest)",
-            "type": "integration",
-            "framework": "doctest",
-            "path": "projects/tests/integration/AudioPipeline_Tests/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["doctest", "bass"],
-            "external_options": {
-                "bass": { "BASS_FLAC": true }
-            },
-            "labels": ["integration", "audio", "slow"],
-            "timeout": 120,
-            "parallel": false
-        },
-        {
-            "name": "System_EndToEndTests",
-            "displayName": "System E2E Tests (GoogleTest)",
-            "type": "system",
-            "framework": "googletest",
-            "path": "projects/tests/system/E2E_Tests/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["googletest"],
-            "labels": ["system", "e2e", "slow"],
-            "timeout": 180,
-            "parallel": false
-        },
-        {
-            "name": "Performance_Benchmarks",
-            "displayName": "Performance Benchmarks (Catch2)",
-            "type": "performance",
-            "framework": "catch2",
-            "path": "projects/tests/performance/Benchmarks/src",
-            "externals": ["catch2"],
-            "labels": ["performance", "benchmark", "slow"],
-            "timeout": 300,
-            "parallel": false
-        },
-        {
-            "name": "Smoke_Tests",
-            "displayName": "Smoke Tests (doctest)",
-            "type": "smoke",
-            "framework": "doctest",
-            "path": "projects/tests/smoke/Smoke_Tests/src",
-            "dependencies": ["BasicLogger"],
-            "externals": ["doctest"],
-            "labels": ["smoke", "critical", "fast"],
-            "timeout": 10
-        }
+        "labels": [ "integration", "audio", "slow" ],
+        "timeout": 120,
+        "parallel": false
+      },
+      {
+        "name": "System_EndToEndTests",
+        "displayName": "System E2E Tests (GoogleTest)",
+        "type": "system",
+        "framework": "googletest",
+        "path": "projects/tests/system/E2E_Tests/src",
+        "skip": true,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "googletest" ],
+        "labels": [ "system", "e2e", "slow" ],
+        "timeout": 180,
+        "parallel": false
+      },
+      {
+        "name": "Performance_Benchmarks",
+        "displayName": "Performance Benchmarks (Catch2)",
+        "type": "performance",
+        "framework": "catch2",
+        "path": "projects/tests/performance/Benchmarks/src",
+        "skip": true,
+        "externals": [ "catch2" ],
+        "labels": [ "performance", "benchmark", "slow" ],
+        "timeout": 300,
+        "parallel": false
+      },
+      {
+        "name": "Smoke_Tests",
+        "displayName": "Smoke Tests (doctest)",
+        "type": "smoke",
+        "framework": "doctest",
+        "path": "projects/tests/smoke/Smoke_Tests/src",
+        "skip": true,
+        "dependencies": [ "BasicLogger" ],
+        "externals": [ "doctest" ],
+        "labels": [ "smoke", "critical", "fast" ],
+        "timeout": 10
+      }
     ]
 }

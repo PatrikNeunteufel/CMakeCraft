@@ -1,7 +1,7 @@
 # C++ Coding Standard — Stil-Richtlinien
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-13  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-18  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle C++ Entwickler  
@@ -17,18 +17,19 @@
 1. [Zweck und Geltungsbereich](#1-zweck-und-geltungsbereich)
 2. [Grundprinzipien](#2-grundprinzipien)
 3. [Sprachversion und Features](#3-sprachversion-und-features)
-4. [Formatierung](#4-formatierung)
-5. [Namenskonventionen](#5-namenskonventionen)
-6. [Typen, Ownership und Lifetime](#6-typen-ownership-und-lifetime)
-7. [Fehlerbehandlung](#7-fehlerbehandlung)
-8. [Concurrency](#8-concurrency)
-9. [Statische Analyse](#9-statische-analyse)
-10. [Test-Code](#10-test-code)
-11. [Verhältnis zu C (Embedded)](#11-verhältnis-zu-c-embedded)
-12. [Legacy-Code und Ausnahmen](#12-legacy-code-und-ausnahmen)
-13. [MISRA/CERT-Alignment](#13-misracert-alignment)
-14. [Siehe auch](#14-siehe-auch)
-15. [Changelog](#15-changelog)
+4. [Datei-Header](#4-datei-header)
+5. [Formatierung](#5-formatierung)
+6. [Namenskonventionen](#6-namenskonventionen)
+7. [Typen, Ownership und Lifetime](#7-typen-ownership-und-lifetime)
+8. [Fehlerbehandlung](#8-fehlerbehandlung)
+9. [Concurrency](#9-concurrency)
+10. [Statische Analyse](#10-statische-analyse)
+11. [Test-Code](#11-test-code)
+12. [Verhältnis zu C (Embedded)](#12-verhältnis-zu-c-embedded)
+13. [Legacy-Code und Ausnahmen](#13-legacy-code-und-ausnahmen)
+14. [MISRA/CERT-Alignment](#14-misracert-alignment)
+15. [Siehe auch](#15-siehe-auch)
+16. [Changelog](#16-changelog)
 
 ---
 
@@ -105,15 +106,78 @@ Dieser Standard wird ergänzt durch:
 
 ---
 
-## 4. Formatierung
+## 4. Datei-Header
 
-### 4.1 Autorität
+### 4.1 Standard-Header für C++ Dateien
+
+Jede `.hpp` und `.cpp` Datei **muss** mit folgendem Doxygen-kompatiblen Header beginnen:
+
+```cpp
+/**
+ ****************************************************************************************
+ * @file   Filename.hpp
+ * @brief  Short description
+ *         Optional second line for context
+ *
+ * @author Author Name
+ * @date   Month YYYY
+ ****************************************************************************************
+ */
+```
+
+### 4.2 Pflichtfelder
+
+| Feld | Beschreibung |
+|------|--------------|
+| `@file` | Exakter Dateiname |
+| `@brief` | Kurzbeschreibung (1-2 Zeilen) |
+| `@author` | Hauptautor |
+| `@date` | Erstellungsdatum (Monat Jahr) |
+
+### 4.3 Optionale Felder
+
+| Feld | Verwendung |
+|------|------------|
+| `@version` | Bei versionierten Komponenten |
+| `@copyright` | Bei speziellen Lizenzen |
+| `@see` | Verweise auf verwandte Dateien |
+
+### 4.4 Beispiel
+
+```cpp
+/**
+ ****************************************************************************************
+ * @file   AudioEngine.hpp
+ * @brief  Audio Engine Interface
+ *         Provides high-level audio playback and management
+ *
+ * @author Patrik Neunteufel
+ * @date   December 2025
+ ****************************************************************************************
+ */
+
+#pragma once
+
+#include <memory>
+// ...
+```
+
+### 4.5 Sprache
+
+- **Englisch** ist Pflicht für alle öffentlichen APIs und Templates
+- Interne/projektspezifische Dateien können Deutsch verwenden, Englisch wird empfohlen
+
+---
+
+## 5. Formatierung
+
+### 5.1 Autorität
 
 - Alle Formatierung via `clang-format`
 - Manuelle Abweichungen nicht erlaubt
 - Bei Problemen: `.clang-format` anpassen, nicht umgehen
 
-### 4.2 Übersicht (Details in `.clang-format`)
+### 5.2 Übersicht (Details in `.clang-format`)
 
 | Aspekt | Regel |
 |--------|-------|
@@ -126,14 +190,14 @@ Dieser Standard wird ergänzt durch:
 
 ---
 
-## 5. Namenskonventionen
+## 6. Namenskonventionen
 
-### 5.1 Autorität
+### 6.1 Autorität
 
 - Namensregeln via `clang-tidy` (`readability-identifier-naming`)
 - Verstöße beheben, nicht unterdrücken
 
-### 5.2 Übersicht
+### 6.2 Übersicht
 
 | Entität | Konvention | Beispiel |
 |---------|------------|----------|
@@ -150,16 +214,16 @@ Dieser Standard wird ergänzt durch:
 
 ---
 
-## 6. Typen, Ownership und Lifetime
+## 7. Typen, Ownership und Lifetime
 
-### 6.1 Fundamentale Typen
+### 7.1 Fundamentale Typen
 
 | Anforderung | Typ |
 |-------------|-----|
 | Größe wichtig | `std::int32_t`, `std::uint64_t` |
 | Größen/Indizes | `std::size_t` |
 
-### 6.2 Ownership-Modell
+### 7.2 Ownership-Modell
 
 | Ownership | Mechanismus |
 |-----------|-------------|
@@ -167,7 +231,7 @@ Dieser Standard wird ergänzt durch:
 | Geteilt | `std::shared_ptr` (nur wenn nötig) |
 | Nicht-besitzend | Raw Pointer oder Reference |
 
-### 6.3 RAII
+### 7.3 RAII
 
 Alle Ressourcen werden durch RAII verwaltet:
 - Dateien, Sockets, Handles
@@ -178,20 +242,20 @@ Alle Ressourcen werden durch RAII verwaltet:
 // ✅ RAII
 {
     std::unique_ptr<Resource> res = createResource();
-    // Automatische Freigabe am Scope-Ende
+    // Automatic cleanup at scope end
 }
 
-// ❌ Manuell
+// ❌ Manual
 Resource* res = createResource();
-// ... vergessen zu löschen = Leak
+// ... forgotten delete = leak
 delete res;
 ```
 
 ---
 
-## 7. Fehlerbehandlung
+## 8. Fehlerbehandlung
 
-### 7.1 Exceptions (C++ PC)
+### 8.1 Exceptions (C++ PC)
 
 Exceptions sind **erlaubt und erwartet**:
 
@@ -202,7 +266,7 @@ Exceptions sind **erlaubt und erwartet**:
 | Verwendung | Echte Ausnahmesituationen |
 | Nicht verwenden für | Normalen Kontrollfluss |
 
-### 7.2 Alternative Fehlerbehandlung
+### 8.2 Alternative Fehlerbehandlung
 
 Für Low-Level-Code (I/O, OS-Interfaces):
 
@@ -212,7 +276,7 @@ Für Low-Level-Code (I/O, OS-Interfaces):
 | `std::optional<T>` | Optionale Rückgabe |
 | `std::expected` (C++23) | Fehler oder Wert |
 
-### 7.3 Logging
+### 8.3 Logging
 
 - Zentrales Logging-System verwenden (z.B. `LogManager`)
 - Keine `std::cout` / `printf` in Produktionscode
@@ -220,9 +284,9 @@ Für Low-Level-Code (I/O, OS-Interfaces):
 
 ---
 
-## 8. Concurrency
+## 9. Concurrency
 
-### 8.1 Empfohlene Mechanismen
+### 9.1 Empfohlene Mechanismen
 
 | Mechanismus | Verwendung |
 |-------------|------------|
@@ -231,7 +295,7 @@ Für Low-Level-Code (I/O, OS-Interfaces):
 | `std::lock_guard` / `std::unique_lock` | RAII-Locking |
 | `std::atomic<T>` | Atomare Operationen |
 
-### 8.2 Richtlinien
+### 9.2 Richtlinien
 
 - **Keine Data Races** — Shared Data immer schützen
 - **Kurze kritische Sektionen** — Locks minimal halten
@@ -239,9 +303,9 @@ Für Low-Level-Code (I/O, OS-Interfaces):
 
 ---
 
-## 9. Statische Analyse
+## 10. Statische Analyse
 
-### 9.1 Default-Profil: Dev-Gentle
+### 10.1 Default-Profil: Dev-Gentle
 
 Aktivierte Check-Kategorien:
 - `clang-analyzer-*` — Kritische Bugs
@@ -250,14 +314,14 @@ Aktivierte Check-Kategorien:
 - `readability-*` — Lesbarkeit
 - `modernize-*` — C++-Modernisierung
 
-### 9.2 Umgang mit Warnungen
+### 10.2 Umgang mit Warnungen
 
 | Warnung | Anforderung |
 |---------|-------------|
 | `clang-analyzer-*`, `bugprone-*` | **Beheben** oder dokumentiert unterdrücken |
 | Stil-Warnungen | Zeitnah beheben, nicht ignorieren |
 
-### 9.3 Profile
+### 10.3 Profile
 
 | Profil | Kontext |
 |--------|---------|
@@ -267,7 +331,7 @@ Aktivierte Check-Kategorien:
 
 ---
 
-## 10. Test-Code
+## 11. Test-Code
 
 - Test-Code folgt **demselben Standard**
 - Test-spezifische Abkürzungen bleiben in Tests
@@ -275,7 +339,7 @@ Aktivierte Check-Kategorien:
 
 ---
 
-## 11. Verhältnis zu C (Embedded)
+## 12. Verhältnis zu C (Embedded)
 
 | Aspekt | C++ (PC) | C (Embedded) |
 |--------|----------|--------------|
@@ -292,15 +356,15 @@ Libraries für PC und Embedded müssen dokumentieren:
 
 ---
 
-## 12. Legacy-Code und Ausnahmen
+## 13. Legacy-Code und Ausnahmen
 
-### 12.1 Legacy-Code
+### 13.1 Legacy-Code
 
 - Bleibt temporär, wenn nicht compliant
 - Neuer Code **immer** nach Standard
 - Refactoring-Chancen nutzen
 
-### 12.2 Intentionale Abweichungen
+### 13.2 Intentionale Abweichungen
 
 - Kommentar im Code
 - Begründung dokumentieren
@@ -308,7 +372,7 @@ Libraries für PC und Embedded müssen dokumentieren:
 
 ---
 
-## 13. MISRA/CERT-Alignment
+## 14. MISRA/CERT-Alignment
 
 Dieser Standard orientiert sich an:
 
@@ -326,7 +390,7 @@ Dieser Standard orientiert sich an:
 
 ---
 
-## 14. Siehe auch
+## 15. Siehe auch
 
 - [C_Coding_Standard.md](C_Coding_Standard.md) — Embedded C
 - [CMake_Standard.md](CMake_Standard.md) — Build-System
@@ -335,9 +399,10 @@ Dieser Standard orientiert sich an:
 
 ---
 
-## Changelog
+## 16. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix** |
+| **0.5.1** | **2025-12-18** | **Neuer Abschnitt 4: Datei-Header mit Doxygen-Format, Pflichtfelder, Sprachregelung** |
+| 0.5.0 | 2025-12-13 | Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix |
 | 0.1.0 | 2025-12-05 | Initial: Namenskonventionen, Ownership, Exceptions, MISRA-Alignment |

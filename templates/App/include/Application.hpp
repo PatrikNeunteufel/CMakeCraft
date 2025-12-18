@@ -5,28 +5,9 @@
  *         CMake Architecture V2 - App-Container Template
  *
  * @author Patrik Neunteufel
- * @date   $MONTHNAME_EN $YEAR
-  ****************************************************************************************
+ * @date   December 2025
+ ****************************************************************************************
  */
-// =============================================================================
-// Application 
-// CMake Architecture V2 - App-Container Template
-// =============================================================================
-//
-// Diese Klasse ist der zentrale Einstiegspunkt für die Anwendungslogik.
-// Sie wird vom generischen main.cpp instanziiert und gesteuert.
-//
-// Für GUI-Anwendungen (Qt):
-//   - init(): QApplication erstellen, MainWindow aufbauen
-//   - run():  QApplication::exec()
-//   - shutdown(): Cleanup
-//
-// Für Console-Anwendungen:
-//   - init(): Konfiguration laden, Services starten
-//   - run():  Hauptlogik oder Event-Loop
-//   - shutdown(): Cleanup
-//
-// =============================================================================
 
 #pragma once
 
@@ -34,62 +15,94 @@
 #include <string>
 #include <vector>
 
-// Forward Declarations (projektspezifisch erweitern)
-// class QApplication;
-// class MainWindow;
-
-class Application {
+/**
+ * @class Application
+ * @brief Central entry point for application logic.
+ *
+ * This class is instantiated and controlled by the generic main.cpp.
+ * All application-specific logic should be implemented here.
+ *
+ * For GUI applications (Qt):
+ *   - init(): Create QApplication, build MainWindow
+ *   - run():  QApplication::exec()
+ *   - shutdown(): Cleanup
+ *
+ * For Console applications:
+ *   - init(): Load configuration, start services
+ *   - run():  Main logic or event loop
+ *   - shutdown(): Cleanup
+ */
+class Application
+{
 public:
     Application();
     ~Application();
-    
-    // Nicht kopierbar, nicht verschiebbar (Singleton-artig)
+
+    // Non-copyable, non-movable (singleton-like)
     Application(const Application&) = delete;
     Application& operator=(const Application&) = delete;
     Application(Application&&) = delete;
     Application& operator=(Application&&) = delete;
-    
+
     // =========================================================================
     // Lifecycle
     // =========================================================================
-    
-    /// Initialisiert die Anwendung
-    /// @param argc Anzahl der Kommandozeilenargumente
-    /// @param argv Kommandozeilenargumente
-    /// @return true bei Erfolg, false bei Fehler
+
+    /**
+     * @brief Initializes the application.
+     * @param argc Number of command line arguments
+     * @param argv Command line arguments
+     * @return true on success, false on error
+     */
     [[nodiscard]] bool init(int argc, char* argv[]);
-    
-    /// Startet die Hauptschleife
-    /// @return Exit-Code (0 = Erfolg)
+
+    /**
+     * @brief Starts the main loop.
+     * @return Exit code (0 = success)
+     */
     [[nodiscard]] int run();
-    
-    /// Beendet die Anwendung und gibt Ressourcen frei
+
+    /**
+     * @brief Shuts down the application and releases resources.
+     */
     void shutdown();
-    
+
     // =========================================================================
     // Accessors
     // =========================================================================
-    
-    /// @return Anwendungsname
+
+    /**
+     * @brief Gets the application name.
+     * @return Application name
+     */
     [[nodiscard]] const std::string& name() const noexcept;
-    
-    /// @return Anwendungsversion
+
+    /**
+     * @brief Gets the application version.
+     * @return Application version
+     */
     [[nodiscard]] const std::string& version() const noexcept;
-    
-    /// @return true wenn initialisiert
+
+    /**
+     * @brief Checks if the application is initialized.
+     * @return true if initialized
+     */
     [[nodiscard]] bool isInitialized() const noexcept;
-    
-    /// @return true wenn die Anwendung läuft
+
+    /**
+     * @brief Checks if the application is running.
+     * @return true if running
+     */
     [[nodiscard]] bool isRunning() const noexcept;
 
 private:
     // =========================================================================
-    // Private Implementation
+    // Private Implementation (Pimpl)
     // =========================================================================
-    
+
     struct Impl;
     std::unique_ptr<Impl> m_impl;
-    
+
     bool m_initialized{false};
     bool m_running{false};
 };

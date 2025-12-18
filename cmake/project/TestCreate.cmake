@@ -2,8 +2,8 @@
 # ===============================
 # Creates test targets from prepared Context
 #
-# Version: 0.5.1
-# Date:    2025-12-17
+# Version: 0.5.3
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -46,6 +46,12 @@ include_guard(GLOBAL)
         6. Link other externals
         7. Apply compiler options
         8. Register with CTest
+    
+    Note on PCH:
+        Tests do NOT use precompiled headers directly. However, when using
+        source_from to share sources with an executable that uses PCH, the
+        PCH directory is added to include paths so #include "pch.h" resolves.
+        The PCH itself is not compiled for the test target.
 ]]
 function(_create_test_target CTX)
     
@@ -64,10 +70,20 @@ function(_create_test_target CTX)
     ctx_get(${CTX} TIMEOUT _timeout)
     ctx_get(${CTX} LABELS _labels)
     ctx_get(${CTX} PARALLEL _parallel)
+    ctx_get(${CTX} SKIP _skip)
     ctx_get(${CTX} DEFINES _defines)
     ctx_get(${CTX} COMPILE_OPTIONS _compile_options)
     ctx_get(${CTX} SOURCE_FROM _source_from)
     ctx_get(${CTX} EXCLUDE_SOURCES _exclude_sources)
+    
+    # ==========================================================================
+    # Check Skip
+    # ==========================================================================
+    
+    if(_skip)
+        dbg(${DBG_COMMON} "  SKIP: ${_name} (skip=true)" ID TESTS)
+        return()
+    endif()
     
     # ==========================================================================
     # Source Collection
@@ -150,6 +166,18 @@ function(_create_test_target CTX)
             endif()
         endforeach()
         
+        # ======================================================================
+        # PCH Directory from source_from executable
+        # ======================================================================
+        # If the executable has a pch/ directory, add it to include paths
+        # so that #include "pch.h" in shared sources can be resolved.
+        # Note: The test does NOT compile or use the PCH itself.
+        # ======================================================================
+        if(EXISTS "${_exec_src_dir}/pch")
+            list(APPEND _include_dirs "${_exec_src_dir}/pch")
+            dbg(${DBG_RARE} "    PCH include dir from source_from: ${_exec_src_dir}/pch" ID TESTS)
+        endif()
+        
         dbg(${DBG_RARE} "    Sources from ${_source_from}: ${_exec_path}" ID TESTS)
     endif()
     
@@ -180,6 +208,12 @@ function(_create_test_target CTX)
                 list(APPEND _include_dirs "${_test_src_dir}/${_inc}")
             endif()
         endforeach()
+        
+        # PCH directory for test's own sources (if exists)
+        if(EXISTS "${_test_src_dir}/pch")
+            list(APPEND _include_dirs "${_test_src_dir}/pch")
+            dbg(${DBG_RARE} "    PCH include dir: ${_test_src_dir}/pch" ID TESTS)
+        endif()
     elseif(NOT _source_from)
         cmake_fatal("E303" "Test '${_name}': Source path does not exist: ${_path}")
     endif()

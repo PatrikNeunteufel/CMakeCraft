@@ -1,5 +1,28 @@
-wenn im pch objekt entweder 
-* nur "enabled" vorhanden und true. -> path und header auf default 
-* "header" angegeben und "enable" nicht false,. -> path kann fehlen und wäre default
-* "path" angegeben und "enable" nicht false. ->header kann fehlen und wäre default
-ich denke so wären alle möglichkeiten geklärt, oder? wenn ja, Korrekturen vornehmen. versionen hochziehen nicht vergessen
+Review:
+
+in den Dokument Blueprints sollte noch ein Block für Review hinzugefügt werden, damit man die Qualität der generierten Inhalte bewerten und Feedback geben kann.
+Dies könnte helfen, die Modelle zu verbessern und sicherzustellen, dass die Ausgaben den Erwartungen entsprechen.
+
+gilt für Konzepte wie auch Standards, Guidelines, Checklisten, Templates, uvm. eigentlich für alle, bei Moduldokumentationen halt inklusive des Codes (bei code halt inkl. z.B. Cpp Standards eingehalten...).
+
+// Review Block (in den Dokus halt als Tabelle, oder Idee um das digital zu erfassen? Reviewer (mehrere?) und Datum sollte auch vorhanden sein, und irgendwie pass/fail)
+
+{
+	"type": "review",
+	"label": "Inhalt bewerten",
+	"description": "Bitte bewerten Sie die Qualität des generierten Inhalts und geben Sie Feedback.",
+	"fields": [
+		{
+			"type": "rating",
+			"label": "Bewertung",
+			"options": [1, 2, 3, 4, 5],
+			"required": true
+		},
+		{
+			"type": "textarea",
+			"label": "Feedback",
+			"placeholder": "Geben Sie hier Ihr Feedback ein...",
+			"required": false
+		}
+	]
+}

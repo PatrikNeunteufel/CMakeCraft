@@ -1,14 +1,27 @@
+/**
+ ****************************************************************************************
+ * @file   main.cpp
+ * @brief  Generic Application Entry Point
+ *         CMake Architecture V2 - App-Container Template
+ *
+ * @author Patrik Neunteufel
+ * @date   December 2025
+ ****************************************************************************************
+ */
+
 // =============================================================================
 // Generic Application Entry Point
 // CMake Architecture V2 - App-Container Template
 // =============================================================================
 //
-// Diese main.cpp ist für alle App-Container identisch.
-// Die gesamte Anwendungslogik liegt in Application (src/).
+// This main.cpp is identical for all App-Containers.
+// All application logic resides in Application (src/).
 //
-// Build-System setzt automatisch:
-//   - APP_GUI    : Bei runner.type = "GUI" (Windows: WinMain)
-//   - APP_CONSOLE: Bei runner.type = "CONSOLE"
+// Build system automatically sets:
+//   - APP_GUI    : For runner.type = "GUI" (Windows: WinMain)
+//   - APP_CONSOLE: For runner.type = "CONSOLE"
+//
+// NOTE: If PCH is disabled in Solution.json, remove the #include "pch.h" line.
 //
 // =============================================================================
 
@@ -21,22 +34,26 @@
 // =============================================================================
 // Common Entry Point
 // =============================================================================
-namespace {
 
-int commonMain(int argc, char* argv[]) {
+namespace
+{
+
+int commonMain(int argc, char* argv[])
+{
     Application app;
-    
-    // Initialisierung (Qt, Audio, Config, etc.)
-    if (!app.init(argc, argv)) {
+
+    // Initialization (Qt, Audio, Config, etc.)
+    if (!app.init(argc, argv))
+    {
         return 1;
     }
-    
-    // Hauptschleife (Qt: exec(), Console: eigene Loop)
+
+    // Main loop (Qt: exec(), Console: custom loop)
     int result = app.run();
-    
-    // Aufräumen
+
+    // Cleanup
     app.shutdown();
-    
+
     return result;
 }
 
@@ -46,22 +63,24 @@ int commonMain(int argc, char* argv[]) {
 // Platform-specific Entry Points
 // =============================================================================
 
-#if defined(_WIN32) && defined(APP_GUI)
+#if defined(_WIN32) && defined(APP_WINDOWS_GUI)
 
-// Windows GUI: WinMain entry point (kein Console-Fenster)
+// Windows GUI: WinMain entry point (no console window)
 int WINAPI WinMain(
     [[maybe_unused]] HINSTANCE hInstance,
     [[maybe_unused]] HINSTANCE hPrevInstance,
     [[maybe_unused]] LPSTR lpCmdLine,
     [[maybe_unused]] int nCmdShow
-) {
+)
+{
     return commonMain(__argc, __argv);
 }
 
 #else
 
 // Console / Linux / macOS: Standard main
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     return commonMain(argc, argv);
 }
 

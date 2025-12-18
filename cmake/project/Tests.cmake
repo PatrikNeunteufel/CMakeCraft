@@ -2,8 +2,8 @@
 # ==========================
 # Test pipeline orchestrator - iterates over tests and creates targets
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.5.1
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -93,6 +93,8 @@ foreach(_idx RANGE 0 ${_last_idx})
     
     # Check skip flag
     ctx_get(TEST_${_idx} SKIP _skip)
+    # DEBUG: Always show skip value to diagnose issue
+    message(STATUS "[Tests]   DEBUG skip value: '${_skip}'")
     if(_skip)
         message(STATUS "[Tests]   Skipped (skip=true)")
         continue()

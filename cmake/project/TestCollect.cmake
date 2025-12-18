@@ -2,8 +2,8 @@
 # ================================
 # Collects test data from JSON into a Context
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.5.2
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -110,6 +110,7 @@ function(_collect_test TEST_JSON CTX)
     # SKIP
     _json_get_bool_or_default("${TEST_JSON}" "skip" FALSE _skip)
     ctx_set(${CTX} SKIP "${_skip}")
+    dbg(${DBG_ULTRA_RARE} "    SKIP parsed: ${_skip}" ID TESTS)
     
     # TIMEOUT
     _json_get_int_or_default("${TEST_JSON}" "timeout" ${_TEST_DEFAULT_TIMEOUT} _timeout)
@@ -209,15 +210,21 @@ function(_json_get_bool_or_default JSON_STR KEY DEFAULT OUT_VAR)
     _json_has_key("${JSON_STR}" "${KEY}" _has_key)
     if(_has_key)
         string(JSON _value GET "${JSON_STR}" "${KEY}")
-        if(_value STREQUAL "true" OR _value STREQUAL "TRUE" OR _value STREQUAL "1")
-            set(_value TRUE)
+        # DEBUG: Show raw JSON value
+        message(STATUS "[DEBUG] _json_get_bool_or_default: Key '${KEY}' raw value: '${_value}'")
+        # CMake JSON parser returns "true"/"false" for JSON booleans
+        # Also handle various string representations
+        string(TOLOWER "${_value}" _value_lower)
+        if(_value_lower STREQUAL "true" OR _value_lower STREQUAL "on" OR _value_lower STREQUAL "yes" OR _value STREQUAL "1")
+            set(_result TRUE)
         else()
-            set(_value FALSE)
+            set(_result FALSE)
         endif()
+        message(STATUS "[DEBUG] _json_get_bool_or_default: Result: '${_result}'")
     else()
-        set(_value "${DEFAULT}")
+        set(_result "${DEFAULT}")
     endif()
-    set(${OUT_VAR} "${_value}" PARENT_SCOPE)
+    set(${OUT_VAR} "${_result}" PARENT_SCOPE)
 endfunction()
 
 # ==============================================================================

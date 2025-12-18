@@ -1,119 +1,351 @@
-# App-Container Template
+# App Template
 
-> **Version:** 0.1.0  
-> **Stand:** 2025-12-17  
-> **Typ:** Template  
-> **Status:** Aktiv
+> **Version:** 0.2.0  
+> **Date:** 2025-12-18  
+> **Type:** Template  
+> **Status:** Active  
+> **German:** [README_de.md](README_de.md)
 
 ---
 
-## Übersicht
+CMake Architecture V2 - App-Container Template
 
-Dieses Template definiert die Standardstruktur für App-Container im CMake Architecture V2 Build-System.
+## Overview
 
-## Struktur
+This template provides the standard structure for App-Containers in the CMake Architecture V2 build system. It separates the entry point (`main/`) from application logic (`include/`, `src/`) for maximum testability.
+
+## Directory Structure
 
 ```
 App/
-├── include/                 # Header
+├── README.md                      # This file (English)
+├── README_de.md                   # German version
+├── include/                       # Public headers
 │   ├── Source.cmake
 │   └── Application.hpp
-├── src/                     # Implementation
+├── src/                           # Implementation
 │   ├── Source.cmake
 │   └── Application.cpp
-├── main/                    # Entry Point
+├── main/                          # Entry point (not testable)
 │   ├── Source.cmake
-│   └── main.cpp             # Generisch, nicht ändern
-├── pch/                     # Precompiled Header
+│   └── main.cpp
+├── pch/                           # Precompiled header
 │   └── pch.h
-└── tests/
-    └── unit/                # Unit Tests
-        └── Application_Tests.cpp
+└── tests/                         # Tests
+    ├── unit/
+    │   └── {TestName}/            # Each test in named subdirectory
+    │       ├── Source.cmake
+    │       ├── test_main.cpp
+    │       └── *.cpp
+    ├── integration/
+    │   └── {TestName}/
+    │       └── ...
+    └── performance/
+        └── {TestName}/
+            └── ...
 ```
 
-## Verwendung
+## Architecture
 
-### 1. Neue App erstellen
+| Directory | Responsibility | Testable |
+|-----------|----------------|----------|
+| `include/` + `src/` | All logic, UI, services | ✅ Yes |
+| `main/` | Entry point only | ❌ No |
+| `pch/` | Precompiled header | — |
+| `tests/` | Test code | — |
+
+## Usage
+
+### 1. Copy Template
+
+Copy this directory to your project:
 
 ```bash
-cp -r projects/templates/App projects/apps/MeineApp
+cp -r projects/templates/App projects/apps/YourAppName
 ```
 
-### 2. Solution.json eintragen
+### 2. Configure Solution.json
+
+#### Minimal Configuration
 
 ```json
 "apps": [
     {
-        "name": "MeineApp",
-        "displayName": "Meine Anwendung",
+        "name": "YourAppName",
+        "displayName": "Your Application",
         "version": "0.1.0",
         
         "core": {
             "dependencies": [],
-            "externals": ["qt6", "bass"]
+            "externals": []
         },
-        
+
         "runner": {
             "type": "GUI",
             "externals": []
         },
-        
+
+        "pch": {
+            "enabled": true
+        },
+
         "tests": {
             "framework": "doctest",
-            "unit": {
-                "timeout": 30,
-                "labels": ["unit", "app", "fast"]
-            }
+            "targets": [
+                {
+                    "name": "UnitTests",
+                    "type": "unit",
+                    "path": "tests/unit/UnitTests"
+                }
+            ]
         }
     }
 ]
 ```
 
-### 3. Application anpassen
+#### Full Configuration (Multiple Tests)
 
-- `include/Application.hpp` - Interface erweitern
-- `src/Application.cpp` - Implementation anpassen
-- `pch/pch.h` - Projektspezifische Includes hinzufügen
-- `include/Source.cmake`, `src/Source.cmake` - Neue Dateien eintragen
+```json
+"apps": [
+    {
+        "name": "YourAppName",
+        "displayName": "Your Application",
+        "version": "0.1.0",
+        "description": "Application description",
+        
+        "core": {
+            "dependencies": ["SomeLibrary"],
+            "externals": ["bass", "qt6"]
+        },
 
-### 4. main.cpp
+        "runner": {
+            "type": "GUI",
+            "externals": ["glad", "glfw"]
+        },
 
-Die `main/main.cpp` sollte **nicht geändert** werden. Sie ist generisch und funktioniert für alle App-Typen (GUI/Console, alle Plattformen).
+        "pch": {
+            "enabled": true
+        },
 
-## Architektur-Prinzipien
+        "tests": {
+            "framework": "doctest",
+            "targets": [
+                {
+                    "name": "Core_UnitTests",
+                    "type": "unit",
+                    "path": "tests/unit/core",
+                    "timeout": 30,
+                    "labels": ["unit", "core", "fast"]
+                },
+                {
+                    "name": "Utils_UnitTests",
+                    "type": "unit",
+                    "path": "tests/unit/utils",
+                    "timeout": 30,
+                    "labels": ["unit", "utils", "fast"]
+                },
+                {
+                    "name": "IntegrationTests",
+                    "type": "integration",
+                    "path": "tests/integration/IntegrationTests",
+                    "timeout": 120,
+                    "labels": ["integration", "slow"],
+                    "externals": ["bass"]
+                },
+                {
+                    "name": "Benchmarks",
+                    "type": "performance",
+                    "path": "tests/performance/Benchmarks",
+                    "timeout": 300,
+                    "labels": ["performance", "nightly"]
+                }
+            ]
+        },
 
-| Ordner | Verantwortung | Testbar |
-|--------|---------------|---------|
-| `include/` + `src/` | Gesamte Anwendungslogik | ✅ Ja |
-| `main/` | Nur Entry Point | ❌ Nein |
-| `tests/unit/` | Unit Tests | — |
+        "platforms": ["windows", "linux", "macos"]
+    }
+]
+```
 
-### runner.type
+### 3. Create Test Directories
 
-| Typ | Windows | Linux/macOS |
-|-----|---------|-------------|
-| `GUI` | `WinMain` (kein Console-Fenster) | `main` |
-| `CONSOLE` | `main` (mit Console) | `main` |
+For each test target, create the matching directory structure:
 
-## Build-Defines
+```bash
+# For "name": "UnitTests", "path": "tests/unit/UnitTests"
+mkdir -p tests/unit/UnitTests
+```
 
-Das Build-System setzt automatisch:
+Each test directory needs:
+- `Source.cmake` — File list
+- `test_main.cpp` — Framework entry point
+- `*.cpp` — Your test files
 
-| Define | Bedingung |
-|--------|-----------|
-| `APP_GUI` | `runner.type = "GUI"` |
-| `APP_CONSOLE` | `runner.type = "CONSOLE"` |
+### 4. Customize Application Class
+
+Edit `src/Application.cpp`:
+- Initialize your services in `init()`
+- Implement your main loop in `run()`
+- Clean up resources in `shutdown()`
+
+## Test Configuration
+
+### Test Target Schema
+
+```json
+{
+    "name": "TestName",           // Required: Target name
+    "type": "unit",               // Required: Test type
+    "path": "tests/unit/TestName", // Optional: Path (default: tests/{type}/{name})
+    "framework": "doctest",       // Optional: Override global framework
+    "timeout": 30,                // Optional: Timeout in seconds
+    "labels": ["unit", "fast"],   // Optional: CTest labels
+    "externals": ["bass"],        // Optional: Additional externals
+    "parallel": true              // Optional: Allow parallel execution
+}
+```
+
+### Known Test Types
+
+| Type | Default Timeout | Default Parallel | Purpose |
+|------|-----------------|------------------|---------|
+| `unit` | 30s | ✅ true | Isolated function/class tests |
+| `integration` | 120s | ✅ true | Component interaction tests |
+| `performance` | 300s | ❌ false | Benchmarks, timing measurements |
+| `system` | 180s | ❌ false | End-to-end tests |
+| `smoke` | 10s | ✅ true | Quick "does it start?" checks |
+| `fuzz` | 60s | ❌ false | Random/invalid input testing |
+| `security` | 120s | ❌ false | Security vulnerability tests |
+| `ui` | 180s | ❌ false | User interface tests |
+| `api` | 60s | ✅ true | API endpoint tests |
+
+Unknown types use: 60s timeout, parallel=true, label=[type]
+
+### Framework Override
+
+```json
+"tests": {
+    "framework": "doctest",           // Global default
+    "targets": [
+        {
+            "name": "UnitTests",
+            "type": "unit"
+            // Uses "doctest" from global
+        },
+        {
+            "name": "FuzzTests",
+            "type": "fuzz",
+            "framework": "googletest"  // Override for this test
+        }
+    ]
+}
+```
+
+Supported frameworks: `doctest`, `googletest`, `catch2`
+
+### Parallel Execution
+
+Tests marked as `parallel: false` or serial-type tests run with CTest's `RUN_SERIAL` property.
+
+⚠️ **Warning W402:** If you explicitly set `parallel: true` for types that default to serial (performance, system, fuzz, security, ui), you'll see a warning. This is allowed but may produce inaccurate results.
+
+## Generated Targets
+
+| Solution.json `name` | CMake Target |
+|---------------------|--------------|
+| `UnitTests` | `YourAppName.UnitTests` |
+| `Core_UnitTests` | `YourAppName.Core_UnitTests` |
+| `IntegrationTests` | `YourAppName.IntegrationTests` |
+
+## test_main.cpp
+
+Each test directory must contain a `test_main.cpp`:
+
+```cpp
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest/doctest.h>
+```
+
+**Important:** This define must appear exactly **once** per test executable. Do not add it to your test files!
 
 ## PCH (Precompiled Header)
 
-`pch/pch.h` enthält häufig verwendete, stabile Includes:
-- Standard Library (string, vector, memory, etc.)
-- Framework-Header (Qt, OpenGL - auskommentiert)
+### PCH Scope
 
-Die `.h` Extension ist Standard für PCH, auch bei C++.
+- **Core (`src/`)**: Uses PCH — add `#include "pch.h"` as first line
+- **Runner (`main/`)**: Does NOT use PCH
+- **Tests**: Do NOT use PCH
 
-## Siehe auch
+### Enabling/Disabling PCH
 
-- [App Creation Guide](../../../docs/de/guides/App_Creation_Guide.md)
-- [App Template Reference](../../../docs/de/references/App_Template_Reference.md)
-- [Solution Schema](../../../docs/de/references/Solution_Schema.md)
+```json
+"pch": {
+    "enabled": true,    // or false to disable
+    "header": "pch.h"   // optional, default is "pch.h"
+}
+```
+
+## Build Defines
+
+| Define | Condition |
+|--------|-----------|
+| `APP_GUI` | `runner.type = "GUI"` (Windows only) |
+
+## runner.type
+
+| Type | Windows | Linux/macOS |
+|------|---------|-------------|
+| `GUI` | `WinMain` (no console window) | `main` |
+| `CONSOLE` | `main` (with console) | `main` |
+
+## Migration from Old Structure
+
+If upgrading from the old `tests.unit`/`tests.integration` structure:
+
+### Before (Old)
+```json
+"tests": {
+    "framework": "doctest",
+    "unit": { "timeout": 30 },
+    "integration": { "timeout": 120 }
+}
+```
+
+```
+tests/unit/Application_Tests.cpp
+tests/integration/Application_Integration_Tests.cpp
+```
+
+### After (New)
+```json
+"tests": {
+    "framework": "doctest",
+    "targets": [
+        { "name": "UnitTests", "type": "unit", "path": "tests/unit/UnitTests" },
+        { "name": "IntegrationTests", "type": "integration", "path": "tests/integration/IntegrationTests" }
+    ]
+}
+```
+
+```
+tests/unit/UnitTests/Application_Tests.cpp
+tests/integration/IntegrationTests/Application_Integration_Tests.cpp
+```
+
+## See Also
+
+- [App Tests Targets Concept](../../docs/de/concepts/App_Tests_Targets_Concept.md)
+- [Solution Schema](../../docs/de/references/Solution_Schema.md)
+- [App Creation Guide](../../docs/de/userguides/App_Creation_Guide.md)
+
+---
+
+## Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| **0.2.0** | **2025-12-18** | **New tests.targets[] structure, multiple tests per type, flexible test types** |
+| 0.1.3 | 2025-12-18 | Added test_main.cpp for doctest |
+| 0.1.2 | 2025-12-18 | Added PCH include to main.cpp |
+| 0.1.1 | 2025-12-18 | Added integration/performance templates |
+| 0.1.0 | 2025-12-17 | Initial template |

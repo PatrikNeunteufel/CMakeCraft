@@ -1,12 +1,12 @@
 # AppCreate.cmake — Dokumentation
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-17  
+> **Version:** 0.5.4  
+> **Datum:** 2025-12-18  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/project/AppCreate.cmake](../../../../cmake/project/AppCreate.cmake)  
-> **Modul-Version:** 0.5.1  
+> **Modul-Version:** 0.5.4  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [AppCreate.md](../../../en/modules/project/AppCreate.md)
@@ -24,11 +24,12 @@
    - 4.3 [_create_app_tests()](#43-_create_app_tests)
    - 4.4 [_create_app_test_target()](#44-_create_app_test_target)
 5. [Verzeichnisstruktur](#5-verzeichnisstruktur)
-6. [Verwendungsbeispiele](#6-verwendungsbeispiele)
-7. [Fehlerbehandlung](#7-fehlerbehandlung)
-8. [Best Practices](#8-best-practices)
-9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+6. [PCH-Behandlung](#6-pch-behandlung)
+7. [Verwendungsbeispiele](#7-verwendungsbeispiele)
+8. [Fehlerbehandlung](#8-fehlerbehandlung)
+9. [Best Practices](#9-best-practices)
+10. [Siehe auch](#10-siehe-auch)
+11. [Changelog](#11-changelog)
 
 ---
 
@@ -90,6 +91,7 @@ Das `AppCreate`-Modul ist verantwortlich für die **Erstellung aller CMake-Targe
 |----------|----------|-----------|
 | PUBLIC | Core.Dependencies → Core | Transitiv zu Runner/Tests |
 | PUBLIC | Core.Externals → Core | Transitiv zu Runner/Tests |
+| PUBLIC | Core.pch/ Include → Core | Transitiv zu Runner/Tests |
 | PRIVATE | Runner.Externals → Runner | Nur für Runner |
 | PRIVATE | Integration.Externals → Integration | Nur für Integration Tests |
 
@@ -98,6 +100,7 @@ Das `AppCreate`-Modul ist verantwortlich für die **Erstellung aller CMake-Targe
 - **Testbarkeit:** Tests können gegen Core linken ohne main()-Konflikt
 - **Compilation:** Einmalige Kompilierung, mehrfache Nutzung
 - **Isolation:** Core enthält keine Entry-Point-Logik
+- **PCH-Sharing:** Runner und Tests können PCH von Core wiederverwenden
 
 ---
 
@@ -126,7 +129,8 @@ Erstellt die `{AppName}.Core` STATIC Library mit allen Business-Logik-Sources.
 | `PATH` | Basis-Verzeichnis |
 | `VERSION` | Target-Version |
 | `PCH_ENABLED` | Precompiled Headers aktivieren |
-| `PCH_HEADER` | PCH Header-Pfad |
+| `PCH_HEADER` | PCH Header-Dateiname |
+| `PCH_PATH` | Optionaler Custom-Pfad für PCH |
 | `CORE_DEPENDENCIES` | Interne Libraries |
 | `CORE_EXTERNALS` | Externe Dependencies |
 
@@ -135,11 +139,19 @@ Erstellt die `{AppName}.Core` STATIC Library mit allen Business-Logik-Sources.
 ```
 {PATH}/
 ├── include/    ← PUBLIC Headers (optional, W401 wenn fehlt)
-└── src/        ← Implementation (Pflicht, E403 wenn fehlt)
+├── src/        ← Implementation (Pflicht, E403 wenn fehlt)
+└── pch/        ← Precompiled Header (optional)
 ```
 
 **Generiertes Target:**
 - `{AppName}.Core` — STATIC Library
+
+**Target Properties (gesetzt):**
+
+| Property | Beschreibung |
+|----------|--------------|
+| `APP_PCH_ENABLED` | Boolean: PCH aktiv |
+| `APP_PCH_PATH` | Pfad zum PCH-Header |
 
 **Fehler:**
 - `E402` — Pfad existiert nicht
@@ -159,7 +171,7 @@ _create_app_runner(CTX)
 ```
 
 **Beschreibung:**  
-Erstellt das `{AppName}` Executable mit dem Entry-Point (main()).
+Erstellt das `{AppName}` Executable mit dem Entry-Point (main()). Verwendet **kein PCH** — main.cpp ist typisch minimal und profitiert kaum davon.
 
 **Parameter:**
 
@@ -187,6 +199,11 @@ Erstellt das `{AppName}` Executable mit dem Entry-Point (main()).
 
 **Generiertes Target:**
 - `{AppName}` — Executable (WIN32/MACOSX_BUNDLE für GUI)
+
+**PCH-Verhalten:**
+- Erbt `pch/` Include-Directory von Core (PUBLIC)
+- Verwendet **kein** `target_precompile_headers()`
+- `#include "pch.h"` ist in main.cpp **nicht erforderlich**
 
 **Fehler:**
 - `E406` — Kein main/ Verzeichnis
@@ -276,24 +293,29 @@ Interne Hilfsfunktion zur Erstellung eines einzelnen Test-Targets.
 ```
 projects/apps/{AppName}/
 ├── include/                 ← PUBLIC Headers (Core)
-│   ├── Application.hpp
-│   └── Module.hpp
+│   └── Application.hpp
 ├── src/                     ← Implementation (Core)
-│   ├── Application.cpp
-│   └── Module.cpp
+│   └── Application.cpp
 ├── main/                    ← Entry Point (Runner)
 │   └── main.cpp
 ├── pch/                     ← Precompiled Headers (optional)
-│   ├── pch.hpp
-│   └── pch.cpp
+│   └── pch.h
 └── tests/                   ← Tests
     ├── unit/
-    │   └── test_Module.cpp
+    │   └── Application_Tests.cpp
     └── integration/
-        └── test_Application.cpp
+        └── Application_Integration_Tests.cpp
 ```
 
-### 5.2 Minimale App-Struktur
+### 5.2 Include-Verzeichnisse
+
+| Verzeichnis | Visibility | Zweck |
+|-------------|------------|-------|
+| `include/` | PUBLIC | Öffentliche Header für Runner/Tests |
+| `pch/` | PUBLIC | PCH-Header für Runner/Tests |
+| `src/` | PRIVATE | Nur wenn private Headers existieren |
+
+### 5.3 Minimale App-Struktur
 
 ```
 projects/apps/{AppName}/
@@ -305,13 +327,79 @@ projects/apps/{AppName}/
 
 ---
 
-## 6. Verwendungsbeispiele
+## 6. PCH-Behandlung
 
-### 6.1 Core Library verwenden
+### 6.1 Aktivierung
+
+PCH wird in Solution.json aktiviert:
+
+```json
+"apps": [{
+    "name": "MyApp",
+    "pch": {
+        "enabled": true,
+        "header": "pch.h"    // Optional, Default: "pch.h"
+    }
+}]
+```
+
+### 6.2 Suchpfad-Priorität
+
+| Priorität | Pfad | Beispiel |
+|-----------|------|----------|
+| 1 | `{PATH}/pch/{header}` | `projects/apps/MyApp/pch/pch.h` |
+| 2 | `{PATH}/src/{header}` | `projects/apps/MyApp/src/pch.h` |
+| 3 | `{PATH}/{header}` | `projects/apps/MyApp/pch.h` |
+
+### 6.3 PCH nur für Core
+
+**Wichtige Vereinfachung:** PCH wird **nur für Core** aktiviert, nicht für Runner oder Tests.
+
+```
+Core Target:
+  ├── target_include_directories(PUBLIC ${pch_dir})   ← pch/ ist sichtbar
+  └── target_precompile_headers(PRIVATE ${pch_path})  ← Kompiliert PCH
+
+Runner:
+  ├── Erbt pch/ include dir via PUBLIC link           ← Könnte pch.h finden
+  └── KEIN target_precompile_headers()                ← Verwendet PCH nicht
+
+Tests:
+  ├── Erbt pch/ include dir via PUBLIC link           ← Könnte pch.h finden
+  └── KEIN target_precompile_headers()                ← Verwendet PCH nicht
+```
+
+### 6.4 Warum kein PCH für Runner/Tests?
+
+| Aspekt | Begründung |
+|--------|------------|
+| **Core wird nicht neu kompiliert** | Runner/Tests linken nur gegen die fertige `.lib` |
+| **main.cpp ist minimal** | Typisch 20-30 Zeilen, PCH-Gewinn vernachlässigbar |
+| **Tests haben Framework-Includes** | doctest/googletest dominieren die Kompilierzeit |
+| **Einfachere Templates** | Kein `#include "pch.h"` in main.cpp und Tests nötig |
+| **Weniger Fehlerquellen** | Kein "PCH not found" bei deaktiviertem PCH |
+
+### 6.5 Warum pch/ trotzdem PUBLIC?
+
+Das `pch/` Verzeichnis ist als **PUBLIC Include** konfiguriert, damit:
+- `src/*.cpp` mit `#include "pch.h"` funktioniert
+- Bei Bedarf Runner/Tests manuell `#include "pch.h"` nutzen könnten
+
+### 6.6 Warum manuelles #include in Core nötig?
+
+MSVC erfordert `#include "pch.h"` als erste Zeile in jeder `.cpp` die PCH nutzt. GCC/Clang können PCH via `-include` injizieren, aber für **Cross-Platform-Kompatibilität** ist das explizite Include erforderlich.
+
+**Bei deaktiviertem PCH:** `#include "pch.h"` muss nur aus `src/*.cpp` entfernt werden (nicht aus main.cpp oder Tests, da diese es ohnehin nicht verwenden).
+
+---
+
+## 7. Verwendungsbeispiele
+
+### 7.1 Core Library verwenden
 
 ```cpp
-// main/main.cpp
-#include <Application.hpp>  // Aus include/ der Core Library
+// main/main.cpp (kein PCH erforderlich)
+#include "Application.hpp" // Aus include/ der Core Library
 
 int main(int argc, char* argv[]) {
     MyApp::Application app;
@@ -319,20 +407,20 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### 6.2 Unit Test schreiben
+### 7.2 Unit Test schreiben
 
 ```cpp
-// tests/unit/test_Module.cpp
+// tests/unit/Application_Tests.cpp (kein PCH erforderlich)
 #include <doctest/doctest.h>
-#include <Module.hpp>  // Aus include/ der Core Library
+#include "Application.hpp"        // Aus include/ der Core Library
 
-TEST_CASE("Module functionality") {
-    MyApp::Module mod;
-    CHECK(mod.initialize() == true);
+TEST_CASE("Application functionality") {
+    MyApp::Application app;
+    CHECK(app.initialize() == true);
 }
 ```
 
-### 6.3 CTest ausführen
+### 7.3 CTest ausführen
 
 ```bash
 # Alle App-Tests
@@ -347,9 +435,9 @@ ctest --timeout 60
 
 ---
 
-## 7. Fehlerbehandlung
+## 8. Fehlerbehandlung
 
-### 7.1 Core-Fehler (E4xx)
+### 8.1 Core-Fehler (E4xx)
 
 | Code | Funktion | Bedingung |
 |------|----------|-----------|
@@ -360,14 +448,14 @@ ctest --timeout 60
 | `E406` | `_create_app_runner` | Kein main/ Verzeichnis |
 | `E407` | `_create_app_runner` | Keine Sources in main/ |
 
-### 7.2 Allgemeine Fehler
+### 8.2 Allgemeine Fehler
 
 | Code | Bedingung |
 |------|-----------|
 | `E010` | External nicht in externals-Block definiert |
 | `E301` | Unbekanntes Test-Framework |
 
-### 7.3 Warnungen (W4xx)
+### 8.3 Warnungen (W4xx)
 
 | Code | Funktion | Bedingung |
 |------|----------|-----------|
@@ -377,34 +465,38 @@ ctest --timeout 60
 
 ---
 
-## 8. Best Practices
+## 9. Best Practices
 
-### 8.1 Do's
+### 9.1 Do's
 
 | Empfehlung | Begründung |
 |------------|------------|
-| Headers in include/, Implementation in src/ | Klare PUBLIC/PRIVATE Trennung |
+| Headers in include/, Implementation in src/ | Klare Trennung |
 | main.cpp minimal halten | Logik gehört in Core |
+| PCH für Standard-Includes | Reduziert Build-Zeit |
 | Framework in externals definieren | Zentrale Verwaltung |
 | Labels für Tests setzen | Einfaches Filtern |
 
-### 8.2 Don'ts
+### 9.2 Don'ts
 
 | Vermeiden | Grund |
 |-----------|-------|
 | Business-Logik in main/ | Nicht testbar |
 | Tests ohne Framework-External | E010 Fehler |
 | Große main.cpp | Verletzt App-Container-Prinzip |
+| PCH in Core ohne #include | MSVC-Fehler in src/*.cpp |
 
-### 8.3 Beispiel: Gute vs. Schlechte Struktur
+### 9.3 Beispiel: Gute vs. Schlechte Struktur
 
 **Gut:**
 ```cpp
-// main/main.cpp (minimal)
-#include <Application.hpp>
+// main/main.cpp (minimal, kein PCH nötig)
+#include "Application.hpp"
 int main() { return MyApp::run(); }
 
-// src/Application.cpp (testbar)
+// src/Application.cpp (testbar, mit PCH)
+#include "pch.h"
+#include "Application.hpp"
 namespace MyApp {
     int run() { /* Business Logic */ }
 }
@@ -420,7 +512,7 @@ int main() {
 
 ---
 
-## 9. Siehe auch
+## 10. Siehe auch
 
 - [Apps.cmake](Apps.md) — Orchestrator
 - [AppCollect.cmake](AppCollect.md) — JSON-Parsing
@@ -431,9 +523,12 @@ int main() {
 
 ---
 
-## 10. Changelog
+## 11. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
-| 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container Target-Erstellung, Core/Runner/Tests Funktionen, FILE_SET für Public Headers, IDE Folder-Organisation |
+| **0.5.4** | **2025-12-18** | **PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr)** |
+| 0.5.3 | 2025-12-18 | PCH-Include-Directory als PUBLIC hinzugefügt, APP_PCH_* Target Properties |
+| 0.5.2 | 2025-12-18 | PCH 3-tier search, implicit activation |
+| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
+| 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container Target-Erstellung |

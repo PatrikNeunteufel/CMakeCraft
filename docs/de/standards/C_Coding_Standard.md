@@ -1,7 +1,7 @@
 # C Coding Standard — Stil-Richtlinien für Embedded
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-13  
+> **Version:** 0.5.1  
+> **Datum:** 2025-12-18  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Embedded-Entwickler, Firmware-Entwickler  
@@ -17,20 +17,21 @@
 1. [Zweck und Geltungsbereich](#1-zweck-und-geltungsbereich)
 2. [Sprachversion und Compiler](#2-sprachversion-und-compiler)
 3. [Grundprinzipien](#3-grundprinzipien)
-4. [Datei- und Modul-Organisation](#4-datei--und-modul-organisation)
-5. [Namenskonventionen](#5-namenskonventionen)
-6. [Typen und Daten](#6-typen-und-daten)
-7. [Pointer und Speicher](#7-pointer-und-speicher)
-8. [Kontrollfluss](#8-kontrollfluss)
-9. [Fehlerbehandlung](#9-fehlerbehandlung)
-10. [Concurrency und Interrupts](#10-concurrency-und-interrupts)
-11. [Hardware-Zugriff](#11-hardware-zugriff)
-12. [MISRA und CERT](#12-misra-und-cert)
-13. [Tests und Statische Analyse](#13-tests-und-statische-analyse)
-14. [Verhältnis zu C++ (PC)](#14-verhältnis-zu-c-pc)
-15. [Legacy-Code und Ausnahmen](#15-legacy-code-und-ausnahmen)
-16. [Siehe auch](#16-siehe-auch)
-17. [Changelog](#17-changelog)
+4. [Datei-Header](#4-datei-header)
+5. [Datei- und Modul-Organisation](#5-datei--und-modul-organisation)
+6. [Namenskonventionen](#6-namenskonventionen)
+7. [Typen und Daten](#7-typen-und-daten)
+8. [Pointer und Speicher](#8-pointer-und-speicher)
+9. [Kontrollfluss](#9-kontrollfluss)
+10. [Fehlerbehandlung](#10-fehlerbehandlung)
+11. [Concurrency und Interrupts](#11-concurrency-und-interrupts)
+12. [Hardware-Zugriff](#12-hardware-zugriff)
+13. [MISRA und CERT](#13-misra-und-cert)
+14. [Tests und Statische Analyse](#14-tests-und-statische-analyse)
+15. [Verhältnis zu C++ (PC)](#15-verhältnis-zu-c-pc)
+16. [Legacy-Code und Ausnahmen](#16-legacy-code-und-ausnahmen)
+17. [Siehe auch](#17-siehe-auch)
+18. [Changelog](#18-changelog)
 
 ---
 
@@ -87,28 +88,94 @@ Erlaubt **nur wenn**:
 
 ---
 
-## 4. Datei- und Modul-Organisation
+## 4. Datei-Header
 
-### 4.1 Dateistruktur
+### 4.1 Standard-Header für C Dateien
+
+Jede `.h` und `.c` Datei **muss** mit folgendem Doxygen-kompatiblen Header beginnen:
+
+```c
+/**
+ ****************************************************************************************
+ * @file   filename.h
+ * @brief  Short description
+ *         Optional second line for context
+ *
+ * @author Author Name
+ * @date   Month YYYY
+ ****************************************************************************************
+ */
+```
+
+### 4.2 Pflichtfelder
+
+| Feld | Beschreibung |
+|------|--------------|
+| `@file` | Exakter Dateiname |
+| `@brief` | Kurzbeschreibung (1-2 Zeilen) |
+| `@author` | Hauptautor |
+| `@date` | Erstellungsdatum (Monat Jahr) |
+
+### 4.3 Optionale Felder
+
+| Feld | Verwendung |
+|------|------------|
+| `@version` | Bei versionierten Komponenten |
+| `@copyright` | Bei speziellen Lizenzen |
+| `@see` | Verweise auf verwandte Dateien |
+| `@note` | Wichtige Hinweise (z.B. Hardware-Abhängigkeiten) |
+
+### 4.4 Beispiel
+
+```c
+/**
+ ****************************************************************************************
+ * @file   gpio_driver.h
+ * @brief  GPIO Driver Interface
+ *         Low-level GPIO control for STM32F4
+ *
+ * @author Patrik Neunteufel
+ * @date   December 2025
+ * @note   Hardware: STM32F407VG
+ ****************************************************************************************
+ */
+
+#ifndef GPIO_DRIVER_H
+#define GPIO_DRIVER_H
+
+#include <stdint.h>
+// ...
+```
+
+### 4.5 Sprache
+
+- **Englisch** ist Pflicht für alle öffentlichen APIs und wiederverwendbare Module
+- Projektspezifische interne Dateien können Deutsch verwenden
+
+---
+
+## 5. Datei- und Modul-Organisation
+
+### 5.1 Dateistruktur
 
 | Typ | Extension | Inhalt |
 |-----|-----------|--------|
 | Implementation | `.c` | Funktions-Implementierungen |
 | Interface | `.h` | Deklarationen, Typen, Makros |
 
-### 4.2 Modul-Design
+### 5.2 Modul-Design
 
 - Jedes Modul hat **eine klare Verantwortung**
 - Öffentliches Interface minimal halten
 - Interne Details verstecken (`static` Funktionen)
 
-### 4.3 Include Guards
+### 5.3 Include Guards
 
 ```c
 #ifndef MODULE_NAME_H
 #define MODULE_NAME_H
 
-// ... Inhalt ...
+// ... content ...
 
 #endif /* MODULE_NAME_H */
 ```
@@ -117,9 +184,9 @@ Oder `#pragma once` (falls Projektrichtlinie).
 
 ---
 
-## 5. Namenskonventionen
+## 6. Namenskonventionen
 
-### 5.1 Übersicht
+### 6.1 Übersicht
 
 | Entität | Konvention | Beispiel |
 |---------|------------|----------|
@@ -130,17 +197,17 @@ Oder `#pragma once` (falls Projektrichtlinie).
 | Konstante/Makro | `UPPER_CASE` | `MAX_BUFFER_SIZE`, `ADC_TIMEOUT` |
 | Typ-Alias | `CamelCase` oder `snake_case` | `TimerHandle`, `gpio_pin_t` |
 
-### 5.2 Modul-Prefix
+### 6.2 Modul-Prefix
 
 Funktionen erhalten Modul-Prefix für Namensraum-Emulation:
 
 ```c
-// Timer-Modul
+// Timer module
 void timer_init(void);
 void timer_start(TimerHandle handle);
 void timer_stop(TimerHandle handle);
 
-// GPIO-Modul
+// GPIO module
 void gpio_init(void);
 void gpio_set_pin(uint8_t pin, bool state);
 uint8_t gpio_read_pin(uint8_t pin);
@@ -148,9 +215,9 @@ uint8_t gpio_read_pin(uint8_t pin);
 
 ---
 
-## 6. Typen und Daten
+## 7. Typen und Daten
 
-### 6.1 Fixed-Width Types
+### 7.1 Fixed-Width Types
 
 Verwende `<stdint.h>` wo Größe wichtig ist:
 
@@ -162,16 +229,16 @@ Verwende `<stdint.h>` wo Größe wichtig ist:
 | `size_t` | Größen und Indizes |
 | `bool` (C99) | Boolesche Werte |
 
-### 6.2 Signed/Unsigned
+### 7.2 Signed/Unsigned
 
 - **Keine Mischung** ohne explizite Behandlung
 - Truncation und Sign-Extension bewusst handhaben
 
 ---
 
-## 7. Pointer und Speicher
+## 8. Pointer und Speicher
 
-### 7.1 Pointer-Regeln
+### 8.1 Pointer-Regeln
 
 | Regel | Beschreibung |
 |-------|--------------|
@@ -183,11 +250,11 @@ Verwende `<stdint.h>` wo Größe wichtig ist:
 // ✅ const-correct
 void processData(const uint8_t* data, size_t length);
 
-// ✅ Zeiger auf konstanten Zeiger
+// ✅ Pointer to constant pointer
 const char* const MESSAGE = "Hello";
 ```
 
-### 7.2 Dynamische Allokation
+### 8.2 Dynamische Allokation
 
 | Regel | Embedded-Kontext |
 |-------|------------------|
@@ -195,23 +262,23 @@ const char* const MESSAGE = "Hello";
 | Nur in Init-Phase | Falls unvermeidbar, dokumentieren |
 | Fallback-Strategie | Dokumentieren was bei Fehlschlag passiert |
 
-### 7.3 Ownership
+### 8.3 Ownership
 
 - Jede dynamisch allokierte Ressource hat **einen klaren Owner**
 - Ownership-Transfer **explizit** in Funktionsnamen/Dokumentation
 
 ---
 
-## 8. Kontrollfluss
+## 9. Kontrollfluss
 
-### 8.1 Strukturierter Code
+### 9.1 Strukturierter Code
 
 Erlaubt:
 - `if` / `else`
 - `switch` / `case`
 - `for` / `while` / `do-while`
 
-### 8.2 goto
+### 9.2 goto
 
 **Generell vermeiden.** Erlaubt nur für:
 - Kontrolliertes Error-Handling mit Cleanup
@@ -229,7 +296,7 @@ int processFile(const char* path)
         goto cleanup;
     }
     
-    // ... Verarbeitung ...
+    // ... processing ...
     
     result = 0;
     
@@ -242,16 +309,16 @@ cleanup:
 }
 ```
 
-### 8.3 Funktionen
+### 9.3 Funktionen
 
 - **Eine klare Verantwortung** pro Funktion
 - Nicht übermäßig lang (Richtwert: 50-100 Zeilen)
 
 ---
 
-## 9. Fehlerbehandlung
+## 10. Fehlerbehandlung
 
-### 9.1 Keine Exceptions
+### 10.1 Keine Exceptions
 
 C verwendet **Return Codes** und **Out-Parameter**:
 
@@ -267,25 +334,25 @@ typedef enum
 Result sensor_read(uint16_t* outValue);
 ```
 
-### 9.2 Rückgabewerte prüfen
+### 10.2 Rückgabewerte prüfen
 
 **Jeder Rückgabewert muss:**
 - Geprüft werden, oder
 - Explizit mit Kommentar ignoriert werden
 
 ```c
-// ✅ Geprüft
+// ✅ Checked
 Result result = sensor_read(&value);
 if (result != RESULT_OK)
 {
     handleError(result);
 }
 
-// ✅ Explizit ignoriert
-(void)printf("Debug: %d\n", value);  // Rückgabe irrelevant
+// ✅ Explicitly ignored
+(void)printf("Debug: %d\n", value);  // Return value irrelevant
 ```
 
-### 9.3 Error-Code-Design
+### 10.3 Error-Code-Design
 
 - Enumeriert und dokumentiert
 - Eindeutige Codes pro Modul
@@ -293,9 +360,9 @@ if (result != RESULT_OK)
 
 ---
 
-## 10. Concurrency und Interrupts
+## 11. Concurrency und Interrupts
 
-### 10.1 Shared Data
+### 11.1 Shared Data
 
 Daten zwischen Interrupt und Main-Context:
 
@@ -305,14 +372,14 @@ Daten zwischen Interrupt und Main-Context:
 | Atomare Operationen | Für Multi-Byte-Werte |
 | Critical Sections | Interrupt-Disable wo nötig |
 
-### 10.2 Richtlinien
+### 11.2 Richtlinien
 
 - **Critical Sections minimal halten**
 - **Race Conditions by Design vermeiden**
 - **Keine Trial-and-Error-Synchronisation**
 
 ```c
-// ✅ Atomarer Zugriff
+// ✅ Atomic access
 static volatile uint32_t s_tickCounter;
 
 void SysTick_Handler(void)
@@ -332,9 +399,9 @@ uint32_t getTicks(void)
 
 ---
 
-## 11. Hardware-Zugriff
+## 12. Hardware-Zugriff
 
-### 11.1 Register-Handling
+### 12.1 Register-Handling
 
 | Regel | Beschreibung |
 |-------|--------------|
@@ -342,10 +409,10 @@ uint32_t getTicks(void)
 | Kapselung | In dedizierten Modulen/Treibern |
 | Keine Magic Addresses | Benannte Konstanten verwenden |
 
-### 11.2 Register-Definition
+### 12.2 Register-Definition
 
 ```c
-// ✅ Strukturierter Zugriff
+// ✅ Structured access
 typedef struct
 {
     volatile uint32_t CR;      // Control Register
@@ -356,7 +423,7 @@ typedef struct
 #define UART1 ((UART_TypeDef*)0x40011000UL)
 ```
 
-### 11.3 Dokumentation
+### 12.3 Dokumentation
 
 - Endianness dokumentieren
 - Alignment-Anforderungen dokumentieren
@@ -364,9 +431,9 @@ typedef struct
 
 ---
 
-## 12. MISRA und CERT
+## 13. MISRA und CERT
 
-### 12.1 MISRA C:2012 Alignment
+### 13.1 MISRA C:2012 Alignment
 
 | Kategorie | Umsetzung |
 |-----------|-----------|
@@ -375,7 +442,7 @@ typedef struct
 | Pointer | Validierung, begrenzte Arithmetik |
 | UB-Vermeidung | Keine Abhängigkeit von undefiniertem Verhalten |
 
-### 12.2 SEI CERT C Alignment
+### 13.2 SEI CERT C Alignment
 
 | Kategorie | Umsetzung |
 |-----------|-----------|
@@ -384,7 +451,7 @@ typedef struct
 | Buffer-Handling | Bounds prüfen |
 | Ressourcen | Keine Leaks, klares Ownership |
 
-### 12.3 Compliance-Dokumentation
+### 13.3 Compliance-Dokumentation
 
 Projekte mit MISRA/CERT-Anspruch dokumentieren:
 - Anwendbare Regeln
@@ -392,16 +459,16 @@ Projekte mit MISRA/CERT-Anspruch dokumentieren:
 
 ---
 
-## 13. Tests und Statische Analyse
+## 14. Tests und Statische Analyse
 
-### 13.1 Tests
+### 14.1 Tests
 
 | Test-Typ | Beschreibung |
 |----------|--------------|
 | Unit Tests | Wo praktikabel (PC-hosted) |
 | Integration Tests | Auf Ziel-Hardware oder Simulation |
 
-### 13.2 Statische Analyse
+### 14.2 Statische Analyse
 
 Empfohlene Tools:
 - `clang-tidy` (PC-Build)
@@ -412,9 +479,9 @@ Warnungen mit Safety-Relevanz **müssen** behoben oder begründet werden.
 
 ---
 
-## 14. Verhältnis zu C++ (PC)
+## 15. Verhältnis zu C++ (PC)
 
-### 14.1 Unterschiede
+### 15.1 Unterschiede
 
 | Aspekt | C (Embedded) | C++ (PC) |
 |--------|--------------|----------|
@@ -423,7 +490,7 @@ Warnungen mit Safety-Relevanz **müssen** behoben oder begründet werden.
 | Standard Library | Minimal | Voll |
 | Abstraktion | Prozedural | OOP erlaubt |
 
-### 14.2 Shared Components
+### 15.2 Shared Components
 
 Interfaces zwischen C und C++:
 
@@ -442,15 +509,15 @@ void shared_function(int param);
 
 ---
 
-## 15. Legacy-Code und Ausnahmen
+## 16. Legacy-Code und Ausnahmen
 
-### 15.1 Legacy-Code
+### 16.1 Legacy-Code
 
 - Temporär erlaubt wenn nicht compliant
 - Neuer Code **immer** nach Standard
 - Refactoring-Chancen nutzen
 
-### 15.2 Intentionale Abweichungen
+### 16.2 Intentionale Abweichungen
 
 - Kommentar im Code
 - Begründung dokumentieren
@@ -458,7 +525,7 @@ void shared_function(int param);
 
 ---
 
-## 16. Siehe auch
+## 17. Siehe auch
 
 - [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md) — C++ (PC)
 - [CMake_Standard.md](CMake_Standard.md) — Build-System
@@ -467,9 +534,10 @@ void shared_function(int param);
 
 ---
 
-## Changelog
+## 18. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix** |
+| **0.5.1** | **2025-12-18** | **Neuer Abschnitt 4: Datei-Header mit Doxygen-Format, Pflichtfelder, Sprachregelung** |
+| 0.5.0 | 2025-12-13 | Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix |
 | 0.1.0 | 2025-12-05 | Initial: Embedded-Fokus, MISRA/CERT-Alignment, Interrupt-Handling |

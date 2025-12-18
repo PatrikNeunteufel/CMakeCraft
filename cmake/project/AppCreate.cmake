@@ -2,7 +2,7 @@
 # ==============================
 # Creates App-Container targets from prepared Context
 #
-# Version: 0.5.2
+# Version: 0.6.1
 # Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
@@ -45,7 +45,8 @@ include_guard(GLOBAL)
     Directory Structure Expected:
         {PATH}/
         ├── include/    - PUBLIC headers
-        └── src/        - Implementation files
+        ├── src/        - Implementation files
+        └── pch/        - Precompiled header (optional)
     
     Generated Target:
         {AppName}.Core - STATIC library
@@ -157,8 +158,11 @@ function(_create_app_core CTX)
     # Include Directories
     # --------------------------------------------------------------------------
     
-    # Private: src/ for implementation details
-    target_include_directories(${_target_name} PRIVATE "${_src_dir}")
+    # Private: src/ for implementation details (NOT needed for Apps - no external consumers)
+    # Only if there are internal headers in src/
+    if(_private_headers)
+        target_include_directories(${_target_name} PRIVATE "${_src_dir}")
+    endif()
     
     # Additional includes from Source.cmake
     foreach(_inc IN LISTS _src_includes)
@@ -169,7 +173,7 @@ function(_create_app_core CTX)
         endif()
     endforeach()
     
-    # Public: include/ for consumers (Runner, Tests, other targets)
+    # Public: include/ for consumers (Runner, Tests)
     if(_has_include_dir)
         target_include_directories(${_target_name} PUBLIC "${_include_dir}")
     endif()
@@ -178,33 +182,50 @@ function(_create_app_core CTX)
     # Precompiled Headers
     # --------------------------------------------------------------------------
     
+    set(_pch_found_path "")
+    set(_pch_dir "")
+    
     if(_pch_enabled)
-        set(_pch_found_path "")
-        
         # If custom path specified, use it (relative to CMAKE_SOURCE_DIR/projects/)
         if(NOT "${_pch_custom_path}" STREQUAL "")
             set(_custom_full_path "${CMAKE_SOURCE_DIR}/projects/${_pch_custom_path}/${_pch_header}")
             if(EXISTS "${_custom_full_path}")
                 set(_pch_found_path "${_custom_full_path}")
+                get_filename_component(_pch_dir "${_custom_full_path}" DIRECTORY)
             endif()
         else()
             # Search priority: 1. pch/, 2. src/, 3. root
             if(EXISTS "${_base_dir}/pch/${_pch_header}")
                 set(_pch_found_path "${_base_dir}/pch/${_pch_header}")
+                set(_pch_dir "${_base_dir}/pch")
             elseif(EXISTS "${_src_dir}/${_pch_header}")
                 set(_pch_found_path "${_src_dir}/${_pch_header}")
+                set(_pch_dir "${_src_dir}")
             elseif(EXISTS "${_base_dir}/${_pch_header}")
                 set(_pch_found_path "${_base_dir}/${_pch_header}")
+                set(_pch_dir "${_base_dir}")
             endif()
         endif()
         
         if(_pch_found_path)
+            # Add PCH directory as PUBLIC include (for Runner and Tests to find pch.h)
+            target_include_directories(${_target_name} PUBLIC "${_pch_dir}")
+            
+            # Enable precompiled headers
             target_precompile_headers(${_target_name} PRIVATE "${_pch_found_path}")
+            
             dbg(${DBG_RARE} "    PCH: ${_pch_found_path}" ID APPS)
+            dbg(${DBG_RARE} "    PCH include dir: ${_pch_dir}" ID APPS)
         else()
             cmake_warn("W402" "App '${_name}': PCH enabled but '${_pch_header}' not found in pch/, src/, or root")
         endif()
     endif()
+    
+    # Store PCH info in target properties for Runner to access
+    set_target_properties(${_target_name} PROPERTIES
+        APP_PCH_ENABLED "${_pch_enabled}"
+        APP_PCH_PATH "${_pch_found_path}"
+    )
     
     # --------------------------------------------------------------------------
     # Internal Dependencies (Libraries)
@@ -215,7 +236,7 @@ function(_create_app_core CTX)
             target_link_libraries(${_target_name} PUBLIC ${_dep})
             dbg(${DBG_RARE} "    Link: ${_dep} (internal, PUBLIC)" ID APPS)
         else()
-            cmake_fatal("E405" "App '${_name}': Dependency '${_dep}' does not exist")
+            cmake_fatal("E405" "App '${_name}': Dependency '${_dep}' not found")
         endif()
     endforeach()
     
@@ -232,17 +253,29 @@ function(_create_app_core CTX)
             cmake_fatal("E010" "External '${_ext}' not defined in externals block")
         endif()
         
-        # Apply external via Orchestrator (no per-target options for Core)
-        apply_external_to_target("${_target_name}" "${_ext}" "{}")
+        # Get external_options if present
+        ctx_get(${CTX} CORE_EXTERNAL_OPTIONS _ext_options)
         
-        dbg(${DBG_RARE} "    External: ${_ext} applied" ID APPS)
+        # Check if this external has specific options
+        set(_options_json "{}")
+        if(NOT "${_ext_options}" STREQUAL "")
+            _json_has_key("${_ext_options}" "${_ext}" _has_options)
+            if(_has_options)
+                _json_get_object("${_ext_options}" "${_ext}" _options_json)
+            endif()
+        endif()
+        
+        # Apply external via Orchestrator
+        apply_external_to_target("${_target_name}" "${_ext}" "${_options_json}")
+        
+        dbg(${DBG_RARE} "    External: ${_ext} applied (Core, PUBLIC)" ID APPS)
     endforeach()
     
     # --------------------------------------------------------------------------
     # Apply Standard Modules
     # --------------------------------------------------------------------------
     
-    # Warnings (from Warnings.cmake)
+    # Compiler warnings (from Warnings.cmake)
     apply_warnings(${_target_name})
     
     # Compiler options (from CompilerOptions.cmake)
@@ -347,6 +380,8 @@ function(_create_app_runner CTX)
     if(_runner_type STREQUAL "WINDOW" OR _runner_type STREQUAL "GUI")
         if(WIN32)
             add_executable(${_target_name} WIN32 ${_sources} ${_headers} ${_extras} ${_modules})
+            # Define APP_WINDOWS_GUI for conditional compilation
+            target_compile_definitions(${_target_name} PRIVATE APP_WINDOWS_GUI)
         elseif(APPLE)
             add_executable(${_target_name} MACOSX_BUNDLE ${_sources} ${_headers} ${_extras} ${_modules})
         else()
@@ -378,6 +413,13 @@ function(_create_app_runner CTX)
     # Link Against Core Library
     # --------------------------------------------------------------------------
     
+    # This also brings in:
+    # - PUBLIC include directories (include/, pch/)
+    # - PUBLIC dependencies and externals from Core
+    #
+    # NOTE: Runner does NOT use PCH - main.cpp is typically small and
+    # gains minimal benefit from precompiled headers. This simplifies
+    # the template (no #include "pch.h" required in main.cpp).
     target_link_libraries(${_target_name} PRIVATE ${_core_target})
     dbg(${DBG_RARE} "    Link: ${_core_target} (Core Library)" ID APPS)
     
@@ -409,7 +451,7 @@ function(_create_app_runner CTX)
     setup_output_dirs(${_target_name})
     
     # --------------------------------------------------------------------------
-    # Version as Target Property
+    # Version and Display Name
     # --------------------------------------------------------------------------
     
     if(NOT "${_version}" STREQUAL "")
@@ -418,26 +460,18 @@ function(_create_app_runner CTX)
         )
     endif()
     
-    # --------------------------------------------------------------------------
-    # Windows-specific: Subsystem for GUI
-    # --------------------------------------------------------------------------
-    
-    if(WIN32 AND (_runner_type STREQUAL "WINDOW" OR _runner_type STREQUAL "GUI"))
+    if(NOT "${_display_name}" STREQUAL "")
         set_target_properties(${_target_name} PROPERTIES
-            WIN32_EXECUTABLE TRUE
+            OUTPUT_NAME "${_display_name}"
         )
-        target_compile_definitions(${_target_name} PRIVATE APP_WINDOWS_GUI)
-        dbg(${DBG_RARE} "    Windows GUI: APP_WINDOWS_GUI defined" ID APPS)
     endif()
     
     # --------------------------------------------------------------------------
-    # macOS-specific: Bundle Properties
+    # Platform-Specific Properties
     # --------------------------------------------------------------------------
     
     if(APPLE AND (_runner_type STREQUAL "WINDOW" OR _runner_type STREQUAL "GUI"))
         set_target_properties(${_target_name} PROPERTIES
-            MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_GUI_IDENTIFIER "com.project.${_name}"
             MACOSX_BUNDLE_BUNDLE_NAME "${_display_name}"
             MACOSX_BUNDLE_BUNDLE_VERSION "${_version}"
             MACOSX_BUNDLE_SHORT_VERSION_STRING "${_version}"
@@ -450,43 +484,45 @@ function(_create_app_runner CTX)
     
     set_target_properties(${_target_name} PROPERTIES
         FOLDER "Apps/${_name}"
+        VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
-    
-    if(NOT "${_display_name}" STREQUAL "${_name}")
-        set_target_properties(${_target_name} PROPERTIES
-            PROJECT_LABEL "${_display_name}"
-        )
-    endif()
     
 endfunction()
 
 # ==============================================================================
-# _create_app_tests - Creates Unit and Integration Test executables
+# _create_app_tests - Creates Test executables
 # ==============================================================================
 #[[
     _create_app_tests(CTX)
     
-    Creates test executables for the App-Container.
-    Tests link against {AppName}.Core and use the configured test framework.
+    Creates test executables based on the tests.targets[] configuration.
+    Supports arbitrary test types with configurable frameworks.
+    
+    Framework Resolution:
+        1. Test-specific framework (targets[].framework)
+        2. Global framework (tests.framework)
+        3. ERROR if neither is specified
     
     Parameters:
         CTX - Mandatory: Context prefix (e.g. APP_0, APP_1)
     
     Expected Context Keys:
-        NAME, PATH, TESTS_FRAMEWORK,
-        TESTS_UNIT_ENABLED, TESTS_UNIT_TIMEOUT, TESTS_UNIT_LABELS,
-        TESTS_INTEGRATION_ENABLED, TESTS_INTEGRATION_TIMEOUT,
-        TESTS_INTEGRATION_LABELS, TESTS_INTEGRATION_EXTERNALS
+        NAME, PATH, TESTS_FRAMEWORK (global default), TESTS_TARGETS_COUNT
+        TESTS_TARGET_{n}_NAME, TESTS_TARGET_{n}_TYPE, TESTS_TARGET_{n}_PATH,
+        TESTS_TARGET_{n}_FRAMEWORK, TESTS_TARGET_{n}_TIMEOUT, TESTS_TARGET_{n}_LABELS,
+        TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
     
     Directory Structure Expected:
         {PATH}/
         └── tests/
-            ├── unit/        - Unit test sources
-            └── integration/ - Integration test sources
+            └── {type}/
+                └── {name}/
+                    ├── Source.cmake
+                    ├── test_main.cpp
+                    └── test_*.cpp
     
     Generated Targets:
-        {AppName}.UnitTests        - Unit test executable
-        {AppName}.IntegrationTests - Integration test executable
+        {AppName}.{TestName} for each target in tests.targets[]
 ]]
 function(_create_app_tests CTX)
     
@@ -496,86 +532,111 @@ function(_create_app_tests CTX)
     
     ctx_get(${CTX} NAME _name)
     ctx_get(${CTX} PATH _path)
-    ctx_get(${CTX} TESTS_FRAMEWORK _framework)
-    ctx_get(${CTX} TESTS_UNIT_ENABLED _unit_enabled)
-    ctx_get(${CTX} TESTS_UNIT_TIMEOUT _unit_timeout)
-    ctx_get(${CTX} TESTS_UNIT_LABELS _unit_labels)
-    ctx_get(${CTX} TESTS_INTEGRATION_ENABLED _integration_enabled)
-    ctx_get(${CTX} TESTS_INTEGRATION_TIMEOUT _integration_timeout)
-    ctx_get(${CTX} TESTS_INTEGRATION_LABELS _integration_labels)
-    ctx_get(${CTX} TESTS_INTEGRATION_EXTERNALS _integration_externals)
-    ctx_get(${CTX} CORE_EXTERNALS _core_externals)
+    ctx_get(${CTX} TESTS_FRAMEWORK _global_framework)
+    ctx_get(${CTX} TESTS_SKIP _global_skip)
+    ctx_get(${CTX} TESTS_TARGETS_COUNT _targets_count)
     
     set(_core_target "${_name}.Core")
     set(_base_dir "${CMAKE_SOURCE_DIR}/${_path}")
     set(_tests_dir "${_base_dir}/tests")
     
     # --------------------------------------------------------------------------
-    # Check if tests directory exists
+    # Check global skip
     # --------------------------------------------------------------------------
     
-    if(NOT EXISTS "${_tests_dir}")
-        # No tests directory - nothing to do
-        dbg(${DBG_RARE} "    No tests/ directory for ${_name}" ID APPS)
+    if(_global_skip)
+        dbg(${DBG_COMMON} "  SKIP: All tests for ${_name} (tests.skip=true)" ID APPS)
         return()
     endif()
     
     # --------------------------------------------------------------------------
-    # Validate Framework
+    # Check if any tests configured
+    # --------------------------------------------------------------------------
+    
+    if(_targets_count EQUAL 0)
+        dbg(${DBG_RARE} "    No test targets configured for ${_name}" ID APPS)
+        return()
+    endif()
+    
+    # --------------------------------------------------------------------------
+    # Check if tests directory exists
+    # --------------------------------------------------------------------------
+    
+    if(NOT EXISTS "${_tests_dir}")
+        cmake_warn("W403" "App '${_name}': tests.targets configured but no tests/ directory")
+        return()
+    endif()
+    
+    # --------------------------------------------------------------------------
+    # Valid Frameworks List
     # --------------------------------------------------------------------------
     
     set(_valid_frameworks "doctest" "googletest" "catch2")
-    if(NOT "${_framework}" IN_LIST _valid_frameworks)
-        cmake_fatal("E301" "App '${_name}': Unknown test framework '${_framework}'. Valid: ${_valid_frameworks}")
-    endif()
     
     # --------------------------------------------------------------------------
-    # Unit Tests
+    # Iterate over all test targets
     # --------------------------------------------------------------------------
     
-    if(_unit_enabled)
-        set(_unit_dir "${_tests_dir}/unit")
+    math(EXPR _targets_last "${_targets_count} - 1")
+    
+    foreach(_t_idx RANGE 0 ${_targets_last})
         
-        if(EXISTS "${_unit_dir}")
-            _create_app_test_target(
-                "${_name}.UnitTests"
-                "${_unit_dir}"
-                "${_core_target}"
-                "${_framework}"
-                "${_unit_timeout}"
-                "${_unit_labels}"
-                ""  # No additional externals for unit tests
-                "${_name}"
-            )
-            dbg(${DBG_COMMON} "  Created: ${_name}.UnitTests" ID APPS)
-        else()
-            cmake_warn("W403" "App '${_name}': tests.unit enabled but no tests/unit/ directory")
-        endif()
-    endif()
-    
-    # --------------------------------------------------------------------------
-    # Integration Tests
-    # --------------------------------------------------------------------------
-    
-    if(_integration_enabled)
-        set(_integration_dir "${_tests_dir}/integration")
+        # Read target configuration from context
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_NAME _t_name)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_TYPE _t_type)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_SKIP _t_skip)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_PATH _t_path)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_FRAMEWORK _t_framework)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_TIMEOUT _t_timeout)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_LABELS _t_labels)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS _t_externals)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL _t_parallel)
         
-        if(EXISTS "${_integration_dir}")
-            _create_app_test_target(
-                "${_name}.IntegrationTests"
-                "${_integration_dir}"
-                "${_core_target}"
-                "${_framework}"
-                "${_integration_timeout}"
-                "${_integration_labels}"
-                "${_integration_externals}"
-                "${_name}"
-            )
-            dbg(${DBG_COMMON} "  Created: ${_name}.IntegrationTests" ID APPS)
-        else()
-            cmake_warn("W403" "App '${_name}': tests.integration enabled but no tests/integration/ directory")
+        # Check individual skip
+        if(_t_skip)
+            dbg(${DBG_COMMON} "  SKIP: ${_name}.${_t_name} (skip=true)" ID APPS)
+            continue()
         endif()
-    endif()
+        
+        # Full target name: {AppName}.{TestName}
+        set(_target_name "${_name}.${_t_name}")
+        
+        # Full path to test sources
+        set(_test_src_dir "${_base_dir}/${_t_path}")
+        
+        # Resolve framework: test-specific > global > error
+        set(_effective_framework "${_t_framework}")
+        if("${_effective_framework}" STREQUAL "")
+            set(_effective_framework "${_global_framework}")
+        endif()
+        if("${_effective_framework}" STREQUAL "")
+            cmake_fatal("E301" "App '${_name}': No framework specified for test '${_t_name}'. Set tests.framework or targets[].framework")
+        endif()
+        if(NOT "${_effective_framework}" IN_LIST _valid_frameworks)
+            cmake_fatal("E302" "App '${_name}': Unknown framework '${_effective_framework}' for test '${_t_name}'. Valid: ${_valid_frameworks}")
+        endif()
+        
+        # Check if path exists
+        if(NOT EXISTS "${_test_src_dir}")
+            cmake_fatal("E305" "App '${_name}': Test '${_t_name}' path does not exist: ${_t_path}")
+        endif()
+        
+        # Create the test target
+        _create_app_test_target(
+            "${_target_name}"
+            "${_test_src_dir}"
+            "${_core_target}"
+            "${_effective_framework}"
+            "${_t_timeout}"
+            "${_t_labels}"
+            "${_t_externals}"
+            "${_name}"
+            "${_t_parallel}"
+        )
+        
+        dbg(${DBG_COMMON} "  Created: ${_target_name} (${_t_type}, ${_effective_framework})" ID APPS)
+        
+    endforeach()
     
 endfunction()
 
@@ -583,7 +644,7 @@ endfunction()
 # _create_app_test_target - Helper to create a single test target
 # ==============================================================================
 #[[
-    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME)
+    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
     
     Internal helper function to create a test executable.
     
@@ -596,8 +657,9 @@ endfunction()
         LABELS          - CTest labels (semicolon-separated)
         EXTRA_EXTERNALS - Additional externals for this test
         APP_NAME        - Parent app name (for folder organization)
+        PARALLEL        - TRUE to allow parallel execution, FALSE for serial
 ]]
-function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME)
+function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
     
     # --------------------------------------------------------------------------
     # Collect Sources (via SourceCollect.cmake)
@@ -640,6 +702,13 @@ function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEO
     # Link Against Core Library
     # --------------------------------------------------------------------------
     
+    # This also brings in:
+    # - PUBLIC include directories (include/, pch/)
+    # - PUBLIC dependencies and externals from Core
+    #
+    # NOTE: Tests do NOT use PCH - test files typically include the test
+    # framework header which dominates compilation time anyway.
+    # This simplifies templates (no #include "pch.h" required in tests).
     target_link_libraries(${TARGET_NAME} PRIVATE ${CORE_TARGET})
     
     # --------------------------------------------------------------------------
@@ -701,6 +770,13 @@ function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEO
     set_tests_properties(${TARGET_NAME} PROPERTIES
         LABELS "${_all_labels}"
     )
+    
+    # Parallel execution (RUN_SERIAL=TRUE when parallel=FALSE)
+    if(NOT PARALLEL)
+        set_tests_properties(${TARGET_NAME} PROPERTIES
+            RUN_SERIAL TRUE
+        )
+    endif()
     
     # --------------------------------------------------------------------------
     # IDE Organization
