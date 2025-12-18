@@ -1,6 +1,6 @@
 # App Template
 
-> **Version:** 0.2.1  
+> **Version:** 0.2.0  
 > **Date:** 2025-12-18  
 > **Type:** Template  
 > **Status:** Active  
@@ -128,7 +128,6 @@ cp -r projects/templates/App projects/apps/YourAppName
         },
 
         "tests": {
-            "skip": false,
             "framework": "doctest",
             "targets": [
                 {
@@ -158,8 +157,7 @@ cp -r projects/templates/App projects/apps/YourAppName
                     "type": "performance",
                     "path": "tests/performance/Benchmarks",
                     "timeout": 300,
-                    "labels": ["performance", "nightly"],
-                    "skip": true
+                    "labels": ["performance", "nightly"]
                 }
             ]
         },
@@ -198,7 +196,6 @@ Edit `src/Application.cpp`:
 {
     "name": "TestName",           // Required: Target name
     "type": "unit",               // Required: Test type
-    "skip": false,                // Optional: Skip this test
     "path": "tests/unit/TestName", // Optional: Path (default: tests/{type}/{name})
     "framework": "doctest",       // Optional: Override global framework
     "timeout": 30,                // Optional: Timeout in seconds
@@ -251,53 +248,6 @@ Supported frameworks: `doctest`, `googletest`, `catch2`
 Tests marked as `parallel: false` or serial-type tests run with CTest's `RUN_SERIAL` property.
 
 ⚠️ **Warning W402:** If you explicitly set `parallel: true` for types that default to serial (performance, system, fuzz, security, ui), you'll see a warning. This is allowed but may produce inaccurate results.
-
-### Skip Feature
-
-Tests can be temporarily disabled without removing them from configuration.
-
-#### Global Skip (all tests)
-
-```json
-"tests": {
-    "skip": true,           // Skip ALL tests for this app
-    "framework": "doctest",
-    "targets": [
-        { "name": "UnitTests", "type": "unit" },
-        { "name": "IntegrationTests", "type": "integration" }
-    ]
-}
-```
-
-#### Per-Target Skip
-
-```json
-"tests": {
-    "framework": "doctest",
-    "targets": [
-        {
-            "name": "UnitTests",
-            "type": "unit",
-            "skip": false    // Will be built
-        },
-        {
-            "name": "SlowTests",
-            "type": "integration",
-            "skip": true     // Temporarily disabled
-        }
-    ]
-}
-```
-
-#### Skip Logic
-
-| Global `tests.skip` | Target `skip` | Result |
-|---------------------|---------------|--------|
-| `true` | any | ⏭️ Skipped |
-| `false`/missing | `true` | ⏭️ Skipped |
-| `false`/missing | `false`/missing | ✅ Built |
-
-**Note:** Global skip takes precedence over individual target skip settings.
 
 ## Generated Targets
 
@@ -394,8 +344,7 @@ tests/integration/IntegrationTests/Application_Integration_Tests.cpp
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **0.2.1** | **2025-12-18** | **Added skip feature documentation (global tests.skip + per-target skip)** |
-| 0.2.0 | 2025-12-18 | New tests.targets[] structure, multiple tests per type, flexible test types |
+| **0.2.0** | **2025-12-18** | **New tests.targets[] structure, multiple tests per type, flexible test types** |
 | 0.1.3 | 2025-12-18 | Added test_main.cpp for doctest |
 | 0.1.2 | 2025-12-18 | Added PCH include to main.cpp |
 | 0.1.1 | 2025-12-18 | Added integration/performance templates |

@@ -2,7 +2,7 @@
 # ================================
 # Collects test data from JSON into a Context
 #
-# Version: 0.5.3
+# Version: 0.5.2
 # Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
@@ -14,10 +14,8 @@
 #
 # Provides:
 #   - _collect_test(TEST_JSON CTX)
-#
-# Note: JSON helper functions are provided by cmake/core/Json.cmake:
+#   - _json_get_int_or_default()
 #   - _json_get_bool_or_default()
-#   - _json_get_number_or_default()
 #   - _json_get_string_or_default()
 #   - _json_get_array_as_list()
 #
@@ -115,7 +113,7 @@ function(_collect_test TEST_JSON CTX)
     dbg(${DBG_ULTRA_RARE} "    SKIP parsed: ${_skip}" ID TESTS)
     
     # TIMEOUT
-    _json_get_number_or_default("${TEST_JSON}" "timeout" ${_TEST_DEFAULT_TIMEOUT} _timeout)
+    _json_get_int_or_default("${TEST_JSON}" "timeout" ${_TEST_DEFAULT_TIMEOUT} _timeout)
     ctx_set(${CTX} TIMEOUT "${_timeout}")
     
     # PARALLEL
@@ -191,10 +189,80 @@ function(_collect_test TEST_JSON CTX)
 endfunction()
 
 # ==============================================================================
-# NOTE: JSON helper functions are now centralized in cmake/core/Json.cmake
-# The following functions are available:
-#   - _json_get_bool_or_default()
-#   - _json_get_number_or_default() (use instead of _json_get_int_or_default)
-#   - _json_get_string_or_default()
-#   - _json_get_array_as_list()
+# Helper: _json_get_int_or_default
 # ==============================================================================
+
+function(_json_get_int_or_default JSON_STR KEY DEFAULT OUT_VAR)
+    _json_has_key("${JSON_STR}" "${KEY}" _has_key)
+    if(_has_key)
+        string(JSON _value GET "${JSON_STR}" "${KEY}")
+    else()
+        set(_value "${DEFAULT}")
+    endif()
+    set(${OUT_VAR} "${_value}" PARENT_SCOPE)
+endfunction()
+
+# ==============================================================================
+# Helper: _json_get_bool_or_default
+# ==============================================================================
+
+function(_json_get_bool_or_default JSON_STR KEY DEFAULT OUT_VAR)
+    _json_has_key("${JSON_STR}" "${KEY}" _has_key)
+    if(_has_key)
+        string(JSON _value GET "${JSON_STR}" "${KEY}")
+        # DEBUG: Show raw JSON value
+        message(STATUS "[DEBUG] _json_get_bool_or_default: Key '${KEY}' raw value: '${_value}'")
+        # CMake JSON parser returns "true"/"false" for JSON booleans
+        # Also handle various string representations
+        string(TOLOWER "${_value}" _value_lower)
+        if(_value_lower STREQUAL "true" OR _value_lower STREQUAL "on" OR _value_lower STREQUAL "yes" OR _value STREQUAL "1")
+            set(_result TRUE)
+        else()
+            set(_result FALSE)
+        endif()
+        message(STATUS "[DEBUG] _json_get_bool_or_default: Result: '${_result}'")
+    else()
+        set(_result "${DEFAULT}")
+    endif()
+    set(${OUT_VAR} "${_result}" PARENT_SCOPE)
+endfunction()
+
+# ==============================================================================
+# Helper: _json_get_string_or_default
+# ==============================================================================
+
+function(_json_get_string_or_default JSON_STR KEY DEFAULT OUT_VAR)
+    _json_has_key("${JSON_STR}" "${KEY}" _has_key)
+    if(_has_key)
+        string(JSON _value GET "${JSON_STR}" "${KEY}")
+    else()
+        set(_value "${DEFAULT}")
+    endif()
+    set(${OUT_VAR} "${_value}" PARENT_SCOPE)
+endfunction()
+
+# ==============================================================================
+# Helper: _json_get_array_as_list
+# ==============================================================================
+
+function(_json_get_array_as_list JSON_STR KEY OUT_VAR)
+    _json_has_key("${JSON_STR}" "${KEY}" _has_key)
+    if(NOT _has_key)
+        set(${OUT_VAR} "" PARENT_SCOPE)
+        return()
+    endif()
+    
+    string(JSON _array GET "${JSON_STR}" "${KEY}")
+    string(JSON _count LENGTH "${_array}")
+    
+    set(_result "")
+    if(_count GREATER 0)
+        math(EXPR _last "${_count} - 1")
+        foreach(_i RANGE 0 ${_last})
+            string(JSON _item GET "${_array}" ${_i})
+            list(APPEND _result "${_item}")
+        endforeach()
+    endif()
+    
+    set(${OUT_VAR} "${_result}" PARENT_SCOPE)
+endfunction()

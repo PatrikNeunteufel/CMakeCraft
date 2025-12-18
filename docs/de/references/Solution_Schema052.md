@@ -1,7 +1,6 @@
 # Solution Schema — Referenz
 
-> **Version:** 0.6.0  
-> **Schema Version:** 0.6  
+> **Version:** 0.5.2  
 > **Datum:** 2025-12-18  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -21,12 +20,11 @@
 6. [executables Array](#6-executables-array)
 7. [libraries Array](#7-libraries-array)
 8. [tests Array](#8-tests-array)
-9. [apps Array](#9-apps-array)
-10. [Schnellreferenz](#10-schnellreferenz)
-11. [Vollständiges Beispiel](#11-vollständiges-beispiel)
-12. [Fehler-Codes](#12-fehler-codes)
-13. [Siehe auch](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+9. [Schnellreferenz](#9-schnellreferenz)
+10. [Vollständiges Beispiel](#10-vollständiges-beispiel)
+11. [Fehler-Codes](#11-fehler-codes)
+12. [Siehe auch](#12-siehe-auch)
+13. [Changelog](#13-changelog)
 
 ---
 
@@ -38,15 +36,14 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
 
 ```json
 {
-    "schemaVersion": "0.6",
+    "schemaVersion": "0.1",
     "solution": { },
     "settings": { },
     "externalsPolicy": { },
     "externals": { },
     "libraries": [ ],
     "executables": [ ],
-    "tests": [ ],
-    "apps": [ ]           
+    "tests": [ ]
 }
 ```
 
@@ -62,7 +59,6 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
 | `libraries` | – | Interne Libraries |
 | `executables` | – | Ausführbare Programme |
 | `tests` | – | Test-Targets |
-| `apps` | – | App-Container (Core/Runner Separation) |
 
 ---
 
@@ -512,317 +508,10 @@ ctest -j8            # 8 parallele Jobs
 ```
 
 ---
-## 9. apps Array
 
-Das `apps` Array definiert App-Container mit Core/Runner Separation für maximale Testbarkeit.
+## 9. Schnellreferenz
 
-### 9.1 Grundstruktur
-
-```json
-"apps": [
-    {
-        "name": "MyVisualizer",
-        "displayName": "My Visualizer",
-        "version": "1.0.0",
-        "description": "Audio visualization application",
-        "skip": false,
-        
-        "core": {
-            "dependencies": ["CoreLib"],
-            "externals": ["bass"]
-        },
-        
-        "runner": {
-            "type": "GUI",
-            "externals": ["glad", "glfw"]
-        },
-        
-        "pch": {
-            "enabled": true,
-            "header": "pch.h"
-        },
-        
-        "tests": {
-            "skip": false,
-            "framework": "doctest",
-            "targets": [
-                {
-                    "name": "UnitTests",
-                    "type": "unit",
-                    "skip": false,
-                    "path": "tests/unit/UnitTests",
-                    "timeout": 30,
-                    "labels": ["unit", "fast"],
-                    "parallel": true
-                }
-            ]
-        },
-        
-        "platforms": ["windows", "linux", "macos"]
-    }
-]
-```
-
-### 9.2 Pflichtfelder
-
-| Feld | Typ | Beschreibung |
-|------|-----|--------------|
-| `name` | string | Eindeutiger App-Name (Präfix für alle Targets) |
-
-### 9.3 Optionale Felder (Root)
-
-| Feld | Typ | Default | Beschreibung |
-|------|-----|---------|--------------|
-| `displayName` | string | `name` | Anzeigename |
-| `version` | string | Solution-Version | App-Version |
-| `description` | string | `""` | Beschreibung |
-| `skip` | bool | `false` | Gesamte App überspringen |
-| `path` | string | `projects/apps/{name}` | Pfad zum App-Verzeichnis |
-| `core` | object | `{}` | Core-Library Konfiguration |
-| `runner` | object | `{}` | Runner-Executable Konfiguration |
-| `pch` | object | `{}` | Precompiled Header Konfiguration |
-| `tests` | object | `{}` | Test-Konfiguration |
-| `platforms` | string[] | `[]` | Plattform-Filter |
-
-### 9.4 core Object
-
-Konfiguriert die Core-Library (`{AppName}.Core`).
-
-```json
-"core": {
-    "dependencies": ["CoreLib", "UtilsLib"],
-    "externals": ["bass", "lua54"]
-}
-```
-
-| Feld | Typ | Default | Beschreibung |
-|------|-----|---------|--------------|
-| `dependencies` | string[] | `[]` | Interne Libraries (aus `libraries[]`) |
-| `externals` | string[] | `[]` | Externe Abhängigkeiten |
-
-### 9.5 runner Object
-
-Konfiguriert das Runner-Executable (`{AppName}`).
-
-```json
-"runner": {
-    "type": "GUI",
-    "externals": ["glad", "glfw"]
-}
-```
-
-| Feld | Typ | Default | Beschreibung |
-|------|-----|---------|--------------|
-| `type` | string | `"CONSOLE"` | Executable-Typ (`GUI` / `CONSOLE`) |
-| `externals` | string[] | `[]` | Runner-spezifische Externals |
-
-**runner.type:**
-
-| Typ | Windows | Linux/macOS |
-|-----|---------|-------------|
-| `GUI` | `WinMain` (kein Konsolenfenster) | `main` |
-| `CONSOLE` | `main` (mit Konsole) | `main` |
-
-### 9.6 pch Object
-
-Konfiguriert Precompiled Header.
-
-```json
-"pch": {
-    "enabled": true,
-    "header": "pch.h"
-}
-```
-
-| Feld | Typ | Default | Beschreibung |
-|------|-----|---------|--------------|
-| `enabled` | bool | `false` | PCH aktivieren |
-| `header` | string | `"pch.h"` | PCH-Header Dateiname |
-
-**PCH-Geltungsbereich:**
-- Core (`src/`): Verwendet PCH wenn aktiviert
-- Runner (`main/`): Verwendet PCH NICHT
-- Tests: Verwenden PCH NICHT
-
-### 9.7 tests Object
-
-Konfiguriert App-Tests mit flexiblem targets[] Array.
-
-```json
-"tests": {
-    "skip": false,
-    "framework": "doctest",
-    "targets": [ ... ]
-}
-```
-
-| Feld | Typ | Default | Beschreibung |
-|------|-----|---------|--------------|
-| `skip` | bool | `false` | **Alle Tests dieser App überspringen** |
-| `framework` | string | — | Default-Framework für alle Tests |
-| `targets` | array | `[]` | Test-Target Definitionen |
-
-### 9.8 tests.targets[] Object
-
-Jedes Element definiert ein Test-Target.
-
-```json
-{
-    "name": "UnitTests",
-    "type": "unit",
-    "skip": false,
-    "path": "tests/unit/UnitTests",
-    "framework": "doctest",
-    "timeout": 30,
-    "labels": ["unit", "fast"],
-    "externals": ["bass"],
-    "parallel": true
-}
-```
-
-| Feld | Typ | Pflicht | Default | Beschreibung |
-|------|-----|---------|---------|--------------|
-| `name` | string | ✅ | — | Target-Name (→ `{AppName}.{name}`) |
-| `type` | string | ✅ | — | Test-Typ |
-| `skip` | bool | — | `false` | **Diesen Test überspringen** |
-| `path` | string | — | `tests/{type}/{name}` | Pfad relativ zum App-Verzeichnis |
-| `framework` | string | — | `tests.framework` | Test-Framework |
-| `timeout` | number | — | Typ-abhängig | CTest Timeout (Sekunden) |
-| `labels` | string[] | — | Typ-abhängig | CTest Labels |
-| `externals` | string[] | — | `[]` | Zusätzliche Externals |
-| `parallel` | bool | — | Typ-abhängig | Parallele Ausführung |
-
-### 9.9 Test-Typen und Defaults
-
-| Typ | Default Timeout | Default Parallel | Default Labels |
-|-----|-----------------|------------------|----------------|
-| `unit` | 30s | true | `["unit", "fast"]` |
-| `integration` | 120s | true | `["integration"]` |
-| `performance` | 300s | false | `["performance", "benchmark"]` |
-| `system` | 180s | false | `["system", "e2e", "slow"]` |
-| `smoke` | 10s | true | `["smoke", "critical", "fast"]` |
-| `fuzz` | 60s | false | `["fuzz", "security"]` |
-| `security` | 120s | false | `["security"]` |
-| `ui` | 180s | false | `["ui", "slow"]` |
-| `api` | 60s | true | `["api", "integration"]` |
-| *(unbekannt)* | 60s | true | `["{type}"]` |
-
-### 9.10 Skip-Logik
-
-| `tests.skip` | `targets[].skip` | Ergebnis |
-|--------------|------------------|----------|
-| `true` | egal | Test übersprungen |
-| `false`/fehlt | `true` | Test übersprungen |
-| `false`/fehlt | `false`/fehlt | Test wird erstellt |
-
-**Globales Skip hat Vorrang** — wenn `tests.skip: true`, werden alle Tests übersprungen.
-
-### 9.11 Generierte Targets
-
-Für jede App werden folgende CMake Targets erstellt:
-
-| Target | Typ | Beschreibung |
-|--------|-----|--------------|
-| `{AppName}.Core` | STATIC Library | Business-Logik (include/ + src/) |
-| `{AppName}` | Executable | Entry Point (main/) |
-| `{AppName}.{TestName}` | Executable | Test (für jedes Target in tests.targets[]) |
-
-**Beispiel:**
-
-```
-MyVisualizer.Core              ← STATIC Library
-MyVisualizer                   ← GUI Executable
-MyVisualizer.UnitTests         ← Test Executable
-MyVisualizer.IntegrationTests  ← Test Executable
-```
-
-### 9.12 Ordnerstruktur
-
-```
-projects/apps/{AppName}/
-├── include/                    # Öffentliche Header → {AppName}.Core
-│   ├── Source.cmake
-│   └── *.hpp
-├── src/                        # Implementierung → {AppName}.Core
-│   ├── Source.cmake
-│   └── *.cpp
-├── main/                       # Entry Point → {AppName}
-│   ├── Source.cmake
-│   └── main.cpp
-├── pch/                        # Precompiled Header
-│   └── pch.h
-└── tests/
-    └── {type}/
-        └── {TestName}/         # → {AppName}.{TestName}
-            ├── Source.cmake
-            ├── test_main.cpp
-            └── test_*.cpp
-```
-
-### 9.13 Vollständiges Beispiel
-
-```json
-{
-    "apps": [
-        {
-            "name": "MyVisualizer",
-            "displayName": "My Visualizer",
-            "version": "0.1.0",
-            
-            "core": {
-                "externals": ["bass"]
-            },
-            
-            "runner": {
-                "type": "GUI",
-                "externals": ["glad", "glfw"]
-            },
-            
-            "pch": {
-                "enabled": true
-            },
-            
-            "tests": {
-                "framework": "doctest",
-                "targets": [
-                    {
-                        "name": "UnitTests",
-                        "type": "unit",
-                        "path": "tests/unit/UnitTests"
-                    },
-                    {
-                        "name": "IntegrationTests",
-                        "type": "integration",
-                        "path": "tests/integration/IntegrationTests",
-                        "externals": ["bass"]
-                    },
-                    {
-                        "name": "Benchmarks",
-                        "type": "performance",
-                        "skip": true
-                    }
-                ]
-            }
-        },
-        {
-            "name": "DemoPlayer",
-            "tests": {
-                "skip": true,
-                "framework": "doctest",
-                "targets": [
-                    { "name": "UnitTests", "type": "unit" }
-                ]
-            }
-        }
-    ]
-}
-```
-
----
-
-## 10. Schnellreferenz
-
-### 10.1 Pflichtfelder
+### 9.1 Pflichtfelder
 
 | Block | Feld |
 |-------|------|
@@ -831,13 +520,10 @@ projects/apps/{AppName}/
 | executables[] | `name` |
 | libraries[] | `name` |
 | tests[] | `name` |
-| apps[] | `name` |
-| apps[].tests.targets[] | `name`, `type` |
 | externals (local) | `path` (include optional) |
 | externals (fetched) | `git`, (tag\|branch\|commit) |
 
-
-### 10.2 Defaults
+### 9.2 Defaults
 
 | Einstellung | Default-Wert |
 |-------------|--------------|
@@ -847,13 +533,10 @@ projects/apps/{AppName}/
 | Source-Mode | auto |
 | Test-Framework | doctest |
 | Test-Timeout | 60s |
-| App runner.type | CONSOLE |
-| App PCH | disabled |
-| App tests.skip | false |
 
 ---
 
-## 11. Vollständiges Beispiel
+## 10. Vollständiges Beispiel
 
 ```json
 {
@@ -933,10 +616,9 @@ projects/apps/{AppName}/
 
 ---
 
+## 11. Fehler-Codes
 
-## 12. Fehler-Codes
-
-### 12.1 External-bezogene Fehler
+### 11.1 External-bezogene Fehler
 
 | Code | Beschreibung |
 |------|--------------|
@@ -947,7 +629,7 @@ projects/apps/{AppName}/
 | E218 | Hook-Datei nicht gefunden |
 | E220 | Target nach Hook nicht registriert |
 
-### 12.2 Test-bezogene Fehler (standalone tests[])
+### 11.2 Test-bezogene Fehler
 
 | Code | Beschreibung |
 |------|--------------|
@@ -955,60 +637,27 @@ projects/apps/{AppName}/
 | E302 | source_from Executable existiert nicht |
 | E303 | Test-Source-Verzeichnis nicht gefunden |
 
-### 12.3 App-Container Fehler (apps[])
+### 11.3 Warnungen
 
 | Code | Beschreibung |
 |------|--------------|
-| E401 | App: `name` ist Pflichtfeld |
-| E402 | App-Pfad existiert nicht |
-| E403 | App hat kein `src/` Verzeichnis |
-| E404 | App hat keine Source-Dateien in `src/` |
-| E405 | App-Dependency nicht gefunden |
-| E406 | App hat kein `main/` Verzeichnis |
-| E407 | App hat keine Source-Dateien in `main/` |
-
-### 12.4 App-Tests Fehler (apps[].tests.targets[])
-
-| Code | Beschreibung |
-|------|--------------|
-| E301 | Kein Framework angegeben (weder global noch per-target) |
-| E302 | Unbekanntes Test-Framework |
-| E303 | Test-Target: `name` fehlt |
-| E304 | Test-Target: `type` fehlt |
-| E305 | Test-Pfad existiert nicht |
-| E306 | Keine Source-Dateien im Test-Pfad |
-
-### 12.5 Warnungen
-
-| Code | Bereich | Beschreibung |
-|------|---------|--------------|
-| W302 | Externals | Hook-Wiederverwendung aktiv |
-| W401 | App-Container | App hat kein `include/` Verzeichnis |
-| W402 | App-Container | PCH aktiviert aber Header nicht gefunden |
-| W402 | App-Tests | Test mit seriellem Typ hat `parallel: true` gesetzt |
-| W403 | App-Container | Tests-Verzeichnis existiert aber keine Sources |
-
-**Hinweis zu W402:** Der Code W402 wird in zwei Kontexten verwendet:
-- Bei PCH: Warnung wenn `pch.enabled: true` aber `pch/{header}` nicht gefunden
-- Bei Tests: Warnung wenn `parallel: true` für Typen wie `performance`, `system`, `fuzz`, `security`, `ui` gesetzt wird
+| W302 | Hook-Wiederverwendung aktiv |
 
 ---
 
-## 13. Siehe auch
+## 12. Siehe auch
 
 - [Externals.md](Externals.md) — External Libraries Referenz
 - [ErrorCodes.md](ErrorCodes.md) — Vollständige Fehlercode-Referenz
 - [CMakePresets Reference](CMakePresets.md) — Build-Presets
-- [App Tests Targets Concept](../projects/buildsystem/concepts/App_Tests_Targets_Concept.md) — Konzept für flexible App-Tests
 
 ---
 
-## 14. Changelog
+## 13. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Konfiguration, Skip-Feature (tests.skip, targets[].skip), App-Container Fehler-Codes (E4xx, W4xx)** |
-| 0.5.2 | 2025-12-18 | PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt |
+| **0.5.2** | **2025-12-18** | **PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt** |
 | 0.5.1 | 2025-12-15 | Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert |
 | 0.1.4 | 2025-12-12 | tests Array dokumentiert: Typen, Frameworks, source_from, CTest |

@@ -93,6 +93,8 @@ foreach(_idx RANGE 0 ${_last_idx})
     
     # Check skip flag
     ctx_get(TEST_${_idx} SKIP _skip)
+    # DEBUG: Always show skip value to diagnose issue
+    message(STATUS "[Tests]   DEBUG skip value: '${_skip}'")
     if(_skip)
         message(STATUS "[Tests]   Skipped (skip=true)")
         continue()

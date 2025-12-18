@@ -2,8 +2,8 @@
 # ======================
 # JSON helper functions for the CMake build system
 #
-# Version: 0.6.0
-# Date:    2025-12-18
+# Version: 0.5.1
+# Date:    2025-12-16
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -17,10 +17,8 @@
 #   - _json_get_number()            - Read numeric value
 #   - _json_get_number_or_default() - Number with fallback
 #   - _json_get_bool_from_key()     - Read boolean value (robust)
-#   - _json_get_bool_or_default()   - Boolean with fallback
 #   - _json_array_length()          - Get array length
 #   - _json_array_get()             - Read array element
-#   - _json_get_array_as_list()     - Read array as CMake list
 #   - _json_get_object()            - Extract object
 #   - _json_get_object_or_empty()   - Object with fallback
 #   - _json_get_type()              - Get type of a key
@@ -28,9 +26,6 @@
 # Used by:
 #   - Solution.cmake
 #   - ExecutableCollect.cmake
-#   - LibraryCollect.cmake
-#   - TestCollect.cmake
-#   - AppCollect.cmake
 #   - Validation.cmake
 #
 # Note: All functions are marked "private" (_prefix),
@@ -231,39 +226,6 @@ function(_json_get_bool_from_key JSON_STRING KEY OUT_VAR)
 endfunction()
 
 # ============================================================================
-# _json_get_bool_or_default - Boolean with default
-# ============================================================================
-#[[
-    _json_get_bool_or_default(JSON_STRING KEY DEFAULT OUT_VAR)
-    
-    Reads boolean value with fallback to default if key is missing.
-    
-    Parameters:
-        JSON_STRING - Mandatory: JSON object as string
-        KEY         - Mandatory: Key
-        DEFAULT     - Mandatory: Fallback value if key missing (TRUE or FALSE)
-        OUT_VAR     - Mandatory: Output: TRUE or FALSE
-    
-    TRUE values: true, TRUE, 1, ON, YES
-    FALSE values: false, FALSE, 0, OFF, NO
-    
-    Example:
-        _json_get_bool_or_default("${_json}" "skip" FALSE _skip)
-        if(_skip)
-            message("Skipped")
-        endif()
-]]
-function(_json_get_bool_or_default JSON_STRING KEY DEFAULT OUT_VAR)
-    _json_has_key("${JSON_STRING}" "${KEY}" _has_key)
-    if(_has_key)
-        _json_get_bool_from_key("${JSON_STRING}" "${KEY}" _result)
-        set(${OUT_VAR} "${_result}" PARENT_SCOPE)
-    else()
-        set(${OUT_VAR} "${DEFAULT}" PARENT_SCOPE)
-    endif()
-endfunction()
-
-# ============================================================================
 # _json_array_length - Array length
 # ============================================================================
 #[[
@@ -320,47 +282,6 @@ function(_json_array_get JSON_STRING KEY INDEX OUT_VAR)
     else()
         set(${OUT_VAR} "${_value}" PARENT_SCOPE)
     endif()
-endfunction()
-
-# ============================================================================
-# _json_get_array_as_list - Read array as CMake list
-# ============================================================================
-#[[
-    _json_get_array_as_list(JSON_STRING KEY OUT_VAR)
-    
-    Reads a JSON array and returns it as a CMake semicolon-separated list.
-    Returns empty string if key doesn't exist or array is empty.
-    
-    Parameters:
-        JSON_STRING - Mandatory: JSON object as string
-        KEY         - Mandatory: Key of the array
-        OUT_VAR     - Mandatory: Output: CMake list or ""
-    
-    Example:
-        _json_get_array_as_list("${_json}" "dependencies" _deps)
-        foreach(_dep IN LISTS _deps)
-            message("Dependency: ${_dep}")
-        endforeach()
-]]
-function(_json_get_array_as_list JSON_STRING KEY OUT_VAR)
-    _json_has_key("${JSON_STRING}" "${KEY}" _has_key)
-    if(NOT _has_key)
-        set(${OUT_VAR} "" PARENT_SCOPE)
-        return()
-    endif()
-    
-    _json_array_length("${JSON_STRING}" "${KEY}" _count)
-    
-    set(_result "")
-    if(_count GREATER 0)
-        math(EXPR _last "${_count} - 1")
-        foreach(_i RANGE 0 ${_last})
-            _json_array_get("${JSON_STRING}" "${KEY}" ${_i} _item)
-            list(APPEND _result "${_item}")
-        endforeach()
-    endif()
-    
-    set(${OUT_VAR} "${_result}" PARENT_SCOPE)
 endfunction()
 
 # ============================================================================

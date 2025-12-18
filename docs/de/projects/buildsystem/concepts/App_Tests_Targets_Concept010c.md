@@ -1,8 +1,8 @@
 # App Tests Targets Konzept
 
-> **Version:** 0.1.1  
+> **Version:** 0.1.0  
 > **Datum:** 2025-12-18  
-> **Status:** Implementiert  
+> **Status:** Entwurf  
 > **Autor:** CMake Architecture V2 Team
 
 ---
@@ -18,7 +18,6 @@ Dieses Konzept beschreibt die flexible Test-Konfiguration für App-Container mit
 - Individuelles Framework pro Test
 - Sinnvolle Defaults für bekannte Typen
 - Klare Ordnerstruktur-Konventionen
-- **Flexibles Überspringen von Tests (global und per-target)**
 
 ### 1.2 Nicht-Ziele
 
@@ -37,13 +36,11 @@ Dieses Konzept beschreibt die flexible Test-Konfiguration für App-Container mit
         {
             "name": "MyApp",
             "tests": {
-                "skip": false,
                 "framework": "doctest",
                 "targets": [
                     {
                         "name": "Core_UnitTests",
                         "type": "unit",
-                        "skip": false,
                         "path": "tests/unit/core",
                         "framework": "doctest",
                         "timeout": 30,
@@ -64,7 +61,6 @@ Dieses Konzept beschreibt die flexible Test-Konfiguration für App-Container mit
 
 | Feld | Typ | Pflicht | Default | Beschreibung |
 |------|-----|---------|---------|--------------|
-| `skip` | bool | Nein | `false` | **Alle Tests dieser App überspringen** |
 | `framework` | string | Nein | — | Globales Default-Framework für alle Tests |
 | `targets` | array | Ja | `[]` | Liste der Test-Targets |
 
@@ -74,104 +70,12 @@ Dieses Konzept beschreibt die flexible Test-Konfiguration für App-Container mit
 |------|-----|---------|---------|--------------|
 | `name` | string | Ja | — | Target-Name (wird zu `{AppName}.{name}`) |
 | `type` | string | Ja | — | Test-Typ (unit, integration, etc.) |
-| `skip` | bool | Nein | `false` | **Diesen Test überspringen** |
 | `path` | string | Nein | `tests/{type}/{name}` | Pfad relativ zum App-Verzeichnis |
 | `framework` | string | Nein | `tests.framework` | Test-Framework (doctest, googletest, catch2) |
 | `timeout` | number | Nein | Typ-abhängig | CTest Timeout in Sekunden |
 | `labels` | array | Nein | Typ-abhängig | CTest Labels |
 | `externals` | array | Nein | `[]` | Zusätzliche Externals für diesen Test |
-| `parallel` | bool | Nein | Typ-abhängig | Parallele Ausführung erlaubt |
-
----
-
-## 2.5 Skip-Feature
-
-Das Skip-Feature ermöglicht das temporäre Deaktivieren von Tests ohne sie aus der Konfiguration zu entfernen.
-
-### 2.5.1 Globales Skip
-
-Überspringt **alle** Tests einer App:
-
-```json
-"tests": {
-    "skip": true,
-    "framework": "doctest",
-    "targets": [
-        { "name": "UnitTests", "type": "unit" },
-        { "name": "IntegrationTests", "type": "integration" }
-    ]
-}
-```
-
-**CMake-Ausgabe:**
-```
-[Apps]   SKIP: All tests for MyApp (tests.skip=true)
-```
-
-### 2.5.2 Per-Target Skip
-
-Überspringt einzelne Tests:
-
-```json
-"tests": {
-    "framework": "doctest",
-    "targets": [
-        { 
-            "name": "UnitTests", 
-            "type": "unit",
-            "skip": false
-        },
-        { 
-            "name": "IntegrationTests", 
-            "type": "integration",
-            "skip": true
-        },
-        { 
-            "name": "PerformanceTests", 
-            "type": "performance",
-            "skip": true
-        }
-    ]
-}
-```
-
-**CMake-Ausgabe:**
-```
-[Apps]   Created: MyApp.UnitTests (unit, doctest)
-[Apps]   SKIP: MyApp.IntegrationTests (skip=true)
-[Apps]   SKIP: MyApp.PerformanceTests (skip=true)
-```
-
-### 2.5.3 Skip-Logik
-
-| Global `tests.skip` | Target `skip` | Ergebnis |
-|---------------------|---------------|----------|
-| `true` | egal | ⏭️ Übersprungen |
-| `false` / fehlt | `true` | ⏭️ Übersprungen |
-| `false` / fehlt | `false` / fehlt | ✅ Wird gebaut |
-
-**Wichtig:** Globales Skip hat Vorrang — wenn `tests.skip: true`, werden alle Tests übersprungen, unabhängig von individuellen `skip`-Einstellungen.
-
-### 2.5.4 Anwendungsfälle
-
-| Szenario | Konfiguration |
-|----------|---------------|
-| CI schneller machen | `"tests": { "skip": true }` für Apps mit langsamen Tests |
-| Broken Test temporär deaktivieren | `"skip": true` für einzelnen Test |
-| Performance-Tests nur nachts | `"skip": true`, Nightly-Pipeline setzt auf `false` |
-| Plattform-spezifische Tests | Mit `platforms: []` kombinieren |
-
-### 2.5.5 Konsistenz mit anderen Targets
-
-Das Skip-Feature verhält sich konsistent mit anderen Target-Typen:
-
-| Target-Typ | Skip-Property | Verhalten |
-|------------|---------------|-----------|
-| `executables[]` | `skip: true` | Target wird nicht erstellt |
-| `libraries[]` | `skip: true` | Target wird nicht erstellt |
-| `tests[]` (standalone) | `skip: true` | Test wird nicht erstellt |
-| `apps[].tests.skip` | `skip: true` | Alle App-Tests werden übersprungen |
-| `apps[].tests.targets[].skip` | `skip: true` | Einzelner App-Test wird übersprungen |
+| `parallel` | bool | Nein | `true` | Parallele Ausführung erlaubt |
 
 ---
 
@@ -396,7 +300,6 @@ Jeder Test wird automatisch bei CTest registriert mit:
             },
             
             "tests": {
-                "skip": false,
                 "framework": "doctest",
                 "targets": [
                     {
@@ -424,8 +327,7 @@ Jeder Test wird automatisch bei CTest registriert mit:
                         "type": "performance",
                         "path": "tests/performance/benchmarks",
                         "timeout": 300,
-                        "labels": ["performance", "nightly"],
-                        "skip": true
+                        "labels": ["performance", "nightly"]
                     },
                     {
                         "name": "Startup_Smoke",
@@ -439,8 +341,7 @@ Jeder Test wird automatisch bei CTest registriert mit:
                         "type": "fuzz",
                         "framework": "googletest",
                         "timeout": 180,
-                        "labels": ["fuzz", "security", "nightly"],
-                        "skip": true
+                        "labels": ["fuzz", "security", "nightly"]
                     }
                 ]
             }
@@ -451,14 +352,14 @@ Jeder Test wird automatisch bei CTest registriert mit:
 
 ### 7.2 Resultierende Targets
 
-| CMake Target | Framework | Timeout | Status |
+| CMake Target | Framework | Timeout | Labels |
 |--------------|-----------|---------|--------|
-| `MyVisualizer.Core_UnitTests` | doctest | 30s | ✅ Gebaut |
-| `MyVisualizer.Utils_UnitTests` | doctest | 30s | ✅ Gebaut |
-| `MyVisualizer.Audio_IntegrationTests` | doctest | 120s | ✅ Gebaut |
-| `MyVisualizer.Benchmarks` | doctest | 300s | ⏭️ Übersprungen |
-| `MyVisualizer.Startup_Smoke` | doctest | 10s | ✅ Gebaut |
-| `MyVisualizer.InputFuzz` | googletest | 180s | ⏭️ Übersprungen |
+| `MyVisualizer.Core_UnitTests` | doctest | 30s | MyVisualizer, unit, core, fast |
+| `MyVisualizer.Utils_UnitTests` | doctest | 30s | MyVisualizer, unit, utils, fast |
+| `MyVisualizer.Audio_IntegrationTests` | doctest | 120s | MyVisualizer, integration, audio |
+| `MyVisualizer.Benchmarks` | doctest | 300s | MyVisualizer, performance, nightly |
+| `MyVisualizer.Startup_Smoke` | doctest | 10s | MyVisualizer, smoke, critical |
+| `MyVisualizer.InputFuzz` | googletest | 180s | MyVisualizer, fuzz, security, nightly |
 
 ---
 
@@ -559,5 +460,4 @@ Das System blockiert nicht, da der Benutzer möglicherweise weiß, was er tut (z
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.1** | **2025-12-18** | **Neu: Skip-Feature (global tests.skip + per-target skip), Status auf "Implementiert" geändert** |
 | 0.1.0 | 2025-12-18 | Initial: Konzept für flexible Test-Targets |

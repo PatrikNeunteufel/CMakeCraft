@@ -1,7 +1,6 @@
 # Solution Schema — Referenz
 
 > **Version:** 0.6.0  
-> **Schema Version:** 0.6  
 > **Datum:** 2025-12-18  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -38,7 +37,7 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
 
 ```json
 {
-    "schemaVersion": "0.6",
+    "schemaVersion": "0.1",
     "solution": { },
     "settings": { },
     "externalsPolicy": { },
@@ -933,7 +932,6 @@ projects/apps/{AppName}/
 
 ---
 
-
 ## 12. Fehler-Codes
 
 ### 12.1 External-bezogene Fehler
@@ -947,7 +945,7 @@ projects/apps/{AppName}/
 | E218 | Hook-Datei nicht gefunden |
 | E220 | Target nach Hook nicht registriert |
 
-### 12.2 Test-bezogene Fehler (standalone tests[])
+### 12.2 Test-bezogene Fehler
 
 | Code | Beschreibung |
 |------|--------------|
@@ -955,42 +953,11 @@ projects/apps/{AppName}/
 | E302 | source_from Executable existiert nicht |
 | E303 | Test-Source-Verzeichnis nicht gefunden |
 
-### 12.3 App-Container Fehler (apps[])
+### 12.3 Warnungen
 
 | Code | Beschreibung |
 |------|--------------|
-| E401 | App: `name` ist Pflichtfeld |
-| E402 | App-Pfad existiert nicht |
-| E403 | App hat kein `src/` Verzeichnis |
-| E404 | App hat keine Source-Dateien in `src/` |
-| E405 | App-Dependency nicht gefunden |
-| E406 | App hat kein `main/` Verzeichnis |
-| E407 | App hat keine Source-Dateien in `main/` |
-
-### 12.4 App-Tests Fehler (apps[].tests.targets[])
-
-| Code | Beschreibung |
-|------|--------------|
-| E301 | Kein Framework angegeben (weder global noch per-target) |
-| E302 | Unbekanntes Test-Framework |
-| E303 | Test-Target: `name` fehlt |
-| E304 | Test-Target: `type` fehlt |
-| E305 | Test-Pfad existiert nicht |
-| E306 | Keine Source-Dateien im Test-Pfad |
-
-### 12.5 Warnungen
-
-| Code | Bereich | Beschreibung |
-|------|---------|--------------|
-| W302 | Externals | Hook-Wiederverwendung aktiv |
-| W401 | App-Container | App hat kein `include/` Verzeichnis |
-| W402 | App-Container | PCH aktiviert aber Header nicht gefunden |
-| W402 | App-Tests | Test mit seriellem Typ hat `parallel: true` gesetzt |
-| W403 | App-Container | Tests-Verzeichnis existiert aber keine Sources |
-
-**Hinweis zu W402:** Der Code W402 wird in zwei Kontexten verwendet:
-- Bei PCH: Warnung wenn `pch.enabled: true` aber `pch/{header}` nicht gefunden
-- Bei Tests: Warnung wenn `parallel: true` für Typen wie `performance`, `system`, `fuzz`, `security`, `ui` gesetzt wird
+| W302 | Hook-Wiederverwendung aktiv |
 
 ---
 
@@ -999,7 +966,6 @@ projects/apps/{AppName}/
 - [Externals.md](Externals.md) — External Libraries Referenz
 - [ErrorCodes.md](ErrorCodes.md) — Vollständige Fehlercode-Referenz
 - [CMakePresets Reference](CMakePresets.md) — Build-Presets
-- [App Tests Targets Concept](../projects/buildsystem/concepts/App_Tests_Targets_Concept.md) — Konzept für flexible App-Tests
 
 ---
 
@@ -1007,7 +973,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Konfiguration, Skip-Feature (tests.skip, targets[].skip), App-Container Fehler-Codes (E4xx, W4xx)** |
+| **0.6.0** | **2025-12-18** | **Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Konfiguration, Skip-Feature (tests.skip, targets[].skip)** |
 | 0.5.2 | 2025-12-18 | PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt |
 | 0.5.1 | 2025-12-15 | Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert |

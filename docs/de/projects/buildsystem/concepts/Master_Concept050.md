@@ -1,9 +1,9 @@
 # Master Concept — CMake Architecture V2
 
-> **Version:** 0.6.0  
-> **Datum:** 2025-12-18  
+> **Version:** 0.5.0  
+> **Datum:** 2025-12-14  
 > **Typ:** Concept  
-> **Status:** Stabil (Phase 1-8 abgeschlossen)  
+> **Status:** Stabil (Phase 1-7 abgeschlossen)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
 > **English:** [master_concept.md](../../en/projects/buildsystem/concepts/Master_Concept.md)
@@ -25,13 +25,12 @@ Dieses Dokument dient als **zentrale Referenz** für das CMake Build-System. Es 
 9. [Error-Handling](#9-error-handling)
 10. [Pipelines](#10-pipelines)
 11. [Test-Pipeline](#11-test-pipeline)
-12. [App-Container](#12-app-container)
-13. [Cache-Variablen](#13-cache-variablen)
-14. [Build-System-Tests](#14-build-system-tests)
-15. [Dokumentation](#15-dokumentation)
-16. [Geplante Erweiterungen](#16-geplante-erweiterungen)
-17. [Siehe auch](#17-siehe-auch)
-18. [Changelog](#18-changelog)
+12. [Cache-Variablen](#12-cache-variablen)
+13. [Build-System-Tests](#13-build-system-tests)
+14. [Dokumentation](#14-dokumentation)
+15. [Geplante Erweiterungen](#15-geplante-erweiterungen)
+16. [Siehe auch](#16-siehe-auch)
+17. [Changelog](#17-changelog)
 
 ---
 
@@ -95,13 +94,10 @@ cmake/
     Libraries.cmake                    # Library-Pipeline
     LibraryCollect.cmake
     LibraryCreate.cmake
-    Tests.cmake                        # Test-Pipeline (standalone)
+    Tests.cmake                        # Test-Pipeline
     TestCollect.cmake
     TestCreate.cmake
     TestFrameworks.cmake               # Framework-spezifische Konfiguration
-    Apps.cmake                         # App-Container Pipeline
-    AppCollect.cmake
-    AppCreate.cmake
     Dependencies.cmake                 # Interne Abhängigkeiten
 
 .externals/                            # Gefetchte Externals (gitignored)
@@ -116,17 +112,6 @@ externals/                             # Lokale Externals im Repo
     Include.cmake
   doctest/
     Include.cmake
-
-projects/
-  apps/                                # App-Container (Phase 8)
-    MyVisualizer/
-    DemoPlayer/
-  exec/                                # Legacy Executables
-    MinimalConsole/
-  libs/                                # Libraries
-    CoreLib/
-  tests/                               # Standalone Tests
-    CoreLib_UnitTests/
 ```
 
 ---
@@ -148,8 +133,7 @@ Die Solution.json ist das Herzstück der deklarativen Konfiguration.
     "externals": { },
     "libraries": [ ],
     "executables": [ ],
-    "tests": [ ],
-    "apps": [ ]
+    "tests": [ ]
 }
 ```
 
@@ -161,13 +145,12 @@ Die Solution.json ist das Herzstück der deklarativen Konfiguration.
 | `externalsPolicy` | ❌ | Cache-Verzeichnis, Update-Strategie |
 | `externals` | ❌ | Zentrale External-Definitionen |
 | `libraries` | ❌ | Interne Libraries |
-| `executables` | ❌ | Ausführbare Programme (monolithisch) |
-| `tests` | ❌ | Standalone Test-Targets |
-| `apps` | ❌ | **App-Container (Core/Runner/Tests)** |
+| `executables` | ❌ | Ausführbare Programme |
+| `tests` | ❌ | Test-Targets |
 
 ### Zentraler Externals-Block
 
-**Alle External-Definitionen werden zentral definiert.** Executables/Apps referenzieren nur über Namen.
+**Alle External-Definitionen werden zentral definiert.** Executables referenzieren nur über Namen.
 
 | Problem (dezentral) | Lösung (zentral) |
 |---------------------|------------------|
@@ -347,13 +330,12 @@ cmake_assert(CONDITION "Message")    # Interne Prüfung
 | E1xx | Target-Erstellung |
 | E2xx | Externals |
 | E3xx | Tests |
-| E4xx | App-Container |
+| E4xx | AppContainer (Phase 8) |
 | E5xx | System-Externals (Phase 9) |
 | W0xx | Deprecation |
 | W1xx | Konfiguration |
 | W2xx | Tools/Setup |
 | W3xx | External-Caching |
-| W4xx | App-Container Warnungen |
 
 ---
 
@@ -372,15 +354,6 @@ Analog zu Executables, zusätzlich:
 - PUBLIC/PRIVATE Headers
 - STATIC/SHARED/INTERFACE Typen
 
-### App-Pipeline
-
-Erweiterte Pipeline für testbare Apps:
-1. **Collect:** JSON → Context (inkl. tests.targets[])
-2. **Filter:** skip, platforms, BUILD_ONLY
-3. **Create Core:** STATIC Library
-4. **Create Runner:** Executable (linkt gegen Core)
-5. **Create Tests:** Für jedes Target in tests.targets[]
-
 ---
 
 ## 11. Test-Pipeline
@@ -392,8 +365,7 @@ Erweiterte Pipeline für testbare Apps:
 | Test-Art | Zweck | Ort | Aktivierung |
 |----------|-------|-----|-------------|
 | **Build-System-Tests** | CMake-Module testen | `cmake/buildSystemTest/` | `RUN_BUILD_SYSTEM_TESTS=ON` |
-| **Standalone Tests** | Library-Code testen | `projects/tests/` | `BUILD_TESTS=ON` |
-| **App-Tests** | App-Code testen | `projects/apps/{App}/tests/` | `BUILD_TESTS=ON` |
+| **Projekt-Tests** | Anwendungscode testen | `projects/tests/` | `BUILD_TESTS=ON` |
 
 ### Test-Definition in Solution.json
 
@@ -407,8 +379,7 @@ Erweiterte Pipeline für testbare Apps:
             "dependencies": ["CoreLib"],
             "externals": ["doctest"],
             "labels": ["unit", "fast"],
-            "timeout": 30,
-            "skip": false
+            "timeout": 30
         }
     ]
 }
@@ -434,112 +405,7 @@ Erweiterte Pipeline für testbare Apps:
 
 ---
 
-## 12. App-Container
-
-**Implementiert in Phase 8**
-
-App-Container ermöglichen testbare Anwendungsarchitektur durch Trennung von Business-Logik und Entry-Point.
-
-→ **Detail-Konzept:** [AppContainer_Concept.md](AppContainer_Concept.md)  
-→ **Test-Konzept:** [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md)
-
-### Architektur
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      App-Container                              │
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │              AppName.Core (STATIC Library)                │  │
-│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                    │  │
-│  │  │ Module A│  │ Module B│  │ Module C│   ...              │  │
-│  │  └─────────┘  └─────────┘  └─────────┘                    │  │
-│  └───────────────────────────────────────────────────────────┘  │
-│                           │                                     │
-│            ┌──────────────┼──────────────┐                      │
-│            ▼              ▼              ▼                      │
-│     ┌───────────┐  ┌────────────┐  ┌────────────┐               │
-│     │   main/   │  │ UnitTests  │  │ Int.Tests  │               │
-│     │ (Runner)  │  │            │  │            │               │
-│     └───────────┘  └────────────┘  └────────────┘               │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Verzeichnisstruktur
-
-```
-projects/apps/{AppName}/
-├── include/    → PUBLIC Headers (Core)
-├── src/        → Implementation (Core)
-├── main/       → Entry Point (Runner)
-├── pch/        → Precompiled Headers (optional)
-└── tests/
-    └── {type}/
-        └── {TestName}/
-            ├── Source.cmake
-            ├── test_main.cpp
-            └── test_*.cpp
-```
-
-### App-Definition in Solution.json
-
-```json
-{
-    "apps": [
-        {
-            "name": "MyVisualizer",
-            "displayName": "My Visualizer",
-            "version": "1.0.0",
-            "skip": false,
-            
-            "core": {
-                "dependencies": ["CoreLib"],
-                "externals": ["bass"]
-            },
-            
-            "runner": {
-                "type": "GUI",
-                "externals": ["glad", "glfw"]
-            },
-            
-            "pch": {
-                "enabled": true
-            },
-            
-            "tests": {
-                "skip": false,
-                "framework": "doctest",
-                "targets": [
-                    {
-                        "name": "UnitTests",
-                        "type": "unit",
-                        "skip": false
-                    }
-                ]
-            }
-        }
-    ]
-}
-```
-
-### Generierte Targets
-
-| Target | Typ | Beschreibung |
-|--------|-----|--------------|
-| `{AppName}.Core` | STATIC Library | Business-Logik |
-| `{AppName}` | Executable | Entry Point |
-| `{AppName}.{TestName}` | Executable | Tests |
-
-### Flexible Test-Konfiguration
-
-- Beliebig viele Tests pro App via `tests.targets[]`
-- Beliebige Test-Typen (nicht nur unit/integration/performance)
-- Type-based Defaults für Timeout, Parallel, Labels
-- Framework Override pro Test
-- Skip-Feature (global + per-target)
-
----
-
-## 13. Cache-Variablen
+## 12. Cache-Variablen
 
 | Variable | Default | Beschreibung |
 |----------|---------|--------------|
@@ -555,7 +421,7 @@ projects/apps/{AppName}/
 
 ---
 
-## 14. Build-System-Tests
+## 13. Build-System-Tests
 
 | Test | Beschreibung |
 |------|--------------|
@@ -570,20 +436,24 @@ projects/apps/{AppName}/
 
 ---
 
-## 15. Dokumentation
+## 14. Dokumentation
 
 | Dokument | Beschreibung |
 |----------|--------------|
-| **Solution_Schema** | JSON-Schema-Dokumentation (inkl. apps[]) |
-| **ErrorCodes** | Alle Fehlercodes (E0xx-E5xx, W0xx-W4xx) |
+| **Solution_Schema** | JSON-Schema-Dokumentation |
+| **ErrorCodes** | Alle Fehlercodes |
 | **guidelines** | Coding-Konventionen |
 | **implementation_plan** | Phasen-basierter Plan |
-| **AppContainer_Concept** | App-Container Architektur |
-| **App_Tests_Targets_Concept** | Flexible App-Tests |
 
 ---
 
-## 16. Geplante Erweiterungen
+## 15. Geplante Erweiterungen
+
+### Phase 8: AppContainer
+
+Testbare App-Architektur mit Core/Runner-Trennung.
+
+→ Siehe [AppContainer_Concept.md](AppContainer_Concept.md)
 
 ### Phase 9: System-Externals
 
@@ -601,21 +471,19 @@ System-Bibliotheken via `find_package()` (Qt, Boost, OpenCV).
 
 ---
 
-## 17. Siehe auch
+## 16. Siehe auch
 
 - [implementation_plan.md](implementation_plan.md) — Phasen-basierter Plan
 - [guidelines.md](../standards/guidelines.md) — Konventionen
-- [AppContainer_Concept.md](AppContainer_Concept.md) — App-Container Detail
-- [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible App-Tests
+- [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8 Detail
 - [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 Detail
 - [Future_Enhancements.md](Future_Enhancements.md) — Post-Release Features
 
 ---
 
-## 18. Changelog
+## 17. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Phase 8 abgeschlossen: App-Container Section (§12) hinzugefügt, apps[] in Schema (§3), App-Pipeline in Pipelines (§10), Fehlercode-Bereiche erweitert (E4xx, W4xx)** |
-| 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 (.externals/ Caching) integriert, Test-Pipeline integriert, Blueprint v0.5.0 Format, Referenzen auf Phase 8/9 |
+| **0.5.0** | **2025-12-14** | **Phase 1-7 abgeschlossen, Fetch v0.2 (.externals/ Caching) integriert, Test-Pipeline integriert, Blueprint v0.5.0 Format, Referenzen auf Phase 8/9** |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Struktur aus v1.7 übernommen |
