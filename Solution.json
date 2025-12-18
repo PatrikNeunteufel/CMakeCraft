@@ -167,7 +167,7 @@
             },
             {
               "name": "PerformanceTests",
-              "skip": true,
+              "skip": false,
               "type": "performance",
               "path": "tests/performance/PerformanceTests",
               "timeout": 300,
