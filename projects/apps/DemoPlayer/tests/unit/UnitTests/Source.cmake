@@ -1,19 +1,11 @@
-# =============================================================================
-# Source.cmake - DemoPlayer Unit Tests
-# =============================================================================
-# Explicit source file listing for DemoPlayer.UnitTests
-#
-# Usage:
-#   Add new test files to _local_sources list
-# =============================================================================
+# Source.cmake
+# CMake Architecture V2 - Source Collection (v0.6)
+# Format: Direkte Zuweisung an ${TARGET_NAME}_* Variablen
 
-set(_local_sources
+set(${TARGET_NAME}_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/test_main.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/test_Application.cpp"
 )
 
-set(_local_headers
-)
-
-set(_local_extras
+set(${TARGET_NAME}_HEADERS
 )

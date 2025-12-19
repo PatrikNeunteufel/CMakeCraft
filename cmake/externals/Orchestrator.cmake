@@ -2,8 +2,8 @@
 # ===================================
 # External type dispatcher - detects type and routes to appropriate handler
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.6.0
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -14,23 +14,26 @@
 #   - cmake/core/Validation.cmake
 #
 # Auto-loads:
-#   - cmake/externals/Local/Attach.cmake
-#   - cmake/externals/Fetched/Handler.cmake
+#   - cmake/externals/local/Attach.cmake
+#   - cmake/externals/fetched/Handler.cmake
+#   - cmake/externals/system/Handler.cmake (Phase 9)
 #
 # Provides:
 #   - _orchestrate_external(EXT_NAME EXT_JSON)
 #   - _get_external_options_for_target(TARGET_NAME EXT_NAME TARGET_JSON OUT_VAR)
 #   - apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 #
-# Type Detection:
-#   - "path" field → Local External
-#   - "git" field  → Fetched External
+# Type Detection (priority order):
+#   - "system" field → System External (find_package)
+#   - "git" field    → Fetched External (FetchContent)
+#   - "path" field   → Local External (Include.cmake)
 #
 # Used by:
 #   - Externals.cmake
 #   - ExecutableCreate.cmake
 #   - LibraryCreate.cmake
 #   - TestCreate.cmake
+#   - AppCreate.cmake
 
 include_guard(GLOBAL)
 
@@ -40,6 +43,7 @@ include_guard(GLOBAL)
 
 include(cmake/externals/local/Attach.cmake)
 include(cmake/externals/fetched/Handler.cmake)
+include(cmake/externals/system/Handler.cmake)
 
 # ==============================================================================
 # _orchestrate_external - Main Dispatch Function
@@ -50,17 +54,19 @@ include(cmake/externals/fetched/Handler.cmake)
     Detects the external type and dispatches to the appropriate handler.
     
     Parameters:
-        EXT_NAME - Name of the external (e.g. "bass", "spdlog")
+        EXT_NAME - Name of the external (e.g. "bass", "spdlog", "qt6")
         EXT_JSON - JSON definition of the external
     
-    Type Detection:
-        - "path" present → _attach_local_external()
-        - "git" present  → _handle_fetched_external()
-        - Neither        → Error E012
+    Type Detection (priority order):
+        - "system" present → _handle_system_external()
+        - "git" present    → _handle_fetched_external()
+        - "path" present   → _attach_local_external()
+        - None             → Error E012
     
     Example:
         _orchestrate_external("bass" "{\"path\":\"externals/bass\"}")
         _orchestrate_external("spdlog" "{\"git\":\"https://...\",\"tag\":\"v1.12.0\"}")
+        _orchestrate_external("qt6" "{\"system\":true,\"package\":\"Qt6\"}")
 ]]
 function(_orchestrate_external EXT_NAME EXT_JSON)
     
@@ -71,27 +77,32 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
     validate_external_source("${EXT_NAME}" "${EXT_JSON}")
     
     # ==========================================================================
-    # Detect Type
+    # Detect Type (priority: system → git → path)
     # ==========================================================================
     
-    _json_has_key("${EXT_JSON}" "path" _is_local)
+    _json_get_bool_or_default("${EXT_JSON}" "system" FALSE _is_system)
     _json_has_key("${EXT_JSON}" "git" _is_fetched)
+    _json_has_key("${EXT_JSON}" "path" _is_local)
     
     # ==========================================================================
     # Dispatch
     # ==========================================================================
     
-    if(_is_local)
-        dbg(${DBG_RARE} "  Type: LOCAL" ID EXTERNALS)
-        _attach_local_external("${EXT_NAME}" "${EXT_JSON}")
+    if(_is_system)
+        dbg(${DBG_RARE} "  Type: SYSTEM" ID EXTERNALS)
+        _handle_system_external("${EXT_NAME}" "${EXT_JSON}")
         
     elseif(_is_fetched)
         dbg(${DBG_RARE} "  Type: FETCHED (git)" ID EXTERNALS)
         _handle_fetched_external("${EXT_NAME}" "${EXT_JSON}")
         
+    elseif(_is_local)
+        dbg(${DBG_RARE} "  Type: LOCAL" ID EXTERNALS)
+        _attach_local_external("${EXT_NAME}" "${EXT_JSON}")
+        
     else()
         # Should not reach here if validate_external_source works correctly
-        cmake_fatal("E012" "External '${EXT_NAME}': No valid source field (path/git)")
+        cmake_fatal("E012" "External '${EXT_NAME}': No valid source field (system/git/path)")
     endif()
     
 endfunction()
@@ -169,6 +180,7 @@ endfunction()
     Example:
         apply_external_to_target("MyApp" "bass" "{\"BASS_FLAC\":true}")
         apply_external_to_target("MyApp" "spdlog" "{}")
+        apply_external_to_target("MyApp" "qt6" "{}")
 ]]
 function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
     # Get external definition from global property
@@ -181,11 +193,22 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
     
     _json_get_object("${_externals_json}" "${EXT_NAME}" _ext_json)
     
-    # Check type
-    _json_has_key("${_ext_json}" "path" _is_local)
+    # Check type (priority: system → git → path)
+    _json_get_bool_or_default("${_ext_json}" "system" FALSE _is_system)
     _json_has_key("${_ext_json}" "git" _is_fetched)
+    _json_has_key("${_ext_json}" "path" _is_local)
     
-    if(_is_local)
+    if(_is_system)
+        # =======================================================================
+        # System External: Link registered target from find_package
+        # =======================================================================
+        
+        dbg(${DBG_RARE} "    Applying ${EXT_NAME} to ${TARGET_NAME} (system)" ID EXTERNALS)
+        
+        # Apply using system handler
+        _apply_system_external_to_target("${TARGET_NAME}" "${EXT_NAME}" "${EXT_OPTIONS}")
+        
+    elseif(_is_local)
         # =======================================================================
         # Local External: Include Include.cmake
         # =======================================================================

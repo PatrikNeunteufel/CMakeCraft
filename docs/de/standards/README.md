@@ -1,7 +1,7 @@
-# Standards v0.5.0 — Übersicht
+# Standards v0.7.0 — Übersicht
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-13  
+> **Version:** 0.7.0  
+> **Datum:** 2025-12-19  
 > **Status:** Stabil
 
 ---
@@ -99,13 +99,15 @@ ClangTidy_Blueprint   ─────────────► .clang-tidy (To
 
 | Thema | Standard | Abschnitt |
 |-------|----------|-----------|
-| Namenskonventionen (C++) | Cpp_Coding_Standard | §5 |
-| Namenskonventionen (C) | C_Coding_Standard | §5 |
+| Namenskonventionen (C++) | Cpp_Coding_Standard | §7 |
+| Namenskonventionen (C) | C_Coding_Standard | §7 |
+| Klassen-Struktur (C++) | Cpp_Coding_Standard | §8 |
+| Struct-Layout (C) | C_Coding_Standard | §8 |
 | Commit-Message-Format | Git_Standard | §3 |
 | Branch-Strategie | Git_Standard | §4 |
 | CMake Target-Namen | CMake_Standard | §4 |
-| RAII | Cpp_Coding_Standard | §6.3 |
-| Error-Handling (C) | C_Coding_Standard | §9 |
+| RAII | Cpp_Coding_Standard | §9.3 |
+| Error-Handling (C) | C_Coding_Standard | §12 |
 
 ---
 
@@ -122,4 +124,6 @@ ClangTidy_Blueprint   ─────────────► .clang-tidy (To
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Initial: Migration aller Standards auf v0.5.0 Format** |
+| **0.7.0** | **2025-12-19** | **Vereinheitlichung C/C++: Dateinamen PascalCase für beide, Präfix p für alle Pointer** |
+| 0.6.0 | 2025-12-19 | Konsolidierung: Cpp_Coding_Standard und C_Coding_Standard erweitert um Klassen-/Struct-Layout, Dateinamen-Konventionen, erweiterte Präfixe, Include-Reihenfolge |
+| 0.5.0 | 2025-12-13 | Initial: Migration aller Standards auf v0.5.0 Format |

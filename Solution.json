@@ -53,12 +53,10 @@
       "tag": "v3.5.2"
     },
     "qt6": {
-      "path": "externals/qt6",
-      "options": {
-        "components": [ "Core", "Widgets", "Gui", "OpenGL" ],
-        "hint": "${QT_ROOT}",
-        "backup": "E:/Backup/Qt/6.7.0/msvc2022_64"
-      }
+      "system": true,
+      "package": "Qt6",
+      "components": [ "Core", "Widgets" ],
+      "hints": [ "${QT_ROOT}" ]
     }
   },
     "libraries": [
@@ -89,7 +87,7 @@
         "displayName": "Console_Demo_Player",
         "version": "1.0.0",
         "path": "projects/demos/exec/consolePlayer/src",
-        "skip": true,
+        "skip": false,
         "dependencies": [ "BasicLogger" ],
         "externals": [ "bass" ],
         "external_options": {
@@ -124,7 +122,7 @@
         "version": "0.1.0",
         "type": "GUI",
         "path": "projects/demos/exec/QtMarkdownViewer/src",
-        "skip": true,
+        "skip": false,
         "dependencies": [],
         "externals": [ "qt6" ]
       }
@@ -180,7 +178,7 @@
       },
       {
         "name": "DemoPlayer",
-        "skip": false,
+        "skip": true,
         "displayName": "Demo Player Application",
         "version": "0.5.0",
         "description": "Phase 8 App-Container Demo",
@@ -197,7 +195,7 @@
 
         "tests": {
           "framework": "doctest",
-          "skip": true,
+          "skip": false,
           "targets": [
             {
               "name": "UnitTests",
@@ -219,7 +217,7 @@
         "type": "unit",
         "framework": "doctest",
         "path": "projects/tests/unit/BasicLogger_Tests/src",
-        "skip": false,
+        "skip": true,
         "dependencies": [ "BasicLogger" ],
         "externals": [ "doctest" ],
         "labels": [ "unit", "logger", "fast" ],

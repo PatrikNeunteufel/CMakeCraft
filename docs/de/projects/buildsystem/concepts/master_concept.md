@@ -1,9 +1,9 @@
 # Master Concept — CMake Architecture V2
 
-> **Version:** 0.6.0  
-> **Datum:** 2025-12-18  
+> **Version:** 0.7.0  
+> **Datum:** 2025-12-19  
 > **Typ:** Concept  
-> **Status:** Stabil (Phase 1-8 abgeschlossen)  
+> **Status:** Stabil (Phase 1-9 abgeschlossen)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
 > **English:** [master_concept.md](../../en/projects/buildsystem/concepts/Master_Concept.md)
@@ -183,11 +183,11 @@ Der Typ wird automatisch über das vorhandene Feld erkannt:
 
 | Erkennungsfeld | Typ | Status |
 |----------------|-----|--------|
+| `system` | **system** | ✅ Implementiert |
 | `path` | **local** | ✅ Implementiert |
 | `git` | **fetched** | ✅ Implementiert |
 | `vcpkg` | **vcpkg** | ⬜ Geplant |
 | `conan` | **conan** | ⬜ Geplant |
-| `find_package` | **system** | ⬜ Geplant (Phase 9) |
 
 **Validierung:** Genau eines dieser Felder muss vorhanden sein (Error E012).
 
@@ -227,6 +227,43 @@ Werden aus Git geklont in `.externals/`.
 | `shallow` | ❌ | Shallow Clone (Default: true) |
 
 *Genau eines von `tag`, `branch`, `commit` erforderlich (Error E215).
+
+### System Externals
+
+Bereits auf dem System installierte Bibliotheken via `find_package()`.
+
+```json
+"externals": {
+    "qt6": {
+        "system": true,
+        "package": "Qt6",
+        "version": ">=6.5.0",
+        "components": ["Core", "Widgets", "Gui"],
+        "hints": ["${QT_ROOT}"],
+        "backup": "E:/Backup/Qt/6.7.0"
+    }
+}
+```
+
+| Feld | Pflicht | Default | Beschreibung |
+|------|---------|---------|--------------|
+| `system` | ✅ | — | Muss `true` sein |
+| `package` | ✅ | — | Name für `find_package()` |
+| `version` | ❌ | — | Version-Constraint |
+| `components` | ❌ | `[]` | Package-Komponenten |
+| `hints` | ❌ | `[]` | Zusätzliche Suchpfade |
+| `backup` | ❌ | — | Notfall-Pfad (W501) |
+| `required` | ❌ | `true` | Fehler wenn nicht gefunden |
+
+**Pfad-Auflösung (Stufen):**
+1. Environment-Variablen ($QT_ROOT, $BOOST_ROOT)
+2. CMAKE_PREFIX_PATH
+3. hints[] aus Solution.json
+4. Standard-Pfade (C:/Qt/, /opt/Qt/, etc.)
+5. backup Pfad (mit W501 Warnung)
+6. Error E501/E503
+
+→ Detail: [System_Externals_Concept.md](System_Externals_Concept.md)
 
 ---
 
@@ -574,22 +611,17 @@ projects/apps/{AppName}/
 
 | Dokument | Beschreibung |
 |----------|--------------|
-| **Solution_Schema** | JSON-Schema-Dokumentation (inkl. apps[]) |
-| **ErrorCodes** | Alle Fehlercodes (E0xx-E5xx, W0xx-W4xx) |
+| **Solution_Schema** | JSON-Schema-Dokumentation (inkl. apps[], system externals) |
+| **ErrorCodes** | Alle Fehlercodes (E0xx-E5xx, W0xx-W5xx) |
 | **guidelines** | Coding-Konventionen |
 | **implementation_plan** | Phasen-basierter Plan |
 | **AppContainer_Concept** | App-Container Architektur |
 | **App_Tests_Targets_Concept** | Flexible App-Tests |
+| **System_Externals_Concept** | System Externals (find_package) |
 
 ---
 
 ## 16. Geplante Erweiterungen
-
-### Phase 9: System-Externals
-
-System-Bibliotheken via `find_package()` (Qt, Boost, OpenCV).
-
-→ Siehe [System_Externals_Concept.md](System_Externals_Concept.md)
 
 ### Post-Release
 
@@ -616,6 +648,7 @@ System-Bibliotheken via `find_package()` (Qt, Boost, OpenCV).
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Phase 8 abgeschlossen: App-Container Section (§12) hinzugefügt, apps[] in Schema (§3), App-Pipeline in Pipelines (§10), Fehlercode-Bereiche erweitert (E4xx, W4xx)** |
+| **0.7.0** | **2025-12-19** | **Phase 9 abgeschlossen: System Externals (§4), system Typ vor path/git, Geplante Erweiterungen aktualisiert (§16)** |
+| 0.6.0 | 2025-12-18 | Phase 8 abgeschlossen: App-Container Section (§12) hinzugefügt, apps[] in Schema (§3), App-Pipeline in Pipelines (§10), Fehlercode-Bereiche erweitert (E4xx, W4xx) |
 | 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 (.externals/ Caching) integriert, Test-Pipeline integriert, Blueprint v0.5.0 Format, Referenzen auf Phase 8/9 |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Struktur aus v1.7 übernommen |

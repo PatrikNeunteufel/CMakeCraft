@@ -1,10 +1,10 @@
 # Implementation Plan — CMake Architecture V2
 
-> **Version:** 0.6.0  
-> **Datum:** 2025-12-18  
+> **Version:** 0.7.0  
+> **Datum:** 2025-12-19  
 > **Typ:** Concept  
-> **Status:** Phase 1-8 abgeschlossen, Phase 9 geplant  
-> **Basiert auf:** master_concept v0.6, Solution_Schema v0.6, ErrorCodes v0.1  
+> **Status:** Phase 1-9 abgeschlossen  
+> **Basiert auf:** master_concept v0.7, Solution_Schema v0.7, ErrorCodes v0.1  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
 > **English:** [implementation_plan.md](../../en/projects/buildsystem/concepts/Implementation_Plan.md)
@@ -24,7 +24,7 @@ Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 7. [Phase 6: Fetched Externals + Hooks](#7-phase-6-fetched-externals--hooks)
 8. [Phase 7: Test-Pipeline](#8-phase-7-test-pipeline)
 9. [Phase 8: App-Container](#9-phase-8-app-container)
-10. [Phase 9: System-Externals (geplant)](#10-phase-9-system-externals-geplant)
+10. [Phase 9: System-Externals](#10-phase-9-system-externals)
 11. [Checkliste](#11-checkliste)
 12. [Siehe auch](#12-siehe-auch)
 13. [Changelog](#13-changelog)
@@ -45,7 +45,7 @@ Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 | 6 | Fetched Externals + Hooks | ✅ Abgeschlossen |
 | 7 | Test-Pipeline | ✅ Abgeschlossen |
 | 8 | App-Container | ✅ Abgeschlossen |
-| 9 | System-Externals | 🔄 Geplant |
+| 9 | System-Externals | ✅ Abgeschlossen |
 
 ### Phasen-Flow
 
@@ -64,9 +64,9 @@ Phase 6: Fetched Externals + Hooks (.externals/ Caching)
     ↓
 Phase 7: Test-Pipeline (doctest, googletest, catch2)
     ↓
-Phase 8: App-Container (Core/Runner/Tests) ← AKTUELL ABGESCHLOSSEN
+Phase 8: App-Container (Core/Runner/Tests)
     ↓
-Phase 9: System-Externals (geplant)
+Phase 9: System-Externals (find_package) ← AKTUELL ABGESCHLOSSEN
 ```
 
 ---
@@ -498,25 +498,69 @@ ctest --test-dir build -L MyApp
 
 ---
 
-## 10. Phase 9: System-Externals (geplant)
+## 10. Phase 9: System-Externals
 
-**Status:** 🔄 Geplant
+**Status:** ✅ Abgeschlossen
 
 **Ziel:** System-Bibliotheken via `find_package()` integrieren.
 
 → **Detail-Konzept:** [System_Externals_Concept.md](System_Externals_Concept.md)
 
-### Kernpunkte
+### Module
 
-- Qt, Boost, OpenCV über `find_package()` einbinden
-- Neues `find_package` Feld in Solution.json externals
-- Hybrid-Externals (System-fallback auf fetched)
+| Modul | Version | Beschreibung |
+|-------|---------|--------------|
+| `System/Handler.cmake` | v0.1.0 | System-External Handler (find_package) |
+| `System/PathResolver.cmake` | v0.1.0 | Mehrstufige Pfad-Auflösung |
+| `Orchestrator.cmake` | v0.3.0 | Dispatch: system → git → path |
+
+### System External JSON-Syntax
+
+```json
+"qt6": {
+    "system": true,
+    "package": "Qt6",
+    "version": ">=6.5.0",
+    "components": ["Core", "Widgets", "Gui"],
+    "hints": ["${QT_ROOT}"],
+    "backup": "E:/Backup/Qt/6.7.0",
+    "required": true
+}
+```
+
+### Typ-Erkennung (Priorität)
+
+| Reihenfolge | Feld | Typ |
+|-------------|------|-----|
+| 1 | `system: true` | System External |
+| 2 | `git` | Fetched External |
+| 3 | `path` | Local External |
+| — | keines | Error E012 |
+
+### Pfad-Auflösung (Stufen)
+
+1. Environment-Variablen ($QT_ROOT, $QT_DIR)
+2. CMAKE_PREFIX_PATH
+3. hints[] aus Solution.json
+4. Standard-Pfade (C:/Qt/..., /opt/Qt/...)
+5. backup Pfad (mit W501 Warnung)
+6. Error E501/E503
 
 ### Error-Code-Bereich
 
 | Bereich | Kategorie |
 |---------|-----------|
 | E5xx | System-External-spezifische Fehler |
+| W5xx | System-External-Warnungen |
+
+### Erfolgskriterium
+
+```bash
+cmake -B build
+# Qt6 wird via find_package() gefunden
+# System External targets verfügbar (Qt6::Core, etc.)
+# Phase 9 Tests bestehen
+```
 
 ---
 
@@ -644,11 +688,55 @@ ctest --test-dir build -L MyApp
 - [ ] UserGuide für App-Container (separates Dokument)
 - [ ] Englische Dokumentation synchronisieren
 
-### Phase 9 (geplant)
+### Phase 9 ✅
 
-- [ ] System/FindExternal.cmake
-- [ ] Hybrid-External-Support
-- [ ] Qt/Boost/OpenCV Tests
+**Core-Module:**
+- ✅ System/Handler.cmake (find_package Integration)
+- ✅ System/PathResolver.cmake (mehrstufige Suche)
+- ✅ Orchestrator.cmake v0.3.0 (system Typ-Dispatch)
+
+**JSON-Schema:**
+- ✅ system: true Typ-Erkennung
+- ✅ package Feld (Pflicht für System)
+- ✅ version Feld (optional)
+- ✅ components[] Array (optional)
+- ✅ hints[] Array (optional)
+- ✅ backup Feld (optional)
+- ✅ required Feld (optional, default: true)
+
+**Typ-Priorität:**
+- ✅ system → git → path → E012
+- ✅ Gegenseitiger Ausschluss validiert
+
+**Pfad-Auflösung:**
+- ✅ Environment-Variablen
+- ✅ CMAKE_PREFIX_PATH
+- ✅ hints[] aus JSON
+- ✅ Standard-Pfade (plattformspezifisch)
+- ✅ backup mit W501 Warnung
+
+**Error/Warning Codes:**
+- ✅ E501: System external not found
+- ✅ E502: package field required
+- ✅ E503: find_package() failed
+- ✅ E504: Component not found
+- ✅ E505: Version constraint failed
+- ✅ W501: Using backup location
+- ✅ W502: Version mismatch
+
+**Tests:**
+- ✅ Phase9.cmake Build-System-Test
+- ✅ Qt6 System External getestet
+
+**Dokumentation:**
+- ✅ System_Externals_Concept.md v0.7.0
+- ✅ Solution_Schema.md v0.7.0 (system fields)
+- ✅ Implementation_Plan.md v0.7.0
+- ✅ Master_Concept.md v0.7.0
+
+**Nicht im Scope (bewusst entfernt):**
+- ❌ Hybrid-External-Support (System mit Fetched-Fallback)
+- ❌ vcpkg/Conan Integration (separates Feature)
 
 ---
 
@@ -668,7 +756,8 @@ ctest --test-dir build -L MyApp
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Phase 8 abgeschlossen: Vollständige Checkliste mit allen Features (Core/Runner, flexible tests.targets[], Skip-Feature, Type-Defaults, Json.cmake v0.6.0), Dokumentation komplett** |
+| **0.7.0** | **2025-12-19** | **Phase 9 abgeschlossen: System Externals (find_package), Typ-Priorität system→git→path, PathResolver, Error Codes E5xx/W5xx, Phase9.cmake Tests, Hybrid-Support bewusst entfernt** |
+| 0.6.0 | 2025-12-18 | Phase 8 abgeschlossen: Vollständige Checkliste mit allen Features (Core/Runner, flexible tests.targets[], Skip-Feature, Type-Defaults, Json.cmake v0.6.0), Dokumentation komplett |
 | 0.5.1 | 2025-12-17 | Phase 8 in Arbeit: Apps.cmake, AppCollect.cmake, AppCreate.cmake implementiert, DemoPlayer Test-App, Core/Runner/Tests Trennung |
 | 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 Details integriert, Test-Pipeline Details integriert, Phase 8/9 als geplant referenziert, Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Phasen aus v1.5 übernommen |

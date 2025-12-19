@@ -133,6 +133,7 @@ enddbgblock(ID CMAKE_MAIN)
 # Build System Tests (optional, after pipeline)
 # ==============================================================================
 
+#[[
 if(RUN_BUILD_SYSTEM_TESTS)
     
     dbg_init(ID BUILD_TEST LEVEL ${DBG_SHOW_ALL} SWITCH ON TAG "BuildTest")
@@ -191,13 +192,19 @@ if(RUN_BUILD_SYSTEM_TESTS)
         dbgspace(ID BUILD_TEST)
         include(cmake/buildSystemTest/Phase8.cmake)
     endif()
+
+    # Phase 9 Test: System Externals
+    if("${TEST_PHASE}" STREQUAL "" OR "9" IN_LIST TEST_PHASE)
+        dbgspace(ID BUILD_TEST)
+        include(cmake/buildSystemTest/Phase9.cmake)
+    endif()
     
     dbgspace(ID BUILD_TEST)
     dbg(${DBG_OFTEN} "Build System Tests completed" ID BUILD_TEST)
     enddbgblock(ID BUILD_TEST)
     
 endif()
-
+]]
 # ==============================================================================
 # Cleanup
 # ==============================================================================

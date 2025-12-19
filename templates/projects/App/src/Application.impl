@@ -1,0 +1,60 @@
+// ==============================================================================
+// Application.impl - PIMPL Implementation
+// CMake Architecture V2 - App-Container Template
+// ==============================================================================
+//
+// This file contains the private implementation details of Application.
+// Using the PIMPL (Pointer to Implementation) idiom provides:
+//   - Reduced compilation dependencies
+//   - ABI stability
+//   - Faster incremental builds
+//
+// Naming convention:
+//   *.impl - PIMPL/detail implementation file
+//
+// ==============================================================================
+
+#pragma once
+
+#include "core/Engine.hpp"
+#include <iostream>
+
+namespace app {
+
+class Application::Impl {
+public:
+    Impl() = default;
+    ~Impl() = default;
+    
+    bool initialize() {
+        std::cout << "[App] Initializing..." << std::endl;
+        m_initialized = true;
+        return true;
+    }
+    
+    int run() {
+        if (!m_initialized) {
+            std::cerr << "[App] Error: Not initialized!" << std::endl;
+            return 1;
+        }
+        
+        std::cout << "[App] Running..." << std::endl;
+        
+        // Main loop would go here
+        m_engine.update();
+        
+        std::cout << "[App] Done." << std::endl;
+        return 0;
+    }
+    
+    void shutdown() {
+        std::cout << "[App] Shutting down..." << std::endl;
+        m_initialized = false;
+    }
+
+private:
+    core::Engine m_engine;
+    bool m_initialized = false;
+};
+
+} // namespace app

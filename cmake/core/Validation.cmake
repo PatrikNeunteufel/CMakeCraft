@@ -2,8 +2,8 @@
 # ============================
 # JSON schema validation for Solution.json and Externals
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.6.0
+# Date:    2025-12-18
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -12,16 +12,21 @@
 #   - Json.cmake (_json_* functions)
 #
 # Provides:
-#   - validate_external_source()        - Exactly one source field
+#   - validate_external_source()        - Exactly one source field (incl. system)
 #   - validate_required_fields()        - Check required fields
 #   - validate_fetched_external()       - Check tag/branch/commit
 #   - validate_local_external()         - Include.cmake exists
 #   - validate_solution_schema()        - Check schema version
 #   - validate_local_external_include() - Best practice checks
 #
+# Phase 9 Changes:
+#   - Added 'system' to source fields in validate_external_source()
+#   - Added E502 validation: system: true requires 'package' field
+#
 # Used by:
 #   - Solution.cmake
 #   - Orchestrator.cmake
+#   - system/Handler.cmake
 
 include_guard(GLOBAL)
 
@@ -38,32 +43,59 @@ include_guard(GLOBAL)
         EXT_JSON - Mandatory: JSON string of the external object
     
     Allowed source fields:
-        path, git, vcpkg, conan, find_package
+        system, path, git, vcpkg, conan, find_package
     
     Errors:
         E012 - no source field present
         E012 - multiple source fields present
+        E502 - system: true but 'package' field missing
     
     Example:
         validate_external_source("bass" "${_ext_json}")
+        validate_external_source("qt6" "{\"system\":true,\"package\":\"Qt6\"}")
 ]]
 function(validate_external_source EXT_NAME EXT_JSON)
-    set(_source_fields "path;git;vcpkg;conan;find_package")
+    # Source fields - system added for Phase 9
+    set(_source_fields "system;path;git;vcpkg;conan;find_package")
     set(_found_count 0)
-    set(_found_field "")
+    set(_found_fields "")
     
     foreach(_field IN LISTS _source_fields)
         _json_has_key("${EXT_JSON}" "${_field}" _has)
         if(_has)
             math(EXPR _found_count "${_found_count} + 1")
-            set(_found_field "${_field}")
+            list(APPEND _found_fields "${_field}")
         endif()
     endforeach()
     
     if(_found_count EQUAL 0)
-        cmake_fatal("E012" "External '${EXT_NAME}': No source field (path/git/vcpkg/...) specified")
+        cmake_fatal("E012" 
+            "External '${EXT_NAME}': No source field specified.\n"
+            "  Required: one of 'system', 'git', or 'path'\n"
+            "  Examples:\n"
+            "    Local:   { \"path\": \"externals/${EXT_NAME}\" }\n"
+            "    Fetched: { \"git\": \"https://...\", \"tag\": \"v1.0\" }\n"
+            "    System:  { \"system\": true, \"package\": \"PackageName\" }"
+        )
     elseif(_found_count GREATER 1)
-        cmake_fatal("E012" "External '${EXT_NAME}': Multiple source fields specified (only one allowed)")
+        cmake_fatal("E012" 
+            "External '${EXT_NAME}': Multiple source fields specified: ${_found_fields}\n"
+            "  Only one source field is allowed."
+        )
+    endif()
+    
+    # Additional validation for system externals
+    if("system" IN_LIST _found_fields)
+        _json_get_bool_or_default("${EXT_JSON}" "system" FALSE _is_system)
+        if(_is_system)
+            _json_has_key("${EXT_JSON}" "package" _has_package)
+            if(NOT _has_package)
+                cmake_fatal("E502" 
+                    "System external '${EXT_NAME}': 'package' field is required.\n"
+                    "  Example: { \"system\": true, \"package\": \"Qt6\" }"
+                )
+            endif()
+        endif()
     endif()
 endfunction()
 

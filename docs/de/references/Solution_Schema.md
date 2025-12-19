@@ -1,7 +1,6 @@
 # Solution Schema — Referenz
 
-> **Version:** 0.6.0  
-> **Schema Version:** 0.6  
+> **Version:** 0.7.0  
 > **Datum:** 2025-12-18  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -38,7 +37,7 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
 
 ```json
 {
-    "schemaVersion": "0.6",
+    "schemaVersion": "0.1",
     "solution": { },
     "settings": { },
     "externalsPolicy": { },
@@ -162,7 +161,9 @@ Der zentrale Ort für alle External-Definitionen.
 |-----|-------------------|--------------|
 | **Local** | `path` Feld | Vorkompilierte Bibliotheken in `externals/` |
 | **Fetched** | `git` Feld | Via Git geklont |
-| **System** | `path` + `options` | Große externe Installationen (Qt6, Boost) |
+| **System** | `system: true` | Große externe Installationen (Qt6, Boost) via find_package() |
+
+> **Typ-Priorität:** `system` → `git` → `path`
 
 ### 5.2 Local Externals
 ```json
@@ -233,30 +234,73 @@ Nur verwenden wenn vom Default abgewichen werden muss:
 | `postFetchHook` | – | Pfad zu PostFetch Hook |
 | `hook` | – | Hook-Wiederverwendung |
 
-### 5.4 System Externals
+### 5.4 System Externals (Phase 9)
 
-Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV:
+Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV.
+
+**Keine lokale Kopie nötig** – nutzt `find_package()` direkt.
 
 ```json
 "externals": {
     "qt6": {
-        "path": "externals/qt6",
-        "options": {
-            "hint": "${QT_ROOT}",
-            "backup": "E:/Backup/Qt/6.10.1/msvc2022_64",
-            "components": ["Core", "Widgets", "Gui", "OpenGL"]
-        }
+        "system": true,
+        "package": "Qt6",
+        "version": ">=6.5.0",
+        "components": ["Core", "Widgets", "Gui", "OpenGL"],
+        "hints": ["${QT_ROOT}", "C:/Qt/6.10.1/msvc2022_64"],
+        "backup": "E:/Backup/Qt/6.10.1/msvc2022_64",
+        "required": true
     }
 }
 ```
 
-#### options Feld
+| Feld | Pflicht | Typ | Beschreibung |
+|------|---------|-----|--------------|
+| `system` | ✅ | boolean | Muss `true` sein |
+| `package` | ✅ | string | Name für find_package() (z.B. "Qt6", "Boost") |
+| `version` | – | string | Versionsanforderung (z.B. ">=6.5.0") |
+| `components` | – | string[] | find_package() COMPONENTS |
+| `hints` | – | string[] | Zusätzliche Suchpfade |
+| `backup` | – | string | Fallback-Pfad (löst W501 aus) |
+| `required` | – | boolean | find_package() REQUIRED (Default: true) |
 
-| Option | Typ | Beschreibung |
-|--------|-----|--------------|
-| `hint` | string | Pfad zur Installation (Umgebungsvariablen erlaubt) |
-| `backup` | string | Fallback-Pfad (mit WARNING wenn verwendet) |
-| `components` | string[] | Zu ladende Module/Komponenten |
+#### Pfad-Auflösung (Reihenfolge)
+
+1. **Umgebungsvariablen:** `Qt6_ROOT`, `QT_ROOT`, `Qt6_DIR`, etc.
+2. **hints[]** aus Solution.json (mit `${VAR}` Expansion)
+3. **Standard-Pfade** aus Package-Hook (plattformspezifisch)
+4. **backup** Pfad (mit W501 Warnung)
+5. **find_package() Default** (CMake-eigene Suche)
+
+#### Package-Hooks
+
+Optionale plattformspezifische Konfiguration in:
+```
+cmake/externals/system/packages/{Package}.cmake
+```
+
+Vordefinierte Hooks:
+- `Qt6.cmake` – Standard-Installationspfade, AUTOMOC/AUTOUIC/AUTORCC, windeployqt
+- `Boost.cmake` – Standard-Pfade, MSVC auto-linking Deaktivierung
+
+#### Migration von Local zu System
+
+**Vorher (Workaround mit leerem Ordner):**
+```json
+"qt6": {
+    "path": "externals/qt6",
+    "options": { "hint": "${QT_ROOT}" }
+}
+```
+
+**Nachher (kein lokaler Ordner nötig):**
+```json
+"qt6": {
+    "system": true,
+    "package": "Qt6",
+    "hints": ["${QT_ROOT}"]
+}
+```
 
 ### 5.5 cmakeSupport Flag
 
@@ -835,6 +879,7 @@ projects/apps/{AppName}/
 | apps[].tests.targets[] | `name`, `type` |
 | externals (local) | `path` (include optional) |
 | externals (fetched) | `git`, (tag\|branch\|commit) |
+| externals (system) | `system: true`, `package` |
 
 
 ### 10.2 Defaults
@@ -884,11 +929,10 @@ projects/apps/{AppName}/
             "cmakeSupport": false
         },
         "qt6": {
-            "path": "externals/qt6",
-            "options": {
-                "hint": "${QT_ROOT}",
-                "components": ["Core", "Widgets", "Gui"]
-            }
+            "system": true,
+            "package": "Qt6",
+            "components": ["Core", "Widgets", "Gui"],
+            "hints": ["${QT_ROOT}"]
         }
     },
     "libraries": [
@@ -941,11 +985,14 @@ projects/apps/{AppName}/
 | Code | Beschreibung |
 |------|--------------|
 | E010 | External nicht in externals Block definiert |
-| E012 | External hat weder path noch git Feld |
+| E012 | External hat weder path, git noch system Feld |
 | E213 | Include.cmake für lokales External nicht gefunden |
+| E214 | Local external path existiert nicht |
 | E216 | PostFetch Hook fehlt (cmakeSupport: false) |
 | E218 | Hook-Datei nicht gefunden |
 | E220 | Target nach Hook nicht registriert |
+| **E502** | **System external: `package` Feld fehlt** |
+| **E503** | **System external: find_package() fehlgeschlagen** |
 
 ### 12.2 Test-bezogene Fehler (standalone tests[])
 
@@ -987,6 +1034,7 @@ projects/apps/{AppName}/
 | W402 | App-Container | PCH aktiviert aber Header nicht gefunden |
 | W402 | App-Tests | Test mit seriellem Typ hat `parallel: true` gesetzt |
 | W403 | App-Container | Tests-Verzeichnis existiert aber keine Sources |
+| **W501** | **System Externals** | **Backup-Pfad verwendet (nicht empfohlen)** |
 
 **Hinweis zu W402:** Der Code W402 wird in zwei Kontexten verwendet:
 - Bei PCH: Warnung wenn `pch.enabled: true` aber `pch/{header}` nicht gefunden
@@ -1007,7 +1055,8 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Konfiguration, Skip-Feature (tests.skip, targets[].skip), App-Container Fehler-Codes (E4xx, W4xx)** |
+| **0.7.0** | **2025-12-18** | **Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen** |
+| 0.6.0 | 2025-12-18 | Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Konfiguration, Skip-Feature (tests.skip, targets[].skip), App-Container Fehler-Codes (E4xx, W4xx) |
 | 0.5.2 | 2025-12-18 | PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt |
 | 0.5.1 | 2025-12-15 | Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert |

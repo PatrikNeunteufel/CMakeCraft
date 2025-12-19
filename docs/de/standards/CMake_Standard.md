@@ -1,7 +1,7 @@
 # CMake Standard — Übergeordnete Build-System-Richtlinien
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-13  
+> **Version:** 0.6.0  
+> **Datum:** 2025-12-19  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -225,6 +225,16 @@ endfunction()
  Code   Beschreibung                     Kontext
 ```
 
+### 6.3 TODO-Marker
+
+Für unfertige Aufgaben oder zu behebende Probleme: `TODO` im Kommentar verwenden.
+
+```cmake
+# TODO: Add support for cross-compilation
+# TODO: Optimize find_package calls
+# TODO: Remove deprecated function after migration
+```
+
 ---
 
 ## 7. Presets
@@ -376,5 +386,6 @@ Bei dauerhaften Abweichungen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix** |
+| **0.6.0** | **2025-12-19** | **Neu: TODO-Marker (6.3)** |
+| 0.5.0 | 2025-12-13 | Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix |
 | 0.1.0 | 2025-12-05 | Initial: Modern CMake, Presets, Target-basiert, Namenskonventionen |
