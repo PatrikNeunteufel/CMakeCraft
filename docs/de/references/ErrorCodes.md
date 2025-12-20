@@ -155,6 +155,26 @@ NN = Nummer (2 Ziffern)
 
 ---
 
+#### E013 — Geskipptes External verwendet
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.7.1 |
+
+**Meldung:**
+```
+[E013] External 'future_lib' is skipped but used by target 'MyApp'. Remove from externals list or set skip: false
+```
+
+**Ursache:** Ein External mit `skip: true` wird von einem Target referenziert.
+
+**Lösung:** 
+- External aus der `externals`-Liste des Targets entfernen, ODER
+- `skip: false` setzen (oder `skip` entfernen) im External-Block
+
+---
+
 ### 3.2 E1xx — Target-Erstellung Errors
 
 #### E101 — Abhängigkeit existiert nicht
@@ -680,6 +700,7 @@ NN = Nummer (2 Ziffern)
 | E002 | JSON | Solution.json nicht gefunden |
 | E010 | JSON | External nicht im externals-Block |
 | E012 | JSON | Kein/mehrere Source-Felder |
+| E013 | External | Geskipptes External verwendet |
 | E101 | Target | Abhängigkeit existiert nicht |
 | E102 | Target | Target existiert bereits |
 | E103 | Target | Zirkuläre Abhängigkeit |

@@ -1,12 +1,12 @@
 # AppCollect.cmake — Dokumentation
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-18  
+> **Version:** 0.7.0  
+> **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/project/AppCollect.cmake](../../../../cmake/project/AppCollect.cmake)  
-> **Modul-Version:** 0.5.2  
+> **Modul-Version:** 0.7.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [AppCollect.md](../../../en/modules/project/AppCollect.md)
@@ -174,6 +174,7 @@ ctx_get(APP_0 RUNNER_TYPE _type)
 |-----|-----|-----------|---------|
 | `CORE_DEPENDENCIES` | List | `core.dependencies[]` | `[]` |
 | `CORE_EXTERNALS` | List | `core.externals[]` | `[]` |
+| `CORE_EXTERNAL_OPTIONS` | JSON | `core.external_options` | `{}` |
 
 ### 5.3 Runner-Keys
 
@@ -181,6 +182,7 @@ ctx_get(APP_0 RUNNER_TYPE _type)
 |-----|-----|-----------|---------|
 | `RUNNER_TYPE` | String | `runner.type` | `CONSOLE` |
 | `RUNNER_EXTERNALS` | List | `runner.externals[]` | `[]` |
+| `RUNNER_EXTERNAL_OPTIONS` | JSON | `runner.external_options` | `{}` |
 
 ### 5.4 PCH-Keys
 
@@ -350,5 +352,6 @@ AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nich
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-18** | **PCH-Defaults korrigiert: header auf pch.h, PCH_SOURCE entfernt, PCH_PATH hinzugefügt, implizite Aktivierung dokumentiert** |
+| **0.7.0** | **2025-12-20** | **CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS hinzugefügt** |
+| 0.5.1 | 2025-12-18 | PCH-Defaults korrigiert: header auf pch.h, PCH_SOURCE entfernt, PCH_PATH hinzugefügt, implizite Aktivierung dokumentiert |
 | 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container JSON-Parsing, Core/Runner/Tests-Trennung, vollständige Context-Keys |

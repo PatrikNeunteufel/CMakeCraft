@@ -18,7 +18,8 @@
     },
   "externals": {
     "bass": {
-      "path": "externals/bass"
+      "path": "externals/bass",
+      "skip": false
     },
     "lua54": {
       "path": "externals/lua54"

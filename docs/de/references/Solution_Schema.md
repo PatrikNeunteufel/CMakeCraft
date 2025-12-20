@@ -1,7 +1,7 @@
 # Solution Schema — Referenz
 
-> **Version:** 0.7.0  
-> **Datum:** 2025-12-18  
+> **Version:** 0.7.2  
+> **Datum:** 2025-12-20  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -334,6 +334,49 @@ Vordefinierte Hooks:
 
 ---
 
+### 5.7 Gemeinsame Felder (alle Typen)
+
+Diese Felder funktionieren für Local, Fetched und System Externals:
+
+| Feld | Typ | Default | Beschreibung |
+|------|-----|---------|--------------|
+| `skip` | bool | `false` | External überspringen (nicht laden) |
+
+#### skip (External deaktivieren)
+
+Mit `skip: true` kann ein External vorbereitet werden, ohne es zu laden:
+
+```json
+"externals": {
+    "bass": {
+        "path": "externals/bass"
+    },
+    "future_feature": {
+        "git": "https://github.com/example/future.git",
+        "tag": "v1.0.0",
+        "skip": true
+    },
+    "optional_qt": {
+        "system": true,
+        "package": "Qt6",
+        "components": ["Core", "Widgets"],
+        "skip": true
+    }
+}
+```
+
+**Verhalten:**
+- External wird nicht geladen (kein FetchContent, kein find_package, kein Include)
+- Wird trotzdem im externals-Block validiert
+- **FATAL ERROR (E013)** wenn ein geskipptes External von einem Target verwendet wird
+
+**Anwendungsfälle:**
+- Externals für spätere Features vorbereiten
+- Optionale Abhängigkeiten temporär deaktivieren
+- Platform-spezifische Externals (manuell oder via Preset)
+
+---
+
 ## 6. executables Array
 
 ```json
@@ -443,7 +486,14 @@ Wenn `path` angegeben: `projects/{path}/{header}`
         "version": "1.0.0",
         "type": "STATIC",
         "path": "projects/libs/CoreLib/src",
-        "public_headers": "projects/libs/CoreLib/include"
+        "public_headers": "projects/libs/CoreLib/include",
+        "dependencies": ["UtilsLib"],
+        "externals": ["bass"],
+        "external_options": {
+            "bass": {
+                "BASS_FLAC": true
+            }
+        }
     }
 ]
 ```
@@ -455,6 +505,9 @@ Wenn `path` angegeben: `projects/{path}/{header}`
 | `type` | Settings-Default | `STATIC`, `SHARED`, `INTERFACE` |
 | `path` | Convention | Source-Verzeichnis |
 | `public_headers` | – | Public Include-Verzeichnis |
+| `dependencies` | `[]` | Andere Libraries (Abhängigkeiten) |
+| `externals` | `[]` | Externe Abhängigkeiten |
+| `external_options` | `{}` | Per-External Options |
 | `pch` | – | Precompiled Headers Config (siehe [§ 6.5](#65-pch-object-precompiled-headers)) |
 
 ---
@@ -573,12 +626,18 @@ Das `apps` Array definiert App-Container mit Core/Runner Separation für maximal
         
         "core": {
             "dependencies": ["CoreLib"],
-            "externals": ["bass"]
+            "externals": ["bass"],
+            "external_options": {
+                "bass": { "BASS_FLAC": true }
+            }
         },
         
         "runner": {
             "type": "GUI",
-            "externals": ["glad", "glfw"]
+            "externals": ["glad", "glfw"],
+            "external_options": {
+                "glad": { "GLAD_DEBUG": true }
+            }
         },
         
         "pch": {
@@ -635,7 +694,12 @@ Konfiguriert die Core-Library (`{AppName}.Core`).
 ```json
 "core": {
     "dependencies": ["CoreLib", "UtilsLib"],
-    "externals": ["bass", "lua54"]
+    "externals": ["bass", "lua54"],
+    "external_options": {
+        "bass": {
+            "BASS_FLAC": true
+        }
+    }
 }
 ```
 
@@ -643,6 +707,7 @@ Konfiguriert die Core-Library (`{AppName}.Core`).
 |------|-----|---------|--------------|
 | `dependencies` | string[] | `[]` | Interne Libraries (aus `libraries[]`) |
 | `externals` | string[] | `[]` | Externe Abhängigkeiten |
+| `external_options` | object | `{}` | Per-External Options |
 
 ### 9.5 runner Object
 
@@ -651,7 +716,12 @@ Konfiguriert das Runner-Executable (`{AppName}`).
 ```json
 "runner": {
     "type": "GUI",
-    "externals": ["glad", "glfw"]
+    "externals": ["glad", "glfw"],
+    "external_options": {
+        "glad": {
+            "GLAD_DEBUG": true
+        }
+    }
 }
 ```
 
@@ -659,6 +729,7 @@ Konfiguriert das Runner-Executable (`{AppName}`).
 |------|-----|---------|--------------|
 | `type` | string | `"CONSOLE"` | Executable-Typ (`GUI` / `CONSOLE`) |
 | `externals` | string[] | `[]` | Runner-spezifische Externals |
+| `external_options` | object | `{}` | Per-External Options |
 
 **runner.type:**
 
@@ -1055,7 +1126,9 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-18** | **Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen** |
+| **0.7.2** | **2025-12-20** | **Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Verwendung geskippter Externals** |
+| 0.7.1 | 2025-12-20 | Konsistente external_options: Für libraries[], apps.core, apps.runner hinzugefügt (fehlte bisher). Nun einheitlich wie executables[] und tests[] |
+| 0.7.0 | 2025-12-18 | Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen |
 | 0.6.0 | 2025-12-18 | Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Konfiguration, Skip-Feature (tests.skip, targets[].skip), App-Container Fehler-Codes (E4xx, W4xx) |
 | 0.5.2 | 2025-12-18 | PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt |
 | 0.5.1 | 2025-12-15 | Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben |

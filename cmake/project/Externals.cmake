@@ -2,8 +2,8 @@
 # ==============================
 # External dependencies pipeline - processes all externals from Solution.json
 #
-# Version: 0.5.0
-# Date:    2025-12-16
+# Version: 0.6.0
+# Date:    2025-12-20
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -90,6 +90,21 @@ foreach(_idx RANGE 0 ${_last_idx})
     
     # Get external definition (value)
     string(JSON _ext_def GET "${_externals_json}" "${_ext_name}")
+    
+    # ==========================================================================
+    # Check for skip flag
+    # ==========================================================================
+    
+    _json_get_bool_or_default("${_ext_def}" "skip" FALSE _skip)
+    
+    if(_skip)
+        dbg(${DBG_COMMON} "--- Skipping: ${_ext_name} (skip: true) ---" ID EXTERNALS)
+        
+        # Mark as skipped in global property for later validation
+        set_property(GLOBAL APPEND PROPERTY SKIPPED_EXTERNALS "${_ext_name}")
+        
+        continue()
+    endif()
     
     dbg(${DBG_COMMON} "--- Processing: ${_ext_name} ---" ID EXTERNALS)
     

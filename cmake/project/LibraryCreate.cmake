@@ -2,8 +2,8 @@
 # ==================================
 # Creates library targets from prepared Context
 #
-# Version: 0.5.2
-# Date:    2025-12-18
+# Version: 0.6.0
+# Date:    2025-12-19
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -39,7 +39,7 @@ include_guard(GLOBAL)
     Expected Context Keys:
         NAME, PATH, TYPE, VERSION, PUBLIC_HEADERS,
         PCH_ENABLED, PCH_HEADER, PCH_PATH,
-        DEPENDENCIES, EXTERNALS
+        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS
     
     Example:
         ctx_create(LIB_0)
@@ -62,6 +62,7 @@ function(_create_library_target CTX)
     ctx_get(${CTX} PCH_PATH _pch_custom_path)
     ctx_get(${CTX} DEPENDENCIES _dependencies)
     ctx_get(${CTX} EXTERNALS _externals)
+    ctx_get(${CTX} EXTERNAL_OPTIONS _external_options)
     
     # --------------------------------------------------------------------------
     # Handle INTERFACE Libraries (Header-Only)
@@ -233,8 +234,7 @@ function(_create_library_target CTX)
     endforeach()
     
     # --------------------------------------------------------------------------
-    # External Dependencies (Externals)
-    # Note: Full integration happens in Phase 5/6
+    # External Dependencies (via Orchestrator)
     # --------------------------------------------------------------------------
     
     foreach(_ext IN LISTS _externals)
@@ -246,14 +246,19 @@ function(_create_library_target CTX)
             cmake_fatal("E010" "External '${_ext}' not defined in externals block")
         endif()
         
-        # If external target already exists, link it
-        if(TARGET ${_ext})
-            target_link_libraries(${_name} PUBLIC ${_ext})
-            dbg(${DBG_RARE} "    Link: ${_ext} (external)" ID LIBRARIES)
-        else()
-            # External will be processed later by Dependencies.cmake
-            dbg(${DBG_RARE} "    External pending: ${_ext}" ID LIBRARIES)
+        # Get options for this external from the target's external_options
+        set(_ext_opts "{}")
+        if(NOT "${_external_options}" STREQUAL "")
+            _json_has_key("${_external_options}" "${_ext}" _has_ext_opts)
+            if(_has_ext_opts)
+                _json_get_object("${_external_options}" "${_ext}" _ext_opts)
+            endif()
         endif()
+        
+        # Apply external via Orchestrator
+        apply_external_to_target("${_name}" "${_ext}" "${_ext_opts}")
+        
+        dbg(${DBG_RARE} "    External: ${_ext} applied" ID LIBRARIES)
     endforeach()
     
     # --------------------------------------------------------------------------

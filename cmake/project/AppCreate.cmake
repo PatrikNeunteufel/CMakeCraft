@@ -2,8 +2,8 @@
 # ==============================
 # Creates App-Container targets from prepared Context
 #
-# Version: 0.6.1
-# Date:    2025-12-18
+# Version: 0.7.0
+# Date:    2025-12-19
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -317,7 +317,7 @@ endfunction()
         CTX - Mandatory: Context prefix (e.g. APP_0, APP_1)
     
     Expected Context Keys:
-        NAME, PATH, VERSION, RUNNER_TYPE, RUNNER_EXTERNALS
+        NAME, PATH, VERSION, RUNNER_TYPE, RUNNER_EXTERNALS, RUNNER_EXTERNAL_OPTIONS
     
     Directory Structure Expected:
         {PATH}/
@@ -338,6 +338,7 @@ function(_create_app_runner CTX)
     ctx_get(${CTX} DISPLAY_NAME _display_name)
     ctx_get(${CTX} RUNNER_TYPE _runner_type)
     ctx_get(${CTX} RUNNER_EXTERNALS _externals)
+    ctx_get(${CTX} RUNNER_EXTERNAL_OPTIONS _external_options)
     
     set(_target_name "${_name}")
     set(_core_target "${_name}.Core")
@@ -436,8 +437,17 @@ function(_create_app_runner CTX)
             cmake_fatal("E010" "External '${_ext}' not defined in externals block")
         endif()
         
+        # Get external_options if present
+        set(_options_json "{}")
+        if(NOT "${_external_options}" STREQUAL "")
+            _json_has_key("${_external_options}" "${_ext}" _has_options)
+            if(_has_options)
+                _json_get_object("${_external_options}" "${_ext}" _options_json)
+            endif()
+        endif()
+        
         # Apply external via Orchestrator
-        apply_external_to_target("${_target_name}" "${_ext}" "{}")
+        apply_external_to_target("${_target_name}" "${_ext}" "${_options_json}")
         
         dbg(${DBG_RARE} "    External: ${_ext} applied (Runner)" ID APPS)
     endforeach()

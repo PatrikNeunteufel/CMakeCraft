@@ -1,7 +1,7 @@
 # Externals.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-15  
+> **Version:** 0.6.0  
+> **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Externals.md](../../en/modules/project/Externals.md)  
 > **Modul:** [`cmake/project/Externals.cmake`](../../../../cmake/project/Externals.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 0.6.0
 
 ---
 
@@ -78,10 +78,36 @@ Externals.cmake
         │
         ├── 4.2 Get definition (value)
         │
-        └── 4.3 _orchestrate_external(name, definition)
+        ├── 4.3 Check skip flag
+        │   ├── skip: true  → Mark as SKIPPED, continue to next
+        │   └── skip: false → Proceed with orchestration
+        │
+        └── 4.4 _orchestrate_external(name, definition)
 ```
 
-### 3.2 Externals-Struktur
+### 3.2 Skip-Feature
+
+Mit `skip: true` können Externals vorbereitet, aber noch nicht geladen werden:
+
+```json
+{
+    "externals": {
+        "bass": { "path": "externals/bass" },
+        "future_lib": { 
+            "git": "https://...", 
+            "tag": "v1.0.0",
+            "skip": true
+        }
+    }
+}
+```
+
+**Verhalten:**
+- Geskippte Externals werden in `SKIPPED_EXTERNALS` Property gespeichert
+- `apply_external_to_target()` prüft diese Liste → **E013 FATAL** bei Verwendung
+- Funktioniert für Local, Fetched und System Externals
+
+### 3.3 Externals-Struktur
 
 ```json
 {
@@ -142,9 +168,10 @@ CMakeLists.txt
 
 ---
 
-## Changelog
+## 7. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0** |
+| **0.6.0** | **2025-12-20** | **Skip-Feature: Externals mit `skip: true` werden nicht geladen, SKIPPED_EXTERNALS Property** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-08 | Initial (Clean Start): Externals-Pipeline |

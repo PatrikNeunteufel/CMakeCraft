@@ -1,12 +1,12 @@
 # AppCreate.cmake — Dokumentation
 
-> **Version:** 0.5.4  
-> **Datum:** 2025-12-18  
+> **Version:** 0.7.0  
+> **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/project/AppCreate.cmake](../../../../cmake/project/AppCreate.cmake)  
-> **Modul-Version:** 0.5.4  
+> **Modul-Version:** 0.7.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [AppCreate.md](../../../en/modules/project/AppCreate.md)
@@ -133,6 +133,7 @@ Erstellt die `{AppName}.Core` STATIC Library mit allen Business-Logik-Sources.
 | `PCH_PATH` | Optionaler Custom-Pfad für PCH |
 | `CORE_DEPENDENCIES` | Interne Libraries |
 | `CORE_EXTERNALS` | Externe Dependencies |
+| `CORE_EXTERNAL_OPTIONS` | Per-External Optionen (JSON) |
 
 **Erwartete Verzeichnisse:**
 
@@ -189,6 +190,7 @@ Erstellt das `{AppName}` Executable mit dem Entry-Point (main()). Verwendet **ke
 | `DISPLAY_NAME` | Anzeigename (macOS Bundle) |
 | `RUNNER_TYPE` | CONSOLE oder WINDOW/GUI |
 | `RUNNER_EXTERNALS` | Runner-spezifische Externals |
+| `RUNNER_EXTERNAL_OPTIONS` | Per-External Optionen (JSON) |
 
 **Erwartete Verzeichnisse:**
 
@@ -527,7 +529,8 @@ int main() {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.4** | **2025-12-18** | **PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr)** |
+| **0.7.0** | **2025-12-20** | **CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() mit Optionen** |
+| 0.5.4 | 2025-12-18 | PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr) |
 | 0.5.3 | 2025-12-18 | PCH-Include-Directory als PUBLIC hinzugefügt, APP_PCH_* Target Properties |
 | 0.5.2 | 2025-12-18 | PCH 3-tier search, implicit activation |
 | 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |

@@ -2,8 +2,8 @@
 # ===================================
 # Collects library data from JSON into a Context
 #
-# Version: 0.5.1
-# Date:    2025-12-18
+# Version: 0.6.0
+# Date:    2025-12-19
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -18,7 +18,7 @@
 # Context Keys Set:
 #   - NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS
 #   - SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH
-#   - DEPENDENCIES, EXTERNALS, PLATFORM
+#   - DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM
 #
 # Used by:
 #   - Libraries.cmake
@@ -41,7 +41,7 @@ include_guard(GLOBAL)
     Context Keys Set:
         NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS,
         SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH,
-        DEPENDENCIES, EXTERNALS, PLATFORM
+        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM
     
     Example:
         ctx_create(LIB_0)
@@ -202,6 +202,13 @@ function(_collect_library LIB_JSON CTX)
         endforeach()
     endif()
     ctx_set(${CTX} EXTERNALS "${_externals}")
+    
+    # --------------------------------------------------------------------------
+    # External Options (JSON block for later processing)
+    # --------------------------------------------------------------------------
+    
+    _json_get_object_or_empty("${LIB_JSON}" "external_options" _ext_options)
+    ctx_set(${CTX} EXTERNAL_OPTIONS "${_ext_options}")
     
     # --------------------------------------------------------------------------
     # Platform (single value platform filter)

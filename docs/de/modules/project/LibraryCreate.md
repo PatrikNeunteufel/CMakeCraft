@@ -1,7 +1,7 @@
 # LibraryCreate.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-17  
+> **Version:** 0.6.0  
+> **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [LibraryCreate.md](../../en/modules/project/LibraryCreate.md)  
 > **Modul:** [`cmake/project/LibraryCreate.cmake`](../../../../cmake/project/LibraryCreate.cmake)  
-> **Modul-Version:** 0.5.1
+> **Modul-Version:** 0.6.0
 
 ---
 
@@ -55,6 +55,7 @@ Analog zu ExecutableCreate — der Context enthält alle Daten, Create erstellt 
 | OutputDirs.cmake | 0.5.0 | `setup_output_dirs` |
 | Warnings.cmake | 0.5.0 | `apply_warnings` |
 | CompilerOptions.cmake | 0.5.0 | `apply_compiler_options` |
+| Orchestrator.cmake | 0.7.0 | `apply_external_to_target` |
 
 ---
 
@@ -85,6 +86,7 @@ _create_library_target(<CTX>)
 | PUBLIC_HEADERS | Öffentliche Include-Verzeichnis |
 | DEPENDENCIES | Interne Libraries |
 | EXTERNALS | Externe Dependencies |
+| EXTERNAL_OPTIONS | Per-External Optionen (JSON) |
 
 ---
 
@@ -144,12 +146,15 @@ _create_library_target(CTX)
     │
     ├── 7. Interne Dependencies linken
     │
-    ├── 8. Standard-Module anwenden
+    ├── 8. Externals anwenden (NEU: mit Optionen)
+    │   └── apply_external_to_target(name, ext, options)
+    │
+    ├── 9. Standard-Module anwenden
     │   ├── apply_warnings()
     │   ├── apply_compiler_options()
     │   └── setup_output_dirs()
     │
-    └── 9. Version als Property setzen
+    └── 10. Version als Property setzen
 ```
 
 ### 5.2 Public Headers
@@ -191,10 +196,11 @@ target_include_directories(${name}
 
 ---
 
-## Changelog
+## 8. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
+| **0.6.0** | **2025-12-20** | **EXTERNAL_OPTIONS Support: apply_external_to_target() statt direktem Linking** |
+| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-07 | Initial (Clean Start): STATIC/SHARED/INTERFACE Support |

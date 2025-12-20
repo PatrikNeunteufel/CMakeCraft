@@ -1,7 +1,7 @@
 # LibraryCollect.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-18  
+> **Version:** 0.6.0  
+> **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [LibraryCollect.md](../../en/modules/project/LibraryCollect.md)  
 > **Modul:** [`cmake/project/LibraryCollect.cmake`](../../../../cmake/project/LibraryCollect.cmake)  
-> **Modul-Version:** 0.5.1
+> **Modul-Version:** 0.6.0
 
 ---
 
@@ -97,6 +97,7 @@ _collect_library(<LIB_JSON> <CTX>)
 | `PCH_PATH` | String | "" | Custom PCH-Pfad (relativ zu projects/) |
 | `DEPENDENCIES` | List | "" | Interne Abhängigkeiten |
 | `EXTERNALS` | List | "" | Externe Abhängigkeiten |
+| `EXTERNAL_OPTIONS` | JSON | "{}" | Per-External Optionen |
 | `PLATFORM` | String | "" (= alle) | Ziel-Plattform |
 
 **Hinweis:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
@@ -128,7 +129,10 @@ _collect_library(<LIB_JSON> <CTX>)
         "header": "pch.h"
     },
     "dependencies": ["UtilLib"],
-    "externals": ["boost"],
+    "externals": ["bass"],
+    "external_options": {
+        "bass": { "BASS_FLAC": true }
+    },
     "platform": "windows"
 }
 ```
@@ -155,6 +159,7 @@ _collect_library(<LIB_JSON> <CTX>)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-18** | **PCH-Support hinzugefügt: PCH_ENABLED, PCH_HEADER, PCH_PATH** |
+| **0.6.0** | **2025-12-20** | **EXTERNAL_OPTIONS hinzugefügt: Per-External Optionen analog zu ExecutableCollect** |
+| 0.5.1 | 2025-12-18 | PCH-Support hinzugefügt: PCH_ENABLED, PCH_HEADER, PCH_PATH |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-07 | Initial (Clean Start): JSON zu Context Mapping |

@@ -2,8 +2,8 @@
 # ================================
 # Collects App-Container data from JSON into a Context
 #
-# Version: 0.6.1
-# Date:    2025-12-18
+# Version: 0.7.0
+# Date:    2025-12-19
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -20,9 +20,9 @@
 #   Base:
 #     - NAME, DISPLAY_NAME, DESCRIPTION, VERSION, PATH
 #   Core:
-#     - CORE_DEPENDENCIES, CORE_EXTERNALS
+#     - CORE_DEPENDENCIES, CORE_EXTERNALS, CORE_EXTERNAL_OPTIONS
 #   Runner:
-#     - RUNNER_TYPE, RUNNER_EXTERNALS
+#     - RUNNER_TYPE, RUNNER_EXTERNALS, RUNNER_EXTERNAL_OPTIONS
 #   PCH:
 #     - PCH_ENABLED, PCH_HEADER, PCH_PATH
 #   Tests:
@@ -128,12 +128,14 @@ endfunction()
             
             "core": {
                 "dependencies": [],
-                "externals": []
+                "externals": [],
+                "external_options": {}
             },
             
             "runner": {
                 "type": "CONSOLE|GUI",
-                "externals": []
+                "externals": [],
+                "external_options": {}
             },
             
             "pch": {
@@ -210,6 +212,7 @@ function(_collect_app APP_JSON CTX)
     
     set(_core_dependencies "")
     set(_core_externals "")
+    set(_core_external_options "")
     
     _json_has_key("${APP_JSON}" "core" _has_core)
     if(_has_core)
@@ -234,10 +237,14 @@ function(_collect_app APP_JSON CTX)
                 list(APPEND _core_externals "${_ext}")
             endforeach()
         endif()
+        
+        # External Options (JSON block for later processing)
+        _json_get_object_or_empty("${_core_obj}" "external_options" _core_external_options)
     endif()
     
     ctx_set(${CTX} CORE_DEPENDENCIES "${_core_dependencies}")
     ctx_set(${CTX} CORE_EXTERNALS "${_core_externals}")
+    ctx_set(${CTX} CORE_EXTERNAL_OPTIONS "${_core_external_options}")
     
     # ==========================================================================
     # Runner Section
@@ -245,6 +252,7 @@ function(_collect_app APP_JSON CTX)
     
     set(_runner_type "CONSOLE")
     set(_runner_externals "")
+    set(_runner_external_options "")
     
     _json_has_key("${APP_JSON}" "runner" _has_runner)
     if(_has_runner)
@@ -263,10 +271,14 @@ function(_collect_app APP_JSON CTX)
                 list(APPEND _runner_externals "${_ext}")
             endforeach()
         endif()
+        
+        # External Options (JSON block for later processing)
+        _json_get_object_or_empty("${_runner_obj}" "external_options" _runner_external_options)
     endif()
     
     ctx_set(${CTX} RUNNER_TYPE "${_runner_type}")
     ctx_set(${CTX} RUNNER_EXTERNALS "${_runner_externals}")
+    ctx_set(${CTX} RUNNER_EXTERNAL_OPTIONS "${_runner_external_options}")
     
     # ==========================================================================
     # PCH Section
@@ -453,7 +465,9 @@ function(_collect_app APP_JSON CTX)
     dbg(${DBG_RARE} "    RUNNER_TYPE: ${_runner_type}" ID APPS)
     dbg(${DBG_ULTRA_RARE} "    CORE_DEPENDENCIES: ${_core_dependencies}" ID APPS)
     dbg(${DBG_ULTRA_RARE} "    CORE_EXTERNALS: ${_core_externals}" ID APPS)
+    dbg(${DBG_ULTRA_RARE} "    CORE_EXTERNAL_OPTIONS: ${_core_external_options}" ID APPS)
     dbg(${DBG_ULTRA_RARE} "    RUNNER_EXTERNALS: ${_runner_externals}" ID APPS)
+    dbg(${DBG_ULTRA_RARE} "    RUNNER_EXTERNAL_OPTIONS: ${_runner_external_options}" ID APPS)
     dbg(${DBG_ULTRA_RARE} "    PCH: ${_pch_enabled} (header=${_pch_header}, path=${_pch_path})" ID APPS)
     dbg(${DBG_ULTRA_RARE} "    TESTS_FRAMEWORK: ${_tests_framework}" ID APPS)
     dbg(${DBG_ULTRA_RARE} "    TESTS_TARGETS_COUNT: ${_tests_targets_count}" ID APPS)

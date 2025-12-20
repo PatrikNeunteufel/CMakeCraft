@@ -2,8 +2,8 @@
 # ===================================
 # External type dispatcher - detects type and routes to appropriate handler
 #
-# Version: 0.6.0
-# Date:    2025-12-18
+# Version: 0.7.0
+# Date:    2025-12-20
 # Status:  Development
 # Author:  CMake Architecture V2 Team
 #
@@ -183,7 +183,19 @@ endfunction()
         apply_external_to_target("MyApp" "qt6" "{}")
 ]]
 function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
+    # ==========================================================================
+    # Check if external is skipped
+    # ==========================================================================
+    
+    get_property(_skipped_list GLOBAL PROPERTY SKIPPED_EXTERNALS)
+    if("${EXT_NAME}" IN_LIST _skipped_list)
+        cmake_fatal("E013" "External '${EXT_NAME}' is skipped but used by target '${TARGET_NAME}'. Remove from externals list or set skip: false")
+    endif()
+    
+    # ==========================================================================
     # Get external definition from global property
+    # ==========================================================================
+    
     get_property(_externals_json GLOBAL PROPERTY SOLUTION_EXTERNALS_JSON)
     
     _json_has_key("${_externals_json}" "${EXT_NAME}" _ext_defined)
