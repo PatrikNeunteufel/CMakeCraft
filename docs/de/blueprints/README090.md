@@ -1,7 +1,7 @@
-# Blueprints v0.5.1 — Übersicht
+# Blueprints v0.5.0 — Übersicht
 
-> **Version:** 0.5.1  
-> **Datum:** 2025-12-21  
+> **Version:** 0.5.0  
+> **Datum:** 2025-12-13  
 > **Status:** In Entwicklung
 
 ---
@@ -47,15 +47,11 @@ Blueprint.md                     ← Meta-Blueprint (Basisklasse)
     │       ├── Reference.md     ← API/Schema-Referenzen
     │       ├── Concept.md       ← Architektur-Konzepte
     │       ├── Standard.md      ← Coding/Project Standards
-    │       ├── Tutorial.md      ← Step-by-Step Anleitungen
-    │       └── Implementierungsplan.md  ← Umsetzungspläne mit Checklisten
+    │       └── Tutorial.md      ← Step-by-Step Anleitungen
     │
     ├── CMake.md                 ← CMake-Scripts (.cmake)
     │
     └── Cpp.md                   ← C++/C Code-Dateien (.cpp, .hpp, .tpp)
-
-templates/                       ← Kopiervorlagen zum Ausfüllen
-    └── Implementierungsplan_Template.md
 ```
 
 ### Vererbungsregeln
@@ -68,8 +64,6 @@ templates/                       ← Kopiervorlagen zum Ausfüllen
 
 ## 3. Dateien
 
-### Blueprints
-
 | Datei | Beschreibung |
 |-------|--------------|
 | [Blueprint.md](Blueprint.md) | Meta-Blueprint — wie man Blueprints schreibt |
@@ -80,17 +74,8 @@ templates/                       ← Kopiervorlagen zum Ausfüllen
 | [Concept.md](Concept.md) | Architektur-Konzepte (ADR) |
 | [Standard.md](Standard.md) | Coding/Project Standards |
 | [Tutorial.md](Tutorial.md) | Step-by-Step Anleitungen |
-| [Implementierungsplan.md](Implementierungsplan.md) | Umsetzungspläne mit Checklisten |
 | [CMake.md](CMake.md) | Struktur für CMake-Scripts (.cmake) |
 | [Cpp.md](Cpp.md) | Struktur für C++/C Code-Dateien (.cpp, .hpp, .tpp) |
-
-### Templates
-
-Kopiervorlagen zum direkten Ausfüllen: [templates/](templates/)
-
-| Template | Blueprint |
-|----------|-----------|
-| [Implementierungsplan_Template.md](templates/Implementierungsplan_Template.md) | [Implementierungsplan.md](Implementierungsplan.md) |
 
 > **Hinweis:** Keine Versionen im Dateinamen. Version steht nur im Header.  
 > Archivierte Versionen: `Blueprint_v0_4_0.md` etc.
@@ -200,5 +185,4 @@ Blueprint_v0_4_0.md              ← Archivierte Version
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-21** | **Neu: Implementierungsplan.md Blueprint, templates/ Ordner mit Kopiervorlagen** |
-| 0.5.0 | 2025-12-13 | Initial v0.5.0: Keine Version im Dateinamen (nur Archiv), Vererbungshierarchie, TOC-Pflicht, Zielgruppe-Pflichtfeld, English-Link, Modul-Link, Cpp.md hinzugefügt |
+| **0.5.0** | **2025-12-13** | **Initial v0.5.0: Keine Version im Dateinamen (nur Archiv), Vererbungshierarchie, TOC-Pflicht, Zielgruppe-Pflichtfeld, English-Link, Modul-Link, Cpp.md hinzugefügt** |

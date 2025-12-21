@@ -1,7 +1,7 @@
 # Orchestrator.cmake — External Type Dispatcher
 
-> **Version:** 0.7.0  
-> **Datum:** 2025-12-20  
+> **Version:** 0.5.0  
+> **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Orchestrator_cmake.md](../../en/modules/externals/Orchestrator_cmake.md)  
 > **Modul:** [cmake/externals/Orchestrator.cmake](../../../cmake/externals/Orchestrator.cmake)  
-> **Modul-Version:** 0.7.0
+> **Modul-Version:** 0.5.0
 
 ---
 
@@ -76,7 +76,6 @@ Externals.cmake (project)
 |-------|-------|
 | `Local/Attach.cmake` | Handler für lokale Externals |
 | `Fetched/Handler.cmake` | Handler für Git-basierte Externals |
-| `System/Handler.cmake` | Handler für System Externals (find_package) |
 
 ---
 
@@ -133,12 +132,6 @@ apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 | `EXT_NAME` | String | Name des Externals |
 | `EXT_OPTIONS` | JSON | Options-JSON für dieses External |
 
-**Verhalten:**
-1. Prüft ob External in `SKIPPED_EXTERNALS` → **E013 FATAL**
-2. Holt External-Definition aus `SOLUTION_EXTERNALS_JSON`
-3. Erkennt Typ (system/git/path)
-4. Wendet typ-spezifisch an
-
 **Für lokale Externals — setzt Variablen:**
 
 | Variable | Beschreibung |
@@ -156,29 +149,16 @@ Linkt das registrierte Target via `_link_external_to_target()`.
 
 ## 4. Type Detection
 
-### Erkennungslogik (Priorität)
+### Erkennungslogik
 
 | JSON-Feld | Erkannter Typ | Handler |
 |-----------|---------------|---------|
-| `"system": true` | System | `_handle_system_external()` |
-| `"git"` | Fetched | `_handle_fetched_external()` |
 | `"path"` | Local | `_attach_local_external()` |
+| `"git"` | Fetched | `_handle_fetched_external()` |
 | Keines | Fehler E012 | — |
-
-> **Priorität:** system → git → path
+| Beide | Fehler (Validation) | — |
 
 ### Beispiel-Definitionen
-
-**System:**
-```json
-{
-    "qt6": {
-        "system": true,
-        "package": "Qt6",
-        "components": ["Core", "Widgets"]
-    }
-}
-```
 
 **Lokal:**
 ```json
@@ -258,20 +238,8 @@ endforeach()
 | Code | Fehler | Beschreibung |
 |------|--------|--------------|
 | E010 | External nicht definiert | External nicht in `externals` Block |
-| E012 | Kein Source-Feld | Weder `path` noch `git` noch `system` vorhanden |
-| E013 | Geskipptes External verwendet | Target referenziert External mit `skip: true` |
+| E012 | Kein Source-Feld | Weder `path` noch `git` vorhanden |
 | E213 | Include.cmake fehlt | Lokales External ohne Include.cmake |
-
-### Skip-Validierung
-
-`apply_external_to_target()` prüft vor der Anwendung, ob das External geskippt ist:
-
-```cmake
-get_property(_skipped_list GLOBAL PROPERTY SKIPPED_EXTERNALS)
-if("${EXT_NAME}" IN_LIST _skipped_list)
-    cmake_fatal("E013" "External '${EXT_NAME}' is skipped but used by target '${TARGET_NAME}'...")
-endif()
-```
 
 ### Warnungen
 
@@ -312,6 +280,4 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" ..
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-20** | **Skip-Validierung: E013 bei Verwendung geskippter Externals in apply_external_to_target()** |
-| 0.6.0 | 2025-12-18 | Phase 9: System Externals Support, `_handle_system_external()` |
-| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |
+| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
