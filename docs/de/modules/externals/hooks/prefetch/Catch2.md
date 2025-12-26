@@ -1,6 +1,6 @@
 # PreFetch/catch2.cmake — Catch2 PreFetch Hook
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-16  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [catch2_PreFetch.md](../../en/modules/externals/hooks/prefetch/catch2_PreFetch.md)  
 > **Hook:** [cmake/externals/Hooks/PreFetch/catch2.cmake](../../../../../cmake/externals/Hooks/PreFetch/catch2.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

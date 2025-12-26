@@ -1,6 +1,6 @@
 # TestCreate.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [TestCreate.md](../../en/modules/project/TestCreate.md)  
 > **Modul:** [`cmake/project/TestCreate.cmake`](../../../../cmake/project/TestCreate.cmake)  
-> **Modul-Version:** 0.5.1
+> **Modul-Version:** 1.0.0
 
 ---
 

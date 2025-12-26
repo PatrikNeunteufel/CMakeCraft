@@ -1,6 +1,6 @@
 # Solution Schema — Referenz
 
-> **Version:** 0.7.2  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -31,7 +31,7 @@
 
 ## 1. Übersicht
 
-Diese Referenz beschreibt das vollständige Schema der Solution.json für das CMake Architecture V2 Build-System. Die Solution.json ist das Herzstück der deklarativen Konfiguration.
+Diese Referenz beschreibt das vollständige Schema der Solution.json für das CMake Architecture Build-System. Die Solution.json ist das Herzstück der deklarativen Konfiguration.
 
 ### Root-Level Struktur
 

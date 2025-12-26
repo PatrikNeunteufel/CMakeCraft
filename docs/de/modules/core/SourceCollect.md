@@ -1,6 +1,6 @@
 # SourceCollect.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [SourceCollect.md](../../en/modules/core/SourceCollect.md)  
 > **Modul:** [`cmake/core/SourceCollect.cmake`](../../../../cmake/core/SourceCollect.cmake)  
-> **Modul-Version:** 0.5.1
+> **Modul-Version:** 1.0.0
 
 ---
 

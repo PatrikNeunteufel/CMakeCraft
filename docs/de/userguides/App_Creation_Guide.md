@@ -1,6 +1,6 @@
 # App Creation Guide
 
-> **Version:** 0.1.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Typ:** Guide  
 > **Status:** Entwurf  
@@ -30,7 +30,7 @@
 
 ## 1. Übersicht
 
-Dieser Guide beschreibt, wie eine neue Anwendung mit dem App-Container-Konzept des CMake Architecture V2 Build-Systems erstellt wird.
+Dieser Guide beschreibt, wie eine neue Anwendung mit dem App-Container-Konzept des CMake Architecture Build-Systems erstellt wird.
 
 ### App-Container-Architektur
 
@@ -58,7 +58,7 @@ Die Trennung ermöglicht vollständige Testbarkeit der Anwendungslogik ohne die 
 
 ## 2. Voraussetzungen
 
-- CMake Architecture V2 Build-System eingerichtet
+- CMake Architecture Build-System eingerichtet
 - Solution.json vorhanden
 - Benötigte Externals im `externals` Block definiert
 

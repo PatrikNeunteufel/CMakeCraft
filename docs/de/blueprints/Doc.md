@@ -1,6 +1,6 @@
 # Doc — Standard für alle Dokumentationen
 
-> **Version:** 0.5.2  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -32,7 +32,7 @@
 
 ## 1. Übersicht
 
-Dieser Blueprint definiert **verbindliche Regeln für alle Dokumentationen** im CMake Architecture V2 Projekt. Er dient als Basis für spezialisierte Blueprints (ModuleDoc, Guide, Reference, etc.).
+Dieser Blueprint definiert **verbindliche Regeln für alle Dokumentationen** im CMake Architecture Projekt. Er dient als Basis für spezialisierte Blueprints (ModuleDoc, Guide, Reference, etc.).
 
 ### Zielgruppe
 
@@ -297,7 +297,7 @@ Anker vor Commit testen:
 
 | Datei-Art | Dateiname | Version |
 |-----------|-----------|---------|
-| **Aktuell** | `Doc.md` | Im Header: `> **Version:** 0.5.0` |
+| **Aktuell** | `Doc.md` | Im Header: `> **Version:** 1.0.0` |
 | **Archiviert** | `Doc_v0_4_0.md` | Im Dateinamen + Header |
 
 ### 8.2 Allgemeine Regeln

@@ -2,8 +2,10 @@
 # ==============================================
 # PostFetch hook for Qt Advanced Docking System
 #
-# Version: 0.1.0
-# Date:    2025-12-21
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 
 include_guard(GLOBAL)
 

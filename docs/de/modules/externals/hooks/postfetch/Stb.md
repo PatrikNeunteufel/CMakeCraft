@@ -1,6 +1,6 @@
 # stb.cmake — Modul-Dokumentation
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-23  
 > **Typ:** ModuleDoc  
 > **Status:** Stabil  
@@ -8,7 +8,7 @@
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
 > **Modul:** [`cmake/externals/hooks/postfetch/stb.cmake`](../../../../cmake/externals/hooks/postfetch/stb.cmake)  
-> **Modul-Version:** 0.1.0
+> **Modul-Version:** 1.0.0
 
 ---
 
@@ -65,7 +65,7 @@ stb = Single-file public domain libraries for C/C++
 
 ### Warum ein PostFetch Hook?
 
-stb ist eine Sammlung von **Header-Only** Libraries ohne Build-System. Das CMake Architecture V2 erwartet jedoch ein Target für jedes External. Der PostFetch Hook schließt diese Lücke:
+stb ist eine Sammlung von **Header-Only** Libraries ohne Build-System. Das CMake Architecture erwartet jedoch ein Target für jedes External. Der PostFetch Hook schließt diese Lücke:
 
 ```
 FetchContent_Declare(stb ...)

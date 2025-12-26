@@ -1,6 +1,11 @@
 # cmake/externals/hooks/prefetch/qt-ads.cmake
 # ============================================
 # PreFetch hook for Qt Advanced Docking System
+#
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 
 include_guard(GLOBAL)
 

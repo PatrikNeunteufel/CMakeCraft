@@ -1,6 +1,6 @@
 # Tutorial — Standard für Step-by-Step Anleitungen
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -99,7 +99,7 @@ Tutorials erweitern den Standard-Header um:
 ```markdown
 # GoogleTest und Catch2 hinzufügen — Tutorial
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-10  
 > **Typ:** Tutorial  
 > **Status:** Stabil  
@@ -415,7 +415,7 @@ Bevor du beginnst, stelle sicher:
 - [ ] Grundkenntnisse in CMake
 
 **Dateien:**
-- [ ] Funktionierendes CMake Architecture V2 Projekt
+- [ ] Funktionierendes CMake Architecture Projekt
 - [ ] `Solution.json` vorhanden
 ```
 

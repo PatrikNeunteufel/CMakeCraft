@@ -1,6 +1,6 @@
 # CppModuleDoc — Standard für C++ Modul-Dokumentation
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-23  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  

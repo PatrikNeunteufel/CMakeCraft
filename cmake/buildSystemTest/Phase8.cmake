@@ -3,9 +3,9 @@
 # ==============================================================================
 #
 # Test:         Phase 8
-# Version:      0.5.0
+# Version:      1.0.0
 # Date:         2025-12-17
-# Part of:      CMake Architecture V2
+# Part of:      CMake Architecture
 #
 # Description:
 #   Tests the App-Container Pipeline including:

@@ -1,6 +1,6 @@
 # doctest/Include.cmake — doctest Testing Framework Integration
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [doctest_Include.md](../../en/modules/externals/includes/doctest_Include.md)  
 > **Modul:** [cmake/externals/includes/doctest/Include.cmake](../../../../cmake/externals/includes/doctest/Include.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

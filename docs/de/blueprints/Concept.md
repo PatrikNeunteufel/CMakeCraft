@@ -1,6 +1,6 @@
 # Concept — Standard für Architektur-Konzepte
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -234,7 +234,7 @@ JSON mit CMake 3.19+ `file(READ)` und `string(JSON)`.
 ```markdown
 # Context Pattern — Konzept
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Concept  
 > **Status:** Stabil  

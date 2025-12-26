@@ -1,6 +1,6 @@
 # Standards v0.7.0 — Übersicht
 
-> **Version:** 0.7.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-19  
 > **Status:** Stabil
 

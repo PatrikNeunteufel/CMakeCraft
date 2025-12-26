@@ -2,10 +2,10 @@
 # ===================================
 # External type dispatcher - detects type and routes to appropriate handler
 #
-# Version: 0.7.0
-# Date:    2025-12-20
-# Status:  Development
-# Author:  CMake Architecture V2 Team
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 #
 # Dependencies:
 #   - cmake/core/Errors.cmake

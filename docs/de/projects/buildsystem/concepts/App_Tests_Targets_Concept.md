@@ -1,9 +1,9 @@
 # App Tests Targets Konzept
 
-> **Version:** 0.1.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Status:** Implementiert  
-> **Autor:** CMake Architecture V2 Team
+> **Autor:** CMake Architecture Team
 
 ---
 

@@ -1,7 +1,7 @@
 # Glossar — Referenz
 
-> **Version:** 0.5.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.0  
+> **Datum:** 2025-12-24  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -18,20 +18,22 @@
 4. [CMake-Begriffe](#4-cmake-begriffe)
 5. [Projekt-Begriffe](#5-projekt-begriffe)
 6. [Build-System Konzepte](#6-build-system-konzepte)
-7. [Typen und Modi](#7-typen-und-modi)
-8. [Compiler und Flags](#8-compiler-und-flags)
-9. [Datei-Extensions](#9-datei-extensions)
-10. [Fehlercode-Bereiche](#10-fehlercode-bereiche)
-11. [Debug-Level](#11-debug-level)
-12. [Übersetzungs-Referenz](#12-übersetzungs-referenz)
-13. [Siehe auch](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+7. [Architektur-Patterns](#7-architektur-patterns) ← **NEU**
+8. [C++-Idiome](#8-c-idiome) ← **NEU**
+9. [Typen und Modi](#9-typen-und-modi)
+10. [Compiler und Flags](#10-compiler-und-flags)
+11. [Datei-Extensions](#11-datei-extensions)
+12. [Fehlercode-Bereiche](#12-fehlercode-bereiche)
+13. [Debug-Level](#13-debug-level)
+14. [Übersetzungs-Referenz](#14-übersetzungs-referenz)
+15. [Siehe auch](#15-siehe-auch)
+16. [Changelog](#16-changelog)
 
 ---
 
 ## 1. Übersicht
 
-Dieses Glossar definiert alle Fachbegriffe, die in der Dokumentation des CMake Architecture V2 Build-Systems verwendet werden. Es dient als zentrale Nachschlagereferenz für konsistente Terminologie.
+Dieses Glossar definiert alle Fachbegriffe, die in der Dokumentation des CMake Architecture Build-Systems verwendet werden. Es dient als zentrale Nachschlagereferenz für konsistente Terminologie.
 
 ### Zielgruppe
 
@@ -53,7 +55,7 @@ Dieses Glossar definiert alle Fachbegriffe, die in der Dokumentation des CMake A
 
 ### Sprache
 
-Begriffe werden auf Deutsch erklärt. Englische Fachbegriffe werden beibehalten, wenn sie in der Praxis üblich sind (z.B. "Target", "External", "Hook").
+Begriffe werden auf Deutsch erklärt. Englische Fachbegriffe werden beibehalten, wenn sie in der Praxis üblich sind (z.B. "Target", "External", "Hook", "EventBus").
 
 ---
 
@@ -65,18 +67,25 @@ Begriffe werden auf Deutsch erklärt. Englische Fachbegriffe werden beibehalten,
 | **CI/CD** | Continuous Integration/Continuous Deployment | Automatisierte Build- und Deployment-Pipelines |
 | **CLI** | Command Line Interface | Kommandozeilen-Schnittstelle |
 | **CRT** | C Runtime Library | Windows C-Laufzeitbibliothek |
+| **DI** | Dependency Injection | Entwurfsmuster zur Entkopplung |
 | **DLL** | Dynamic Link Library | Dynamisch geladene Bibliothek (Windows) |
 | **DSP** | Digital Signal Processing | Digitale Signalverarbeitung |
+| **EMA** | Exponential Moving Average | Glättungsalgorithmus für Zeitreihen |
+| **FFT** | Fast Fourier Transform | Schnelle Fourier-Transformation |
+| **FPS** | Frames Per Second | Bilder pro Sekunde |
 | **GUI** | Graphical User Interface | Grafische Benutzeroberfläche |
 | **i18n** | Internationalization | Internationalisierung (i + 18 Buchstaben + n) |
 | **IDE** | Integrated Development Environment | Integrierte Entwicklungsumgebung |
 | **JSON** | JavaScript Object Notation | Datenaustauschformat |
+| **LOC** | Lines of Code | Codezeilen (Komplexitätsmetrik) |
 | **PCH** | Precompiled Header | Vorkompilierte Header-Datei zur Build-Beschleunigung |
 | **PIMPL** | Pointer to Implementation | Entwurfsmuster zur Kapselung |
 | **PR** | Pull Request | Anfrage zur Code-Integration |
+| **RAII** | Resource Acquisition Is Initialization | C++ Idiom für automatische Ressourcenverwaltung |
 | **RTTI** | Run-Time Type Information | Laufzeit-Typinformationen in C++ |
 | **SemVer** | Semantic Versioning | Semantische Versionierung (MAJOR.MINOR.PATCH) |
 | **SO** | Shared Object | Dynamisch geladene Bibliothek (Linux) |
+| **TDD** | Test-Driven Development | Testgetriebene Entwicklung |
 
 ---
 
@@ -123,9 +132,95 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 
 ---
 
-## 7. Typen und Modi
+## 7. Architektur-Patterns
 
-### 7.1 Executable-Typen
+> **Neu in v0.6.0** — Allgemeine Software-Architektur-Begriffe
+
+### 7.1 Architektur-Stile
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **Service-Architektur** | Architekturstil mit passiven Services, die von außen gesteuert werden. Services wrappen Domain-Logik und kommunizieren über → EventBus. |
+| **Agent-Architektur** | Architekturstil mit autonomen Agents, die eigenes Verhalten und → State-Machine haben. Agents reagieren selbstständig auf Events. |
+| **Microservices** | Architekturstil mit unabhängig deploybare Services, die über Netzwerk kommunizieren. |
+| **Monolith** | Architekturstil mit einer einzigen, zusammenhängenden Anwendung. |
+
+### 7.2 Kommunikations-Patterns
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **EventBus** | Zentraler Message-Broker für type-safe → Publish/Subscribe. Ermöglicht → Lose Kopplung zwischen Modulen. |
+| **CommandBus** | Dispatcher für benannte Aktionen (Commands). Ermöglicht UI-Aktionen über String-IDs. |
+| **MessageQueue** | Asynchrone Nachrichtenwarteschlange zwischen Komponenten. |
+| **Publish/Subscribe** | Entkopplungs-Pattern: Publisher kennt Subscriber nicht, beide kennen nur den → EventBus. |
+| **Observer** | Pattern bei dem Objekte (Observer) auf Änderungen eines Subjects reagieren. Enger gekoppelt als → Publish/Subscribe. |
+| **Request/Response** | Synchrones Kommunikationsmuster: Anfrage → Antwort. |
+
+### 7.3 Event-Konzepte
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **Event** | Immutables Daten-Struct, das etwas beschreibt, das passiert ist. |
+| **Command** | Benannte Aktion, die ausgeführt werden kann. Imperativ (tue etwas). |
+| **Publisher** | Komponente, die Events veröffentlicht. |
+| **Subscriber** | Komponente, die Events empfängt. |
+| **Subscription** | Registrierung eines → Subscribers für einen Event-Typ. |
+| **Handler** | Funktion, die auf ein Event oder Command reagiert. |
+
+### 7.4 Dependency Injection
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **Dependency Injection** | Entwurfsmuster: Abhängigkeiten werden von außen übergeben statt selbst erzeugt. |
+| **ServiceContainer** | Container der alle Services hält und bei Bedarf injiziert. Auch: IoC Container. |
+| **IoC** | Inversion of Control. Prinzip hinter → Dependency Injection. |
+| **Singleton** | Lebenszyklus: Genau eine Instanz für gesamte Anwendung. |
+| **Scoped** | Lebenszyklus: Eine Instanz pro Scope (z.B. Request). |
+| **Transient** | Lebenszyklus: Neue Instanz bei jedem Abruf. |
+
+### 7.5 Design-Prinzipien
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **Lose Kopplung** | Module kennen sich nicht direkt, kommunizieren nur über Abstraktionen. Gegenteil: → Enge Kopplung. |
+| **Enge Kopplung** | Module rufen sich direkt auf. Schwer testbar, fragil. Zu vermeiden. |
+| **Interface-First Design** | Zuerst Interface definieren, dann Implementation. Ermöglicht späteren Austausch. |
+| **Separation of Concerns** | Jedes Modul hat genau eine Verantwortung. |
+| **Single Responsibility** | Eine Klasse sollte nur einen Grund zur Änderung haben. |
+| **Open/Closed Principle** | Offen für Erweiterung, geschlossen für Modifikation. |
+
+### 7.6 Zustandsverwaltung
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **State-Machine** | Zustandsautomat mit definierten Zuständen und Übergängen. |
+| **Immutable** | Unveränderlich nach Erstellung. Events sollten immutable sein. |
+| **Mutable** | Veränderbar. Gegenteil von → Immutable. |
+
+---
+
+## 8. C++-Idiome
+
+> **Neu in v0.6.0** — Allgemeine C++-Begriffe und Idiome
+
+| Begriff | Erklärung |
+|---------|-----------|
+| **RAII** | Resource Acquisition Is Initialization. Ressourcen werden im Konstruktor erworben, im Destruktor freigegeben. |
+| **PIMPL** | Pointer to Implementation. Kapselung der Implementierung hinter Pointer. |
+| **CRTP** | Curiously Recurring Template Pattern. Klasse erbt von Template mit sich selbst als Parameter. |
+| **Type-Erasure** | Technik um Template-Typen hinter nicht-template Interface zu verbergen. |
+| **StrongId** | Type-safe ID-Wrapper: `StrongId<T, Tag>`. Verhindert Verwechslung verschiedener ID-Typen zur Compile-Zeit. |
+| **Tag Dispatch** | Überladungsauswahl über leere Tag-Typen. |
+| **SFINAE** | Substitution Failure Is Not An Error. Template-Metaprogrammierung. |
+| **Copy-and-Swap** | Idiom für exception-safe Assignment-Operator. |
+| **Rule of Zero** | Keine eigenen Destruktor/Copy/Move wenn möglich. |
+| **Rule of Five** | Wenn einer von Destruktor/Copy-Ctor/Copy-Assign/Move-Ctor/Move-Assign nötig, dann alle fünf. |
+
+---
+
+## 9. Typen und Modi
+
+### 9.1 Executable-Typen
 
 | Typ | Verwendung |
 |-----|------------|
@@ -135,7 +230,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | **HEADLESS** | Server/Dienst ohne Benutzeroberfläche |
 | **WORKER** | Hintergrund-Prozess |
 
-### 7.2 Library-Typen
+### 9.2 Library-Typen
 
 | Typ | Erklärung |
 |-----|-----------|
@@ -143,7 +238,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | **SHARED** | Dynamisch gelinkte Bibliothek (.so, .dll) |
 | **INTERFACE** | Header-only Bibliothek (keine Kompilierung) |
 
-### 7.3 Test-Typen
+### 9.3 Test-Typen
 
 | Typ | Erklärung | Typischer Timeout |
 |-----|-----------|-------------------|
@@ -152,7 +247,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | **SYSTEM** | Ende-zu-Ende Tests | 300s |
 | **PERFORMANCE** | Leistungs- und Benchmark-Tests | 600s |
 
-### 7.4 Source-Modi
+### 9.4 Source-Modi
 
 | Modus | Erklärung |
 |-------|-----------|
@@ -162,9 +257,9 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 
 ---
 
-## 8. Compiler und Flags
+## 10. Compiler und Flags
 
-### 8.1 Compiler
+### 10.1 Compiler
 
 | Begriff | Erklärung |
 |---------|-----------|
@@ -177,7 +272,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | **MSVC** | Microsoft Visual C++ Compiler |
 | **Apple Clang** | Apples Variante des Clang-Compilers |
 
-### 8.2 MSVC-Flags
+### 10.2 MSVC-Flags
 
 | Flag | Erklärung |
 |------|-----------|
@@ -189,7 +284,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | `/Zc:__cplusplus` | Korrekter __cplusplus Makro-Wert |
 | `/Zc:preprocessor` | Standard-konformer Präprozessor |
 
-### 8.3 GCC/Clang-Flags
+### 10.3 GCC/Clang-Flags
 
 | Flag | Erklärung |
 |------|-----------|
@@ -201,7 +296,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 
 ---
 
-## 9. Datei-Extensions
+## 11. Datei-Extensions
 
 | Extension | Verwendung |
 |-----------|------------|
@@ -214,10 +309,11 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | `.ixx`, `.cppm`, `.mpp` | C++20 Module Interface Units |
 | `.a`, `.lib` | Statische Bibliotheken |
 | `.so`, `.dll` | Dynamische Bibliotheken |
+| `.vert`, `.frag`, `.glsl` | GLSL Shader-Dateien |
 
 ---
 
-## 10. Fehlercode-Bereiche
+## 12. Fehlercode-Bereiche
 
 | Bereich | Beschreibung |
 |---------|--------------|
@@ -236,9 +332,9 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 
 ---
 
-## 11. Debug-Level
+## 13. Debug-Level
 
-### 11.1 Anzeige-Level (was sehen wir)
+### 13.1 Anzeige-Level (was sehen wir)
 
 | Level | Konstante | Verwendung |
 |-------|-----------|------------|
@@ -248,7 +344,7 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 | 4 | `DBG_SHOW_LOTS` | Viele Details |
 | 5 | `DBG_SHOW_ALL` | Alles |
 
-### 11.2 Message-Level (wie wichtig ist die Nachricht)
+### 13.2 Message-Level (wie wichtig ist die Nachricht)
 
 | Level | Konstante | Message-Wichtigkeit |
 |-------|-----------|---------------------|
@@ -260,26 +356,32 @@ Diese Begriffe werden in unserem Projekt **nicht übersetzt**:
 
 ---
 
-## 12. Übersetzungs-Referenz
+## 14. Übersetzungs-Referenz
 
 Konsistente Übersetzungen zwischen Deutsch und Englisch:
 
 | Deutsch | Englisch |
 |---------|----------|
 | Abhängigkeit | Dependency |
+| Agent | Agent |
 | Ausführbare Datei | Executable |
 | Bibliothek | Library |
+| Dienst / Service | Service |
+| Enge Kopplung | Tight Coupling |
+| Ereignis | Event |
+| Konfiguration | Configuration |
+| Lose Kopplung | Loose Coupling |
 | Pflichtfeld | Required field |
 | Verzeichnis | Directory |
 | Warnung | Warning |
 | Fehler | Error |
-| Konfiguration | Configuration |
 | Einstellung | Setting |
 | Ziel | Target |
+| Zustandsautomat | State Machine |
 
 ---
 
-## 13. Siehe auch
+## 15. Siehe auch
 
 - [ErrorCodes.md](ErrorCodes.md) — Vollständige Fehlercode-Referenz
 - [Solution_Schema.md](Solution_Schema.md) — JSON-Schema Referenz
@@ -287,9 +389,10 @@ Konsistente Übersetzungen zwischen Deutsch und Englisch:
 
 ---
 
-## 14. Changelog
+## 16. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, vollständige Fehlercode-Bereiche (E0xx-E5xx, W0xx-W5xx inkl. E4xx/W4xx AppContainer)** |
+| **0.6.0** | **2025-12-24** | **Neue Abschnitte: 7. Architektur-Patterns (Service/Agent-Architektur, EventBus, CommandBus, Publish/Subscribe, Dependency Injection, Design-Prinzipien), 8. C++-Idiome (RAII, PIMPL, CRTP, Type-Erasure, StrongId, Rule of Zero/Five). Neue Abkürzungen: DI, EMA, FFT, FPS, LOC, RAII, TDD. Neue Datei-Extensions: .vert, .frag, .glsl** |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, vollständige Fehlercode-Bereiche |
 | 0.1.0 | 2025-12-05 | Initial: Begriffe aus allen Dokumentationen gesammelt |

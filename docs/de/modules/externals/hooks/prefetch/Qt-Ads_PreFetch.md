@@ -1,6 +1,6 @@
 # PreFetch/qt-ads.cmake — Qt-ADS PreFetch Hook
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-21  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Qt-Ads_PreFetch.md](../../../../en/modules/externals/hooks/prefetch/Qt-Ads.md)  
 > **Hook:** [cmake/externals/hooks/prefetch/qt-ads.cmake](../../../../../../cmake/externals/hooks/prefetch/qt-ads.cmake)  
-> **Modul-Version:** 0.1.0
+> **Modul-Version:** 1.0.0
 
 ---
 

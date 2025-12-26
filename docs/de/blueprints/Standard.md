@@ -1,6 +1,6 @@
 # Standard — Standard für Coding/Project Standards
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -187,7 +187,7 @@ Für Übersichten kompakte Tabellenform:
 ```markdown
 # C++ Coding Standard
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Standard  
 > **Status:** Stabil  

@@ -1,6 +1,6 @@
 # PathResolver.cmake — System External Path Resolution
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [PathResolver_cmake.md](../../../../en/modules/externals/system/PathResolver_cmake.md)  
 > **Modul:** [cmake/externals/system/PathResolver.cmake](../../../../../cmake/externals/system/PathResolver.cmake)  
-> **Modul-Version:** 0.6.0  
+> **Modul-Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
 ---

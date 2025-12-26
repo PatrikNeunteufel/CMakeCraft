@@ -1,6 +1,6 @@
 # LibraryCreate.cmake — Modul-Dokumentation
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [LibraryCreate.md](../../en/modules/project/LibraryCreate.md)  
 > **Modul:** [`cmake/project/LibraryCreate.cmake`](../../../../cmake/project/LibraryCreate.cmake)  
-> **Modul-Version:** 0.6.0
+> **Modul-Version:** 1.0.0
 
 ---
 

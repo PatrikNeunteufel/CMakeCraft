@@ -1,6 +1,6 @@
 # Core/Fetch.cmake — FetchContent Wrapper mit Caching
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Fetch_cmake.md](../../en/modules/externals/Fetch_cmake.md)  
 > **Modul:** [cmake/externals/Core/Fetch.cmake](../../../cmake/externals/Core/Fetch.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

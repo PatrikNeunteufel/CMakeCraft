@@ -1,6 +1,6 @@
 # Fetched/Handler.cmake — Git External Pipeline
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Handler_cmake.md](../../en/modules/externals/Handler_cmake.md)  
 > **Modul:** [cmake/externals/Fetched/Handler.cmake](../../../cmake/externals/Fetched/Handler.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

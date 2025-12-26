@@ -1,6 +1,6 @@
 # Git Externals — Testing
 
-> **Version:** 0.5.2  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -24,7 +24,7 @@
 
 ## 1. Übersicht
 
-Dieses Dokument beschreibt Git Testing-Externals für das CMake Architecture V2 Build-System.
+Dieses Dokument beschreibt Git Testing-Externals für das CMake Architecture Build-System.
 
 | Library | Beschreibung | CMake | Hook |
 |---------|--------------|-------|------|

@@ -1,6 +1,6 @@
 # ModuleDoc — Standard für CMake-Modul-Dokumentation
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -260,13 +260,13 @@ docs/de/modules/core/Context.md   ← Dokumentation (Version im Header)
 ```markdown
 # Context.cmake — Dokumentation
 
-> **Version:** 0.1.1 (doc v2)  
+> **Version:** 1.0.0 (doc v2)  
 > **Datum:** 2025-12-13  
 > **Typ:** ModuleDoc  
 > **Status:** Stabil  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/core/Context.cmake](../../../cmake/core/Context.cmake)  
-> **Modul-Version:** 0.1.1  
+> **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [Context.md](../../en/modules/core/Context.md)

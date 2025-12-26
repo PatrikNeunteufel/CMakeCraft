@@ -1,6 +1,6 @@
 # Blueprint: Cheatsheet
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Typ:** Blueprint  
 > **Status:** Stabil  

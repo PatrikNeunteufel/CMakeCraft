@@ -1,6 +1,6 @@
 # Handler.cmake — System External Handler
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Handler_cmake.md](../../../../en/modules/externals/system/Handler_cmake.md)  
 > **Modul:** [cmake/externals/system/Handler.cmake](../../../../../cmake/externals/system/Handler.cmake)  
-> **Modul-Version:** 0.6.0  
+> **Modul-Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
 ---

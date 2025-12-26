@@ -1,6 +1,6 @@
 # glad/Include.cmake — GLAD OpenGL Loader Integration
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [glad_Include.md](../../en/modules/externals/includes/glad_Include.md)  
 > **Modul:** [cmake/externals/includes/glad/Include.cmake](../../../../cmake/externals/includes/glad/Include.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

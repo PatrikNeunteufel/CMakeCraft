@@ -1,6 +1,6 @@
 # Build-System-Tests — Phasen-Testdokumentation
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Sprache:** Deutsch  
 > **English:** [README.md](../../../en/modules/buildSystemTest/README.md)

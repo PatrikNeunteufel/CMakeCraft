@@ -1,8 +1,8 @@
 # Solution.json — Cheatsheet
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Letzte Aktualisierung:** 2025-12-18  
-> **Für:** CMake Architecture V2  
+> **Für:** CMake Architecture  
 > **Sprache:** Deutsch  
 > **English:** [Solution_Cheatsheet.md](../../en/cheatsheets/Solution_Cheatsheet.md)
 

@@ -1,6 +1,6 @@
 # C++ Coding Standard — Stil-Richtlinien
 
-> **Version:** 0.9.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-19  
 > **Typ:** Standard  
 > **Status:** Stabil  

@@ -1,6 +1,6 @@
 # CMakeLists.txt — Referenz
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -29,7 +29,7 @@
 
 ## 1. Übersicht
 
-Die `CMakeLists.txt` ist die **Top-Level-Konfiguration** des modularen CMake Architecture V2 Build-Systems. Sie orchestriert das Laden aller Module und Pipelines.
+Die `CMakeLists.txt` ist die **Top-Level-Konfiguration** des modularen CMake Architecture Build-Systems. Sie orchestriert das Laden aller Module und Pipelines.
 
 ### Verantwortlichkeiten
 
@@ -281,7 +281,7 @@ include(cmake/project/Tests.cmake)
 ### 6.3 Beispiel-Ausgabe
 
 ```
--- [CMake] === CMake Architecture V2 ===
+-- [CMake] === CMake Architecture ===
 -- [CMake] CMake Version: 3.28.0
 -- [CMake] Generator: Ninja
 -- [CMake] Build Type: Release

@@ -1,6 +1,6 @@
 # PreFetch/googletest.cmake — GoogleTest PreFetch Hook
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-16  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [googletest_PreFetch.md](../../en/modules/externals/hooks/prefetch/googletest_PreFetch.md)  
 > **Hook:** [cmake/externals/Hooks/PreFetch/googletest.cmake](../../../../../cmake/externals/Hooks/PreFetch/googletest.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

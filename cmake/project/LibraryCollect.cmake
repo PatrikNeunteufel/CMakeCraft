@@ -2,10 +2,10 @@
 # ===================================
 # Collects library data from JSON into a Context
 #
-# Version: 0.6.0
-# Date:    2025-12-19
-# Status:  Development
-# Author:  CMake Architecture V2 Team
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 #
 # Dependencies:
 #   - cmake/core/Json.cmake

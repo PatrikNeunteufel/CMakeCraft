@@ -1,6 +1,6 @@
 # Testing – Benutzerhandbuch
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Guide  
 > **Status:** Stabil  
@@ -56,7 +56,7 @@ Dieses Handbuch behandelt **Projekt-Tests**.
 
 ### Checkliste
 
-- [ ] **CMake Architecture V2** eingerichtet
+- [ ] **CMake Architecture** eingerichtet
 - [ ] **Test-Framework** als External definiert (doctest, GoogleTest, oder Catch2)
 - [ ] **Library zum Testen** vorhanden (in `libraries` Block)
 - [ ] **CTest** verfügbar (kommt mit CMake)

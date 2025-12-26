@@ -1,6 +1,6 @@
 # CMake Standard — Übergeordnete Build-System-Richtlinien
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-19  
 > **Typ:** Standard  
 > **Status:** Stabil  
@@ -47,10 +47,10 @@ Alle Entwickler, die CMake für Build-Konfiguration verwenden. Dieser Standard i
 | Einfache Projekte | Standalone CMakeLists.txt |
 | Prototypen | Minimal-Setup |
 
-### Verhältnis zu CMake Architecture V2
+### Verhältnis zu CMake Architecture
 
 Dieser Standard ist **übergeordnet** zum modularen Build-System:
-- CMake Architecture V2 (Solution.json) folgt diesem Standard
+- CMake Architecture (Solution.json) folgt diesem Standard
 - Eigenständige Projekte folgen ebenfalls diesem Standard
 - Der Standard definiert das "Was", Module das "Wie"
 

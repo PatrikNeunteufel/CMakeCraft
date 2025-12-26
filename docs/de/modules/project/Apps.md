@@ -1,12 +1,12 @@
 # Apps.cmake — Dokumentation
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/project/Apps.cmake](../../../../cmake/project/Apps.cmake)  
-> **Modul-Version:** 0.5.0  
+> **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [Apps.md](../../../en/modules/project/Apps.md)

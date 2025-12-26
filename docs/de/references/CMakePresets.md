@@ -1,6 +1,6 @@
 # CMakePresets — Referenz
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -30,7 +30,7 @@
 
 ## 1. Übersicht
 
-Diese Referenz dokumentiert alle verfügbaren Team-Presets in `CMakePresets.json` für das CMake Architecture V2 Build-System.
+Diese Referenz dokumentiert alle verfügbaren Team-Presets in `CMakePresets.json` für das CMake Architecture Build-System.
 
 ### Preset-Kategorien
 
@@ -51,7 +51,7 @@ Diese Referenz dokumentiert alle verfügbaren Team-Presets in `CMakePresets.json
         "cmake-architecture-v2": {
             "version": "0.5.0",
             "date": "2025-12-14",
-            "description": "Team-weite Presets für CMake Architecture V2"
+            "description": "Team-weite Presets für CMake Architecture"
         }
     }
 }
@@ -258,7 +258,7 @@ Diese Presets werden nur zur Vererbung verwendet (`hidden: true`).
 
 | Preset | Beschreibung |
 |--------|--------------|
-| `windows-vs-base` | VS Generator, C++20, V2 Variablen |
+| `windows-vs-base` | VS Generator, C++20, Variablen |
 | `windows-ninja-base` | Ninja, compile_commands.json |
 | `linux-base` | Ninja, C++20 |
 | `macos-base` | C++20, PIC |
@@ -276,7 +276,7 @@ Diese Presets werden nur zur Vererbung verwendet (`hidden: true`).
 
 ## 9. Cache-Variablen
 
-Alle Configure Presets setzen diese V2-Variablen:
+Alle Configure Presets setzen diese Variablen:
 
 | Variable | Default | Beschreibung |
 |----------|---------|--------------|
@@ -362,4 +362,4 @@ cmake --list-presets=test
 | Version | Datum | Änderungen |
 |---------|-------|------------|
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Verwendung** |
-| 0.1.0 | 2025-12-03 | Initial: Alle Team-Presets dokumentiert, Hidden Building Blocks, V2-Variablen |
+| 0.1.0 | 2025-12-03 | Initial: Alle Team-Presets dokumentiert, Hidden Building Blocks, Variablen |

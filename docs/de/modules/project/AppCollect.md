@@ -1,12 +1,12 @@
 # AppCollect.cmake — Dokumentation
 
-> **Version:** 0.7.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Modul:** [cmake/project/AppCollect.cmake](../../../../cmake/project/AppCollect.cmake)  
-> **Modul-Version:** 0.7.0  
+> **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
 > **English:** [AppCollect.md](../../../en/modules/project/AppCollect.md)

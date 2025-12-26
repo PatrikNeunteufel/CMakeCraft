@@ -1,6 +1,6 @@
 # Offene Abklärungen — Build-System Module
 
-> **Version:** 0.5.3  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** Abklärung  
 > **Status:** In Bearbeitung  

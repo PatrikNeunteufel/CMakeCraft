@@ -1,6 +1,6 @@
 # Language Standard – Sprachrichtlinien
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Standard  
 > **Status:** Stabil  
@@ -185,7 +185,7 @@ docs/fr/guides/Qt6_Integration_Guide_Utilisateur.md
 ```markdown
 # Module Name – Documentation
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Language:** English  
 > **Translations:** [Deutsch](../../de/modules/core/Module_Name.md) · [Français](../../fr/modules/core/Module_Name.md)
 ```
@@ -194,7 +194,7 @@ docs/fr/guides/Qt6_Integration_Guide_Utilisateur.md
 ```markdown
 # Modul-Name – Dokumentation
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Sprache:** Deutsch  
 > **English:** [Module_Name.md](../../en/modules/core/Module_Name.md)
 ```

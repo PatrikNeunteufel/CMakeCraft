@@ -1,6 +1,6 @@
 # CMake — Standard für CMake-Scripts
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -31,7 +31,7 @@
 
 ## 1. Übersicht
 
-Dieser Blueprint definiert die **verbindliche Struktur** für alle CMake-Module (.cmake Dateien) im CMake Architecture V2 Projekt.
+Dieser Blueprint definiert die **verbindliche Struktur** für alle CMake-Module (.cmake Dateien) im CMake Architecture Projekt.
 
 ### Ziele
 
@@ -88,7 +88,7 @@ Jede .cmake Datei beginnt mit diesem Header:
 # Version: X.Y.Z
 # Date:    YYYY-MM-DD
 # Status:  [Development | Stable | Deprecated]
-# Author:  CMake Architecture V2 Team
+# Author:  CMake Architecture Team
 #
 # Dependencies:
 #   - [Abhängigkeit 1]

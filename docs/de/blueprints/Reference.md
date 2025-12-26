@@ -1,6 +1,6 @@
 # Reference — Standard für API/Schema-Referenzen
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -223,7 +223,7 @@ Am Ende des Hauptteils eine kompakte Übersicht aller Einträge.
 ```markdown
 # ErrorCodes — Referenz
 
-> **Version:** 0.1.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -247,7 +247,7 @@ Am Ende des Hauptteils eine kompakte Übersicht aller Einträge.
 
 ## 1. Übersicht
 
-Diese Referenz dokumentiert alle Error Codes des CMake Architecture V2 
+Diese Referenz dokumentiert alle Error Codes des CMake Architecture 
 Build-Systems.
 
 ### Error-Code-Format

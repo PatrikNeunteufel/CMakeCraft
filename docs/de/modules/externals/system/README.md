@@ -1,6 +1,6 @@
 # externals/system — System Externals Handler
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** README  
 > **Status:** Aktiv  

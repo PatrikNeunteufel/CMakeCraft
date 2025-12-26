@@ -1,6 +1,6 @@
 # hooks/HookLoader.cmake — Pre/PostFetch Hook System
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [HookLoader_cmake.md](../../en/modules/externals/HookLoader_cmake.md)  
 > **Modul:** [cmake/externals/hooks/HookLoader.cmake](../../../cmake/externals/hooks/HookLoader.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

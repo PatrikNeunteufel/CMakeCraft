@@ -1,6 +1,6 @@
 # Externals — Referenz
 
-> **Version:** 0.5.2  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -30,7 +30,7 @@
 
 ## 1. Übersicht
 
-Diese Referenz bietet eine **kategorisierte Übersicht** aller verfügbaren External Libraries für das CMake Architecture V2 Build-System.
+Diese Referenz bietet eine **kategorisierte Übersicht** aller verfügbaren External Libraries für das CMake Architecture Build-System.
 
 ### External-Typen
 

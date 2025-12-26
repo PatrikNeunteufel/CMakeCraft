@@ -1,6 +1,6 @@
 # Debug.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Debug.md](../../en/modules/core/Debug.md)  
 > **Modul:** [`cmake/core/Debug.cmake`](../../../../cmake/core/Debug.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

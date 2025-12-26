@@ -2,10 +2,10 @@
 # ================================
 # Source file management for executables, libraries, and tests
 #
-# Version: 0.5.1
-# Date:    2025-12-17
-# Status:  Development
-# Author:  CMake Architecture V2 Team
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 #
 # Dependencies:
 #   - Errors.cmake (cmake_fatal, cmake_warn)

@@ -1,6 +1,6 @@
 # lua54/Include.cmake — Lua 5.4 Scripting Engine Integration
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [lua54_Include.md](../../en/modules/externals/includes/lua54_Include.md)  
 > **Modul:** [cmake/externals/includes/lua54/Include.cmake](../../../../cmake/externals/includes/lua54/Include.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

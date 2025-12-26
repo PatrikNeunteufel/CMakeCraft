@@ -1,6 +1,6 @@
 # Qt6 Integration – Benutzerhandbuch
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Guide  
 > **Status:** Stabil  
@@ -30,7 +30,7 @@
 
 ## 1. Überblick
 
-Die Qt6-Integration ermöglicht die Verwendung von Qt6 in CMake Architecture V2 Projekten.
+Die Qt6-Integration ermöglicht die Verwendung von Qt6 in CMake Architecture Projekten.
 
 ### Features
 
@@ -59,7 +59,7 @@ Die Qt6-Integration ermöglicht die Verwendung von Qt6 in CMake Architecture V2 
 - [ ] **Qt6 installiert** (Version 6.5 oder höher empfohlen)
 - [ ] **CMake 3.24+** (für Qt6-Unterstützung)
 - [ ] **Compiler:** MSVC 2022, GCC 11+, oder Clang 14+
-- [ ] **CMake Architecture V2** eingerichtet
+- [ ] **CMake Architecture** eingerichtet
 - [ ] **externals/qt6/Include.cmake** vorhanden (v0.6.0+)
 
 ### Empfohlene Versionen

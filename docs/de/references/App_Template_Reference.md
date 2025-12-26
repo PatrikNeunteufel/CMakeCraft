@@ -1,6 +1,6 @@
 # App Template Reference
 
-> **Version:** 0.1.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Typ:** Reference  
 > **Status:** Entwurf  
@@ -26,7 +26,7 @@
 
 ## 1. Übersicht
 
-Das App-Template definiert die Standardstruktur für App-Container im CMake Architecture V2 Build-System. Es trennt Entry Point (main/) von Anwendungslogik (include/, src/) für maximale Testbarkeit.
+Das App-Template definiert die Standardstruktur für App-Container im CMake Architecture Build-System. Es trennt Entry Point (main/) von Anwendungslogik (include/, src/) für maximale Testbarkeit.
 
 ### Pfad
 

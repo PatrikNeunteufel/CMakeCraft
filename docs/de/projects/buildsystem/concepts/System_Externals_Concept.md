@@ -1,6 +1,6 @@
 # System Externals — Konzept
 
-> **Version:** 0.7.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Typ:** Concept  
 > **Status:** Implementiert ✅  

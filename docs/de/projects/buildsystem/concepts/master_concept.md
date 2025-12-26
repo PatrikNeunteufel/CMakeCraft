@@ -1,6 +1,6 @@
-# Master Concept — CMake Architecture V2
+# Master Concept — CMake Architecture
 
-> **Version:** 0.7.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-19  
 > **Typ:** Concept  
 > **Status:** Stabil (Phase 1-9 abgeschlossen)  

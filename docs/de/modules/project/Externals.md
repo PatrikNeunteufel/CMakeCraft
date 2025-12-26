@@ -1,6 +1,6 @@
 # Externals.cmake — Modul-Dokumentation
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Externals.md](../../en/modules/project/Externals.md)  
 > **Modul:** [`cmake/project/Externals.cmake`](../../../../cmake/project/Externals.cmake)  
-> **Modul-Version:** 0.6.0
+> **Modul-Version:** 1.0.0
 
 ---
 

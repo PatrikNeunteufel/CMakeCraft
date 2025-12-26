@@ -1,6 +1,6 @@
 # ExecutableCollect.cmake — Modul-Dokumentation
 
-> **Version:** 0.5.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [ExecutableCollect.md](../../en/modules/project/ExecutableCollect.md)  
 > **Modul:** [`cmake/project/ExecutableCollect.cmake`](../../../../cmake/project/ExecutableCollect.cmake)  
-> **Modul-Version:** 0.5.2
+> **Modul-Version:** 1.0.0
 
 ---
 

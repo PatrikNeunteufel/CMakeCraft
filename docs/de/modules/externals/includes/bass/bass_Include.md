@@ -1,6 +1,6 @@
 # bass/Include.cmake — BASS Audio Library Integration
 
-> **Version:** 0.5.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [bass_Include.md](../../en/modules/externals/includes/bass_Include.md)  
 > **Modul:** [cmake/externals/includes/bass/Include.cmake](../../../../../../cmake/externals/includes/bass/Include.cmake)  
-> **Modul-Version:** 0.5.1
+> **Modul-Version:** 1.0.0
 
 ---
 

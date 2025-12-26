@@ -2,11 +2,10 @@
 # ==========================================
 # Generic path resolution for system externals
 #
-# Version: 0.6.0
-# Date:    2025-12-18
-# Status:  Development
-# Author:  CMake Architecture V2 Team
-# Phase:   9
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 #
 # Dependencies:
 #   - cmake/core/Debug.cmake

@@ -1,6 +1,6 @@
 # Externe Bibliotheken hinzufügen – Benutzerhandbuch
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Guide  
 > **Status:** Stabil  
@@ -29,7 +29,7 @@
 
 ## 1. Überblick
 
-Dieses Handbuch erklärt Schritt für Schritt, wie neue externe Bibliotheken zum CMake Architecture V2 Build-System hinzugefügt werden.
+Dieses Handbuch erklärt Schritt für Schritt, wie neue externe Bibliotheken zum CMake Architecture Build-System hinzugefügt werden.
 
 ### Zielgruppe
 
@@ -66,7 +66,7 @@ Dieses Handbuch erklärt Schritt für Schritt, wie neue externe Bibliotheken zum
 
 ### Checkliste
 
-- [ ] **CMake Architecture V2** eingerichtet und funktionsfähig
+- [ ] **CMake Architecture** eingerichtet und funktionsfähig
 - [ ] **Git** installiert (für Git Externals)
 - [ ] **Kenntnisse:** CMake-Grundlagen (add_library, target_link_libraries)
 - [ ] **Zugriff:** Repository des Externals (für Analyse)
@@ -238,7 +238,7 @@ Ein PreFetch Hook ist sinnvoll wenn das External:
 # Hook:         {name}.cmake
 # Version:      0.1.0
 # Date:         {DATUM}
-# Part of:      CMake Architecture V2
+# Part of:      CMake Architecture
 #
 # Description:
 #   PreFetch hook for {Name}.
@@ -316,7 +316,7 @@ Ein PostFetch Hook ist **erforderlich** wenn:
 # Hook:         {name}.cmake
 # Version:      0.1.0
 # Date:         {DATUM}
-# Part of:      CMake Architecture V2
+# Part of:      CMake Architecture
 #
 # Description:
 #   PostFetch hook for {Name}.

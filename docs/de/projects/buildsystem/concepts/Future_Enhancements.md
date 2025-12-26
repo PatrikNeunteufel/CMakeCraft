@@ -1,6 +1,6 @@
 # Future Enhancements — Geplante Erweiterungen
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Concept  
 > **Status:** Sammlung  
@@ -30,7 +30,7 @@
 
 ## 1. Übersicht
 
-Dieses Dokument sammelt mögliche **zukünftige Erweiterungen** für das CMake Architecture V2 Build-System. Die Einträge sind nach Bereich gruppiert und mit Priorität/Komplexität bewertet.
+Dieses Dokument sammelt mögliche **zukünftige Erweiterungen** für das CMake Architecture Build-System. Die Einträge sind nach Bereich gruppiert und mit Priorität/Komplexität bewertet.
 
 > **Hinweis:** Bereits beschlossene Features mit eigenem Konzept-Dokument sind hier nicht aufgeführt. Siehe [Abschnitt 12 (Siehe auch)](#12-siehe-auch) für fertige Konzepte.
 

@@ -1,6 +1,6 @@
 # Local Externals — Übersicht
 
-> **Version:** 0.5.2  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** Reference  
 > **Status:** Stabil  

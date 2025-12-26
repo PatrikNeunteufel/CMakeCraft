@@ -1,6 +1,6 @@
 # Module — CMake-Modul-Dokumentation
 
-> **Version:** 0.5.1  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Sprache:** Deutsch  
 > **English:** [README.md](../../en/modules/README.md)

@@ -1,6 +1,6 @@
 # ErrorCodes — Referenz
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -25,7 +25,7 @@
 
 ## 1. Übersicht
 
-Diese Referenz dokumentiert alle Fehlercodes des CMake Architecture V2 Build-Systems mit Erklärungen und Lösungsvorschlägen.
+Diese Referenz dokumentiert alle Fehlercodes des CMake Architecture Build-Systems mit Erklärungen und Lösungsvorschlägen.
 
 ### Fehlercode-Format
 

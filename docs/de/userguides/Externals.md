@@ -1,6 +1,6 @@
 # Externals — UserGuide
 
-> **Version:** 0.5.2  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** Guide  
 > **Status:** Stabil  
@@ -26,7 +26,7 @@
 
 ## 1. Übersicht
 
-Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture V2 Build-System kombiniert werden. Für detaillierte Informationen zu einzelnen Externals siehe die [Detail-Guides](#7-detail-guides).
+Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture Build-System kombiniert werden. Für detaillierte Informationen zu einzelnen Externals siehe die [Detail-Guides](#7-detail-guides).
 
 ### External-Typen
 

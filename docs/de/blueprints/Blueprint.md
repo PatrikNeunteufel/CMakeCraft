@@ -1,6 +1,6 @@
 # Blueprint — Meta-Standard für Blueprints
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -242,7 +242,7 @@ Beispiele:
 ```markdown
 # [Name] — [Kurzbeschreibung]
 
-> **Version:** 0.1.0  
+> **Version:** 1.0.0  
 > **Datum:** YYYY-MM-DD  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  

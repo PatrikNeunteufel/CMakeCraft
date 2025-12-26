@@ -1,6 +1,6 @@
 # Json.cmake — Modul-Dokumentation
 
-> **Version:** 0.6.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-18  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Json.md](../../en/modules/core/Json.md)  
 > **Modul:** [`cmake/core/Json.cmake`](../../../../cmake/core/Json.cmake)  
-> **Modul-Version:** 0.6.0
+> **Modul-Version:** 1.0.0
 
 ---
 

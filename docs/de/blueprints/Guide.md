@@ -1,6 +1,6 @@
 # Guide — Standard für Benutzerhandbücher
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
@@ -193,7 +193,7 @@ Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
 ```markdown
 # Qt6 Integration — Benutzerhandbuch
 
-> **Version:** 0.2.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-13  
 > **Typ:** Guide  
 > **Status:** Stabil  
@@ -219,7 +219,7 @@ Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
 
 ## 1. Überblick
 
-Die Qt6-Integration ermöglicht die Verwendung von Qt6 in CMake Architecture V2 Projekten.
+Die Qt6-Integration ermöglicht die Verwendung von Qt6 in CMake Architecture Projekten.
 
 ### Features
 

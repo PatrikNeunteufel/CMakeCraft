@@ -1,6 +1,6 @@
 # Orchestrator.cmake — External Type Dispatcher
 
-> **Version:** 0.7.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-20  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Orchestrator_cmake.md](../../en/modules/externals/Orchestrator_cmake.md)  
 > **Modul:** [cmake/externals/Orchestrator.cmake](../../../cmake/externals/Orchestrator.cmake)  
-> **Modul-Version:** 0.7.0
+> **Modul-Version:** 1.0.0
 
 ---
 

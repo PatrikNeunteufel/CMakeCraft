@@ -1,6 +1,6 @@
 # PreFetch/glfw.cmake — GLFW PreFetch Hook
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [glfw_PreFetch.md](../../en/modules/externals/glfw_PreFetch.md)  
 > **Hook:** [cmake/externals/hooks/prefetch/glfw.cmake](../../../cmake/externals/hooks/prefetch/glfw.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

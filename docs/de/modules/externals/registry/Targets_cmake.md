@@ -1,6 +1,6 @@
 # Registry/Targets.cmake — External Target Registry
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Targets_cmake.md](../../en/modules/externals/Targets_cmake.md)  
 > **Modul:** [cmake/externals/Registry/Targets.cmake](../../../cmake/externals/Registry/Targets.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 

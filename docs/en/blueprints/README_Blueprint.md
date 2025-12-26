@@ -1,403 +1,475 @@
-# README — Standard for Folder Navigation Documents
+# README — Standard für Ordner-Navigations-Dokumente
 
-> **Version:** 0.1.0  
-> **Date:** 2025-12-15  
+> **Version:** 1.0.0  
+> **Date:** 2025-12-26  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5.1, Blueprint v0.5  
-> **Audience:** Documentation Authors  
+> **Target Audience:** Documentation Authors  
 > **Language:** English  
-> **Deutsch:** [README_Blueprint.md](../../de/blueprints/README_Blueprint.md)
+> **German:** [README_Blueprint.md](../../en/blueprints/README_Blueprint.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-overview)
-2. [Scope](#2-scope)
-3. [Filename Conventions](#3-filename-conventions)
-4. [Header Structure](#4-header-structure)
-5. [Content Structure](#5-content-structure)
-6. [Quick-Start Section](#6-quick-start-section)
-7. [File and Folder Descriptions](#7-file-and-folder-descriptions)
-8. [Examples](#8-examples)
-9. [Review Checklist](#9-review-checklist)
-10. [See Also](#10-see-also)
+1. [Overview](#1-übersicht)
+2. [Scope](#2-geltungsbereich)
+3. [Dateinamen-Konventionen](#3-dateinamen-konventionen)
+4. [Header-Struktur](#4-header-struktur)
+5. [Inhaltliche Struktur](#5-inhaltliche-struktur)
+6. [Quick-Start Abschnitt](#6-quick-start-abschnitt)
+7. [Datei- und Ordner-Descriptionen](#7-datei--und-ordner-beschreibungen)
+8. [Examples](#8-beispiele)
+9. [Review Checklist](#9-review-checkliste)
+10. [See Also](#10-siehe-auch)
 11. [Changelog](#11-changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines **binding rules for README.md files** that serve as navigation and orientation aids in each folder.
+This blueprint defines **verbindliche Regeln für README.md Dateien**, die als Navigations- und Orientierungshilfe in jedem Ordner dienen.
 
-### Audience
+### Zielgruppe
 
-- **Documentation authors** writing README files
-- **New team members** navigating the project
+- **Documentation Authors**, die README-Dateien verfassen
+- **Neue Team-Mitglieder**, die sich im Projekt orientieren
 
-### What This Blueprint Covers
+### Was dieser Blueprint regelt
 
-| Area | Rules |
-|------|-------|
-| Filenames | Language suffixes, directory-dependent conventions |
-| Header | Required fields, language links |
-| Structure | Quick-start, file descriptions, folder links |
-| Audience | Navigation for newcomers and experienced users |
+| Bereich | Regeln |
+|---------|--------|
+| Dateinamen | Sprach-Suffixe, Verzeichnis-abhängige Konventionen |
+| Header | Requiredfelder, Sprach-Links |
+| Struktur | Quick-Start, Dateibeschreibungen, Ordner-Links |
+| Zielgruppe | Navigation für Neulinge und erfahrene Nutzer |
 
-### Purpose of README Files
+### Zweck von README-Dateien
 
-| Aspect | Description |
-|--------|-------------|
-| **Primary** | Quick orientation within a folder |
-| **Secondary** | Entry point for newcomers (Quick-Start) |
-| **Tertiary** | Navigation to subfolders and related documents |
+| Aspekt | Description |
+|--------|--------------|
+| **Primär** | Schnelle Orientierung im Ordner |
+| **Sekundär** | Einstiegspunkt für Neulinge (Quick-Start) |
+| **Tertiär** | Navigation zu Unterordnern und verwandten Dokumenten |
 
 ---
 
 ## 2. Scope
 
-### 2.1 Where README Files Are Needed
+### 2.1 Wo README-Dateien benötigt werden
 
-Every folder with documentation or code **SHOULD** contain a README.md:
+Jeder Ordner mit Dokumentation oder Code **SOLLTE** eine README.md enthalten:
 
-| Folder Type | README Required |
-|-------------|-----------------|
+| Ordner-Typ | README erforderlich |
+|------------|---------------------|
 | `docs/` | ✓ Required |
 | `docs/de/`, `docs/en/` | ✓ Required |
 | `docs/de/blueprints/` | ✓ Required |
 | `docs/de/modules/core/` | ✓ Required |
-| `cmake/` | ✓ Recommended |
-| Project Root | ✓ Required (GitHub standard) |
+| `cmake/` | ✓ Empfohlen |
+| Projekt-Root | ✓ Required (GitHub-Standard) |
 
-### 2.2 Exceptions
+### 2.2 Ausnahmen
 
-No README required for:
-- Very small folders with only 1-2 self-explanatory files
-- Temporary or generated folders
+Keine README erforderlich für:
+- Sehr kleine Ordner mit nur 1-2 selbsterklärenden Dateien
+- Temporäre oder generierte Ordner
+
+Bei Ordnern mit nur einer Datei kann diese vom **übergeordneten README** verlinkt werden.
 
 ---
 
-## 3. Filename Conventions
+## 3. Dateinamen-Konventionen
 
-### 3.1 Basic Principle
+### 3.1 Grundprinzip
 
-| Context | Filename | Language |
-|---------|----------|----------|
-| **Default** | `README.md` | English |
-| **Other language** | `README_de.md`, `README_fr.md` | According to suffix |
-| **In language directory** (`/de/`, `/en/`) | `README.md` | Directory language |
+| Kontext | Dateiname | Sprache |
+|---------|-----------|---------|
+| **Standard** | `README.md` | Englisch |
+| **Andere Sprache** | `README_de.md`, `README_fr.md` | Entsprechend Suffix |
+| **In Sprach-Verzeichnis** (`/de/`, `/en/`) | `README.md` | Sprache des Verzeichnisses |
 
 ### 3.2 Examples
 
 ```
 project/
-├── README.md                    ← English (default)
+├── README.md                    ← Englisch (Standard)
 ├── README_de.md                 ← German (optional)
 │
 ├── cmake/
-│   ├── README.md                ← English
+│   ├── README.md                ← Englisch
 │   └── README_de.md             ← German (optional)
 │
 └── docs/
-    ├── README.md                ← English (overview)
+    ├── README.md                ← Englisch (Overview)
     │
     ├── de/
-    │   ├── README.md            ← German (in /de/ folder)
+    │   ├── README.md            ← German (im /de/ Ordner)
     │   ├── blueprints/
-    │   │   └── README.md        ← German (inherits from /de/)
+    │   │   └── README.md        ← German (erbt von /de/)
     │   └── modules/
-    │       └── README.md        ← German (inherits from /de/)
+    │       └── README.md        ← German (erbt von /de/)
     │
     └── en/
-        ├── README.md            ← English (in /en/ folder)
+        ├── README.md            ← Englisch (im /en/ Ordner)
         └── blueprints/
-            └── README.md        ← English (inherits from /en/)
+            └── README.md        ← Englisch (erbt von /en/)
 ```
 
-### 3.3 Language Inheritance
+### 3.3 Sprach-Vererbung
 
-READMEs in subfolders of `/de/` or `/en/` inherit the language:
+READMEs in Unterordnern von `/de/` oder `/en/` erben die Language:
 
-| Path | Language | Reason |
-|------|----------|--------|
-| `docs/de/blueprints/README.md` | German | Subfolder of `/de/` |
-| `docs/en/modules/README.md` | English | Subfolder of `/en/` |
-| `cmake/README.md` | English | No language directory |
-| `cmake/README_de.md` | German | Explicit suffix |
+| Pfad | Sprache | Begründung |
+|------|---------|------------|
+| `docs/de/blueprints/README.md` | German | Unterordner von `/de/` |
+| `docs/en/modules/README.md` | Englisch | Unterordner von `/en/` |
+| `cmake/README.md` | Englisch | Kein Sprach-Verzeichnis |
+| `cmake/README_de.md` | German | Expliziter Suffix |
 
 ---
 
-## 4. Header Structure
+## 4. Header-Struktur
 
-### 4.1 Simplified Header for READMEs
+### 4.1 Vereinfachter Header für READMEs
 
-READMEs use a **simplified header** without Type/Status/Audience:
+READMEs verwenden einen **vereinfachten Header** ohne Typ/Status/Target Audience:
 
 ```markdown
-# [Folder Name] — [Short Description]
+# [Ordnername] — [Kurzbeschreibung]
 
 > **Version:** X.Y.Z  
 > **Date:** YYYY-MM-DD  
 > **Language:** English  
-> **Deutsch:** [README.md](path/to/german/version)
+> **German:** [README.md](pfad/zur/englischen/version)
 ```
 
-### 4.2 Header Fields
+### 4.2 Header-Felder
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| **Version** | ✓ | SemVer, synchronized with folder content |
-| **Date** | ✓ | Last update |
-| **Language** | ✓ | `Deutsch` or `English` |
-| **Deutsch** | ✓ (non-DE only) | Link to German version |
+| Feld | Required | Description |
+|------|---------|--------------|
+| **Version** | ✓ | SemVer, synchron mit Ordnerinhalt |
+| **Datum** | ✓ | Letzte Aktualisierung |
+| **Sprache** | ✓ | `German` oder `English` |
+| **English** | ✓ (nur nicht-EN) | Link zur englischen Version |
 
-### 4.3 Language Links
+### 4.3 Sprach-Links
 
-**For non-German READMEs** (outside `/de/`):
+**Für nicht-englische READMEs** (außerhalb von `/en/`):
 
 ```markdown
-> **Deutsch:** [README_de.md](./README_de.md)
+> **German:** [README.md](../../en/ordner/README.md)
 ```
 
-**For German READMEs** (outside language directories):
+**Für englische READMEs** (außerhalb von Sprach-Verzeichnissen):
 
 ```markdown
-> **English:** [README.md](./README.md)
-```
-
-**In language directories** (`/de/`, `/en/`):
-
-```markdown
-# In /en/blueprints/README.md:
-> **Deutsch:** [README.md](../../de/blueprints/README.md)
-
-# In /de/blueprints/README.md:
-> **English:** [README.md](../../en/blueprints/README.md)
+> **German:** [README_de.md](./README_de.md)
 ```
 
 ---
 
-## 5. Content Structure
+## 5. Inhaltliche Struktur
 
-### 5.1 Required Sections
+### 5.1 Required-Abschnitte
 
-Every README **MUST** contain these sections:
+Jede README **MUSS** diese Abschnitte enthalten:
 
-| # | Section | Content |
-|---|---------|---------|
-| 1 | Quick-Start | Entry point for newcomers |
-| 2 | Overview | Purpose of the folder |
-| 3 | Files | Description + links |
-| 4 | Subfolders | If present, with links |
+| # | Abschnitt | Inhalt |
+|---|-----------|--------|
+| 1 | Quick-Start | Einstieg für Neulinge (mehrere Pfade möglich) |
+| 2 | Overview | Zweck des Ordners |
+| 3 | Dateien | **Alle** Dateien beschrieben + verlinkt |
+| 4 | Unterordner | Falls vorhanden, mit Links zu deren READMEs |
 
-### 5.2 Optional Sections
+### 5.2 Optionale Abschnitte
 
-| Section | When Useful |
-|---------|-------------|
-| See Also | Related folders/documents |
-| Changelog | For frequent structural changes |
+| Abschnitt | Wann sinnvoll |
+|-----------|---------------|
+| See Also | Verwandte Ordner/Dokumente |
+| Changelog | Bei häufigen Struktur-Changes |
 
-### 5.3 Structure Template
+### 5.3 Struktur-Template
 
 ```markdown
-# [Folder Name] — [Short Description]
+# [Ordnername] — [Kurzbeschreibung]
 
 > **Version:** X.Y.Z  
 > **Date:** YYYY-MM-DD  
 > **Language:** English  
-> **Deutsch:** [README_de.md](path/to/de/version)
+> **German:** [README.md](pfad/zur/en/version)
 
 ---
 
 ## Quick-Start
 
-[2-3 sentences: What is this folder for? Where to start?]
+**[Zielgruppe 1]?**
+1. [Dokument1.md](Dokument1.md) — Description
+2. [Dokument2.md](Dokument2.md) — Description
+
+**[Zielgruppe 2]?**
+1. [Dokument3.md](Dokument3.md) — Description
 
 ---
 
 ## Overview
 
-[More detailed description of folder purpose]
+[Detailliertere Description des Ordnerzwecks]
 
 ---
 
-## Files
+## Dateien
 
-| File | Description |
-|------|-------------|
-| [File1.md](File1.md) | Short description |
-| [File2.md](File2.md) | Short description |
+| Datei | Description |
+|-------|--------------|
+| [Datei1.md](Datei1.md) | Kurzbeschreibung |
+| [Datei2.md](Datei2.md) | Kurzbeschreibung |
+| ... | ... |
 
 ---
 
-## Subfolders
+## Unterordner
 
-| Folder | Description |
-|--------|-------------|
-| [folder1/](folder1/README.md) | Short description |
-| [folder2/](folder2/README.md) | Short description |
+| Ordner | Description |
+|--------|--------------|
+| [ordner1/](ordner1/README.md) | Kurzbeschreibung |
+| [ordner2/](ordner2/README.md) | Kurzbeschreibung |
 ```
 
 ---
 
-## 6. Quick-Start Section
+## 6. Quick-Start Abschnitt
 
-### 6.1 Purpose
+### 6.1 Zweck
 
-The Quick-Start is the **most important part** for new users. It answers:
-- What do I find here?
-- Where do I start?
-- What are the most important files?
+Der Quick-Start ist der **wichtigste Teil** für neue Nutzer. Er beantwortet:
+- Was finde ich hier?
+- Wo fange ich an?
+- Was sind die wichtigsten Dateien für **meine** Situation?
 
-### 6.2 Structure
+### 6.2 Mehrere Einstiegspfade
+
+Quick-Start sollte **verschiedene Zielgruppen** ansprechen:
 
 ```markdown
 ## Quick-Start
 
-**New here?** This folder contains [purpose].
+**Neu im Projekt?**
+1. [Getting_Started.md](Getting_Started.md) — Erste Schritte
+2. [Glossar.md](../references/Glossar.md) — Begriffe klären
 
-Start with:
-1. [Most_Important_File.md](Most_Important_File.md) — Understand basics
-2. [Second_File.md](Second_File.md) — Practical application
+**Build-System entwickeln?**
+1. [Master_Concept.md](concepts/Master_Concept.md) — Architecture verstehen
+2. [Errors.md](../modules/core/Errors.md) — Errorbehandlung
+
+**Externe Library einbinden?**
+1. [Externals.md](Externals.md) — Overview
+2. [Adding_Externals.md](Adding_Externals.md) — Schritt-für-Schritt
 ```
 
-### 6.3 Rules
+### 6.3 Regeln
 
-| Rule | Description |
-|------|-------------|
-| **Brevity** | Maximum 5-7 lines |
-| **Action-oriented** | Clear next steps |
-| **Prioritized** | Most important first |
-| **Linked** | Direct links to entry documents |
+| Regel | Description |
+|-------|--------------|
+| **Mehrere Pfade** | Verschiedene Zielgruppen ansprechen |
+| **Priorisiert** | Importantstes zuerst pro Pfad |
+| **Verlinkt** | Direkte Links zu Dokumenten |
+| **Kurze Description** | Was lernt man dort? |
+
+### 6.4 Verlinkung über Ordnergrenzen
+
+Quick-Start darf und sollte auch Dokumente aus **anderen Ordnern** verlinken, wenn sie für den Einstieg relevant sind:
+
+```markdown
+## Quick-Start
+
+**Testing Framework nutzen?**
+1. [Doctest.md](Doctest.md) — Dieses Verzeichnis
+2. [../references/externals/Git_Externals_Testing.md](../references/externals/Git_Externals_Testing.md) — Alle Test-Frameworks
+3. [../../userguides/Testing.md](../../userguides/Testing.md) — Tests schreiben
+```
 
 ---
 
-## 7. File and Folder Descriptions
+## 7. Datei- und Ordner-Descriptionen
 
-### 7.1 File Table
+### 7.1 Vollständige Dateiliste
 
-All files in the folder are listed in a table:
-
-```markdown
-## Files
-
-| File | Description |
-|------|-------------|
-| [Blueprint.md](Blueprint.md) | Meta-blueprint — how to write blueprints |
-| [Doc.md](Doc.md) | General rules for all documentation |
-| [CMake.md](CMake.md) | Structure for CMake scripts |
-```
-
-### 7.2 Folder Table
-
-Subfolders are listed separately, with link to README:
+**Alle** Dateien im Ordner müssen aufgelistet werden:
 
 ```markdown
-## Subfolders
+## Dateien
 
-| Folder | Description |
-|--------|-------------|
-| [core/](core/README.md) | Core modules (8 modules) |
-| [externals/](externals/README.md) | External management |
-| [project/](project/README.md) | Project pipeline |
+| Datei | Description |
+|-------|--------------|
+| [Blueprint.md](Blueprint.md) | Meta-Blueprint — wie man Blueprints schreibt |
+| [Doc.md](Doc.md) | Allgemeine Regeln für alle Dokumentationen |
+| [CMake.md](CMake.md) | Struktur für CMake-Scripts |
+| [Concept.md](Concept.md) | Architecture-Concepte (ADR) |
+| [Cpp.md](Cpp.md) | C++/C Code-Struktur |
+| [Guide.md](Guide.md) | Benutzerhandbücher (How-To) |
+| [ModuleDoc.md](ModuleDoc.md) | CMake-Modul-Dokumentation |
+| [README_Blueprint.md](README_Blueprint.md) | Dieses Dokument |
+| [Reference.md](Reference.md) | Nachschlagewerke |
+| [Standard.md](Standard.md) | Coding/Project Standards |
+| [Structure.md](Structure.md) | Dokumentations-Struktur |
+| [Tutorial.md](Tutorial.md) | Step-by-Step Anleitungen |
 ```
 
-### 7.3 Description Style
+### 7.2 Unterordner mit einzelnen Dateien
 
-| Good | Bad |
-|------|-----|
-| "Core modules (Errors, Context)" | "Contains core modules" |
-| "CMake module documentation" | "Documentation" |
-| "Architecture concepts (ADR)" | "Concepts and stuff" |
+Bei Unterordnern mit nur **einer Datei** kann diese direkt vom übergeordneten README verlinkt werden:
+
+```markdown
+## Unterordner
+
+| Ordner | Inhalt |
+|--------|--------|
+| [core/](core/README.md) | [Fetch_cmake.md](core/Fetch_cmake.md) — Git FetchContent |
+| [fetched/](fetched/README.md) | [Handler_cmake.md](fetched/Handler_cmake.md) — Post-Fetch Handler |
+```
+
+Oder als erweiterte Tabelle:
+
+```markdown
+## Unterordner und deren Dateien
+
+### core/
+| Datei | Description |
+|-------|--------------|
+| [Fetch_cmake.md](core/Fetch_cmake.md) | Git FetchContent Wrapper |
+
+### fetched/
+| Datei | Description |
+|-------|--------------|
+| [Handler_cmake.md](fetched/Handler_cmake.md) | Post-Fetch Handler |
+```
+
+### 7.3 Gruppierung bei vielen Dateien
+
+Bei > 10 Dateien sollten diese thematisch gruppiert werden:
+
+```markdown
+## Dateien
+
+### Kern-Blueprints
+
+| Datei | Description |
+|-------|--------------|
+| [Blueprint.md](Blueprint.md) | Meta-Blueprint |
+| [Doc.md](Doc.md) | Dokumentations-Grundlagen |
+
+### Dokumentations-Typen
+
+| Datei | Description |
+|-------|--------------|
+| [Guide.md](Guide.md) | Benutzerhandbücher |
+| [Reference.md](Reference.md) | Nachschlagewerke |
+| [Tutorial.md](Tutorial.md) | Anleitungen |
+| ... | ... |
+```
 
 ---
 
 ## 8. Examples
 
-### 8.1 Complete Example: blueprints/README.md
+### 8.1 Vollständiges Example: modules/externals/README.md
 
 ```markdown
-# Blueprints — Templates and Standards
+# Externals — External-Management-System
 
-> **Version:** 0.5.0  
-> **Date:** 2025-12-15  
+> **Version:** 1.0.0  
+> **Date:** 2025-12-26  
 > **Language:** English  
-> **Deutsch:** [README.md](../../de/blueprints/README.md)
+> **German:** [README.md](../../../en/modules/externals/README.md)
 
 ---
 
 ## Quick-Start
 
-**Creating new documentation?** Blueprints are your templates.
+**Externe Libraries einbinden?**
+1. [Orchestrator_cmake.md](Orchestrator_cmake.md) — Haupt-Entry verstehen
+2. [../../userguides/Externals.md](../../userguides/Externals.md) — Praktische Anleitung
 
-Start with:
-1. [Doc.md](Doc.md) — Basic rules for all documentation
-2. Choose the right type: [Guide.md](Guide.md) for how-tos, [Reference.md](Reference.md) for lookups
+**Git-basierte Library fetchen?**
+1. [core/Fetch_cmake.md](core/Fetch_cmake.md) — FetchContent-Wrapper
+2. [hooks/HookLoader_cmake.md](hooks/HookLoader_cmake.md) — Pre/Post-Fetch Hooks
+
+**Lokale Library einbinden?**
+1. [locals/Attach_cmake.md](locals/Attach_cmake.md) — Local-Attach-System
+2. [includes/](includes/README.md) — Include-Definitionen
 
 ---
 
 ## Overview
 
-The blueprint collection defines binding standards for:
-- **Documentation** of all types (Guide, Reference, Concept, etc.)
-- **CMake modules** (.cmake files)
-- **Code standards** (C++, C)
-
-Blueprints follow an inheritance hierarchy: `Blueprint.md` → `Doc.md` → specialized types.
+Das External-Management-System handhabt alle externen Dependencies.
 
 ---
 
-## Files
+## Dateien
 
-| File | Description |
-|------|-------------|
-| [Blueprint.md](Blueprint.md) | Meta-blueprint — how to write blueprints |
-| [Doc.md](Doc.md) | General rules for all documentation |
-| [ModuleDoc.md](ModuleDoc.md) | CMake module documentation |
-| [Guide.md](Guide.md) | User guides (how-to) |
-| [Reference.md](Reference.md) | Reference documentation (schema, API) |
+| Datei | Description |
+|-------|--------------|
+| [Orchestrator_cmake.md](Orchestrator_cmake.md) | Haupt-Orchestrierung des External-Systems |
+
+---
+
+## Unterordner
+
+| Ordner | Dateien | Description |
+|--------|---------|--------------|
+| [core/](core/README.md) | 1 | [Fetch_cmake.md](core/Fetch_cmake.md) — Git FetchContent |
+| [fetched/](fetched/README.md) | 1 | [Handler_cmake.md](fetched/Handler_cmake.md) — Post-Fetch Handler |
+| [hooks/](hooks/README.md) | 3+ | Hook-System (Pre/Post-Fetch) |
+| [includes/](includes/README.md) | 4+ | Library-spezifische Includes |
+| [locals/](locals/README.md) | 1 | [Attach_cmake.md](locals/Attach_cmake.md) — Local Libraries |
+| [registry/](registry/README.md) | 1 | [Targets_cmake.md](registry/Targets_cmake.md) — Target-Registry |
 ```
 
 ---
 
 ## 9. Review Checklist
 
-Before finalizing a README:
+Vor Fertigstellung einer README prüfen:
 
 **Header:**
-- [ ] Version and date current
-- [ ] Language correctly specified
-- [ ] Language link present (if applicable)
-- [ ] Language link points to correct file
+- [ ] Version und Datum aktuell
+- [ ] Sprache korrekt angegeben
+- [ ] English-Link vorhanden (bei nicht-EN)
 
 **Quick-Start:**
-- [ ] Present and short (max. 7 lines)
-- [ ] Clear next steps
-- [ ] Links to most important documents
+- [ ] Mehrere Einstiegspfade für verschiedene Zielgruppen
+- [ ] Links zu wichtigsten Dokumenten
+- [ ] Auch relevante Dokumente aus anderen Ordnern verlinkt
 
-**Files/Folders:**
-- [ ] All files listed
-- [ ] All subfolders listed
-- [ ] Links work
-- [ ] Descriptions are meaningful
+**Dateien:**
+- [ ] **Alle** Dateien im Ordner aufgelistet
+- [ ] Jede Datei hat eine aussagekräftige Description
+- [ ] Links funktionieren
 
-**Structure:**
-- [ ] Horizontal separators before H2
-- [ ] No section numbering (exception from Doc.md)
+**Unterordner:**
+- [ ] Alle Unterordner aufgelistet
+- [ ] Bei Ordnern mit einzelnen Dateien: Dateien direkt verlinkt
+- [ ] Link zur README des Unterordners
+
+**Struktur:**
+- [ ] Horizontale Trenner vor H2
+- [ ] Keine Nummerierung der Abschnitte
 
 ---
 
 ## 10. See Also
 
-- [Doc.md](Doc.md) — General documentation rules
-- [Blueprint.md](Blueprint.md) — Meta-blueprint
-- [Structure.md](Structure.md) — Documentation structure
+- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
+- [Blueprint.md](Blueprint.md) — Meta-Blueprint
+- [Structure.md](Structure.md) — Dokumentations-Struktur
 
 ---
 
 ## Changelog
 
-| Version | Date | Changes |
-|---------|------|---------|
-| **0.1.0** | **2025-12-15** | **Initial: Filename conventions, Quick-Start requirement, Simplified header, Language inheritance** |
+| Version | Datum | Changes |
+|---------|-------|------------|
+| **0.1.0** | **2025-12-15** | **Initial: Dateinamen-Konventionen, Quick-Start mit mehreren Pfaden, vollständige Dateilisten, Unterordner-Integration** |

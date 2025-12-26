@@ -2,10 +2,10 @@
 # ==========================
 # Compiler-specific warning level configuration
 #
-# Version: 0.5.0
-# Date:    2025-12-16
-# Status:  Development
-# Author:  CMake Architecture V2 Team
+# Version: 1.0.0
+# Date:    2025-12-26
+# Status:  Release
+# Author:  CMake Architecture Team
 #
 # Dependencies:
 #   - None (standalone module)

@@ -1,6 +1,6 @@
-# Deutsche Dokumentation — CMake Architecture V2
+# Deutsche Dokumentation — CMake Architecture
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Sprache:** Deutsch  
 > **English:** [README.md](../en/README.md)
@@ -32,7 +32,7 @@
 
 ## Übersicht
 
-Die deutsche Dokumentation ist die Primärsprache für das CMake Architecture V2 Projekt. Sie umfasst alle technischen Spezifikationen, Benutzerhandbücher und Referenzmaterialien.
+Die deutsche Dokumentation ist die Primärsprache für das CMake Architecture Projekt. Sie umfasst alle technischen Spezifikationen, Benutzerhandbücher und Referenzmaterialien.
 
 | Bereich | Anzahl Dokumente | Beschreibung |
 |---------|------------------|--------------|

@@ -1,6 +1,6 @@
 # Erste Schritte – Benutzerhandbuch
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-14  
 > **Typ:** Guide  
 > **Status:** Stabil  
@@ -32,9 +32,9 @@
 
 ## 1. Überblick
 
-Willkommen zum **CMake Architecture V2** Build-System! Dieses Handbuch führt dich durch alle Schritte, um dein erstes Projekt erfolgreich zu erstellen und zu bauen.
+Willkommen zum **CMake Architecture** Build-System! Dieses Handbuch führt dich durch alle Schritte, um dein erstes Projekt erfolgreich zu erstellen und zu bauen.
 
-### Was ist CMake Architecture V2?
+### Was ist CMake Architecture?
 
 Ein **JSON-gesteuertes Build-System** für C++ Projekte, das:
 
@@ -146,7 +146,7 @@ Erstelle `projects/demos/exec/HelloWorld/src/main.cpp`:
 #include <iostream>
 
 int main() {
-    std::cout << "Hello, CMake Architecture V2!" << std::endl;
+    std::cout << "Hello, CMake Architecture!" << std::endl;
     return 0;
 }
 ```
@@ -865,4 +865,4 @@ cmake --build out/build/... --target help
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Umfassender Einstiegs-Guide für CMake Architecture V2** |
+| **0.5.0** | **2025-12-14** | **Initial: Umfassender Einstiegs-Guide für CMake Architecture** |

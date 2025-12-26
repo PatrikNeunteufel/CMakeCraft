@@ -1,6 +1,6 @@
-# Implementation Plan — CMake Architecture V2
+# Implementation Plan — CMake Architecture
 
-> **Version:** 0.7.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-19  
 > **Typ:** Concept  
 > **Status:** Phase 1-9 abgeschlossen  

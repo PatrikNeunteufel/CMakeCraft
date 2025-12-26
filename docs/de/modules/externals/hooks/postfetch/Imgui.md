@@ -1,6 +1,6 @@
 # PostFetch/imgui.cmake — ImGui PostFetch Hook
 
-> **Version:** 0.5.0  
+> **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [imgui_PostFetch.md](../../en/modules/externals/imgui_PostFetch.md)  
 > **Hook:** [cmake/externals/hooks/postfetch/imgui.cmake](../../../cmake/externals/hooks/postfetch/imgui.cmake)  
-> **Modul-Version:** 0.5.0
+> **Modul-Version:** 1.0.0
 
 ---
 
