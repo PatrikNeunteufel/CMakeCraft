@@ -1,7 +1,7 @@
 # PostFetch/qt-ads.cmake — Qt-ADS PostFetch Hook
 
-> **Version:** 1.1.0  
-> **Datum:** 2025-12-27  
+> **Version:** 1.0.0  
+> **Datum:** 2025-12-21  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Qt-Ads_PostFetch.md](../../../../en/modules/externals/hooks/postfetch/Qt-Ads.md)  
 > **Hook:** [cmake/externals/hooks/postfetch/qt-ads.cmake](../../../../../../cmake/externals/hooks/postfetch/qt-ads.cmake)  
-> **Modul-Version:** 1.1.0
+> **Modul-Version:** 1.0.0
 
 ---
 
@@ -19,21 +19,18 @@
 2. [Warum ein PostFetch Hook?](#2-warum-ein-postfetch-hook)
 3. [Erstellte Targets](#3-erstellte-targets)
 4. [Target-Erkennung](#4-target-erkennung)
-5. [Deployment (v1.1.0)](#5-deployment-v110)
-6. [Solution.json Konfiguration](#6-solutionjson-konfiguration)
-7. [Verwendung in Executables/Apps](#7-verwendung-in-executablesapps)
-8. [Abhängigkeiten](#8-abhängigkeiten)
-9. [Fehlerbehandlung](#9-fehlerbehandlung)
-10. [Siehe auch](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+5. [Solution.json Konfiguration](#5-solutionjson-konfiguration)
+6. [Verwendung in Executables/Apps](#6-verwendung-in-executablesapps)
+7. [Abhängigkeiten](#7-abhängigkeiten)
+8. [Fehlerbehandlung](#8-fehlerbehandlung)
+9. [Siehe auch](#9-siehe-auch)
+10. [Changelog](#10-changelog)
 
 ---
 
 ## 1. Übersicht
 
 Der `qt-ads.cmake` PostFetch Hook registriert das Qt Advanced Docking System Target in der External-Registry, da Qt-ADS ein nicht-standardmäßiges Target-Naming verwendet.
-
-**Ab v1.1.0:** Der Hook registriert nur noch das Target. DLL-Kopier-Logik wurde entfernt, da qt-ads nun als **statische Library** gebaut wird (siehe PreFetch Hook).
 
 ---
 
@@ -51,10 +48,8 @@ Qt-ADS erstellt Targets mit dem Namen `qt6advanceddocking` (Qt6) bzw. `qtadvance
 
 | Target | Typ | Beschreibung |
 |--------|-----|--------------|
-| `qt6advanceddocking` | **STATIC** | Qt6 Advanced Docking System Library |
-| `qtadvanceddocking` | **STATIC** | Qt5 Fallback (wenn Qt6 nicht verfügbar) |
-
-**Hinweis:** Seit v1.1.0 werden die Targets als **STATIC** Library gebaut (konfiguriert im PreFetch Hook).
+| `qt6advanceddocking` | STATIC | Qt6 Advanced Docking System Library |
+| `qtadvanceddocking` | STATIC | Qt5 Fallback (wenn Qt6 nicht verfügbar) |
 
 ---
 
@@ -74,37 +69,7 @@ Dadurch funktioniert der Hook sowohl mit Qt6 als auch mit Qt5.
 
 ---
 
-## 5. Deployment (v1.1.0)
-
-### Vorherige Versionen (v1.0.x)
-
-In früheren Versionen enthielt der PostFetch Hook eine `POST_LINK` oder `POST_BUILD` Funktion zum Kopieren der qt-ads DLL:
-
-```cmake
-# ALT (v1.0.x) - ENTFERNT in v1.1.0
-function(_qt_ads_post_link_hook CONSUMER_TARGET)
-    add_custom_command(TARGET ${CONSUMER_TARGET} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:qt6advanceddocking>
-            $<TARGET_FILE_DIR:${CONSUMER_TARGET}>
-    )
-endfunction()
-```
-
-### Aktuelle Version (v1.1.0)
-
-**Keine DLL-Kopie mehr nötig!**
-
-Da qt-ads nun als **statische Library** gebaut wird (`BUILD_STATIC=ON` im PreFetch Hook), gibt es keine DLL zum Kopieren. Die Library wird direkt in die Executable eingelinkt.
-
-**Vorteile:**
-- ✅ Kein kompliziertes Timing (PRE_LINK vs POST_BUILD)
-- ✅ Kein Konflikt mit windeployqt
-- ✅ Einfacheres Deployment
-
----
-
-## 6. Solution.json Konfiguration
+## 5. Solution.json Konfiguration
 
 ```json
 {
@@ -125,7 +90,7 @@ Da qt-ads nun als **statische Library** gebaut wird (`BUILD_STATIC=ON` im PreFet
 
 ---
 
-## 7. Verwendung in Executables/Apps
+## 6. Verwendung in Executables/Apps
 
 ### In Executable
 
@@ -158,7 +123,7 @@ Da qt-ads nun als **statische Library** gebaut wird (`BUILD_STATIC=ON` im PreFet
 
 ---
 
-## 8. Abhängigkeiten
+## 7. Abhängigkeiten
 
 | External | Typ | Beschreibung |
 |----------|-----|--------------|
@@ -172,7 +137,7 @@ Qt6 **muss vor** qt-ads in der alphabetischen Sortierung stehen:
 
 ---
 
-## 9. Fehlerbehandlung
+## 8. Fehlerbehandlung
 
 | Situation | Verhalten |
 |-----------|-----------|
@@ -190,36 +155,19 @@ Qt6 **muss vor** qt-ads in der alphabetischen Sortierung stehen:
 
 **Lösung:** Sicherstellen dass Qt6 vor qt-ads geladen wird (siehe Reihenfolge).
 
-### windeployqt-Fehler
-
-Falls windeployqt immer noch Fehler wirft:
-
-```
-Unable to find dependent libraries of ... qt6advanceddockingd.dll
-```
-
-**Ursache:** qt-ads wird als DLL gebaut (PreFetch Hook nicht aktiv).
-
-**Lösung:** 
-1. Cache löschen: `rd /s /q .externals\qt-ads out\build\*`
-2. Prüfen ob PreFetch Hook `BUILD_STATIC: ON` meldet
-3. CMake neu konfigurieren
-
 ---
 
-## 10. Siehe auch
+## 9. Siehe auch
 
-- [Qt-Ads_PreFetch.md](../prefetch/Qt-Ads.md) — PreFetch Hook (Build-Optionen, **DLL-Problem-Lösung**)
+- [Qt-Ads_PreFetch.md](../prefetch/Qt-Ads.md) — PreFetch Hook (Optionen)
 - [HookLoader.md](../../hooks/HookLoader_cmake.md) — Hook-System
 - [Targets.md](../../registry/Targets_cmake.md) — Target-Registrierung
 - [Qt6.md](../../system/packages/Qt6.md) — Qt6 System External
 
 ---
 
-## 11. Changelog
+## 10. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.0** | **2025-12-27** | **Entfernt: POST_LINK Hook für DLL-Kopie (nicht mehr nötig)** |
-| | | **Aktualisiert: Dokumentation für statische Library** |
-| 1.0.0 | 2025-12-21 | Initial: PostFetch Hook für Qt-ADS Target-Registrierung |
+| **0.1.0** | **2025-12-21** | **Initial: PostFetch Hook für Qt-ADS Target-Registrierung** |
