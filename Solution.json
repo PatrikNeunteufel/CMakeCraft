@@ -12,9 +12,9 @@
             "library_type": "INTERFACE",
             "executable_type": "CONSOLE"
         },
-        "sources": {
-            "mode": "auto"
-        }
+      "sources": {
+        "mode": "explicit"
+      }
     },
   "externals": {
     "bass": {
