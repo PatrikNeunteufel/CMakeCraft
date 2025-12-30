@@ -43,14 +43,6 @@
 include_guard(GLOBAL)
 
 # ==============================================================================
-# Schema Version Definition
-# ==============================================================================
-
-set(SOLUTION_SCHEMA_VERSION_MAJOR 1)
-set(SOLUTION_SCHEMA_VERSION_MINOR 0)
-set(SOLUTION_SCHEMA_VERSION_CURRENT "${SOLUTION_SCHEMA_VERSION_MAJOR}.${SOLUTION_SCHEMA_VERSION_MINOR}")
-
-# ==============================================================================
 # Debug Context Initialization
 # ==============================================================================
 
@@ -85,26 +77,8 @@ set_property(GLOBAL PROPERTY SOLUTION_SCHEMA_VERSION "${_schema_version}")
 
 # Schema version 0.1 is the current version
 # Note: Schema uses only MAJOR.MINOR (no PATCH)
-
-# Parse schema version from JSON
-string(REGEX MATCH "^([0-9]+)\\.([0-9]+)" _schema_match "${_schema_version}")
-if(NOT _schema_match)
-    cmake_fatal("E002" "Solution.json: 'schemaVersion' has invalid format '${_schema_version}' (expected: MAJOR.MINOR)")
-endif()
-
-string(REGEX REPLACE "^([0-9]+)\\.([0-9]+)" "\\1" _schema_major "${_schema_version}")
-string(REGEX REPLACE "^([0-9]+)\\.([0-9]+)" "\\2" _schema_minor "${_schema_version}")
-
-# Major version must match exactly
-if(NOT "${_schema_major}" EQUAL "${SOLUTION_SCHEMA_VERSION_MAJOR}")
-    cmake_fatal("E003" "Solution.json: schemaVersion ${_schema_version} incompatible (expected major: ${SOLUTION_SCHEMA_VERSION_MAJOR}, current: ${SOLUTION_SCHEMA_VERSION_CURRENT})")
-endif()
-
-# Minor version warnings
-if("${_schema_minor}" LESS "${SOLUTION_SCHEMA_VERSION_MINOR}")
-    cmake_warn("W101" "Solution.json: schemaVersion ${_schema_version} < ${SOLUTION_SCHEMA_VERSION_CURRENT}, some features may not be available")
-elseif("${_schema_minor}" GREATER "${SOLUTION_SCHEMA_VERSION_MINOR}")
-    cmake_warn("W102" "Solution.json: schemaVersion ${_schema_version} > ${SOLUTION_SCHEMA_VERSION_CURRENT}, some features may not work correctly")
+if(NOT "${_schema_version}" VERSION_GREATER_EQUAL "0.1")
+    cmake_warn("W001" "Solution.json schemaVersion ${_schema_version} < 0.1, some features may not be available")
 endif()
 
 dbg(${DBG_COMMON} "Schema version: ${_schema_version}" ID SOLUTION)
@@ -333,9 +307,6 @@ enddbgblock(ID SOLUTION)
 unset(_solution_file)
 unset(_solution_json_raw)
 unset(_schema_version)
-unset(_schema_match)
-unset(_schema_major)
-unset(_schema_minor)
 unset(_solution_obj)
 unset(_solution_name)
 unset(_solution_version)

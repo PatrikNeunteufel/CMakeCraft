@@ -1,6 +1,7 @@
 # Solution Schema — Referenz
 
 > **Version:** 1.0.0  
+> **Solution Schema Version:** 1.0  
 > **Datum:** 2025-12-20  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -37,7 +38,7 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": { },
     "settings": { },
     "externalsPolicy": { },

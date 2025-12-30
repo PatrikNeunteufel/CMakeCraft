@@ -40,7 +40,13 @@ App/
     ├── integration/
     │   └── {TestName}/
     │       └── ...
-    └── performance/
+    ├── performance/
+    │   └── {TestName}/
+    │       └── ...
+    ├── smoke/
+    │   └── {TestName}/
+    │       └── ...
+    └── system/
         └── {TestName}/
             └── ...
 ```

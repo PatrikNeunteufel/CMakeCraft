@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.1.0  
-> **Datum:** 2025-12-28  
+> **Version:** 1.0.0  
+> **Datum:** 2025-12-14  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -109,26 +109,6 @@ NN = Nummer (2 Ziffern)
 **Lösung:**
 - Stelle sicher, dass `Solution.json` im Projekt-Root liegt
 - Prüfe Schreibweise (Groß-/Kleinschreibung)
-
----
-
-#### E003 — Schema-Version inkompatibel
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.6.0 |
-
-**Meldung:**
-```
-[E003] Solution.json: schemaVersion 1.0 incompatible (expected major: 0, current: 0.6)
-```
-
-**Ursache:** Die Major-Version des Schemas in Solution.json stimmt nicht mit der vom Build-System unterstützten Version überein.
-
-**Lösung:**
-- `schemaVersion` in Solution.json auf kompatible Version setzen (z.B. `"0.6"`)
-- Oder Build-System aktualisieren, wenn neuere Schema-Version benötigt wird
 
 ---
 
@@ -546,39 +526,16 @@ NN = Nummer (2 Ziffern)
 
 ### 4.2 W1xx — Konfiguration/Validation Warnings
 
-#### W101 — Schema-Version zu niedrig
+#### W101 — Suboptimale Konfiguration
 
 | Aspekt | Wert |
 |--------|------|
 | **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.6.0 |
+| **Seit** | v0.1.0 |
 
-**Meldung:**
-```
-[W101] Solution.json: schemaVersion 0.4 < 0.6, some features may not be available
-```
-
-**Beschreibung:** Die Solution.json verwendet eine ältere Schema-Version. Neuere Features des Build-Systems sind möglicherweise nicht verfügbar.
-
-**Lösung:** `schemaVersion` in Solution.json auf aktuelle Version aktualisieren.
-
----
-
-#### W102 — Schema-Version zu hoch
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.6.0 |
-
-**Meldung:**
-```
-[W102] Solution.json: schemaVersion 0.7 > 0.6, some features may not work correctly
-```
-
-**Beschreibung:** Die Solution.json verwendet eine neuere Schema-Version als das Build-System unterstützt. Einige Features funktionieren möglicherweise nicht korrekt.
-
-**Lösung:** Build-System aktualisieren oder `schemaVersion` reduzieren.
+**Beispiele:**
+- Keine Source-Dateien gefunden
+- PCH aktiviert aber Header nicht gefunden
 
 ---
 
@@ -741,7 +698,6 @@ NN = Nummer (2 Ziffern)
 |------|-----------|--------------|
 | E001 | JSON | Pflichtfeld fehlt |
 | E002 | JSON | Solution.json nicht gefunden |
-| E003 | JSON | Schema-Version inkompatibel (Major) |
 | E010 | JSON | External nicht im externals-Block |
 | E012 | JSON | Kein/mehrere Source-Felder |
 | E013 | External | Geskipptes External verwendet |
@@ -778,8 +734,7 @@ NN = Nummer (2 Ziffern)
 |------|-----------|--------------|
 | W001 | Deprecation | Veraltetes Schema |
 | W002 | Deprecation | Veraltete Syntax/Feld |
-| W101 | Config | Schema-Version zu niedrig |
-| W102 | Config | Schema-Version zu hoch |
+| W101 | Config | Suboptimale Konfiguration |
 | W103 | Config | Include.cmake erstellt Executables |
 | W104 | Config | Include.cmake bindet Beispiel-Verzeichnisse ein |
 | W105 | Config | Version nicht SemVer-konform |
@@ -825,7 +780,6 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.0** | **2025-12-28** | **E003 (Schema Major inkompatibel), W101/W102 (Schema Minor Warnungen) hinzugefügt** |
-| 1.0.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching) |
+| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching)** |
 | 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Alle Codes aus v1.4 |
