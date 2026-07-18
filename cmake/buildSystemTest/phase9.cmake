@@ -392,7 +392,7 @@ dbg(${DBG_COMMON} "  Targets using Qt6: ${_targets_with_qt}" ID PHASE9_TEST)
 dbg(${DBG_COMMON} "Test 9: Package-Hook mechanism..." ID PHASE9_TEST)
 
 # Package hooks are in cmake/externals/system/packages/
-set(_package_hooks_dir "${CMAKE_SOURCE_DIR}/cmake/externals/system/packages")
+set(_package_hooks_dir "${CMAKECRAFT_DIR}/externals/system/packages")
 
 if(EXISTS "${_package_hooks_dir}")
     dbg(${DBG_COMMON} "  Package hooks directory exists" ID PHASE9_TEST)

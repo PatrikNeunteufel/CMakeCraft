@@ -27,8 +27,8 @@ include_guard(GLOBAL)
 # Load Sub-Modules
 # ==============================================================================
 
-include(cmake/project/ExecutableCollect.cmake)
-include(cmake/project/ExecutableCreate.cmake)
+include("${CMAKECRAFT_DIR}/project/ExecutableCollect.cmake")
+include("${CMAKECRAFT_DIR}/project/ExecutableCreate.cmake")
 
 # ==============================================================================
 # Debug Context Initialization

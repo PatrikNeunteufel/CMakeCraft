@@ -25,7 +25,7 @@ include_guard(GLOBAL)
 # Load Sub-Modules
 # ==============================================================================
 
-include(cmake/externals/Orchestrator.cmake)
+include("${CMAKECRAFT_DIR}/externals/Orchestrator.cmake")
 
 # ==============================================================================
 # Debug Context Initialization

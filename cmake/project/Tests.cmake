@@ -27,8 +27,8 @@
 include_guard(GLOBAL)
 
 # Load sub-modules
-include(cmake/project/TestCollect.cmake)
-include(cmake/project/TestCreate.cmake)
+include("${CMAKECRAFT_DIR}/project/TestCollect.cmake")
+include("${CMAKECRAFT_DIR}/project/TestCreate.cmake")
 
 # ==============================================================================
 # Main Entry Point

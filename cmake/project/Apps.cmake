@@ -33,8 +33,8 @@ include_guard(GLOBAL)
 # Load Sub-Modules
 # ==============================================================================
 
-include(cmake/project/AppCollect.cmake)
-include(cmake/project/AppCreate.cmake)
+include("${CMAKECRAFT_DIR}/project/AppCollect.cmake")
+include("${CMAKECRAFT_DIR}/project/AppCreate.cmake")
 
 # ==============================================================================
 # Debug Context Initialization

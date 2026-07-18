@@ -36,8 +36,8 @@ include_guard(GLOBAL)
 # Convention Paths
 # ==============================================================================
 
-set(HOOKS_PREFETCH_DIR "${CMAKE_SOURCE_DIR}/cmake/externals/hooks/prefetch")
-set(HOOKS_POSTFETCH_DIR "${CMAKE_SOURCE_DIR}/cmake/externals/hooks/postfetch")
+set(HOOKS_PREFETCH_DIR "${CMAKECRAFT_DIR}/externals/hooks/prefetch")
+set(HOOKS_POSTFETCH_DIR "${CMAKECRAFT_DIR}/externals/hooks/postfetch")
 
 # ==============================================================================
 # _get_hook_name - Determine which hook to use

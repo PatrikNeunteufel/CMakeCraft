@@ -37,9 +37,10 @@ wichtigste Regel dieses Guides:
 | **Build-System** | `CMakeCraft/` | `cmake/` (core, project, externals, buildSystemTest), `templates/`, Build-System-Doku | Build-System-Entwicklung (eigene Commits/Tags) |
 | **Projekt** | z. B. `LumiViz/` | `Solution.json`, `projects/`, `externals/`, Presets, App-Doku — **plus Snapshot von `cmake/`** | Projektentwicklung; Build-System nur per Sync (§5) |
 
-> **Hinweis:** Aktuell wird der Snapshot manuell synchronisiert (dieser Guide, §5).
-> Geplant ist ein Bootstrap-/Submodule-Bezug mit gepinnter Version („Phase 1"), der den
-> manuellen Sync ersetzt — die Regeln in §5 bleiben dieselben, nur der Kopierschritt entfällt.
+> **Stand seit v0.7.0 (2026-07-18):** Der Bezug läuft über **Bootstrap-Fetch** — das Projekt
+> committet nur noch `CMakeCraftBootstrap.cmake` + `cmakecraft.pin` (Version); das Build-System
+> wird beim Configure nach `.externals/cmakecraft/<version>/` geholt. Ein `cmake/`-Snapshot im
+> Projekt ist damit Geschichte (Konzept: `docs/de/konzepte/Konzept_Versionierter_Bezug.md`).
 
 ---
 
@@ -61,39 +62,40 @@ mkdir MeinProjekt && cd MeinProjekt
 git init
 ```
 
-### Schritt 2: Build-System-Snapshot aus CMakeCraft kopieren
+### Schritt 2: Bootstrap-Dateien übernehmen (KEIN cmake/-Snapshot mehr)
 
-Diese Dateien/Ordner werden aus der CMakeCraft-Arbeitskopie kopiert:
+Aus einem bestehenden Konsumenten (z. B. LumiViz) oder von Hand:
 
-| Aus CMakeCraft | Zweck | Pflicht? |
+| Datei | Zweck | Pflicht? |
 |---|---|---|
-| `CMakeLists.txt` | Top-Level-Einstieg (lädt `cmake/`-Module, liest Solution.json) | ✅ |
-| `cmake/` | das komplette Build-System (core, project, externals, buildSystemTest) | ✅ |
-| `templates/` | Vorlagen für Apps/Source.cmake (nur als Kopierquelle) | empfohlen |
-| `CMakePresets.json` | Projekt-Presets (vs-debug, ninja-release, …) | ✅ |
+| `CMakeCraftBootstrap.cmake` | holt CMakeCraft in der gepinnten Version nach `.externals/` | ✅ |
+| `cmakecraft.pin` | **die** Versionsangabe (Tag) + Quellen (GitHub-URL, lokale Fallbacks) | ✅ |
+| `CMakeLists.txt` | Dünnfassung (s. u.) | ✅ |
+| `CMakePresets.json` | Projekt-Presets (aus CMakeCraft kopieren) | ✅ |
 | `.gitignore`, `.gitattributes` | inkl. der bewussten Externals-Regeln (§4!) | ✅ |
 | `clang-format`, `clang-tidy` | Code-Konventionen | empfohlen |
-| `templates/Solution.json` | Startpunkt für die eigene Solution.json | ✅ (als Vorlage) |
+| `templates/` + `templates/Solution.json` | Vorlagen für Apps/Source.cmake/Solution | empfohlen |
 
-```bash
-# im neuen Projektordner (Pfade anpassen):
-CRAFT=../CMakeCraft
-cp $CRAFT/CMakeLists.txt $CRAFT/CMakePresets.json $CRAFT/.gitignore $CRAFT/.gitattributes \
-   $CRAFT/clang-format $CRAFT/clang-tidy .
-cp -r $CRAFT/cmake $CRAFT/templates .
-cp $CRAFT/templates/Solution.json ./Solution.json
+Die komplette Top-Level-`CMakeLists.txt` eines Konsumenten:
+
+```cmake
+cmake_minimum_required(VERSION 3.25)
+include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")
 ```
 
-### Schritt 3: Herkunft dokumentieren (wichtig!)
+### Schritt 3: Version pinnen
 
-Solange der Snapshot manuell gepflegt wird, muss nachvollziehbar sein, **welcher
-CMakeCraft-Stand** im Projekt steckt. Lege `BUILDSYSTEM_VERSION.md` im Projekt-Root an:
+In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — das ist der
+**einzige** Ort, an dem die Build-System-Version steht:
 
-```bash
-echo "CMakeCraft-Snapshot: $(git -C $CRAFT rev-parse --short HEAD) ($(date +%F))" > BUILDSYSTEM_VERSION.md
+```cmake
+set(CMAKECRAFT_VERSION "v0.7.0")
+set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
+set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
 
-Diese Datei wird bei **jedem Sync** (§5) aktualisiert und mitcommittet.
+Für die **Build-System-Entwicklung** gegen eine Arbeitskopie (ohne Klon/Tag):
+Configure mit `-DCMAKECRAFT_LOCAL_DIR=../CMakeCraft`.
 
 ### Schritt 4: Benutzer-Presets anlegen (lokal, nicht committen)
 
@@ -231,54 +233,38 @@ External-Include, einen Fetch-Hook, einen Fix in einem core-Modul. **Der Reflex 
 schnell die cmake/-Datei im Projekt" ist der Anfang der Divergenz** — genau so sind früher
 Projekt- und Template-Stand auseinandergelaufen. Darum:
 
-### 5.1 Standard-Weg (geplante Erweiterung/Korrektur)
+### 5.1 Standard-Weg (Erweiterung/Korrektur)
 
 ```
-CMakeCraft ändern → dort testen → dort committen → ins Projekt syncen
+CMakeCraft ändern → gegen das Projekt testen → committen + taggen → Pin bumpen
 ```
 
-1. **In der CMakeCraft-Arbeitskopie ändern** (nicht im Projekt!).
-2. **Testen** mit den Phasentests des Build-Systems:
+1. **In der CMakeCraft-Arbeitskopie ändern** (einzig zulässiger Ort — im Projekt liegt kein
+   Build-System-Code mehr).
+2. **Testen:**
    ```bash
-   cmake --preset ninja-debug -DRUN_BUILD_SYSTEM_TESTS=ON        # alle Phasen
-   cmake --preset ninja-debug -DRUN_BUILD_SYSTEM_TESTS=ON -DTEST_PHASE=6   # gezielt
+   # Selbsttest des Build-Systems (im CMakeCraft-Repo):
+   cmake --preset craft-selftest
+   # das anfordernde Projekt DIREKT gegen die Arbeitskopie bauen (kein Klon/Tag noetig):
+   cmake --preset <projekt-preset> -DCMAKECRAFT_LOCAL_DIR=../CMakeCraft
    ```
-   Zusätzlich: das anfordernde Projekt einmal gegen den geänderten Stand bauen (Schritt 4
-   vorziehen), bevor committet wird.
-3. **In CMakeCraft committen** — aussagekräftig, mit Error-Code-/Modul-Bezug. Bei
-   release-würdigen Ständen **Tag** setzen (z. B. `v0.6.1`); Konventionen:
-   [Guidelines.md](../../en/projects/buildsystem/standards/Guidelines.md) *(Pfad im
-   jeweiligen Projekt: Build-System-Standards)*.
-4. **Ins Projekt synchronisieren** — den kompletten `cmake/`-Baum spiegeln, nicht einzelne
-   Dateien picken (verhindert Teil-Syncs):
-   ```powershell
-   # Windows (PowerShell), im Projekt-Root:
-   robocopy ..\CMakeCraft\cmake .\cmake /MIR
+3. **In CMakeCraft committen und Tag setzen** (z. B. `v0.7.1`) — Konsumenten pinnen Tags.
+4. **Im Projekt den Pin bumpen:** in `cmakecraft.pin` die neue Version eintragen,
+   `CMAKECRAFT_LOCAL_DIR` wieder leeren (Cache-Variable löschen oder auf "" setzen),
+   Configure prüft den frischen Klon. Commit:
    ```
-   ```bash
-   # Git Bash, im Projekt-Root:
-   rm -rf cmake && cp -r ../CMakeCraft/cmake .
-   ```
-   Falls sich auch `CMakeLists.txt` oder `templates/` geändert haben: mitkopieren.
-5. **`BUILDSYSTEM_VERSION.md` aktualisieren** (neuer Hash/Tag + Datum).
-6. **Im Projekt committen:**
-   ```
-   chore(buildsystem): sync CMakeCraft @<hash> — <was der Sync bringt>
+   chore(buildsystem): CMakeCraft v0.7.1 — <was die Version bringt>
    ```
 
 ### 5.2 Notfall-Weg (Fix fällt mitten in der Projektarbeit an)
 
-Es ist erlaubt, im Projekt **lokal** zu fixen, um nicht blockiert zu sein — aber mit Pflichten:
-
-1. Fix im Projekt-`cmake/` machen, weiterarbeiten.
-2. **Noch am selben Tag** den Fix nach CMakeCraft zurückspielen (Datei rüberkopieren,
-   Phasentests, Commit in CMakeCraft).
-3. Danach regulären Sync (§5.1 Schritt 4–6) ausführen, damit Projekt-Snapshot == CMakeCraft.
-4. **Nie** einen Projekt-Commit machen, der cmake/-Änderungen enthält, ohne dass dieselbe
-   Änderung in CMakeCraft committet ist. Divergenz-Check jederzeit:
-   ```bash
-   git diff --no-index ../CMakeCraft/cmake ./cmake   # leer = synchron
-   ```
+1. Fix in der CMakeCraft-**Arbeitskopie** machen und im Projekt sofort mit
+   `-DCMAKECRAFT_LOCAL_DIR=../CMakeCraft` weiterarbeiten — kein Warten auf Tag/Release.
+2. Sobald der Fix steht: in CMakeCraft committen, Tag setzen, Pin bumpen (§5.1 Schritt 3–4).
+3. **Nie** mit dauerhaft gesetztem `CMAKECRAFT_LOCAL_DIR` committen/abschließen — der Override
+   ist ein Arbeitszustand, kein Projektzustand (er steht bewusst nur im CMake-Cache, nie im Repo).
+   Übergangsweise darf der Pin auch auf einen **Branch** zeigen (`CMAKECRAFT_VERSION "master"`),
+   muss aber vor Projekt-Releases wieder auf einen Tag.
 
 ### 5.3 Was gehört wohin?
 
@@ -322,7 +308,10 @@ Kopien/USB — Klone von USB-Sticks haben schon Dateien verloren.
 | Qt nicht gefunden | `QT_ROOT` nicht gesetzt | `CMakeUserPresets.json` (§3.4) |
 | Neue Datei wird nicht gebaut | nicht in `Source.cmake` eingetragen | `list(APPEND …)` ergänzen (§3.6) |
 | Linker: `undefined symbol … staticMetaObject / qt_metacall / Signale` | AUTOMOC lief nicht — `cmake/externals/system/packages/Qt6.cmake` fehlt im Checkout (historisch: VS-Regel `**/packages/*` hatte sie verschluckt) | Snapshot-Sync aus CMakeCraft (§5.1 Schritt 4); danach frisch konfigurieren |
-| Build-System verhält sich anders als in CMakeCraft | Snapshot divergiert | `git diff --no-index ../CMakeCraft/cmake ./cmake`, dann Sync (§5.1) |
+| `[Bootstrap] … konnte aus keiner Quelle geholt werden` | kein Netz + kein Cache + kein lokaler Fallback | Netz herstellen, `CMAKECRAFT_FALLBACK_PATHS` auf lokalen Checkout zeigen lassen, oder `-DCMAKECRAFT_LOCAL_DIR=<pfad>` |
+| `CMake Warning (dev): No project() command is present` beim Configure | erwartet: `project()` wird im CMakeCraft-Entry-Point gerufen, nicht wörtlich in der Dünnfassungs-CMakeLists | harmlos — ignorieren (oder `-Wno-dev`) |
+| Build-System verhält sich „alt" trotz neuem Pin | `.externals/cmakecraft/<version>/` ist ein Cache pro Version; gleicher Tag wird nie neu geholt | Tags nie umhängen! Neuer Stand = neuer Tag. Notfalls `.externals/cmakecraft/` löschen |
+| Build-System verhält sich anders als erwartet | vergessener `CMAKECRAFT_LOCAL_DIR`-Override im Cache | Configure-Ausgabe prüfen (`[Bootstrap] … LOKAL-OVERRIDE`); Variable leeren |
 | CLI: `Could not read presets` / VS zeigt nur noch x64-Debug-Standardkonfigurationen | Preset-Datei verletzt das Schema. Achtung: **Preset-JSONs vertragen KEINE Kommentare** — `/* */` bricht das CLI, `"$comment"` bräuchte Schema v10 (CMake ≥ 3.31), aber Visual Studio kann nur v2–v9 und fällt bei v10 still auf Default-Konfigurationen zurück | Presets über `displayName`/`description` dokumentieren, Schema-Version 6 belassen. Kommentar-Konvention `"_comment"` gilt nur für **Nicht-Preset-JSONs** (z. B. Solution.json). Nach Reparatur: in VS den Ordner neu laden |
 
 Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgaben via

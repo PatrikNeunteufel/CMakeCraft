@@ -36,9 +36,9 @@ include_guard(GLOBAL)
 # Load Dependencies
 # ==============================================================================
 
-include(cmake/externals/core/Fetch.cmake)
-include(cmake/externals/hooks/HookLoader.cmake)
-include(cmake/externals/registry/Targets.cmake)
+include("${CMAKECRAFT_DIR}/externals/core/Fetch.cmake")
+include("${CMAKECRAFT_DIR}/externals/hooks/HookLoader.cmake")
+include("${CMAKECRAFT_DIR}/externals/registry/Targets.cmake")
 
 # ==============================================================================
 # _handle_fetched_external - Main entry point for fetched externals

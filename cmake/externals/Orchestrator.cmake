@@ -41,9 +41,9 @@ include_guard(GLOBAL)
 # Load Sub-Modules
 # ==============================================================================
 
-include(cmake/externals/local/Attach.cmake)
-include(cmake/externals/fetched/Handler.cmake)
-include(cmake/externals/system/Handler.cmake)
+include("${CMAKECRAFT_DIR}/externals/local/Attach.cmake")
+include("${CMAKECRAFT_DIR}/externals/fetched/Handler.cmake")
+include("${CMAKECRAFT_DIR}/externals/system/Handler.cmake")
 
 # ==============================================================================
 # _orchestrate_external - Main Dispatch Function
@@ -235,7 +235,7 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
             set(_include_file "${CMAKE_SOURCE_DIR}/${_include_path}")
         else()
             # Convention: cmake/externals/includes/{name}/Include.cmake
-            set(_include_file "${CMAKE_SOURCE_DIR}/cmake/externals/includes/${EXT_NAME}/Include.cmake")
+            set(_include_file "${CMAKECRAFT_DIR}/externals/includes/${EXT_NAME}/Include.cmake")
         endif()
         
         # Validate Include.cmake exists

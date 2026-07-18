@@ -22,7 +22,7 @@
 
 include_guard(GLOBAL)
 
-include(cmake/externals/system/PathResolver.cmake)
+include("${CMAKECRAFT_DIR}/externals/system/PathResolver.cmake")
 
 # ==============================================================================
 # _handle_system_external - Process a System External Definition
@@ -96,7 +96,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     # Load package-specific hook for standard paths (if exists)
     # =========================================================================
     
-    set(_package_hook "${CMAKE_SOURCE_DIR}/cmake/externals/system/packages/${_package}.cmake")
+    set(_package_hook "${CMAKECRAFT_DIR}/externals/system/packages/${_package}.cmake")
     set(_additional_paths "")
     
     if(EXISTS "${_package_hook}")

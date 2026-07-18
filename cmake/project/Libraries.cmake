@@ -27,8 +27,8 @@ include_guard(GLOBAL)
 # Load Sub-Modules
 # ==============================================================================
 
-include(cmake/project/LibraryCollect.cmake)
-include(cmake/project/LibraryCreate.cmake)
+include("${CMAKECRAFT_DIR}/project/LibraryCollect.cmake")
+include("${CMAKECRAFT_DIR}/project/LibraryCreate.cmake")
 
 # ==============================================================================
 # Debug Context Initialization

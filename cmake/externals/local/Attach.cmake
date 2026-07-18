@@ -83,7 +83,7 @@ function(_attach_local_external EXT_NAME EXT_JSON)
         set(_include_file "${CMAKE_SOURCE_DIR}/${_include_path}")
     else()
         # Convention: cmake/externals/includes/{name}/Include.cmake
-        set(_include_file "${CMAKE_SOURCE_DIR}/cmake/externals/includes/${EXT_NAME}/Include.cmake")
+        set(_include_file "${CMAKECRAFT_DIR}/externals/includes/${EXT_NAME}/Include.cmake")
     endif()
     # ==========================================================================
     # Validate Include.cmake Exists
