@@ -107,6 +107,16 @@ project(
 dbg(${DBG_COMMON} "Project: ${PROJECT_NAME} v${PROJECT_VERSION}" ID CMAKE_MAIN)
 
 # ==============================================================================
+# Testing (ctest) — MUSS vor allen add_test()-Aufrufen aktiv sein.
+# App-Container-Tests werden bereits in Apps.cmake registriert; stand
+# enable_testing() erst in Tests.cmake, wurden sie stillschweigend verworfen.
+# ==============================================================================
+
+if(BUILD_TESTS)
+    enable_testing()
+endif()
+
+# ==============================================================================
 # Phase 5 & 6: Externals (Local + Fetched) — BEFORE Libraries and Executables!
 # ==============================================================================
 
