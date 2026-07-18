@@ -1,0 +1,62 @@
+#!/bin/sh
+# ==============================================================================
+# pre-commit — Doku-Versions-Paritaet de/ (SSOT) vs. Uebersetzungen (en/, ...)
+# ==============================================================================
+# Prueft fuer alle im Commit enthaltenen docs/-Markdown-Dateien, ob die
+# "> **Version:** x.y.z"-Zeile zwischen de-Master und Uebersetzung uebereinstimmt.
+# NUR HINWEIS — blockiert nie (exit 0). Aktivierung (einmalig pro Klon):
+#   git config core.hooksPath .githooks
+# ==============================================================================
+
+files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^docs/(de|en)/.*\.md$')
+[ -z "$files" ] && exit 0
+
+get_version() {
+    # erste "**Version:**"-Zeile der INDEXIERTEN Fassung (nicht Arbeitskopie)
+    git show ":$1" 2>/dev/null | grep -m1 -oE '\*\*Version:\*\*[[:space:]]*[0-9][0-9a-z.]*' | grep -oE '[0-9][0-9a-z.]*$'
+}
+
+tracked_or_staged() {
+    git cat-file -e "HEAD:$1" 2>/dev/null || git show ":$1" >/dev/null 2>&1
+}
+
+warned=0
+for f in $files; do
+    case "$f" in
+        docs/de/*)
+            rel=${f#docs/de/}
+            for lang in en; do
+                other="docs/$lang/$rel"
+                if tracked_or_staged "$other"; then
+                    v_de=$(get_version "$f")
+                    v_tr=$(get_version "$other")
+                    if [ -n "$v_de" ] && [ "$v_de" != "$v_tr" ]; then
+                        echo "HINWEIS: Uebersetzung veraltet: $other (Version ${v_tr:-fehlt}) != de-Master (Version $v_de)"
+                        warned=1
+                    fi
+                else
+                    echo "HINWEIS: keine $lang-Uebersetzung vorhanden fuer: $f"
+                    warned=1
+                fi
+            done
+            ;;
+        docs/en/*)
+            rel=${f#docs/en/}
+            master="docs/de/$rel"
+            if tracked_or_staged "$master"; then
+                v_de=$(get_version "$master")
+                v_tr=$(get_version "$f")
+                if [ -n "$v_de" ] && [ "$v_de" != "$v_tr" ]; then
+                    echo "HINWEIS: $f (Version ${v_tr:-fehlt}) weicht vom de-Master ab (Version $v_de)"
+                    warned=1
+                fi
+            else
+                echo "HINWEIS: Uebersetzung ohne de-Master (de ist SSOT!): $f"
+                warned=1
+            fi
+            ;;
+    esac
+done
+
+[ $warned -eq 1 ] && echo "(Doku-Versions-Check: nur Hinweise, Commit laeuft weiter)"
+exit 0
