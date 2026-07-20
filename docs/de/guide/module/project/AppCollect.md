@@ -1,7 +1,7 @@
 # AppCollect.cmake — Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Datum:** 2026-07-20  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
@@ -111,9 +111,11 @@ Das Modul wendet folgende Defaults an:
 | `path` | `projects/apps/{name}` | Convention over Configuration |
 | `runner.type` | `CONSOLE` | Häufigster Fall |
 | `pch.header` | `pch.h` | Standard-Name, Pfad via Suchpriorität |
-| `tests.framework` | `doctest` | Schnell, Header-only |
-| `tests.unit.timeout` | `30` | Sekunden für Unit Tests |
-| `tests.integration.timeout` | `120` | Sekunden für Integration |
+| `tests.framework` | `""` (leer) | Auflösung erst in AppCreate: per-Target > global > E301 |
+| `targets[].path` | `tests/{type}/{name}` | Convention over Configuration |
+| `targets[].timeout` | Typ-abhängig | z.B. unit=30s, integration=120s (siehe [Solution_Schema § 9.9](../../references/Solution_Schema.md#99-test-typen-und-defaults)) |
+| `targets[].labels` | Typ-abhängig | z.B. unit → `["unit", "fast"]` |
+| `targets[].parallel` | Typ-abhängig | `FALSE` für performance, system, fuzz, security, ui |
 
 ---
 
@@ -150,7 +152,8 @@ ctx_get(APP_0 RUNNER_TYPE _type)
 ```
 
 **Fehler:**
-- `E401` wenn `name` Feld fehlt
+- `E400` wenn `name` Feld fehlt
+- `E303`/`E304` wenn ein Test-Target `name` bzw. `type` fehlt
 
 ---
 
@@ -194,18 +197,32 @@ ctx_get(APP_0 RUNNER_TYPE _type)
 
 **Hinweis:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
 
-### 5.5 Test-Keys
+### 5.5 Test-Keys (global)
 
 | Key | Typ | JSON-Pfad | Default |
 |-----|-----|-----------|---------|
-| `TESTS_FRAMEWORK` | String | `tests.framework` | `doctest` |
-| `TESTS_UNIT_ENABLED` | Bool | (wenn `tests.unit` existiert) | `FALSE` |
-| `TESTS_UNIT_TIMEOUT` | Number | `tests.unit.timeout` | `30` |
-| `TESTS_UNIT_LABELS` | List | `tests.unit.labels[]` | `[]` |
-| `TESTS_INTEGRATION_ENABLED` | Bool | (wenn `tests.integration` existiert) | `FALSE` |
-| `TESTS_INTEGRATION_TIMEOUT` | Number | `tests.integration.timeout` | `120` |
-| `TESTS_INTEGRATION_LABELS` | List | `tests.integration.labels[]` | `[]` |
-| `TESTS_INTEGRATION_EXTERNALS` | List | `tests.integration.externals[]` | `[]` |
+| `TESTS_FRAMEWORK` | String | `tests.framework` | `""` (leer, Auflösung in AppCreate) |
+| `TESTS_SKIP` | Bool | `tests.skip` | `FALSE` |
+| `TESTS_TARGETS_COUNT` | Number | (Länge von `tests.targets[]`) | `0` |
+
+### 5.6 Test-Target-Keys (pro Eintrag in tests.targets[])
+
+`{n}` ist der 0-basierte Index im `targets[]`-Array.
+
+| Key | Typ | JSON-Pfad | Default |
+|-----|-----|-----------|---------|
+| `TESTS_TARGET_{n}_NAME` | String | `targets[].name` | ⛔ Pflicht (E303) |
+| `TESTS_TARGET_{n}_TYPE` | String | `targets[].type` | ⛔ Pflicht (E304) |
+| `TESTS_TARGET_{n}_SKIP` | Bool | `targets[].skip` | `FALSE` |
+| `TESTS_TARGET_{n}_PATH` | String | `targets[].path` | `tests/{type}/{name}` |
+| `TESTS_TARGET_{n}_FRAMEWORK` | String | `targets[].framework` | `""` (→ `TESTS_FRAMEWORK`) |
+| `TESTS_TARGET_{n}_TIMEOUT` | Number | `targets[].timeout` | Typ-abhängig |
+| `TESTS_TARGET_{n}_LABELS` | List | `targets[].labels[]` | Typ-abhängig |
+| `TESTS_TARGET_{n}_DEPENDENCIES` | List | `targets[].dependencies[]` | `[]` |
+| `TESTS_TARGET_{n}_EXTERNALS` | List | `targets[].externals[]` | `[]` |
+| `TESTS_TARGET_{n}_PARALLEL` | Bool | `targets[].parallel` | Typ-abhängig |
+
+Die Typ-abhängigen Defaults (Timeout, Labels, Parallel) liefert `_get_test_type_defaults()`; die Tabelle steht in [Solution_Schema § 9.9](../../references/Solution_Schema.md#99-test-typen-und-defaults).
 
 ---
 
@@ -230,7 +247,8 @@ NAME = "SimpleApp"
 DISPLAY_NAME = "SimpleApp"
 PATH = "projects/apps/SimpleApp"
 RUNNER_TYPE = "CONSOLE"
-TESTS_FRAMEWORK = "doctest"
+TESTS_FRAMEWORK = ""
+TESTS_TARGETS_COUNT = 0
 # ... (alle anderen mit Defaults)
 ```
 
@@ -261,15 +279,22 @@ TESTS_FRAMEWORK = "doctest"
             
             "tests": {
                 "framework": "doctest",
-                "unit": {
-                    "timeout": 30,
-                    "labels": ["unit", "audio"]
-                },
-                "integration": {
-                    "timeout": 120,
-                    "labels": ["integration", "audio"],
-                    "externals": ["bass"]
-                }
+                "targets": [
+                    {
+                        "name": "UnitTests",
+                        "type": "unit",
+                        "timeout": 30,
+                        "labels": ["unit", "audio"]
+                    },
+                    {
+                        "name": "IntegrationTests",
+                        "type": "integration",
+                        "timeout": 120,
+                        "labels": ["integration", "audio"],
+                        "dependencies": ["BasicLogger"],
+                        "externals": ["bass"]
+                    }
+                ]
             },
             
             "platforms": ["windows", "linux", "macos"]
@@ -309,11 +334,20 @@ endforeach()
 
 | Code | Bedingung | Meldung |
 |------|-----------|---------|
-| `E401` | `name` Feld fehlt | `App definition: 'name' is required` |
+| `E400` | `name` Feld fehlt | `App definition missing required 'name' field` |
+| `E303` | Test-Target ohne `name` | `Test target [{n}] missing required 'name' field` |
+| `E304` | Test-Target ohne `type` | `Test target '{name}' missing required 'type' field` |
 
-### 7.2 Fehler-Kontext
+### 7.2 Ausgelöste Warnungen
 
-AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nicht, etc.) werden von `AppCreate` behandelt.
+| Code | Bedingung |
+|------|-----------|
+| `W401` | `tests.targets` ist vorhanden, aber leer |
+| `W402` | `parallel: true` bei seriellem Test-Typ (performance, system, fuzz, security, ui) |
+
+### 7.3 Fehler-Kontext
+
+AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nicht, unbekanntes Framework, unbekannte Dependency, etc.) werden von `AppCreate` behandelt (E301/E302/E305, E101).
 
 ---
 
@@ -352,6 +386,7 @@ AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nich
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-20** | **CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS hinzugefügt** |
+| **0.7.3** | **2026-07-20** | **Test-Keys auf tests.targets[]-Stand gebracht (§ 5.5/5.6): TESTS_TARGET_{n}_*-Keys inkl. neuem DEPENDENCIES-Key dokumentiert, altes tests.unit/tests.integration-Schema entfernt; Beispiel 6.2 und Fehlerliste (§ 7) korrigiert (E400 statt E401, E303/E304, W401/W402)** |
+| 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS hinzugefügt |
 | 0.5.1 | 2025-12-18 | PCH-Defaults korrigiert: header auf pch.h, PCH_SOURCE entfernt, PCH_PATH hinzugefügt, implizite Aktivierung dokumentiert |
 | 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container JSON-Parsing, Core/Runner/Tests-Trennung, vollständige Context-Keys |

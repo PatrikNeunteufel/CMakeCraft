@@ -520,7 +520,7 @@ endfunction()
         NAME, PATH, TESTS_FRAMEWORK (global default), TESTS_TARGETS_COUNT
         TESTS_TARGET_{n}_NAME, TESTS_TARGET_{n}_TYPE, TESTS_TARGET_{n}_PATH,
         TESTS_TARGET_{n}_FRAMEWORK, TESTS_TARGET_{n}_TIMEOUT, TESTS_TARGET_{n}_LABELS,
-        TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
+        TESTS_TARGET_{n}_DEPENDENCIES, TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
     
     Directory Structure Expected:
         {PATH}/
@@ -599,6 +599,7 @@ function(_create_app_tests CTX)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_FRAMEWORK _t_framework)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_TIMEOUT _t_timeout)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_LABELS _t_labels)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_DEPENDENCIES _t_dependencies)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS _t_externals)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL _t_parallel)
         
@@ -636,6 +637,7 @@ function(_create_app_tests CTX)
             "${_target_name}"
             "${_test_src_dir}"
             "${_core_target}"
+            "${_t_dependencies}"
             "${_effective_framework}"
             "${_t_timeout}"
             "${_t_labels}"
@@ -654,14 +656,15 @@ endfunction()
 # _create_app_test_target - Helper to create a single test target
 # ==============================================================================
 #[[
-    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
-    
+    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
+
     Internal helper function to create a test executable.
-    
+
     Parameters:
         TARGET_NAME     - Name for the test target
         SRC_DIR         - Directory containing test sources
         CORE_TARGET     - Core library to link against
+        DEPENDENCIES    - Internal libraries to link directly (semicolon-separated)
         FRAMEWORK       - Test framework (doctest, googletest, catch2)
         TIMEOUT         - CTest timeout in seconds
         LABELS          - CTest labels (semicolon-separated)
@@ -669,7 +672,7 @@ endfunction()
         APP_NAME        - Parent app name (for folder organization)
         PARALLEL        - TRUE to allow parallel execution, FALSE for serial
 ]]
-function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
+function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
     
     # --------------------------------------------------------------------------
     # Collect Sources (via SourceCollect.cmake)
@@ -720,7 +723,22 @@ function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEO
     # framework header which dominates compilation time anyway.
     # This simplifies templates (no #include "pch.h" required in tests).
     target_link_libraries(${TARGET_NAME} PRIVATE ${CORE_TARGET})
-    
+
+    # --------------------------------------------------------------------------
+    # Link Internal Dependencies (Libraries)
+    # --------------------------------------------------------------------------
+
+    # Per-target dependencies from tests.targets[].dependencies - libraries the
+    # test uses directly (independent of what Core exposes transitively).
+    foreach(_dep IN LISTS DEPENDENCIES)
+        if(TARGET ${_dep})
+            target_link_libraries(${TARGET_NAME} PRIVATE ${_dep})
+            dbg(${DBG_RARE} "    Link: ${_dep} (internal)" ID APPS)
+        else()
+            cmake_fatal("E101" "Dependency '${_dep}' for test '${TARGET_NAME}' does not exist")
+        endif()
+    endforeach()
+
     # --------------------------------------------------------------------------
     # Link Test Framework
     # --------------------------------------------------------------------------

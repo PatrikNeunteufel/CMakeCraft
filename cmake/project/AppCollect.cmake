@@ -31,7 +31,8 @@
 #     - TESTS_TARGETS_COUNT
 #     - TESTS_TARGET_{n}_NAME, TESTS_TARGET_{n}_TYPE, TESTS_TARGET_{n}_SKIP,
 #       TESTS_TARGET_{n}_PATH, TESTS_TARGET_{n}_FRAMEWORK, TESTS_TARGET_{n}_TIMEOUT,
-#       TESTS_TARGET_{n}_LABELS, TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
+#       TESTS_TARGET_{n}_LABELS, TESTS_TARGET_{n}_DEPENDENCIES,
+#       TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
 #   Filter:
 #     - PLATFORMS, SKIP
 #
@@ -154,6 +155,7 @@ endfunction()
                         "framework": "doctest",
                         "timeout": 30,
                         "labels": ["unit", "fast"],
+                        "dependencies": [],
                         "externals": [],
                         "parallel": true
                     }
@@ -392,6 +394,17 @@ function(_collect_app APP_JSON CTX)
                     set(_t_labels "${_default_labels}")
                 endif()
                 
+                # --- Optional: dependencies (internal libraries) ---
+                set(_t_dependencies "")
+                _json_array_length("${_target_json}" "dependencies" _dep_count)
+                if(_dep_count GREATER 0)
+                    math(EXPR _dep_last "${_dep_count} - 1")
+                    foreach(_d_idx RANGE 0 ${_dep_last})
+                        _json_array_get("${_target_json}" "dependencies" ${_d_idx} _dep)
+                        list(APPEND _t_dependencies "${_dep}")
+                    endforeach()
+                endif()
+
                 # --- Optional: externals ---
                 set(_t_externals "")
                 _json_array_length("${_target_json}" "externals" _ext_count)
@@ -423,6 +436,7 @@ function(_collect_app APP_JSON CTX)
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_FRAMEWORK "${_t_framework}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_TIMEOUT "${_t_timeout}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_LABELS "${_t_labels}")
+                ctx_set(${CTX} TESTS_TARGET_${_t_idx}_DEPENDENCIES "${_t_dependencies}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS "${_t_externals}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL "${_t_parallel}")
                 

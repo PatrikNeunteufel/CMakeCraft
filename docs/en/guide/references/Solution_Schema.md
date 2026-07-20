@@ -790,6 +790,7 @@ Jedes Element definiert ein Test-Target.
     "framework": "doctest",
     "timeout": 30,
     "labels": ["unit", "fast"],
+    "dependencies": ["CoreLib"],
     "externals": ["bass"],
     "parallel": true
 }
@@ -804,6 +805,7 @@ Jedes Element definiert ein Test-Target.
 | `framework` | string | — | `tests.framework` | Test-Framework |
 | `timeout` | number | — | Typ-abhängig | CTest Timeout (Sekunden) |
 | `labels` | string[] | — | Typ-abhängig | CTest Labels |
+| `dependencies` | string[] | — | `[]` | Internal libraries (linked directly, in addition to `{AppName}.Core`) |
 | `externals` | string[] | — | `[]` | Zusätzliche Externals |
 | `parallel` | bool | — | Typ-abhängig | Parallele Ausführung |
 
@@ -1089,6 +1091,7 @@ projects/apps/{AppName}/
 
 | Code | Description |
 |------|--------------|
+| E101 | Test dependency (internal library) does not exist |
 | E301 | Kein Framework angegeben (weder global noch per-target) |
 | E302 | Unbekanntes Test-Framework |
 | E303 | Test-Target: `name` fehlt |
@@ -1126,7 +1129,8 @@ projects/apps/{AppName}/
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.7.2** | **2025-12-20** | **Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Usage geskippter Externals** |
+| **0.7.3** | **2026-07-20** | **New: `dependencies` for apps[].tests.targets[] (§9.8) — internal libraries are linked directly to the test target (E101 on unknown dependency). Previously the key was ignored** |
+| 0.7.2 | 2025-12-20 | Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Usage geskippter Externals |
 | 0.7.1 | 2025-12-20 | Konsistente external_options: Für libraries[], apps.core, apps.runner hinzugefügt (fehlte bisher). Nun einheitlich wie executables[] und tests[] |
 | 0.7.0 | 2025-12-18 | Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen |
 | 0.6.0 | 2025-12-18 | Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Configuration, Skip-Feature (tests.skip, targets[].skip), App-Container Error-Codes (E4xx, W4xx) |
