@@ -1,0 +1,123 @@
+name: 🔨 Build-Problem in einem Zielprojekt
+description: Dein Projekt konfiguriert oder baut nicht — und du weißt nicht, woran es liegt
+labels: ["build-problem", "support"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Das ist die wertvollste Art von Meldung für CMakeCraft.** Jede Stelle,
+        an der jemand beim Aufsetzen hängen bleibt, ist entweder ein Fehler oder
+        eine Lücke in der Dokumentation — beides will ich wissen.
+
+        Du musst **nicht** vorher herausfinden, ob CMakeCraft schuld ist. Genau
+        dabei hilft diese Vorlage.
+
+        Zwei Dinge, die oft schon reichen:
+
+        - `docs/de/guide/references/ErrorCodes.md` — was der Fehlercode bedeutet
+        - `BUILDING.md`, Abschnitt „Wenn etwas schiefgeht"
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Wo bricht es ab?
+      options:
+        - Bootstrap — CMakeCraft wird gar nicht erst geholt
+        - Configure — Solution.json wird ausgewertet
+        - Configure — Externals werden geholt/gefunden
+        - Build — Übersetzen
+        - Build — Linken
+        - Tests / CTest
+        - weiß nicht
+    validations:
+      required: true
+
+  - type: textarea
+    id: fehlermeldung
+    attributes:
+      label: Die vollständige Fehlermeldung
+      description: >
+        Bitte nicht nur die letzte Zeile — der Weg dorthin steht meist darüber.
+        Bei Configure-Problemen: mit `-DDEBUG_DEFAULT_LEVEL=5` neu laufen lassen.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Deine Solution.json
+      description: >
+        Ganz oder der betroffene Ausschnitt. Wenn sie vertraulich ist: durch eine
+        anonymisierte Fassung ersetzen, die denselben Fehler zeigt — die Struktur
+        ist das Entscheidende, nicht die Namen.
+      render: json
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: CMakeCraft-Version
+      description: Der Wert von `CMAKECRAFT_VERSION` aus deiner `cmakecraft.pin`.
+      placeholder: v0.8.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: bezug
+    attributes:
+      label: Wie beziehst du CMakeCraft?
+      options:
+        - Bootstrap mit cmakecraft.pin (Normalfall)
+        - "-DCMAKECRAFT_LOCAL_DIR auf eine Arbeitskopie"
+        - kopierter Snapshot im Projekt (alter Weg)
+        - direkt im CMakeCraft-Repo (Demo-Solution)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: betriebssystem
+    attributes:
+      label: Betriebssystem
+      options:
+        - Windows
+        - Linux
+        - macOS
+    validations:
+      required: true
+
+  - type: input
+    id: umgebung
+    attributes:
+      label: CMake-Version, Generator, Compiler, Preset
+      placeholder: CMake 3.28.1 · Visual Studio 17 2022 · MSVC · Preset windows-vs-x64-debug_dynamic
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: geprueft
+    attributes:
+      label: Schon geprüft?
+      description: Kein Vorwurf, wenn nichts angekreuzt ist — es hilft nur beim Eingrenzen.
+      options:
+        - label: Frischer Configure in ein leeres Build-Verzeichnis (`out/` gelöscht)
+        - label: "`.externals/` gelöscht und neu holen lassen"
+        - label: Der Fehler tritt auch mit einer minimalen Solution.json auf
+        - label: Der Fehlercode steht in ErrorCodes.md, hat mir aber nicht weitergeholfen
+
+  - type: textarea
+    id: struktur
+    attributes:
+      label: Verzeichnisstruktur des Projekts
+      description: >
+        Nur die relevante Ebene — wo liegen `Solution.json`, `projects/`,
+        `externals/` und die betroffene `Source.cmake`? Bei Pfadproblemen ist das
+        meist die entscheidende Angabe.
+      render: text
+
+  - type: textarea
+    id: sonstiges
+    attributes:
+      label: Sonstiges
+      description: Was du schon versucht hast, seit wann es auftritt, was zuletzt geändert wurde.

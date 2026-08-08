@@ -364,27 +364,66 @@ FodyWeavers.xsd
 
 # custom ignores #
 
-
 # no zip
 *.zip
 
 #no bak
 *.bak
+*.bak[0-9]
 
 # no old folder
 old/
-/Archive
+*.archive/
+# Achtung: KEINE Regel "/Archive" hier - Git ignoriert auf Windows die
+# Gross-/Kleinschreibung und wuerde damit den getrackten Ordner archive/
+# (stillgelegte Makefile-Doku) mit erfassen.
 
-# HINWEIS: BASS-Binaries unter externals/ (win/c/x64/*.lib, win/x64/*.dll, linux/libs/, bin/)
-# sind aus LIZENZGRUENDEN bewusst NICHT getrackt (proprietaer, un4seen.com).
-# Beschaffung bei Bedarf: siehe externals/bass/SETUP.md
-
-# zur Build-Zeit gefetchte Git-Externals
+# zur Build-Zeit gefetchte Git-Externals (inkl. CMakeCraft-Cache der Konsumenten)
 /.externals/
 
 # Claude-Systemdaten
 /CLAUDE.md
 /.claude/
+
+# Lokale Benutzer-Presets (Qt-Pfade, vcpkg-Toolchain) - die Vorlage
+# CMakeUserPresets.example.json ist getrackt, die Kopie nicht.
+/CMakeUserPresets.json
+
+# --- BASS: KOMPLETT ausgeschlossen (Lizenz) ---------------------------------
+# BASS gehoert un4seen developments Ltd.; die Lizenz schliesst Weiterverbreitung
+# und Unterlizenzierung aus. Das betrifft NICHT NUR die Binaries, sondern das
+# GESAMTE SDK: Header, Beispiele, Doku (.chm), Delphi-/VB-Units.
+#
+# Frueher standen hier nur Verzeichnisregeln (x64/, x86/, bin/ - siehe oben im
+# VS-Block). Die haben die 32-Bit-DLL in win/, die Linux-Libs in
+# linux/libs/<arch>/ und die macOS-Dylibs in osx/ NICHT erfasst - 889 Dateien
+# lagen dadurch im Repo. Darum jetzt: alles unter externals/bass/ ausser der
+# Anleitung.
+#
+# Beschaffung: externals/bass/SETUP.md
+/externals/bass/*
+!/externals/bass/SETUP.md
+
+# --- Kompilate: endungsbasiert, nicht verzeichnisbasiert ---------------------
+# In einem Build-System-Repo gehoert keine einzige vorkompilierte Bibliothek.
+# Verzeichnisregeln (x64/, bin/, lib/) greifen immer nur dort, wo jemand die
+# uebliche Struktur benutzt hat - die Endung greift ueberall.
+#
+# Betrifft u. a. die Lua-Kompilate unter externals/lua54/ (die Header bleiben
+# getrackt). Soll doch einmal eine Binaerdatei mit ins Repo, braucht sie hier
+# eine ausdrueckliche Ausnahme (!pfad/datei) - und einen Eintrag in
+# THIRD_PARTY_NOTICES.md.
+*.dll
+*.so
+*.so.*
+*.dylib
+*.lib
+*.a
+*.exe
+*.chm
+*.nib
+*.obj
+*.o
 
 # Build-System-Quellcode und Doku sind NIE Build-Output (VS-Regeln wie **/packages/* greifen sonst!)
 !cmake/**

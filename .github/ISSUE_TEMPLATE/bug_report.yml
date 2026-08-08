@@ -1,0 +1,107 @@
+name: 🐞 Fehlerbericht
+description: Das Build-System verhält sich anders als dokumentiert
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke fürs Melden! Wenn dein **eigenes Projekt** nicht baut und du nicht
+        sicher bist, ob CMakeCraft schuld ist, nimm bitte stattdessen die Vorlage
+        „Build-Problem in einem Zielprojekt" — dort werden die richtigen Angaben
+        abgefragt.
+
+  - type: textarea
+    id: was-passiert
+    attributes:
+      label: Was passiert?
+      description: Kurz und konkret.
+      placeholder: >
+        Ein Executable mit "externals": ["glfw"] bekommt die Include-Pfade nicht
+        gesetzt, obwohl glfw laut Log erfolgreich geholt und registriert wurde.
+    validations:
+      required: true
+
+  - type: textarea
+    id: erwartet
+    attributes:
+      label: Was hättest du erwartet?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Die auslösende Solution.json
+      description: >
+        Am hilfreichsten ist der **kleinste** Ausschnitt, der den Fehler noch
+        zeigt — gern eine eigens dafür zusammengekürzte Solution.
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: schritte
+    attributes:
+      label: Schritte zum Nachvollziehen
+      value: |
+        1. `cmake --preset …`
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: CMakeCraft-Stand
+      description: >
+        Tag aus `cmakecraft.pin` (z. B. `v0.8.0`) oder Commit-Kurzhash
+        (`git rev-parse --short HEAD`), wenn du direkt im Repo arbeitest.
+      placeholder: v0.8.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: betriebssystem
+    attributes:
+      label: Betriebssystem
+      options:
+        - Windows
+        - Linux
+        - macOS
+    validations:
+      required: true
+
+  - type: input
+    id: umgebung
+    attributes:
+      label: CMake-Version, Generator, Compiler
+      description: Ausgabe von `cmake --version` plus verwendetes Preset.
+      placeholder: CMake 3.28.1 · Ninja · Clang 17 · Preset windows-ninja-debug-clang
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Configure-Ausgabe
+      description: >
+        Der Ausschnitt rund um den Fehler. Mit `-DDEBUG_DEFAULT_LEVEL=5` wird die
+        Ausgabe deutlich gesprächiger — das hilft besonders bei Externals und
+        Target-Erzeugung.
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: fehlercode
+    attributes:
+      label: Fehlercode
+      description: Falls einer ausgegeben wurde (E…, W…). Sonst leer lassen.
+      placeholder: E214
+
+  - type: textarea
+    id: sonstiges
+    attributes:
+      label: Sonstiges
+      description: Alles, was hilft — Verzeichnisbaum, betroffene Source.cmake, Umgehung, die du gefunden hast.

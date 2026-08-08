@@ -1,0 +1,90 @@
+{
+  "version": 6,
+
+  "vendor": {
+    "cmakecraft/readme": {
+      "zweck": [
+        "Vorlage fuer die eigene CMakeUserPresets.json.",
+        "",
+        "  cp CMakeUserPresets.example.json CMakeUserPresets.json",
+        "",
+        "Die kopierte Datei ist bewusst NICHT versioniert - sie enthaelt deine",
+        "lokalen Pfade. Passe unten an, was du brauchst; alles andere kann",
+        "geloescht werden.",
+        "",
+        "Warum dieser Text in 'vendor' steht: CMake lehnt unbekannte Felder in",
+        "Preset-Dateien ab, ignoriert 'vendor' aber ausdruecklich. Kommentare",
+        "(// oder /* */) sind in Preset-JSONs nicht erlaubt - Visual Studio",
+        "kommt damit nicht zurecht. Erklaerungen gehoeren sonst in",
+        "'displayName' und 'description'.",
+        "",
+        "Doku: docs/de/guide/userguides/CMakeUserPresets.md"
+      ]
+    }
+  },
+
+  "configurePresets": [
+    {
+      "name": "qt-env",
+      "hidden": true,
+      "description": "Pfad zur Qt-Installation - das Verzeichnis MIT bin/ und lib/ darin. Nur noetig fuer das Demo-Executable QtMarkdownViewer.",
+      "environment": {
+        "QT_ROOT": "C:/Qt/6.10.1/msvc2022_64"
+      }
+    },
+
+    {
+      "name": "with-vcpkg",
+      "hidden": true,
+      "description": "Bindet eine lokale vcpkg-Toolchain ein und schaltet Manifeste ein. Optional - CMakeCraft braucht vcpkg nicht.",
+      "cacheVariables": {
+        "VCPKG_ROOT": "C:/dev/vcpkg",
+        "CMAKE_TOOLCHAIN_FILE": "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_FEATURE_FLAGS": "manifests,versions"
+      }
+    },
+
+    {
+      "name": "my-vs-debug",
+      "displayName": "Meine Konfiguration - VS x64 - Debug",
+      "description": "Baut auf dem mitgelieferten Preset auf und ergaenzt nur die lokalen Pfade.",
+      "inherits": [ "windows-vs-x64-debug_dynamic", "qt-env" ]
+    },
+
+    {
+      "name": "my-ninja-debug",
+      "displayName": "Meine Konfiguration - Ninja Clang - Debug",
+      "inherits": [ "windows-ninja-debug-clang", "qt-env" ]
+    },
+
+    {
+      "name": "my-selftest-verbose",
+      "displayName": "Meine Konfiguration - Selbsttest mit voller Debug-Ausgabe",
+      "description": "Wie craft-selftest, aber mit der gespraechigsten Debug-Stufe. Nuetzlich beim Aendern von Externals- oder Target-Modulen.",
+      "inherits": [ "craft-selftest" ],
+      "cacheVariables": {
+        "DEBUG_DEFAULT_LEVEL": "5"
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "my-vs-debug-build",
+      "displayName": "Bauen - VS x64 - Debug (8 Jobs)",
+      "configurePreset": "my-vs-debug",
+      "configuration": "Debug",
+      "jobs": 8
+    }
+  ],
+
+  "testPresets": [
+    {
+      "name": "my-vs-debug-test",
+      "displayName": "CTest - VS x64 - Debug",
+      "configurePreset": "my-vs-debug",
+      "configuration": "Debug",
+      "output": { "outputOnFailure": true }
+    }
+  ]
+}

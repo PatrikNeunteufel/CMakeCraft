@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.7.0
-# Date:         2026-07-18
+# Version:      0.9.0
+# Date:         2026-08-08
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -28,6 +28,13 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.9.0 (2026-08-08): first publicly usable version - dual license MIT/
+#                        Apache-2.0, third-party notices, consumer bootstrap
+#                        template under templates/consumer/. BASS is no longer
+#                        shipped (proprietary): externals/bass/ holds only
+#                        SETUP.md. No functional change to the build system.
+#   v0.8.0 (2026-07-20): dependencies array for app test targets
+#   v0.7.1 (2026-07-18): enable_testing() moved before app container tests
 #   v0.7.0 (2026-07-18): relocatable entry point (CMAKECRAFT_DIR), phase-test
 #                        block reactivated (was commented out)
 #   v0.6.x (2026-07-17): case fixes (lowercase), packages/ tracked, selftest preset

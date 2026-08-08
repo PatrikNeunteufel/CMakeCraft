@@ -1,0 +1,50 @@
+# Lizenz
+
+CMakeCraft steht unter einer **dualen Lizenz**. Du darfst wählen:
+
+- **MIT** — siehe [LICENSE-MIT](LICENSE-MIT)
+- **Apache-2.0** — siehe [LICENSE-APACHE](LICENSE-APACHE)
+
+Beide Lizenzen gelten alternativ, nicht kumulativ: verwende CMakeCraft nach der
+Lizenz, die dir besser passt. MIT ist die kürzere und ist mit GPLv2 verträglich;
+Apache-2.0 enthält zusätzlich eine ausdrückliche Patentrechte-Gewährung.
+
+Das ist die in der Rust- und CMake-Werkzeugwelt übliche Kombination — sie stellt
+sicher, dass CMakeCraft in praktisch jedem Projekt eingesetzt werden darf,
+unabhängig davon, unter welcher Lizenz dieses Projekt selbst steht.
+
+## Was die Lizenz *nicht* bedeutet
+
+CMakeCraft ist ein **Build-System**. Es erzeugt keinen Code, der in deine
+Binärdateien wandert, und verlinkt nichts in dein Programm. Ein Projekt, das
+CMakeCraft zum Bauen verwendet, wird dadurch **nicht** zu einem abgeleiteten
+Werk von CMakeCraft und muss weder MIT noch Apache-2.0 übernehmen.
+
+Etwas anderes gilt für die **Vorlagen** unter `templates/` und die
+Demo-Quelldateien unter `projects/`: die sind zum Kopieren gedacht. Kopierst du
+sie in dein Projekt, gilt für die Kopie diese Lizenz — bei MIT genügt es, den
+Copyright-Vermerk mitzuführen.
+
+## Beiträge
+
+Sofern nicht ausdrücklich anders erklärt, gilt jeder Beitrag, den du
+absichtlich zur Aufnahme in CMakeCraft einreichst, als unter denselben beiden
+Lizenzen stehend — ohne zusätzliche Bedingungen.
+
+## Wichtig: Diese Lizenz deckt nur den CMakeCraft-eigenen Code
+
+Das Repository liefert eine **Demo-Solution** mit, die Fremdcode enthält
+(doctest, glad, Lua-Header) und beim Konfigurieren weitere Abhängigkeiten per
+`git clone` holt (glfw, Dear ImGui, GoogleTest, Catch2, Qt Advanced Docking
+System). Diese Komponenten haben **eigene** Lizenzen.
+
+Die Demo-Solution referenziert außerdem die **proprietäre** Audio-Bibliothek
+**BASS** (un4seen developments Ltd.). BASS ist **nicht** in diesem Repository
+enthalten, darf es lizenzbedingt auch nicht sein, und steht **nicht** unter der
+obigen Dual-Lizenz. Für die Nutzung von CMakeCraft selbst wird BASS nicht
+gebraucht — nur zwei Demo-Executables verwenden es. Siehe
+[`externals/bass/SETUP.md`](externals/bass/SETUP.md).
+
+Vollständige Aufstellung aller Fremdkomponenten mit ihren Lizenzen und
+Copyright-Vermerken: **[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)**.
+Wer CMakeCraft weitergibt, muss die dort genannten Vermerke mitliefern.

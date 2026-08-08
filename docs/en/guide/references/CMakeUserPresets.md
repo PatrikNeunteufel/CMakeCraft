@@ -90,8 +90,8 @@ Basis-Preset für lokale vcpkg-Integration:
     "name": "with-vcpkg",
     "hidden": true,
     "cacheVariables": {
-        "VCPKG_ROOT": "H:/Dev/vcpkg",
-        "CMAKE_TOOLCHAIN_FILE": "H:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_ROOT": "C:/dev/vcpkg",
+        "CMAKE_TOOLCHAIN_FILE": "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_FEATURE_FLAGS": "manifests,versions"
     }
 }
@@ -99,7 +99,7 @@ Basis-Preset für lokale vcpkg-Integration:
 
 | Variable | Wert | Description |
 |----------|------|--------------|
-| `VCPKG_ROOT` | H:/Dev/vcpkg | Lokaler vcpkg-Pfad |
+| `VCPKG_ROOT` | C:/dev/vcpkg | Lokaler vcpkg-Pfad |
 | `CMAKE_TOOLCHAIN_FILE` | .../vcpkg.cmake | Toolchain-Integration |
 | `VCPKG_FEATURE_FLAGS` | manifests,versions | Moderne Features |
 

@@ -1,0 +1,73 @@
+name: 💡 Funktionswunsch
+description: Eine Idee für CMakeCraft
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Betrifft dein Vorschlag das **`Solution.json`-Schema**, ist dieses Issue
+        der vorgeschriebene erste Schritt — Schema-Änderungen wirken sich auf
+        jedes Projekt aus, das CMakeCraft nutzt.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem löst es?
+      description: >
+        Fang beim Problem an, nicht bei der Lösung — das führt oft zu einem
+        besseren Vorschlag als der ursprünglich gedachte.
+      placeholder: >
+        Für jedes Test-Target muss die Framework-Angabe wiederholt werden, obwohl
+        in einem Projekt praktisch immer dasselbe Framework verwendet wird.
+    validations:
+      required: true
+
+  - type: textarea
+    id: vorschlag
+    attributes:
+      label: Wie stellst du es dir vor?
+      description: Bei Schema-Vorschlägen gern als JSON-Ausschnitt.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: bereich
+    attributes:
+      label: Welcher Bereich?
+      options:
+        - Solution.json — Schema und Felder
+        - Targets (Libraries, Executables, App-Container)
+        - Externals — lokal, git-fetched, System
+        - Hooks (PreFetch / PostFetch)
+        - Tests und CTest-Anbindung
+        - Presets
+        - Fehlermeldungen und Diagnose
+        - Bezug/Bootstrap (cmakecraft.pin, Versionierung)
+        - Dokumentation und Vorlagen
+        - anderes / weiß nicht
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: kompatibilitaet
+    attributes:
+      label: Verträglichkeit mit bestehenden Projekten
+      options:
+        - label: Mein Vorschlag ist rückwärtskompatibel — bestehende Solution.json-Dateien funktionieren unverändert weiter
+        - label: Mein Vorschlag würde bestehende Projekte brechen (bitte unten erklären, warum es sich trotzdem lohnt)
+
+  - type: textarea
+    id: alternativen
+    attributes:
+      label: Alternativen, die du erwogen hast
+      description: >
+        Auch: Lässt sich das heute schon lösen — mit einem Hook, einem eigenen
+        Include, einer anderen Projektstruktur? Optional.
+
+  - type: checkboxes
+    id: mitarbeit
+    attributes:
+      label: Mitarbeit
+      options:
+        - label: Ich würde das selbst umsetzen wollen
+          required: false

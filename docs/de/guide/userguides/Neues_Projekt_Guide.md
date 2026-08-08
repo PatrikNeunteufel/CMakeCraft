@@ -64,11 +64,13 @@ git init
 
 ### Schritt 2: Bootstrap-Dateien übernehmen (KEIN cmake/-Snapshot mehr)
 
-Aus einem bestehenden Konsumenten (z. B. LumiViz) oder von Hand:
+Die drei Pflichtdateien liegen als Vorlage in CMakeCraft unter
+[`templates/consumer/`](../../../../templates/consumer/) — von dort in den
+Projekt-Root kopieren:
 
 | Datei | Zweck | Pflicht? |
 |---|---|---|
-| `CMakeCraftBootstrap.cmake` | holt CMakeCraft in der gepinnten Version nach `.externals/` | ✅ |
+| `CMakeCraftBootstrap.cmake` | holt CMakeCraft in der gepinnten Version nach `.externals/` — **unverändert** übernehmen | ✅ |
 | `cmakecraft.pin` | **die** Versionsangabe (Tag) + Quellen (GitHub-URL, lokale Fallbacks) | ✅ |
 | `CMakeLists.txt` | Dünnfassung (s. u.) | ✅ |
 | `CMakePresets.json` | Projekt-Presets (aus CMakeCraft kopieren) | ✅ |
@@ -89,7 +91,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.7.0")
+set(CMAKECRAFT_VERSION "v0.9.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```

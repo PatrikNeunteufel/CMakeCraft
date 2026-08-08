@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Sicherheitslücke melden
+    url: https://github.com/PatrikNeunteufel/CMakeCraft/security/policy
+    about: Bitte NICHT als öffentliches Issue — die Sicherheitsrichtlinie erklärt den Weg.
+  - name: 📖 Dokumentation
+    url: https://github.com/PatrikNeunteufel/CMakeCraft/blob/master/docs/de/README.md
+    about: Anleitungen, Referenzen, Modul-Doku und Architektur-Konzepte.
+  - name: 🚀 Neues Projekt aufsetzen
+    url: https://github.com/PatrikNeunteufel/CMakeCraft/blob/master/docs/de/guide/userguides/Neues_Projekt_Guide.md
+    about: Bootstrap, cmakecraft.pin, Solution.json — Schritt für Schritt.
+  - name: 🧾 Fehlercodes nachschlagen
+    url: https://github.com/PatrikNeunteufel/CMakeCraft/blob/master/docs/de/guide/references/ErrorCodes.md
+    about: Was E104, E214 oder W101 bedeuten und was dagegen hilft.

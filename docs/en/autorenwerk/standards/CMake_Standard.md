@@ -191,10 +191,10 @@ target_link_libraries(MyApp PRIVATE SDL2::SDL2)
 
 ```cmake
 # ❌ Verboten
-set(VCPKG_ROOT "H:/Dev/vcpkg")
+set(VCPKG_ROOT "C:/dev/vcpkg")
 
 # ✅ Erlaubt (in CMakeUserPresets.json)
-# "CMAKE_TOOLCHAIN_FILE": "H:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake"
+# "CMAKE_TOOLCHAIN_FILE": "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake"
 ```
 
 ---

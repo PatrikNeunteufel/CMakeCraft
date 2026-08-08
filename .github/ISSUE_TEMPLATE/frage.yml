@@ -1,0 +1,37 @@
+name: ❓ Frage
+description: Etwas ist unklar — zum Aufsetzen, zum Solution-Schema oder zum Aufbau
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fragen sind willkommen. Vier Orte, die die Antwort oft schon enthalten:
+
+        - **Wie setze ich ein Projekt auf?** →
+          [Neues_Projekt_Guide.md](../../docs/de/guide/userguides/Neues_Projekt_Guide.md)
+        - **Welche Felder gibt es in `Solution.json`?** →
+          [Solution_Schema.md](../../docs/de/guide/references/Solution_Schema.md)
+          und das [Cheatsheet](../../docs/de/guide/cheatsheets/Solution_Cheatsheet.md)
+        - **Was bedeutet dieser Fehlercode?** →
+          [ErrorCodes.md](../../docs/de/guide/references/ErrorCodes.md)
+        - **Wie binde ich eine externe Bibliothek ein?** →
+          [Externals.md](../../docs/de/guide/userguides/Externals.md)
+
+        Geht es darum, dass dein Projekt **nicht baut**, nimm bitte die Vorlage
+        „Build-Problem in einem Zielprojekt".
+
+  - type: textarea
+    id: frage
+    attributes:
+      label: Deine Frage
+    validations:
+      required: true
+
+  - type: textarea
+    id: kontext
+    attributes:
+      label: Worum geht es konkret?
+      description: >
+        Was willst du erreichen? Bei Fragen zum Schema hilft der Ausschnitt deiner
+        Solution.json; bei Fragen zum Aufsetzen die Angabe von Betriebssystem,
+        CMake-Version und CMakeCraft-Version aus `cmakecraft.pin`.
