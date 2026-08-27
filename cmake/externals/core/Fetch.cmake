@@ -2,8 +2,8 @@
 # =================================
 # FetchContent wrapper with .externals/ caching
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-08-08
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -17,6 +17,14 @@
 #   - _make_external_available(EXT_NAME)
 #   - _is_external_populated(EXT_NAME OUT_VAR)
 #   - _get_external_source_dir(EXT_NAME OUT_VAR)
+#
+# Changelog:
+#   v1.1.0 (2026-08-08): Aborted clones in .externals/ are detected and removed
+#                        instead of being mistaken for a cached version. Before,
+#                        a half-written .git made the cache check report
+#                        "version mismatch"; FetchContent then tried to wipe the
+#                        directory itself and its failure message named neither
+#                        the cause nor a remedy. New: W303, E219.
 #
 # Options (CMake Cache):
 #   - EXTERNALS_OFFLINE      - Use only cached externals
@@ -111,30 +119,60 @@ function(_fetch_git_external EXT_NAME EXT_JSON)
     # CHECK 2: Already Cached?
     elseif(EXISTS "${_cache_dir}/.git")
         dbg(${DBG_COMMON} "[${EXT_NAME}] Found in cache: ${_cache_dir}" ID EXTERNALS)
-        
-        # Check if version matches
-        _check_cached_version("${EXT_NAME}" "${_git_ref}" "${_ref_type}" "${_cache_dir}" _version_match)
-        
-        if(_version_match)
-            set(_do_fetch FALSE)
-            set(_skip_reason "cached")
-            dbg(${DBG_COMMON} "[${EXT_NAME}] Version OK, skipping fetch" ID EXTERNALS)
-        else()
-            dbg(${DBG_COMMON} "[${EXT_NAME}] Version mismatch" ID EXTERNALS)
-            
+
+        # A ".git" alone does not mean a usable clone: an aborted first fetch
+        # (network loss, Ctrl-C) leaves one behind with no commit checked out.
+        # Without this check the version comparison below reports "mismatch"
+        # for what is really debris - a diagnosis that sends people looking in
+        # the wrong place.
+        _is_complete_clone("${EXT_NAME}" "${_cache_dir}" _clone_complete)
+
+        if(NOT _clone_complete)
             if(EXTERNALS_OFFLINE)
-                cmake_warn("W302" "External '${EXT_NAME}': Version mismatch but offline mode - using cached")
+                cmake_fatal("E218" "External '${EXT_NAME}': Cache holds an incomplete clone and offline mode is enabled. Delete '${_cache_dir}' and re-run with network access")
+            endif()
+
+            cmake_warn("W303" "External '${EXT_NAME}': Incomplete clone in cache (leftover of an aborted fetch) - removing and fetching again: ${_cache_dir}")
+            _purge_cache_dir("${EXT_NAME}" "${_cache_dir}")
+            set(_do_fetch TRUE)
+
+        else()
+            # Check if version matches
+            _check_cached_version("${EXT_NAME}" "${_git_ref}" "${_ref_type}" "${_cache_dir}" _version_match)
+
+            if(_version_match)
                 set(_do_fetch FALSE)
-                set(_skip_reason "offline-cached")
+                set(_skip_reason "cached")
+                dbg(${DBG_COMMON} "[${EXT_NAME}] Version OK, skipping fetch" ID EXTERNALS)
             else()
-                set(_do_fetch TRUE)
+                dbg(${DBG_COMMON} "[${EXT_NAME}] Version mismatch" ID EXTERNALS)
+
+                if(EXTERNALS_OFFLINE)
+                    cmake_warn("W302" "External '${EXT_NAME}': Version mismatch but offline mode - using cached")
+                    set(_do_fetch FALSE)
+                    set(_skip_reason "offline-cached")
+                else()
+                    set(_do_fetch TRUE)
+                endif()
             endif()
         endif()
-        
-    # CHECK 3: Offline Mode without Cache?
+
+    # CHECK 3: Directory there, but no .git at all?
+    # Same origin as above - a fetch that died before git even got started, or
+    # leftovers of a manual copy. FetchContent cannot clone into it either.
+    elseif(EXISTS "${_cache_dir}")
+        if(EXTERNALS_OFFLINE)
+            cmake_fatal("E218" "External '${EXT_NAME}': Cache directory exists but is not a git clone, and offline mode is enabled. Delete '${_cache_dir}' and re-run with network access")
+        endif()
+
+        cmake_warn("W303" "External '${EXT_NAME}': Cache directory is not a git clone - removing and fetching again: ${_cache_dir}")
+        _purge_cache_dir("${EXT_NAME}" "${_cache_dir}")
+        set(_do_fetch TRUE)
+
+    # CHECK 4: Offline Mode without Cache?
     elseif(EXTERNALS_OFFLINE)
         cmake_fatal("E218" "External '${EXT_NAME}': Not cached and offline mode enabled")
-        
+
     # Not cached, need to fetch
     else()
         set(_do_fetch TRUE)
@@ -343,6 +381,127 @@ function(_extract_git_ref EXT_NAME EXT_JSON OUT_REF OUT_TYPE)
         set(${OUT_REF} "${_ref}" PARENT_SCOPE)
         set(${OUT_TYPE} "commit" PARENT_SCOPE)
     endif()
+endfunction()
+
+# ==============================================================================
+# Helper: Is the cached directory a usable clone?
+# ==============================================================================
+#[[
+    _is_complete_clone(EXT_NAME CACHE_DIR OUT_OK)
+
+    Decides whether CACHE_DIR holds a clone that can be reasoned about, as
+    opposed to the debris of an aborted fetch.
+
+    "git clone" creates .git early and fills it afterwards. If it is
+    interrupted - no network, Ctrl-C, a full disk - the directory keeps a .git
+    without a checked-out commit. EXISTS "<dir>/.git" is therefore not enough
+    to call something cached.
+
+    A resolvable HEAD is the criterion: it exists only once the clone got far
+    enough to check something out.
+
+    The check MUST pin git to this directory with --git-dir. Asked from inside
+    the directory instead, git walks the tree upwards and answers for the first
+    repository it finds - and .externals/ always sits inside the consuming
+    project's repository. A broken .git would then be reported complete, with
+    the project's own HEAD as the answer. That is the normal case here, not an
+    edge case.
+
+    Parameters:
+        EXT_NAME  - Mandatory: Name of the external (for debug output)
+        CACHE_DIR - Mandatory: Directory to examine
+        OUT_OK    - Output: TRUE if the clone is usable
+
+    Note:
+        Without a git executable the question cannot be answered. The clone is
+        then treated as complete - _check_cached_version reports a mismatch in
+        that case anyway, so the external gets fetched again either way.
+
+    Example:
+        _is_complete_clone("glfw" "${_cache_dir}" _complete)
+]]
+function(_is_complete_clone EXT_NAME CACHE_DIR OUT_OK)
+
+    set(${OUT_OK} FALSE PARENT_SCOPE)
+
+    # A plain clone keeps .git as a directory. Anything else (a .git file as
+    # used by submodules and worktrees, or no .git at all) is not what belongs
+    # in the cache.
+    if(NOT IS_DIRECTORY "${CACHE_DIR}/.git")
+        dbg(${DBG_RARE} "[${EXT_NAME}] No .git directory - not a usable clone" ID EXTERNALS)
+        return()
+    endif()
+
+    find_program(_git_exe git)
+    if(NOT _git_exe)
+        dbg(${DBG_RARE} "[${EXT_NAME}] Git not found, assuming clone is complete" ID EXTERNALS)
+        set(${OUT_OK} TRUE PARENT_SCOPE)
+        return()
+    endif()
+
+    # --git-dir keeps git from walking up into the surrounding project repo.
+    execute_process(
+        COMMAND "${_git_exe}" --git-dir "${CACHE_DIR}/.git" rev-parse --verify --quiet HEAD
+        OUTPUT_QUIET
+        ERROR_QUIET
+        RESULT_VARIABLE _rc
+    )
+
+    if(_rc EQUAL 0)
+        set(${OUT_OK} TRUE PARENT_SCOPE)
+    else()
+        dbg(${DBG_RARE} "[${EXT_NAME}] No resolvable HEAD of its own - incomplete clone" ID EXTERNALS)
+    endif()
+
+endfunction()
+
+# ==============================================================================
+# Helper: Remove a cache directory
+# ==============================================================================
+#[[
+    _purge_cache_dir(EXT_NAME CACHE_DIR)
+
+    Removes CACHE_DIR completely and makes sure it is gone.
+
+    FetchContent would delete the directory itself before cloning, but if that
+    fails its message names neither the directory's role nor a way out. Doing
+    it here means the failure can be explained where the context still exists.
+
+    Parameters:
+        EXT_NAME  - Mandatory: Name of the external
+        CACHE_DIR - Mandatory: Directory to remove
+
+    Errors:
+        E219 - if the directory survives the removal
+
+    Example:
+        _purge_cache_dir("glfw" "${_cache_dir}")
+]]
+function(_purge_cache_dir EXT_NAME CACHE_DIR)
+
+    if(NOT EXISTS "${CACHE_DIR}")
+        return()
+    endif()
+
+    dbg(${DBG_RARE} "[${EXT_NAME}] Removing cache directory: ${CACHE_DIR}" ID EXTERNALS)
+
+    file(REMOVE_RECURSE "${CACHE_DIR}")
+
+    if(EXISTS "${CACHE_DIR}")
+        # cmake_fatal takes exactly one message - assemble it first, otherwise
+        # everything past the second argument is silently dropped.
+        string(CONCAT _msg
+            "External '${EXT_NAME}': Could not remove the cache directory\n"
+            "    ${CACHE_DIR}\n"
+            "  It is left over from an aborted fetch and has to go before the external "
+            "can be fetched again.\n"
+            "  Usual causes: a program still holds a file in it (editor, file manager, "
+            "virus scanner), or the path is longer than the tooling handles.\n"
+            "  Remedy: close whatever is using the directory, delete it by hand, "
+            "then configure again.")
+        cmake_fatal("E219" "${_msg}")
+    endif()
+
 endfunction()
 
 # ==============================================================================

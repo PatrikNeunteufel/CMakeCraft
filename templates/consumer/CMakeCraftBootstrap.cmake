@@ -69,7 +69,21 @@ if(NOT EXISTS "${_craft_dir}/CMakeCraft.cmake")
     set(_craft_ok FALSE)
     foreach(_src IN LISTS _craft_sources)
         message(STATUS "[Bootstrap] Hole CMakeCraft ${CMAKECRAFT_VERSION} von: ${_src}")
+
+        # Reste eines abgebrochenen Klons muessen weg - git clone weigert sich
+        # sonst mit "destination path already exists". Scheitert das Loeschen,
+        # hier abbrechen: die Meldung von git nennt die Ursache nicht.
         file(REMOVE_RECURSE "${_craft_dir}")
+        if(EXISTS "${_craft_dir}")
+            message(FATAL_ERROR
+                "[Bootstrap] Das Cache-Verzeichnis liess sich nicht entfernen:\n"
+                "    ${_craft_dir}\n"
+                "  Es ist der Rest eines abgebrochenen Klons und muss weg, bevor neu geholt werden kann.\n"
+                "  Uebliche Ursachen: ein Programm haelt eine Datei darin offen (Editor, Explorer,\n"
+                "  Terminal mit cd dorthin, Virenscanner), oder der Pfad ist zu lang.\n"
+                "  Abhilfe: das Programm schliessen, das Verzeichnis von Hand loeschen, neu konfigurieren.")
+        endif()
+
         execute_process(
             COMMAND "${GIT_EXECUTABLE}" clone --depth 1 --branch "${CMAKECRAFT_VERSION}"
                     --config advice.detachedHead=false "${_src}" "${_craft_dir}"

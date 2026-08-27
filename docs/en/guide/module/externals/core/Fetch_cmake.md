@@ -1,7 +1,7 @@
 # Core/Fetch.cmake — FetchContent Wrapper mit Caching
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.1.0  
+> **Date:** 2026-08-08  
 > **Type:** ModuleDoc  
 > **Status:** Aktiv  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
@@ -9,7 +9,7 @@
 > **Language:** English  
 > **German:** [Fetch_cmake.md](Fetch_cmake.md)  
 > **Module:** [cmake/externals/Core/Fetch.cmake](../../../cmake/externals/Core/Fetch.cmake)  
-> **Module Version:** 1.0.0
+> **Module Version:** 1.1.0
 
 ---
 
@@ -138,6 +138,43 @@ Gibt den Source-Pfad eines Externals zurück.
 
 ---
 
+### 4.5 _is_complete_clone()
+
+```cmake
+_is_complete_clone(EXT_NAME CACHE_DIR OUT_OK)
+```
+
+> **Since:** module version 1.1.0
+
+Decides whether `CACHE_DIR` holds a usable clone or only the debris of an
+aborted fetch. The criterion is a resolvable `HEAD`
+(`git rev-parse --verify --quiet HEAD`) — that exists only once the clone got
+far enough to check something out.
+
+Without a `git` executable the question cannot be answered and the clone counts
+as complete. That is harmless: without `git`, `_check_cached_version()` reports
+a mismatch anyway, so the external gets fetched either way.
+
+---
+
+### 4.6 _purge_cache_dir()
+
+```cmake
+_purge_cache_dir(EXT_NAME CACHE_DIR)
+```
+
+> **Since:** module version 1.1.0
+
+Removes `CACHE_DIR` completely and verifies it is gone. If the directory
+survives, the function fails with **E219** — naming the path, the usual causes
+(open file, path too long) and what to do.
+
+Doing the removal here instead of leaving it to FetchContent is the whole
+point: at this spot it is still known *which* external is affected and *why*
+the directory has to go.
+
+---
+
 ## 5. Caching-Logik
 
 ### Entscheidungsbaum
@@ -147,11 +184,23 @@ FORCE_FETCH=ON?  ──YES──► FETCH
        │
        NO
        ▼
-Cache exists?  ──NO──► OFFLINE? ──YES──► E218 ERROR
-       │                   │
-      YES                  NO
-       │                   ▼
-       ▼               FETCH
+.git present?   ──NO──► directory there? ──YES──► OFFLINE? ──YES──► E218 ERROR
+       │                      │                      │
+      YES                     NO                     NO
+       │                      │                      ▼
+       │                      ▼             W303 + REMOVE + FETCH
+       │                 OFFLINE? ──YES──► E218 ERROR
+       │                      │
+       │                      NO
+       │                      ▼
+       │                    FETCH
+       ▼
+Clone complete? ──NO──► OFFLINE? ──YES──► E218 ERROR
+       │                      │
+      YES                     NO
+       │                      ▼
+       │              W303 + REMOVE + FETCH
+       ▼
 Version match? ──YES──► USE CACHE
        │
        NO
@@ -162,6 +211,30 @@ OFFLINE? ──YES──► W302 + USE CACHE
     ▼
   FETCH
 ```
+
+### Why "clone complete?" is a question of its own
+
+`git clone` creates `.git` early and fills it afterwards. If it is interrupted —
+network loss, Ctrl-C, a full disk — a `.git` without a checked-out commit stays
+behind. The presence of `.git` therefore does **not** mean a usable clone lives
+there.
+
+Until v0.9.0 that distinction was missing, with two consequences:
+
+1. The version comparison ran against debris and reported **"version mismatch"** —
+   a diagnosis pointing in the wrong direction.
+2. Cleaning up was left to FetchContent. When its removal failed, the message
+   named neither the cause nor a way out.
+
+Since v0.9.1, [`_is_complete_clone()`](#45-_is_complete_clone) checks whether a
+`HEAD` resolves — which it does only once the clone got far enough. If the clone
+is incomplete, [`_purge_cache_dir()`](#46-_purge_cache_dir) cleans up and, should
+that fail, reports **E219** with cause and remedy.
+
+**Deliberately unchanged:** for a *complete* clone with a differing version,
+FetchContent still does the removal. Purging up front there would re-fetch
+branch-pinned externals on every configure — `_check_cached_version()` reports
+"mismatch" for branches by design.
 
 ---
 
@@ -226,7 +299,13 @@ cmake -B build-ci -DEXTERNALS_OFFLINE=ON
 | E012 | Keine git URL | `git` Feld fehlt oder leer |
 | E202 | Fetch fehlgeschlagen | FetchContent konnte External nicht laden |
 | E215 | Keine Version | Kein tag/branch/commit angegeben |
-| E218 | Offline ohne Cache | External nicht gecacht, OFFLINE=ON |
+| E218 | Offline without cache | External not cached (or only partially), OFFLINE=ON |
+| E219 | Cache not removable | An unusable cache directory could not be removed |
+
+| Code | Warning | Description |
+|------|---------|-------------|
+| W302 | Version differs | Offline mode uses the cache anyway |
+| W303 | Incomplete clone | Debris of an aborted fetch — removed and fetched again |
 
 ---
 
@@ -242,4 +321,5 @@ cmake -B build-ci -DEXTERNALS_OFFLINE=ON
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.1.0** | **2026-08-08** | **Module version 1.1.0: `_is_complete_clone()` and `_purge_cache_dir()` documented; decision tree extended by the completeness check; E219/W303 added** |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

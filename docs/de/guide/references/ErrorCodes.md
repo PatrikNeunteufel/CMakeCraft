@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.1.0  
-> **Datum:** 2025-12-28  
+> **Version:** 1.2.0  
+> **Datum:** 2026-08-08  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -342,6 +342,60 @@ NN = Nummer (2 Ziffern)
 
 ---
 
+#### E218 — Nicht im Cache und Offline-Modus aktiv
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.1.2 |
+
+**Meldung:**
+```
+[E218] External 'glfw': Not cached and offline mode enabled
+```
+
+**Beschreibung:** `EXTERNALS_OFFLINE` verbietet das Holen, aber unter
+`.externals/<name>/` liegt nichts Brauchbares. Seit v0.9.1 nennt die Meldung
+auch den Fall, dass dort zwar etwas liegt, es aber kein vollständiger Klon ist.
+
+**Lösung:**
+1. Einmal mit Netzverbindung und ohne `EXTERNALS_OFFLINE` konfigurieren
+2. Oder ein befülltes `.externals/` von einer anderen Arbeitskopie übernehmen
+
+---
+
+#### E219 — Cache-Verzeichnis lässt sich nicht entfernen
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.9.1 |
+
+**Meldung:**
+```
+[E219] External 'glfw': Could not remove the cache directory
+    .../.externals/glfw
+  It is left over from an aborted fetch and has to go before the external can be fetched again.
+  ...
+```
+
+**Beschreibung:** Ein unbrauchbares Cache-Verzeichnis muss weg, bevor neu
+geklont werden kann — das Löschen ist aber gescheitert. Das Build-System kann
+an dieser Stelle nichts mehr tun.
+
+**Lösung:**
+1. Programme schließen, die im Verzeichnis etwas offen halten (Editor,
+   Explorer-Fenster, Terminal mit `cd` dorthin, Virenscanner)
+2. `.externals/<name>/` von Hand löschen
+3. Erneut konfigurieren
+
+Bleibt es dabei, ist meist der **Pfad zu lang**: der Projektpfad plus die
+Verzeichnistiefe des Fremdprojekts überschreitet unter Windows die Grenze der
+Werkzeugkette. Dann das Projekt an einen kürzeren Pfad legen oder lange Pfade
+in Windows und Git aktivieren (`git config --global core.longpaths true`).
+
+---
+
 ### 3.4 E3xx — Test Errors
 
 #### E301 — Unbekanntes Test-Framework
@@ -663,14 +717,53 @@ NN = Nummer (2 Ziffern)
 
 ---
 
-#### W302 — Hook-Wiederverwendung aktiv
+#### W302 — Version weicht ab, Offline-Modus nutzt den Cache
 
 | Aspekt | Wert |
 |--------|------|
 | **Schweregrad** | ⚠️ WARNING |
 | **Seit** | v0.1.2 |
 
-**Beschreibung:** Ein External verwendet einen Hook von einem anderen External.
+**Meldung:**
+```
+[W302] External 'glfw': Version mismatch but offline mode - using cached
+```
+
+**Beschreibung:** Die gecachte Fassung entspricht nicht dem in `Solution.json`
+angegebenen tag/branch/commit. Weil `EXTERNALS_OFFLINE` gesetzt ist, wird sie
+trotzdem verwendet, statt den Build abzubrechen.
+
+**Lösung:** Ohne Offline-Modus konfigurieren, damit die richtige Fassung geholt wird.
+
+---
+
+#### W303 — Unvollständiger Klon im Cache
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⚠️ WARNING |
+| **Seit** | v0.9.1 |
+
+**Meldung:**
+```
+[W303] External 'glfw': Incomplete clone in cache (leftover of an aborted fetch)
+       - removing and fetching again: .../.externals/glfw
+```
+
+**Beschreibung:** In `.externals/<name>/` lag der Rest eines abgebrochenen
+Klons — ein `.git` ohne ausgecheckten Stand. `git clone` legt `.git` früh an und
+füllt es danach; bricht der Vorgang ab (Netz weg, Strg-C, Platte voll), bleibt
+genau das liegen.
+
+CMakeCraft erkennt das, löscht das Verzeichnis und holt neu. **Es ist nichts zu
+tun** — die Warnung sagt nur, warum an dieser Stelle ein Download passiert,
+obwohl scheinbar etwas im Cache lag.
+
+Vor v0.9.1 wurde dieser Zustand als „Version mismatch" gemeldet, was in die
+falsche Richtung wies.
+
+**Lösung:** keine. Tritt die Warnung bei *jedem* Configure auf, bricht der
+Klon reproduzierbar ab — dann die Netzverbindung oder den Plattenplatz prüfen.
 
 ---
 
@@ -756,6 +849,8 @@ NN = Nummer (2 Ziffern)
 | E215 | External | Fetched External: kein tag/branch/commit |
 | E216 | External | Explizit angegebener Hook fehlt |
 | E217 | External | PostFetch Hook erforderlich (cmakeSupport=false) |
+| E218 | External | Nicht im Cache und Offline-Modus aktiv |
+| E219 | External | Cache-Verzeichnis lässt sich nicht entfernen |
 | E301 | Test | Unbekanntes Test-Framework |
 | E302 | Test | source_from Executable existiert nicht |
 | E303 | Test | Test-Source-Verzeichnis nicht gefunden |
@@ -787,7 +882,8 @@ NN = Nummer (2 Ziffern)
 | W110 | Config | GLOB-Fallback aktiv |
 | W201 | Tools | Clang-Tidy nicht gefunden |
 | W301 | Caching | External aus Cache (Offline-Modus) |
-| W302 | Caching | Hook-Wiederverwendung aktiv |
+| W302 | Caching | Version weicht ab, Offline-Modus nutzt den Cache |
+| W303 | Caching | Unvollständiger Klon im Cache — entfernt und neu geholt |
 | W401 | AppContainer | Kein include/ Verzeichnis |
 | W402 | AppContainer | PCH Header nicht gefunden |
 | W403 | AppContainer | Tests-Verzeichnis ohne Sources |
@@ -825,7 +921,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.0** | **2025-12-28** | **E003 (Schema Major inkompatibel), W101/W102 (Schema Minor Warnungen) hinzugefügt** |
+| **1.2.0** | **2026-08-08** | **E219 und W303 (unvollständiger Klon im Cache) hinzugefügt; E218 nachdokumentiert; W302-Beschreibung auf den Code korrigiert (beschrieb bis dahin „Hook-Wiederverwendung")** |
+| 1.1.0 | 2025-12-28 | E003 (Schema Major inkompatibel), W101/W102 (Schema Minor Warnungen) hinzugefügt |
 | 1.0.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching) |
 | 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Alle Codes aus v1.4 |

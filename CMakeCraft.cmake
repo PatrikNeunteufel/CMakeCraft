@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.9.0
-# Date:         2026-08-08
+# Version:      0.9.1
+# Date:         2026-08-27
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -28,6 +28,11 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.9.1 (2026-08-27): aborted clones in .externals/ are detected and removed
+#                        instead of being mistaken for a cached version. The
+#                        check pins git to the directory - asked from inside,
+#                        git walks up into the consuming project's repository
+#                        and reports debris as complete. New: W303, E219.
 #   v0.9.0 (2026-08-08): first publicly usable version - dual license MIT/
 #                        Apache-2.0, third-party notices, consumer bootstrap
 #                        template under templates/consumer/. BASS is no longer

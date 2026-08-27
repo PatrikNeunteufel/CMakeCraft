@@ -322,6 +322,60 @@ NN = Nummer (2 Ziffern)
 
 ---
 
+#### E218 — Not cached and offline mode enabled
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.2 |
+
+**Message:**
+```
+[E218] External 'glfw': Not cached and offline mode enabled
+```
+
+**Description:** `EXTERNALS_OFFLINE` forbids fetching, but there is nothing
+usable under `.externals/<name>/`. Since v0.9.1 the message also covers the case
+where something *is* there but is not a complete clone.
+
+**Fix:**
+1. Configure once with a network connection and without `EXTERNALS_OFFLINE`
+2. Or copy a populated `.externals/` from another working copy
+
+---
+
+#### E219 — Cache directory cannot be removed
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.9.1 |
+
+**Message:**
+```
+[E219] External 'glfw': Could not remove the cache directory
+    .../.externals/glfw
+  It is left over from an aborted fetch and has to go before the external can be fetched again.
+  ...
+```
+
+**Description:** An unusable cache directory has to go before a fresh clone can
+happen — but removing it failed. There is nothing the build system can do at
+that point.
+
+**Fix:**
+1. Close whatever holds a file in the directory (editor, file manager window,
+   a terminal sitting in it, virus scanner)
+2. Delete `.externals/<name>/` by hand
+3. Configure again
+
+If it persists, the **path is usually too long**: the project path plus the
+directory depth of the third-party project exceeds what the Windows toolchain
+handles. Move the project to a shorter path, or enable long paths in Windows
+and Git (`git config --global core.longpaths true`).
+
+---
+
 ### 3.4 E3xx — Test Errors
 
 #### E301 — Unbekanntes Test-Framework
@@ -620,14 +674,53 @@ NN = Nummer (2 Ziffern)
 
 ---
 
-#### W302 — Hook-Wiederverwendung aktiv
+#### W302 — Version differs, offline mode uses the cache
 
-| Aspekt | Wert |
+| Aspect | Value |
 |--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.2 |
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.2 |
 
-**Description:** Ein External verwendet einen Hook von einem anderen External.
+**Message:**
+```
+[W302] External 'glfw': Version mismatch but offline mode - using cached
+```
+
+**Description:** The cached copy does not match the tag/branch/commit given in
+`Solution.json`. Because `EXTERNALS_OFFLINE` is set, it is used anyway instead
+of failing the build.
+
+**Fix:** Configure without offline mode so the requested version gets fetched.
+
+---
+
+#### W303 — Incomplete clone in the cache
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.9.1 |
+
+**Message:**
+```
+[W303] External 'glfw': Incomplete clone in cache (leftover of an aborted fetch)
+       - removing and fetching again: .../.externals/glfw
+```
+
+**Description:** `.externals/<name>/` held the remains of an aborted clone — a
+`.git` with nothing checked out. `git clone` creates `.git` early and fills it
+afterwards; if it is interrupted (network loss, Ctrl-C, full disk), that is
+exactly what stays behind.
+
+CMakeCraft detects this, removes the directory and fetches again. **Nothing to
+do** — the warning only explains why a download happens at a point where the
+cache appeared to hold something.
+
+Before v0.9.1 this state was reported as "version mismatch", which pointed in
+the wrong direction.
+
+**Fix:** none. If the warning shows up on *every* configure, the clone is
+failing reproducibly — check the network connection or the free disk space.
 
 ---
 
@@ -712,6 +805,8 @@ NN = Nummer (2 Ziffern)
 | E215 | External | Fetched External: kein tag/branch/commit |
 | E216 | External | Explizit angegebener Hook fehlt |
 | E217 | External | PostFetch Hook erforderlich (cmakeSupport=false) |
+| E218 | External | Not cached and offline mode enabled |
+| E219 | External | Cache directory cannot be removed |
 | E301 | Test | Unbekanntes Test-Framework |
 | E302 | Test | source_from Executable existiert nicht |
 | E303 | Test | Test-Source-Verzeichnis nicht gefunden |
@@ -742,7 +837,8 @@ NN = Nummer (2 Ziffern)
 | W110 | Config | GLOB-Fallback aktiv |
 | W201 | Tools | Clang-Tidy nicht gefunden |
 | W301 | Caching | External aus Cache (Offline-Modus) |
-| W302 | Caching | Hook-Wiederverwendung aktiv |
+| W302 | Caching | Version differs, offline mode uses the cache |
+| W303 | Caching | Incomplete clone in the cache — removed and fetched again |
 | W401 | AppContainer | Kein include/ Verzeichnis |
 | W402 | AppContainer | PCH Header nicht gefunden |
 | W403 | AppContainer | Tests-Verzeichnis ohne Sources |

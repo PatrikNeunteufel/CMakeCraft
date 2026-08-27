@@ -28,6 +28,10 @@
 #   W2xx - Tools/Setup
 #   W3xx - Externals (Warnings)
 #
+# Changes v0.1.3:
+#   - Documented E219 (Cache directory could not be removed)
+#   - Documented W303 (Incomplete clone in cache)
+#
 # Changes v0.1.2:
 #   - Added W3xx range for Externals warnings
 #   - Documented E218 (Offline without cache)
@@ -69,6 +73,7 @@ include_guard(GLOBAL)
             E216 - Explicitly specified hook not found
             E217 - PostFetch hook required (cmakeSupport=false)
             E218 - External not cached and offline mode enabled
+            E219 - Cache directory could not be removed
     
     Example:
         cmake_fatal("E001" "Executable 'MyApp': Required field 'name' missing")
@@ -114,6 +119,7 @@ endfunction()
         W3xx - Externals
             W301 - Offline mode: using existing external (version may differ)
             W302 - Version mismatch but offline mode - using cached
+            W303 - Incomplete clone in cache - removed and fetched again
     
     Example:
         cmake_warn("W001" "Schema version < 0.1, features limited")
