@@ -32,7 +32,8 @@
 #     - TESTS_TARGET_{n}_NAME, TESTS_TARGET_{n}_TYPE, TESTS_TARGET_{n}_SKIP,
 #       TESTS_TARGET_{n}_PATH, TESTS_TARGET_{n}_FRAMEWORK, TESTS_TARGET_{n}_TIMEOUT,
 #       TESTS_TARGET_{n}_LABELS, TESTS_TARGET_{n}_DEPENDENCIES,
-#       TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
+#       TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_EXTERNAL_OPTIONS,
+#       TESTS_TARGET_{n}_PARALLEL
 #   Filter:
 #     - PLATFORMS, SKIP
 #
@@ -157,6 +158,7 @@ endfunction()
                         "labels": ["unit", "fast"],
                         "dependencies": [],
                         "externals": [],
+                        "external_options": {},
                         "parallel": true
                     }
                 ]
@@ -415,7 +417,10 @@ function(_collect_app APP_JSON CTX)
                         list(APPEND _t_externals "${_ext}")
                     endforeach()
                 endif()
-                
+
+                # --- Optional: external_options (JSON block for later processing) ---
+                _json_get_object_or_empty("${_target_json}" "external_options" _t_external_options)
+
                 # --- Optional: parallel (default: type-based) ---
                 set(_t_parallel "${_default_parallel}")
                 _json_has_key("${_target_json}" "parallel" _has_t_parallel)
@@ -438,6 +443,7 @@ function(_collect_app APP_JSON CTX)
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_LABELS "${_t_labels}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_DEPENDENCIES "${_t_dependencies}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS "${_t_externals}")
+                ctx_set(${CTX} TESTS_TARGET_${_t_idx}_EXTERNAL_OPTIONS "${_t_external_options}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL "${_t_parallel}")
                 
                 dbg(${DBG_ULTRA_RARE} "    Test Target [${_t_idx}]: ${_t_name} (${_t_type}, skip=${_t_skip})" ID APPS)

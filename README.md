@@ -64,13 +64,13 @@ Drei Dateien in den Projekt-Root kopieren — Vorlagen liegen unter
 `cmakecraft.pin` ist der einzige Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.9.1")
+set(CMAKECRAFT_VERSION "v0.9.2")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
 
 Beim ersten Konfigurieren klont CMake diesen Tag nach
-`.externals/cmakecraft/v0.9.1/` und lädt von dort den Entry-Point
+`.externals/cmakecraft/v0.9.2/` und lädt von dort den Entry-Point
 `CMakeCraft.cmake`. Danach liegt alles im Cache und der Build ist offlinefähig.
 **Ein Versionswechsel ist eine geänderte Zeile im Pin** — kein Kopieren, kein
 Abgleichen, kein Submodule.

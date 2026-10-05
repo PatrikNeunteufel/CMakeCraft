@@ -792,6 +792,9 @@ Jedes Element definiert ein Test-Target.
     "labels": ["unit", "fast"],
     "dependencies": ["CoreLib"],
     "externals": ["bass"],
+    "external_options": {
+        "bass": { "BASS_MIX": true }
+    },
     "parallel": true
 }
 ```
@@ -807,7 +810,12 @@ Jedes Element definiert ein Test-Target.
 | `labels` | string[] | — | Typ-abhängig | CTest Labels |
 | `dependencies` | string[] | — | `[]` | Internal libraries (linked directly, in addition to `{AppName}.Core`) |
 | `externals` | string[] | — | `[]` | Zusätzliche Externals |
+| `external_options` | object | — | `{}` | Per-external options for the entries in `externals` |
 | `parallel` | bool | — | Typ-abhängig | Parallele Ausführung |
+
+`external_options` only applies to externals listed in `externals` of the same test target.
+The test framework (`framework`) is always applied without options — an entry such as
+`external_options.doctest` has no effect.
 
 ### 9.9 Test-Typen und Defaults
 
@@ -1129,7 +1137,8 @@ projects/apps/{AppName}/
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.7.3** | **2026-07-20** | **New: `dependencies` for apps[].tests.targets[] (§9.8) — internal libraries are linked directly to the test target (E101 on unknown dependency). Previously the key was ignored** |
+| **0.7.4** | **2026-10-05** | **Fix: `external_options` for apps[].tests.targets[] (§9.8) is applied — until now the test target received every external with empty options. Existing entries take effect for the first time. The test framework stays without options** |
+| 0.7.3 | 2026-07-20 | New: `dependencies` for apps[].tests.targets[] (§9.8) — internal libraries are linked directly to the test target (E101 on unknown dependency). Previously the key was ignored |
 | 0.7.2 | 2025-12-20 | Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Usage geskippter Externals |
 | 0.7.1 | 2025-12-20 | Konsistente external_options: Für libraries[], apps.core, apps.runner hinzugefügt (fehlte bisher). Nun einheitlich wie executables[] und tests[] |
 | 0.7.0 | 2025-12-18 | Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen |

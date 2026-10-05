@@ -87,9 +87,9 @@ externals/lua54/
 
 | Option | Typ | Default | Beschreibung |
 |--------|-----|---------|--------------|
-| `LUA_EMBEDDED` | bool | `true` | Statisch linken (empfohlen) |
-| `LUA_32BITS` | bool | `false` | 32-bit Integer/Float |
-| `LUA_USE_C89` | bool | `false` | C89-Kompatibilität |
+| `LUA_EMBEDDED` | bool | `false` | Statisch linken. Vorgabe ist dynamisch; `true` braucht unter Windows eine statische `lua54.lib` — mit einer Import-Bibliothek linkt das Target, startet aber ohne `lua54.dll` nicht |
+| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit Integer/Float (setzt das Compile-Define `LUA_32BITS`) |
+| `LUA_USE_READLINE` | bool | `false` | Readline-Unterstützung (nur Linux; linkt `readline`) |
 
 ### Verwendungsbeispiel
 

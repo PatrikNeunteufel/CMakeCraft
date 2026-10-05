@@ -520,7 +520,8 @@ endfunction()
         NAME, PATH, TESTS_FRAMEWORK (global default), TESTS_TARGETS_COUNT
         TESTS_TARGET_{n}_NAME, TESTS_TARGET_{n}_TYPE, TESTS_TARGET_{n}_PATH,
         TESTS_TARGET_{n}_FRAMEWORK, TESTS_TARGET_{n}_TIMEOUT, TESTS_TARGET_{n}_LABELS,
-        TESTS_TARGET_{n}_DEPENDENCIES, TESTS_TARGET_{n}_EXTERNALS, TESTS_TARGET_{n}_PARALLEL
+        TESTS_TARGET_{n}_DEPENDENCIES, TESTS_TARGET_{n}_EXTERNALS,
+        TESTS_TARGET_{n}_EXTERNAL_OPTIONS, TESTS_TARGET_{n}_PARALLEL
     
     Directory Structure Expected:
         {PATH}/
@@ -601,6 +602,7 @@ function(_create_app_tests CTX)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_LABELS _t_labels)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_DEPENDENCIES _t_dependencies)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS _t_externals)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_EXTERNAL_OPTIONS _t_external_options)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL _t_parallel)
         
         # Check individual skip
@@ -642,6 +644,7 @@ function(_create_app_tests CTX)
             "${_t_timeout}"
             "${_t_labels}"
             "${_t_externals}"
+            "${_t_external_options}"
             "${_name}"
             "${_t_parallel}"
         )
@@ -656,23 +659,25 @@ endfunction()
 # _create_app_test_target - Helper to create a single test target
 # ==============================================================================
 #[[
-    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
+    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL)
 
     Internal helper function to create a test executable.
 
     Parameters:
-        TARGET_NAME     - Name for the test target
-        SRC_DIR         - Directory containing test sources
-        CORE_TARGET     - Core library to link against
-        DEPENDENCIES    - Internal libraries to link directly (semicolon-separated)
-        FRAMEWORK       - Test framework (doctest, googletest, catch2)
-        TIMEOUT         - CTest timeout in seconds
-        LABELS          - CTest labels (semicolon-separated)
-        EXTRA_EXTERNALS - Additional externals for this test
-        APP_NAME        - Parent app name (for folder organization)
-        PARALLEL        - TRUE to allow parallel execution, FALSE for serial
+        TARGET_NAME      - Name for the test target
+        SRC_DIR          - Directory containing test sources
+        CORE_TARGET      - Core library to link against
+        DEPENDENCIES     - Internal libraries to link directly (semicolon-separated)
+        FRAMEWORK        - Test framework (doctest, googletest, catch2)
+        TIMEOUT          - CTest timeout in seconds
+        LABELS           - CTest labels (semicolon-separated)
+        EXTRA_EXTERNALS  - Additional externals for this test
+        EXTERNAL_OPTIONS - JSON object with per-external options for
+                           EXTRA_EXTERNALS (not applied to FRAMEWORK)
+        APP_NAME         - Parent app name (for folder organization)
+        PARALLEL         - TRUE to allow parallel execution, FALSE for serial
 ]]
-function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME PARALLEL)
+function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL)
     
     # --------------------------------------------------------------------------
     # Collect Sources (via SourceCollect.cmake)
@@ -764,7 +769,16 @@ function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FR
             cmake_fatal("E010" "External '${_ext}' not defined in externals block")
         endif()
         
-        apply_external_to_target("${TARGET_NAME}" "${_ext}" "{}")
+        # Get external_options if present
+        set(_options_json "{}")
+        if(NOT "${EXTERNAL_OPTIONS}" STREQUAL "")
+            _json_has_key("${EXTERNAL_OPTIONS}" "${_ext}" _has_options)
+            if(_has_options)
+                _json_get_object("${EXTERNAL_OPTIONS}" "${_ext}" _options_json)
+            endif()
+        endif()
+
+        apply_external_to_target("${TARGET_NAME}" "${_ext}" "${_options_json}")
     endforeach()
     
     # --------------------------------------------------------------------------

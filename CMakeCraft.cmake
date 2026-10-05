@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.9.1
-# Date:         2026-08-27
+# Version:      0.9.2
+# Date:         2026-10-05
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -28,6 +28,15 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.9.2 (2026-10-05): external_options of app test targets
+#                        (apps[].tests.targets[]) are applied - until now the
+#                        test target received every external with empty
+#                        options. Entries that were silently ignored take
+#                        effect for the first time. The test framework
+#                        external stays without options.
+#                        lua54: documented default of LUA_EMBEDDED corrected
+#                        to false (dynamic); the 'default true' block never
+#                        took effect and is removed. No behaviour change.
 #   v0.9.1 (2026-08-27): aborted clones in .externals/ are detected and removed
 #                        instead of being mistaken for a cached version. The
 #                        check pins git to the directory - asked from inside,

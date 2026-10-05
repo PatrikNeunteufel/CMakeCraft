@@ -235,39 +235,49 @@ Erstellt Test Executables basierend auf der Tests-Konfiguration im Context.
 |-----|------------|
 | `NAME` | App-Name für Target-Prefix |
 | `PATH` | Basis-Verzeichnis |
-| `TESTS_FRAMEWORK` | doctest, googletest, catch2 |
-| `TESTS_UNIT_ENABLED` | Unit Tests erstellen |
-| `TESTS_UNIT_TIMEOUT` | CTest Timeout |
-| `TESTS_UNIT_LABELS` | CTest Labels |
-| `TESTS_INTEGRATION_ENABLED` | Integration Tests erstellen |
-| `TESTS_INTEGRATION_TIMEOUT` | CTest Timeout |
-| `TESTS_INTEGRATION_LABELS` | CTest Labels |
-| `TESTS_INTEGRATION_EXTERNALS` | Zusätzliche Externals |
+| `TESTS_FRAMEWORK` | Default-Framework für alle Test-Targets (doctest, googletest, catch2) |
+| `TESTS_SKIP` | `TRUE` überspringt alle Tests der App |
+| `TESTS_TARGETS_COUNT` | Anzahl der Einträge in `tests.targets[]` |
+| `TESTS_TARGET_{n}_NAME` | Name → Target `{AppName}.{name}` |
+| `TESTS_TARGET_{n}_TYPE` | Test-Typ (nur für die Ausgabe; Defaults setzt AppCollect) |
+| `TESTS_TARGET_{n}_SKIP` | `TRUE` überspringt dieses Target |
+| `TESTS_TARGET_{n}_PATH` | Quellverzeichnis relativ zum App-Verzeichnis |
+| `TESTS_TARGET_{n}_FRAMEWORK` | Framework dieses Targets; leer → `TESTS_FRAMEWORK` |
+| `TESTS_TARGET_{n}_TIMEOUT` | CTest Timeout |
+| `TESTS_TARGET_{n}_LABELS` | CTest Labels |
+| `TESTS_TARGET_{n}_DEPENDENCIES` | Interne Libraries, direkt gelinkt |
+| `TESTS_TARGET_{n}_EXTERNALS` | Zusätzliche Externals |
+| `TESTS_TARGET_{n}_EXTERNAL_OPTIONS` | Optionen je External aus `EXTERNALS` (JSON) |
+| `TESTS_TARGET_{n}_PARALLEL` | Parallele Ausführung erlaubt |
+
+Alle Keys setzt [AppCollect § 5.5/5.6](AppCollect.md).
 
 **Erwartete Verzeichnisse:**
 
 ```
 {PATH}/
 └── tests/
-    ├── unit/        ← Unit Test Sources
-    └── integration/ ← Integration Test Sources
+    └── {type}/
+        └── {name}/   ← TESTS_TARGET_{n}_PATH (Default: tests/{type}/{name})
 ```
 
 **Generierte Targets:**
-- `{AppName}.UnitTests` — wenn `TESTS_UNIT_ENABLED`
-- `{AppName}.IntegrationTests` — wenn `TESTS_INTEGRATION_ENABLED`
+- `{AppName}.{name}` — je Eintrag in `tests.targets[]`, sofern weder `TESTS_SKIP` noch `TESTS_TARGET_{n}_SKIP` gesetzt ist
 
 **Fehler:**
-- `E301` — Unbekanntes Framework
+- `E301` — Kein Framework angegeben (weder `tests.framework` noch `targets[].framework`)
+- `E302` — Unbekanntes Framework
+- `E305` — Pfad des Test-Targets existiert nicht
 - `E010` — Framework/External nicht definiert
-- `W403` — Tests aktiviert aber Verzeichnis fehlt/leer
+- `E101` — Dependency des Test-Targets existiert nicht
+- `W403` — Tests konfiguriert, aber `tests/` fehlt oder das Target hat keine Sources
 
 ---
 
 ### 4.4 _create_app_test_target()
 
 ```cmake
-_create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS APP_NAME)
+_create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL)
 ```
 
 **Beschreibung:**  
@@ -280,11 +290,14 @@ Interne Hilfsfunktion zur Erstellung eines einzelnen Test-Targets.
 | `TARGET_NAME` | Name des Test-Targets |
 | `SRC_DIR` | Verzeichnis mit Test-Sources |
 | `CORE_TARGET` | Core Library zum Linken |
+| `DEPENDENCIES` | Interne Libraries, die direkt gelinkt werden (Liste) |
 | `FRAMEWORK` | Test-Framework |
 | `TIMEOUT` | CTest Timeout in Sekunden |
 | `LABELS` | CTest Labels (Liste) |
 | `EXTRA_EXTERNALS` | Zusätzliche Externals |
+| `EXTERNAL_OPTIONS` | JSON-Objekt mit Optionen je External aus `EXTRA_EXTERNALS`; das Framework-External bekommt immer `{}` |
 | `APP_NAME` | App-Name für IDE-Folder |
+| `PARALLEL` | `TRUE` erlaubt parallele Ausführung, `FALSE` erzwingt seriell |
 
 ---
 
@@ -529,7 +542,8 @@ int main() {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-20** | **CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() mit Optionen** |
+| **0.7.4** | **2026-10-05** | **_create_app_test_target(): neuer Parameter EXTERNAL_OPTIONS — `tests.targets[].external_options` wird je External angewandt statt fest `{}`. Signatur in § 4.4 berichtigt (DEPENDENCIES, PARALLEL fehlten). § 4.3 auf tests.targets[]-Stand gebracht (altes tests.unit/tests.integration-Schema entfernt, Fehlerliste ergänzt)** |
+| 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() mit Optionen |
 | 0.5.4 | 2025-12-18 | PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr) |
 | 0.5.3 | 2025-12-18 | PCH-Include-Directory als PUBLIC hinzugefügt, APP_PCH_* Target Properties |
 | 0.5.2 | 2025-12-18 | PCH 3-tier search, implicit activation |

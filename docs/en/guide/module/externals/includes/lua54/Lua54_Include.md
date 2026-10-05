@@ -80,15 +80,17 @@ target_include_directories(lua54 PUBLIC
 
 | Option | Typ | Default | Description |
 |--------|-----|---------|--------------|
-| `LUA_EMBEDDED` | bool | `true` | Statisch linken (empfohlen) |
-| `LUA_32BITS` | bool | `false` | 32-bit Integer/Float |
-| `LUA_USE_C89` | bool | `false` | C89-Kompatibilität |
+| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; on Windows `true` needs a static `lua54.lib` — with an import library the target links but cannot start without `lua54.dll` |
+| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile definition `LUA_32BITS`) |
+| `LUA_USE_READLINE` | bool | `false` | Readline support (Linux only; links `readline`) |
 
 ### 4.1 LUA_EMBEDDED
 
-Wenn `true` (Default), wird Lua statisch gelinkt. Dies ist die empfohlene Einstellung für eingebettete Anwendungen.
+If `true`, Lua is linked statically and no `lua54.dll` is copied next to the target. The default is `false` (dynamic): the target links against `lua54.lib` and `lua54.dll` is copied next to it after the build.
 
-### 4.2 LUA_32BITS
+On Windows `true` requires a **static** `lua54.lib`. If the file is an import library for the DLL, the target links but does not start because the DLL is missing.
+
+### 4.2 LUA_32BIT_COMPAT
 
 Für ressourcenbeschränkte Systeme. Verwendet 32-bit Integer und Float statt 64-bit.
 

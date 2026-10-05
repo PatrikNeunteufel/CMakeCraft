@@ -18,7 +18,9 @@
 #   - EXECUTABLE_NAME  - Target to attach to
 #
 # Available Options (via external_options in Solution.json):
-#   - LUA_EMBEDDED     - Use static library (default: true)
+#   - LUA_EMBEDDED     - Link statically (default: false = dynamic). On Windows
+#                        this needs a static lua54.lib - with an import library
+#                        the target links but cannot start without lua54.dll
 #   - LUA_32BIT_COMPAT - Enable 32-bit integer compatibility
 #   - LUA_USE_READLINE - Enable readline support (Linux only)
 #
@@ -68,10 +70,7 @@ _json_get_bool_from_key("${EXTERNAL_OPTIONS}" "LUA_EMBEDDED" _lua_embedded)
 _json_get_bool_from_key("${EXTERNAL_OPTIONS}" "LUA_32BIT_COMPAT" _lua_32bit)
 _json_get_bool_from_key("${EXTERNAL_OPTIONS}" "LUA_USE_READLINE" _lua_readline)
 
-# Default: Embedded = true (recommended for embedded applications)
-if(NOT _lua_embedded AND NOT DEFINED _lua_embedded)
-    set(_lua_embedded TRUE)
-endif()
+# Default: dynamic - _json_get_bool_from_key() yields FALSE for a missing key
 
 # ==============================================================================
 # Platform-Specific Integration

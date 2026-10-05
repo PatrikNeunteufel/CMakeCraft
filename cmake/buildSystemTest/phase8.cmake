@@ -88,6 +88,61 @@ else()
 endif()
 
 # ==============================================================================
+# Test 2b: external_options of App-Test Targets
+# ==============================================================================
+# The demo Solution.json has no app test with externals, so the collect step
+# is checked against a literal app definition.
+
+dbg(${DBG_COMMON} "Test 2b: external_options of app test targets..." ID PHASE8_TEST)
+
+if(COMMAND _collect_app)
+    set(_p8_app_json [==[{
+        "name": "Phase8Probe",
+        "tests": {
+            "framework": "doctest",
+            "targets": [
+                {
+                    "name": "WithOptions",
+                    "type": "unit",
+                    "externals": [ "bass" ],
+                    "external_options": { "bass": { "BASS_MIX": true } }
+                },
+                {
+                    "name": "WithoutOptions",
+                    "type": "unit"
+                }
+            ]
+        }
+    }]==])
+
+    ctx_create(PHASE8_PROBE)
+    _collect_app("${_p8_app_json}" PHASE8_PROBE)
+
+    ctx_get(PHASE8_PROBE TESTS_TARGET_0_EXTERNAL_OPTIONS _p8_opts_0)
+    ctx_get(PHASE8_PROBE TESTS_TARGET_1_EXTERNAL_OPTIONS _p8_opts_1)
+
+    _json_get_object("${_p8_opts_0}" "bass" _p8_bass_opts)
+    _json_get_bool_from_key("${_p8_bass_opts}" "BASS_MIX" _p8_bass_mix)
+    if(NOT _p8_bass_mix)
+        cmake_fatal("ASSERT" "App test external_options not collected: expected bass.BASS_MIX=true, got '${_p8_opts_0}'")
+    endif()
+
+    if(NOT "${_p8_opts_1}" STREQUAL "{}")
+        cmake_fatal("ASSERT" "App test without external_options: expected '{}', got '${_p8_opts_1}'")
+    endif()
+
+    dbg(${DBG_COMMON} "  TESTS_TARGET_{n}_EXTERNAL_OPTIONS collected" ID PHASE8_TEST)
+
+    unset(_p8_app_json)
+    unset(_p8_opts_0)
+    unset(_p8_opts_1)
+    unset(_p8_bass_opts)
+    unset(_p8_bass_mix)
+else()
+    dbg(${DBG_COMMON} "  skipped (_collect_app() not available)" ID PHASE8_TEST)
+endif()
+
+# ==============================================================================
 # Test 3: App-Container Targets
 # ==============================================================================
 

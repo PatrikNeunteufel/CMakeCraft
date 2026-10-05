@@ -91,7 +91,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.9.1")
+set(CMAKECRAFT_VERSION "v0.9.2")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
