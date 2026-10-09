@@ -17,6 +17,7 @@
 #   - cmake/externals/local/Attach.cmake
 #   - cmake/externals/fetched/Handler.cmake
 #   - cmake/externals/system/Handler.cmake (Phase 9)
+#   - cmake/externals/archive/Handler.cmake
 #
 # Provides:
 #   - _orchestrate_external(EXT_NAME EXT_JSON)
@@ -27,6 +28,7 @@
 #   - "system" field → System External (find_package)
 #   - "git" field    → Fetched External (FetchContent)
 #   - "path" field   → Local External (Include.cmake)
+#   - "archive" field → Archive External (prebuilt package, pinned)
 #
 # Used by:
 #   - Externals.cmake
@@ -44,6 +46,7 @@ include_guard(GLOBAL)
 include("${CMAKECRAFT_DIR}/externals/local/Attach.cmake")
 include("${CMAKECRAFT_DIR}/externals/fetched/Handler.cmake")
 include("${CMAKECRAFT_DIR}/externals/system/Handler.cmake")
+include("${CMAKECRAFT_DIR}/externals/archive/Handler.cmake")
 
 # ==============================================================================
 # _orchestrate_external - Main Dispatch Function
@@ -61,6 +64,7 @@ include("${CMAKECRAFT_DIR}/externals/system/Handler.cmake")
         - "system" present → _handle_system_external()
         - "git" present    → _handle_fetched_external()
         - "path" present   → _attach_local_external()
+        - "archive" present → _handle_archive_external()
         - None             → Error E012
     
     Example:
@@ -83,6 +87,7 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
     _json_get_bool_or_default("${EXT_JSON}" "system" FALSE _is_system)
     _json_has_key("${EXT_JSON}" "git" _is_fetched)
     _json_has_key("${EXT_JSON}" "path" _is_local)
+    _json_get_bool_or_default("${EXT_JSON}" "archive" FALSE _is_archive)
     
     # ==========================================================================
     # Dispatch
@@ -100,9 +105,13 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
         dbg(${DBG_RARE} "  Type: LOCAL" ID EXTERNALS)
         _attach_local_external("${EXT_NAME}" "${EXT_JSON}")
         
+    elseif(_is_archive)
+        dbg(${DBG_RARE} "  Type: ARCHIVE" ID EXTERNALS)
+        _handle_archive_external("${EXT_NAME}" "${EXT_JSON}")
+        
     else()
         # Should not reach here if validate_external_source works correctly
-        cmake_fatal("E012" "External '${EXT_NAME}': No valid source field (system/git/path)")
+        cmake_fatal("E012" "External '${EXT_NAME}': No valid source field (system/git/path/archive)")
     endif()
     
 endfunction()
@@ -209,6 +218,7 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
     _json_get_bool_or_default("${_ext_json}" "system" FALSE _is_system)
     _json_has_key("${_ext_json}" "git" _is_fetched)
     _json_has_key("${_ext_json}" "path" _is_local)
+    _json_get_bool_or_default("${_ext_json}" "archive" FALSE _is_archive)
     
     if(_is_system)
         # =======================================================================
@@ -273,6 +283,15 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
         
         # Link using registry
         _link_external_to_target("${TARGET_NAME}" "${EXT_NAME}" SCOPE PRIVATE)
+        
+    elseif(_is_archive)
+        # =======================================================================
+        # Archive External: include path, define, files next to the executable
+        # =======================================================================
+        
+        dbg(${DBG_RARE} "    Applying ${EXT_NAME} to ${TARGET_NAME} (archive)" ID EXTERNALS)
+        
+        _apply_archive_external_to_target("${TARGET_NAME}" "${EXT_NAME}" "${_ext_json}" "${EXT_OPTIONS}")
         
     else()
         cmake_fatal("E012" "External '${EXT_NAME}': Unknown type")

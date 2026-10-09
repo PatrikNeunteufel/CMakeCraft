@@ -376,6 +376,26 @@ and Git (`git config --global core.longpaths true`).
 
 ---
 
+#### E220 — Archive external: field `pin` missing
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.10.0 |
+
+**Message:**
+```
+[E220] Archive external 'sichttest': 'pin' field is required.
+  Example: { "archive": true, "pin": "sichttest.pin" }
+```
+
+**Description:** An external with `"archive": true` names no pin file. Version, address and
+checksum live only there.
+
+**Fix:** Create a pin file and name it with `"pin"` — see [Packages.md](Packages.md) §4.
+
+---
+
 ### 3.4 E3xx — Test Errors
 
 #### E301 — Unbekanntes Test-Framework
@@ -648,6 +668,21 @@ and Git (`git config --global core.longpaths true`).
 
 ---
 
+#### W112 — Package names a target that does not exist
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⚠️ WARNING |
+| **Seit** | v0.10.0 |
+
+**Description:** An entry of `packages[].contents` (`headers_of`, `binary_of`,
+`output_dir_of`) names a target that does not exist in this configure — skipped, hidden by
+`BUILD_ONLY`, or meant for another platform. The target `package_<name>` is then not created.
+
+**Fix:** If the name is right, nothing is to be done. Otherwise correct the name in `Solution.json`.
+
+---
+
 ### 4.3 W2xx — Tools/Setup Warnings
 
 #### W201 — Clang-Tidy nicht gefunden
@@ -721,6 +756,30 @@ the wrong direction.
 
 **Fix:** none. If the warning shows up on *every* configure, the clone is
 failing reproducibly — check the network connection or the free disk space.
+
+---
+
+#### W304 — Archive external not available
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⚠️ WARNING |
+| **Seit** | v0.10.0 |
+
+**Message:**
+```
+[W304] Archive external 'sichttest' is not available - targets build without it
+```
+
+**Description:** The package could not be obtained from any source (cache empty, no network,
+nothing in the fallback paths, checksum or version does not match). Right before it there is a
+`[CraftPackage]` warning naming every source tried and the reason.
+
+The build goes on: targets naming the external get neither include path nor define nor
+runtime files.
+
+**Fix:** Connect to the network, put the archive into a fallback path, or set
+`-D<NAME>_LOCAL_DIR=<unpacked package>` — see [Packages.md](Packages.md) §3.4.
 
 ---
 
@@ -807,6 +866,7 @@ failing reproducibly — check the network connection or the free disk space.
 | E217 | External | PostFetch Hook erforderlich (cmakeSupport=false) |
 | E218 | External | Not cached and offline mode enabled |
 | E219 | External | Cache directory cannot be removed |
+| E220 | External | Archive external: field `pin` missing |
 | E301 | Test | Unbekanntes Test-Framework |
 | E302 | Test | source_from Executable existiert nicht |
 | E303 | Test | Test-Source-Verzeichnis nicht gefunden |
@@ -835,10 +895,12 @@ failing reproducibly — check the network connection or the free disk space.
 | W105 | Config | Version nicht SemVer-konform |
 | W109 | Config | C++20 Module verwendet (experimentell) |
 | W110 | Config | GLOB-Fallback aktiv |
+| W112 | Config | Package names a target that does not exist |
 | W201 | Tools | Clang-Tidy nicht gefunden |
 | W301 | Caching | External aus Cache (Offline-Modus) |
 | W302 | Caching | Version differs, offline mode uses the cache |
 | W303 | Caching | Incomplete clone in the cache — removed and fetched again |
+| W304 | Externals | Archive external not available — targets build without it |
 | W401 | AppContainer | Kein include/ Verzeichnis |
 | W402 | AppContainer | PCH Header nicht gefunden |
 | W403 | AppContainer | Tests-Verzeichnis ohne Sources |
@@ -876,6 +938,7 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Changes |
 |---------|-------|------------|
+| **1.3.0** | **2026-10-09** | **E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0)** |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching)** |
 | 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Alle Codes aus v1.4 |

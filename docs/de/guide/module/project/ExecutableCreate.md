@@ -90,7 +90,7 @@ _create_executable_target(<CTX>)
 | DEPENDENCIES | Interne Libraries |
 | EXTERNALS | Externe Dependencies |
 | EXTERNAL_OPTIONS | Optionen pro External |
-| DEFINES | Präprozessor-Definitionen |
+| DEFINES | Präprozessor-Definitionen; `{version}` wird durch VERSION des Targets ersetzt |
 | COMPILE_OPTIONS | Compiler-Flags |
 | LINK_OPTIONS | Linker-Flags |
 
@@ -112,6 +112,7 @@ _create_executable_target(EXE_0)
 _create_executable_target(CTX)
     │
     ├── 1. Context-Daten lesen
+    │   └── {version} in DEFINES durch VERSION ersetzen
     │
     ├── 2. Source-Verzeichnis validieren
     │   └── E001 wenn nicht existiert
@@ -241,7 +242,8 @@ Keine speziellen Anpassungen für GUI-Typ.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
+| **0.10.0** | **2026-10-09** | **`{version}` in DEFINES steht für die Version des Targets** |
+| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.2 | 2025-12-09 | APP_WINDOWS_GUI Define für Windows GUI |
 | 0.1.1 | 2025-12-07 | Externals-Integration via apply_external_to_target() |

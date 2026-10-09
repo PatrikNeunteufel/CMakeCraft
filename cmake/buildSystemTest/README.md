@@ -7,8 +7,8 @@
 
 ## Zweck
 
-Phasentests der „CMake Architecture V2": `phase1.cmake` … `phase9.cmake` prüfen die
-Build-System-Module (Core, Solution, Libraries, Externals, Tests, App-Container, …)
+Phasentests der „CMake Architecture V2": `phase1.cmake` … `phase10.cmake` prüfen die
+Build-System-Module (Core, Solution, Libraries, Externals, Tests, App-Container, Pakete, …)
 zur Configure-Zeit.
 
 ## Wann laufen sie?

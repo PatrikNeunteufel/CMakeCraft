@@ -152,7 +152,7 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 | Variable | Description |
 |----------|--------------|
 | `EXTERNAL_NAME` | `"glad"` |
-| `EXTERNAL_PATH` | Absoluter Pfad zu `externals/glad` |
+| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/glad` |
 | `EXTERNAL_JSON` | JSON-Element aus Solution.json |
 | `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
 
@@ -203,7 +203,7 @@ externals/glad/
 
 # Source-Dateien
 set(_glad_sources
-    "${EXTERNAL_PATH}/src/glad.c"
+    "${EXTERNAL_ROOT}/src/glad.c"
 )
 
 # Static Library erstellen
@@ -211,7 +211,7 @@ add_library(glad STATIC ${_glad_sources})
 
 # Include-Verzeichnisse
 target_include_directories(glad PUBLIC
-    "${EXTERNAL_PATH}/include"
+    "${EXTERNAL_ROOT}/include"
 )
 
 # OpenGL linken
@@ -261,10 +261,10 @@ endif()
 # cmake/externals/includes/glad/Include.cmake
 # GLAD OpenGL 4.5 mit Extensions
 
-add_library(glad STATIC "${EXTERNAL_PATH}/src/glad.c")
+add_library(glad STATIC "${EXTERNAL_ROOT}/src/glad.c")
 
 target_include_directories(glad PUBLIC
-    "${EXTERNAL_PATH}/include"
+    "${EXTERNAL_ROOT}/include"
 )
 
 find_package(OpenGL REQUIRED)
@@ -296,10 +296,10 @@ _register_external_target("glad" "glad" PRIMARY)
 # cmake/externals/includes/glad/Include.cmake
 # GLAD OpenGL ES 3.0
 
-add_library(glad STATIC "${EXTERNAL_PATH}/src/glad.c")
+add_library(glad STATIC "${EXTERNAL_ROOT}/src/glad.c")
 
 target_include_directories(glad PUBLIC
-    "${EXTERNAL_PATH}/include"
+    "${EXTERNAL_ROOT}/include"
 )
 
 # OpenGL ES Libraries
@@ -329,10 +329,10 @@ _register_external_target("glad" "glad" PRIMARY)
 # cmake/externals/includes/glad/Include.cmake
 # GLAD Vulkan Loader
 
-add_library(glad STATIC "${EXTERNAL_PATH}/src/glad_vulkan.c")
+add_library(glad STATIC "${EXTERNAL_ROOT}/src/glad_vulkan.c")
 
 target_include_directories(glad PUBLIC
-    "${EXTERNAL_PATH}/include"
+    "${EXTERNAL_ROOT}/include"
 )
 
 find_package(Vulkan REQUIRED)

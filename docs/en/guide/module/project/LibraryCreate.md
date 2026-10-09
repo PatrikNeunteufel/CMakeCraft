@@ -87,6 +87,8 @@ _create_library_target(<CTX>)
 | DEPENDENCIES | Interne Libraries |
 | EXTERNALS | Externe Dependencies |
 | EXTERNAL_OPTIONS | Per-External Optionen (JSON) |
+| OUTPUT_NAME | File name without extension (empty = target name) |
+| DEFINES | Preprocessor definitions; `{version}` stands for VERSION |
 
 ---
 
@@ -169,6 +171,24 @@ target_include_directories(${name}
 - **PUBLIC:** Für Consumer der Library sichtbar
 - **PRIVATE:** Nur intern verwendet
 
+If `PUBLIC_HEADERS` is set, the target also receives the property `CRAFT_PUBLIC_HEADERS_DIR` with the absolute path (`${CMAKE_SOURCE_DIR}/${public_headers}`) — for INTERFACE libraries as well. [Packages.cmake](Packages.md) reads it for `headers_of`.
+
+### 5.3 Defines and Output Name
+
+Right after the context is read, every `{version}` in `DEFINES` is replaced by the version of the target.
+
+```cmake
+# INTERFACE library
+target_compile_definitions(${name} INTERFACE ${defines})
+
+# STATIC / SHARED library (after the externals are applied)
+target_compile_definitions(${name} PRIVATE ${defines})
+set_target_properties(${name} PROPERTIES OUTPUT_NAME "${output_name}")  # only if not empty
+```
+
+- **DEFINES:** `INTERFACE` for INTERFACE libraries, `PRIVATE` otherwise
+- **OUTPUT_NAME:** STATIC/SHARED only; the file name then differs from the target name, the target name stays
+
 ---
 
 ## 6. Errorbehandlung
@@ -200,7 +220,8 @@ target_include_directories(${name}
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-20** | **EXTERNAL_OPTIONS Support: apply_external_to_target() statt direktem Linking** |
+| **0.10.0** | **2026-10-09** | **OUTPUT_NAME and DEFINES (with `{version}`); target property `CRAFT_PUBLIC_HEADERS_DIR`** |
+| 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS Support: apply_external_to_target() statt direktem Linking |
 | 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-07 | Initial (Clean Start): STATIC/SHARED/INTERFACE Support |

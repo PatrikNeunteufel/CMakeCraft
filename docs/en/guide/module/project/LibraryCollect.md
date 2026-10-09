@@ -99,6 +99,8 @@ _collect_library(<LIB_JSON> <CTX>)
 | `EXTERNALS` | List | "" | Externe Dependencies |
 | `EXTERNAL_OPTIONS` | JSON | "{}" | Per-External Optionen |
 | `PLATFORM` | String | "" (= alle) | Ziel-Plattform |
+| `OUTPUT_NAME` | String | "" (= target name) | File name without extension (JSON: `output_name`) |
+| `DEFINES` | List | "" | Preprocessor definitions (JSON: `defines`); `{version}` is replaced later, in LibraryCreate |
 
 **Note:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
 
@@ -133,7 +135,9 @@ _collect_library(<LIB_JSON> <CTX>)
     "external_options": {
         "bass": { "BASS_FLAC": true }
     },
-    "platform": "windows"
+    "platform": "windows",
+    "output_name": "CoreLib1",
+    "defines": ["CORE_LIB_VERSION=\"{version}\""]
 }
 ```
 
@@ -159,7 +163,8 @@ _collect_library(<LIB_JSON> <CTX>)
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-20** | **EXTERNAL_OPTIONS hinzugefügt: Per-External Optionen analog zu ExecutableCollect** |
+| **0.10.0** | **2026-10-09** | **Added OUTPUT_NAME and DEFINES (JSON: `output_name`, `defines`)** |
+| 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS hinzugefügt: Per-External Optionen analog zu ExecutableCollect |
 | 0.5.1 | 2025-12-18 | PCH-Support hinzugefügt: PCH_ENABLED, PCH_HEADER, PCH_PATH |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-07 | Initial (Clean Start): JSON zu Context Mapping |

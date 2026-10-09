@@ -28,6 +28,11 @@
 #   W2xx - Tools/Setup
 #   W3xx - Externals (Warnings)
 #
+# Changes v0.1.4:
+#   - Documented E220 (Archive external without pin)
+#   - Documented W111 (empty Source.cmake) and W112 (Package names a missing target)
+#   - Documented W304 (Archive external not available)
+#
 # Changes v0.1.3:
 #   - Documented E219 (Cache directory could not be removed)
 #   - Documented W303 (Incomplete clone in cache)
@@ -74,7 +79,8 @@ include_guard(GLOBAL)
             E217 - PostFetch hook required (cmakeSupport=false)
             E218 - External not cached and offline mode enabled
             E219 - Cache directory could not be removed
-    
+            E220 - Archive external: 'pin' field missing
+
     Example:
         cmake_fatal("E001" "Executable 'MyApp': Required field 'name' missing")
         cmake_fatal("E012" "External 'imgui': No source field specified")
@@ -112,6 +118,8 @@ endfunction()
             W108 - Multiple test frameworks without explicit field
             W109 - C++20 modules used (experimental)
             W110 - GLOB fallback active
+            W111 - Source.cmake exists but defines no files
+            W112 - Package names a target that does not exist
         
         W2xx - Tools/Setup
             W201 - Clang-Tidy enabled but not found
@@ -120,6 +128,7 @@ endfunction()
             W301 - Offline mode: using existing external (version may differ)
             W302 - Version mismatch but offline mode - using cached
             W303 - Incomplete clone in cache - removed and fetched again
+            W304 - Archive external not available - targets build without it
     
     Example:
         cmake_warn("W001" "Schema version < 0.1, features limited")

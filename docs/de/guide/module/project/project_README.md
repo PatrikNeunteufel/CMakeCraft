@@ -29,6 +29,10 @@
 2. [TestCollect.md](TestCollect.md) — JSON-Parsing
 3. [TestCreate.md](TestCreate.md) — Test-Target-Erstellung
 
+**Paket schnüren?** (Phase 10)
+1. [Packages.md](Packages.md) — Block `packages` → Target `package_<name>`
+2. [PackageBuild.md](PackageBuild.md) — Build-Zeit-Skript (Ordner, Zip, Prüfsumme)
+
 ---
 
 ## Übersicht
@@ -56,6 +60,9 @@ Solution.cmake          ← Lädt und parst Solution.json
      ├── Apps.cmake           ← App-Container-Pipeline (Phase 8)
      │   ├── AppCollect       → JSON → Context
      │   └── AppCreate        → Core/Runner/Tests Targets
+     │
+     ├── Packages.cmake       ← Package-Pipeline (Phase 10)
+     │   └── PackageBuild     → Build-Zeit-Skript (cmake -P)
      │
      └── Tests.cmake          ← Test-Pipeline
          ├── TestCollect      → JSON → Context
@@ -104,6 +111,13 @@ Solution.cmake          ← Lädt und parst Solution.json
 | [Apps.md](Apps.md) | App-Container-Pipeline-Orchestrator |
 | [AppCollect.md](AppCollect.md) | JSON-Parsing → Context |
 | [AppCreate.md](AppCreate.md) | Context → Core/Runner/Tests Targets |
+
+### Packages (Phase 10)
+
+| Datei | Beschreibung |
+|-------|--------------|
+| [Packages.md](Packages.md) | Block `packages` → Target `package_<name>` (Manifest, Versionsdatei) |
+| [PackageBuild.md](PackageBuild.md) | Build-Zeit-Skript: Paketordner, Zip-Archiv, SHA256 |
 
 ---
 

@@ -54,7 +54,7 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 | Variable | Beschreibung |
 |----------|--------------|
 | `EXTERNAL_NAME` | `"lua54"` |
-| `EXTERNAL_PATH` | Absoluter Pfad zu `externals/lua54` |
+| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/lua54` |
 | `EXTERNAL_JSON` | JSON-Element aus Solution.json |
 | `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
 
@@ -70,7 +70,7 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 
 ```cmake
 target_include_directories(lua54 PUBLIC
-    "${EXTERNAL_PATH}/src"
+    "${EXTERNAL_ROOT}/src"
 )
 ```
 

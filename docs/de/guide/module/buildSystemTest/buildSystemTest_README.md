@@ -39,7 +39,8 @@ CMakeLists.txt
              ├── Phase5.cmake  → Local Externals
              ├── Phase6.cmake  → Git Externals
              ├── Phase7.cmake  → Tests
-             └── Phase8.cmake  → App-Container (neu)
+             ├── Phase8.cmake  → App-Container (neu)
+             └── Phase10.cmake → Packages, Archive Externals
 ```
 
 ---
@@ -56,6 +57,7 @@ CMakeLists.txt
 | [Phase6_doc.md](Phase6_doc.md) | 6 | Git Externals + Hooks |
 | [Phase7_doc.md](Phase7_doc.md) | 7 | Test-Pipeline |
 | [Phase8_doc.md](Phase8_doc.md) | 8 | App-Container-Pipeline |
+| [Phase10_doc.md](Phase10_doc.md) | 10 | Packages, CMakeCraftPackage, Archive Externals |
 
 ---
 
@@ -71,6 +73,7 @@ CMakeLists.txt
 | **6** | ✅ Stabil | Externals (Git) | FetchContent, Hooks, Caching |
 | **7** | ✅ Stabil | Tests, TestCollect, TestCreate | Framework-Integration, CTest |
 | **8** | ✅ In Entwicklung | Apps, AppCollect, AppCreate | Core/Runner/Tests Targets |
+| **10** | ✅ Stabil | Packages, CMakeCraftPackage, archive/Handler | Package-Target, output_name/defines, Bezug über URL/Cache/Ausweichpfad, Anwenden auf Target |
 
 ---
 
@@ -130,6 +133,7 @@ Jede Phase setzt ein Cache-Flag bei Erfolg:
 | 6 | `PHASE6_TEST_PASSED` |
 | 7 | `PHASE7_TEST_PASSED` |
 | 8 | `PHASE8_TEST_PASSED` |
+| 10 | `PHASE10_TEST_PASSED` |
 
 ---
 

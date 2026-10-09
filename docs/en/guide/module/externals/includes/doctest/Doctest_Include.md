@@ -54,7 +54,7 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 | Variable | Description |
 |----------|--------------|
 | `EXTERNAL_NAME` | `"doctest"` |
-| `EXTERNAL_PATH` | Absoluter Pfad zu `externals/doctest` |
+| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/doctest` |
 | `EXTERNAL_JSON` | JSON-Element aus Solution.json |
 | `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
 
@@ -70,7 +70,7 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 
 ```cmake
 target_include_directories(doctest INTERFACE
-    "${EXTERNAL_PATH}/include"
+    "${EXTERNAL_ROOT}/include"
 )
 ```
 

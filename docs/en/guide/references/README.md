@@ -14,6 +14,7 @@
 
 **JSON-Configuration verstehen?**
 1. [Solution_Schema.md](Solution_Schema.md) — Solution.json Schema
+1. [Packages.md](Packages.md) — Building and consuming packages
 2. [CMakePresets.md](CMakePresets.md) — CMakePresets.json
 3. [CMakeUserPresets.md](CMakeUserPresets.md) — Eigene Presets
 
@@ -39,6 +40,7 @@ Referencedokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentie
 |-------|--------------|
 | [ErrorCodes.md](ErrorCodes.md) | Vollständige Errorcode-Reference (E001-E999) |
 | [Solution_Schema.md](Solution_Schema.md) | JSON-Schema für Solution.json |
+| [Packages.md](Packages.md) | Building packages (`packages`) and consuming them (external kind `archive`) |
 | [CMakePresets.md](CMakePresets.md) | CMakePresets.json Reference |
 | [CMakeUserPresets.md](CMakeUserPresets.md) | CMakeUserPresets.json Reference |
 | [Externals.md](Externals.md) | Externals-System Overview |

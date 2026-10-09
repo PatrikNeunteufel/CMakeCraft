@@ -207,7 +207,7 @@ In jeder Include.cmake stehen diese Variablen zur Verfügung:
 | Variable | Beschreibung |
 |----------|--------------|
 | `EXTERNAL_NAME` | Name des Externals (z.B. "bass") |
-| `EXTERNAL_PATH` | Absoluter Pfad zum External |
+| `EXTERNAL_ROOT` | Absoluter Pfad zum External |
 | `EXTERNAL_JSON` | JSON-Element aus Solution.json |
 | `EXTERNAL_OPTIONS` | Target-spezifische Options |
 
@@ -218,7 +218,7 @@ In jeder Include.cmake stehen diese Variablen zur Verfügung:
 ```cmake
 add_library(${EXTERNAL_NAME} INTERFACE)
 target_include_directories(${EXTERNAL_NAME} INTERFACE
-    "${EXTERNAL_PATH}/include"
+    "${EXTERNAL_ROOT}/include"
 )
 _register_external_target("${EXTERNAL_NAME}" "${EXTERNAL_NAME}" PRIMARY)
 ```
@@ -226,17 +226,17 @@ _register_external_target("${EXTERNAL_NAME}" "${EXTERNAL_NAME}" PRIMARY)
 **Aus Quellen (lua54):**
 
 ```cmake
-file(GLOB _lua_sources "${EXTERNAL_PATH}/src/*.c")
+file(GLOB _lua_sources "${EXTERNAL_ROOT}/src/*.c")
 add_library(lua54 STATIC ${_lua_sources})
-target_include_directories(lua54 PUBLIC "${EXTERNAL_PATH}/src")
+target_include_directories(lua54 PUBLIC "${EXTERNAL_ROOT}/src")
 _register_external_target("lua54" "lua54" PRIMARY)
 ```
 
 **Generiert (glad):**
 
 ```cmake
-add_library(glad STATIC "${EXTERNAL_PATH}/src/glad.c")
-target_include_directories(glad PUBLIC "${EXTERNAL_PATH}/include")
+add_library(glad STATIC "${EXTERNAL_ROOT}/src/glad.c")
+target_include_directories(glad PUBLIC "${EXTERNAL_ROOT}/include")
 find_package(OpenGL REQUIRED)
 target_link_libraries(glad PUBLIC OpenGL::GL)
 _register_external_target("glad" "glad" PRIMARY)
@@ -247,10 +247,10 @@ _register_external_target("glad" "glad" PRIMARY)
 ```cmake
 add_library(bass SHARED IMPORTED GLOBAL)
 set_target_properties(bass PROPERTIES
-    IMPORTED_LOCATION "${EXTERNAL_PATH}/lib/x64/bass.dll"
-    IMPORTED_IMPLIB "${EXTERNAL_PATH}/lib/x64/bass.lib"
+    IMPORTED_LOCATION "${EXTERNAL_ROOT}/lib/x64/bass.dll"
+    IMPORTED_IMPLIB "${EXTERNAL_ROOT}/lib/x64/bass.lib"
 )
-target_include_directories(bass INTERFACE "${EXTERNAL_PATH}/include")
+target_include_directories(bass INTERFACE "${EXTERNAL_ROOT}/include")
 _register_external_target("bass" "bass" PRIMARY)
 ```
 

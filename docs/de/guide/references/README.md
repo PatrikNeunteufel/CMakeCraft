@@ -14,6 +14,7 @@
 
 **JSON-Konfiguration verstehen?**
 1. [Solution_Schema.md](Solution_Schema.md) — Solution.json Schema
+1. [Packages.md](Packages.md) — Pakete schnüren und beziehen
 2. [CMakePresets.md](CMakePresets.md) — CMakePresets.json
 3. [CMakeUserPresets.md](CMakeUserPresets.md) — Eigene Presets
 
@@ -39,6 +40,7 @@ Referenzdokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentier
 |-------|--------------|
 | [ErrorCodes.md](ErrorCodes.md) | Vollständige Fehlercode-Referenz (E001-E999) |
 | [Solution_Schema.md](Solution_Schema.md) | JSON-Schema für Solution.json |
+| [Packages.md](Packages.md) | Pakete schnüren (`packages`) und beziehen (External-Art `archive`) |
 | [CMakePresets.md](CMakePresets.md) | CMakePresets.json Referenz |
 | [CMakeUserPresets.md](CMakeUserPresets.md) | CMakeUserPresets.json Referenz |
 | [Externals.md](Externals.md) | Externals-System Übersicht |

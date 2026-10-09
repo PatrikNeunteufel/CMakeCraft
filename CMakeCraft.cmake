@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.9.2
-# Date:         2026-10-05
+# Version:      0.10.0
+# Date:         2026-10-09
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -16,18 +16,27 @@
 #   (CMAKE_SOURCE_DIR): Solution.json, projects/, externals/, .externals/.
 #
 # Consumer usage (thin CMakeLists.txt):
-#   cmake_minimum_required(VERSION 3.25)
+#   cmake_minimum_required(VERSION 3.26)
 #   include("<path-to-cmakecraft>/CMakeCraft.cmake")
 #
 # Options:
 #   -DBUILD_TESTS=ON|OFF          Build project tests (default: OFF)
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests (default: OFF; CMakeCraft
 #                                 repo itself: use preset "craft-selftest")
-#   -DTEST_PHASE=1..9             Specific phase(s) to test (default: all)
+#   -DTEST_PHASE=1..10            Specific phase(s) to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.10.0 (2026-10-09): build and consume prebuilt packages. New block
+#                        "packages" (target package_<name> writes folder, zip
+#                        and checksum to out/package/), new external kind
+#                        "archive" (pinned download with checksum, include
+#                        path, define, files next to the executable), and the
+#                        standalone CMakeCraftPackage.cmake behind it.
+#                        Libraries: "output_name" and "defines"; {version} in
+#                        defines of libraries and executables. Nothing is
+#                        active unless a project uses it. Requires CMake 3.26.
 #   v0.9.2 (2026-10-05): external_options of app test targets
 #                        (apps[].tests.targets[]) are applied - until now the
 #                        test target received every external with empty
@@ -162,6 +171,12 @@ include("${CMAKECRAFT_DIR}/project/Executables.cmake")
 include("${CMAKECRAFT_DIR}/project/Apps.cmake")
 
 # ==============================================================================
+# Phase 10: Packages (targets package_<name>; needs the targets above)
+# ==============================================================================
+
+include("${CMAKECRAFT_DIR}/project/Packages.cmake")
+
+# ==============================================================================
 # Phase 7: Tests (only when BUILD_TESTS is enabled)
 # ==============================================================================
 
@@ -192,7 +207,7 @@ if(RUN_BUILD_SYSTEM_TESTS)
         dbg(${DBG_COMMON} "Testing all completed phases" ID BUILD_TEST)
     endif()
 
-    foreach(_craft_phase RANGE 1 9)
+    foreach(_craft_phase RANGE 1 10)
         if("${TEST_PHASE}" STREQUAL "" OR "${_craft_phase}" IN_LIST TEST_PHASE)
             dbgspace(ID BUILD_TEST)
             include("${CMAKECRAFT_DIR}/buildSystemTest/phase${_craft_phase}.cmake")

@@ -45,7 +45,8 @@ Diese Reference beschreibt das vollständige Schema der Solution.json für das C
     "libraries": [ ],
     "executables": [ ],
     "tests": [ ],
-    "apps": [ ]           
+    "apps": [ ],
+    "packages": [ ]
 }
 ```
 
@@ -62,6 +63,7 @@ Diese Reference beschreibt das vollständige Schema der Solution.json für das C
 | `executables` | – | Ausführbare Programme |
 | `tests` | – | Test-Targets |
 | `apps` | – | App-Container (Core/Runner Separation) |
+| `packages` | – | Build packages: target `package_<name>` (see [Packages.md](Packages.md)) |
 
 ---
 
@@ -162,8 +164,9 @@ Der zentrale Ort für alle External-Definitionen.
 | **Local** | `path` Feld | Vorkompilierte Bibliotheken in `externals/` |
 | **Fetched** | `git` Feld | Via Git geklont |
 | **System** | `system: true` | Große externe Installationen (Qt6, Boost) via find_package() |
+| **Archive** | `archive: true` | Prebuilt package in a pinned version (archive with checksum) |
 
-> **Typ-Priorität:** `system` → `git` → `path`
+> **Typ-Priorität:** `system` → `git` → `path` → `archive`
 
 ### 5.2 Local Externals
 ```json
@@ -230,8 +233,8 @@ Nur verwenden wenn vom Default abgewichen werden muss:
 | `commit` | – | Spezifischer Commit-Hash |
 | `shallow` | – | Shallow Clone (Default: true) |
 | `cmakeSupport` | – | Hat CMakeLists.txt (Default: true) |
-| `preFetchHook` | – | Pfad zu PreFetch Hook |
-| `postFetchHook` | – | Pfad zu PostFetch Hook |
+| `hooks.preFetch` | – | Path to the PreFetch hook (object `hooks`, relative to CMAKE_SOURCE_DIR) |
+| `hooks.postFetch` | – | Path to the PostFetch hook (object `hooks`, relative to CMAKE_SOURCE_DIR) |
 | `hook` | – | Hook-Wiederverwendung |
 
 ### 5.4 System Externals (Phase 9)
@@ -245,7 +248,7 @@ Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV.
     "qt6": {
         "system": true,
         "package": "Qt6",
-        "version": ">=6.5.0",
+        "version": "6.5.0",
         "components": ["Core", "Widgets", "Gui", "OpenGL"],
         "hints": ["${QT_ROOT}", "C:/Qt/6.10.1/msvc2022_64"],
         "backup": "E:/Backup/Qt/6.10.1/msvc2022_64",
@@ -258,7 +261,7 @@ Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV.
 |------|---------|-----|--------------|
 | `system` | ✅ | boolean | Muss `true` sein |
 | `package` | ✅ | string | Name für find_package() (z.B. "Qt6", "Boost") |
-| `version` | – | string | Versionsanforderung (z.B. ">=6.5.0") |
+| `version` | – | string | Minimum version, passed unchanged to find_package() (e.g. "6.5.0"; no comparison operator) |
 | `components` | – | string[] | find_package() COMPONENTS |
 | `hints` | – | string[] | Zusätzliche Suchpfade |
 | `backup` | – | string | Fallback-Pfad (löst W501 aus) |
@@ -377,6 +380,42 @@ Mit `skip: true` kann ein External vorbereitet werden, ohne es zu laden:
 
 ---
 
+### 5.8 Archive Externals (since v0.10.0)
+
+A prebuilt package (headers, runtime files, tools) in a pinned version. Nothing is linked:
+targets get an include path, a define and — executables — the runtime files next to the
+executable.
+
+```json
+"externals": {
+    "sichttest": {
+        "archive": true,
+        "pin": "sichttest.pin",
+        "platforms": ["windows"],
+        "include_dirs": ["include"],
+        "define": "SICHTTEST_VORHANDEN",
+        "runtime": { "files": ["bin/SichttestSteuerung1.dll"], "dirs": ["sichttest"] }
+    }
+}
+```
+
+| Field | Required | Type | Description |
+|-------|----------|------|-------------|
+| `archive` | ✅ | boolean | Must be `true` |
+| `pin` | ✅ | string | Pin file (version, address, checksum, fallback paths) |
+| `platforms` | – | string[] | Platform filter; elsewhere the external is absent without a warning |
+| `include_dirs` | – | string[] | Include folders inside the package |
+| `define` | – | string | Definition `<name>=1` on the target |
+| `runtime` | – | object | `files` and `dirs` copied next to each executable |
+
+Can be switched off per target: `"external_options": { "sichttest": { "runtime": false } }`.
+If the package cannot be obtained, W304 is issued and the targets build without it.
+
+Pin file, order of sources and the `packages` block for building:
+[Packages.md](Packages.md).
+
+---
+
 ## 6. executables Array
 
 ```json
@@ -417,7 +456,7 @@ Mit `skip: true` kann ein External vorbereitet werden, ohne es zu laden:
 | `externals` | `[]` | External-Referenceen |
 | `external_options` | `{}` | Per-External Options |
 | `platforms` | `[]` (alle) | Plattform-Filter |
-| `defines` | `[]` | Preprocessor-Definitionen |
+| `defines` | `[]` | Preprocessor definitions; `{version}` is replaced by the version of the target |
 | `compile_options` | `[]` | Compiler-Flags |
 | `link_options` | `[]` | Linker-Flags |
 
@@ -505,6 +544,9 @@ Wenn `path` angegeben: `projects/{path}/{header}`
 | `type` | Settings-Default | `STATIC`, `SHARED`, `INTERFACE` |
 | `path` | Convention | Source-Verzeichnis |
 | `public_headers` | – | Public Include-Verzeichnis |
+| `output_name` | target name | File name without extension (since v0.10.0) |
+| `defines` | `[]` | Preprocessor definitions; `{version}` is replaced by the version of the target (since v0.10.0) |
+| `platform` | – (all) | Platform filter: `windows`, `linux`, `macos`, `unix` |
 | `dependencies` | `[]` | Andere Libraries (Dependencies) |
 | `externals` | `[]` | Externe Dependencies |
 | `external_options` | `{}` | Per-External Options |
@@ -961,6 +1003,8 @@ projects/apps/{AppName}/
 | externals (local) | `path` (include optional) |
 | externals (fetched) | `git`, (tag\|branch\|commit) |
 | externals (system) | `system: true`, `package` |
+| externals (archive) | `archive: true`, `pin` |
+| packages[] | `name`, `contents` |
 
 
 ### 10.2 Defaults
@@ -1069,9 +1113,10 @@ projects/apps/{AppName}/
 | E012 | External hat weder path, git noch system Feld |
 | E213 | Include.cmake für lokales External nicht gefunden |
 | E214 | Local external path existiert nicht |
-| E216 | PostFetch Hook fehlt (cmakeSupport: false) |
-| E218 | Hook-Datei nicht gefunden |
-| E220 | Target nach Hook nicht registriert |
+| E216 | Explicitly specified hook not found |
+| E217 | PostFetch hook required (cmakeSupport: false) |
+| E218 | Not cached and offline mode enabled |
+| E220 | Archive external: `pin` field missing |
 | **E502** | **System external: `package` Feld fehlt** |
 | **E503** | **System external: find_package() fehlgeschlagen** |
 
@@ -1111,7 +1156,9 @@ projects/apps/{AppName}/
 
 | Code | Bereich | Description |
 |------|---------|--------------|
-| W302 | Externals | Hook-Wiederverwendung aktiv |
+| W112 | Packages | Package names a target that does not exist — `package_<name>` is not created |
+| W302 | Externals | Version mismatch, offline mode uses the cache |
+| W304 | Externals | Archive external not available — targets build without it |
 | W401 | App-Container | App hat kein `include/` Verzeichnis |
 | W402 | App-Container | PCH aktiviert aber Header nicht gefunden |
 | W402 | App-Tests | Test mit seriellem Typ hat `parallel: true` gesetzt |
@@ -1126,6 +1173,7 @@ projects/apps/{AppName}/
 
 ## 13. See Also
 
+- [Packages.md](Packages.md) — building and consuming packages
 - [Externals.md](Externals.md) — External Libraries Reference
 - [ErrorCodes.md](ErrorCodes.md) — Vollständige Errorcode-Reference
 - [CMakePresets Reference](CMakePresets.md) — Build-Presets
@@ -1137,6 +1185,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Changes |
 |---------|-------|------------|
+| **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: `packages` block, archive externals (§5.8), `output_name` and `defines` for libraries[], `{version}` in `defines`. Corrected: hook paths are `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` of a system external is a minimum version without operator (§5.4), error table §12.1 (E216–E220) and W302 aligned with the code** |
 | **0.7.4** | **2026-10-05** | **Fix: `external_options` for apps[].tests.targets[] (§9.8) is applied — until now the test target received every external with empty options. Existing entries take effect for the first time. The test framework stays without options** |
 | 0.7.3 | 2026-07-20 | New: `dependencies` for apps[].tests.targets[] (§9.8) — internal libraries are linked directly to the test target (E101 on unknown dependency). Previously the key was ignored |
 | 0.7.2 | 2025-12-20 | Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Usage geskippter Externals |

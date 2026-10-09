@@ -67,7 +67,10 @@ function(_create_executable_target CTX)
     ctx_get(${CTX} DEFINES _defines)
     ctx_get(${CTX} COMPILE_OPTIONS _compile_options)
     ctx_get(${CTX} LINK_OPTIONS _link_options)
-    
+
+    # {version} in defines stands for the version of this target
+    string(REPLACE "{version}" "${_version}" _defines "${_defines}")
+
     # --------------------------------------------------------------------------
     # Validate Source Directory
     # --------------------------------------------------------------------------

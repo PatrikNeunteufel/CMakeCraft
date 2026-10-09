@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.2.0  
-> **Datum:** 2026-08-08  
+> **Version:** 1.3.0  
+> **Datum:** 2026-10-09  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -396,6 +396,26 @@ in Windows und Git aktivieren (`git config --global core.longpaths true`).
 
 ---
 
+#### E220 — Archive External: Feld `pin` fehlt
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.10.0 |
+
+**Meldung:**
+```
+[E220] Archive external 'sichttest': 'pin' field is required.
+  Example: { "archive": true, "pin": "sichttest.pin" }
+```
+
+**Beschreibung:** Ein External mit `"archive": true` nennt keine Pin-Datei. Version,
+Adresse und Prüfsumme stehen nur dort.
+
+**Lösung:** Pin-Datei anlegen und mit `"pin"` nennen — siehe [Packages.md](Packages.md) §4.
+
+---
+
 ### 3.4 E3xx — Test Errors
 
 #### E301 — Unbekanntes Test-Framework
@@ -691,6 +711,22 @@ in Windows und Git aktivieren (`git config --global core.longpaths true`).
 
 ---
 
+#### W112 — Paket nennt ein Target, das es nicht gibt
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⚠️ WARNING |
+| **Seit** | v0.10.0 |
+
+**Beschreibung:** Ein Eintrag in `packages[].contents` (`headers_of`, `binary_of`,
+`output_dir_of`) nennt ein Target, das in diesem Configure nicht existiert — übersprungen,
+durch `BUILD_ONLY` ausgeblendet oder für eine andere Plattform. Das Target `package_<name>`
+wird dann nicht angelegt.
+
+**Lösung:** Stimmt der Name, ist nichts zu tun. Sonst den Namen in `Solution.json` berichtigen.
+
+---
+
 ### 4.3 W2xx — Tools/Setup Warnings
 
 #### W201 — Clang-Tidy nicht gefunden
@@ -764,6 +800,30 @@ falsche Richtung wies.
 
 **Lösung:** keine. Tritt die Warnung bei *jedem* Configure auf, bricht der
 Klon reproduzierbar ab — dann die Netzverbindung oder den Plattenplatz prüfen.
+
+---
+
+#### W304 — Archive External nicht verfügbar
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⚠️ WARNING |
+| **Seit** | v0.10.0 |
+
+**Meldung:**
+```
+[W304] Archive external 'sichttest' is not available - targets build without it
+```
+
+**Beschreibung:** Das Paket ließ sich aus keiner Quelle beziehen (Zwischenspeicher leer, kein
+Netz, kein Treffer in den Fallback-Pfaden, Prüfsumme oder Version passt nicht). Unmittelbar davor
+steht eine Warnung `[CraftPackage]`, die jede versuchte Quelle mit Grund nennt.
+
+Der Build läuft weiter: Targets, die das External nennen, bekommen weder Include-Pfad noch
+Define noch Laufzeitdateien.
+
+**Lösung:** Netz herstellen, das Archiv in einen Fallback-Pfad legen oder
+`-D<NAME>_LOCAL_DIR=<ausgepacktes Paket>` setzen — siehe [Packages.md](Packages.md) §3.4.
 
 ---
 
@@ -851,6 +911,7 @@ Klon reproduzierbar ab — dann die Netzverbindung oder den Plattenplatz prüfen
 | E217 | External | PostFetch Hook erforderlich (cmakeSupport=false) |
 | E218 | External | Nicht im Cache und Offline-Modus aktiv |
 | E219 | External | Cache-Verzeichnis lässt sich nicht entfernen |
+| E220 | External | Archive External: Feld `pin` fehlt |
 | E301 | Test | Unbekanntes Test-Framework |
 | E302 | Test | source_from Executable existiert nicht |
 | E303 | Test | Test-Source-Verzeichnis nicht gefunden |
@@ -880,10 +941,12 @@ Klon reproduzierbar ab — dann die Netzverbindung oder den Plattenplatz prüfen
 | W105 | Config | Version nicht SemVer-konform |
 | W109 | Config | C++20 Module verwendet (experimentell) |
 | W110 | Config | GLOB-Fallback aktiv |
+| W112 | Config | Paket nennt ein Target, das es nicht gibt |
 | W201 | Tools | Clang-Tidy nicht gefunden |
 | W301 | Caching | External aus Cache (Offline-Modus) |
 | W302 | Caching | Version weicht ab, Offline-Modus nutzt den Cache |
 | W303 | Caching | Unvollständiger Klon im Cache — entfernt und neu geholt |
+| W304 | Externals | Archive External nicht verfügbar — Targets bauen ohne es |
 | W401 | AppContainer | Kein include/ Verzeichnis |
 | W402 | AppContainer | PCH Header nicht gefunden |
 | W403 | AppContainer | Tests-Verzeichnis ohne Sources |
@@ -921,6 +984,7 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.3.0** | **2026-10-09** | **E220, W112 und W304 hinzugefügt (Pakete und Archive Externals, CMakeCraft v0.10.0)** |
 | **1.2.0** | **2026-08-08** | **E219 und W303 (unvollständiger Klon im Cache) hinzugefügt; E218 nachdokumentiert; W302-Beschreibung auf den Code korrigiert (beschrieb bis dahin „Hook-Wiederverwendung")** |
 | 1.1.0 | 2025-12-28 | E003 (Schema Major inkompatibel), W101/W102 (Schema Minor Warnungen) hinzugefügt |
 | 1.0.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching) |

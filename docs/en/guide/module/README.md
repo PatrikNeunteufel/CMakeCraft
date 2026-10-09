@@ -29,7 +29,7 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 | Kategorie | Description | Module |
 |-----------|--------------|--------|
 | **Core** | Grundlegende Functions | 9 Module |
-| **Project** | Projekt-Erstellung | 14 Module |
+| **Project** | Projekt-Erstellung | 16 Module |
 | **Externals** | Dependency-Management | 8+ Module |
 
 ---
@@ -39,6 +39,7 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 | Datei | Description |
 |-------|--------------|
 | [CMakeLists.md](CMakeLists.md) | Root-CMakeLists.txt Dokumentation |
+| [CMakeCraftPackage.md](CMakeCraftPackage.md) | Standalone file in the repo root: fetch and deploy prebuilt packages |
 
 ---
 
@@ -46,7 +47,7 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 
 | Ordner | Description |
 |--------|--------------|
-| [buildSystemTest/](buildSystemTest/README.md) | Phasen-Testdokumentation (Phase 1-8) |
+| [buildSystemTest/](buildSystemTest/README.md) | Phasen-Testdokumentation (Phase 1-8, 10) |
 | [core/](core/README.md) | Kern-Module (Errors, Debug, Context, etc.) |
 | [externals/](externals/README.md) | External-Management-System |
 | [project/](project/README.md) | Projekt-Pipeline (Executables, Libraries, Apps, Tests) |
@@ -87,7 +88,9 @@ project/
 ├── Apps.cmake               → App-Container-Pipeline (Phase 8)
 ├── AppCollect.cmake         → App-Discovery
 ├── AppCreate.cmake          → App-Erstellung (Core/Runner/Tests)
-└── Externals.cmake          → Externals-Integration
+├── Externals.cmake          → Externals-Integration
+├── Packages.cmake           → Package pipeline (phase 10)
+└── PackageBuild.cmake       → Build-time script of the package targets
 ```
 
 ### Externals-Module (Phase 4-5)
@@ -97,6 +100,7 @@ externals/
 ├── Orchestrator.cmake       → Haupt-Orchestrierung
 ├── core/Fetch.cmake         → Git-Fetch
 ├── fetched/Handler.cmake    → Fetched-Library-Handler
+├── archive/Handler.cmake    → Archive external handler (prebuilt packages)
 ├── locals/Attach.cmake      → Local-Library-Attach
 ├── registry/Targets.cmake   → Target-Registry
 ├── hooks/HookLoader.cmake   → Hook-System

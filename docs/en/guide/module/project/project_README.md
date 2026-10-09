@@ -29,6 +29,10 @@
 2. [TestCollect.md](TestCollect.md) — JSON-Parsing
 3. [TestCreate.md](TestCreate.md) — Test-Target-Erstellung
 
+**Building a package?** (Phase 10)
+1. [Packages.md](Packages.md) — block `packages` → target `package_<name>`
+2. [PackageBuild.md](PackageBuild.md) — build-time script (folder, zip, checksum)
+
 ---
 
 ## Overview
@@ -56,6 +60,9 @@ Solution.cmake          ← Lädt und parst Solution.json
      ├── Apps.cmake           ← App-Container-Pipeline (Phase 8)
      │   ├── AppCollect       → JSON → Context
      │   └── AppCreate        → Core/Runner/Tests Targets
+     │
+     ├── Packages.cmake       ← Package pipeline (phase 10)
+     │   └── PackageBuild     → Build-time script (cmake -P)
      │
      └── Tests.cmake          ← Test-Pipeline
          ├── TestCollect      → JSON → Context
@@ -104,6 +111,13 @@ Solution.cmake          ← Lädt und parst Solution.json
 | [Apps.md](Apps.md) | App-Container-Pipeline-Orchestrator |
 | [AppCollect.md](AppCollect.md) | JSON-Parsing → Context |
 | [AppCreate.md](AppCreate.md) | Context → Core/Runner/Tests Targets |
+
+### Packages (Phase 10)
+
+| Datei | Description |
+|-------|--------------|
+| [Packages.md](Packages.md) | Block `packages` → target `package_<name>` (manifest, version file) |
+| [PackageBuild.md](PackageBuild.md) | Build-time script: package folder, zip archive, SHA256 |
 
 ---
 

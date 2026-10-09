@@ -54,7 +54,7 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 | Variable | Beschreibung |
 |----------|--------------|
 | `EXTERNAL_NAME` | `"bass"` |
-| `EXTERNAL_PATH` | Absoluter Pfad zu `externals/bass` |
+| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/bass` |
 | `EXTERNAL_JSON` | JSON-Element aus Solution.json |
 | `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
 

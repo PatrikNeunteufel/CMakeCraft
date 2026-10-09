@@ -79,6 +79,7 @@ validate_external_source(<EXT_NAME> <EXT_JSON>)
 
 - `path` — Lokales External
 - `git` — Fetched via Git
+- `archive` — Archive External (vorgebautes Paket, festgelegte Version)
 - `vcpkg` — Via vcpkg (geplant)
 - `conan` — Via Conan (geplant)
 - `find_package` — System External (Phase 9)
@@ -344,6 +345,7 @@ endfunction()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **0.10.0** | **2026-10-09** | **validate_external_source: `archive` als Source-Feld; E012-Meldung nennt `archive`** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): validate_external_source, validate_required_fields, validate_fetched_external, validate_local_external, validate_solution_schema, validate_local_external_include |

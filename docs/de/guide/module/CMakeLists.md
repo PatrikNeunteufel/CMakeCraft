@@ -35,7 +35,7 @@ Die `CMakeLists.txt` ist die **Top-Level-Konfiguration** des modularen CMake Arc
 
 | Aufgabe | Beschreibung |
 |---------|--------------|
-| **CMake-Version** | Minimum-Version definieren (3.19+) |
+| **CMake-Version** | Minimum-Version definieren (3.26+) |
 | **Optionen** | Cache-Variablen für Build-Konfiguration |
 | **Core-Module** | In korrekter Reihenfolge laden |
 | **Solution.json** | Projekt-Konfiguration verarbeiten |
@@ -46,7 +46,7 @@ Die `CMakeLists.txt` ist die **Top-Level-Konfiguration** des modularen CMake Arc
 ### Minimale CMakeLists.txt
 
 ```cmake
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.26)
 
 # === Phase 1: Core-Module ===
 include(cmake/core/Errors.cmake)
@@ -119,6 +119,7 @@ include(cmake/project/Tests.cmake)
 | **7** | Fetch | (in Phase 5 integriert) | ✅ |
 | **8** | AppContainer | (geplant) | ⏳ |
 | **9** | System Externals | (geplant) | ⏳ |
+| **10** | Packages | Packages, PackageBuild (Build-Zeit-Skript) | ✅ |
 
 ### Ausführungsreihenfolge
 
@@ -129,7 +130,8 @@ include(cmake/project/Tests.cmake)
 4. Libraries        (Phase 4)  ← VOR Executables!
 5. Externals        (Phase 5)
 6. Executables      (Phase 3)
-7. Tests            (Phase 6-7)
+7. Packages         (Phase 10) ← braucht die Targets davor
+8. Tests            (Phase 6-7)
 ```
 
 ---
@@ -331,6 +333,7 @@ include(cmake/project/Tests.cmake)
 | 4 | `phase4.cmake` | Library-Pipeline |
 | 5 | `phase5.cmake` | Externals-Pipeline |
 | 6 | `phase6.cmake` | Test-Pipeline |
+| 10 | `phase10.cmake` | Packages und Archive Externals |
 
 ### 7.2 Test-Flags
 
@@ -343,6 +346,7 @@ PHASE3_TEST_PASSED = TRUE
 PHASE4_TEST_PASSED = TRUE
 PHASE5_TEST_PASSED = TRUE
 PHASE6_TEST_PASSED = TRUE
+PHASE10_TEST_PASSED = TRUE
 ```
 
 ### 7.3 Deaktivieren
@@ -572,6 +576,7 @@ cmake -B build -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format; alle 9 Phasen dokumentiert; Externals-Pipeline hinzugefügt; Tests-Pipeline hinzugefügt** |
+| **0.10.0** | **2026-10-09** | **Phase 10 (Packages) und Phasentest 10 nachgetragen; CMake-Minimum 3.26** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format; alle 9 Phasen dokumentiert; Externals-Pipeline hinzugefügt; Tests-Pipeline hinzugefügt |
 | 0.1.1 | 2025-12-07 | Libraries.cmake hinzugefügt, SourceCollect.cmake in Core |
 | 0.1.0 | 2025-12-05 | Initial: Clean Start mit Debug-System |

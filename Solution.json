@@ -66,6 +66,26 @@
             "version": "1.0.0",
             "type": "INTERFACE",
             "public_headers": "projects/demos/libs/BasicLogger/include"
+        },
+        {
+            "name": "PackDemo",
+            "version": "1.2.0",
+            "type": "SHARED",
+            "path": "projects/demos/libs/PackDemo/src",
+            "public_headers": "projects/demos/libs/PackDemo/include",
+            "output_name": "PackDemo1",
+            "defines": [ "PACK_DEMO_VERSION=\"{version}\"" ]
+        }
+    ],
+    "packages": [
+        {
+            "name": "packdemo",
+            "archive": "packdemo-v{version}",
+            "contents": [
+                { "to": "include", "headers_of": "PackDemo", "files": [ "pack_demo.h" ] },
+                { "to": "bin", "binary_of": "PackDemo" }
+            ],
+            "version_file": "projects/demos/packaging/VERSION.in"
         }
     ],
     "executables": [

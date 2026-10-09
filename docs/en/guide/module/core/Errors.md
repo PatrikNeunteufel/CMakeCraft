@@ -302,6 +302,14 @@ endfunction()
 
 → Vollständige Reference: [ErrorCodes.md](../../references/ErrorCodes.md)
 
+### 6.3 Codes Documented Since Module v0.1.4
+
+| Code | Description | Raised in |
+|------|-------------|-----------|
+| `E220` | Archive external: field `pin` missing | `externals/archive/Handler.cmake` |
+| `W112` | Package names a target that does not exist | `project/Packages.cmake` |
+| `W304` | Archive external not available — targets build without it | `externals/archive/Handler.cmake` |
+
 ---
 
 ## 7. Best Practices
@@ -364,7 +372,8 @@ endfunction()
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung** |
+| **0.10.0** | **2026-10-09** | **Documented E220, W112, W304 (module v0.1.4)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung |
 | 0.1.2 | 2025-12-09 | W3xx Range für Externals, E218, W302 dokumentiert |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): cmake_fatal/cmake_warn/cmake_assert/cmake_require_field API |

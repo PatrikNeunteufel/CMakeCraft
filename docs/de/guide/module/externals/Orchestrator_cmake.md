@@ -77,6 +77,7 @@ Externals.cmake (project)
 | `Local/Attach.cmake` | Handler für lokale Externals |
 | `Fetched/Handler.cmake` | Handler für Git-basierte Externals |
 | `System/Handler.cmake` | Handler für System Externals (find_package) |
+| `archive/Handler.cmake` | Handler für Archive Externals (vorgebautes Paket, festgelegte Version) |
 
 ---
 
@@ -136,7 +137,7 @@ apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 **Verhalten:**
 1. Prüft ob External in `SKIPPED_EXTERNALS` → **E013 FATAL**
 2. Holt External-Definition aus `SOLUTION_EXTERNALS_JSON`
-3. Erkennt Typ (system/git/path)
+3. Erkennt Typ (system/git/path/archive)
 4. Wendet typ-spezifisch an
 
 **Für lokale Externals — setzt Variablen:**
@@ -152,6 +153,10 @@ apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 
 Linkt das registrierte Target via `_link_external_to_target()`.
 
+**Für Archive Externals:**
+
+Ruft `_apply_archive_external_to_target(TARGET_NAME EXT_NAME EXT_JSON EXT_OPTIONS)` auf — Include-Pfad, Define und Dateien neben die ausführbare Datei.
+
 ---
 
 ## 4. Type Detection
@@ -163,9 +168,10 @@ Linkt das registrierte Target via `_link_external_to_target()`.
 | `"system": true` | System | `_handle_system_external()` |
 | `"git"` | Fetched | `_handle_fetched_external()` |
 | `"path"` | Local | `_attach_local_external()` |
+| `"archive": true` | Archive | `_handle_archive_external()` |
 | Keines | Fehler E012 | — |
 
-> **Priorität:** system → git → path
+> **Priorität:** system → git → path → archive
 
 ### Beispiel-Definitionen
 
@@ -196,6 +202,16 @@ Linkt das registrierte Target via `_link_external_to_target()`.
     "spdlog": {
         "git": "https://github.com/gabime/spdlog.git",
         "tag": "v1.12.0"
+    }
+}
+```
+
+**Archive:**
+```json
+{
+    "toolkit": {
+        "archive": true,
+        "pin": "toolkit.pin"
     }
 }
 ```
@@ -258,7 +274,7 @@ endforeach()
 | Code | Fehler | Beschreibung |
 |------|--------|--------------|
 | E010 | External nicht definiert | External nicht in `externals` Block |
-| E012 | Kein Source-Feld | Weder `path` noch `git` noch `system` vorhanden |
+| E012 | Kein Source-Feld | Weder `path` noch `git` noch `system` noch `archive` vorhanden |
 | E013 | Geskipptes External verwendet | Target referenziert External mit `skip: true` |
 | E213 | Include.cmake fehlt | Lokales External ohne Include.cmake |
 
@@ -287,7 +303,7 @@ endif()
 
 | Level | Ausgabe |
 |-------|---------|
-| `DBG_RARE` | Type: LOCAL / FETCHED |
+| `DBG_RARE` | Type: LOCAL / FETCHED / ARCHIVE |
 | `DBG_RARE` | Applying {ext} to {target} |
 | `DBG_ULTRA_RARE` | Options für External |
 
@@ -303,6 +319,7 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" ..
 
 - [Attach_cmake.md](locals/Attach_cmake.md) — Lokale Externals
 - [Handler_cmake.md](Handler_cmake.md) — Git Externals
+- [archive/Handler_cmake.md](archive/Handler_cmake.md) — Archive Externals
 - [Targets_cmake.md](registry/Targets_cmake.md) — Target Registry
 - [Externals_cmake.md](../project/Externals_cmake.md) — Entry-Point (Project)
 
@@ -312,6 +329,7 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" ..
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-20** | **Skip-Validierung: E013 bei Verwendung geskippter Externals in apply_external_to_target()** |
+| **0.10.0** | **2026-10-09** | **External-Art `archive`: Erkennung in `_orchestrate_external()`, Anwenden in `apply_external_to_target()`** |
+| 0.7.0 | 2025-12-20 | Skip-Validierung: E013 bei Verwendung geskippter Externals in apply_external_to_target() |
 | 0.6.0 | 2025-12-18 | Phase 9: System Externals Support, `_handle_system_external()` |
 | 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

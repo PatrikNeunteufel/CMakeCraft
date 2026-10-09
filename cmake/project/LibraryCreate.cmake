@@ -63,7 +63,12 @@ function(_create_library_target CTX)
     ctx_get(${CTX} DEPENDENCIES _dependencies)
     ctx_get(${CTX} EXTERNALS _externals)
     ctx_get(${CTX} EXTERNAL_OPTIONS _external_options)
-    
+    ctx_get(${CTX} OUTPUT_NAME _output_name)
+    ctx_get(${CTX} DEFINES _defines)
+
+    # {version} in defines stands for the version of this target
+    string(REPLACE "{version}" "${_version}" _defines "${_defines}")
+
     # --------------------------------------------------------------------------
     # Handle INTERFACE Libraries (Header-Only)
     # --------------------------------------------------------------------------
@@ -82,8 +87,16 @@ function(_create_library_target CTX)
             dbg(${DBG_RARE} "    Include: ${_public_headers}" ID LIBRARIES)
             # Nach Zeile 76 in LibraryCreate.cmake:
             dbg(${DBG_RARE} "  INTERFACE include: ${CMAKE_SOURCE_DIR}/${_public_headers}" ID LIBRARIES)
+            set_target_properties(${_name} PROPERTIES
+                CRAFT_PUBLIC_HEADERS_DIR "${CMAKE_SOURCE_DIR}/${_public_headers}"
+            )
         endif()
-        
+
+        if(_defines)
+            target_compile_definitions(${_name} INTERFACE ${_defines})
+            dbg(${DBG_RARE} "    Defines: ${_defines}" ID LIBRARIES)
+        endif()
+
         # Link dependencies (INTERFACE only)
         foreach(_dep IN LISTS _dependencies)
             if(TARGET ${_dep})
@@ -181,8 +194,12 @@ function(_create_library_target CTX)
             "${CMAKE_SOURCE_DIR}/${_public_headers}"
         )
         dbg(${DBG_RARE} "    Public Include: ${_public_headers}" ID LIBRARIES)
+        # Read by Packages.cmake ("headers_of")
+        set_target_properties(${_name} PROPERTIES
+            CRAFT_PUBLIC_HEADERS_DIR "${CMAKE_SOURCE_DIR}/${_public_headers}"
+        )
     endif()
-    
+
     # Additionally: If there is a pch/ subdirectory
     if(EXISTS "${_src_dir}/pch")
         target_include_directories(${_name} PRIVATE "${_src_dir}/pch")
@@ -262,9 +279,29 @@ function(_create_library_target CTX)
     endforeach()
     
     # --------------------------------------------------------------------------
+    # Preprocessor Definitions
+    # --------------------------------------------------------------------------
+
+    if(_defines)
+        target_compile_definitions(${_name} PRIVATE ${_defines})
+        dbg(${DBG_RARE} "    Defines: ${_defines}" ID LIBRARIES)
+    endif()
+
+    # --------------------------------------------------------------------------
+    # Output Name (file name differs from the target name)
+    # --------------------------------------------------------------------------
+
+    if(NOT "${_output_name}" STREQUAL "")
+        set_target_properties(${_name} PROPERTIES
+            OUTPUT_NAME "${_output_name}"
+        )
+        dbg(${DBG_RARE} "    Output Name: ${_output_name}" ID LIBRARIES)
+    endif()
+
+    # --------------------------------------------------------------------------
     # Apply Standard Modules
     # --------------------------------------------------------------------------
-    
+
     # Warnings (from Warnings.cmake)
     apply_warnings(${_name})
     

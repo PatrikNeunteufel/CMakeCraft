@@ -46,7 +46,7 @@ wichtigste Regel dieses Guides:
 
 ## 2. Voraussetzungen
 
-- **CMake ≥ 3.25**, ein C++20-Compiler (MSVC, Clang), **Ninja** und/oder Visual Studio 2022+
+- **CMake ≥ 3.26**, ein C++20-Compiler (MSVC, Clang), **Ninja** und/oder Visual Studio 2022+
 - **Git**
 - Optional je nach Projekt: **Qt6** (Pfad für `QT_ROOT`), weitere SDKs
 - Eine lokale **CMakeCraft-Arbeitskopie** (dieses Repo)
@@ -81,7 +81,7 @@ Projekt-Root kopieren:
 Die komplette Top-Level-`CMakeLists.txt` eines Konsumenten:
 
 ```cmake
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.26)
 include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")
 ```
 
@@ -91,7 +91,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.9.2")
+set(CMAKECRAFT_VERSION "v0.10.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -174,15 +174,17 @@ Checkliste, was im ersten Commit **nicht** enthalten sein darf: `out/`, `.extern
 
 ## 4. Externals & proprietäre Libraries (BASS & Co.)
 
-### 4.1 Die drei Externals-Quellen
+### 4.1 Die vier Externals-Quellen
 
 | Quelle | Deklaration in Solution.json | Beispiel |
 |---|---|---|
 | **local** | `"path": "externals/<name>"` — liegt im Projekt-Repo | doctest, bass (SDK-Struktur), glad, lua54 |
 | **fetched** | `"git": "<url>", "tag": "…"` — wird beim Configure nach `.externals/` geholt | qt-ads, googletest |
 | **system** | `"system": true, "package": "…"` — via find_package | Qt6, onnxruntime |
+| **archive** | `"archive": true, "pin": "<name>.pin"` — fertiges Paket in gepinnter Version, wird beim Configure nach `.externals/<name>/<version>/` geholt (seit v0.10.0) | sichttest |
 
-Anleitung zum Einbinden: [Adding_Externals.md](Adding_Externals.md) · [Externals.md](Externals.md)
+Anleitung zum Einbinden: [Adding_Externals.md](Adding_Externals.md) · [Externals.md](Externals.md) ·
+Pakete schnüren und beziehen: [Packages.md](../references/Packages.md)
 
 ### 4.2 Proprietäre Binaries: bewusst NICHT im Repo
 
@@ -335,4 +337,5 @@ Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgab
 
 ## Changelog
 
+- **1.1.0** (2026-10-09): CMake 3.26, Pin-Beispiel v0.10.0, vierte Externals-Quelle `archive` (§4.1)
 - **1.0.0** (2026-07-17): Erstfassung — Projekt-Setup, Lib-Beschaffung, Sync-Workflow (SSOT CMakeCraft)

@@ -19,6 +19,7 @@
 #   - NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS
 #   - SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH
 #   - DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM
+#   - OUTPUT_NAME, DEFINES
 #
 # Used by:
 #   - Libraries.cmake
@@ -41,8 +42,9 @@ include_guard(GLOBAL)
     Context Keys Set:
         NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS,
         SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH,
-        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM
-    
+        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM,
+        OUTPUT_NAME, DEFINES
+
     Example:
         ctx_create(LIB_0)
         _collect_library("${_lib_json}" LIB_0)
@@ -216,7 +218,21 @@ function(_collect_library LIB_JSON CTX)
     
     _json_get_string_or_default("${LIB_JSON}" "platform" "" _platform)
     ctx_set(${CTX} PLATFORM "${_platform}")
-    
+
+    # --------------------------------------------------------------------------
+    # Output Name (file name without extension; default: target name)
+    # --------------------------------------------------------------------------
+
+    _json_get_string_or_default("${LIB_JSON}" "output_name" "" _output_name)
+    ctx_set(${CTX} OUTPUT_NAME "${_output_name}")
+
+    # --------------------------------------------------------------------------
+    # Defines (preprocessor definitions)
+    # --------------------------------------------------------------------------
+
+    _json_get_array_as_list("${LIB_JSON}" "defines" _defines)
+    ctx_set(${CTX} DEFINES "${_defines}")
+
     # --------------------------------------------------------------------------
     # Debug Output (at high level)
     # --------------------------------------------------------------------------

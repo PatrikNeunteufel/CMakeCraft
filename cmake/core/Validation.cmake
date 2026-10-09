@@ -43,7 +43,7 @@ include_guard(GLOBAL)
         EXT_JSON - Mandatory: JSON string of the external object
     
     Allowed source fields:
-        system, path, git, vcpkg, conan, find_package
+        system, path, git, archive, vcpkg, conan, find_package
     
     Errors:
         E012 - no source field present
@@ -56,7 +56,7 @@ include_guard(GLOBAL)
 ]]
 function(validate_external_source EXT_NAME EXT_JSON)
     # Source fields - system added for Phase 9
-    set(_source_fields "system;path;git;vcpkg;conan;find_package")
+    set(_source_fields "system;path;git;archive;vcpkg;conan;find_package")
     set(_found_count 0)
     set(_found_fields "")
     
@@ -71,11 +71,12 @@ function(validate_external_source EXT_NAME EXT_JSON)
     if(_found_count EQUAL 0)
         cmake_fatal("E012" 
             "External '${EXT_NAME}': No source field specified.\n"
-            "  Required: one of 'system', 'git', or 'path'\n"
+            "  Required: one of 'system', 'git', 'path', or 'archive'\n"
             "  Examples:\n"
             "    Local:   { \"path\": \"externals/${EXT_NAME}\" }\n"
             "    Fetched: { \"git\": \"https://...\", \"tag\": \"v1.0\" }\n"
-            "    System:  { \"system\": true, \"package\": \"PackageName\" }"
+            "    System:  { \"system\": true, \"package\": \"PackageName\" }\n"
+            "    Archive: { \"archive\": true, \"pin\": \"${EXT_NAME}.pin\" }"
         )
     elseif(_found_count GREATER 1)
         cmake_fatal("E012" 

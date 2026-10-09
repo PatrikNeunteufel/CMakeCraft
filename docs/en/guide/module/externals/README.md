@@ -23,6 +23,10 @@
 1. [locals/Attach_cmake.md](locals/Attach_cmake.md) — Local-Attach-System
 2. [includes/](includes/README.md) — Include-Definitionen pro Library
 
+**Fetching a prebuilt package?**
+1. [archive/Handler_cmake.md](archive/Handler_cmake.md) — external kind `archive`
+2. [../CMakeCraftPackage.md](../CMakeCraftPackage.md) — pin file, fetching, deployment
+
 **Hook für Library schreiben?**
 1. [hooks/HookLoader_cmake.md](hooks/HookLoader_cmake.md) — Hook-System verstehen
 2. [hooks/prefetch/Glfw.md](hooks/prefetch/Glfw.md) — Example: Pre-Fetch Hook
@@ -54,6 +58,8 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
     ├── fetched/Handler.cmake    ← Verarbeitet gefetchte Libs
     │
     ├── locals/Attach.cmake      ← Bindet lokale Libs ein
+    │
+    ├── archive/Handler.cmake    ← Fetches prebuilt packages (CMakeCraftPackage.cmake)
     │
     └── includes/                ← Library-spezifische Includes
         ├── bass/Bass_Include.cmake
@@ -99,6 +105,12 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 |-------|--------------|
 | [fetched/Handler_cmake.md](fetched/Handler_cmake.md) | Verarbeitet Libraries nach Git-Fetch |
 
+### archive/ — Archive Externals
+
+| Datei | Description |
+|-------|--------------|
+| [archive/Handler_cmake.md](archive/Handler_cmake.md) | Fetches prebuilt packages in a pinned version and applies them to targets |
+
 ### locals/ — Lokale Libraries
 
 | Datei | Description |
@@ -136,6 +148,7 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 |-----|--------|-----------|----------|
 | **Git (fetched)** | Git Repository | GLFW, ImGui, doctest | [Git_Externals.md](../../references/externals/Git_Externals.md) |
 | **Local** | System/SDK | BASS, Lua, Qt6 | [Local_Externals.md](../../references/externals/Local_Externals.md) |
+| **Archive** | Prebuilt package (pin file with version, URL, SHA256) | — | [archive/Handler_cmake.md](archive/Handler_cmake.md) |
 
 ---
 
