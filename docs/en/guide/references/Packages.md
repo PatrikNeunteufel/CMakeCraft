@@ -163,6 +163,11 @@ A target names the external under `externals` like any other:
 | Executable | yes | yes | yes — after each build, per configuration, only when changed |
 | Library (STATIC, SHARED) | yes | yes | no |
 
+Include path and define apply **only to the target naming the external** (PRIVATE); they are
+not inherited by targets depending on it. A test target that includes a header of the package
+through a public header of its library must therefore name the external itself — or the library
+keeps the include inside a `.cpp`.
+
 Switching the copies off for a single target:
 
 ```json

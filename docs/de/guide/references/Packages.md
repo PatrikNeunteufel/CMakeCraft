@@ -163,6 +163,11 @@ Ein Target nennt das External wie jedes andere unter `externals`:
 | Executable | ja | ja | ja — nach jedem Bau, je Konfiguration, nur bei Änderung |
 | Bibliothek (STATIC, SHARED) | ja | ja | nein |
 
+Include-Pfad und Define gelten **nur für das Target, das das External nennt** (PRIVATE); sie
+vererben sich nicht an Targets, die davon abhängen. Ein Test-Target, das einen Kopf des Pakets
+über einen öffentlichen Kopf seiner Bibliothek einbindet, muss das External deshalb selbst
+nennen — oder die Bibliothek hält die Einbindung in einer `.cpp`.
+
 Abschalten der Kopien für ein einzelnes Target:
 
 ```json
