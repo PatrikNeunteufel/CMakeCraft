@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      1.0.0   (version of THIS file, independent of CMakeCraft's own)
+# Version:      1.1.0   (version of THIS file, independent of CMakeCraft's own)
 # Date:         2026-10-09
 #
 # Description:
@@ -22,7 +22,17 @@
 #   craft_package_deploy(TARGET <target> ROOT <dir>
 #                        [INCLUDE_DIRS <dir>...] [DEFINE <name>]
 #                        [RUNTIME_FILES <file>...] [RUNTIME_DIRS <dir>...]
-#                        [NO_RUNTIME])
+#                        [NAME <name>] [NO_RUNTIME])
+#
+# Changelog:
+#   1.1.0 (2026-10-09): runtime files are copied by a target of their own
+#                       (<target>_deploy_<name>) that the executable depends
+#                       on, no longer by a POST_BUILD step of the executable.
+#                       The copy runs on every build, also when the executable
+#                       is not linked again - after a change of the pinned
+#                       version the new files arrive with the next build.
+#                       New optional argument NAME.
+#   1.0.0 (2026-10-09): first version
 #
 # Pin file (CMake script, <NAME> = upper-case package name):
 #   set(<NAME>_VERSION "v0.2.0")
@@ -48,7 +58,7 @@
 
 include_guard(GLOBAL)
 
-set(CMAKECRAFT_PACKAGE_VERSION "1.0.0")
+set(CMAKECRAFT_PACKAGE_VERSION "1.1.0")
 
 if(CMAKE_VERSION VERSION_LESS 3.26)
     message(FATAL_ERROR
@@ -59,6 +69,10 @@ endif()
 if(POLICY CMP0174)
     cmake_policy(SET CMP0174 NEW)
 endif()
+
+# $<TARGET_FILE_DIR:...> in the deploy target must not make it depend on the
+# executable: the dependency runs the other way (see craft_package_deploy)
+cmake_policy(SET CMP0112 NEW)
 
 # ------------------------------------------------------------------------------
 # _craft_package_read_version – reads "produkt=" from <root>/VERSION
@@ -291,7 +305,7 @@ endfunction()
     craft_package_deploy(TARGET <target> ROOT <dir>
                          [INCLUDE_DIRS <dir>...] [DEFINE <name>]
                          [RUNTIME_FILES <file>...] [RUNTIME_DIRS <dir>...]
-                         [NO_RUNTIME])
+                         [NAME <name>] [NO_RUNTIME])
 
     Parameters:
         TARGET        - Mandatory: existing target
@@ -301,17 +315,24 @@ endfunction()
                         (include path only - nothing is linked)
         DEFINE        - Optional: compile definition <name>=1 on the target
         RUNTIME_FILES - Optional: files, relative to ROOT, copied next to the
-                        executable after each build
+                        executable on each build
         RUNTIME_DIRS  - Optional: directories, relative to ROOT, copied as a
                         subfolder of the same name next to the executable
+        NAME          - Optional: package name, part of the name of the deploy
+                        target (<target>_deploy_<name>; default: "package")
         NO_RUNTIME    - Optional: include path and define only, no copies
 
     Runtime files and directories are only copied for executable targets, per
     configuration, and only when they differ.
+
+    The copies are made by a target of their own that the executable depends
+    on. It runs on every build of the executable, whether or not the
+    executable itself is compiled or linked - so the files of a newly pinned
+    package version arrive without touching the executable.
 ]]
 function(craft_package_deploy)
     cmake_parse_arguments(PARSE_ARGV 0 _cpd
-        "NO_RUNTIME" "TARGET;ROOT;DEFINE" "INCLUDE_DIRS;RUNTIME_FILES;RUNTIME_DIRS")
+        "NO_RUNTIME" "TARGET;ROOT;DEFINE;NAME" "INCLUDE_DIRS;RUNTIME_FILES;RUNTIME_DIRS")
 
     if("${_cpd_TARGET}" STREQUAL "" OR NOT TARGET "${_cpd_TARGET}")
         message(FATAL_ERROR "[CraftPackage] craft_package_deploy: TARGET '${_cpd_TARGET}' does not exist.")
@@ -354,10 +375,45 @@ function(craft_package_deploy)
                     "${_cpd_ROOT}/${_dir}" "$<TARGET_FILE_DIR:${_cpd_TARGET}>/${_dir_name}")
     endforeach()
 
-    if(_commands)
-        add_custom_command(TARGET "${_cpd_TARGET}" POST_BUILD
-            ${_commands}
-            COMMENT "Deploying package files next to ${_cpd_TARGET}"
-            VERBATIM)
+    if(NOT _commands)
+        return()
+    endif()
+
+    # A target of its own, not POST_BUILD: POST_BUILD only runs when the
+    # executable is linked, and a new package version does not relink it.
+    if("${_cpd_NAME}" STREQUAL "")
+        set(_cpd_NAME "package")
+    endif()
+    string(MAKE_C_IDENTIFIER "${_cpd_NAME}" _deploy_suffix)
+    set(_deploy_base "${_cpd_TARGET}_deploy_${_deploy_suffix}")
+    set(_deploy "${_deploy_base}")
+    set(_deploy_index 1)
+    while(TARGET "${_deploy}")
+        math(EXPR _deploy_index "${_deploy_index} + 1")
+        set(_deploy "${_deploy_base}_${_deploy_index}")
+    endwhile()
+
+    # The directory may not exist yet: the copy runs before the first link
+    add_custom_target("${_deploy}"
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "$<TARGET_FILE_DIR:${_cpd_TARGET}>"
+        ${_commands}
+        COMMENT "Deploying package files next to ${_cpd_TARGET}"
+        VERBATIM)
+    add_dependencies("${_cpd_TARGET}" "${_deploy}")
+
+    # IDE folder of the executable - read at the end of the directory, because
+    # the caller may set it after this call. EVAL: a deferred call evaluates
+    # its variables only when it runs, the names must be fixed here.
+    cmake_language(EVAL CODE
+        "cmake_language(DEFER CALL _craft_package_deploy_folder [[${_cpd_TARGET}]] [[${_deploy}]])")
+endfunction()
+
+# ------------------------------------------------------------------------------
+# _craft_package_deploy_folder – puts the deploy target next to its executable
+# ------------------------------------------------------------------------------
+function(_craft_package_deploy_folder TARGET DEPLOY_TARGET)
+    get_target_property(_folder "${TARGET}" FOLDER)
+    if(_folder)
+        set_target_properties("${DEPLOY_TARGET}" PROPERTIES FOLDER "${_folder}")
     endif()
 endfunction()

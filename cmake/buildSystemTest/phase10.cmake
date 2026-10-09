@@ -15,6 +15,7 @@
 #     from the cache; rejection of a wrong checksum is NOT exercised here
 #     (it is a warning by design and would clutter the selftest output)
 #   - External kind "archive": handler and application to a target
+#   - Runtime files of an executable: deploy target of its own
 #
 #   The test writes a miniature package below <build>/phase10/ and fetches it
 #   from there. No network access, nothing is written into the source tree.
@@ -219,6 +220,40 @@ endif()
 dbg(${DBG_COMMON} "  Include path and define set; absent package leaves the target untouched" ID PHASE10_TEST)
 
 # ==============================================================================
+# Test 7: Runtime Files of an Executable (deploy target of its own)
+# ==============================================================================
+
+dbg(${DBG_COMMON} "Test 7: Deploy target for runtime files..." ID PHASE10_TEST)
+
+# Not part of ALL; to see the copies: cmake --build <build> --target _craft_phase10_exe
+file(WRITE "${_p10_dir}/main.cpp" "int main() { return 0; }\n")
+
+if(NOT TARGET _craft_phase10_exe)
+    add_executable(_craft_phase10_exe EXCLUDE_FROM_ALL "${_p10_dir}/main.cpp")
+    add_executable(_craft_phase10_exe_plain EXCLUDE_FROM_ALL "${_p10_dir}/main.cpp")
+endif()
+
+_apply_archive_external_to_target(_craft_phase10_exe "phase10demo" "${_p10_ext_json}" "{}")
+_apply_archive_external_to_target(_craft_phase10_exe_plain "phase10demo" "${_p10_ext_json}" "{ \"runtime\": false }")
+
+if(NOT TARGET _craft_phase10_exe_deploy_phase10demo)
+    cmake_fatal("ASSERT" "Deploy target '_craft_phase10_exe_deploy_phase10demo' was not created")
+endif()
+
+# The executable depends on the deploy target, so the copy runs on every build
+# of the executable - also when the executable itself is not linked again
+get_target_property(_p10_exe_deps _craft_phase10_exe MANUALLY_ADDED_DEPENDENCIES)
+if(NOT "_craft_phase10_exe_deploy_phase10demo" IN_LIST _p10_exe_deps)
+    cmake_fatal("ASSERT" "_craft_phase10_exe should depend on its deploy target, got: ${_p10_exe_deps}")
+endif()
+
+if(TARGET _craft_phase10_exe_plain_deploy_phase10demo)
+    cmake_fatal("ASSERT" "\"runtime\": false must not create a deploy target")
+endif()
+
+dbg(${DBG_COMMON} "  Deploy target exists, the executable depends on it; none with runtime: false" ID PHASE10_TEST)
+
+# ==============================================================================
 # Summary
 # ==============================================================================
 
@@ -253,3 +288,4 @@ unset(_p10_includes)
 unset(_p10_probe_defines)
 unset(_p10_absent_includes)
 unset(_p10_absent_defines)
+unset(_p10_exe_deps)

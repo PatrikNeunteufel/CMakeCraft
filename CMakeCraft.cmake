@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.10.0
+# Version:      0.11.0
 # Date:         2026-10-09
 #
 # Description:
@@ -28,6 +28,15 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.11.0 (2026-10-09): runtime files of an archive external are copied by a
+#                        target of their own (<executable>_deploy_<external>)
+#                        that the executable depends on, no longer as a
+#                        POST_BUILD step. The copy runs on every build - after
+#                        a change of the pinned package version the new files
+#                        arrive without linking the executable again.
+#                        CMakeCraftPackage.cmake 1.1.0 (argument NAME).
+#                        App test targets (apps[].tests.targets[]) know
+#                        "compile_options".
 #   v0.10.0 (2026-10-09): build and consume prebuilt packages. New block
 #                        "packages" (target package_<name> writes folder, zip
 #                        and checksum to out/package/), new external kind

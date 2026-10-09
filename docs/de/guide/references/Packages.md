@@ -1,6 +1,6 @@
 # Pakete schnüren und beziehen — Referenz
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Datum:** 2026-10-09  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -160,7 +160,7 @@ Ein Target nennt das External wie jedes andere unter `externals`:
 
 | Target | Include-Pfad | Define | Laufzeitdateien |
 |--------|--------------|--------|-----------------|
-| Executable | ja | ja | ja — nach jedem Bau, je Konfiguration, nur bei Änderung |
+| Executable | ja | ja | ja — bei jedem Bau, je Konfiguration, nur bei Änderung |
 | Bibliothek (STATIC, SHARED) | ja | ja | nein |
 
 Include-Pfad und Define gelten **nur für das Target, das das External nennt** (PRIVATE); sie
@@ -168,9 +168,18 @@ vererben sich nicht an Targets, die davon abhängen. Ein Test-Target, das einen 
 über einen öffentlichen Kopf seiner Bibliothek einbindet, muss das External deshalb selbst
 nennen — oder die Bibliothek hält die Einbindung in einer `.cpp`.
 
-Die Laufzeitdateien werden **beim Bau der Exe** kopiert, nicht beim Configure. Nach einem
-Wechsel der Paketversion bleibt die alte Kopie neben der Exe liegen, bis die Exe neu gebaut
-wird.
+Die Laufzeitdateien kopiert ein **eigenes Ziel** `<Exe>_deploy_<External>` (etwa
+`LumiViz_deploy_sichttest`), von dem die Exe abhängt. Es läuft bei **jedem Bau** der Exe und
+bei jedem Bau von allem — auch dann, wenn die Exe selbst weder übersetzt noch gelinkt wird.
+Nach einem Wechsel der Paketversion genügt deshalb ein gewöhnlicher Bau: Der Configure läuft
+von selbst neu (die Pin-Datei ist geändert), die neuen Dateien liegen danach neben der Exe.
+Das Ziel lässt sich auch allein bauen (`cmake --build <Ordner> --target <Exe>_deploy_<External>`).
+
+Bis v0.10.0 hing die Kopie als Schritt nach dem Linken an der Exe und lief nur, wenn die Exe
+neu gelinkt wurde.
+
+Was die Kopie **nicht** tut: Dateien entfernen, die eine frühere Paketversion neben die Exe
+gelegt hat und die das neue Paket nicht mehr enthält.
 
 Abschalten der Kopien für ein einzelnes Target:
 
@@ -259,6 +268,7 @@ craft_package_deploy(TARGET MeineApp ROOT "${_sichttest_root}"
 | | `ROOT` | Paketwurzel; leer = nichts geschieht |
 | | `INCLUDE_DIRS`, `DEFINE` | wie `include_dirs`, `define` |
 | | `RUNTIME_FILES`, `RUNTIME_DIRS` | wie `runtime.files`, `runtime.dirs` |
+| | `NAME` | optional: Paketname, Teil des Zielnamens `<Target>_deploy_<Name>` (ohne Angabe: `package`) |
 | | `NO_RUNTIME` | nur Include-Pfad und Define |
 
 ---
@@ -316,4 +326,5 @@ nennen jede versuchte Quelle mit Grund.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.0.0** | **2026-10-09** | **Erste Fassung zu CMakeCraft v0.10.0** |
+| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: Laufzeitdateien kopiert ein eigenes Ziel `<Exe>_deploy_<External>` bei jedem Bau, nicht mehr ein Schritt nach dem Linken (§3.2); Argument `NAME` (§5)** |
+| 1.0.0 | 2026-10-09 | Erste Fassung zu CMakeCraft v0.10.0 |

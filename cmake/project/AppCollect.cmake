@@ -421,6 +421,9 @@ function(_collect_app APP_JSON CTX)
                 # --- Optional: external_options (JSON block for later processing) ---
                 _json_get_object_or_empty("${_target_json}" "external_options" _t_external_options)
 
+                # --- Optional: compile_options ---
+                _json_get_array_as_list("${_target_json}" "compile_options" _t_compile_options)
+
                 # --- Optional: parallel (default: type-based) ---
                 set(_t_parallel "${_default_parallel}")
                 _json_has_key("${_target_json}" "parallel" _has_t_parallel)
@@ -444,6 +447,7 @@ function(_collect_app APP_JSON CTX)
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_DEPENDENCIES "${_t_dependencies}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS "${_t_externals}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_EXTERNAL_OPTIONS "${_t_external_options}")
+                ctx_set(${CTX} TESTS_TARGET_${_t_idx}_COMPILE_OPTIONS "${_t_compile_options}")
                 ctx_set(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL "${_t_parallel}")
                 
                 dbg(${DBG_ULTRA_RARE} "    Test Target [${_t_idx}]: ${_t_name} (${_t_type}, skip=${_t_skip})" ID APPS)

@@ -249,6 +249,7 @@ Erstellt Test Executables basierend auf der Tests-Konfiguration im Context.
 | `TESTS_TARGET_{n}_EXTERNALS` | Zusätzliche Externals |
 | `TESTS_TARGET_{n}_EXTERNAL_OPTIONS` | Optionen je External aus `EXTERNALS` (JSON) |
 | `TESTS_TARGET_{n}_PARALLEL` | Parallele Ausführung erlaubt |
+| `TESTS_TARGET_{n}_COMPILE_OPTIONS` | Compiler-Flags nur für dieses Test-Target |
 
 Alle Keys setzt [AppCollect § 5.5/5.6](AppCollect.md).
 
@@ -277,7 +278,7 @@ Alle Keys setzt [AppCollect § 5.5/5.6](AppCollect.md).
 ### 4.4 _create_app_test_target()
 
 ```cmake
-_create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL)
+_create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL COMPILE_OPTIONS)
 ```
 
 **Beschreibung:**  
@@ -298,6 +299,7 @@ Interne Hilfsfunktion zur Erstellung eines einzelnen Test-Targets.
 | `EXTERNAL_OPTIONS` | JSON-Objekt mit Optionen je External aus `EXTRA_EXTERNALS`; das Framework-External bekommt immer `{}` |
 | `APP_NAME` | App-Name für IDE-Folder |
 | `PARALLEL` | `TRUE` erlaubt parallele Ausführung, `FALSE` erzwingt seriell |
+| `COMPILE_OPTIONS` | Compiler-Flags nur für dieses Test-Target (Liste, PRIVATE; nach `apply_compiler_options()` gesetzt) |
 
 ---
 
@@ -542,6 +544,7 @@ int main() {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **0.8.0** | **2026-10-09** | **_create_app_test_target(): neuer Parameter COMPILE_OPTIONS — `tests.targets[].compile_options` wird als PRIVATE Compiler-Flags ans Test-Target gesetzt (CMakeCraft v0.11.0)** |
 | **0.7.4** | **2026-10-05** | **_create_app_test_target(): neuer Parameter EXTERNAL_OPTIONS — `tests.targets[].external_options` wird je External angewandt statt fest `{}`. Signatur in § 4.4 berichtigt (DEPENDENCIES, PARALLEL fehlten). § 4.3 auf tests.targets[]-Stand gebracht (altes tests.unit/tests.integration-Schema entfernt, Fehlerliste ergänzt)** |
 | 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() mit Optionen |
 | 0.5.4 | 2025-12-18 | PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr) |

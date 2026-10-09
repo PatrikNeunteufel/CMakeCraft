@@ -1,6 +1,6 @@
 # Building and Consuming Packages — Reference
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Date:** 2026-10-09  
 > **Type:** Reference  
 > **Status:** Stable  
@@ -160,7 +160,7 @@ A target names the external under `externals` like any other:
 
 | Target | Include path | Define | Runtime files |
 |--------|--------------|--------|---------------|
-| Executable | yes | yes | yes — after each build, per configuration, only when changed |
+| Executable | yes | yes | yes — on each build, per configuration, only when changed |
 | Library (STATIC, SHARED) | yes | yes | no |
 
 Include path and define apply **only to the target naming the external** (PRIVATE); they are
@@ -168,9 +168,19 @@ not inherited by targets depending on it. A test target that includes a header o
 through a public header of its library must therefore name the external itself — or the library
 keeps the include inside a `.cpp`.
 
-The runtime files are copied **when the executable is built**, not at configure time. After a
-change of the package version the old copy stays next to the executable until the executable
-is rebuilt.
+The runtime files are copied by a **target of its own**, `<executable>_deploy_<external>`
+(for example `LumiViz_deploy_sichttest`), that the executable depends on. It runs on **every
+build** of the executable and on every build of everything — also when the executable itself
+is neither compiled nor linked. After a change of the package version an ordinary build is
+therefore enough: configure runs again by itself (the pin file changed), and afterwards the
+new files lie next to the executable. The target can also be built alone
+(`cmake --build <dir> --target <executable>_deploy_<external>`).
+
+Up to v0.10.0 the copy was a step after linking the executable and only ran when the
+executable was linked again.
+
+What the copy does **not** do: remove files that an earlier package version put next to the
+executable and that the new package no longer contains.
 
 Switching the copies off for a single target:
 
@@ -258,6 +268,7 @@ craft_package_deploy(TARGET MyApp ROOT "${_sichttest_root}"
 | | `ROOT` | package root; empty = nothing happens |
 | | `INCLUDE_DIRS`, `DEFINE` | like `include_dirs`, `define` |
 | | `RUNTIME_FILES`, `RUNTIME_DIRS` | like `runtime.files`, `runtime.dirs` |
+| | `NAME` | optional: package name, part of the target name `<target>_deploy_<name>` (default: `package`) |
 | | `NO_RUNTIME` | include path and define only |
 
 ---
@@ -314,4 +325,5 @@ name every source tried and the reason.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **1.0.0** | **2026-10-09** | **First version, for CMakeCraft v0.10.0** |
+| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: runtime files are copied by a target of its own, `<executable>_deploy_<external>`, on every build, no longer by a step after linking (§3.2); argument `NAME` (§5)** |
+| 1.0.0 | 2026-10-09 | First version, for CMakeCraft v0.10.0 |

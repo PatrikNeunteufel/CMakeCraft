@@ -2,7 +2,7 @@
 # =====================================
 # Archive externals - prebuilt packages fetched in a pinned version
 #
-# Version: 1.0.0
+# Version: 1.1.0
 # Date:    2026-10-09
 # Status:  Release
 # Author:  CMake Architecture Team
@@ -26,7 +26,8 @@
 #   include_dirs - Optional: include directories inside the package
 #   define       - Optional: compile definition <define>=1 on each target
 #   runtime      - Optional: { "files": [...], "dirs": [...] } copied next to
-#                  each executable that names the external
+#                  each executable that names the external, by the target
+#                  <executable>_deploy_<external> on every build
 #
 # Per target (external_options): { "runtime": false } - no copies
 #
@@ -141,7 +142,8 @@ function(_apply_archive_external_to_target TARGET_NAME EXT_NAME EXT_JSON EXT_OPT
 
     craft_package_deploy(
         TARGET        "${TARGET_NAME}"
-        ROOT          "${_root}"
+        NAME          "${EXT_NAME}"
+        ROOT         "${_root}"
         INCLUDE_DIRS  ${_include_dirs}
         DEFINE        "${_define}"
         RUNTIME_FILES ${_runtime_files}

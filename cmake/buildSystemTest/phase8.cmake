@@ -105,7 +105,8 @@ if(COMMAND _collect_app)
                     "name": "WithOptions",
                     "type": "unit",
                     "externals": [ "bass" ],
-                    "external_options": { "bass": { "BASS_MIX": true } }
+                    "external_options": { "bass": { "BASS_MIX": true } },
+                    "compile_options": [ "-DP8_ONE", "$<$<CXX_COMPILER_ID:MSVC>:/bigobj>" ]
                 },
                 {
                     "name": "WithoutOptions",
@@ -133,6 +134,30 @@ if(COMMAND _collect_app)
 
     dbg(${DBG_COMMON} "  TESTS_TARGET_{n}_EXTERNAL_OPTIONS collected" ID PHASE8_TEST)
 
+    # compile_options: collected as a list, generator expressions unchanged
+    ctx_get(PHASE8_PROBE TESTS_TARGET_0_COMPILE_OPTIONS _p8_copts_0)
+    ctx_get(PHASE8_PROBE TESTS_TARGET_1_COMPILE_OPTIONS _p8_copts_1)
+
+    if(NOT "${_p8_copts_0}" STREQUAL "-DP8_ONE;$<$<CXX_COMPILER_ID:MSVC>:/bigobj>")
+        cmake_fatal("ASSERT" "App test compile_options not collected, got '${_p8_copts_0}'")
+    endif()
+    if(NOT "${_p8_copts_1}" STREQUAL "")
+        cmake_fatal("ASSERT" "App test without compile_options: expected '', got '${_p8_copts_1}'")
+    endif()
+
+    # ... and applied to the demo test target that names them
+    if(TARGET MyVisualizer.UnitTests)
+        get_target_property(_p8_copts_target MyVisualizer.UnitTests COMPILE_OPTIONS)
+        if(NOT "$<$<CXX_COMPILER_ID:MSVC>:/bigobj>" IN_LIST _p8_copts_target)
+            cmake_fatal("ASSERT" "MyVisualizer.UnitTests: compile_options not applied, got '${_p8_copts_target}'")
+        endif()
+    endif()
+
+    dbg(${DBG_COMMON} "  TESTS_TARGET_{n}_COMPILE_OPTIONS collected and applied" ID PHASE8_TEST)
+
+    unset(_p8_copts_0)
+    unset(_p8_copts_1)
+    unset(_p8_copts_target)
     unset(_p8_app_json)
     unset(_p8_opts_0)
     unset(_p8_opts_1)

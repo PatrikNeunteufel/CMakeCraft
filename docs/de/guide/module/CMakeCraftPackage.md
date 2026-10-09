@@ -1,6 +1,6 @@
 # CMakeCraftPackage.cmake — Vorgebaute Pakete beziehen und ausliefern
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Datum:** 2026-10-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [CMakeCraftPackage.md](../../../en/guide/module/CMakeCraftPackage.md)  
 > **Modul:** [CMakeCraftPackage.cmake](../../../../CMakeCraftPackage.cmake)  
-> **Modul-Version:** 1.0.0 (eigene Version der Datei, unabhängig von der CMakeCraft-Version)
+> **Modul-Version:** 1.1.0 (eigene Version der Datei, unabhängig von der CMakeCraft-Version)
 
 ---
 
@@ -136,7 +136,7 @@ Bezieht das Paket in der festgelegten Version und liefert seine Wurzel.
 craft_package_deploy(TARGET <target> ROOT <dir>
                      [INCLUDE_DIRS <dir>...] [DEFINE <name>]
                      [RUNTIME_FILES <file>...] [RUNTIME_DIRS <dir>...]
-                     [NO_RUNTIME])
+                     [NAME <name>] [NO_RUNTIME])
 ```
 
 **Beschreibung:**  
@@ -150,8 +150,9 @@ Wendet ein bezogenes Paket auf ein Target an.
 | `ROOT` | ✓ | Paketwurzel aus `craft_package_fetch()`; leer oder kein Verzeichnis = Paket fehlt, es geschieht nichts |
 | `INCLUDE_DIRS` | — | Include-Verzeichnisse, relativ zu `ROOT` (nur Include-Pfad — es wird nichts gelinkt) |
 | `DEFINE` | — | Compile-Definition `<name>=1` auf dem Target |
-| `RUNTIME_FILES` | — | Dateien, relativ zu `ROOT`, die nach jedem Build neben die ausführbare Datei kopiert werden |
+| `RUNTIME_FILES` | — | Dateien, relativ zu `ROOT`, die bei jedem Build neben die ausführbare Datei kopiert werden |
 | `RUNTIME_DIRS` | — | Verzeichnisse, relativ zu `ROOT`, die als gleichnamiger Unterordner neben die ausführbare Datei kopiert werden |
+| `NAME` | — | Paketname, Teil des Namens des Deploy-Targets (`<target>_deploy_<name>`; Default: `package`) |
 | `NO_RUNTIME` | — | Nur Include-Pfad und Define, keine Kopien |
 
 **Verhalten:**
@@ -159,10 +160,18 @@ Wendet ein bezogenes Paket auf ein Target an.
 | Target-Typ | Include-Pfad und Define | Laufzeit-Kopien |
 |------------|-------------------------|-----------------|
 | `INTERFACE_LIBRARY` | `INTERFACE` | keine |
-| `EXECUTABLE` | `PRIVATE` | ja (`POST_BUILD`), außer bei `NO_RUNTIME` |
+| `EXECUTABLE` | `PRIVATE` | ja (eigenes Target `<target>_deploy_<name>`), außer bei `NO_RUNTIME` |
 | andere | `PRIVATE` | keine |
 
 Kopiert wird nach `$<TARGET_FILE_DIR:target>`, also je Konfiguration, und nur bei Unterschied (`copy_if_different`, `copy_directory_if_different`).
+
+**Das Deploy-Target:** Die Kopien macht ein eigenes Target (`add_custom_target`, nicht in `ALL`), von dem die ausführbare Datei abhängt (`add_dependencies`). Es läuft damit bei jedem Build der ausführbaren Datei — unabhängig davon, ob sie selbst übersetzt oder gelinkt wird. Ein `POST_BUILD`-Schritt (bis 1.0.0) lief nur beim Linken; nach einem Wechsel der gepinnten Version blieben die alten Dateien liegen.
+
+- Der Zielordner wird vor dem Kopieren angelegt (das Target läuft vor dem ersten Linken).
+- Ist der Name schon vergeben (zweiter Aufruf für dasselbe Target und denselben Namen), wird `_2`, `_3`, … angehängt.
+- Das Target übernimmt den IDE-Ordner (`FOLDER`) der ausführbaren Datei; gelesen wird er am Ende des Verzeichnisses (`cmake_language(DEFER)`), weil der Aufrufer ihn oft erst danach setzt.
+- Die Datei setzt für ihre Funktionen CMP0112 auf NEW: `$<TARGET_FILE_DIR:...>` im Deploy-Target darf keine Abhängigkeit auf die ausführbare Datei erzeugen — sie läuft in der Gegenrichtung.
+- Dateien, die ein früheres Paket kopiert hat und das neue nicht mehr enthält, bleiben liegen.
 
 **Rückgabe:**  
 Keine.
@@ -297,4 +306,5 @@ Die Datei verwendet keine Fehlercodes des CMakeCraft-Kerns.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.0.0** | **2026-10-09** | **Initial (CMakeCraft v0.10.0): craft_package_fetch, craft_package_deploy** |
+| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: craft_package_deploy kopiert über ein eigenes Target `<target>_deploy_<name>` statt `POST_BUILD` — die Kopie läuft bei jedem Build, auch ohne neues Linken. Neues Argument `NAME`** |
+| 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): craft_package_fetch, craft_package_deploy |

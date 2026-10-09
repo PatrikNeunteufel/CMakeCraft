@@ -1,6 +1,6 @@
 # phase10.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Datum:** 2026-10-09  
 > **Typ:** ModuleDoc  
 > **Pfad:** `cmake/buildSystemTest/phase10.cmake`  
@@ -109,6 +109,18 @@ Verwendet zwei INTERFACE-Libraries als Sonden (`_craft_phase10_probe`, `_craft_p
 | | `INTERFACE_COMPILE_DEFINITIONS` enthält `PHASE10_DEMO_VORHANDEN=1` |
 | `craft_package_deploy(... ROOT "")` auf die zweite Sonde | weder Include-Pfad noch Define — ein fehlendes Paket lässt das Target unberührt |
 
+### 2.7 Laufzeitdateien einer Exe
+
+Verwendet zwei ausführbare Dateien außerhalb von `ALL` (`_craft_phase10_exe`, `_craft_phase10_exe_plain`), Quelle `<build>/phase10/main.cpp`.
+
+| Prüfung | Erwartet |
+|---------|----------|
+| `_apply_archive_external_to_target()` auf `_craft_phase10_exe` | Target `_craft_phase10_exe_deploy_phase10demo` existiert |
+| | `_craft_phase10_exe` hängt davon ab (`MANUALLY_ADDED_DEPENDENCIES`) |
+| dasselbe mit `{ "runtime": false }` auf `_craft_phase10_exe_plain` | kein Deploy-Target |
+
+Die Kopie selbst läuft erst beim Bauen: `cmake --build <build> --target _craft_phase10_exe`.
+
 ---
 
 ## 3. Erfolgs-Flag
@@ -133,4 +145,5 @@ set(PHASE10_TEST_PASSED TRUE CACHE BOOL "Phase 10 Test passed" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.0.0** | **2026-10-09** | **Initial (CMakeCraft v0.10.0)** |
+| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: Test 7 (§2.7) — Deploy-Target für Laufzeitdateien** |
+| 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0) |

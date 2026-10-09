@@ -603,6 +603,7 @@ function(_create_app_tests CTX)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_DEPENDENCIES _t_dependencies)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_EXTERNALS _t_externals)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_EXTERNAL_OPTIONS _t_external_options)
+        ctx_get(${CTX} TESTS_TARGET_${_t_idx}_COMPILE_OPTIONS _t_compile_options)
         ctx_get(${CTX} TESTS_TARGET_${_t_idx}_PARALLEL _t_parallel)
         
         # Check individual skip
@@ -647,6 +648,7 @@ function(_create_app_tests CTX)
             "${_t_external_options}"
             "${_name}"
             "${_t_parallel}"
+            "${_t_compile_options}"
         )
         
         dbg(${DBG_COMMON} "  Created: ${_target_name} (${_t_type}, ${_effective_framework})" ID APPS)
@@ -659,7 +661,7 @@ endfunction()
 # _create_app_test_target - Helper to create a single test target
 # ==============================================================================
 #[[
-    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL)
+    _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL COMPILE_OPTIONS)
 
     Internal helper function to create a test executable.
 
@@ -676,8 +678,10 @@ endfunction()
                            EXTRA_EXTERNALS (not applied to FRAMEWORK)
         APP_NAME         - Parent app name (for folder organization)
         PARALLEL         - TRUE to allow parallel execution, FALSE for serial
+        COMPILE_OPTIONS  - Compiler flags for this test target only
+                           (semicolon-separated, PRIVATE)
 ]]
-function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL)
+function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK TIMEOUT LABELS EXTRA_EXTERNALS EXTERNAL_OPTIONS APP_NAME PARALLEL COMPILE_OPTIONS)
     
     # --------------------------------------------------------------------------
     # Collect Sources (via SourceCollect.cmake)
@@ -788,7 +792,13 @@ function(_create_app_test_target TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FR
     apply_warnings(${TARGET_NAME})
     apply_compiler_options(${TARGET_NAME})
     setup_output_dirs(${TARGET_NAME})
-    
+
+    # Per-target compile options from tests.targets[].compile_options
+    if(COMPILE_OPTIONS)
+        target_compile_options(${TARGET_NAME} PRIVATE ${COMPILE_OPTIONS})
+        dbg(${DBG_RARE} "    Compile Options: ${COMPILE_OPTIONS}" ID APPS)
+    endif()
+
     # --------------------------------------------------------------------------
     # CTest Registration
     # --------------------------------------------------------------------------

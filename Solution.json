@@ -176,7 +176,8 @@
               "path": "tests/unit/UnitTests",
               "timeout": 30,
               "labels": [ "unit", "demo", "fast" ],
-              "dependencies": [ "BasicLogger" ]
+              "dependencies": [ "BasicLogger" ],
+              "compile_options": [ "$<$<CXX_COMPILER_ID:MSVC>:/bigobj>" ]
             },
             {
               "name": "IntegrationTests",

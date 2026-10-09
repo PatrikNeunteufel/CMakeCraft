@@ -221,6 +221,7 @@ ctx_get(APP_0 RUNNER_TYPE _type)
 | `TESTS_TARGET_{n}_DEPENDENCIES` | List | `targets[].dependencies[]` | `[]` |
 | `TESTS_TARGET_{n}_EXTERNALS` | List | `targets[].externals[]` | `[]` |
 | `TESTS_TARGET_{n}_EXTERNAL_OPTIONS` | JSON | `targets[].external_options` | `{}` |
+| `TESTS_TARGET_{n}_COMPILE_OPTIONS` | Liste | `targets[].compile_options` | `""` |
 | `TESTS_TARGET_{n}_PARALLEL` | Bool | `targets[].parallel` | Typ-abhängig |
 
 Die Typ-abhängigen Defaults (Timeout, Labels, Parallel) liefert `_get_test_type_defaults()`; die Tabelle steht in [Solution_Schema § 9.9](../../references/Solution_Schema.md#99-test-typen-und-defaults).
@@ -387,6 +388,7 @@ AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nich
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **0.8.0** | **2026-10-09** | **Neuer Key TESTS_TARGET_{n}_COMPILE_OPTIONS (§ 5.6): `targets[].compile_options` wird gesammelt (CMakeCraft v0.11.0)** |
 | **0.7.4** | **2026-10-05** | **Neuer Key TESTS_TARGET_{n}_EXTERNAL_OPTIONS (§ 5.6): `targets[].external_options` wird gesammelt — bisher wurde der Schlüssel am App-Test ignoriert** |
 | **0.7.3** | **2026-07-20** | **Test-Keys auf tests.targets[]-Stand gebracht (§ 5.5/5.6): TESTS_TARGET_{n}_*-Keys inkl. neuem DEPENDENCIES-Key dokumentiert, altes tests.unit/tests.integration-Schema entfernt; Beispiel 6.2 und Fehlerliste (§ 7) korrigiert (E400 statt E401, E303/E304, W401/W402)** |
 | 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS hinzugefügt |

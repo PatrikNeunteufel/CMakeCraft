@@ -1,6 +1,6 @@
 # Handler.cmake — Archive External Handler
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Datum:** 2026-10-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Handler_cmake.md](../../../../../en/guide/module/externals/archive/Handler_cmake.md)  
 > **Modul:** [cmake/externals/archive/Handler.cmake](../../../../../../cmake/externals/archive/Handler.cmake)  
-> **Modul-Version:** 1.0.0
+> **Modul-Version:** 1.1.0
 
 ---
 
@@ -105,7 +105,7 @@ _handle_archive_external(EXT_NAME EXT_JSON)
 | `platforms` | array | `[]` (= alle) | `windows`, `linux`, `macos`, `unix`; auf jeder anderen Plattform fehlt das External |
 | `include_dirs` | array | `[]` | Include-Verzeichnisse innerhalb des Pakets |
 | `define` | string | "" | Compile-Definition `<define>=1` auf jedem Target |
-| `runtime` | object | `{}` | `{ "files": [...], "dirs": [...] }` — wird neben jede ausführbare Datei kopiert, die das External nennt |
+| `runtime` | object | `{}` | `{ "files": [...], "dirs": [...] }` — wird neben jede ausführbare Datei kopiert, die das External nennt; das Target `<Exe>_deploy_<External>` kopiert bei jedem Build |
 
 **Setzt:**
 
@@ -269,4 +269,5 @@ Vor W304 gibt `craft_package_fetch()` eine eigene Warnung mit den Gründen aus (
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.0.0** | **2026-10-09** | **Initial (CMakeCraft v0.10.0): External-Art `archive`, E220, W304** |
+| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: gibt den Namen des Externals als `NAME` an `craft_package_deploy()` — das Deploy-Target heißt `<Exe>_deploy_<External>`** |
+| 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): External-Art `archive`, E220, W304 |

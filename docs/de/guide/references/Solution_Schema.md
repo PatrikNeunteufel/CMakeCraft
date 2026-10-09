@@ -407,7 +407,7 @@ neben die Exe.
 | `platforms` | – | string[] | Plattform-Filter; sonst fehlt das External ohne Warnung |
 | `include_dirs` | – | string[] | Include-Ordner im Paket |
 | `define` | – | string | Define `<Name>=1` am Target |
-| `runtime` | – | object | `files` und `dirs`, die neben jede Exe kopiert werden |
+| `runtime` | – | object | `files` und `dirs`, die neben jede Exe kopiert werden (bei jedem Bau, über das Ziel `<Exe>_deploy_<External>`) |
 
 Je Target abschaltbar: `"external_options": { "sichttest": { "runtime": false } }`.
 Lässt sich das Paket nicht beziehen, gibt es W304 und die Targets bauen ohne es.
@@ -854,11 +854,19 @@ Jedes Element definiert ein Test-Target.
 | `dependencies` | string[] | — | `[]` | Interne Libraries (direkt gelinkt, zusätzlich zu `{AppName}.Core`) |
 | `externals` | string[] | — | `[]` | Zusätzliche Externals |
 | `external_options` | object | — | `{}` | Per-External Options für die Einträge in `externals` |
+| `compile_options` | string[] | — | `[]` | Compiler-Flags nur für dieses Test-Target (PRIVATE) |
 | `parallel` | bool | — | Typ-abhängig | Parallele Ausführung |
 
 `external_options` wirkt nur auf Externals, die in `externals` desselben Test-Targets stehen.
 Das Test-Framework (`framework`) wird immer ohne Optionen angewandt — ein Eintrag wie
 `external_options.doctest` bleibt ohne Wirkung.
+
+`compile_options` gilt für jeden Compiler, mit dem das Projekt baut. Ein Flag, das nur einer
+versteht, steht in einer Generator Expression:
+
+```json
+"compile_options": [ "$<$<CXX_COMPILER_ID:MSVC>:/bigobj>" ]
+```
 
 ### 9.9 Test-Typen und Defaults
 
@@ -1186,6 +1194,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **0.9.0** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` für apps[].tests.targets[] (§9.8); Laufzeitdateien eines Archive Externals kopiert ein eigenes Ziel bei jedem Bau (§5.8)** |
 | **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: Block `packages`, Archive Externals (§5.8), `output_name` und `defines` für libraries[], `{version}` in `defines`. Berichtigt: Hook-Pfade heißen `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` eines System Externals ist eine Mindestversion ohne Operator (§5.4), Fehlertabelle §12.1 (E216–E220) und W302 an den Code angeglichen** |
 | **0.7.4** | **2026-10-05** | **Fix: `external_options` für apps[].tests.targets[] (§9.8) wird angewandt — bisher bekam das Test-Target jedes External mit leeren Optionen. Vorhandene Einträge werden damit erstmals wirksam. Das Test-Framework bleibt ohne Optionen** |
 | 0.7.3 | 2026-07-20 | Neu: `dependencies` für apps[].tests.targets[] (§9.8) — interne Libraries werden direkt ans Test-Target gelinkt (E101 bei unbekannter Dependency). Vorher wurde der Key ignoriert |
