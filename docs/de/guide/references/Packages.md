@@ -168,6 +168,10 @@ vererben sich nicht an Targets, die davon abhängen. Ein Test-Target, das einen 
 über einen öffentlichen Kopf seiner Bibliothek einbindet, muss das External deshalb selbst
 nennen — oder die Bibliothek hält die Einbindung in einer `.cpp`.
 
+Die Laufzeitdateien werden **beim Bau der Exe** kopiert, nicht beim Configure. Nach einem
+Wechsel der Paketversion bleibt die alte Kopie neben der Exe liegen, bis die Exe neu gebaut
+wird.
+
 Abschalten der Kopien für ein einzelnes Target:
 
 ```json
@@ -198,6 +202,10 @@ die Targets bekommen weder Include-Pfad noch Define noch Kopien. Der Quelltext u
 | 4 | `<NAME>_FALLBACK_PATHS` | Ordner, in denen dieselbe Archivdatei liegt; gleiche Prüfsumme |
 
 Ist das Paket einmal im Zwischenspeicher, braucht kein weiterer Configure das Netz.
+
+Der Zwischenspeicher gilt über die **Version**, nicht über die Prüfsumme. Wird ein Paket unter
+derselben Version neu geschnürt, bleibt der alte Inhalt liegen, bis der Ordner
+`.externals/<name>/<version>/` gelöscht ist.
 
 ---
 

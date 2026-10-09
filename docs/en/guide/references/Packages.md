@@ -168,6 +168,10 @@ not inherited by targets depending on it. A test target that includes a header o
 through a public header of its library must therefore name the external itself — or the library
 keeps the include inside a `.cpp`.
 
+The runtime files are copied **when the executable is built**, not at configure time. After a
+change of the package version the old copy stays next to the executable until the executable
+is rebuilt.
+
 Switching the copies off for a single target:
 
 ```json
@@ -198,6 +202,9 @@ define:
 | 4 | `<NAME>_FALLBACK_PATHS` | folders holding the same archive file; same checksum |
 
 Once the package is in the cache, no further configure needs the network.
+
+The cache is valid by **version**, not by checksum. If a package is rebuilt under the same
+version, the old content stays until the folder `.externals/<name>/<version>/` is deleted.
 
 ---
 
