@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.11.0
-# Date:         2026-10-09
+# Version:      0.11.1
+# Date:         2026-10-11
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -28,6 +28,11 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.11.1 (2026-10-11): the deploy target of an archive external writes no
+#                        deploy recipe file under the Visual Studio generators
+#                        (MSBuild warning on every build in projects that
+#                        redirect IntDir through Directory.Build.targets).
+#                        CMakeCraftPackage.cmake 1.1.1.
 #   v0.11.0 (2026-10-09): runtime files of an archive external are copied by a
 #                        target of their own (<executable>_deploy_<external>)
 #                        that the executable depends on, no longer as a

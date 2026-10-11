@@ -247,6 +247,14 @@ if(NOT "_craft_phase10_exe_deploy_phase10demo" IN_LIST _p10_exe_deps)
     cmake_fatal("ASSERT" "_craft_phase10_exe should depend on its deploy target, got: ${_p10_exe_deps}")
 endif()
 
+# No deploy recipe file under the Visual Studio generators (MSBuild warning in
+# projects that redirect IntDir)
+get_target_property(_p10_recipe _craft_phase10_exe_deploy_phase10demo
+    VS_GLOBAL_GenerateDesktopDeployRecipeFile)
+if(NOT "${_p10_recipe}" STREQUAL "false")
+    cmake_fatal("ASSERT" "Deploy target should switch off the deploy recipe file, got: ${_p10_recipe}")
+endif()
+
 if(TARGET _craft_phase10_exe_plain_deploy_phase10demo)
     cmake_fatal("ASSERT" "\"runtime\": false must not create a deploy target")
 endif()

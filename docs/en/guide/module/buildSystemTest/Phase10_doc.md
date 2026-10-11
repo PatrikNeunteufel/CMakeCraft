@@ -1,7 +1,7 @@
 # phase10.cmake — Module Documentation
 
-> **Version:** 1.1.0  
-> **Date:** 2026-10-09  
+> **Version:** 1.1.1  
+> **Date:** 2026-10-11  
 > **Type:** ModuleDoc  
 > **Path:** `cmake/buildSystemTest/phase10.cmake`  
 > **Status:** Stable  
@@ -117,6 +117,7 @@ Uses two executables outside `ALL` (`_craft_phase10_exe`, `_craft_phase10_exe_pl
 |-------|----------|
 | `_apply_archive_external_to_target()` on `_craft_phase10_exe` | target `_craft_phase10_exe_deploy_phase10demo` exists |
 | | `_craft_phase10_exe` depends on it (`MANUALLY_ADDED_DEPENDENCIES`) |
+| | `VS_GLOBAL_GenerateDesktopDeployRecipeFile` on the deploy target is `false` |
 | the same with `{ "runtime": false }` on `_craft_phase10_exe_plain` | no deploy target |
 
 The copy itself only runs when building: `cmake --build <build> --target _craft_phase10_exe`.
@@ -145,5 +146,6 @@ set(PHASE10_TEST_PASSED TRUE CACHE BOOL "Phase 10 Test passed" FORCE)
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: test 7 (§2.7) — deploy target for runtime files** |
+| **1.1.1** | **2026-10-11** | **CMakeCraft v0.11.1: test 7 checks that the deploy target switches off the deploy recipe file** |
+| 1.1.0 | 2026-10-09 | CMakeCraft v0.11.0: test 7 (§2.7) — deploy target for runtime files |
 | 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0) |

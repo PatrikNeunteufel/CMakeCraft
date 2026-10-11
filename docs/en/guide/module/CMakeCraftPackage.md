@@ -1,7 +1,7 @@
 # CMakeCraftPackage.cmake — Fetch and Deploy Prebuilt Packages
 
-> **Version:** 1.1.0  
-> **Date:** 2026-10-09  
+> **Version:** 1.1.1  
+> **Date:** 2026-10-11  
 > **Type:** ModuleDoc  
 > **Status:** Active  
 > **Based on:** ModuleDoc v0.5  
@@ -9,7 +9,7 @@
 > **Language:** English  
 > **German:** [CMakeCraftPackage.md](../../../de/guide/module/CMakeCraftPackage.md)  
 > **Module:** [CMakeCraftPackage.cmake](../../../../CMakeCraftPackage.cmake)  
-> **Module Version:** 1.1.0 (version of the file itself, independent of the CMakeCraft version)
+> **Module Version:** 1.1.1 (version of the file itself, independent of the CMakeCraft version)
 
 ---
 
@@ -168,6 +168,7 @@ Copies go to `$<TARGET_FILE_DIR:target>`, i.e. per configuration, and only when 
 **The deploy target:** The copies are made by a target of its own (`add_custom_target`, not in `ALL`) that the executable depends on (`add_dependencies`). It therefore runs on every build of the executable — whether or not the executable itself is compiled or linked. A `POST_BUILD` step (up to 1.0.0) only ran on linking; after a change of the pinned version the old files stayed.
 
 - The destination directory is created before copying (the target runs before the first link).
+- Under the Visual Studio generators the target writes no deploy recipe file (`VS_GLOBAL_GenerateDesktopDeployRecipeFile` = `false`, since 1.1.1). MSBuild fixes its path from `IntDir` before `Directory.Build.targets` is read; a project that redirects `IntDir` there otherwise got a warning on every build that the `.recipe` file could not be found (`Microsoft.CppBuild.targets`, task `GenerateDesktopDeployRecipe`). The file serves remote deployment when debugging remotely; the target deploys nothing.
 - If the name is taken (second call for the same target and name), `_2`, `_3`, … is appended.
 - The target takes over the IDE folder (`FOLDER`) of the executable; it is read at the end of the directory (`cmake_language(DEFER)`), because the caller often sets it afterwards.
 - The file sets CMP0112 to NEW for its functions: `$<TARGET_FILE_DIR:...>` in the deploy target must not create a dependency on the executable — the dependency runs the other way.
@@ -306,5 +307,6 @@ The file uses no error codes of the CMakeCraft core.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: craft_package_deploy copies through a target of its own, `<target>_deploy_<name>`, instead of `POST_BUILD` — the copy runs on every build, also without linking again. New argument `NAME`** |
+| **1.1.1** | **2026-10-11** | **CMakeCraft v0.11.1: the deploy target writes no deploy recipe file under the Visual Studio generators — no more MSBuild warning in projects that redirect `IntDir` through `Directory.Build.targets`** |
+| 1.1.0 | 2026-10-09 | CMakeCraft v0.11.0: craft_package_deploy copies through a target of its own, `<target>_deploy_<name>`, instead of `POST_BUILD` — the copy runs on every build, also without linking again. New argument `NAME` |
 | 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): craft_package_fetch, craft_package_deploy |

@@ -1,7 +1,7 @@
 # CMakeCraftPackage.cmake — Vorgebaute Pakete beziehen und ausliefern
 
-> **Version:** 1.1.0  
-> **Datum:** 2026-10-09  
+> **Version:** 1.1.1  
+> **Datum:** 2026-10-11  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [CMakeCraftPackage.md](../../../en/guide/module/CMakeCraftPackage.md)  
 > **Modul:** [CMakeCraftPackage.cmake](../../../../CMakeCraftPackage.cmake)  
-> **Modul-Version:** 1.1.0 (eigene Version der Datei, unabhängig von der CMakeCraft-Version)
+> **Modul-Version:** 1.1.1 (eigene Version der Datei, unabhängig von der CMakeCraft-Version)
 
 ---
 
@@ -168,6 +168,7 @@ Kopiert wird nach `$<TARGET_FILE_DIR:target>`, also je Konfiguration, und nur be
 **Das Deploy-Target:** Die Kopien macht ein eigenes Target (`add_custom_target`, nicht in `ALL`), von dem die ausführbare Datei abhängt (`add_dependencies`). Es läuft damit bei jedem Build der ausführbaren Datei — unabhängig davon, ob sie selbst übersetzt oder gelinkt wird. Ein `POST_BUILD`-Schritt (bis 1.0.0) lief nur beim Linken; nach einem Wechsel der gepinnten Version blieben die alten Dateien liegen.
 
 - Der Zielordner wird vor dem Kopieren angelegt (das Target läuft vor dem ersten Linken).
+- Unter den Visual-Studio-Generatoren schreibt das Target keine Deploy-Recipe-Datei (`VS_GLOBAL_GenerateDesktopDeployRecipeFile` = `false`, seit 1.1.1). MSBuild legt deren Pfad aus `IntDir` fest, bevor `Directory.Build.targets` gelesen wird; ein Projekt, das `IntDir` dort umleitet, bekam sonst je Build die Warnung „… .recipe konnte nicht gefunden werden“ (`Microsoft.CppBuild.targets`, Aufgabe `GenerateDesktopDeployRecipe`). Die Datei dient der Fernbereitstellung beim Remote-Debuggen; das Target stellt nichts bereit.
 - Ist der Name schon vergeben (zweiter Aufruf für dasselbe Target und denselben Namen), wird `_2`, `_3`, … angehängt.
 - Das Target übernimmt den IDE-Ordner (`FOLDER`) der ausführbaren Datei; gelesen wird er am Ende des Verzeichnisses (`cmake_language(DEFER)`), weil der Aufrufer ihn oft erst danach setzt.
 - Die Datei setzt für ihre Funktionen CMP0112 auf NEW: `$<TARGET_FILE_DIR:...>` im Deploy-Target darf keine Abhängigkeit auf die ausführbare Datei erzeugen — sie läuft in der Gegenrichtung.
@@ -306,5 +307,6 @@ Die Datei verwendet keine Fehlercodes des CMakeCraft-Kerns.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: craft_package_deploy kopiert über ein eigenes Target `<target>_deploy_<name>` statt `POST_BUILD` — die Kopie läuft bei jedem Build, auch ohne neues Linken. Neues Argument `NAME`** |
+| **1.1.1** | **2026-10-11** | **CMakeCraft v0.11.1: das Deploy-Target schreibt unter den Visual-Studio-Generatoren keine Deploy-Recipe-Datei — keine MSBuild-Warnung mehr in Projekten, die `IntDir` über `Directory.Build.targets` umleiten** |
+| 1.1.0 | 2026-10-09 | CMakeCraft v0.11.0: craft_package_deploy kopiert über ein eigenes Target `<target>_deploy_<name>` statt `POST_BUILD` — die Kopie läuft bei jedem Build, auch ohne neues Linken. Neues Argument `NAME` |
 | 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): craft_package_fetch, craft_package_deploy |

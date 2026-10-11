@@ -1,7 +1,7 @@
 # phase10.cmake — Modul-Dokumentation
 
-> **Version:** 1.1.0  
-> **Datum:** 2026-10-09  
+> **Version:** 1.1.1  
+> **Datum:** 2026-10-11  
 > **Typ:** ModuleDoc  
 > **Pfad:** `cmake/buildSystemTest/phase10.cmake`  
 > **Status:** Stabil  
@@ -117,6 +117,7 @@ Verwendet zwei ausführbare Dateien außerhalb von `ALL` (`_craft_phase10_exe`, 
 |---------|----------|
 | `_apply_archive_external_to_target()` auf `_craft_phase10_exe` | Target `_craft_phase10_exe_deploy_phase10demo` existiert |
 | | `_craft_phase10_exe` hängt davon ab (`MANUALLY_ADDED_DEPENDENCIES`) |
+| | `VS_GLOBAL_GenerateDesktopDeployRecipeFile` am Deploy-Target ist `false` |
 | dasselbe mit `{ "runtime": false }` auf `_craft_phase10_exe_plain` | kein Deploy-Target |
 
 Die Kopie selbst läuft erst beim Bauen: `cmake --build <build> --target _craft_phase10_exe`.
@@ -145,5 +146,6 @@ set(PHASE10_TEST_PASSED TRUE CACHE BOOL "Phase 10 Test passed" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: Test 7 (§2.7) — Deploy-Target für Laufzeitdateien** |
+| **1.1.1** | **2026-10-11** | **CMakeCraft v0.11.1: Test 7 prüft, dass das Deploy-Target die Deploy-Recipe-Datei abschaltet** |
+| 1.1.0 | 2026-10-09 | CMakeCraft v0.11.0: Test 7 (§2.7) — Deploy-Target für Laufzeitdateien |
 | 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0) |

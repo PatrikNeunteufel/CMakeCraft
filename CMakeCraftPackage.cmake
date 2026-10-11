@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      1.1.0   (version of THIS file, independent of CMakeCraft's own)
-# Date:         2026-10-09
+# Version:      1.1.1   (version of THIS file, independent of CMakeCraft's own)
+# Date:         2026-10-11
 #
 # Description:
 #   Fetches a prebuilt package (headers, runtime files, tools) in a pinned
@@ -25,6 +25,10 @@
 #                        [NAME <name>] [NO_RUNTIME])
 #
 # Changelog:
+#   1.1.1 (2026-10-11): the deploy target writes no deploy recipe file (Visual
+#                       Studio generators). A project that redirects IntDir
+#                       through Directory.Build.targets got an MSBuild warning
+#                       from the deploy target on every build.
 #   1.1.0 (2026-10-09): runtime files are copied by a target of their own
 #                       (<target>_deploy_<name>) that the executable depends
 #                       on, no longer by a POST_BUILD step of the executable.
@@ -58,7 +62,7 @@
 
 include_guard(GLOBAL)
 
-set(CMAKECRAFT_PACKAGE_VERSION "1.1.0")
+set(CMAKECRAFT_PACKAGE_VERSION "1.1.1")
 
 if(CMAKE_VERSION VERSION_LESS 3.26)
     message(FATAL_ERROR
@@ -400,6 +404,13 @@ function(craft_package_deploy)
         COMMENT "Deploying package files next to ${_cpd_TARGET}"
         VERBATIM)
     add_dependencies("${_cpd_TARGET}" "${_deploy}")
+
+    # Visual Studio generators: no deploy recipe file for this target. MSBuild
+    # fixes its path from IntDir before Directory.Build.targets is read; a
+    # project that redirects IntDir there never gets the folder, and the
+    # target warns on every build. The target deploys nothing remotely.
+    set_target_properties("${_deploy}" PROPERTIES
+        VS_GLOBAL_GenerateDesktopDeployRecipeFile "false")
 
     # IDE folder of the executable - read at the end of the directory, because
     # the caller may set it after this call. EVAL: a deferred call evaluates
