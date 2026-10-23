@@ -2,8 +2,8 @@
 # =================================
 # Compiler-specific options and code quality tools
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-10-23
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -19,6 +19,7 @@
 #   - Clang-Tidy integration
 #   - NO_EXCEPTIONS, NO_RTTI support
 #   - Per-target overrides
+#   - MSVC multi-processor compilation (/MP<n> from settings.msvc)
 #
 # Cache variables:
 #   - ENABLE_CLANG_TIDY           (ON/OFF, Default: OFF)
@@ -178,7 +179,20 @@ function(apply_compiler_options TARGET_NAME)
         else()
             dbg(${DBG_RARE} "  RTTI: enabled" ID CO_DBG)
         endif()
-        
+
+        # Multi-processor compilation (settings.msvc.parallel_compile).
+        # MSVC only - clang-cl also sets MSVC but is left alone. Limited to
+        # C/C++ so the resource compiler never sees the flag.
+        get_property(_parallel GLOBAL PROPERTY SOLUTION_MSVC_PARALLEL_COMPILE)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND _parallel GREATER 1)
+            target_compile_options(${TARGET_NAME} PRIVATE
+                $<$<COMPILE_LANGUAGE:C,CXX>:/MP${_parallel}>
+            )
+            dbg(${DBG_NORMAL} "  Parallel compile: /MP${_parallel}" ID CO_DBG)
+        else()
+            dbg(${DBG_RARE} "  Parallel compile: off" ID CO_DBG)
+        endif()
+
     # =========================================================================
     # 3. GCC/Clang-specific options
     # =========================================================================

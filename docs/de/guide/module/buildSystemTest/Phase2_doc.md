@@ -1,7 +1,7 @@
 # phase2.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.1.0  
+> **Datum:** 2026-10-23  
 > **Typ:** ModuleDoc  
 > **Pfad:** `cmake/buildSystemTest/phase2.cmake`  
 > **Status:** Stabil  
@@ -52,6 +52,7 @@
 | `SOLUTION_DEFAULT_LIBRARY_TYPE` | ✅ | STATIC |
 | `SOLUTION_DEFAULT_EXECUTABLE_TYPE` | ✅ | CONSOLE |
 | `SOLUTION_SOURCE_MODE` | ✅ | auto |
+| `SOLUTION_MSVC_PARALLEL_COMPILE` | ✅ | 8 (Wert aus `settings.msvc.parallel_compile`) |
 
 ### 2.3 CMake Cache Variables
 
@@ -102,5 +103,6 @@ set(PHASE2_TEST_PASSED TRUE CACHE BOOL "Phase 2 Test passed" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| **1.1.0** | **2026-10-23** | **Prüft `SOLUTION_MSVC_PARALLEL_COMPILE` (CMakeCraft v0.12.0)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-05 | Initial |

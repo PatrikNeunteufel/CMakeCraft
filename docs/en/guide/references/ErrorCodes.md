@@ -1,7 +1,7 @@
 # ErrorCodes — Reference
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.4.0  
+> **Date:** 2026-10-23  
 > **Type:** Reference  
 > **Status:** Stable  
 > **Target Audience:** Alle Entwickler  
@@ -109,6 +109,26 @@ NN = Nummer (2 Ziffern)
 **Lösung:**
 - Stelle sicher, dass `Solution.json` im Projekt-Root liegt
 - Prüfe Schreibweise (Groß-/Kleinschreibung)
+
+---
+
+#### E004 — Invalid value in the settings block
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.12.0 |
+
+**Message:**
+```
+[E004] Solution.json: settings.msvc.parallel_compile must be a non-negative integer, got 'many'
+```
+
+**Cause:** A field in the `settings` block has a value CMakeCraft cannot use.
+
+**Solution:**
+- Give `settings.msvc.parallel_compile` as an integer ≥ 0 (`0` or `1` = off), see
+  [Solution_Schema.md §4.4](Solution_Schema.md#44-msvc)
 
 ---
 
@@ -850,6 +870,7 @@ runtime files.
 |------|-----------|--------------|
 | E001 | JSON | Requiredfeld fehlt |
 | E002 | JSON | Solution.json nicht gefunden |
+| E004 | JSON | Invalid value in the settings block |
 | E010 | JSON | External nicht im externals-Block |
 | E012 | JSON | Kein/mehrere Source-Felder |
 | E013 | External | Geskipptes External verwendet |
@@ -938,7 +959,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **1.3.0** | **2026-10-09** | **E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0)** |
+| **1.4.0** | **2026-10-23** | **E004 added (invalid value in the settings block, CMakeCraft v0.12.0)** |
+| 1.3.0 | 2026-10-09 | E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0) |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching)** |
 | 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Alle Codes aus v1.4 |

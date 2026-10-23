@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.3.0  
-> **Datum:** 2026-10-09  
+> **Version:** 1.4.0  
+> **Datum:** 2026-10-23  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -129,6 +129,26 @@ NN = Nummer (2 Ziffern)
 **Lösung:**
 - `schemaVersion` in Solution.json auf kompatible Version setzen (z.B. `"0.6"`)
 - Oder Build-System aktualisieren, wenn neuere Schema-Version benötigt wird
+
+---
+
+#### E004 — Ungültiger Wert im settings-Block
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.12.0 |
+
+**Meldung:**
+```
+[E004] Solution.json: settings.msvc.parallel_compile must be a non-negative integer, got 'viele'
+```
+
+**Ursache:** Ein Feld im `settings`-Block hat einen Wert, den CMakeCraft nicht verwenden kann.
+
+**Lösung:**
+- `settings.msvc.parallel_compile` als ganze Zahl ≥ 0 angeben (`0` oder `1` = aus), siehe
+  [Solution_Schema.md §4.4](Solution_Schema.md#44-msvc)
 
 ---
 
@@ -895,6 +915,7 @@ Define noch Laufzeitdateien.
 | E001 | JSON | Pflichtfeld fehlt |
 | E002 | JSON | Solution.json nicht gefunden |
 | E003 | JSON | Schema-Version inkompatibel (Major) |
+| E004 | JSON | Ungültiger Wert im settings-Block |
 | E010 | JSON | External nicht im externals-Block |
 | E012 | JSON | Kein/mehrere Source-Felder |
 | E013 | External | Geskipptes External verwendet |
@@ -984,8 +1005,9 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.4.0** | **2026-10-23** | **E004 hinzugefügt (ungültiger Wert im settings-Block, CMakeCraft v0.12.0)** |
 | **1.3.0** | **2026-10-09** | **E220, W112 und W304 hinzugefügt (Pakete und Archive Externals, CMakeCraft v0.10.0)** |
-| **1.2.0** | **2026-08-08** | **E219 und W303 (unvollständiger Klon im Cache) hinzugefügt; E218 nachdokumentiert; W302-Beschreibung auf den Code korrigiert (beschrieb bis dahin „Hook-Wiederverwendung")** |
+| 1.2.0 | 2026-08-08 | E219 und W303 (unvollständiger Klon im Cache) hinzugefügt; E218 nachdokumentiert; W302-Beschreibung auf den Code korrigiert (beschrieb bis dahin „Hook-Wiederverwendung") |
 | 1.1.0 | 2025-12-28 | E003 (Schema Major inkompatibel), W101/W102 (Schema Minor Warnungen) hinzugefügt |
 | 1.0.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching) |
 | 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |

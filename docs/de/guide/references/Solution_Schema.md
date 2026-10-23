@@ -127,6 +127,9 @@ Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
     },
     "sources": {
         "mode": "auto"
+    },
+    "msvc": {
+        "parallel_compile": 8
     }
 }
 ```
@@ -151,6 +154,22 @@ Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
 | Feld | Default | Beschreibung |
 |------|---------|--------------|
 | `mode` | `"auto"` | Source-Collection (explicit, glob, auto) |
+
+### 4.4 msvc
+
+Einstellungen, die nur der MSVC-Compiler (`cl.exe`) sieht — clang-cl, Clang und GCC bleiben
+unberührt. Seit CMakeCraft v0.12.0.
+
+| Feld | Default | Beschreibung |
+|------|---------|--------------|
+| `parallel_compile` | 8 | Zahl paralleler Compiler-Prozesse je Ziel (`/MP<n>`). `0` oder `1` = aus. Ganze Zahl ≥ 0, sonst E004 |
+
+`parallel_compile` gilt für jedes Ziel, das CMakeCraft erzeugt: libraries, executables, apps
+(Core, Runner und `tests.targets[]`) und tests. Ein Feld je Ziel gibt es nicht. Wirkung hat
+`/MP` unter den Visual-Studio-Generatoren: MSBuild kompiliert die Dateien eines Ziels sonst
+nacheinander auf einem Kern. Ninja startet ohnehin je Datei einen eigenen Compiler.
+Verträgt ein Ziel `/MP` nicht (`#import`, `/Gm`), schaltet `"parallel_compile": 0` es für die
+Solution ab.
 
 ---
 
@@ -1194,6 +1213,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **0.10.0** | **2026-10-23** | **CMakeCraft v0.12.0: Block `settings.msvc` mit `parallel_compile` (§4.4, Vorgabe 8), E004** |
 | **0.9.0** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` für apps[].tests.targets[] (§9.8); Laufzeitdateien eines Archive Externals kopiert ein eigenes Ziel bei jedem Bau (§5.8)** |
 | **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: Block `packages`, Archive Externals (§5.8), `output_name` und `defines` für libraries[], `{version}` in `defines`. Berichtigt: Hook-Pfade heißen `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` eines System Externals ist eine Mindestversion ohne Operator (§5.4), Fehlertabelle §12.1 (E216–E220) und W302 an den Code angeglichen** |
 | **0.7.4** | **2026-10-05** | **Fix: `external_options` für apps[].tests.targets[] (§9.8) wird angewandt — bisher bekam das Test-Target jedes External mit leeren Optionen. Vorhandene Einträge werden damit erstmals wirksam. Das Test-Framework bleibt ohne Optionen** |

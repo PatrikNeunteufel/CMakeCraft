@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.11.1
-# Date:         2026-10-11
+# Version:      0.12.0
+# Date:         2026-10-23
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -28,6 +28,13 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.12.0 (2026-10-23): MSVC compiles the files of a target in parallel
+#                        (/MP<n>). New field settings.msvc.parallel_compile,
+#                        default 8; 0 or 1 switch it off. Applies to every
+#                        target CMakeCraft creates (libraries, executables,
+#                        apps incl. their test targets, tests), only when the
+#                        compiler is MSVC - clang-cl, Clang and GCC unchanged.
+#                        New error code E004 (invalid value in settings).
 #   v0.11.1 (2026-10-11): the deploy target of an archive external writes no
 #                        deploy recipe file under the Visual Studio generators
 #                        (MSBuild warning on every build in projects that

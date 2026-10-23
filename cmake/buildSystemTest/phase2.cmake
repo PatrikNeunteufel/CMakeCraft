@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Module:       phase2.cmake
-# Version:      1.0.0
-# Date:         2025-12-05
+# Version:      1.1.0
+# Date:         2026-10-23
 # Path:         cmake/buildSystemTest/phase2.cmake
 # Part of:      CMake Architecture V2
 #
@@ -19,6 +19,7 @@
 #   - Settings are extracted correctly
 #   - Externals block is provided
 #   - Source mode is available (NEW in v0.1.0)
+#   - MSVC parallel compile is set, default 8 (NEW in v0.12.0)
 #
 # Based on:
 #   - master_concept v0.1
@@ -91,6 +92,16 @@ endif()
 if("${_source_mode}" STREQUAL "")
     cmake_fatal("ASSERT" "SOLUTION_SOURCE_MODE not set")
 endif()
+
+# settings.msvc.parallel_compile: the value from Solution.json, default 8
+get_property(_settings_json GLOBAL PROPERTY SOLUTION_SETTINGS_JSON)
+_json_get_object_or_empty("${_settings_json}" "msvc" _msvc_json)
+_json_get_number_or_default("${_msvc_json}" "parallel_compile" 8 _msvc_expected)
+get_property(_msvc_parallel GLOBAL PROPERTY SOLUTION_MSVC_PARALLEL_COMPILE)
+if(NOT "${_msvc_parallel}" STREQUAL "${_msvc_expected}")
+    cmake_fatal("ASSERT" "SOLUTION_MSVC_PARALLEL_COMPILE: expected '${_msvc_expected}', got '${_msvc_parallel}'")
+endif()
+dbg(${DBG_COMMON} "  MSVC_PARALLEL_COMPILE: ${_msvc_parallel}" ID PHASE2_TEST)
 
 dbg(${DBG_COMMON} "  CXX_STANDARD: ${_cxx_std}" ID PHASE2_TEST)
 dbg(${DBG_COMMON} "  C_STANDARD: ${_c_std}" ID PHASE2_TEST)

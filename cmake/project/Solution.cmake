@@ -2,8 +2,8 @@
 # ============================
 # Project configuration loader - reads Solution.json and sets global properties
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-10-23
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -29,6 +29,7 @@
 #   - SOLUTION_DEFAULT_LIBRARY_TYPE    (Global Property)
 #   - SOLUTION_DEFAULT_EXECUTABLE_TYPE (Global Property)
 #   - SOLUTION_SOURCE_MODE             (Global Property)
+#   - SOLUTION_MSVC_PARALLEL_COMPILE   (Global Property)
 #   - SOLUTION_EXTERNALS_CACHE_ROOT    (Global Property)
 #   - SOLUTION_EXTERNALS_UPDATE_POLICY (Global Property)
 #   - CMAKE_CXX_STANDARD               (Cache Variable)
@@ -260,6 +261,17 @@ else()
     set_property(GLOBAL PROPERTY SOLUTION_SOURCE_MODE "explicit")
 endif()
 
+# --- MSVC (NEW in v0.12.0) ---
+# parallel_compile: number of cl.exe processes per target (/MP<n>);
+# 0 or 1 = off. Missing block or field = 8.
+_json_get_object_or_empty("${_settings_obj}" "msvc" _msvc_obj)
+_json_get_number_or_default("${_msvc_obj}" "parallel_compile" 8 _msvc_parallel_compile)
+if(NOT "${_msvc_parallel_compile}" MATCHES "^[0-9]+$")
+    cmake_fatal("E004" "Solution.json: settings.msvc.parallel_compile must be a non-negative integer, got '${_msvc_parallel_compile}'")
+endif()
+set_property(GLOBAL PROPERTY SOLUTION_MSVC_PARALLEL_COMPILE "${_msvc_parallel_compile}")
+dbg(${DBG_RARE} "MSVC parallel compile: ${_msvc_parallel_compile}" ID SOLUTION)
+
 # ==============================================================================
 # Extract ExternalsPolicy Block
 # ==============================================================================
@@ -346,6 +358,8 @@ unset(_standards_obj)
 unset(_defaults_obj)
 unset(_sources_obj)
 unset(_source_mode)
+unset(_msvc_obj)
+unset(_msvc_parallel_compile)
 unset(_externals_policy_obj)
 unset(_externals_obj)
 unset(_libraries_json)

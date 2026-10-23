@@ -60,6 +60,8 @@ include_guard(GLOBAL)
         E0xx - JSON/Parsing
             E001 - Required field missing
             E002 - Solution.json not found
+            E003 - Schema version incompatible / invalid library type
+            E004 - Invalid value in settings block
             E010 - External not defined in externals block
             E012 - External: no/multiple source fields
         

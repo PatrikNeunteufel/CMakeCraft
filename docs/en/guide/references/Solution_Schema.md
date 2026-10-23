@@ -126,6 +126,9 @@ Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
     },
     "sources": {
         "mode": "auto"
+    },
+    "msvc": {
+        "parallel_compile": 8
     }
 }
 ```
@@ -150,6 +153,22 @@ Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
 | Feld | Default | Description |
 |------|---------|--------------|
 | `mode` | `"auto"` | Source-Collection (explicit, glob, auto) |
+
+### 4.4 msvc
+
+Settings seen only by the MSVC compiler (`cl.exe`) — clang-cl, Clang and GCC are left
+alone. Since CMakeCraft v0.12.0.
+
+| Field | Default | Description |
+|------|---------|--------------|
+| `parallel_compile` | 8 | Number of parallel compiler processes per target (`/MP<n>`). `0` or `1` = off. Integer ≥ 0, otherwise E004 |
+
+`parallel_compile` applies to every target CMakeCraft creates: libraries, executables, apps
+(core, runner and `tests.targets[]`) and tests. There is no per-target field. `/MP` takes
+effect under the Visual Studio generators: otherwise MSBuild compiles the files of a target
+one after another on a single core. Ninja starts a compiler per file anyway.
+If a target cannot use `/MP` (`#import`, `/Gm`), `"parallel_compile": 0` switches it off for
+the solution.
 
 ---
 
@@ -1193,6 +1212,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Changes |
 |---------|-------|------------|
+| **0.10.0** | **2026-10-23** | **CMakeCraft v0.12.0: block `settings.msvc` with `parallel_compile` (§4.4, default 8), E004** |
 | **0.9.0** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` for apps[].tests.targets[] (§9.8); runtime files of an archive external are copied by a target of its own on every build (§5.8)** |
 | **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: `packages` block, archive externals (§5.8), `output_name` and `defines` for libraries[], `{version}` in `defines`. Corrected: hook paths are `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` of a system external is a minimum version without operator (§5.4), error table §12.1 (E216–E220) and W302 aligned with the code** |
 | **0.7.4** | **2026-10-05** | **Fix: `external_options` for apps[].tests.targets[] (§9.8) is applied — until now the test target received every external with empty options. Existing entries take effect for the first time. The test framework stays without options** |

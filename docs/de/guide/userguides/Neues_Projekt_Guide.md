@@ -1,7 +1,7 @@
 # Neues Projekt mit CMakeCraft — Bedienungsanleitung
 
-> **Version:** 1.0.0
-> **Datum:** 2026-07-17
+> **Version:** 1.2.0
+> **Datum:** 2026-10-23
 > **Typ:** Guide
 > **Status:** Entwurf
 > **Zielgruppe:** Entwickler, die ein neues, eigenständiges Projekt-Repo auf Basis von CMakeCraft aufsetzen
@@ -91,7 +91,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.10.0")
+set(CMAKECRAFT_VERSION "v0.12.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -137,6 +137,11 @@ Die Solution.json ist das Herzstück — **was nicht drinsteht, existiert nicht*
   "apps": [ ]
 }
 ```
+
+Unter MSVC kompiliert jedes Ziel seine Dateien mit 8 parallelen Compilern (`/MP8`, seit
+v0.12.0) — ohne Eintrag. Eine andere Zahl oder `0` (aus) steht in
+`"settings": { "msvc": { "parallel_compile": 16 } }` und gilt für die ganze Solution
+([Solution_Schema.md §4.4](../references/Solution_Schema.md#44-msvc)).
 
 Referenz aller Felder: [Solution_Schema.md](../references/Solution_Schema.md) ·
 Cheatsheet: [Solution_Cheatsheet.md](../cheatsheets/Solution_Cheatsheet.md)
@@ -337,5 +342,6 @@ Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgab
 
 ## Changelog
 
+- **1.2.0** (2026-10-23): Pin-Beispiel v0.12.0, parallele Kompilierung unter MSVC (`settings.msvc`, Schritt 5)
 - **1.1.0** (2026-10-09): CMake 3.26, Pin-Beispiel v0.10.0, vierte Externals-Quelle `archive` (§4.1)
 - **1.0.0** (2026-07-17): Erstfassung — Projekt-Setup, Lib-Beschaffung, Sync-Workflow (SSOT CMakeCraft)
