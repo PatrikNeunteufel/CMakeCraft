@@ -1,7 +1,7 @@
 # CMakePresets — Referenz
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.1.0  
+> **Datum:** 2026-10-24  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -95,6 +95,13 @@ variante:  dynamic, static, asan, quality
 | `windows-vs-x64-debug_clangcl_asan` | x64 | Debug | – | Clang-CL + ASan |
 | `windows-vs-x64-debug_quality` | x64 | Debug | /MDd | Clang-Tidy aktiviert |
 | `windows-vs-x64-debug_apps-only` | x64 | Debug | /MDd | BUILD_TESTS=OFF |
+
+**Konfiguration `Testing`** (seit CMakeCraft v0.13.0): optimiert, mit Asserts und Debug-Info —
+RelWithDebInfo ohne `NDEBUG`. MSVC/clang-cl `/O2 /Ob1 /Zi`, Linker `/DEBUG /INCREMENTAL:NO`;
+GCC/Clang `-O2 -g`. Die Flags setzt `cmake/core/Configurations.cmake`, nur wenn
+`CMAKE_<LANG>_FLAGS_TESTING` leer ist (ein eigener Wert per `-D` bleibt stehen). Die CRT kommt
+wie bei allen Konfigurationen aus `CMAKE_MSVC_RUNTIME_LIBRARY`. Zum schrittweisen Debuggen
+bleibt `Debug`.
 
 ### 3.2 Windows • Ninja (Single-Config)
 
@@ -361,5 +368,6 @@ cmake --list-presets=test
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Verwendung** |
+| **1.1.0** | **2026-10-24** | **Konfiguration `Testing` beschrieben (optimiert, Asserts, Debug-Info; CMakeCraft v0.13.0)** |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Verwendung |
 | 0.1.0 | 2025-12-03 | Initial: Alle Team-Presets dokumentiert, Hidden Building Blocks, Variablen |

@@ -62,6 +62,7 @@ include_guard(GLOBAL)
             E002 - Solution.json not found
             E003 - Schema version incompatible / invalid library type
             E004 - Invalid value in settings block
+            E005 - Top-level CMakeLists.txt has no project() line
             E010 - External not defined in externals block
             E012 - External: no/multiple source fields
         

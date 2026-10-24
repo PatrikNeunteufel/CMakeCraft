@@ -13,7 +13,7 @@ cp templates/consumer/CMakeLists.txt             <dein-projekt>/
 |---|---|
 | `CMakeCraftBootstrap.cmake` | **nein** — unveraendert uebernehmen |
 | `cmakecraft.pin` | **ja** — Version (Git-Tag) und ggf. Fallback-Pfade |
-| `CMakeLists.txt` | nur den Kommentarkopf (Projektname) |
+| `CMakeLists.txt` | Kommentarkopf und Name in `project(<Name> LANGUAGES NONE)` — die Zeile selbst ist Pflicht (seit v0.13.0, sonst E005) |
 
 Dazu kommt eine `Solution.json` — die beschreibt, *was* gebaut wird. Vorlage:
 [`../Solution.json`](../Solution.json).

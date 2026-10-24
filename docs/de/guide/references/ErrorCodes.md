@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.4.0  
-> **Datum:** 2026-10-23  
+> **Version:** 1.5.0  
+> **Datum:** 2026-10-24  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -149,6 +149,33 @@ NN = Nummer (2 Ziffern)
 **Lösung:**
 - `settings.msvc.parallel_compile` als ganze Zahl ≥ 0 angeben (`0` oder `1` = aus), siehe
   [Solution_Schema.md §4.4](Solution_Schema.md#44-msvc)
+
+---
+
+#### E005 — Top-Level-CMakeLists.txt ohne project()
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.13.0 |
+
+**Meldung:**
+```
+[E005] .../CMakeLists.txt has no project() line. Add 'project(<Name> LANGUAGES NONE)' directly after cmake_minimum_required() ...
+```
+
+**Ursache:** Ohne ausgeschriebenes `project()` im obersten `CMakeLists.txt` setzt CMake ein
+eigenes `project(Project)` in Zeile 1, **vor** `cmake_minimum_required()`. Die Compiler werden
+dann nach alten Regeln eingerichtet: `CMAKE_MSVC_RUNTIME_LIBRARY` greift nicht, und die
+Konfiguration `Testing` baut mit der statischen CRT (`/MT`).
+
+**Lösung:**
+```cmake
+cmake_minimum_required(VERSION 3.26)
+project(MeinProjekt LANGUAGES NONE)   # Name/Version kommen aus Solution.json
+include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")
+```
+Danach einmal mit `--fresh` konfigurieren — im Cache stehen sonst die alten Flags.
 
 ---
 
@@ -916,6 +943,7 @@ Define noch Laufzeitdateien.
 | E002 | JSON | Solution.json nicht gefunden |
 | E003 | JSON | Schema-Version inkompatibel (Major) |
 | E004 | JSON | Ungültiger Wert im settings-Block |
+| E005 | Setup | Top-Level-CMakeLists.txt ohne project() |
 | E010 | JSON | External nicht im externals-Block |
 | E012 | JSON | Kein/mehrere Source-Felder |
 | E013 | External | Geskipptes External verwendet |
@@ -1005,7 +1033,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.4.0** | **2026-10-23** | **E004 hinzugefügt (ungültiger Wert im settings-Block, CMakeCraft v0.12.0)** |
+| **1.5.0** | **2026-10-24** | **E005 hinzugefügt (Top-Level-CMakeLists.txt ohne project(), CMakeCraft v0.13.0)** |
+| 1.4.0 | 2026-10-23 | E004 hinzugefügt (ungültiger Wert im settings-Block, CMakeCraft v0.12.0) |
 | **1.3.0** | **2026-10-09** | **E220, W112 und W304 hinzugefügt (Pakete und Archive Externals, CMakeCraft v0.10.0)** |
 | 1.2.0 | 2026-08-08 | E219 und W303 (unvollständiger Klon im Cache) hinzugefügt; E218 nachdokumentiert; W302-Beschreibung auf den Code korrigiert (beschrieb bis dahin „Hook-Wiederverwendung") |
 | 1.1.0 | 2025-12-28 | E003 (Schema Major inkompatibel), W101/W102 (Schema Minor Warnungen) hinzugefügt |

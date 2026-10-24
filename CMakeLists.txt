@@ -11,5 +11,6 @@
 # ==============================================================================
 
 cmake_minimum_required(VERSION 3.26)
+project(CMakeCraft LANGUAGES NONE)   # name/version come from Solution.json
 
 include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraft.cmake")

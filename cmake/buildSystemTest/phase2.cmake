@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Module:       phase2.cmake
-# Version:      1.1.0
-# Date:         2026-10-23
+# Version:      1.2.0
+# Date:         2026-10-24
 # Path:         cmake/buildSystemTest/phase2.cmake
 # Part of:      CMake Architecture V2
 #
@@ -20,6 +20,7 @@
 #   - Externals block is provided
 #   - Source mode is available (NEW in v0.1.0)
 #   - MSVC parallel compile is set, default 8 (NEW in v0.12.0)
+#   - Testing configuration has compiler flags (NEW in v0.13.0)
 #
 # Based on:
 #   - master_concept v0.1
@@ -120,6 +121,14 @@ dbg(${DBG_COMMON} "Validating CMake Cache Variables..." ID PHASE2_TEST)
 if("${CMAKE_CXX_STANDARD}" STREQUAL "")
     cmake_fatal("ASSERT" "CMAKE_CXX_STANDARD not set")
 endif()
+
+# Testing configuration: optimized with debug info (Configurations.cmake)
+foreach(_lang C CXX)
+    if("${CMAKE_${_lang}_FLAGS_TESTING}" STREQUAL "")
+        cmake_fatal("ASSERT" "CMAKE_${_lang}_FLAGS_TESTING is empty - Testing would build unoptimized")
+    endif()
+endforeach()
+dbg(${DBG_COMMON} "  CMAKE_CXX_FLAGS_TESTING: ${CMAKE_CXX_FLAGS_TESTING}" ID PHASE2_TEST)
 
 dbg(${DBG_COMMON} "  CMAKE_CXX_STANDARD: ${CMAKE_CXX_STANDARD}" ID PHASE2_TEST)
 dbg(${DBG_COMMON} "  CMAKE_C_STANDARD: ${CMAKE_C_STANDARD}" ID PHASE2_TEST)

@@ -1,7 +1,7 @@
 # Neues Projekt mit CMakeCraft — Bedienungsanleitung
 
-> **Version:** 1.2.0
-> **Datum:** 2026-10-23
+> **Version:** 1.3.0
+> **Datum:** 2026-10-24
 > **Typ:** Guide
 > **Status:** Entwurf
 > **Zielgruppe:** Entwickler, die ein neues, eigenständiges Projekt-Repo auf Basis von CMakeCraft aufsetzen
@@ -82,8 +82,15 @@ Die komplette Top-Level-`CMakeLists.txt` eines Konsumenten:
 
 ```cmake
 cmake_minimum_required(VERSION 3.26)
+project(MeinProjekt LANGUAGES NONE)   # Name/Version kommen aus Solution.json
 include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")
 ```
+
+Die Zeile `project(... LANGUAGES NONE)` ist Pflicht (seit v0.13.0, sonst E005). Ohne sie setzt
+CMake ein eigenes `project()` **vor** `cmake_minimum_required()` und richtet die Compiler nach
+alten Regeln ein: `CMAKE_MSVC_RUNTIME_LIBRARY` greift nicht, und die Konfiguration `Testing`
+baut mit der statischen CRT. Name und Version setzt weiterhin CMakeCraft aus der Solution.json.
+Wer die Zeile in ein bestehendes Projekt nachträgt, konfiguriert einmal mit `--fresh`.
 
 ### Schritt 3: Version pinnen
 
@@ -91,7 +98,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.12.0")
+set(CMAKECRAFT_VERSION "v0.13.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -342,6 +349,7 @@ Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgab
 
 ## Changelog
 
+- **1.3.0** (2026-10-24): Pin-Beispiel v0.13.0, Pflichtzeile `project(<Name> LANGUAGES NONE)` (Schritt 2)
 - **1.2.0** (2026-10-23): Pin-Beispiel v0.12.0, parallele Kompilierung unter MSVC (`settings.msvc`, Schritt 5)
 - **1.1.0** (2026-10-09): CMake 3.26, Pin-Beispiel v0.10.0, vierte Externals-Quelle `archive` (§4.1)
 - **1.0.0** (2026-07-17): Erstfassung — Projekt-Setup, Lib-Beschaffung, Sync-Workflow (SSOT CMakeCraft)

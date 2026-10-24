@@ -1,7 +1,7 @@
 # ErrorCodes — Reference
 
-> **Version:** 1.4.0  
-> **Date:** 2026-10-23  
+> **Version:** 1.5.0  
+> **Date:** 2026-10-24  
 > **Type:** Reference  
 > **Status:** Stable  
 > **Target Audience:** Alle Entwickler  
@@ -129,6 +129,33 @@ NN = Nummer (2 Ziffern)
 **Solution:**
 - Give `settings.msvc.parallel_compile` as an integer ≥ 0 (`0` or `1` = off), see
   [Solution_Schema.md §4.4](Solution_Schema.md#44-msvc)
+
+---
+
+#### E005 — Top-level CMakeLists.txt without project()
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.13.0 |
+
+**Message:**
+```
+[E005] .../CMakeLists.txt has no project() line. Add 'project(<Name> LANGUAGES NONE)' directly after cmake_minimum_required() ...
+```
+
+**Cause:** Without a literal `project()` in the top-level `CMakeLists.txt`, CMake inserts
+`project(Project)` on line 1, **before** `cmake_minimum_required()`. The compilers are then set
+up under old policies: `CMAKE_MSVC_RUNTIME_LIBRARY` is ignored, and the `Testing`
+configuration builds with the static CRT (`/MT`).
+
+**Solution:**
+```cmake
+cmake_minimum_required(VERSION 3.26)
+project(MyProject LANGUAGES NONE)   # name/version come from Solution.json
+include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")
+```
+Then configure once with `--fresh` — the cache still holds the old flags otherwise.
 
 ---
 
@@ -871,6 +898,7 @@ runtime files.
 | E001 | JSON | Requiredfeld fehlt |
 | E002 | JSON | Solution.json nicht gefunden |
 | E004 | JSON | Invalid value in the settings block |
+| E005 | Setup | Top-level CMakeLists.txt without project() |
 | E010 | JSON | External nicht im externals-Block |
 | E012 | JSON | Kein/mehrere Source-Felder |
 | E013 | External | Geskipptes External verwendet |
@@ -959,7 +987,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **1.4.0** | **2026-10-23** | **E004 added (invalid value in the settings block, CMakeCraft v0.12.0)** |
+| **1.5.0** | **2026-10-24** | **E005 added (top-level CMakeLists.txt without project(), CMakeCraft v0.13.0)** |
+| 1.4.0 | 2026-10-23 | E004 added (invalid value in the settings block, CMakeCraft v0.12.0) |
 | 1.3.0 | 2026-10-09 | E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0) |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching)** |
 | 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |

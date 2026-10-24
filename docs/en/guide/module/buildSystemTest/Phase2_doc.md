@@ -1,7 +1,7 @@
 # phase2.cmake — Modul-Dokumentation
 
-> **Version:** 1.1.0  
-> **Date:** 2026-10-23  
+> **Version:** 1.2.0  
+> **Date:** 2026-10-24  
 > **Type:** ModuleDoc  
 > **Path:** `cmake/buildSystemTest/phase2.cmake`  
 > **Status:** Stable  
@@ -62,6 +62,7 @@
 | `CMAKE_C_STANDARD` | Gesetzt aus Solution |
 | `CMAKE_CXX_STANDARD_REQUIRED` | TRUE |
 | `CMAKE_CXX_EXTENSIONS` | OFF |
+| `CMAKE_C_FLAGS_TESTING`, `CMAKE_CXX_FLAGS_TESTING` | not empty (Configurations.cmake) |
 
 ### 2.4 Externals Policy
 
@@ -103,6 +104,7 @@ set(PHASE2_TEST_PASSED TRUE CACHE BOOL "Phase 2 Test passed" FORCE)
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **1.1.0** | **2026-10-23** | **Checks `SOLUTION_MSVC_PARALLEL_COMPILE` (CMakeCraft v0.12.0)** |
+| **1.2.0** | **2026-10-24** | **Checks the flags of the `Testing` configuration (CMakeCraft v0.13.0)** |
+| 1.1.0 | 2026-10-23 | Checks `SOLUTION_MSVC_PARALLEL_COMPILE` (CMakeCraft v0.12.0) |
 | 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-05 | Initial |

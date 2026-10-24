@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.12.0
-# Date:         2026-10-23
+# Version:      0.13.0
+# Date:         2026-10-24
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -17,6 +17,7 @@
 #
 # Consumer usage (thin CMakeLists.txt):
 #   cmake_minimum_required(VERSION 3.26)
+#   project(<Name> LANGUAGES NONE)        # required since v0.13.0 (E005)
 #   include("<path-to-cmakecraft>/CMakeCraft.cmake")
 #
 # Options:
@@ -28,6 +29,17 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.13.0 (2026-10-24): the Testing configuration is optimized, with asserts
+#                        and debug info (MSVC /O2 /Ob1 /Zi, linker /DEBUG
+#                        /INCREMENTAL:NO; GCC/Clang -O2 -g; no NDEBUG) - until
+#                        now it had no flags at all (/Od, -O0). New module
+#                        core/Configurations.cmake.
+#                        The consumer's top-level CMakeLists.txt needs the line
+#                        project(<Name> LANGUAGES NONE), otherwise E005.
+#                        Without it CMake enabled the compilers under old
+#                        policies: CMAKE_MSVC_RUNTIME_LIBRARY was ignored and
+#                        Testing built with the static CRT (/MT).
+#                        Existing build directories: configure with --fresh.
 #   v0.12.0 (2026-10-23): MSVC compiles the files of a target in parallel
 #                        (/MP<n>). New field settings.msvc.parallel_compile,
 #                        default 8; 0 or 1 switch it off. Applies to every
@@ -122,6 +134,7 @@ include("${CMAKECRAFT_DIR}/core/SourceCollect.cmake")
 include("${CMAKECRAFT_DIR}/core/OutputDirs.cmake")
 include("${CMAKECRAFT_DIR}/core/Warnings.cmake")
 include("${CMAKECRAFT_DIR}/core/CompilerOptions.cmake")
+include("${CMAKECRAFT_DIR}/core/Configurations.cmake")
 
 # ==============================================================================
 # Build System Info (via Debug Module)
@@ -146,6 +159,18 @@ include("${CMAKECRAFT_DIR}/project/Solution.cmake")
 # Project Definition (with values from Solution.json)
 # ==============================================================================
 
+# The consumer's top-level CMakeLists.txt must call project() literally
+# (project(<Name> LANGUAGES NONE) is enough). Without it CMake inserts
+# project(Project) on line 1 - before cmake_minimum_required() - and enables
+# C/CXX under old policies: CMAKE_MSVC_RUNTIME_LIBRARY is ignored, and a
+# configuration without default flags (Testing) compiles with the static CRT.
+file(STRINGS "${CMAKE_SOURCE_DIR}/CMakeLists.txt" _craft_top_project
+    REGEX "^[ \t]*[pP][rR][oO][jJ][eE][cC][tT][ \t]*\\(")
+if(NOT _craft_top_project)
+    cmake_fatal("E005" "${CMAKE_SOURCE_DIR}/CMakeLists.txt has no project() line. Add 'project(<Name> LANGUAGES NONE)' directly after cmake_minimum_required() - name and version still come from Solution.json. Then configure with --fresh.")
+endif()
+unset(_craft_top_project)
+
 get_property(_sol_name GLOBAL PROPERTY SOLUTION_NAME)
 get_property(_sol_version GLOBAL PROPERTY SOLUTION_VERSION)
 
@@ -156,6 +181,8 @@ project(
 )
 
 dbg(${DBG_COMMON} "Project: ${PROJECT_NAME} v${PROJECT_VERSION}" ID CMAKE_MAIN)
+
+craft_setup_testing_configuration()
 
 # ==============================================================================
 # Testing (ctest) — MUSS vor allen add_test()-Aufrufen aktiv sein.
