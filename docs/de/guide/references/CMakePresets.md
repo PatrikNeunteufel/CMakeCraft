@@ -1,6 +1,6 @@
 # CMakePresets — Referenz
 
-> **Version:** 1.1.0  
+> **Version:** 1.1.1  
 > **Datum:** 2026-10-24  
 > **Typ:** Reference  
 > **Status:** Stabil  
@@ -102,6 +102,11 @@ GCC/Clang `-O2 -g`. Die Flags setzt `cmake/core/Configurations.cmake`, nur wenn
 `CMAKE_<LANG>_FLAGS_TESTING` leer ist (ein eigener Wert per `-D` bleibt stehen). Die CRT kommt
 wie bei allen Konfigurationen aus `CMAKE_MSVC_RUNTIME_LIBRARY`. Zum schrittweisen Debuggen
 bleibt `Debug`.
+
+Unter MSVC bekommt jedes Ziel, das CMakeCraft erzeugt, in jeder Konfiguration `/bigobj` (seit
+v0.13.1): `/O2` und `/Zi` zusammen sprengen in großen Dateien sonst die Grenze von 2^16
+Abschnitten je Objektdatei (C1128). `/bigobj` je Datei oder in `compile_options` ist damit
+überflüssig.
 
 ### 3.2 Windows • Ninja (Single-Config)
 
@@ -368,6 +373,7 @@ cmake --list-presets=test
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.0** | **2026-10-24** | **Konfiguration `Testing` beschrieben (optimiert, Asserts, Debug-Info; CMakeCraft v0.13.0)** |
+| **1.1.1** | **2026-10-24** | **`/bigobj` unter MSVC (CMakeCraft v0.13.1)** |
+| 1.1.0 | 2026-10-24 | Konfiguration `Testing` beschrieben (optimiert, Asserts, Debug-Info; CMakeCraft v0.13.0) |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Verwendung |
 | 0.1.0 | 2025-12-03 | Initial: Alle Team-Presets dokumentiert, Hidden Building Blocks, Variablen |

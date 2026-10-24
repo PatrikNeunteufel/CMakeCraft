@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.13.0
+# Version:      0.13.1
 # Date:         2026-10-24
 #
 # Description:
@@ -29,6 +29,10 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.13.1 (2026-10-24): /bigobj for every target CMakeCraft creates, every
+#                        configuration, MSVC only. Testing (/O2 + /Zi) broke
+#                        the limit of 2^16 sections per object file (C1128)
+#                        in large files of LumiViz. CompilerOptions.cmake 1.2.0.
 #   v0.13.0 (2026-10-24): the Testing configuration is optimized, with asserts
 #                        and debug info (MSVC /O2 /Ob1 /Zi, linker /DEBUG
 #                        /INCREMENTAL:NO; GCC/Clang -O2 -g; no NDEBUG) - until

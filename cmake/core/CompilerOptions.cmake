@@ -2,8 +2,8 @@
 # =================================
 # Compiler-specific options and code quality tools
 #
-# Version: 1.1.0
-# Date:    2026-10-23
+# Version: 1.2.0
+# Date:    2026-10-24
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -20,6 +20,7 @@
 #   - NO_EXCEPTIONS, NO_RTTI support
 #   - Per-target overrides
 #   - MSVC multi-processor compilation (/MP<n> from settings.msvc)
+#   - MSVC big object files (/bigobj, every configuration)
 #
 # Cache variables:
 #   - ENABLE_CLANG_TIDY           (ON/OFF, Default: OFF)
@@ -191,6 +192,16 @@ function(apply_compiler_options TARGET_NAME)
             dbg(${DBG_NORMAL} "  Parallel compile: /MP${_parallel}" ID CO_DBG)
         else()
             dbg(${DBG_RARE} "  Parallel compile: off" ID CO_DBG)
+        endif()
+
+        # Large object files: 2^32 sections instead of 2^16 (C1128). /O2
+        # (implies /Gy) together with /Zi - the Testing configuration - breaks
+        # the limit in template-heavy files; Debug can too.
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+            target_compile_options(${TARGET_NAME} PRIVATE
+                $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
+            )
+            dbg(${DBG_RARE} "  Big object files: /bigobj" ID CO_DBG)
         endif()
 
     # =========================================================================
