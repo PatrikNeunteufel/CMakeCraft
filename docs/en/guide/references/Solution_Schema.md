@@ -565,11 +565,31 @@ Wenn `path` angegeben: `projects/{path}/{header}`
 | `public_headers` | – | Public Include-Verzeichnis |
 | `output_name` | target name | File name without extension (since v0.10.0) |
 | `defines` | `[]` | Preprocessor definitions; `{version}` is replaced by the version of the target (since v0.10.0) |
+| `compile_options` | `[]` | Compiler flags of this library (PRIVATE), `STATIC`/`SHARED` only; for `INTERFACE` error E105 (since v0.14.0) |
 | `platform` | – (all) | Platform filter: `windows`, `linux`, `macos`, `unix` |
 | `dependencies` | `[]` | Andere Libraries (Dependencies) |
 | `externals` | `[]` | Externe Dependencies |
 | `external_options` | `{}` | Per-External Options |
 | `pch` | – | Precompiled Headers Config (siehe [§ 6.5](#65-pch-object-precompiled-headers)) |
+
+### compile_options (since v0.14.0)
+
+The flags apply **PRIVATE** to the compilation of the library, not to its users. They come
+**after** the CMakeCraft defaults (warnings, `apply_compiler_options`), so that a flag of the
+library overrides a default — with MSVC the later `/fp:` wins. Generator expressions pass
+through as for the app tests (§9.8); this is how flags per compiler are written:
+
+```json
+"compile_options": [
+    "$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>",
+    "$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-ffp-contract=off>",
+    "$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-fno-fast-math>"
+]
+```
+
+An `INTERFACE` library has no compilation of its own; `compile_options` there is a
+configuration error (**E105**), not silently skipped. A source package of the library
+([Packages.md](Packages.md) §2.5) writes the flags verbatim into its `CMakeLists.txt`.
 
 ---
 
@@ -1031,7 +1051,7 @@ projects/apps/{AppName}/
 | externals (fetched) | `git`, (tag\|branch\|commit) |
 | externals (system) | `system: true`, `package` |
 | externals (archive) | `archive: true`, `pin` |
-| packages[] | `name`, `contents` |
+| packages[] | `name`, `contents` or `library` |
 
 
 ### 10.2 Defaults
@@ -1212,6 +1232,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Changes |
 |---------|-------|------------|
+| **0.11.0** | **2026-11-07** | **CMakeCraft v0.14.0: `compile_options` for libraries[] (§7, E105 for INTERFACE); source package of a library in the `packages` block (`library` instead of `contents`, [Packages.md](Packages.md) §2.5, E106)** |
 | **0.10.0** | **2026-10-23** | **CMakeCraft v0.12.0: block `settings.msvc` with `parallel_compile` (§4.4, default 8), E004** |
 | **0.9.0** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` for apps[].tests.targets[] (§9.8); runtime files of an archive external are copied by a target of its own on every build (§5.8)** |
 | **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: `packages` block, archive externals (§5.8), `output_name` and `defines` for libraries[], `{version}` in `defines`. Corrected: hook paths are `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` of a system external is a minimum version without operator (§5.4), error table §12.1 (E216–E220) and W302 aligned with the code** |

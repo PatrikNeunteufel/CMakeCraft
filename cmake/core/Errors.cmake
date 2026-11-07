@@ -28,6 +28,10 @@
 #   W2xx - Tools/Setup
 #   W3xx - Externals (Warnings)
 #
+# Changes v0.1.5 (CMakeCraft v0.14.0):
+#   - Documented E105 (compile_options on an INTERFACE library)
+#   - Documented E106 (source package cannot be described in plain CMake)
+#
 # Changes v0.1.4:
 #   - Documented E220 (Archive external without pin)
 #   - Documented W111 (empty Source.cmake) and W112 (Package names a missing target)
@@ -71,7 +75,9 @@ include_guard(GLOBAL)
             E102 - Target already exists
             E103 - Circular dependency
             E104 - Source.cmake not found (mode=explicit)
-        
+            E105 - compile_options on an INTERFACE library
+            E106 - Source package: library cannot be described in plain CMake
+
         E2xx - Externals
             E201 - Fetched external: no target in registry
             E202 - External fetch failed

@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.13.1
-# Date:         2026-10-24
+# Version:      0.14.0
+# Date:         2026-11-07
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -24,11 +24,22 @@
 #   -DBUILD_TESTS=ON|OFF          Build project tests (default: OFF)
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests (default: OFF; CMakeCraft
 #                                 repo itself: use preset "craft-selftest")
-#   -DTEST_PHASE=1..10            Specific phase(s) to test (default: all)
+#   -DTEST_PHASE=1..11            Specific phase(s) to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.14.0 (2026-11-07): "compile_options" for libraries[] (PRIVATE, after
+#                        apply_compiler_options; E105 on INTERFACE). Source
+#                        package of a STATIC library: packages[] entry with
+#                        "library" -> sources, headers, generated plain
+#                        CMakeLists.txt (language rules, compile_options
+#                        verbatim, CXX_* as in the solution), local header
+#                        externals as transferred INTERFACE targets, VERSION,
+#                        SHA256SUMS; E106. craft_language_rules() as single
+#                        source of the language-rule switches. Files the
+#                        package script writes (also .zip.sha256) use LF on
+#                        every platform. New: SourcePackage.cmake, phase 11.
 #   v0.13.1 (2026-10-24): /bigobj for every target CMakeCraft creates, every
 #                        configuration, MSVC only. Testing (/O2 + /Zi) broke
 #                        the limit of 2^16 sections per object file (C1128)
@@ -259,7 +270,7 @@ if(RUN_BUILD_SYSTEM_TESTS)
         dbg(${DBG_COMMON} "Testing all completed phases" ID BUILD_TEST)
     endif()
 
-    foreach(_craft_phase RANGE 1 10)
+    foreach(_craft_phase RANGE 1 11)
         if("${TEST_PHASE}" STREQUAL "" OR "${_craft_phase}" IN_LIST TEST_PHASE)
             dbgspace(ID BUILD_TEST)
             include("${CMAKECRAFT_DIR}/buildSystemTest/phase${_craft_phase}.cmake")

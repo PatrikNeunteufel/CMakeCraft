@@ -90,6 +90,7 @@ project/
 ├── AppCreate.cmake          → App-Erstellung (Core/Runner/Tests)
 ├── Externals.cmake          → Externals-Integration
 ├── Packages.cmake           → Package-Pipeline (Phase 10)
+├── SourcePackage.cmake      → Quellpaket einer Bibliothek (Phase 11)
 └── PackageBuild.cmake       → Build-Zeit-Skript der Package-Targets
 ```
 

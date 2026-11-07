@@ -2,8 +2,8 @@
 # ===================================
 # Collects library data from JSON into a Context
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-11-07
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -19,7 +19,7 @@
 #   - NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS
 #   - SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH
 #   - DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM
-#   - OUTPUT_NAME, DEFINES
+#   - OUTPUT_NAME, DEFINES, COMPILE_OPTIONS
 #
 # Used by:
 #   - Libraries.cmake
@@ -43,7 +43,7 @@ include_guard(GLOBAL)
         NAME, VERSION, PATH, TYPE, PUBLIC_HEADERS,
         SKIP, PCH_ENABLED, PCH_HEADER, PCH_PATH,
         DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS, PLATFORM,
-        OUTPUT_NAME, DEFINES
+        OUTPUT_NAME, DEFINES, COMPILE_OPTIONS
 
     Example:
         ctx_create(LIB_0)
@@ -232,6 +232,14 @@ function(_collect_library LIB_JSON CTX)
 
     _json_get_array_as_list("${LIB_JSON}" "defines" _defines)
     ctx_set(${CTX} DEFINES "${_defines}")
+
+    # --------------------------------------------------------------------------
+    # Compile Options (PRIVATE flags of this library, generator expressions
+    # pass through; an INTERFACE library rejects them with E105)
+    # --------------------------------------------------------------------------
+
+    _json_get_array_as_list("${LIB_JSON}" "compile_options" _compile_options)
+    ctx_set(${CTX} COMPILE_OPTIONS "${_compile_options}")
 
     # --------------------------------------------------------------------------
     # Debug Output (at high level)

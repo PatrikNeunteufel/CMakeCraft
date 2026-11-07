@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.5.0  
-> **Datum:** 2026-10-24  
+> **Version:** 1.6.0  
+> **Datum:** 2026-11-07  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -289,6 +289,40 @@ Danach einmal mit `--fresh` konfigurieren — im Cache stehen sonst die alten Fl
 **Beschreibung:** Der Source-Mode ist `explicit` und das Source-Verzeichnis enthält keine `Source.cmake` Datei.
 
 **Lösung:** Source.cmake erstellen oder Mode auf `auto` ändern.
+
+---
+
+#### E105 — compile_options an einer INTERFACE-Library
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.14.0 |
+
+**Beschreibung:** Eine Library mit `"type": "INTERFACE"` trägt `compile_options`. Eine
+Header-Library hat keine eigene Übersetzung; das Flag würde nirgends wirken.
+
+**Lösung:** Die Rechnung in `.cpp`-Dateien einer `STATIC`-Library legen und die Flags dort
+setzen — oder `compile_options` entfernen.
+
+---
+
+#### E106 — Quellpaket nicht abbildbar
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.14.0 |
+
+**Beschreibung:** Ein Eintrag `{ "library": … }` im Block `packages` nennt eine Library, die
+sich nicht in einfachem CMake beschreiben lässt: sie ist nicht `STATIC`, hat C++20-Module, eine
+Datei oder ein Include-Ordner liegt außerhalb von `path` und `public_headers`, oder ein
+External ist nicht lokal (system, fetched, archive) beziehungsweise bringt mehr als ein
+Header-only-`INTERFACE`-Ziel mit Include-Ordnern im eigenen Ordner, Defines, Compile-Optionen
+und -Features. Die Meldung nennt die Library und gegebenenfalls das External.
+
+**Lösung:** Die Library oder das External so umstellen, dass es passt, oder kein Quellpaket
+schnüren (Binärpaket mit `contents`). Siehe [Packages.md](Packages.md) §2.5.
 
 ---
 
@@ -951,6 +985,8 @@ Define noch Laufzeitdateien.
 | E102 | Target | Target existiert bereits |
 | E103 | Target | Zirkuläre Abhängigkeit |
 | E104 | Target | Source.cmake nicht gefunden (mode=explicit) |
+| E105 | Target | compile_options an einer INTERFACE-Library |
+| E106 | Target | Quellpaket nicht in einfachem CMake abbildbar |
 | E201 | External | Fetched External: kein Target in Registry |
 | E202 | External | External Fetch fehlgeschlagen |
 | E213 | External | Lokales External: Include.cmake fehlt |
@@ -1033,7 +1069,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.5.0** | **2026-10-24** | **E005 hinzugefügt (Top-Level-CMakeLists.txt ohne project(), CMakeCraft v0.13.0)** |
+| **1.6.0** | **2026-11-07** | **E105 (compile_options an INTERFACE-Library) und E106 (Quellpaket nicht abbildbar) hinzugefügt, CMakeCraft v0.14.0** |
+| 1.5.0 | 2026-10-24 | **E005 hinzugefügt (Top-Level-CMakeLists.txt ohne project(), CMakeCraft v0.13.0)** |
 | 1.4.0 | 2026-10-23 | E004 hinzugefügt (ungültiger Wert im settings-Block, CMakeCraft v0.12.0) |
 | **1.3.0** | **2026-10-09** | **E220, W112 und W304 hinzugefügt (Pakete und Archive Externals, CMakeCraft v0.10.0)** |
 | 1.2.0 | 2026-08-08 | E219 und W303 (unvollständiger Klon im Cache) hinzugefügt; E218 nachdokumentiert; W302-Beschreibung auf den Code korrigiert (beschrieb bis dahin „Hook-Wiederverwendung") |

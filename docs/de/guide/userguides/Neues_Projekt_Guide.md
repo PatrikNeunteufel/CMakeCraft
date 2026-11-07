@@ -1,7 +1,7 @@
 # Neues Projekt mit CMakeCraft — Bedienungsanleitung
 
-> **Version:** 1.3.0
-> **Datum:** 2026-10-24
+> **Version:** 1.4.0
+> **Datum:** 2026-11-07
 > **Typ:** Guide
 > **Status:** Entwurf
 > **Zielgruppe:** Entwickler, die ein neues, eigenständiges Projekt-Repo auf Basis von CMakeCraft aufsetzen
@@ -98,7 +98,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.13.0")
+set(CMAKECRAFT_VERSION "v0.14.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -349,6 +349,7 @@ Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgab
 
 ## Changelog
 
+- **1.4.0** (2026-11-07): Pin-Beispiel v0.14.0 (`compile_options` je Bibliothek, Quellpaket einer Bibliothek)
 - **1.3.0** (2026-10-24): Pin-Beispiel v0.13.0, Pflichtzeile `project(<Name> LANGUAGES NONE)` (Schritt 2)
 - **1.2.0** (2026-10-23): Pin-Beispiel v0.12.0, parallele Kompilierung unter MSVC (`settings.msvc`, Schritt 5)
 - **1.1.0** (2026-10-09): CMake 3.26, Pin-Beispiel v0.10.0, vierte Externals-Quelle `archive` (§4.1)

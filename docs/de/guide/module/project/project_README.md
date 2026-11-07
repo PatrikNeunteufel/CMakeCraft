@@ -32,6 +32,7 @@
 **Paket schnüren?** (Phase 10)
 1. [Packages.md](Packages.md) — Block `packages` → Target `package_<name>`
 2. [PackageBuild.md](PackageBuild.md) — Build-Zeit-Skript (Ordner, Zip, Prüfsumme)
+3. [SourcePackage.md](SourcePackage.md) — Quellpaket einer Bibliothek mit einfachem `CMakeLists.txt` (Phase 11)
 
 ---
 
@@ -62,6 +63,7 @@ Solution.cmake          ← Lädt und parst Solution.json
      │   └── AppCreate        → Core/Runner/Tests Targets
      │
      ├── Packages.cmake       ← Package-Pipeline (Phase 10)
+     │   ├── SourcePackage    → Quellpaket einer Bibliothek (Phase 11)
      │   └── PackageBuild     → Build-Zeit-Skript (cmake -P)
      │
      └── Tests.cmake          ← Test-Pipeline
@@ -118,6 +120,7 @@ Solution.cmake          ← Lädt und parst Solution.json
 |-------|--------------|
 | [Packages.md](Packages.md) | Block `packages` → Target `package_<name>` (Manifest, Versionsdatei) |
 | [PackageBuild.md](PackageBuild.md) | Build-Zeit-Skript: Paketordner, Zip-Archiv, SHA256 |
+| [SourcePackage.md](SourcePackage.md) | Quellpaket einer Bibliothek: erzeugtes einfaches `CMakeLists.txt`, übertragene lokale Externals, `SHA256SUMS` |
 
 ---
 

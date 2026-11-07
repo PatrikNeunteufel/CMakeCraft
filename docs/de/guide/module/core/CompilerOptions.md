@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [CompilerOptions.md](CompilerOptions.md)  
 > **Modul:** [`cmake/core/CompilerOptions.cmake`](../../../../cmake/core/CompilerOptions.cmake)  
-> **Modul-Version:** 1.0.0
+> **Modul-Version:** 1.3.0
 
 ---
 
@@ -126,6 +126,29 @@ apply_compiler_options(<TARGET_NAME>
 apply_compiler_options(MyApp)
 apply_compiler_options(LegacyLib SKIP_STRICT_CONFORMANCE FORCE_EXCEPTIONS)
 ```
+
+### craft_language_rules() (seit v0.14.0)
+
+Einzige Quelle der Schalter, die **Sprachregeln** setzen — strikte Konformität, `NOMINMAX`,
+Ausnahmen, RTTI —, für alle Compiler-Familien zugleich. `apply_compiler_options()` wendet die
+Liste des aktuellen Compilers an; ein Quellpaket
+([SourcePackage.cmake](../project/SourcePackage.md)) schreibt alle Listen in sein erzeugtes
+`CMakeLists.txt`, damit der Bezieher unter denselben Regeln übersetzt. Warnungen
+(`Warnings.cmake`), `/MP` und `/bigobj` sind keine Sprachregeln und bleiben in
+`apply_compiler_options()`.
+
+```cmake
+craft_language_rules(<PREFIX>
+    [SKIP_STRICT_CONFORMANCE] [SKIP_NOMINMAX] [FORCE_EXCEPTIONS] [FORCE_RTTI])
+```
+
+| Ergebnis | Inhalt |
+|----------|--------|
+| `<PREFIX>_MSVC_OPTIONS` | MSVC-Frontend (cl, clang-cl; CMake `MSVC`): `/permissive- /Zc:preprocessor /Zc:__cplusplus` bei strikter Konformität, `/EHs-c-` bei `NO_EXCEPTIONS`, `/GR-` bei `NO_RTTI` |
+| `<PREFIX>_MSVC_DEFINES` | `NOMINMAX`, außer bei `SKIP_NOMINMAX` |
+| `<PREFIX>_GNU_OPTIONS` | GCC und Clang mit GNU-Frontend: `-fno-exceptions`, `-fno-rtti` wie oben |
+
+Die Flags haben dieselbe Bedeutung wie bei `apply_compiler_options()`.
 
 ---
 
@@ -273,6 +296,7 @@ apply_compiler_options(SpecialApp
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung, korrigierte Abhängigkeiten** |
+| **0.14.0** | **2026-11-07** | **`craft_language_rules()`: Sprachregel-Schalter aller Compiler-Familien an einer Stelle, von `apply_compiler_options()` und Quellpaketen genutzt; Modul-Version 1.3.0** |
+| 0.5.0 | 2025-12-15 | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung, korrigierte Abhängigkeiten** |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Inhalte aus v2.0 übernommen, Blueprint-Format, Per-Target Overrides |

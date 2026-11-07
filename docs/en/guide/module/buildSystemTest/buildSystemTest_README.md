@@ -40,7 +40,8 @@ CMakeLists.txt
              ├── Phase6.cmake  → Git Externals
              ├── Phase7.cmake  → Tests
              ├── Phase8.cmake  → App-Container (neu)
-             └── Phase10.cmake → Packages, archive externals
+             ├── Phase10.cmake → Packages, archive externals
+             └── Phase11.cmake → compile_options per library, source packages
 ```
 
 ---
@@ -58,6 +59,7 @@ CMakeLists.txt
 | [Phase7_doc.md](Phase7_doc.md) | 7 | Test-Pipeline |
 | [Phase8_doc.md](Phase8_doc.md) | 8 | App-Container-Pipeline |
 | [Phase10_doc.md](Phase10_doc.md) | 10 | Packages, CMakeCraftPackage, archive externals |
+| [Phase11_doc.md](Phase11_doc.md) | 11 | compile_options per library, source package, E105, E106 |
 
 ---
 
@@ -74,6 +76,7 @@ CMakeLists.txt
 | **7** | ✅ Stable | Tests, TestCollect, TestCreate | Framework-Integration, CTest |
 | **8** | ✅ In Development | Apps, AppCollect, AppCreate | Core/Runner/Tests Targets |
 | **10** | ✅ Stable | Packages, CMakeCraftPackage, archive/Handler | Package target, output_name/defines, fetch via URL/cache/fallback path, apply to target |
+| **11** | ✅ Stable | LibraryCreate, SourcePackage, PackageBuild, CompilerOptions | compile_options on the target, generated CMakeLists.txt, build the package, build and run a consumer without CMakeCraft, E105, E106 |
 
 ---
 
@@ -134,6 +137,7 @@ Jede Phase setzt ein Cache-Flag bei Success:
 | 7 | `PHASE7_TEST_PASSED` |
 | 8 | `PHASE8_TEST_PASSED` |
 | 10 | `PHASE10_TEST_PASSED` |
+| 11 | `PHASE11_TEST_PASSED` |
 
 ---
 

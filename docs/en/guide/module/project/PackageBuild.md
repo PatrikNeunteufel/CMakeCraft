@@ -1,7 +1,7 @@
 # PackageBuild.cmake — Module Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2026-10-09  
+> **Version:** 1.1.0  
+> **Date:** 2026-11-07  
 > **Type:** ModuleDoc  
 > **Status:** Active  
 > **Based on:** ModuleDoc v0.5  
@@ -9,7 +9,7 @@
 > **Language:** English  
 > **German:** [PackageBuild.md](../../../../de/guide/module/project/PackageBuild.md)  
 > **Module:** [`cmake/project/PackageBuild.cmake`](../../../../../cmake/project/PackageBuild.cmake)  
-> **Module Version:** 1.0.0  
+> **Module Version:** 1.1.0  
 > **Phase:** 10 (Packages)
 
 ---
@@ -83,6 +83,17 @@ cmake -DCRAFT_PKG_MANIFEST=<manifest.cmake> -P PackageBuild.cmake
 | `CRAFT_PKG_ITEM_<i>_FILES` | Files relative to the source (kind `files`) |
 | `CRAFT_PKG_ITEM_<i>_EXCLUDE` | Exclude patterns (kind `dir`) |
 
+**Source package** (since v0.14.0, manifest `manifest-source.cmake` from [SourcePackage.cmake](SourcePackage.md), written with `file(WRITE)` — independent of the configuration):
+
+| Variable | Usage |
+|----------|-------|
+| `CRAFT_PKG_KIND` | `source` |
+| `CRAFT_PKG_LIB_VERSION` | Version of the library → file `VERSION` |
+| `CRAFT_PKG_CMAKELISTS` | Template of the generated `CMakeLists.txt` |
+| `CRAFT_PKG_COPY_SRC` / `CRAFT_PKG_COPY_DST` | Files of the library and their destination in the package (`src/…`) |
+| `CRAFT_PKG_DIR_SRC` / `CRAFT_PKG_DIR_DST` / `CRAFT_PKG_DIR_DROP` | Folders (public headers, externals), destination, file to leave out (`Include.cmake`) or `-` |
+| `CRAFT_PKG_HASH_NAMES` | Externals whose folder checksum goes into the `CMakeLists.txt` |
+
 ---
 
 ## 4. Processing
@@ -101,6 +112,14 @@ PackageBuild.cmake
     │   ├── remove and recreate <out>/<archive>/
     │   └── remove <archive>.zip and <archive>.zip.sha256
     │
+    ├── 3a. Source package only (CRAFT_PKG_KIND = source):
+    │   ├── copy files one by one (COPY_SRC → COPY_DST)
+    │   ├── copy folders, remove DIR_DROP
+    │   ├── checksum per external folder → replace placeholder
+    │   │   @CRAFT_EXT_SHA256_<ext>@ in the CMakeLists.txt
+    │   ├── write VERSION (version of the library)
+    │   └── SHA256SUMS over every file (sorted, LF, without itself)
+    │
     ├── 4. Copy the contents (each entry to <out>/<archive>/<TO>)
     │   ├── files → every named file, subfolders are kept
     │   ├── file  → one file
@@ -114,6 +133,12 @@ PackageBuild.cmake
     │
     └── 7. Compute SHA256 → <archive>.zip.sha256
 ```
+
+Every file the script creates itself (`CMakeLists.txt`, `VERSION` and `SHA256SUMS` of a source
+package, `<archive>.zip.sha256` of every package) is written by `_craft_pkg_write_lf()` via
+`file(CONFIGURE … NEWLINE_STYLE LF)` with **LF** — `file(WRITE)` would write CRLF on Windows,
+the package would then differ from the same package built on Linux, and `sha256sum -c` would
+fail (since v0.14.0). Copied files stay byte-identical.
 
 At the end the script prints the archive path and the checksum as `STATUS` messages.
 
@@ -131,6 +156,7 @@ All errors are `message(FATAL_ERROR ...)` without an error code; they abort the 
 | Kind `files`: a named file is missing | `file not found: <src>/<file>` |
 | Kind `file`: file is missing | `file not found: <src>` |
 | Kind `dir`: folder is missing | `folder not found: <src>` |
+| Source package: file or folder is missing | `file not found` / `folder not found` |
 | Archive could not be written | `writing the archive failed (<result>)` |
 
 ---
@@ -146,4 +172,5 @@ All errors are `message(FATAL_ERROR ...)` without an error code; they abort the 
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **1.0.0** | **2026-10-09** | **Initial (CMakeCraft v0.10.0): package folder, zip archive, checksum** |
+| **1.1.0** | **2026-11-07** | **CMakeCraft v0.14.0: source package (`CRAFT_PKG_KIND source`) with `CMakeLists.txt`, `VERSION` and `SHA256SUMS`; generated files (also `.zip.sha256`) with LF on every platform** |
+| 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): package folder, zip archive, checksum |

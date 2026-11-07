@@ -1,7 +1,7 @@
 # ErrorCodes — Reference
 
-> **Version:** 1.5.0  
-> **Date:** 2026-10-24  
+> **Version:** 1.6.0  
+> **Date:** 2026-11-07  
 > **Type:** Reference  
 > **Status:** Stable  
 > **Target Audience:** Alle Entwickler  
@@ -269,6 +269,40 @@ Then configure once with `--fresh` — the cache still holds the old flags other
 **Description:** Der Source-Mode ist `explicit` und das Source-Verzeichnis enthält keine `Source.cmake` Datei.
 
 **Lösung:** Source.cmake erstellen oder Mode auf `auto` ändern.
+
+---
+
+#### E105 — compile_options on an INTERFACE library
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.14.0 |
+
+**Description:** A library with `"type": "INTERFACE"` carries `compile_options`. A header
+library has no compilation of its own; the flag would have no effect anywhere.
+
+**Solution:** Put the computation into `.cpp` files of a `STATIC` library and set the flags
+there — or remove `compile_options`.
+
+---
+
+#### E106 — Source package cannot be expressed
+
+| Aspect | Value |
+|--------|------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.14.0 |
+
+**Description:** An entry `{ "library": … }` in the `packages` block names a library that
+cannot be described in plain CMake: it is not `STATIC`, has C++20 modules, a file or an
+include folder lies outside `path` and `public_headers`, or an external is not local (system,
+fetched, archive) or brings more than one header-only `INTERFACE` target with include folders
+in its own folder, defines, compile options and compile features. The message names the
+library and, where applicable, the external.
+
+**Solution:** Change the library or the external so that it fits, or do not build a source
+package (binary package with `contents`). See [Packages.md](Packages.md) §2.5.
 
 ---
 
@@ -906,6 +940,8 @@ runtime files.
 | E102 | Target | Target existiert bereits |
 | E103 | Target | Zirkuläre Abhängigkeit |
 | E104 | Target | Source.cmake nicht gefunden (mode=explicit) |
+| E105 | Target | compile_options on an INTERFACE library |
+| E106 | Target | Source package cannot be expressed in plain CMake |
 | E201 | External | Fetched External: kein Target in Registry |
 | E202 | External | External Fetch fehlgeschlagen |
 | E213 | External | Lokales External: Include.cmake fehlt |
@@ -987,7 +1023,8 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **1.5.0** | **2026-10-24** | **E005 added (top-level CMakeLists.txt without project(), CMakeCraft v0.13.0)** |
+| **1.6.0** | **2026-11-07** | **E105 (compile_options on an INTERFACE library) and E106 (source package cannot be expressed) added, CMakeCraft v0.14.0** |
+| 1.5.0 | 2026-10-24 | **E005 added (top-level CMakeLists.txt without project(), CMakeCraft v0.13.0)** |
 | 1.4.0 | 2026-10-23 | E004 added (invalid value in the settings block, CMakeCraft v0.12.0) |
 | 1.3.0 | 2026-10-09 | E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0) |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching)** |

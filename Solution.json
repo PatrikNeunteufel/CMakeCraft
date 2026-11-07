@@ -58,6 +58,11 @@
       "package": "Qt6",
       "components": [ "Core", "Widgets" ],
       "hints": [ "${QT_ROOT}" ]
+    },
+    "calcext": {
+      "description": "Demo local header external with its own Include.cmake (define on an INTERFACE target) - travels with the source package of CalcDemo (phase 11)",
+      "path": "externals/calcext",
+      "include": "externals/calcext/Include.cmake"
     }
   },
     "libraries": [
@@ -75,6 +80,20 @@
             "public_headers": "projects/demos/libs/PackDemo/include",
             "output_name": "PackDemo1",
             "defines": [ "PACK_DEMO_VERSION=\"{version}\"" ]
+        },
+        {
+            "name": "CalcDemo",
+            "version": "0.3.0",
+            "type": "STATIC",
+            "path": "projects/demos/libs/CalcDemo/src",
+            "public_headers": "projects/demos/libs/CalcDemo/include",
+            "externals": [ "calcext" ],
+            "defines": [ "CALC_DEMO_VERSION=\"{version}\"" ],
+            "compile_options": [
+                "$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>",
+                "$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-ffp-contract=off>",
+                "$<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-fno-fast-math>"
+            ]
         }
     ],
     "packages": [
@@ -86,6 +105,10 @@
                 { "to": "bin", "binary_of": "PackDemo" }
             ],
             "version_file": "projects/demos/packaging/VERSION.in"
+        },
+        {
+            "name": "calcdemo",
+            "library": "CalcDemo"
         }
     ],
     "executables": [

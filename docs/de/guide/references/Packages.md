@@ -1,7 +1,7 @@
 # Pakete schnüren und beziehen — Referenz
 
-> **Version:** 1.1.0  
-> **Datum:** 2026-10-09  
+> **Version:** 1.2.0  
+> **Datum:** 2026-11-07  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -122,6 +122,100 @@ produkt=@VERSION@
 ```
 
 Weitere Zeilen sind frei.
+
+### 2.5 Quellpaket einer Bibliothek: `library` (seit v0.14.0)
+
+Statt fertiger Dateien packt ein Eintrag mit `library` eine **STATIC-Bibliothek als Quellen**,
+mit einem erzeugten `CMakeLists.txt` aus **einfachem CMake**. Der Bezieher braucht kein
+CMakeCraft und baut die Bibliothek mit denselben Schaltern selbst, auch unter Linux.
+
+```json
+"packages": [
+    { "name": "kern", "library": "LumiKern" }
+]
+```
+
+| Feld | Pflicht | Beschreibung |
+|------|---------|--------------|
+| `name` | ✅ | Paketname; das Target heißt `package_<name>` |
+| `library` | ✅ | Name der Bibliothek (`STATIC`) |
+| `archive` | – | Name von Ordner und Archiv; `{version}` ist hier die Version **der Bibliothek**. Default: `<name>-v{version}` |
+
+`contents`, `config` und `version_file` sind zusammen mit `library` nicht erlaubt (E001): das
+Paket hängt an keiner Konfiguration, und `VERSION` schreibt CMakeCraft selbst.
+
+**Inhalt des Paketordners:**
+
+| Teil | Inhalt |
+|------|--------|
+| `src/` | genau die Dateien der Bibliothek, wie sie gebaut wird (aus `Source.cmake`), mit ihren Pfaden relativ zu `path`; `Source.cmake` selbst nicht |
+| `include/` | der Ordner `public_headers` |
+| `externals/<name>/` | jedes lokale Header-External der Bibliothek, samt Lizenzdatei, ohne seine `Include.cmake` |
+| `CMakeLists.txt` | erzeugt, nur einfaches CMake (unten) |
+| `VERSION` | die `version` der Bibliothek, eine Zeile |
+| `SHA256SUMS` | Prüfsumme **jeder** Datei des Ordners, sortiert, Format von `sha256sum`, LF — zusätzlich zur `.zip.sha256`, damit der **entpackte** Ordner prüfbar bleibt |
+
+**Das erzeugte `CMakeLists.txt`** (Mindestversion 3.26) legt an:
+
+- `add_library(<name> STATIC …)` und den Alias `<name>::<name>`;
+- Include-Ordner: `PUBLIC include/`, `PRIVATE src/` und die Includes aus `Source.cmake`;
+- `target_compile_definitions(PRIVATE …)` aus `defines`;
+- die **Sprachregeln**, unter denen die Bibliothek in CMakeCraft übersetzt wird
+  (`craft_language_rules`: unter MSVC `/permissive- /Zc:preprocessor /Zc:__cplusplus`, wenn
+  die strikte Konformität an ist, und `NOMINMAX`; für alle Compiler Ausnahmen und RTTI, wenn
+  `NO_EXCEPTIONS`/`NO_RTTI` gesetzt sind);
+- danach `target_compile_options(PRIVATE …)` aus `compile_options` — **wörtlich**, mit den
+  Generator Expressions;
+- `cxx_std_<n>` (PUBLIC) sowie `CXX_STANDARD`, `CXX_STANDARD_REQUIRED` und `CXX_EXTENSIONS`
+  mit dem Wert, der in der Solution galt (ohne Angabe dort: `CXX_EXTENSIONS ON`, die Vorgabe
+  von CMake) — sonst entschiede die Vorgabe des Beziehers zwischen `c++20` und `gnu++20`;
+- PCH (`target_precompile_headers`), `OUTPUT_NAME` und `VERSION`;
+- für jede Bibliothek aus `dependencies` eine Prüfung `if(NOT TARGET <dep>)` und den Link —
+  jede Bibliothek ist ihr eigenes Paket, der Bezieher bindet sie in der richtigen Reihenfolge
+  ein.
+
+Nicht ins Paket kommen Warnungen (`Warnings.cmake`), `/MP` und `/bigobj`: sie ändern nichts am
+übersetzten Code und bleiben Sache des Beziehers.
+
+**Lokale Header-Externals.** CMakeCraft hält das Ziel der Bibliothek vor und nach dem
+Einbinden jedes Externals fest und überträgt, **was das External hinzugefügt hat** — nicht
+bloß den Include-Ordner. Ein External, dessen `Include.cmake` ein Define setzt (pocketfft:
+`POCKETFFT_NO_MULTITHREADING`), bringt es so ins Paket mit. Erlaubt ist ein
+`INTERFACE`-Ziel mit Include-Ordnern **innerhalb** des External-Ordners (auch `SYSTEM`),
+Defines, Compile-Optionen und Compile-Features; das Paket legt es unter seinem Namen an:
+
+```cmake
+if(NOT TARGET pocketfft)
+    add_library(pocketfft INTERFACE)
+    target_include_directories(pocketfft SYSTEM INTERFACE
+        "${CMAKE_CURRENT_SOURCE_DIR}/externals/pocketfft")
+    target_compile_definitions(pocketfft INTERFACE [=[POCKETFFT_NO_MULTITHREADING]=])
+    set_property(GLOBAL PROPERTY CRAFT_PACKAGE_EXTERNAL_pocketfft_SHA256 "<Prüfsumme>")
+else()
+    # gleiche Prüfsumme verlangt, sonst Abbruch
+endif()
+```
+
+Bringen zwei Pakete dasselbe External mit (Kern und Messung), legt das erste das Ziel an; das
+zweite verlangt dieselbe Prüfsumme des External-Ordners und bricht sonst ab. Jedes andere
+External — fetched, system, archive, ein Ziel mit Quellen oder Link-Bibliotheken, ein External,
+das die Bibliothek direkt verändert — ergibt **E106** mit seinem Namen.
+
+**Der Bezieher** schreibt nur:
+
+```cmake
+add_subdirectory(externals/kern/0.1.0)
+target_link_libraries(ic_rechnung PRIVATE LumiKern::LumiKern)
+```
+
+> **Zeilenenden.** Das Paket übernimmt die Bytes aus dem Arbeitsbaum. Ein Checkout mit CRLF
+> ergibt andere `SHA256SUMS` als einer mit LF. Wer gleiche Pakete auf jedem Rechner will, gibt
+> den Quellen der Bibliothek eine `.gitattributes` (`eol=lf`); wer den entpackten Ordner in ein
+> Repo legt, dort `* -text`.
+
+Was ein Quellpaket nicht abbilden kann, bricht beim Konfigurieren mit **E106** ab: eine
+Bibliothek, die nicht `STATIC` ist, C++20-Module, eine Datei oder ein Include-Ordner außerhalb
+von `path` und `public_headers`, ein External wie oben.
 
 ---
 
@@ -290,6 +384,7 @@ Zum Schnüren gehören zwei Felder, die Bibliotheken seit v0.10.0 kennen:
 |------|--------------|
 | `output_name` | Dateiname ohne Endung; der Target-Name bleibt |
 | `defines` | Preprocessor-Definitionen, PRIVATE am Target (bei `INTERFACE`: INTERFACE) |
+| `compile_options` | Compiler-Flags, PRIVATE, nach den Vorgaben von CMakeCraft; bei `INTERFACE` E105 (seit v0.14.0, [Solution_Schema.md](Solution_Schema.md) §7) |
 
 `{version}` in `defines` wird bei Bibliotheken **und** Executables durch die Version des
 Targets ersetzt (eigenes `version`, sonst die der Solution).
@@ -303,8 +398,10 @@ Build-Ordner; `binary_of` nimmt die richtige.
 
 | Code | Wann | Folge |
 |------|------|-------|
-| E001 | `packages[]` ohne `name` oder `contents`; Eintrag ohne oder mit mehreren Quellen; `version_file` oder `from`-Ordner fehlt; Bibliothek ohne öffentliche Köpfe | Abbruch |
+| E001 | `packages[]` ohne `name` oder `contents`; Eintrag ohne oder mit mehreren Quellen; `version_file` oder `from`-Ordner fehlt; Bibliothek ohne öffentliche Köpfe; `library` zusammen mit `contents`, `config` oder `version_file` | Abbruch |
 | E102 | Target `package_<name>` existiert schon | Abbruch |
+| E105 | `compile_options` an einer `INTERFACE`-Bibliothek | Abbruch |
+| E106 | Quellpaket nicht in einfachem CMake abbildbar (§2.5) | Abbruch |
 | E220 | Archiv-External ohne `pin` | Abbruch |
 | W112 | Ein Paket nennt ein Target, das es nicht gibt (übersprungen, andere Plattform) | `package_<name>` wird nicht angelegt |
 | W304 | Archiv-External nicht verfügbar | Targets bauen ohne das Paket |
@@ -326,5 +423,6 @@ nennen jede versuchte Quelle mit Grund.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.2.0** | **2026-11-07** | **CMakeCraft v0.14.0: Quellpaket einer Bibliothek (`library`, §2.5) mit erzeugtem `CMakeLists.txt`, `VERSION` und `SHA256SUMS`; `compile_options` für Bibliotheken (§6); E105, E106** |
 | **1.1.0** | **2026-10-09** | **CMakeCraft v0.11.0: Laufzeitdateien kopiert ein eigenes Ziel `<Exe>_deploy_<External>` bei jedem Bau, nicht mehr ein Schritt nach dem Linken (§3.2); Argument `NAME` (§5)** |
 | 1.0.0 | 2026-10-09 | Erste Fassung zu CMakeCraft v0.10.0 |

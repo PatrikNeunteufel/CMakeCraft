@@ -2,8 +2,8 @@
 # =============================
 # Package pipeline - creates one target package_<name> per entry of "packages"
 #
-# Version: 1.0.0
-# Date:    2026-10-09
+# Version: 1.1.0
+# Date:    2026-11-07
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -12,6 +12,7 @@
 #   - cmake/core/Debug.cmake
 #   - cmake/core/Json.cmake
 #   - cmake/project/Solution.cmake
+#   - cmake/project/SourcePackage.cmake (entries with "library")
 #   - cmake/project/PackageBuild.cmake (run at build time via cmake -P)
 #
 # Provides:
@@ -27,6 +28,8 @@
 #   - CMakeCraft.cmake (after libraries, executables and apps exist)
 
 include_guard(GLOBAL)
+
+include("${CMAKECRAFT_DIR}/project/SourcePackage.cmake")
 
 # ============================================================================
 # _create_package_target - Creates the target package_<name>
@@ -55,6 +58,9 @@ include_guard(GLOBAL)
                          from          - folder relative to the project root,
                                          optionally narrowed by "files"
 
+    Instead of "contents": "library" - the library as sources with a
+    generated plain CMakeLists.txt (SourcePackage.cmake).
+
     A package naming a target that does not exist (skipped, other platform)
     is left out with W112.
 ]]
@@ -67,6 +73,13 @@ function(_create_package_target PKG_JSON)
 
     if(TARGET package_${_name})
         cmake_fatal("E102" "Target 'package_${_name}' already exists")
+    endif()
+
+    # A library as sources with a generated plain CMakeLists.txt
+    _json_has_key("${PKG_JSON}" "library" _is_source_package)
+    if(_is_source_package)
+        _create_source_package_target("${PKG_JSON}" "${_name}")
+        return()
     endif()
 
     get_property(_version GLOBAL PROPERTY SOLUTION_VERSION)

@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [LibraryCollect.md](LibraryCollect.md)  
 > **Modul:** [`cmake/project/LibraryCollect.cmake`](../../../../cmake/project/LibraryCollect.cmake)  
-> **Modul-Version:** 1.0.0
+> **Modul-Version:** 1.1.0
 
 ---
 
@@ -101,6 +101,7 @@ _collect_library(<LIB_JSON> <CTX>)
 | `PLATFORM` | String | "" (= alle) | Ziel-Plattform |
 | `OUTPUT_NAME` | String | "" (= Target-Name) | Dateiname ohne Endung (JSON: `output_name`) |
 | `DEFINES` | List | "" | Präprozessor-Definitionen (JSON: `defines`); `{version}` wird erst in LibraryCreate ersetzt |
+| `COMPILE_OPTIONS` | List | "" | Compiler-Flags der Library (JSON: `compile_options`), Generator Expressions unverändert; LibraryCreate setzt sie PRIVATE, bei INTERFACE E105 |
 
 **Hinweis:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
 
@@ -137,7 +138,8 @@ _collect_library(<LIB_JSON> <CTX>)
     },
     "platform": "windows",
     "output_name": "CoreLib1",
-    "defines": ["CORE_LIB_VERSION=\"{version}\""]
+    "defines": ["CORE_LIB_VERSION=\"{version}\""],
+    "compile_options": ["$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"]
 }
 ```
 
@@ -163,7 +165,8 @@ _collect_library(<LIB_JSON> <CTX>)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.10.0** | **2026-10-09** | **OUTPUT_NAME und DEFINES hinzugefügt (JSON: `output_name`, `defines`)** |
+| **0.14.0** | **2026-11-07** | **COMPILE_OPTIONS hinzugefügt (JSON: `compile_options`); Modul-Version 1.1.0** |
+| 0.10.0 | 2026-10-09 | OUTPUT_NAME und DEFINES hinzugefügt (JSON: `output_name`, `defines`) |
 | 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS hinzugefügt: Per-External Optionen analog zu ExecutableCollect |
 | 0.5.1 | 2025-12-18 | PCH-Support hinzugefügt: PCH_ENABLED, PCH_HEADER, PCH_PATH |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |

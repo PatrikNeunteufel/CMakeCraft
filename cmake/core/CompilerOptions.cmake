@@ -2,8 +2,8 @@
 # =================================
 # Compiler-specific options and code quality tools
 #
-# Version: 1.2.0
-# Date:    2026-10-24
+# Version: 1.3.0
+# Date:    2026-11-07
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -13,6 +13,8 @@
 #
 # Provides:
 #   - apply_compiler_options(TARGET [FLAGS...])
+#   - craft_language_rules(PREFIX [FLAGS...]) - language-rule switches of
+#     every compiler family (also written into source packages)
 #
 # Features:
 #   - Precise compiler detection (MSVC, GCC, Clang, Apple Clang)
@@ -45,6 +47,80 @@ dbg_init(
 )
 
 dbg(${DBG_OFTEN} "=== Compiler Options Module ===" ID COMPILEROPTION_INFO_MSG)
+
+# ============================================================================
+# craft_language_rules - The switches that set the language rules
+# ============================================================================
+#[[
+    craft_language_rules(PREFIX [SKIP_STRICT_CONFORMANCE] [SKIP_NOMINMAX]
+                         [FORCE_EXCEPTIONS] [FORCE_RTTI])
+
+    Single source of the switches that change how code is translated -
+    strict conformance, NOMINMAX, exceptions, RTTI - for every compiler
+    family at once. Diagnostics (Warnings.cmake) and build speed (/MP,
+    /bigobj) are not language rules and stay in apply_compiler_options.
+
+    apply_compiler_options applies the lists of the current compiler; a
+    source package (SourcePackage.cmake) writes all of them into its
+    generated CMakeLists.txt, so the receiver translates the library under
+    the same rules.
+
+    Parameters:
+        PREFIX - Mandatory: prefix of the result variables
+        Flags  - as in apply_compiler_options
+
+    Sets in the caller's scope:
+        <PREFIX>_MSVC_OPTIONS - MSVC front end (cl, clang-cl; CMake: MSVC)
+        <PREFIX>_MSVC_DEFINES - MSVC front end
+        <PREFIX>_GNU_OPTIONS  - GCC and Clang with GNU front end
+
+    Example:
+        craft_language_rules(_rules)
+        target_compile_options(MyLib PRIVATE ${_rules_GNU_OPTIONS})
+]]
+function(craft_language_rules PREFIX)
+    cmake_parse_arguments(
+        ARG
+        "SKIP_STRICT_CONFORMANCE;SKIP_NOMINMAX;FORCE_EXCEPTIONS;FORCE_RTTI"
+        ""
+        ""
+        ${ARGN}
+    )
+
+    set(_msvc_options "")
+    set(_msvc_defines "")
+    set(_gnu_options "")
+
+    # Strict conformance (MSVC only; ENABLE_STRICT_CONFORMANCE default ON)
+    if(NOT ARG_SKIP_STRICT_CONFORMANCE AND NOT DEFINED ENABLE_STRICT_CONFORMANCE OR ENABLE_STRICT_CONFORMANCE)
+        list(APPEND _msvc_options
+            /permissive-        # Strict standard conformance
+            /Zc:preprocessor    # Standard-conformant preprocessor
+            /Zc:__cplusplus     # Correct __cplusplus value
+        )
+    endif()
+
+    # No min/max macros from windows.h
+    if(NOT ARG_SKIP_NOMINMAX)
+        list(APPEND _msvc_defines NOMINMAX)
+    endif()
+
+    # Exceptions (NO_EXCEPTIONS, overridden by FORCE_EXCEPTIONS)
+    if(NO_EXCEPTIONS AND NOT ARG_FORCE_EXCEPTIONS)
+        list(APPEND _msvc_options /EHs-c-)
+        list(APPEND _gnu_options -fno-exceptions)
+    endif()
+
+    # RTTI (NO_RTTI, overridden by FORCE_RTTI)
+    if(NO_RTTI AND NOT ARG_FORCE_RTTI)
+        list(APPEND _msvc_options /GR-)
+        list(APPEND _gnu_options -fno-rtti)
+    endif()
+
+    set(${PREFIX}_MSVC_OPTIONS "${_msvc_options}" PARENT_SCOPE)
+    set(${PREFIX}_MSVC_DEFINES "${_msvc_defines}" PARENT_SCOPE)
+    set(${PREFIX}_GNU_OPTIONS  "${_gnu_options}"  PARENT_SCOPE)
+endfunction()
 
 # ============================================================================
 # apply_compiler_options - Main function
@@ -142,44 +218,24 @@ function(apply_compiler_options TARGET_NAME)
     # 2. MSVC-specific options
     # =========================================================================
     
+    # Language rules (strict conformance, NOMINMAX, exceptions, RTTI) come
+    # from craft_language_rules - the same lists a source package writes out.
+    set(_rule_flags "")
+    foreach(_flag IN ITEMS SKIP_STRICT_CONFORMANCE SKIP_NOMINMAX FORCE_EXCEPTIONS FORCE_RTTI)
+        if(ARG_${_flag})
+            list(APPEND _rule_flags ${_flag})
+        endif()
+    endforeach()
+    craft_language_rules(_rules ${_rule_flags})
+
     if(_is_msvc)
-        # Strict conformance (optionally disableable)
-        if(NOT ARG_SKIP_STRICT_CONFORMANCE AND NOT DEFINED ENABLE_STRICT_CONFORMANCE OR ENABLE_STRICT_CONFORMANCE)
-            target_compile_options(${TARGET_NAME} PRIVATE 
-                /permissive-        # Strict standard conformance
-                /Zc:preprocessor    # Standard-conformant preprocessor
-                /Zc:__cplusplus     # Correct __cplusplus value
-            )
-            dbg(${DBG_NORMAL} "  Strict Conformance: ENABLED" ID CO_DBG)
-        else()
-            dbg(${DBG_NORMAL} "  Strict Conformance: SKIPPED" ID CO_DBG)
+        if(_rules_MSVC_OPTIONS)
+            target_compile_options(${TARGET_NAME} PRIVATE ${_rules_MSVC_OPTIONS})
         endif()
-        
-        # Windows-specific definitions (optionally disableable)
-        if(NOT ARG_SKIP_NOMINMAX)
-            target_compile_definitions(${TARGET_NAME} PRIVATE 
-                NOMINMAX            # Disable min/max macros
-            )
-            dbg(${DBG_RARE} "  NOMINMAX: DEFINED" ID CO_DBG)
-        else()
-            dbg(${DBG_RARE} "  NOMINMAX: SKIPPED" ID CO_DBG)
+        if(_rules_MSVC_DEFINES)
+            target_compile_definitions(${TARGET_NAME} PRIVATE ${_rules_MSVC_DEFINES})
         endif()
-        
-        # Exceptions (respects FORCE_EXCEPTIONS)
-        if(NO_EXCEPTIONS AND NOT ARG_FORCE_EXCEPTIONS)
-            target_compile_options(${TARGET_NAME} PRIVATE /EHs-c-)
-            dbg(${DBG_NORMAL} "  Exceptions: DISABLED" ID CO_DBG)
-        else()
-            dbg(${DBG_RARE} "  Exceptions: enabled" ID CO_DBG)
-        endif()
-        
-        # RTTI (respects FORCE_RTTI)
-        if(NO_RTTI AND NOT ARG_FORCE_RTTI)
-            target_compile_options(${TARGET_NAME} PRIVATE /GR-)
-            dbg(${DBG_NORMAL} "  RTTI: DISABLED" ID CO_DBG)
-        else()
-            dbg(${DBG_RARE} "  RTTI: enabled" ID CO_DBG)
-        endif()
+        dbg(${DBG_NORMAL} "  Language rules: ${_rules_MSVC_OPTIONS} ${_rules_MSVC_DEFINES}" ID CO_DBG)
 
         # Multi-processor compilation (settings.msvc.parallel_compile).
         # MSVC only - clang-cl also sets MSVC but is left alone. Limited to
@@ -209,22 +265,11 @@ function(apply_compiler_options TARGET_NAME)
     # =========================================================================
     
     elseif(_is_gcc OR _is_clang)
-        # Exceptions (respects FORCE_EXCEPTIONS)
-        if(NO_EXCEPTIONS AND NOT ARG_FORCE_EXCEPTIONS)
-            target_compile_options(${TARGET_NAME} PRIVATE -fno-exceptions)
-            dbg(${DBG_NORMAL} "  Exceptions: DISABLED" ID CO_DBG)
-        else()
-            dbg(${DBG_RARE} "  Exceptions: enabled" ID CO_DBG)
+        if(_rules_GNU_OPTIONS)
+            target_compile_options(${TARGET_NAME} PRIVATE ${_rules_GNU_OPTIONS})
         endif()
-        
-        # RTTI (respects FORCE_RTTI)
-        if(NO_RTTI AND NOT ARG_FORCE_RTTI)
-            target_compile_options(${TARGET_NAME} PRIVATE -fno-rtti)
-            dbg(${DBG_NORMAL} "  RTTI: DISABLED" ID CO_DBG)
-        else()
-            dbg(${DBG_RARE} "  RTTI: enabled" ID CO_DBG)
-        endif()
-        
+        dbg(${DBG_NORMAL} "  Language rules: ${_rules_GNU_OPTIONS}" ID CO_DBG)
+
         # Apple-specific options
         if(_is_apple_clang)
             dbg(${DBG_ULTRA_RARE} "  Apple Clang: Standard flags" ID CO_DBG)

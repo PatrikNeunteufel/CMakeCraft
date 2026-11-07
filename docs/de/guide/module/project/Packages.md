@@ -1,7 +1,7 @@
 # Packages.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2026-10-09  
+> **Version:** 1.1.0  
+> **Datum:** 2026-11-07  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5  
@@ -9,7 +9,7 @@
 > **Sprache:** Deutsch  
 > **English:** [Packages.md](../../../../en/guide/module/project/Packages.md)  
 > **Modul:** [`cmake/project/Packages.cmake`](../../../../../cmake/project/Packages.cmake)  
-> **Modul-Version:** 1.0.0  
+> **Modul-Version:** 1.1.0  
 > **Phase:** 10 (Packages)
 
 ---
@@ -66,6 +66,7 @@ Das eigentliche Zusammenstellen geschieht zur Build-Zeit in [PackageBuild.cmake]
 | Json.cmake | `_json_get_string`, `_json_get_string_or_default`, `_json_array_length`, `_json_array_get`, `_json_get_array_as_list`, `_json_has_key` |
 | Solution.cmake | Global Properties `SOLUTION_JSON`, `SOLUTION_VERSION` |
 | PackageBuild.cmake | Wird zur Build-Zeit über `cmake -P` ausgeführt |
+| SourcePackage.cmake | Einträge mit `library` (Quellpaket, seit v0.14.0) |
 | LibraryCreate.cmake | Setzt die Target-Property `CRAFT_PUBLIC_HEADERS_DIR`, die `headers_of` liest |
 
 ---
@@ -105,6 +106,10 @@ Beim `include()` liest das Modul `packages` aus der Global Property `SOLUTION_JS
 | `config` | — | "" | Die einzige Konfiguration, aus der das Paket gebaut werden darf (z.B. `Release`) |
 | `version_file` | — | "" | Vorlage relativ zum Projekt-Root; wird mit `@VERSION@` (Solution-Version) konfiguriert und als Datei `VERSION` in die Paketwurzel geschrieben |
 | `contents` | ✓ | — | Array der Inhalte, mindestens ein Eintrag |
+
+Hat der Eintrag stattdessen das Feld **`library`**, gibt `_create_package_target()` ihn an
+[SourcePackage.cmake](SourcePackage.md) weiter (Quellpaket einer Bibliothek, seit v0.14.0) und
+kehrt zurück; `contents`, `config` und `version_file` sind dann nicht erlaubt.
 
 ### 4.2 Felder eines `contents`-Eintrags
 
@@ -243,6 +248,7 @@ Fehler zur Build-Zeit: siehe [PackageBuild.cmake](PackageBuild.md).
 ## 8. Siehe auch
 
 - [PackageBuild.cmake](PackageBuild.md) — Build-Zeit-Skript des Targets
+- [SourcePackage.cmake](SourcePackage.md) — Quellpaket einer Bibliothek (`library`)
 - [LibraryCreate.cmake](LibraryCreate.md) — setzt `CRAFT_PUBLIC_HEADERS_DIR`
 - [CMakeCraftPackage.cmake](../CMakeCraftPackage.md) — bezieht Pakete in diesem Aufbau
 - [Phase10_doc.md](../buildSystemTest/Phase10_doc.md) — Phasentest
@@ -253,4 +259,5 @@ Fehler zur Build-Zeit: siehe [PackageBuild.cmake](PackageBuild.md).
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.0.0** | **2026-10-09** | **Initial (CMakeCraft v0.10.0): Block `packages`, Target `package_<name>`** |
+| **1.1.0** | **2026-11-07** | **CMakeCraft v0.14.0: Einträge mit `library` gehen an SourcePackage.cmake** |
+| 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): Block `packages`, Target `package_<name>` |

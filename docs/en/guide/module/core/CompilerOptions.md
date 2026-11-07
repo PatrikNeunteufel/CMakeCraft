@@ -9,7 +9,7 @@
 > **Language:** English  
 > **German:** [CompilerOptions.md](CompilerOptions.md)  
 > **Module:** [`cmake/core/CompilerOptions.cmake`](../../../../cmake/core/CompilerOptions.cmake)  
-> **Module Version:** 1.0.0
+> **Module Version:** 1.3.0
 
 ---
 
@@ -126,6 +126,23 @@ apply_compiler_options(<TARGET_NAME>
 apply_compiler_options(MyApp)
 apply_compiler_options(LegacyLib SKIP_STRICT_CONFORMANCE FORCE_EXCEPTIONS)
 ```
+
+### craft_language_rules() (since v0.14.0)
+
+Single source of the switches that set **language rules** — strict conformance, `NOMINMAX`, exceptions, RTTI — for all compiler families at once. `apply_compiler_options()` applies the list of the current compiler; a source package ([SourcePackage.cmake](../project/SourcePackage.md)) writes all lists into its generated `CMakeLists.txt`, so that the consumer compiles under the same rules. Warnings (`Warnings.cmake`), `/MP` and `/bigobj` are not language rules and stay in `apply_compiler_options()`.
+
+```cmake
+craft_language_rules(<PREFIX>
+    [SKIP_STRICT_CONFORMANCE] [SKIP_NOMINMAX] [FORCE_EXCEPTIONS] [FORCE_RTTI])
+```
+
+| Result | Content |
+|--------|---------|
+| `<PREFIX>_MSVC_OPTIONS` | MSVC frontend (cl, clang-cl; CMake `MSVC`): `/permissive- /Zc:preprocessor /Zc:__cplusplus` with strict conformance, `/EHs-c-` with `NO_EXCEPTIONS`, `/GR-` with `NO_RTTI` |
+| `<PREFIX>_MSVC_DEFINES` | `NOMINMAX`, except with `SKIP_NOMINMAX` |
+| `<PREFIX>_GNU_OPTIONS` | GCC and Clang with GNU frontend: `-fno-exceptions`, `-fno-rtti` as above |
+
+The flags have the same meaning as for `apply_compiler_options()`.
 
 ---
 
@@ -273,6 +290,7 @@ apply_compiler_options(SpecialApp
 
 | Version | Datum | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung, korrigierte Dependencies** |
+| **0.14.0** | **2026-11-07** | **`craft_language_rules()`: language-rule switches of all compiler families in one place, used by `apply_compiler_options()` and source packages; module version 1.3.0** |
+| 0.5.0 | 2025-12-15 | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung, korrigierte Dependencies** |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Inhalte aus v2.0 übernommen, Blueprint-Format, Per-Target Overrides |

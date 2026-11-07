@@ -2,8 +2,8 @@
 # ==================================
 # Creates library targets from prepared Context
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-11-07
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -17,6 +17,15 @@
 #
 # Provides:
 #   - _create_library_target(CTX)
+#   - _craft_target_snapshot(TARGET PREFIX)
+#   - _craft_record_external_effect(TARGET EXT PREFIX)
+#
+# Target properties set for source packages (STATIC/SHARED):
+#   - CRAFT_LIB_SOURCE_DIR, CRAFT_LIB_FILES, CRAFT_LIB_MODULES,
+#     CRAFT_LIB_PRIVATE_INCLUDES, CRAFT_LIB_DEFINES, CRAFT_LIB_COMPILE_OPTIONS,
+#     CRAFT_LIB_PCH, CRAFT_LIB_DEPENDENCIES, CRAFT_LIB_EXTERNALS,
+#     CRAFT_LIB_VERSION, CRAFT_LIB_OUTPUT_NAME
+#   - CRAFT_EXT_<external>_LINKS / _PUBLIC / _OTHER (what an external added)
 #
 # Used by:
 #   - Libraries.cmake
@@ -39,8 +48,12 @@ include_guard(GLOBAL)
     Expected Context Keys:
         NAME, PATH, TYPE, VERSION, PUBLIC_HEADERS,
         PCH_ENABLED, PCH_HEADER, PCH_PATH,
-        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS
-    
+        DEPENDENCIES, EXTERNALS, EXTERNAL_OPTIONS,
+        OUTPUT_NAME, DEFINES, COMPILE_OPTIONS
+
+    Errors:
+        E105 - compile_options on an INTERFACE library
+
     Example:
         ctx_create(LIB_0)
         _collect_library("${_lib_json}" LIB_0)
@@ -65,6 +78,7 @@ function(_create_library_target CTX)
     ctx_get(${CTX} EXTERNAL_OPTIONS _external_options)
     ctx_get(${CTX} OUTPUT_NAME _output_name)
     ctx_get(${CTX} DEFINES _defines)
+    ctx_get(${CTX} COMPILE_OPTIONS _compile_options)
 
     # {version} in defines stands for the version of this target
     string(REPLACE "{version}" "${_version}" _defines "${_defines}")
@@ -72,8 +86,14 @@ function(_create_library_target CTX)
     # --------------------------------------------------------------------------
     # Handle INTERFACE Libraries (Header-Only)
     # --------------------------------------------------------------------------
-    
+
     if(_type STREQUAL "INTERFACE")
+        # A header-only library has no translation of its own - a switch
+        # there is a configuration error, not something to drop silently
+        if(_compile_options)
+            cmake_fatal("E105" "Library '${_name}': 'compile_options' on an INTERFACE library (it has no translation of its own): ${_compile_options}")
+        endif()
+
         # INTERFACE libraries have no sources
         add_library(${_name} INTERFACE)
         
@@ -209,9 +229,9 @@ function(_create_library_target CTX)
     # Precompiled Headers
     # --------------------------------------------------------------------------
     
+    set(_pch_found_path "")
     if(_pch_enabled)
-        set(_pch_found_path "")
-        
+
         # If custom path specified, use it (relative to CMAKE_SOURCE_DIR/projects/)
         if(NOT "${_pch_custom_path}" STREQUAL "")
             set(_custom_full_path "${CMAKE_SOURCE_DIR}/projects/${_pch_custom_path}/${_pch_header}")
@@ -272,9 +292,12 @@ function(_create_library_target CTX)
             endif()
         endif()
         
-        # Apply external via Orchestrator
+        # Apply external via Orchestrator; what it adds to the target is
+        # recorded for source packages (SourcePackage.cmake)
+        _craft_target_snapshot(${_name} _before)
         apply_external_to_target("${_name}" "${_ext}" "${_ext_opts}")
-        
+        _craft_record_external_effect(${_name} "${_ext}" _before)
+
         dbg(${DBG_RARE} "    External: ${_ext} applied" ID LIBRARIES)
     endforeach()
     
@@ -307,7 +330,14 @@ function(_create_library_target CTX)
     
     # Compiler options (from CompilerOptions.cmake)
     apply_compiler_options(${_name})
-    
+
+    # Compile options of this library - after the defaults above, so a switch
+    # of the library overrides a CMakeCraft default (MSVC: the later /fp: wins)
+    if(_compile_options)
+        target_compile_options(${_name} PRIVATE ${_compile_options})
+        dbg(${DBG_RARE} "    Compile Options: ${_compile_options}" ID LIBRARIES)
+    endif()
+
     # Output directories (from OutputDirs.cmake)
     setup_output_dirs(${_name})
     
@@ -334,5 +364,121 @@ function(_create_library_target CTX)
             )
         endif()
     endif()
-    
+
+    # --------------------------------------------------------------------------
+    # Description for a source package (read by SourcePackage.cmake)
+    # --------------------------------------------------------------------------
+
+    set(_private_includes "${_src_dir}")
+    foreach(_inc IN LISTS _includes)
+        if(IS_ABSOLUTE "${_inc}")
+            list(APPEND _private_includes "${_inc}")
+        else()
+            list(APPEND _private_includes "${_src_dir}/${_inc}")
+        endif()
+    endforeach()
+    if(EXISTS "${_src_dir}/pch")
+        list(APPEND _private_includes "${_src_dir}/pch")
+    endif()
+
+    set_target_properties(${_name} PROPERTIES
+        CRAFT_LIB_SOURCE_DIR       "${_src_dir}"
+        CRAFT_LIB_FILES            "${_sources};${_headers};${_extras}"
+        CRAFT_LIB_MODULES          "${_modules}"
+        CRAFT_LIB_PRIVATE_INCLUDES "${_private_includes}"
+        CRAFT_LIB_DEFINES          "${_defines}"
+        CRAFT_LIB_COMPILE_OPTIONS  "${_compile_options}"
+        CRAFT_LIB_PCH              "${_pch_found_path}"
+        CRAFT_LIB_DEPENDENCIES     "${_dependencies}"
+        CRAFT_LIB_EXTERNALS        "${_externals}"
+        CRAFT_LIB_VERSION          "${_version}"
+        CRAFT_LIB_OUTPUT_NAME      "${_output_name}"
+    )
+
+endfunction()
+
+# ============================================================================
+# _craft_target_snapshot - Records the properties an external may change
+# ============================================================================
+#[[
+    _craft_target_snapshot(TARGET_NAME PREFIX)
+
+    Stores the current value of every property listed in
+    _CRAFT_EXTERNAL_EFFECT_PROPERTIES as <PREFIX>_<PROPERTY> in the caller's
+    scope (empty if unset). Paired with _craft_record_external_effect.
+]]
+set(_CRAFT_EXTERNAL_EFFECT_PROPERTIES
+    LINK_LIBRARIES INTERFACE_LINK_LIBRARIES
+    INCLUDE_DIRECTORIES INTERFACE_INCLUDE_DIRECTORIES
+    INTERFACE_SYSTEM_INCLUDE_DIRECTORIES
+    COMPILE_DEFINITIONS INTERFACE_COMPILE_DEFINITIONS
+    COMPILE_OPTIONS INTERFACE_COMPILE_OPTIONS
+    COMPILE_FEATURES INTERFACE_COMPILE_FEATURES
+    LINK_OPTIONS INTERFACE_LINK_OPTIONS
+    SOURCES INTERFACE_SOURCES
+    PRECOMPILE_HEADERS
+)
+
+function(_craft_target_snapshot TARGET_NAME PREFIX)
+    foreach(_prop IN LISTS _CRAFT_EXTERNAL_EFFECT_PROPERTIES)
+        get_target_property(_value ${TARGET_NAME} ${_prop})
+        if(NOT _value)
+            set(_value "")
+        endif()
+        set(${PREFIX}_${_prop} "${_value}" PARENT_SCOPE)
+    endforeach()
+endfunction()
+
+# ============================================================================
+# _craft_record_external_effect - What applying an external added
+# ============================================================================
+#[[
+    _craft_record_external_effect(TARGET_NAME EXT_NAME PREFIX)
+
+    Compares the target with the snapshot <PREFIX>_* and stores on the
+    target:
+        CRAFT_EXT_<EXT>_LINKS  - entries added to LINK_LIBRARIES
+        CRAFT_EXT_<EXT>_PUBLIC - entries added to INTERFACE_LINK_LIBRARIES
+                                 without $<LINK_ONLY:...> (PUBLIC links)
+        CRAFT_EXT_<EXT>_OTHER  - names of every other property that changed
+                                 (the external touched the target directly)
+]]
+function(_craft_record_external_effect TARGET_NAME EXT_NAME PREFIX)
+    set(_links "")
+    set(_public "")
+    set(_other "")
+
+    foreach(_prop IN LISTS _CRAFT_EXTERNAL_EFFECT_PROPERTIES)
+        get_target_property(_after ${TARGET_NAME} ${_prop})
+        if(NOT _after)
+            set(_after "")
+        endif()
+        set(_before "${${PREFIX}_${_prop}}")
+        if("${_after}" STREQUAL "${_before}")
+            continue()
+        endif()
+
+        set(_added "${_after}")
+        if(NOT "${_before}" STREQUAL "")
+            list(REMOVE_ITEM _added ${_before})
+        endif()
+
+        if(_prop STREQUAL "LINK_LIBRARIES")
+            list(APPEND _links ${_added})
+        elseif(_prop STREQUAL "INTERFACE_LINK_LIBRARIES")
+            foreach(_entry IN LISTS _added)
+                if(NOT _entry MATCHES "^\\$<LINK_ONLY:")
+                    list(APPEND _public "${_entry}")
+                endif()
+            endforeach()
+        else()
+            list(APPEND _other ${_prop})
+        endif()
+    endforeach()
+
+    set_target_properties(${TARGET_NAME} PROPERTIES
+        CRAFT_EXT_${EXT_NAME}_LINKS  "${_links}"
+        CRAFT_EXT_${EXT_NAME}_PUBLIC "${_public}"
+        CRAFT_EXT_${EXT_NAME}_OTHER  "${_other}"
+    )
 endfunction()

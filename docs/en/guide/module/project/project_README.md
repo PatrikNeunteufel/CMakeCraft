@@ -32,6 +32,7 @@
 **Building a package?** (Phase 10)
 1. [Packages.md](Packages.md) — block `packages` → target `package_<name>`
 2. [PackageBuild.md](PackageBuild.md) — build-time script (folder, zip, checksum)
+3. [SourcePackage.md](SourcePackage.md) — source package of a library with a plain `CMakeLists.txt` (Phase 11)
 
 ---
 
@@ -62,6 +63,7 @@ Solution.cmake          ← Lädt und parst Solution.json
      │   └── AppCreate        → Core/Runner/Tests Targets
      │
      ├── Packages.cmake       ← Package pipeline (phase 10)
+     │   ├── SourcePackage    → Source package of a library (phase 11)
      │   └── PackageBuild     → Build-time script (cmake -P)
      │
      └── Tests.cmake          ← Test-Pipeline
@@ -118,6 +120,7 @@ Solution.cmake          ← Lädt und parst Solution.json
 |-------|--------------|
 | [Packages.md](Packages.md) | Block `packages` → target `package_<name>` (manifest, version file) |
 | [PackageBuild.md](PackageBuild.md) | Build-time script: package folder, zip archive, SHA256 |
+| [SourcePackage.md](SourcePackage.md) | Source package of a library: generated plain `CMakeLists.txt`, carried-over local externals, `SHA256SUMS` |
 
 ---
 
