@@ -384,6 +384,8 @@ old/
 # Claude-Systemdaten
 /CLAUDE.md
 /.claude/
+# Haltepunkt von session-pause (lokaler Sitzungszettel, Fallback ohne Handover)
+/HALTEPUNKT.md
 
 # Lokale Benutzer-Presets (Qt-Pfade, vcpkg-Toolchain) - die Vorlage
 # CMakeUserPresets.example.json ist getrackt, die Kopie nicht.
