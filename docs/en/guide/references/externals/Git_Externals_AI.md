@@ -4,40 +4,40 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_AI.md](Git_Externals_AI.md)
+> **German:** [Git_Externals_AI.md](../../../../de/guide/references/externals/Git_Externals_AI.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [LLM Inference](#2-llm-inference)
 3. [ML Frameworks](#3-ml-frameworks)
 4. [CUDA / GPU Computing](#4-cuda--gpu-computing)
-5. [Notee](#5-hinweise)
-6. [Schnellreferenz](#6-schnellreferenz)
-7. [See Also](#7-siehe-auch)
+5. [Notes](#5-notes)
+6. [Quick Reference](#6-quick-reference)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Bibliotheken für Machine Learning, LLM Inference und GPU Computing.
+This document describes libraries for machine learning, LLM inference and GPU computing.
 
-### Kategorien
+### Categories
 
-| Kategorie | Bibliotheken |
-|-----------|--------------|
+| Category | Libraries |
+|----------|-----------|
 | LLM Inference | llama.cpp, whisper.cpp, ggml |
 | ML Frameworks | onnxruntime, ncnn |
 | CUDA/GPU | thrust, cub, cutlass |
 
-### Komplexitätshinweis
+### Complexity Note
 
-⚠️ Viele dieser Bibliotheken haben komplexe Build-Anforderungen (CUDA, spezielle Hardware). Prüfe die Dokumentation der jeweiligen Bibliothek vor der Integration.
+⚠️ Many of these libraries have complex build requirements (CUDA, special hardware). Check the documentation of the respective library before integrating it.
 
 ---
 
@@ -45,16 +45,16 @@ This document describes Bibliotheken für Machine Learning, LLM Inference und GP
 
 ### 2.1 llama.cpp
 
-> **Zweck:** Effiziente LLM Inference in C/C++ (LLaMA, Mistral, Phi, etc.).
+> **Purpose:** Efficient LLM inference in C/C++ (LLaMA, Mistral, Phi, etc.).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/ggerganov/llama.cpp.git` |
-| **Aktueller Tag** | `b2000+` (häufige Releases) |
+| **Current Tag** | `b2000+` (frequent releases) |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
-| **CUDA** | Optional (signifikante Beschleunigung) |
-| **Komplexität** | 🟡 Mittel |
+| **Hook** | PreFetch recommended |
+| **CUDA** | Optional (significant speedup) |
+| **Complexity** | 🟡 Medium |
 
 ```json
 "llama_cpp": {
@@ -92,16 +92,16 @@ llama_context* ctx = llama_new_context_with_model(model, ctx_params);
 
 ### 2.2 whisper.cpp
 
-> **Zweck:** Automatic Speech Recognition (OpenAI Whisper in C++).
+> **Purpose:** Automatic Speech Recognition (OpenAI Whisper in C++).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/ggerganov/whisper.cpp.git` |
-| **Aktueller Tag** | `v1.6.0+` |
+| **Current Tag** | `v1.6.0+` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **CUDA** | Optional |
-| **Komplexität** | 🟡 Mittel |
+| **Complexity** | 🟡 Medium |
 
 ```json
 "whisper_cpp": {
@@ -140,15 +140,15 @@ for (int i = 0; i < n_segments; ++i) {
 
 ### 2.3 ggml
 
-> **Zweck:** Tensor-Bibliothek für Machine Learning (Basis für llama.cpp, whisper.cpp).
+> **Purpose:** Tensor library for machine learning (basis for llama.cpp, whisper.cpp).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/ggerganov/ggml.git` |
-| **Aktueller Tag** | Aktuelle Releases |
+| **Current Tag** | Current releases |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
-| **Komplexität** | 🟡 Mittel |
+| **Hook** | PreFetch recommended |
+| **Complexity** | 🟡 Medium |
 
 ```json
 "ggml": {
@@ -163,15 +163,15 @@ for (int i = 0; i < n_segments; ++i) {
 
 ### 3.1 onnxruntime
 
-> **Zweck:** ONNX Model Inference von Microsoft.
+> **Purpose:** ONNX model inference from Microsoft.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/microsoft/onnxruntime.git` |
-| **Aktueller Tag** | `v1.17.0` |
-| **CMake Support** | ⚠️ Komplex |
-| **Hook** | PreFetch erforderlich |
-| **Komplexität** | 🔴 Hoch |
+| **Current Tag** | `v1.17.0` |
+| **CMake Support** | ⚠️ Complex |
+| **Hook** | PreFetch required |
+| **Complexity** | 🔴 High |
 
 ```json
 "onnxruntime": {
@@ -187,22 +187,22 @@ set(onnxruntime_BUILD_SHARED_LIB ON CACHE BOOL "" FORCE)
 set(onnxruntime_ENABLE_PYTHON OFF CACHE BOOL "" FORCE)
 ```
 
-> ⚠️ **Note:** Sehr komplexer Build. Empfehlung: Pre-built Binaries von der [Release Page](https://github.com/microsoft/onnxruntime/releases) verwenden.
+> ⚠️ **Note:** Very complex build. Recommendation: use pre-built binaries from the [Release Page](https://github.com/microsoft/onnxruntime/releases).
 
 ---
 
 ### 3.2 ncnn
 
-> **Zweck:** Hochperformante Neural Network Inference (Mobile-optimiert, von Tencent).
+> **Purpose:** High-performance neural network inference (mobile-optimized, by Tencent).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/Tencent/ncnn.git` |
-| **Aktueller Tag** | `20240102` |
+| **Current Tag** | `20240102` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
-| **Vulkan** | Optional (GPU Acceleration) |
-| **Komplexität** | 🟡 Mittel |
+| **Hook** | PreFetch recommended |
+| **Vulkan** | Optional (GPU acceleration) |
+| **Complexity** | 🟡 Medium |
 
 ```json
 "ncnn": {
@@ -227,16 +227,16 @@ set(NCNN_VULKAN OFF CACHE BOOL "" FORCE)
 
 ### 4.1 thrust
 
-> **Zweck:** CUDA-basierte parallele Algorithmen (STL-ähnliche API).
+> **Purpose:** CUDA-based parallel algorithms (STL-like API).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/NVIDIA/thrust.git` |
-| **Aktueller Tag** | `2.2.0` |
+| **Current Tag** | `2.2.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
-| **Voraussetzung** | CUDA Toolkit |
+| **Prerequisite** | CUDA Toolkit |
 
 ```json
 "thrust": {
@@ -265,14 +265,14 @@ thrust::sort(d_vec.begin(), d_vec.end());
 
 ### 4.2 cub
 
-> **Zweck:** CUDA Unbound - Primitive für CUDA Kernel Development.
+> **Purpose:** CUDA Unbound - primitives for CUDA kernel development.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/NVIDIA/cub.git` |
-| **Aktueller Tag** | `2.2.0` |
+| **Current Tag** | `2.2.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -286,16 +286,16 @@ thrust::sort(d_vec.begin(), d_vec.end());
 
 ### 4.3 cutlass
 
-> **Zweck:** CUDA Templates for Linear Algebra Subroutines (Matrix Operations).
+> **Purpose:** CUDA Templates for Linear Algebra Subroutines (matrix operations).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/NVIDIA/cutlass.git` |
-| **Aktueller Tag** | `v3.4.1` |
+| **Current Tag** | `v3.4.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
-| **Voraussetzung** | CUDA Toolkit |
-| **Komplexität** | 🔴 Hoch |
+| **Hook** | PreFetch recommended |
+| **Prerequisite** | CUDA Toolkit |
+| **Complexity** | 🔴 High |
 
 ```json
 "cutlass": {
@@ -313,41 +313,41 @@ set(CUTLASS_ENABLE_TOOLS OFF CACHE BOOL "" FORCE)
 
 ---
 
-## 5. Notee
+## 5. Notes
 
 ### 5.1 CUDA Toolkit (System)
 
-CUDA muss als System-Installation vorliegen:
+CUDA must be present as a system installation:
 
 ```cmake
 find_package(CUDAToolkit REQUIRED)
 target_link_libraries(MyApp PRIVATE CUDA::cudart CUDA::cublas)
 ```
 
-### 5.2 Build-Komplexität
+### 5.2 Build Complexity
 
-| Bibliothek | Build-Zeit | Dependencies |
-|------------|------------|----------------|
-| llama.cpp | Mittel | Optional: CUDA, Vulkan, Metal |
-| whisper.cpp | Mittel | Optional: CUDA |
-| onnxruntime | Sehr lang | Viele (empfehle Pre-built) |
-| ncnn | Mittel | Optional: Vulkan |
-| thrust/cub | Schnell | CUDA Toolkit |
-| cutlass | Lang | CUDA Toolkit |
+| Library | Build Time | Dependencies |
+|---------|------------|--------------|
+| llama.cpp | Medium | Optional: CUDA, Vulkan, Metal |
+| whisper.cpp | Medium | Optional: CUDA |
+| onnxruntime | Very long | Many (pre-built recommended) |
+| ncnn | Medium | Optional: Vulkan |
+| thrust/cub | Fast | CUDA Toolkit |
+| cutlass | Long | CUDA Toolkit |
 
-### 5.3 Empfohlener Ansatz
+### 5.3 Recommended Approach
 
-Für onnxruntime und komplexe CUDA-Projekte:
-1. Pre-built Binaries herunterladen
-2. Als Local External einbinden
-3. Custom Include.cmake schreiben
+For onnxruntime and complex CUDA projects:
+1. Download pre-built binaries
+2. Integrate them as a Local External
+3. Write a custom Include.cmake
 
 ---
 
-## 6. Schnellreferenz
+## 6. Quick Reference
 
-| Bibliothek | Tag | CMake | Hook | Hauptverwendung |
-|------------|-----|-------|------|-----------------|
+| Library | Tag | CMake | Hook | Main Use |
+|---------|-----|-------|------|----------|
 | llama.cpp | b2500 | ✅ | PreFetch | LLM inference |
 | whisper.cpp | v1.6.0 | ✅ | PreFetch | Speech recognition |
 | ggml | master | ✅ | PreFetch | Tensor operations |
@@ -361,7 +361,7 @@ Für onnxruntime und komplexe CUDA-Projekte:
 
 ## 7. See Also
 
-- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Main overview
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Testing & Benchmarking
 - [Git_Externals_Network.md](Git_Externals_Network.md) — Threading
 
@@ -369,6 +369,7 @@ Für onnxruntime und komplexe CUDA-Projekte:
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: extracted from Git_Externals_Reference |

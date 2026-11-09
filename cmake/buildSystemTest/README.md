@@ -1,9 +1,9 @@
 # buildSystemTest — Selbsttests des Build-Systems (CMakeCraft)
 
 > **In Konsumenten-Projekten (LumiViz & Co.) wird dieser Ordner NICHT benötigt.**
-> Er ist Teil des CMakeCraft-Snapshots und wird beim Sync 1:1 mitgespiegelt —
-> **bitte nicht löschen** (die Top-Level-CMakeLists.txt referenziert die Dateien,
-> und der Spiegel-Sync `robocopy /MIR cmake/` würde ihn ohnehin wiederherstellen).
+> Er kommt mit dem bezogenen CMakeCraft (`.externals/cmakecraft/<version>/`, siehe
+> `cmakecraft.pin`) und wird nur bei `RUN_BUILD_SYSTEM_TESTS=ON` geladen — **bitte nicht
+> löschen**, `CMakeCraft.cmake` referenziert die Dateien.
 
 ## Zweck
 
@@ -17,12 +17,13 @@ Quellpakete, …) zur Configure-Zeit. Phase 11 konfiguriert dabei drei kleine Pr
 - **Default: AUS** (`RUN_BUILD_SYSTEM_TESTS` = OFF) — in Projekten laufen sie also nie mit.
 - **Im CMakeCraft-Repo** (Entwicklung am Build-System): Preset **`craft-selftest`**
   verwenden — oder jedem Preset `-DRUN_BUILD_SYSTEM_TESTS=ON` mitgeben.
-- **In Projekten sinnvoll als Smoke-Check** direkt nach einem Snapshot-Sync
-  (siehe Neues_Projekt_Guide §5.1):
+- **In Projekten sinnvoll als Smoke-Check** direkt nach einem Wechsel des Pins
+  (siehe `docs/de/guide/userguides/Neues_Projekt_Guide.md`):
   ```bash
   cmake --preset <euer-preset> -DRUN_BUILD_SYSTEM_TESTS=ON     # einmalig testen
   cmake --preset <euer-preset>                                  # danach wieder normal
   ```
 - Einzelne Phase: zusätzlich `-DTEST_PHASE=6` (o. ä.).
 
-Doku: `docs/en/projects/buildsystem/` (Konzepte) bzw. Modul-Doku der Phasen.
+Doku: `docs/de/guide/module/buildSystemTest/` (je Phase `Phase<n>_doc.md`, Übersicht
+`buildSystemTest_README.md`; englisch unter `docs/en/…`).

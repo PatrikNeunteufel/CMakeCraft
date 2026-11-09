@@ -1,12 +1,12 @@
 # Future Enhancements — Geplante Erweiterungen
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Datum:** 2025-12-26  
 > **Typ:** Concept  
 > **Status:** Sammlung  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [Future_Enhancements.md](Future_Enhancements.md)
+> **English:** [Future_Enhancements.md](../../en/konzepte/Future_Enhancements.md)
 
 ---
 
@@ -658,8 +658,8 @@ cmake --generate-ci github
 
 
 **Architektur:**
-- [master_concept.md](abgeschlossen/master_concept.md) — Architektur-Übersicht
-- [implementation_plan.md](implementation_plan.md) — Phasen 1-7
+- [master_concept.md](abgeschlossen/Master_Concept.md) — Architektur-Übersicht
+- [implementation_plan.md](abgeschlossen/Implementation_Plan.md) — Phasen 1-7
 
 ---
 
@@ -667,6 +667,7 @@ cmake --generate-ci github
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 (Concept), bereits beschlossene Konzepte entfernt (App-Container Basis, System-Externals Basis), Verweis auf separate Konzept-Dokumente** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 (Concept), bereits beschlossene Konzepte entfernt (App-Container Basis, System-Externals Basis), Verweis auf separate Konzept-Dokumente |
 | 0.2.0 | 2025-12-12 | App-Container (Phase 8), Lockfile-Details, Settings-Erweiterungen |
 | 0.1.0 | 2025-12-10 | Initial: externalsPolicy, Lockfile, vcpkg, Conan, Tooling |

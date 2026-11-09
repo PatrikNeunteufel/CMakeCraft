@@ -1,18 +1,18 @@
 # Solution.json — Cheatsheet
 
 > **Version:** 1.0.0  
-> **Letzte Aktualisierung:** 2025-12-18  
-> **Für:** CMake Architecture  
+> **Date:** 2025-12-18  
+> **For:** CMake Architecture  
 > **Language:** English  
-> **German:** [Solution_Cheatsheet.md](Solution_Cheatsheet.md)
+> **German:** [Solution_Cheatsheet.md](../../../de/guide/cheatsheets/Solution_Cheatsheet.md)
 
 ---
 
-## Schnellstart
+## Quick Start
 
 ```json
 {
-    "schemaVersion": "0.6",
+    "schemaVersion": "1.0",
     "solution": { "name": "MyProject", "version": "1.0.0" },
     "externals": { "doctest": { "path": "externals/doctest" } },
     "libraries": [{ "name": "CoreLib" }],
@@ -22,24 +22,24 @@
 
 ---
 
-## Root-Struktur
+## Root Structure
 
 | Block | Required | Description |
-|-------|---------|--------------|
-| `schemaVersion` | ✅ | `"0.6"` |
-| `solution` | ✅ | Name, Version, Description |
-| `settings` | — | C++ Standard, Defaults |
-| `externals` | — | Externe Dependencies |
-| `libraries` | — | Interne Libraries |
-| `executables` | — | Monolithische Executables |
-| `tests` | — | Standalone Tests |
-| `apps` | — | App-Container (Core/Runner) |
+|-------|----------|-------------|
+| `schemaVersion` | ✅ | `"1.0"` |
+| `solution` | ✅ | Name, version, description |
+| `settings` | — | C++ standard, defaults |
+| `externals` | — | External dependencies |
+| `libraries` | — | Internal libraries |
+| `executables` | — | Monolithic executables |
+| `tests` | — | Standalone tests |
+| `apps` | — | App containers (Core/Runner) |
 
 ---
 
 ## Externals
 
-### Lokal (im Repo)
+### Local (in the repo)
 
 ```json
 "bass": { "path": "externals/bass" }
@@ -54,7 +54,7 @@
 }
 ```
 
-### Mit Hook
+### With Hook
 
 ```json
 "imgui": { 
@@ -68,14 +68,14 @@
 
 ## Executables
 
-| Feld | Required | Default | Description |
-|------|---------|---------|--------------|
-| `name` | ✅ | — | Target-Name |
+| Field | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `name` | ✅ | — | Target name |
 | `type` | — | `CONSOLE` | `CONSOLE` / `GUI` |
-| `path` | — | `projects/exec/{name}` | Source-Pfad |
-| `dependencies` | — | `[]` | Interne Libraries |
-| `externals` | — | `[]` | Externe Dependencies |
-| `skip` | — | `false` | Überspringen |
+| `path` | — | `projects/exec/{name}` | Source path |
+| `dependencies` | — | `[]` | Internal libraries |
+| `externals` | — | `[]` | External dependencies |
+| `skip` | — | `false` | Skip |
 
 ```json
 {
@@ -90,11 +90,11 @@
 
 ## Libraries
 
-| Feld | Required | Default | Description |
-|------|---------|---------|--------------|
-| `name` | ✅ | — | Target-Name |
+| Field | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `name` | ✅ | — | Target name |
 | `type` | — | `STATIC` | `STATIC` / `SHARED` / `INTERFACE` |
-| `path` | — | `projects/libs/{name}` | Source-Pfad |
+| `path` | — | `projects/libs/{name}` | Source path |
 
 ```json
 { "name": "CoreLib", "type": "STATIC" }
@@ -125,13 +125,13 @@
 }
 ```
 
-### Generierte Targets
+### Generated Targets
 
-| Target | Typ |
-|--------|-----|
-| `{App}.Core` | STATIC Library |
+| Target | Type |
+|--------|------|
+| `{App}.Core` | STATIC library |
 | `{App}` | Executable |
-| `{App}.{TestName}` | Test Executable |
+| `{App}.{TestName}` | Test executable |
 
 ---
 
@@ -150,7 +150,7 @@
 }
 ```
 
-### App-Tests (apps[].tests.targets[])
+### App Tests (apps[].tests.targets[])
 
 ```json
 {
@@ -162,10 +162,10 @@
 }
 ```
 
-### Test-Typ Defaults
+### Test Type Defaults
 
-| Typ | Timeout | Parallel |
-|-----|---------|----------|
+| Type | Timeout | Parallel |
+|------|---------|----------|
 | `unit` | 30s | ✅ |
 | `integration` | 120s | ✅ |
 | `performance` | 300s | ❌ |
@@ -174,15 +174,15 @@
 
 ---
 
-## Skip-Feature
+## Skip Feature
 
-| Ebene | JSON | Wirkung |
-|-------|------|---------|
-| App | `"skip": true` | Gesamte App |
-| Alle Tests | `"tests": { "skip": true }` | Alle App-Tests |
-| Ein Test | `"targets": [{ "skip": true }]` | Einzelner Test |
+| Level | JSON | Effect |
+|-------|------|--------|
+| App | `"skip": true` | Entire app |
+| All tests | `"tests": { "skip": true }` | All app tests |
+| One test | `"targets": [{ "skip": true }]` | Single test |
 
-📌 **Global skip hat Vorrang!**
+📌 **Global skip takes precedence!**
 
 ---
 
@@ -195,17 +195,17 @@
 }
 ```
 
-Datei liegt in: `{app}/pch/pch.h`
+File location: `{app}/pch/pch.h`
 
 ---
 
-## Verzeichnisstruktur
+## Directory Structure
 
 ```
 projects/
 ├── apps/{AppName}/
-│   ├── include/     → Core PUBLIC Headers
-│   ├── src/         → Core Implementation
+│   ├── include/     → Core PUBLIC headers
+│   ├── src/         → Core implementation
 │   ├── main/        → Runner (main.cpp)
 │   ├── pch/         → pch.h
 │   └── tests/{type}/{TestName}/
@@ -219,40 +219,40 @@ projects/
 
 ---
 
-## Error-Codes
+## Error Codes
 
-| Code | Bereich | Bedeutung |
-|------|---------|-----------|
-| E0xx | JSON | Parsing-Error |
-| E1xx | Target | Erstellungs-Error |
-| E2xx | External | External-Error |
-| E3xx | Test | Test-Error |
-| E4xx | App | App-Container-Error |
+| Code | Area | Meaning |
+|------|------|---------|
+| E0xx | JSON | Parsing errors |
+| E1xx | Target | Creation errors |
+| E2xx | External | External errors |
+| E3xx | Test | Test errors |
+| E4xx | App | App container errors |
 
 ---
 
-## CMake-Variablen
+## CMake Variables
 
-| Variable | Default | Wirkung |
-|----------|---------|---------|
-| `BUILD_TESTS` | ON | Tests aktivieren |
-| `BUILD_ONLY` | `""` | Nur bestimmte Targets |
-| `EXTERNALS_OFFLINE` | OFF | Kein Netzwerk |
-| `EXTERNALS_FORCE_FETCH` | OFF | Cache ignorieren |
+| Variable | Default | Effect |
+|----------|---------|--------|
+| `BUILD_TESTS` | ON | Enable tests |
+| `BUILD_ONLY` | `""` | Only specific targets |
+| `EXTERNALS_OFFLINE` | OFF | No network |
+| `EXTERNALS_FORCE_FETCH` | OFF | Ignore cache |
 
 ---
 
 ## Tips
 
-- 💡 `externals` zentral definieren → nie inline in executables
-- 💡 `apps[]` für testbare Anwendungen verwenden
-- 💡 `skip: true` für temporär deaktivierte Tests
-- 📌 Schema-Version immer angeben!
+- 💡 Define `externals` centrally → never inline in executables
+- 💡 Use `apps[]` for testable applications
+- 💡 `skip: true` for temporarily disabled tests
+- 📌 Always specify the schema version!
 
 ---
 
 ## See Also
 
-- [Solution_Schema.md](../references/Solution_Schema.md) — Vollständige Reference
-- [AppContainer_Concept.md](../../konzepte/abgeschlossen/AppContainer_Concept.md) — App-Concept
-- [ErrorCodes.md](../references/ErrorCodes.md) — Alle Error-Codes
+- [Solution_Schema.md](../references/Solution_Schema.md) — Complete reference
+- [AppContainer_Concept.md](../../konzepte/abgeschlossen/AppContainer_Concept.md) — App concept
+- [ErrorCodes.md](../references/ErrorCodes.md) — All error codes

@@ -84,7 +84,8 @@ endif()
 
 set_property(GLOBAL PROPERTY SOLUTION_SCHEMA_VERSION "${_schema_version}")
 
-# Schema version 0.1 is the current version
+# Schema version 1.0 is the current version (MAJOR must be 1, else E003;
+# other MINOR -> W102)
 # Note: Schema uses only MAJOR.MINOR (no PATCH)
 
 # Parse schema version from JSON

@@ -1,14 +1,14 @@
 # CMake Standard — Übergeordnete Build-System-Richtlinien
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-19  
+> **Datum:** 2025-12-26  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Geltungsbereich:** Alle CMake-basierten Projekte  
 > **Durchsetzung:** Code Review, CI  
 > **Sprache:** Deutsch  
-> **English:** [CMake_Standard.md](CMake_Standard.md)
+> **English:** [CMake_Standard.md](../../../en/autorenwerk/standards/CMake_Standard.md)
 
 ---
 
@@ -27,7 +27,7 @@
 11. [Verhältnis zu anderen Standards](#11-verhältnis-zu-anderen-standards)
 12. [Checkliste für neue Projekte](#12-checkliste-für-neue-projekte)
 13. [Siehe auch](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+14. [Changelog](#changelog)
 
 ---
 
@@ -386,6 +386,7 @@ Bei dauerhaften Abweichungen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-19** | **Neu: TODO-Marker (6.3)** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.6.0 | 2025-12-19 | Neu: TODO-Marker (6.3) |
 | 0.5.0 | 2025-12-13 | Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix |
 | 0.1.0 | 2025-12-05 | Initial: Modern CMake, Presets, Target-basiert, Namenskonventionen |

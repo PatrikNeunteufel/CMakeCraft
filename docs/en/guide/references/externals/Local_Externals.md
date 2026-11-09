@@ -4,43 +4,43 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Local_Externals.md](Local_Externals.md)
+> **German:** [Local_Externals.md](../../../../de/guide/references/externals/Local_Externals.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
-3. [Kategorien](#3-kategorien)
-4. [Schnellreferenz](#4-schnellreferenz)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
+3. [Categories](#3-categories)
+4. [Quick Reference](#4-quick-reference)
 5. [Include.cmake System](#5-includecmake-system)
-6. [Usage](#6-verwendung)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+6. [Usage](#6-usage)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Diese Reference listet **lokale External Libraries**, die im `externals/` Ordner bereitgestellt werden. Im Gegensatz zu Git-Externals werden diese nicht gefetcht, sondern sind vorkompiliert, generiert oder als Quellen vorhanden.
+This reference lists **local external libraries** that are provided in the `externals/` folder. Unlike Git externals, these are not fetched but are precompiled, generated or present as sources.
 
-### Umfang
+### Scope
 
-- **4 Bibliotheken** in 4 Kategorien
-- Vorkompilierte Libraries (BASS)
-- Generierte Loader (glad)
-- Header-Only Libraries (doctest)
-- Source-basierte Libraries (lua54)
+- **4 libraries** in 4 categories
+- Precompiled libraries (BASS)
+- Generated loaders (glad)
+- Header-only libraries (doctest)
+- Source-based libraries (lua54)
 
-### Dokumentstruktur
+### Document Structure
 
-Die Bibliotheken sind nach Kategorien in separate Dokumente aufgeteilt — **parallel zu den Git-Kategorien**:
+The libraries are split by category into separate documents — **parallel to the Git categories**:
 
-| Dokument | Kategorie | Bibliotheken | Git-Pendant |
-|----------|-----------|--------------|-------------|
+| Document | Category | Libraries | Git Counterpart |
+|----------|----------|-----------|-----------------|
 | [Local_Externals_Testing.md](Local_Externals_Testing.md) | Testing | doctest | Git_Externals_Testing.md |
 | [Local_Externals_Scripting.md](Local_Externals_Scripting.md) | Scripting | lua54 | Git_Externals_Scripting.md |
 | [Local_Externals_GUI.md](Local_Externals_GUI.md) | GUI | glad | Git_Externals_GUI.md |
@@ -48,29 +48,29 @@ Die Bibliotheken sind nach Kategorien in separate Dokumente aufgeteilt — **par
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### 2.1 Symbole
+### 2.1 Symbols
 
-| Symbol | Bedeutung |
-|--------|-----------|
-| ✅ | Verfügbar / Unterstützt |
-| ❌ | Nicht verfügbar |
-| 📦 | Vorkompiliert (Binaries) |
-| 🔧 | Generiert (Konfigurator) |
-| 📄 | Header-Only |
-| 📝 | Aus Quellen kompiliert |
+| Symbol | Meaning |
+|--------|---------|
+| ✅ | Available / Supported |
+| ❌ | Not available |
+| 📦 | Precompiled (binaries) |
+| 🔧 | Generated (configurator) |
+| 📄 | Header-only |
+| 📝 | Compiled from sources |
 
-### 2.2 Library-Typen
+### 2.2 Library Types
 
-| Typ | Description | Example |
-|-----|--------------|----------|
-| **Vorkompiliert** | DLLs/SOs mit Import-Libs | BASS |
-| **Generiert** | Via Web-Konfigurator erstellt | glad |
-| **Header-Only** | Nur Header, keine Kompilierung | doctest |
-| **Source-basiert** | Wird aus Quellen kompiliert | lua54 |
+| Type | Description | Example |
+|------|-------------|---------|
+| **Precompiled** | DLLs/SOs with import libs | BASS |
+| **Generated** | Created via web configurator | glad |
+| **Header-Only** | Headers only, no compilation | doctest |
+| **Source-based** | Compiled from sources | lua54 |
 
-### 2.3 Include.cmake Pfade
+### 2.3 Include.cmake Paths
 
 **Convention over Configuration:**
 
@@ -78,7 +78,7 @@ Die Bibliotheken sind nach Kategorien in separate Dokumente aufgeteilt — **par
 cmake/externals/includes/{name}/Include.cmake
 ```
 
-| External | Include.cmake Pfad |
+| External | Include.cmake Path |
 |----------|-------------------|
 | doctest | `cmake/externals/includes/doctest/Include.cmake` |
 | lua54 | `cmake/externals/includes/lua54/Include.cmake` |
@@ -87,71 +87,71 @@ cmake/externals/includes/{name}/Include.cmake
 
 ---
 
-## 3. Kategorien
+## 3. Categories
 
 ### 3.1 Testing
 
-Unit Testing und Benchmarking.
+Unit testing and benchmarking.
 
-| Bibliothek | Typ | Description | Plattformen |
-|------------|-----|--------------|-------------|
-| **doctest** | 📄 Header-Only | Schnelles Testing Framework | Alle |
+| Library | Type | Description | Platforms |
+|---------|------|-------------|-----------|
+| **doctest** | 📄 Header-Only | Fast testing framework | All |
 
 → Details: [Local_Externals_Testing.md](Local_Externals_Testing.md)
 
 ### 3.2 Scripting
 
-Embedded Scripting Engines.
+Embedded scripting engines.
 
-| Bibliothek | Typ | Description | Plattformen |
-|------------|-----|--------------|-------------|
-| **lua54** | 📝 Source | Lua 5.4 Scripting Engine | Alle |
+| Library | Type | Description | Platforms |
+|---------|------|-------------|-----------|
+| **lua54** | 📝 Source | Lua 5.4 scripting engine | All |
 
 → Details: [Local_Externals_Scripting.md](Local_Externals_Scripting.md)
 
 ### 3.3 GUI
 
-OpenGL Loading und Rendering.
+OpenGL loading and rendering.
 
-| Bibliothek | Typ | Description | Plattformen |
-|------------|-----|--------------|-------------|
-| **glad** | 🔧 Generiert | OpenGL Function Loader | Alle |
+| Library | Type | Description | Platforms |
+|---------|------|-------------|-----------|
+| **glad** | 🔧 Generated | OpenGL function loader | All |
 
 → Details: [Local_Externals_GUI.md](Local_Externals_GUI.md)
 
 ### 3.4 Media
 
-Audio-Verarbeitung und Multimedia.
+Audio processing and multimedia.
 
-| Bibliothek | Typ | Description | Plattformen |
-|------------|-----|--------------|-------------|
-| **BASS** | 📦 Vorkompiliert | Audio-Library mit Plugin-System | Win, Linux, macOS |
+| Library | Type | Description | Platforms |
+|---------|------|-------------|-----------|
+| **BASS** | 📦 Precompiled | Audio library with plugin system | Win, Linux, macOS |
 
 → Details: [Local_Externals_Media.md](Local_Externals_Media.md)
 
 ---
 
-## 4. Schnellreferenz
+## 4. Quick Reference
 
-### 4.1 Alle Local Externals
+### 4.1 All Local Externals
 
-| Library | Kategorie | Typ | Options | Detail-Dok |
-|---------|-----------|-----|---------|------------|
+| Library | Category | Type | Options | Detail Doc |
+|---------|----------|------|---------|------------|
 | **doctest** | Testing | 📄 Header-Only | — | [doctest_Include.md](../../module/externals/includes/doctest/Doctest_Include.md) |
 | **lua54** | Scripting | 📝 Source | LUA_EMBEDDED | [lua54_Include.md](../../module/externals/includes/lua54/Lua54_Include.md) |
-| **glad** | GUI | 🔧 Generiert | — | [glad_Include.md](../../module/externals/includes/glad/Glad_Include.md) |
-| **BASS** | Media | 📦 Vorkompiliert | BASS_FLAC, BASS_FX, ... | [bass_Include.md](../../module/externals/includes/bass/Bass_Include.md) |
+| **glad** | GUI | 🔧 Generated | — | [glad_Include.md](../../module/externals/includes/glad/Glad_Include.md) |
+| **BASS** | Media | 📦 Precompiled | BASS_FLAC, BASS_FX, ... | [bass_Include.md](../../module/externals/includes/bass/Bass_Include.md) |
 
-### 4.2 Kategorie-Mapping (Local ↔ Git)
+### 4.2 Category Mapping (Local ↔ Git)
 
-| Kategorie | Local Externals | Git Externals |
-|-----------|-----------------|---------------|
+| Category | Local Externals | Git Externals |
+|----------|-----------------|---------------|
 | **Testing** | doctest | googletest, catch2, benchmark |
 | **Scripting** | lua54 | sol2, pybind11, chaiscript |
 | **GUI** | glad | glfw, imgui, SDL2, raylib |
 | **Media** | BASS | miniaudio, openal-soft, stb, glm |
 
-### 4.3 Verzeichnisstruktur
+### 4.3 Directory Structure
 
 ```
 externals/
@@ -192,28 +192,28 @@ externals/
 
 ### 5.1 Convention over Configuration
 
-Local Externals benötigen eine `Include.cmake` die das Target erstellt:
+Local externals need an `Include.cmake` that creates the target:
 
 ```
 cmake/externals/includes/{name}/Include.cmake
 ```
 
-Das `include` Feld in Solution.json ist **optional** — die Convention wird automatisch verwendet.
+The `include` field in Solution.json is **optional** — the convention is used automatically.
 
-### 5.2 Verfügbare Variablen
+### 5.2 Available Variables
 
-In jeder Include.cmake stehen diese Variablen zur Verfügung:
+The following variables are available in every Include.cmake:
 
 | Variable | Description |
-|----------|--------------|
-| `EXTERNAL_NAME` | Name des Externals (z.B. "bass") |
-| `EXTERNAL_ROOT` | Absoluter Pfad zum External |
-| `EXTERNAL_JSON` | JSON-Element aus Solution.json |
-| `EXTERNAL_OPTIONS` | Target-spezifische Options |
+|----------|-------------|
+| `EXTERNAL_NAME` | Name of the external (e.g. "bass") |
+| `EXTERNAL_ROOT` | Absolute path to the external |
+| `EXTERNAL_JSON` | JSON element from Solution.json |
+| `EXTERNAL_OPTIONS` | Target-specific options |
 
 ### 5.3 Include.cmake Templates
 
-**Header-Only (doctest):**
+**Header-only (doctest):**
 
 ```cmake
 add_library(${EXTERNAL_NAME} INTERFACE)
@@ -223,7 +223,7 @@ target_include_directories(${EXTERNAL_NAME} INTERFACE
 _register_external_target("${EXTERNAL_NAME}" "${EXTERNAL_NAME}" PRIMARY)
 ```
 
-**Aus Quellen (lua54):**
+**From sources (lua54):**
 
 ```cmake
 file(GLOB _lua_sources "${EXTERNAL_ROOT}/src/*.c")
@@ -232,7 +232,7 @@ target_include_directories(lua54 PUBLIC "${EXTERNAL_ROOT}/src")
 _register_external_target("lua54" "lua54" PRIMARY)
 ```
 
-**Generiert (glad):**
+**Generated (glad):**
 
 ```cmake
 add_library(glad STATIC "${EXTERNAL_ROOT}/src/glad.c")
@@ -242,7 +242,7 @@ target_link_libraries(glad PUBLIC OpenGL::GL)
 _register_external_target("glad" "glad" PRIMARY)
 ```
 
-**Vorkompiliert (BASS):**
+**Precompiled (BASS):**
 
 ```cmake
 add_library(bass SHARED IMPORTED GLOBAL)
@@ -258,7 +258,7 @@ _register_external_target("bass" "bass" PRIMARY)
 
 ## 6. Usage
 
-### 6.1 Einfaches Local External
+### 6.1 Simple Local External
 
 ```json
 {
@@ -276,7 +276,7 @@ _register_external_target("bass" "bass" PRIMARY)
 }
 ```
 
-### 6.2 Mit Options (BASS Plugins)
+### 6.2 With Options (BASS Plugins)
 
 ```json
 {
@@ -300,7 +300,7 @@ _register_external_target("bass" "bass" PRIMARY)
 }
 ```
 
-### 6.3 Kombiniert mit Git Externals
+### 6.3 Combined with Git Externals
 
 ```json
 {
@@ -319,36 +319,37 @@ _register_external_target("bass" "bass" PRIMARY)
 }
 ```
 
-> **Reihenfolge wichtig:** glad → glfw → imgui
+> **Order matters:** glad → glfw → imgui
 
 ---
 
 ## 7. See Also
 
-- [Externals.md](Externals.md) — Hauptübersicht (Local + Git)
-- [Git_Externals.md](Git_Externals.md) — Git Externals Overview
-- [Solution_Schema.md](../Solution_Schema.md) — External-Configuration
-- [Attach_cmake.md](../../module/externals/locals/Attach_cmake.md) — Local External Handler
+- [Externals.md](../Externals.md) — Main overview (Local + Git)
+- [Git_Externals.md](Git_Externals.md) — Git Externals overview
+- [Solution_Schema.md](../Solution_Schema.md) — External configuration
+- [Attach_cmake.md](../../module/externals/locals/Attach_cmake.md) — Local External handler
 
-### Kategorie-Dokumente
+### Category Documents
 
 - [Local_Externals_Testing.md](Local_Externals_Testing.md) — doctest
 - [Local_Externals_Scripting.md](Local_Externals_Scripting.md) — lua54
 - [Local_Externals_GUI.md](Local_Externals_GUI.md) — glad
 - [Local_Externals_Media.md](Local_Externals_Media.md) — BASS
 
-### Detail-Dokumentationen (Include.cmake)
+### Detail Documentation (Include.cmake)
 
-- [doctest_Include.md](../../../../de/guide/module/externals/includes/doctest/doctest_Include.md)
-- [lua54_Include.md](../../../../de/guide/module/externals/includes/lua54/lua54_Include.md)
-- [glad_Include.md](../../../../de/guide/module/externals/includes/glad/glad_Include.md)
-- [bass_Include.md](../../../../de/guide/module/externals/includes/bass/bass_Include.md)
+- [doctest_Include.md](../../module/externals/includes/doctest/Doctest_Include.md)
+- [lua54_Include.md](../../module/externals/includes/lua54/Lua54_Include.md)
+- [glad_Include.md](../../module/externals/includes/glad/Glad_Include.md)
+- [bass_Include.md](../../module/externals/includes/bass/Bass_Include.md)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **4 Kategorien parallel zu Git: Testing, Scripting, GUI, Media** |
-| 0.5.0 | 2025-12-15 | Initial: Overview für Local Externals |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | 4 categories parallel to Git: Testing, Scripting, GUI, Media |
+| 0.5.0 | 2025-12-15 | Initial: overview for Local Externals |

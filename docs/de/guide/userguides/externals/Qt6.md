@@ -1,12 +1,12 @@
 # Qt6 — UserGuide
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [qt6.md](Qt6.md)
+> **English:** [qt6.md](../../../../en/guide/userguides/externals/Qt6.md)
 
 ---
 
@@ -22,7 +22,7 @@
 8. [Fortgeschrittene Techniken](#8-fortgeschrittene-techniken)
 9. [Troubleshooting](#9-troubleshooting)
 10. [Weiterführende Informationen](#10-weiterführende-informationen)
-11. [Changelog](#11-changelog)
+11. [Changelog](#changelog)
 
 ---
 
@@ -107,6 +107,7 @@ brew install qt@6
     "externals": {
         "qt6": {
             "system": true,
+            "package": "Qt6",
             "components": ["Widgets"]
         }
     },
@@ -127,6 +128,7 @@ brew install qt@6
     "externals": {
         "qt6": {
             "system": true,
+            "package": "Qt6",
             "components": ["Widgets", "Network", "Sql"]
         }
     },
@@ -147,6 +149,7 @@ brew install qt@6
     "externals": {
         "qt6": {
             "system": true,
+            "package": "Qt6",
             "components": ["Quick", "QuickControls2", "Qml"]
         }
     },
@@ -751,7 +754,11 @@ QFile file(":/styles/app.css");
 
 ### 9.1 "Qt6 not found"
 
-**Problem:** CMake findet Qt6 nicht
+**Problem:** CMake findet Qt6 nicht. Das Konfigurieren bricht mit
+`[E503] System external 'qt6': find_package(Qt6) failed.` ab; fehlt nur ein Modul aus
+`components`, mit E504, passt die Version nicht zu `version`, mit E505
+(`cmake/externals/system/Handler.cmake:91`, `:109`, `:128`; Meldungen und Lösungen:
+[ErrorCodes.md](../../references/ErrorCodes.md)).
 
 **Lösung:** `CMAKE_PREFIX_PATH` setzen:
 ```bash
@@ -814,4 +821,6 @@ cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64 ..
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An den Code angeglichen: Beispiele §3.1–3.3 mit Pflichtfeld `"package": "Qt6"` (sonst E502, `cmake/externals/system/Handler.cmake`); §9.1 mit E503/E504/E505 (CMakeCraft v0.14.1) |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Qt6** |

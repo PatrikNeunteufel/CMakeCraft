@@ -1,13 +1,13 @@
 # Implementation Plan — Standard for Implementation Plans
 
-> **Version:** 1.2.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.2.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** Stable  
 > **Based on:** Doc v1.0, Blueprint v1.0  
 > **Target Audience:** Documentation Authors, Project Managers  
 > **Language:** English  
-> **Deutsch:** [Implementierungsplan.md](../../de/blueprints/Implementierungsplan.md)
+> **German:** [ImplementationPlan.md](../../../de/autorenwerk/blueprints/ImplementationPlan.md)
 
 ---
 
@@ -61,7 +61,7 @@ This blueprint applies to documents that:
 
 - Describe concrete implementation steps for phases or features
 - Contain task checklists
-- Are located in `docs/[lang]/projects/` or project-specific folders
+- Are located in `docs/[lang]/konzepte/` (implemented: `konzepte/abgeschlossen/`) or project-specific folders
 
 **Examples:**
 
@@ -453,7 +453,7 @@ Goal is a compilable project skeleton with basic types.
 
 | Prerequisite | Version | Status |
 |--------------|---------|--------|
-| CMake Architecture | 1.0+ | ✅ |
+| CMake Architecture V2 | 1.0+ | ✅ |
 | C++ Standard | C++20 | ✅ |
 
 ---
@@ -611,7 +611,8 @@ In addition to the Doc.md checklist:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **1.2.0** | **2025-12-26** | **Documentation as REQUIRED step at end of every phase. Review checklist extended.** |
+| **1.2.1** | **2026-11-09** | **Aligned with the code: location `docs/[lang]/konzepte/` instead of `projects/` (§ 2)** |
+| 1.2.0 | 2025-12-26 | Documentation as REQUIRED step at end of every phase. Review checklist extended. |
 | 1.1.0 | 2025-12-26 | New fields: Methodology, Actual Duration, Status variants. TDD-specific sections documented. |
 | 1.0.0 | 2025-12-26 | Release version: Structure, checklist format, example |
 | 0.1.0 | 2025-12-21 | Initial |

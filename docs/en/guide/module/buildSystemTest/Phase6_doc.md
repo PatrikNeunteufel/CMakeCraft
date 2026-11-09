@@ -1,4 +1,4 @@
-# phase6.cmake — Modul-Dokumentation
+# phase6.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
@@ -6,83 +6,84 @@
 > **Path:** `cmake/buildSystemTest/phase6.cmake`  
 > **Status:** Stable  
 > **Language:** English  
+> **German:** [Phase6_doc.md](../../../../de/guide/module/buildSystemTest/Phase6_doc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Tests](#2-tests)
-3. [Successs-Flag](#3-erfolgs-flag)
-4. [See Also](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+3. [Success Flag](#3-success-flag)
+4. [See Also](#4-see-also)
+5. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Phase 6** testet die **Git Externals Pipeline** — FetchContent-Integration, Hooks und Target Registry.
+**Phase 6** tests the **Git externals pipeline** — FetchContent integration, hooks and target registry.
 
-| Aspekt | Description |
-|--------|--------------|
-| **Zweck** | Git Externals & Hooks Validation |
-| **Debug-ID** | `PHASE6_TEST` |
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Git externals & hooks validation |
+| **Debug ID** | `PHASE6_TEST` |
 | **Dependencies** | Phase 1-5, Fetch.cmake, HookLoader.cmake |
 
 ---
 
 ## 2. Tests
 
-### 2.1 Git External mit CMake-Support (GLFW)
+### 2.1 Git External with CMake Support (GLFW)
 
-| Prüfung | Description |
-|---------|--------------|
-| `TARGET glfw` | Target existiert |
-| `EXTERNAL_TARGET_glfw` | In Registry eingetragen |
+| Check | Description |
+|-------|-------------|
+| `TARGET glfw` | Target exists |
+| `EXTERNAL_TARGET_glfw` | Entered in the registry |
 
-### 2.2 Git External ohne CMake-Support (ImGui)
+### 2.2 Git External without CMake Support (ImGui)
 
-Prüft, dass PostFetch-Hook das Target erstellt:
+Checks that the PostFetch hook creates the target:
 
 ```cmake
 if(TARGET imgui OR TARGET imgui_docking)
-    # PostFetch Hook hat funktioniert
+    # PostFetch hook worked
 endif()
 ```
 
 ### 2.3 Hook Reuse
 
-Prüft, dass `imgui_docking` den `imgui`-Hook wiederverwendet:
+Checks that `imgui_docking` reuses the `imgui` hook:
 
 | Property | Description |
-|----------|--------------|
-| `EXTERNAL_HOOK_imgui` | Hook-Pfad |
-| `EXTERNAL_HOOK_imgui_docking` | Sollte gleich sein |
+|----------|-------------|
+| `EXTERNAL_HOOK_imgui` | Hook path |
+| `EXTERNAL_HOOK_imgui_docking` | Should be the same |
 
-Beide Targets sollten existieren und unterschiedlich sein.
+Both targets should exist and be distinct.
 
 ### 2.4 Externals JSON Parsing
 
-Prüft JSON-Felder:
+Checks JSON fields:
 
-| Feld | External | Description |
-|------|----------|--------------|
-| `git` | glfw | Git-URL |
+| Field | External | Description |
+|-------|----------|-------------|
+| `git` | glfw | Git URL |
 | `cmakeSupport` | imgui | false |
 | `hook` | imgui_docking | "imgui" |
 
 ### 2.5 Fetched External Linking
 
-Prüft `imGuiApp` Links:
+Checks the links of `imGuiApp`:
 
 ```cmake
 get_target_property(_libs imGuiApp LINK_LIBRARIES)
-# Sollte glfw und imgui enthalten
+# Should contain glfw and imgui
 ```
 
 ---
 
-## 3. Successs-Flag
+## 3. Success Flag
 
 ```cmake
 set(PHASE6_TEST_PASSED TRUE CACHE BOOL "Phase 6 Test passed" FORCE)
@@ -92,17 +93,18 @@ set(PHASE6_TEST_PASSED TRUE CACHE BOOL "Phase 6 Test passed" FORCE)
 
 ## 4. See Also
 
-- [Fetch.md](../modules/externals/core/Fetch.md)
-- [HookLoader.md](../modules/externals/Hook/HookLoader.md)
-- [Handler.md](../modules/externals/Fetched/Handler.md)
-- [Targets.md](../modules/externals/Registry/Targets.md)
+- [Fetch.md](../externals/core/Fetch_cmake.md)
+- [HookLoader.md](../externals/hooks/HookLoader_cmake.md)
+- [Handler.md](../externals/fetched/Handler_cmake.md)
+- [Targets.md](../externals/registry/Targets_cmake.md)
 - [Git_Externals.md](../../references/externals/Git_Externals.md)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 format |
 | 0.1.0 | 2025-12-12 | Initial |

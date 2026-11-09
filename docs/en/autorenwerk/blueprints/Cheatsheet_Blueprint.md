@@ -4,35 +4,35 @@
 > **Date:** 2025-12-26  
 > **Type:** Blueprint  
 > **Status:** Stable  
-> **Target Audience:** Dokumentations-Autoren  
+> **Target Audience:** Documentation authors  
 > **Language:** English  
-> **German:** [Cheatsheet_Blueprint.md](Cheatsheet_Blueprint.md)
+> **German:** [Cheatsheet_Blueprint.md](../../../de/autorenwerk/blueprints/Cheatsheet_Blueprint.md)
 
 ---
 
 ## 1. Overview
 
-Dieses Blueprint definiert das Format für **Cheatsheets** — kompakte Schnellreferenzen für häufig benötigte Informationen.
+This blueprint defines the format for **cheatsheets** — compact quick references for frequently needed information.
 
-### 1.1 Eigenschaften
+### 1.1 Properties
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| Ziel-Länge | 1-2 Seiten (gedruckt) |
-| Primäres Format | Tabellen, Code-Snippets |
-| Fließtext | Minimal |
-| Zielgruppe | Entwickler mit Grundwissen |
+| Target length | 1-2 pages (printed) |
+| Primary format | Tables, code snippets |
+| Running text | Minimal |
+| Target audience | Developers with basic knowledge |
 
-### 1.2 Wann Cheatsheet verwenden?
+### 1.2 When to Use a Cheatsheet?
 
 | Situation | Cheatsheet? | Alternative |
 |-----------|-------------|-------------|
-| Schnellreferenz für Befehle | ✅ Yes | — |
-| API-Kurzübersicht | ✅ Yes | — |
-| Syntax-Reference | ✅ Yes | — |
-| Concept-Erklärung | ❌ No | Concept |
-| Schritt-für-Schritt Anleitung | ❌ No | UserGuide |
-| Vollständige Spezifikation | ❌ No | Reference |
+| Quick reference for commands | ✅ Yes | — |
+| Short API overview | ✅ Yes | — |
+| Syntax reference | ✅ Yes | — |
+| Explaining a concept | ❌ No | Concept |
+| Step-by-step instructions | ❌ No | UserGuide |
+| Complete specification | ❌ No | Reference |
 
 ---
 
@@ -41,37 +41,37 @@ Dieses Blueprint definiert das Format für **Cheatsheets** — kompakte Schnellr
 ### 2.1 Header
 
 ```markdown
-# {Thema} — Cheatsheet
+# {Topic} — Cheatsheet
 
 > **Version:** X.Y.Z  
-> **Letzte Aktualisierung:** YYYY-MM-DD  
-> **Für:** {Produkt/Tool} vX.Y  
+> **Last Updated:** YYYY-MM-DD  
+> **For:** {Product/Tool} vX.Y  
 > **Language:** English  
-> **German:** [{Thema}_Cheatsheet.md](path/to/english)
+> **German:** [{Topic}_Cheatsheet.md](path/to/german)
 
 ---
 ```
 
-### 2.2 Struktur
+### 2.2 Structure
 
-```markdown
-## Schnellstart
+````markdown
+## Quick Start
 
-{2-3 Zeilen: Importantste Info sofort}
+{2-3 lines: most important info right away}
 
 ---
 
-## {Kategorie 1}
+## {Category 1}
 
-| {Spalte A} | {Spalte B} | {Spalte C} |
+| {Column A} | {Column B} | {Column C} |
 |------------|------------|------------|
 | ... | ... | ... |
 
 ---
 
-## {Kategorie 2}
+## {Category 2}
 
-### {Unterkategorie}
+### {Subcategory}
 
 ```{language}
 {code snippet}
@@ -90,238 +90,239 @@ Dieses Blueprint definiert das Format für **Cheatsheets** — kompakte Schnellr
 
 - [Link 1](path) — Description
 - [Link 2](path) — Description
-```
+````
 
 ---
 
-## 3. Formatierungsregeln
+## 3. Formatting Rules
 
-### 3.1 Tabellen
+### 3.1 Tables
 
-Tabellen sind das Hauptelement eines Cheatsheets.
+Tables are the main element of a cheatsheet.
 
-| Regel | Example |
+| Rule | Example |
 |-------|----------|
-| Kurze Zellen | `name` statt `Der Name des Elements` |
-| Code in Backticks | `cmake_fatal()` |
-| Keine Sätze | Stichworte |
-| Max 4-5 Spalten | Lesbarkeit |
+| Short cells | `name` instead of `The name of the element` |
+| Code in backticks | `cmake_fatal()` |
+| No sentences | Keywords |
+| Max 4-5 columns | Readability |
 
-**Gut:**
+**Good:**
 
-| Befehl | Wirkung |
+| Command | Effect |
 |--------|---------|
-| `git add .` | Alle Changes stagen |
-| `git commit -m "msg"` | Commit erstellen |
+| `git add .` | Stage all changes |
+| `git commit -m "msg"` | Create commit |
 
-**Schlecht:**
+**Bad:**
 
-| Befehl | Description was dieser Befehl macht |
+| Command | Description of what this command does |
 |--------|--------------------------------------|
-| `git add .` | Dieser Befehl fügt alle geänderten Dateien zum Staging-Bereich hinzu |
+| `git add .` | This command adds all changed files to the staging area |
 
-### 3.2 Code-Snippets
+### 3.2 Code Snippets
 
-- **Kurz halten** (max 5-10 Zeilen)
-- **Kommentare** nur wenn nötig
-- **Syntax-Highlighting** immer angeben
+- **Keep them short** (max 5-10 lines)
+- **Comments** only where necessary
+- **Syntax highlighting** always specified
 
 ```cmake
-# Gut: Kurz und prägnant
+# Good: short and concise
 cmake_fatal("E001" "Description")
 cmake_warn("W001" "Description")
 ```
 
 ```cmake
-# Schlecht: Zu ausführlich für Cheatsheet
-# Diese Funktion wird verwendet um einen fatalen Error zu erzeugen
-# Parameters 1: Der Errorcode im Format EXXX
-# Parameters 2: Die Description des Errors
+# Bad: too verbose for a cheatsheet
+# This function is used to raise a fatal error
+# Parameter 1: The error code in the format EXXX
+# Parameter 2: The description of the error
 function(cmake_fatal ERROR_CODE DESCRIPTION)
     message(FATAL_ERROR "[${ERROR_CODE}] ${DESCRIPTION}")
 endfunction()
 ```
 
-### 3.3 Kategorien
+### 3.3 Categories
 
-- **Logisch gruppieren** (nicht alphabetisch)
-- **Importantstes zuerst**
-- **Max 6-8 Kategorien**
-- **Horizontale Linien** (`---`) zwischen Kategorien
+- **Group logically** (not alphabetically)
+- **Most important first**
+- **Max 6-8 categories**
+- **Horizontal rules** (`---`) between categories
 
-### 3.4 Visuelle Marker
+### 3.4 Visual Markers
 
 | Marker | Usage |
 |--------|------------|
-| ✅ | Empfohlen, Success |
-| ❌ | Nicht empfohlen, Error |
-| ⚠️ | Warning, Vorsicht |
+| ✅ | Recommended, success |
+| ❌ | Not recommended, error |
+| ⚠️ | Warning, caution |
 | 💡 | Tip |
-| 📌 | Important/Merken |
-| → | Ergebnis, führt zu |
+| 📌 | Important/remember |
+| → | Result, leads to |
 
 ---
 
-## 4. Example: Vollständiges Cheatsheet
+## 4. Example: Complete Cheatsheet
 
-```markdown
+````markdown
 # Git — Cheatsheet
 
 > **Version:** 1.0.0  
-> **Letzte Aktualisierung:** 2025-12-18  
-> **Für:** Git 2.x  
+> **Last Updated:** 2025-12-18  
+> **For:** Git 2.x  
 
 ---
 
-## Schnellstart
+## Quick Start
 
 ```bash
-git clone <url>      # Repository klonen
-git add . && git commit -m "msg" && git push   # Changes pushen
+git clone <url>      # Clone repository
+git add . && git commit -m "msg" && git push   # Push changes
 ```
 
 ---
 
-## Basis-Befehle
+## Basic Commands
 
-| Befehl | Wirkung |
+| Command | Effect |
 |--------|---------|
-| `git init` | Neues Repository |
-| `git clone <url>` | Repository klonen |
-| `git status` | Status anzeigen |
-| `git log --oneline` | Kompakte History |
+| `git init` | New repository |
+| `git clone <url>` | Clone repository |
+| `git status` | Show status |
+| `git log --oneline` | Compact history |
 
 ---
 
 ## Changes
 
-| Befehl | Wirkung |
+| Command | Effect |
 |--------|---------|
-| `git add <file>` | Datei stagen |
-| `git add .` | Alles stagen |
+| `git add <file>` | Stage file |
+| `git add .` | Stage everything |
 | `git commit -m "msg"` | Commit |
-| `git commit --amend` | Letzten Commit ändern |
+| `git commit --amend` | Amend last commit |
 
 ---
 
 ## Branches
 
-| Befehl | Wirkung |
+| Command | Effect |
 |--------|---------|
-| `git branch` | Branches auflisten |
-| `git branch <name>` | Branch erstellen |
-| `git checkout <name>` | Branch wechseln |
-| `git checkout -b <name>` | Erstellen + Wechseln |
-| `git merge <branch>` | Branch mergen |
+| `git branch` | List branches |
+| `git branch <name>` | Create branch |
+| `git checkout <name>` | Switch branch |
+| `git checkout -b <name>` | Create + switch |
+| `git merge <branch>` | Merge branch |
 
 ---
 
 ## Remote
 
-| Befehl | Wirkung |
+| Command | Effect |
 |--------|---------|
-| `git push` | Changes hochladen |
-| `git pull` | Changes holen + mergen |
-| `git fetch` | Changes holen (ohne merge) |
+| `git push` | Upload changes |
+| `git pull` | Fetch + merge changes |
+| `git fetch` | Fetch changes (without merge) |
 
 ---
 
-## Rückgängig
+## Undo
 
-| Situation | Befehl |
+| Situation | Command |
 |-----------|--------|
-| Unstaged Changes verwerfen | `git checkout -- <file>` |
-| Staged → Unstaged | `git reset HEAD <file>` |
-| Letzten Commit rückgängig | `git reset --soft HEAD~1` |
-| ⚠️ Commit löschen | `git reset --hard HEAD~1` |
+| Discard unstaged changes | `git checkout -- <file>` |
+| Staged → unstaged | `git reset HEAD <file>` |
+| Undo last commit | `git reset --soft HEAD~1` |
+| ⚠️ Delete commit | `git reset --hard HEAD~1` |
 
 ---
 
 ## Tips
 
-- 💡 `git stash` → Changes temporär speichern
-- 💡 `git diff --staged` → Staged Changes anzeigen
-- 📌 Vor `--hard` immer `git stash` machen!
+- 💡 `git stash` → Save changes temporarily
+- 💡 `git diff --staged` → Show staged changes
+- 📌 Always run `git stash` before `--hard`!
 
 ---
 
 ## See Also
 
-- [Git Dokumentation](https://git-scm.com/doc)
-- [Pro Git Buch](https://git-scm.com/book)
-```
+- [Git Documentation](https://git-scm.com/doc)
+- [Pro Git Book](https://git-scm.com/book)
+````
 
 ---
 
 ## 5. Anti-Patterns
 
-### 5.1 Zu viel Text
+### 5.1 Too Much Text
 
-❌ **Schlecht:**
+❌ **Bad:**
 
 ```markdown
-## Einführung
+## Introduction
 
-Git ist ein verteiltes Versionskontrollsystem, das von Linus Torvalds 
-entwickelt wurde. Es ermöglicht die Zusammenarbeit mehrerer Entwickler 
-an einem Projekt und die Nachverfolgung aller Changes...
+Git is a distributed version control system developed by 
+Linus Torvalds. It enables several developers to collaborate 
+on a project and to track all changes...
 ```
 
-✅ **Gut:**
+✅ **Good:**
 
 ```markdown
-## Schnellstart
+## Quick Start
 
 `git clone` → `git add` → `git commit` → `git push`
 ```
 
-### 5.2 Zu viele Details
+### 5.2 Too Many Details
 
-❌ **Schlecht:**
+❌ **Bad:**
 
-| Flag | Langform | Description | Default | Seit Version |
+| Flag | Long form | Description | Default | Since version |
 |------|----------|--------------|---------|--------------|
-| `-m` | `--message` | Commit-Nachricht | — | 1.0 |
+| `-m` | `--message` | Commit message | — | 1.0 |
 
-✅ **Gut:**
+✅ **Good:**
 
-| Befehl | Wirkung |
+| Command | Effect |
 |--------|---------|
-| `git commit -m "msg"` | Commit mit Nachricht |
+| `git commit -m "msg"` | Commit with message |
 
-### 5.3 Alphabetische Sortierung
+### 5.3 Alphabetical Sorting
 
-❌ **Schlecht:** `add`, `branch`, `checkout`, `clone`, `commit`...
+❌ **Bad:** `add`, `branch`, `checkout`, `clone`, `commit`...
 
-✅ **Gut:** Nach Workflow: `clone` → `add` → `commit` → `push`
+✅ **Good:** By workflow: `clone` → `add` → `commit` → `push`
 
 ---
 
-## 6. Checkliste
+## 6. Checklist
 
-Vor Veröffentlichung prüfen:
+Check before publishing:
 
-- [ ] Passt auf 1-2 Seiten (gedruckt)?
-- [ ] Importantstes zuerst?
-- [ ] Tabellen statt Fließtext?
-- [ ] Code-Snippets kurz (< 10 Zeilen)?
-- [ ] Kategorien logisch gruppiert?
-- [ ] Keine Erklärungen, nur Fakten?
-- [ ] Visuelle Marker sparsam verwendet?
-- [ ] Siehe-auch Links vorhanden?
+- [ ] Fits on 1-2 pages (printed)?
+- [ ] Most important first?
+- [ ] Tables instead of running text?
+- [ ] Code snippets short (< 10 lines)?
+- [ ] Categories grouped logically?
+- [ ] No explanations, only facts?
+- [ ] Visual markers used sparingly?
+- [ ] See-also links present?
 
 ---
 
 ## 7. See Also
 
-- [Concept_Blueprint.md](Concept_Blueprint.md) — Für Erklärungen
-- [Reference_Blueprint.md](Reference_Blueprint.md) — Für vollständige Spezifikationen
-- [UserGuide_Blueprint.md](UserGuide_Blueprint.md) — Für Schritt-für-Schritt Anleitungen
+- [Concept.md](Concept.md) — For explanations
+- [Reference.md](Reference.md) — For complete specifications
+- [Guide.md](Guide.md) — For step-by-step instructions
 
 ---
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-18** | **Initial: Cheatsheet Blueprint erstellt** |
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.1.0 | 2025-12-18 | Initial: Cheatsheet blueprint created |

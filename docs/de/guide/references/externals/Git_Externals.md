@@ -1,12 +1,12 @@
 # Git Externals — Übersicht
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals.md](Git_Externals.md)
+> **English:** [Git_Externals.md](../../../../en/guide/references/externals/Git_Externals.md)
 
 ---
 
@@ -19,7 +19,7 @@
 5. [Hook-Anforderungen](#5-hook-anforderungen)
 6. [Verwendung](#6-verwendung)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -355,6 +355,7 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **8 Kategorien: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel zu Local** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | 8 Kategorien: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel zu Local |
 | 0.5.0 | 2025-12-14 | Aufteilung in Kategorie-Dokumente |
 | 0.1.0 | 2025-12-10 | Initial: 50+ Externals in 15 Kategorien |

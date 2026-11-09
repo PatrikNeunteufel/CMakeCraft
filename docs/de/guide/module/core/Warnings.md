@@ -1,14 +1,14 @@
 # Warnings.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Warnings.md](Warnings.md)  
-> **Modul:** [`cmake/core/Warnings.cmake`](../../../../cmake/core/Warnings.cmake)  
+> **English:** [Warnings.md](../../../../en/guide/module/core/Warnings.md)  
+> **Modul:** [`cmake/core/Warnings.cmake`](../../../../../cmake/core/Warnings.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [Verwendungsbeispiele](#5-verwendungsbeispiele)
 6. [Third-Party Code](#6-third-party-code)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -213,6 +213,7 @@ target_compile_options(${TARGET} PRIVATE
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): apply_warnings für MSVC/GCC/Clang |

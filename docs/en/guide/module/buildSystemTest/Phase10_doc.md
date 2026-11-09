@@ -6,6 +6,7 @@
 > **Path:** `cmake/buildSystemTest/phase10.cmake`  
 > **Status:** Stable  
 > **Language:** English  
+> **German:** [Phase10_doc.md](../../../../de/guide/module/buildSystemTest/Phase10_doc.md)
 
 ---
 
@@ -15,7 +16,7 @@
 2. [Tests](#2-tests)
 3. [Success Flag](#3-success-flag)
 4. [See Also](#4-see-also)
-5. [Changelog](#5-changelog)
+5. [Changelog](#changelog)
 
 ---
 

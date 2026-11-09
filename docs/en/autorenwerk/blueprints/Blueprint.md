@@ -1,322 +1,324 @@
-# Blueprint — Meta-Standard für Blueprints
+# Blueprint — Meta-Standard for Blueprints
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Target Audience:** Documentation Authors  
 > **Language:** English  
-> **German:** [Blueprint.md](Blueprint.md)
+> **German:** [Blueprint.md](../../../de/autorenwerk/blueprints/Blueprint.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-uebersicht)
-2. [Blueprint-Hierarchie](#2-blueprint-hierarchie)
-3. [Kernprinzipien](#3-kernprinzipien)
-4. [Blueprint-Struktur](#4-blueprint-struktur)
-5. [Vererbung](#5-vererbung)
-6. [Versionierung](#6-versionierung)
-7. [Example: Neuen Blueprint erstellen](#7-beispiel-neuen-blueprint-erstellen)
-8. [Review Checklist](#8-review-checkliste)
-9. [See Also](#9-siehe-auch)
+1. [Overview](#1-overview)
+2. [Blueprint Hierarchy](#2-blueprint-hierarchy)
+3. [Core Principles](#3-core-principles)
+4. [Blueprint Structure](#4-blueprint-structure)
+5. [Inheritance](#5-inheritance)
+6. [Versioning](#6-versioning)
+7. [Example: Creating a New Blueprint](#7-example-creating-a-new-blueprint)
+8. [Review Checklist](#8-review-checklist)
+9. [See Also](#9-see-also)
 10. [Changelog](#10-changelogs)
 
 ---
 
 ## 1. Overview
 
-Dieses Dokument ist der **Meta-Blueprint** — es definiert, wie Blueprints selbst aufgebaut sein müssen. 
+This document is the **meta-blueprint** — it defines how blueprints themselves must be structured.
 
-Blueprints sind Standards, die:
-- Struktur und Format für andere Dokumente oder Code definieren
-- Konsistenz über das gesamte Projekt sicherstellen
-- Als "Basisklassen" für spezialisierte Standards fungieren
+Blueprints are standards that:
+- define structure and format for other documents or code
+- ensure consistency across the entire project
+- act as "base classes" for specialized standards
 
-### Was ist ein Blueprint?
+### What Is a Blueprint?
 
-| Aspekt | Description |
+| Aspect | Description |
 |--------|--------------|
-| **Zweck** | Definiert verbindliche Regeln für Dokumente oder Code |
-| **Zielgruppe** | Documentation Authors, Code-Autoren |
-| **Verbindlichkeit** | Normativ — Abweichungen müssen begründet werden |
-| **Selbstreferenz** | Dieser Blueprint beschreibt auch sich selbst |
+| **Purpose** | Defines binding rules for documents or code |
+| **Target audience** | Documentation authors, code authors |
+| **Binding force** | Normative — deviations must be justified |
+| **Self-reference** | This blueprint also describes itself |
 
 ---
 
-## 2. Blueprint-Hierarchie
+## 2. Blueprint Hierarchy
 
-Die Blueprints folgen einer Vererbungshierarchie:
+The blueprints follow an inheritance hierarchy:
 
 ```
-Blueprint.md                    ← Meta-Blueprint (dieses Dokument)
+Blueprint.md                    ← Meta-blueprint (this document)
     │
-    ├── Doc.md                  ← Allgemeine Dokumentations-Regeln
+    ├── Doc.md                  ← General documentation rules
     │       │
-    │       ├── ModuleDoc.md    ← CMake-Modul-Dokumentation
-    │       ├── Guide.md        ← Benutzerhandbücher
-    │       ├── Reference.md    ← API/Schema-Referenceen
-    │       ├── Concept.md      ← Architecture-Concepte
-    │       ├── Standard.md     ← Coding/Project Standards
-    │       └── Tutorial.md     ← Step-by-Step Tutorials
+    │       ├── ModuleDoc.md    ← CMake module documentation
+    │       ├── Guide.md        ← User guides
+    │       ├── Reference.md    ← API/schema references
+    │       ├── Concept.md      ← Architecture concepts
+    │       ├── Standard.md     ← Coding/project standards
+    │       └── Tutorial.md     ← Step-by-step tutorials
     
-    ├── CMake.md                ← CMake-Scripts (.cmake)
+    ├── CMake.md                ← CMake scripts (.cmake)
     │
-    └── Cpp.md                  ← C++/C Code-Dateien (.cpp, .hpp, .tpp)
+    └── Cpp.md                  ← C++/C code files (.cpp, .hpp, .tpp)
 ```
 
-### Vererbungsregeln
+### Inheritance Rules
 
-| Regel | Description |
+| Rule | Description |
 |-------|--------------|
-| **Erben** | Spezialisierte Blueprints übernehmen Regeln vom Parent |
-| **Erweitern** | Zusätzliche Regeln können hinzugefügt werden |
-| **Überschreiben** | Parent-Regeln können explizit überschrieben werden |
-| **Dokumentieren** | Abweichungen müssen im "Basiert auf"-Header sichtbar sein |
+| **Inherit** | Specialized blueprints adopt rules from the parent |
+| **Extend** | Additional rules can be added |
+| **Override** | Parent rules can be explicitly overridden |
+| **Document** | Deviations must be visible in the "Based on" header |
 
 ---
 
-## 3. Kernprinzipien
+## 3. Core Principles
 
-Alle Blueprints folgen diesen Grundsätzen:
+All blueprints follow these principles:
 
-### 3.1 Konsistenz vor Individualität
+### 3.1 Consistency over Individuality
 
-> Einheitliche Struktur ermöglicht schnelles Erfassen von Dokumenten.
+> A uniform structure makes documents quick to take in.
 
 ### 3.2 Convention over Configuration
 
-> Standardwerte und implizite Konventionen reduzieren Boilerplate.
+> Default values and implicit conventions reduce boilerplate.
 
-### 3.3 Explizit vor Implizit
+### 3.3 Explicit over Implicit
 
-> Bei Mehrdeutigkeiten explizite Angabe bevorzugen.
+> In case of ambiguity, prefer an explicit statement.
 
-### 3.4 Maschinenlesbar wenn möglich
+### 3.4 Machine-Readable Where Possible
 
-> Strukturen so wählen, dass Tools sie parsen können (YAML-Header, konsistente Überschriften).
+> Choose structures that tools can parse (YAML header, consistent headings).
 
 ---
 
-## 4. Blueprint-Struktur
+## 4. Blueprint Structure
 
-Jeder Blueprint **MUSS** diese Elemente enthalten:
+Every blueprint **MUST** contain these elements:
 
 ### 4.1 Header (Required)
 
 ```markdown
-# [Name] — [Kurzbeschreibung]
+# [Name] — [Short description]
 
 > **Version:** X.Y.Z  
 > **Date:** YYYY-MM-DD  
 > **Type:** Blueprint  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** [Wer soll diesen Blueprint lesen?]  
+> **Target Audience:** [Who should read this blueprint?]  
 > **Language:** English  
-> **German:** [Dateiname.md](../../en/blueprints/Dateiname.md)
+> **German:** [FileName.md](../../../de/autorenwerk/blueprints/FileName.md)
 ```
 
 ### 4.2 Table of Contents (Required)
 
-Nach dem Header folgt immer ein nummeriertes Table of Contents mit Anker-Links:
+The header is always followed by a numbered table of contents with anchor links:
 
 ```markdown
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Thema A](#2-thema-a)
-3. [Thema B](#3-thema-b)
+1. [Overview](#1-overview)
+2. [Topic A](#2-topic-a)
+3. [Topic B](#3-topic-b)
 ...
 ```
 
-### 4.3 Requiredabschnitte für Blueprints
+### 4.3 Required Sections for Blueprints
 
-| # | Abschnitt | Inhalt |
+| # | Section | Content |
 |---|-----------|--------|
-| 1 | Overview | Zweck, Scope |
-| 2-n | Thematische Abschnitte | Die eigentlichen Regeln |
-| n+1 | Examples/Templates | Konkrete Anwendung |
-| n+2 | Review Checklist | Prüfpunkte vor Fertigstellung |
-| n+3 | See Also | Verwandte Dokumente |
-| n+4 | Changelog | Versionshistorie (immer am Ende) |
+| 1 | Overview | Purpose, scope |
+| 2-n | Topical sections | The actual rules |
+| n+1 | Examples/templates | Concrete application |
+| n+2 | Review checklist | Checkpoints before completion |
+| n+3 | See also | Related documents |
+| n+4 | Changelog | Version history (always at the end) |
 
-### 4.4 Horizontale Trenner
+### 4.4 Horizontal Separators
 
-Vor jedem H2-Abschnitt (`##`) steht ein horizontaler Trenner:
+Every H2 section (`##`) is preceded by a horizontal separator:
 
 ```markdown
 ---
 
-## Neuer Abschnitt
+## New Section
 ```
 
 ---
 
-## 5. Vererbung
+## 5. Inheritance
 
-### 5.1 "Basiert auf"-Angabe
+### 5.1 "Based on" Statement
 
-Spezialisierte Blueprints müssen ihren Parent referenzieren:
+Specialized blueprints must reference their parent:
 
 ```markdown
 > **Based on:** Doc v0.5, Blueprint v0.5
 ```
 
-### 5.2 Überschreiben von Regeln
+### 5.2 Overriding Rules
 
-Wenn ein Blueprint eine Parent-Regel überschreibt:
+When a blueprint overrides a parent rule:
 
 ```markdown
-### Überschreibungen von Doc.md
+### Overrides of Doc.md
 
-| Regel | Parent-Wert | Dieser Blueprint |
+| Rule | Parent value | This blueprint |
 |-------|-------------|------------------|
-| Header-Feld X | Optional | Required |
+| Header field X | Optional | Required |
 ```
 
-### 5.3 Erweitern von Strukturen
+### 5.3 Extending Structures
 
-Zusätzliche Requiredfelder werden dokumentiert:
+Additional required fields are documented:
 
 ```markdown
-### Zusätzliche Header-Felder
+### Additional Header Fields
 
-Zusätzlich zu den Feldern aus Doc.md:
+In addition to the fields from Doc.md:
 
-| Feld | Required | Description |
+| Field | Required | Description |
 |------|---------|--------------|
-| `Module:` | ✓ | Pfad zum dokumentierten Modul |
+| `Module:` | ✓ | Path to the documented module |
 ```
 
 ---
 
-## 6. Versionierung
+## 6. Versioning
 
 ### 6.1 Semantic Versioning
 
-Blueprints verwenden SemVer:
+Blueprints use SemVer:
 
-| Teil | Bedeutung | Wann erhöhen? |
+| Part | Meaning | When to increment? |
 |------|-----------|---------------|
-| **MAJOR** | Inkompatible Changes | Bestehende Dokumente werden ungültig |
-| **MINOR** | Neue Regeln | Rückwärtskompatibel |
-| **PATCH** | Korrekturen | Typos, Klarstellungen |
+| **MAJOR** | Incompatible changes | Existing documents become invalid |
+| **MINOR** | New rules | Backward compatible |
+| **PATCH** | Corrections | Typos, clarifications |
 
 ### 6.2 Pre-Release Phase
 
-Während v0.x.x:
-- Breaking Changes mit MINOR-Bump erlaubt
-- Schnelle Iteration möglich
-- Ab v1.0.0: Strikte SemVer
+During v0.x.x:
+- Breaking changes allowed with a MINOR bump
+- Fast iteration possible
+- From v1.0.0: strict SemVer
 
-### 6.3 Dateinamenskonvention
+### 6.3 File Naming Convention
 
 ```
-[Name]_v[MAJOR]_[MINOR]_[PATCH].md
+[Name].md            ← the version is only in the header
 
 Examples:
-  Blueprint_v0_5_0.md
-  Doc_v0_5_0.md
-  ModuleDoc_v0_5_0.md
+  Blueprint.md
+  Doc.md
+  ModuleDoc.md
 ```
+
+No version number in the file name, no version copies — **Git is the history** (see [Doc.md § 8](Doc.md#8-file-name-conventions)).
 
 ---
 
-## 7. Example: Neuen Blueprint erstellen
+## 7. Example: Creating a New Blueprint
 
-### 7.1 Schritt-für-Schritt
+### 7.1 Step by Step
 
-1. **Parent wählen:** Welcher Blueprint wird spezialisiert?
-2. **Header erstellen:** Mit korrektem "Basiert auf"
-3. **Table of Contents:** Nummeriert mit Ankern
-4. **Regeln definieren:** Was ist gleich, was ist neu, was wird überschrieben?
-5. **Examples:** Mindestens ein vollständiges Example
-6. **Checkliste:** Prüfpunkte für Anwender
-7. **Review:** Gegen Parent-Blueprint validieren
+1. **Choose the parent:** Which blueprint is being specialized?
+2. **Create the header:** With a correct "Based on"
+3. **Table of contents:** Numbered, with anchors
+4. **Define the rules:** What stays the same, what is new, what is overridden?
+5. **Examples:** At least one complete example
+6. **Checklist:** Checkpoints for users
+7. **Review:** Validate against the parent blueprint
 
-### 7.2 Template für neue Blueprints
+### 7.2 Template for New Blueprints
 
 ```markdown
-# [Name] — [Kurzbeschreibung]
+# [Name] — [Short description]
 
 > **Version:** 1.0.0  
 > **Date:** YYYY-MM-DD  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** [Parent] vX.Y  
-> **Target Audience:** [Wer soll diesen Blueprint lesen?]  
+> **Target Audience:** [Who should read this blueprint?]  
 > **Language:** English  
-> **German:** [Name.md](../../en/blueprints/Name.md)
+> **German:** [Name.md](../../../de/autorenwerk/blueprints/Name.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Überschreibungen von Parent.md](#3-überschreibungen-von-parentmd)
-4. [Zusätzliche Regeln](#4-zusätzliche-regeln)
-5. [Examples](#5-beispiele)
-6. [Review Checklist](#6-review-checkliste)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Overrides of Parent.md](#3-overrides-of-parentmd)
+4. [Additional Rules](#4-additional-rules)
+5. [Examples](#5-examples)
+6. [Review Checklist](#6-review-checklist)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-[Zweck und Zielgruppe — hier detaillierter beschreiben]
+[Purpose and target audience — describe in more detail here]
 
 ---
 
 ## 2. Scope
 
-[Welche Dokumente/Code betrifft dieser Blueprint?]
+[Which documents/code does this blueprint apply to?]
 
 ---
 
-## 3. Überschreibungen von Parent.md
+## 3. Overrides of Parent.md
 
-| Regel | Parent-Wert | Dieser Blueprint |
+| Rule | Parent value | This blueprint |
 |-------|-------------|------------------|
 | ... | ... | ... |
 
 ---
 
-## 4. Zusätzliche Regeln
+## 4. Additional Rules
 
-[Neue Regeln hier]
+[New rules here]
 
 ---
 
 ## 5. Examples
 
-[Vollständiges Example]
+[Complete example]
 
 ---
 
 ## 6. Review Checklist
 
-- [ ] Header vollständig
-- [ ] Table of Contents aktuell
-- [ ] Überschreibungen dokumentiert
-- [ ] Examples vorhanden
-- [ ] Changelog aktuell
+- [ ] Header complete
+- [ ] Table of contents up to date
+- [ ] Overrides documented
+- [ ] Examples present
+- [ ] Changelog up to date
 
 ---
 
 ## 7. See Also
 
-- [Parent-Blueprint](Parent_vX_Y_Z.md)
+- [Parent blueprint](Parent_vX_Y_Z.md)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
 | **0.1.0** | **YYYY-MM-DD** | **Initial** |
 ```
@@ -325,28 +327,28 @@ Examples:
 
 ## 8. Review Checklist
 
-Vor Freigabe eines Blueprints prüfen:
+Check before releasing a blueprint:
 
-- [ ] Header vollständig (Version, Datum, Typ, Status, Zielgruppe, Sprache, English-Link)
-- [ ] Zielgruppe im Header UND in Overview beschrieben
-- [ ] Table of Contents nummeriert und verlinkt
-- [ ] Anker funktionieren (lowercase, bindestriche statt leerzeichen)
-- [ ] Alle Requiredabschnitte vorhanden
-- [ ] Examples/Templates vollständig und getestet
-- [ ] Review Checklist vorhanden
-- [ ] "See Also" mit relevanten Querverweisen
-- [ ] Changelog am Ende, aktuelle Version fett
-- [ ] Dateiname folgt Konvention
-- [ ] Bei Vererbung: "Basiert auf" korrekt
+- [ ] Header complete (Version, Date, Type, Status, Target Audience, Language, English link)
+- [ ] Target audience described in the header AND in the overview
+- [ ] Table of contents numbered and linked
+- [ ] Anchors work (lowercase, hyphens instead of spaces)
+- [ ] All required sections present
+- [ ] Examples/templates complete and tested
+- [ ] Review checklist present
+- [ ] "See also" with relevant cross-references
+- [ ] Changelog at the end, current version in bold
+- [ ] File name follows the convention
+- [ ] With inheritance: "Based on" correct
 
 ---
 
 ## 9. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [CMake.md](CMake.md) — CMake-Dateistruktur
-- [Cpp.md](Cpp.md) — C++/C Dateistruktur
-- [Strukture.md](Structure.md) — Ordnerstruktur
+- [Doc.md](Doc.md) — General documentation rules
+- [CMake.md](CMake.md) — CMake file structure
+- [Cpp.md](Cpp.md) — C++/C file structure
+- [Strukture.md](Structure.md) — Folder structure
 
 ---
 
@@ -354,7 +356,9 @@ Vor Freigabe eines Blueprints prüfen:
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Vererbungshierarchie, Required-Table of Contents mit Ankern, Zielgruppe-Requiredfeld, English-Link im Header, Template für neue Blueprints** |
-| 0.1.0 | 2025-12-03 | Initial (als Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: file names without version (§ 6.3), jump path to the German version `../../../de/autorenwerk/blueprints/` (§ 4.1, § 7.2)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: inheritance hierarchy, required table of contents with anchors, required target audience field, English link in the header, template for new blueprints |
+| 0.1.0 | 2025-12-03 | Initial (as Documentation_Blueprint) |

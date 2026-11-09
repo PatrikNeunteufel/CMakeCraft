@@ -1,12 +1,12 @@
 # CMakeUserPresets — Referenz
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CMakeUserPresets_Reference.md](../../en/references/CMakeUserPresets_Reference.md)
+> **English:** [CMakeUserPresets.md](../../../en/guide/references/CMakeUserPresets.md)
 
 ---
 
@@ -294,5 +294,6 @@ cmake --workflow --preset wf-vs-x64-release-inno+sign
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Autor-Feld entfernt** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Autor-Feld entfernt |
 | 0.1.0 | 2025-12-03 | Initial: vcpkg-Integration, parallelisierte Builds, Code-Signing |

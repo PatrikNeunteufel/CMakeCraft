@@ -1,95 +1,95 @@
-# CMake User Presets – Benutzerhandbuch
+# CMake User Presets – User Guide
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** C++ Developers  
+> **Target Audience:** C++ developers  
 > **Language:** English  
-> **German:** [CMakeUserPresets_UserGuide.md](../../en/userguides/CMakeUserPresets.md)
+> **German:** [CMakeUserPresets_UserGuide.md](../../../de/guide/userguides/CMakeUserPresets.md)
 
 ---
 
 ## Table of Contents
 
-1. [Überblick](#1-überblick)
-2. [Prerequisites](#2-voraussetzungen)
-3. [Schnellstart](#3-schnellstart)
-4. [Grundlagen](#4-grundlagen)
+1. [Overview](#1-overview)
+2. [Prerequisites](#2-prerequisites)
+3. [Quick Start](#3-quick-start)
+4. [Basics](#4-basics)
 5. [Configure Presets](#5-configure-presets)
 6. [Build Presets](#6-build-presets)
 7. [Test Presets](#7-test-presets)
 8. [Workflow Presets](#8-workflow-presets)
-9. [Praxis-Szenarien](#9-praxis-szenarien)
+9. [Practical Scenarios](#9-practical-scenarios)
 10. [Best Practices](#10-best-practices)
-11. [Stolpersteine und Lösungen](#11-stolpersteine-und-lösungen)
+11. [Pitfalls and Solutions](#11-pitfalls-and-solutions)
 12. [Troubleshooting](#12-troubleshooting)
-13. [See Also](#13-siehe-auch)
+13. [See Also](#13-see-also)
 
 ---
 
-## 1. Überblick
+## 1. Overview
 
-This guide explains, wie du mit `CMakeUserPresets.json` deine persönliche Build-Umgebung konfigurierst.
+This guide explains how to configure your personal build environment with `CMakeUserPresets.json`.
 
-### Was sind User Presets?
+### What Are User Presets?
 
-| Datei | Zweck | Git |
-|-------|-------|-----|
-| `CMakePresets.json` | Team-weite Standards | ✅ Committen |
-| `CMakeUserPresets.json` | **Persönliche** Anpassungen | ❌ In .gitignore |
+| File | Purpose | Git |
+|------|---------|-----|
+| `CMakePresets.json` | Team-wide standards | ✅ Commit |
+| `CMakeUserPresets.json` | **Personal** adjustments | ❌ In .gitignore |
 
-### Wann User Presets verwenden?
+### When to Use User Presets?
 
-- **Lokale Pfade** – vcpkg, Qt, SDK-Installationen
-- **Performance** – Anzahl Build-Jobs anpassen
-- **Experimente** – Neue Features testen ohne Team-Presets zu ändern
-- **Umgebungsvariablen** – Qt-Pfade, Toolchain-Configuration
-- **Eigene Kombinationen** – Team-Presets kombinieren
+- **Local paths** – vcpkg, Qt, SDK installations
+- **Performance** – adjust the number of build jobs
+- **Experiments** – test new features without changing team presets
+- **Environment variables** – Qt paths, toolchain configuration
+- **Your own combinations** – combine team presets
 
-### Vorteile
+### Advantages
 
-- Keine Konflikte mit Team-Configuration
-- Persönliche Optimierungen
-- Schnelles Wechseln zwischen Configurationen
-- IDE-Integration (Visual Studio, CLion, VS Code)
+- No conflicts with the team configuration
+- Personal optimizations
+- Fast switching between configurations
+- IDE integration (Visual Studio, CLion, VS Code)
 
 ---
 
 ## 2. Prerequisites
 
-### Checkliste
+### Checklist
 
-- [ ] **CMake 3.21+** (für Presets v4+)
-- [ ] **CMakePresets.json** vorhanden (Team-Presets)
-- [ ] **CMakeUserPresets.json in .gitignore** eingetragen
-- [ ] **IDE** mit Preset-Unterstützung (optional)
+- [ ] **CMake 3.21+** (for presets v4+)
+- [ ] **CMakePresets.json** present (team presets)
+- [ ] **CMakeUserPresets.json listed in .gitignore**
+- [ ] **IDE** with preset support (optional)
 
-### .gitignore prüfen
+### Check .gitignore
 
 ```bash
-# Prüfen ob eingetragen
+# Check whether it is listed
 grep CMakeUserPresets .gitignore
 
-# Falls nicht, hinzufügen
+# If not, add it
 echo "CMakeUserPresets.json" >> .gitignore
 ```
 
-### CMake-Version prüfen
+### Check the CMake Version
 
 ```bash
 cmake --version
-# Minimum: 3.21 für Presets v4
-# Empfohlen: 3.25+ für Presets v6
+# Minimum: 3.21 for presets v4
+# Recommended: 3.25+ for presets v6
 ```
 
 ---
 
-## 3. Schnellstart
+## 3. Quick Start
 
-### 3.1 Datei erstellen
+### 3.1 Create the File
 
-Erstelle `CMakeUserPresets.json` im Projekt-Root:
+Create `CMakeUserPresets.json` in the project root:
 
 ```json
 {
@@ -98,7 +98,7 @@ Erstelle `CMakeUserPresets.json` im Projekt-Root:
         {
             "name": "my-debug",
             "displayName": "Mein Debug Build",
-            "inherits": "windows-ninja-debug",
+            "inherits": "windows-ninja-debug-msvc",
             "cacheVariables": {
                 "BUILD_TESTS": "ON"
             }
@@ -107,38 +107,38 @@ Erstelle `CMakeUserPresets.json` im Projekt-Root:
 }
 ```
 
-### 3.2 Preset verwenden
+### 3.2 Use the Preset
 
 ```bash
-# Verfügbare Presets anzeigen
+# Show available presets
 cmake --list-presets
 
-# Dein Preset verwenden
+# Use your preset
 cmake --preset my-debug
 
-# Bauen
+# Build
 cmake --build out/build/my-debug
 ```
 
-### 3.3 In IDE verwenden
+### 3.3 Use in an IDE
 
 **Visual Studio 2022:**
-- Öffne Projekt-Ordner
-- Wähle Preset aus Dropdown (Toolbar)
+- Open the project folder
+- Select the preset from the dropdown (toolbar)
 
 **CLion:**
 - Settings → Build → CMake
-- "Load CMake presets" aktivieren
+- Enable "Load CMake presets"
 
 **VS Code:**
-- CMake Tools Extension installieren
+- Install the CMake Tools extension
 - Cmd+Shift+P → "CMake: Select Configure Preset"
 
 ---
 
-## 4. Grundlagen
+## 4. Basics
 
-### 4.1 Datei-Struktur
+### 4.1 File Structure
 
 ```json
 {
@@ -162,27 +162,27 @@ cmake --build out/build/my-debug
 
 | Version | CMake | Features |
 |---------|-------|----------|
-| 4 | 3.21+ | Basis-Presets |
-| 5 | 3.24+ | Package Presets |
-| 6 | 3.25+ | Workflow Presets, include |
+| 4 | 3.21+ | Basic presets |
+| 5 | 3.24+ | Package presets |
+| 6 | 3.25+ | Workflow presets, include |
 
-**Empfehlung:** Version 6 verwenden.
+**Recommendation:** Use version 6.
 
-### 4.3 Vererbung (inherits)
+### 4.3 Inheritance (inherits)
 
 ```json
 {
     "name": "my-preset",
-    "inherits": ["windows-ninja-debug", "with-vcpkg"],
+    "inherits": ["windows-ninja-debug-msvc", "with-vcpkg"],
     "cacheVariables": {
         "MY_OPTION": "ON"
     }
 }
 ```
 
-- Erbt alle Einstellungen vom Parent
-- Eigene Werte überschreiben Parent-Werte
-- Mehrere Parents möglich (Array)
+- Inherits all settings from the parent
+- Your own values override parent values
+- Multiple parents possible (array)
 
 ### 4.4 Hidden Presets
 
@@ -196,24 +196,24 @@ cmake --build out/build/my-debug
 }
 ```
 
-- Nicht in `--list-presets` sichtbar
-- Nur zum Vererben gedacht
-- Ideal für Pfad-Definitionen
+- Not visible in `--list-presets`
+- Intended only for inheritance
+- Ideal for path definitions
 
 ---
 
 ## 5. Configure Presets
 
-### 5.1 Grundstruktur
+### 5.1 Basic Structure
 
 ```json
 {
     "configurePresets": [
         {
             "name": "my-config",
-            "displayName": "Meine Configuration",
+            "displayName": "Meine Konfiguration",
             "description": "Debug mit meinen Einstellungen",
-            "inherits": "windows-ninja-debug",
+            "inherits": "windows-ninja-debug-msvc",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "cacheVariables": {
@@ -228,19 +228,19 @@ cmake --build out/build/my-debug
 }
 ```
 
-### 5.2 Importante Felder
+### 5.2 Important Fields
 
-| Feld | Description |
-|------|--------------|
-| `name` | Eindeutiger Bezeichner (für CLI) |
-| `displayName` | Anzeigename (für IDE) |
-| `inherits` | Parent-Preset(s) |
-| `generator` | CMake-Generator |
-| `binaryDir` | Build-Verzeichnis |
-| `cacheVariables` | CMake-Cache-Variablen |
-| `environment` | Umgebungsvariablen |
+| Field | Description |
+|-------|-------------|
+| `name` | Unique identifier (for the CLI) |
+| `displayName` | Display name (for the IDE) |
+| `inherits` | Parent preset(s) |
+| `generator` | CMake generator |
+| `binaryDir` | Build directory |
+| `cacheVariables` | CMake cache variables |
+| `environment` | Environment variables |
 
-### 5.3 Umgebungsvariablen setzen
+### 5.3 Setting Environment Variables
 
 ```json
 {
@@ -253,11 +253,11 @@ cmake --build out/build/my-debug
 }
 ```
 
-**Variable-Referenceen:**
-- `$env{VAR}` – Umgebungsvariable
-- `$penv{VAR}` – Parent-Umgebungsvariable
-- `${sourceDir}` – Projekt-Root
-- `${presetName}` – Preset-Name
+**Variable references:**
+- `$env{VAR}` – environment variable
+- `$penv{VAR}` – parent environment variable
+- `${sourceDir}` – project root
+- `${presetName}` – preset name
 
 ### 5.4 Conditions
 
@@ -276,7 +276,7 @@ cmake --build out/build/my-debug
 
 ## 6. Build Presets
 
-### 6.1 Grundstruktur
+### 6.1 Basic Structure
 
 ```json
 {
@@ -293,19 +293,19 @@ cmake --build out/build/my-debug
 }
 ```
 
-### 6.2 Importante Felder
+### 6.2 Important Fields
 
-| Feld | Description |
-|------|--------------|
-| `configurePreset` | Zugehöriges Configure-Preset |
-| `configuration` | Debug/Release (Multi-Config) |
-| `jobs` | Anzahl paralleler Jobs |
-| `targets` | Nur bestimmte Targets bauen |
-| `cleanFirst` | Clean vor Build |
+| Field | Description |
+|-------|-------------|
+| `configurePreset` | Associated configure preset |
+| `configuration` | Debug/Release (multi-config) |
+| `jobs` | Number of parallel jobs |
+| `targets` | Build only specific targets |
+| `cleanFirst` | Clean before build |
 
 ### 6.3 Examples
 
-**Schneller Build:**
+**Fast build:**
 ```json
 {
     "name": "fast",
@@ -314,7 +314,7 @@ cmake --build out/build/my-debug
 }
 ```
 
-**Nur bestimmte Targets:**
+**Specific targets only:**
 ```json
 {
     "name": "app-only",
@@ -323,7 +323,7 @@ cmake --build out/build/my-debug
 }
 ```
 
-**Clean Build:**
+**Clean build:**
 ```json
 {
     "name": "clean-build",
@@ -336,7 +336,7 @@ cmake --build out/build/my-debug
 
 ## 7. Test Presets
 
-### 7.1 Grundstruktur
+### 7.1 Basic Structure
 
 ```json
 {
@@ -392,9 +392,9 @@ cmake --build out/build/my-debug
 
 ## 8. Workflow Presets
 
-### 8.1 Grundstruktur
+### 8.1 Basic Structure
 
-Workflow Presets kombinieren Configure → Build → Test → Package:
+Workflow presets combine configure → build → test → package:
 
 ```json
 {
@@ -418,7 +418,7 @@ Workflow Presets kombinieren Configure → Build → Test → Package:
 cmake --workflow --preset full-cycle
 ```
 
-### 8.3 Release-Workflow
+### 8.3 Release Workflow
 
 ```json
 {
@@ -435,9 +435,9 @@ cmake --workflow --preset full-cycle
 
 ---
 
-## 9. Praxis-Szenarien
+## 9. Practical Scenarios
 
-### 9.1 Qt6-Umgebung
+### 9.1 Qt6 Environment
 
 ```json
 {
@@ -453,18 +453,18 @@ cmake --workflow --preset full-cycle
         {
             "name": "my-qt-debug",
             "displayName": "Debug mit Qt6",
-            "inherits": ["windows-ninja-debug", "qt-env"]
+            "inherits": ["windows-ninja-debug-msvc", "qt-env"]
         },
         {
             "name": "my-qt-release",
             "displayName": "Release mit Qt6",
-            "inherits": ["windows-ninja-release", "qt-env"]
+            "inherits": ["windows-ninja-release-msvc", "qt-env"]
         }
     ]
 }
 ```
 
-### 9.2 vcpkg-Integration
+### 9.2 vcpkg Integration
 
 ```json
 {
@@ -481,13 +481,13 @@ cmake --workflow --preset full-cycle
         {
             "name": "my-debug-vcpkg",
             "displayName": "Debug + vcpkg",
-            "inherits": ["windows-ninja-debug", "with-vcpkg"]
+            "inherits": ["windows-ninja-debug-msvc", "with-vcpkg"]
         }
     ]
 }
 ```
 
-### 9.3 Schnelle Entwicklung
+### 9.3 Fast Development
 
 ```json
 {
@@ -496,7 +496,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "dev-fast",
             "displayName": "Schnelle Entwicklung",
-            "inherits": "windows-ninja-debug",
+            "inherits": "windows-ninja-debug-msvc",
             "cacheVariables": {
                 "BUILD_TESTS": "OFF",
                 "BUILD_ONLY": "MyApp"
@@ -513,7 +513,7 @@ cmake --workflow --preset full-cycle
 }
 ```
 
-### 9.4 Sanitizer-Builds (Linux/macOS)
+### 9.4 Sanitizer Builds (Linux/macOS)
 
 ```json
 {
@@ -522,7 +522,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "with-asan",
             "displayName": "AddressSanitizer",
-            "inherits": "linux-ninja-debug",
+            "inherits": "linux-gcc-debug",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-fsanitize=address -fno-omit-frame-pointer",
                 "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address"
@@ -531,7 +531,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "with-ubsan",
             "displayName": "UndefinedBehaviorSanitizer",
-            "inherits": "linux-ninja-debug",
+            "inherits": "linux-gcc-debug",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-fsanitize=undefined",
                 "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=undefined"
@@ -541,7 +541,7 @@ cmake --workflow --preset full-cycle
 }
 ```
 
-### 9.5 Vollständiges Example
+### 9.5 Complete Example
 
 ```json
 {
@@ -574,7 +574,7 @@ cmake --workflow --preset full-cycle
             "name": "my-dev",
             "displayName": "Meine Entwicklungsumgebung",
             "description": "Debug mit Qt und vcpkg",
-            "inherits": ["windows-ninja-debug", "qt-env", "vcpkg-env"],
+            "inherits": ["windows-ninja-debug-msvc", "qt-env", "vcpkg-env"],
             "cacheVariables": {
                 "BUILD_TESTS": "ON"
             }
@@ -582,7 +582,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "my-release",
             "displayName": "Mein Release Build",
-            "inherits": ["windows-ninja-release", "qt-env", "vcpkg-env"]
+            "inherits": ["windows-ninja-release-msvc", "qt-env", "vcpkg-env"]
         }
     ],
 
@@ -633,70 +633,77 @@ cmake --workflow --preset full-cycle
 
 ### ✅ Do's
 
-- **Vendor-Block pflegen** – Version und Datum aktuell halten
-- **Aussagekräftige Namen** – `displayName` für IDE-Anzeige
-- **Hidden Presets** – Für wiederverwendbare Bausteine
-- **Von Team-Presets erben** – Nicht kopieren!
-- **Regelmäßig aufräumen** – Ungenutzte Presets entfernen
+- **Maintain the vendor block** – keep version and date up to date
+- **Meaningful names** – `displayName` for the IDE display
+- **Hidden presets** – for reusable building blocks
+- **Inherit from team presets** – do not copy!
+- **Clean up regularly** – remove unused presets
 
 ### ❌ Don'ts
 
-- **Keine absoluten Pfade** ohne `hidden: true`
-- **Team-Presets nicht überschreiben** – Eigene Namen verwenden
-- **Keine sensiblen Daten** – Passwörter, API-Keys
-- **Nicht committen** – Muss in .gitignore sein!
-- **Keine komplexe Logik** – Dafür CMake-Module verwenden
+- **No absolute paths** without `hidden: true`
+- **Do not override team presets** – use your own names
+- **No sensitive data** – passwords, API keys
+- **Do not commit** – must be in .gitignore!
+- **No complex logic** – use CMake modules for that
 
-### Namenskonventionen
+### Naming Conventions
 
 ```
-my-*          → Persönliche Presets
-with-*        → Feature-Bausteine (hidden)
-dev-*         → Entwicklungs-Presets
-test-*        → Test-Configurationen
+my-*          → Personal presets
+with-*        → Feature building blocks (hidden)
+dev-*         → Development presets
+test-*        → Test configurations
 ```
 
 ---
 
-## 11. Stolpersteine und Lösungen
+## 11. Pitfalls and Solutions
 
-### 11.1 Preset nicht sichtbar
+### 11.1 Preset Not Visible
 
-**Problem:** Preset erscheint nicht in `--list-presets`.
+**Problem:** The preset does not appear in `--list-presets`.
 
-**Ursache:** `hidden: true` gesetzt oder JSON-Error.
+**Cause:** `hidden: true` set or a JSON error.
 
-**Lösung:**
+**Solution:**
 ```bash
-# Alle Presets (auch hidden)
+# All presets (including hidden)
 cmake --list-presets=all
 
-# JSON validieren
+# Validate JSON
 cat CMakeUserPresets.json | python -m json.tool
 ```
 
-### 11.2 Vererbung funktioniert nicht
+### 11.2 Inheritance Does Not Work
 
-**Problem:** Einstellungen vom Parent werden nicht übernommen.
+**Problem:** Settings from the parent are not applied.
 
-**Ursache:** `inherits` als String statt Array.
+**Cause:** Usually the order: if several parents provide the same field, the value of the
+**first** entry in `inherits` applies; a field in the preset itself overrides all parents. The form,
+on the other hand, is not an error — `inherits` may be a string (one parent) or an array
+(CMake documentation `cmake-presets(7)`, field `inherits`).
 
-**Lösung:**
+**Solution:**
 ```json
-// ❌ Falsch
-"inherits": "windows-ninja-debug"
+// Both valid and equivalent
+"inherits": "windows-ninja-debug-msvc"
+"inherits": ["windows-ninja-debug-msvc"]
 
-// ✅ Richtig
-"inherits": ["windows-ninja-debug"]
+// For identical fields the earlier parent wins: here qt-env before with-vcpkg
+"inherits": ["windows-ninja-debug-msvc", "qt-env", "with-vcpkg"]
 ```
 
-### 11.3 Umgebungsvariable nicht gesetzt
+If a value has no effect, move the parent that should set it further forward, or set the field in
+the preset itself.
 
-**Problem:** `$env{QT_ROOT}` ist leer.
+### 11.3 Environment Variable Not Set
 
-**Ursache:** Variable in falscher Sektion oder nicht definiert.
+**Problem:** `$env{QT_ROOT}` is empty.
 
-**Lösung:**
+**Cause:** Variable in the wrong section or not defined.
+
+**Solution:**
 ```json
 {
     "name": "with-qt",
@@ -707,41 +714,41 @@ cat CMakeUserPresets.json | python -m json.tool
 },
 {
     "name": "my-debug",
-    "inherits": ["windows-ninja-debug", "with-qt"]
-    // Jetzt ist QT_ROOT verfügbar
+    "inherits": ["windows-ninja-debug-msvc", "with-qt"]
+    // QT_ROOT is now available
 }
 ```
 
-### 11.4 Pfade mit Backslashes
+### 11.4 Paths with Backslashes
 
-**Problem:** Windows-Pfade mit `\` funktionieren nicht.
+**Problem:** Windows paths with `\` do not work.
 
-**Ursache:** Backslash ist JSON-Escape-Zeichen.
+**Cause:** The backslash is the JSON escape character.
 
-**Lösung:**
+**Solution:**
 ```json
-// ❌ Falsch
+// ❌ Wrong
 "QT_ROOT": "C:\Qt\6.7.0"
 
-// ✅ Richtig (Forward Slashes)
+// ✅ Correct (forward slashes)
 "QT_ROOT": "C:/Qt/6.7.0"
 
-// ✅ Alternativ (Escaped)
+// ✅ Alternative (escaped)
 "QT_ROOT": "C:\\Qt\\6.7.0"
 ```
 
-### 11.5 Preset-Version inkompatibel
+### 11.5 Incompatible Preset Version
 
 **Problem:** `CMake Error: Preset version X requires CMake Y`.
 
-**Ursache:** CMake-Version zu alt für Preset-Version.
+**Cause:** CMake version too old for the preset version.
 
-**Lösung:**
-1. CMake aktualisieren, oder
-2. Preset-Version reduzieren:
+**Solution:**
+1. Update CMake, or
+2. Reduce the preset version:
 ```json
 {
-    "version": 4  // Statt 6
+    "version": 4  // Instead of 6
 }
 ```
 
@@ -749,39 +756,39 @@ cat CMakeUserPresets.json | python -m json.tool
 
 ## 12. Troubleshooting
 
-### Checkliste bei Problemen
+### Checklist for Problems
 
-1. ☐ JSON-Syntax korrekt? (`python -m json.tool`)
-2. ☐ Preset-Name eindeutig?
-3. ☐ `inherits` als Array?
-4. ☐ Parent-Preset existiert?
-5. ☐ CMake-Version ausreichend?
-6. ☐ Pfade korrekt (Forward Slashes)?
-7. ☐ In .gitignore eingetragen?
+1. ☐ JSON syntax correct? (`python -m json.tool`)
+2. ☐ Preset name unique?
+3. ☐ `inherits` order correct (first parent wins)?
+4. ☐ Parent preset exists?
+5. ☐ CMake version sufficient?
+6. ☐ Paths correct (forward slashes)?
+7. ☐ Listed in .gitignore?
 
-### Häufige Error
+### Common Errors
 
-| Error | Ursache | Lösung |
-|--------|---------|--------|
-| "No such preset" | Tipfehler / hidden | Namen prüfen |
-| "Invalid JSON" | Syntax-Error | JSON validieren |
-| "Preset requires CMake X" | Version zu alt | CMake updaten |
-| "Cannot find inherited preset" | Parent fehlt | `inherits` prüfen |
-| Env-Variable leer | Falsche Sektion | In `environment` setzen |
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "No such preset" | Typo / hidden | Check the name |
+| "Invalid JSON" | Syntax error | Validate JSON |
+| "Preset requires CMake X" | Version too old | Update CMake |
+| "Cannot find inherited preset" | Parent missing | Check `inherits` |
+| Env variable empty | Wrong section | Set in `environment` |
 
-### Debug-Befehle
+### Debug Commands
 
 ```bash
-# Alle Presets anzeigen
+# Show all presets
 cmake --list-presets=all
 
-# Preset-Details
+# Preset details
 cmake --preset my-debug --debug-output
 
-# JSON validieren
+# Validate JSON
 python -m json.tool < CMakeUserPresets.json
 
-# Effektive Configuration anzeigen
+# Show the effective configuration
 cmake -LAH out/build/my-debug
 ```
 
@@ -789,16 +796,18 @@ cmake -LAH out/build/my-debug
 
 ## 13. See Also
 
-- [CMakePresets_Reference.md](../references/CMakePresets.md) – Team-Presets Reference
-- [CMakeUserPresets_Reference.md](../references/CMakeUserPresets.md) – User-Presets Reference
-- [Qt6_Integration_UserGuide.md](Qt6_Integration.md) – Qt6-Umgebung konfigurieren
-- [Getting_Started_UserGuide.md](Getting_Started.md) – Projekt-Grundlagen
+- [CMakePresets_Reference.md](../references/CMakePresets.md) – Team presets reference
+- [CMakeUserPresets_Reference.md](../references/CMakeUserPresets.md) – User presets reference
+- [Qt6_Integration_UserGuide.md](Qt6_Integration.md) – Configuring the Qt6 environment
+- [Getting_Started_UserGuide.md](Getting_Started.md) – Project basics
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Konformität: Erweitert mit Workflow Presets, Praxis-Szenarien, Stolpersteine/Troubleshooting** |
-| 0.1.0 | 2025-12-03 | Initial: Templates, Example-Szenarien, Best Practices |
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | 2026-11-09 | Aligned with the code: §11.2 — `inherits` as a string is valid (CMake documentation `cmake-presets(7)`); the cause is the order of the parents; checklist §12 accordingly; base presets switched to existing names (`windows-ninja-debug-msvc`, `windows-ninja-release-msvc`, `linux-gcc-debug`) |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 conformance: extended with workflow presets, practical scenarios, pitfalls/troubleshooting** |
+| 0.1.0 | 2025-12-03 | Initial: templates, example scenarios, best practices |

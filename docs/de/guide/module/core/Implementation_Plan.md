@@ -1,13 +1,13 @@
 # Implementation Plan — CMake Architecture
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Datum:** 2025-12-26  
 > **Typ:** Concept  
 > **Status:** Phase 1-7 abgeschlossen, Phase 8 in Arbeit  
 > **Basiert auf:** master_concept v0.5, Solution_Schema v0.1, ErrorCodes v0.1  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [implementation_plan.md](../../en/projects/buildsystem/concepts/Implementation_Plan.md)
+> **English:** [Implementation_Plan.md](../../../../en/guide/module/core/Implementation_Plan.md)
 
 Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 
@@ -23,7 +23,7 @@ Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 6. [Phase 5: Lokale Externals](#6-phase-5-lokale-externals)
 7. [Phase 6: Fetched Externals + Hooks](#7-phase-6-fetched-externals--hooks)
 8. [Phase 7: Test-Pipeline](#8-phase-7-test-pipeline)
-9. [Phase 8: AppContainer (geplant)](#9-phase-8-appcontainer-geplant)
+9. [Phase 8: AppContainer (in Arbeit)](#9-phase-8-appcontainer-in-arbeit)
 10. [Phase 9: System-Externals (geplant)](#10-phase-9-system-externals-geplant)
 11. [Checkliste](#11-checkliste)
 12. [Siehe auch](#12-siehe-auch)
@@ -550,8 +550,8 @@ projects/apps/{AppName}/
 
 ## 12. Siehe auch
 
-- [master_concept.md](../../../konzepte/abgeschlossen/master_concept.md) — Architektur
-- [guidelines.md](../standards/guidelines.md) — Konventionen
+- [Master_Concept.md](../../../konzepte/abgeschlossen/Master_Concept.md) — Architektur
+- [guidelines.md](../../../konzepte/Guidelines.md) — Konventionen
 - [AppContainer_Concept.md](../../../konzepte/abgeschlossen/AppContainer_Concept.md) — Phase 8 Detail
 - [System_Externals_Concept.md](../../../konzepte/abgeschlossen/System_Externals_Concept.md) — Phase 9 Detail
 - [Solution_Schema](../../references/Solution_Schema.md) — JSON-Schema
@@ -563,6 +563,7 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **Phase 8 in Arbeit: Apps.cmake, AppCollect.cmake, AppCreate.cmake implementiert, DemoPlayer Test-App, Core/Runner/Tests Trennung** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.1 | 2025-12-17 | Phase 8 in Arbeit: Apps.cmake, AppCollect.cmake, AppCreate.cmake implementiert, DemoPlayer Test-App, Core/Runner/Tests Trennung |
 | 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 Details integriert, Test-Pipeline Details integriert, Phase 8/9 als geplant referenziert, Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Phasen aus v1.5 übernommen |

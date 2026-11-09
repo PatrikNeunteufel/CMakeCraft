@@ -1,41 +1,41 @@
-# Externals — UserGuide
+# Externals — User Guide
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Externals.md](../../en/userguides/Externals.md)
+> **German:** [Externals.md](../../../de/guide/userguides/Externals.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Externe Bibliotheken einbinden](#2-externe-bibliotheken-einbinden)
-3. [Kombinationen](#3-kombinationen)
-4. [Reihenfolge und Dependencies](#4-reihenfolge-und-abhängigkeiten)
-5. [Typische Projektsetups](#5-typische-projektsetups)
+1. [Overview](#1-overview)
+2. [Integrating External Libraries](#2-integrating-external-libraries)
+3. [Combinations](#3-combinations)
+4. [Order and Dependencies](#4-order-and-dependencies)
+5. [Typical Project Setups](#5-typical-project-setups)
 6. [Troubleshooting](#6-troubleshooting)
-7. [Detail-Guides](#7-detail-guides)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+7. [Detail Guides](#7-detail-guides)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture Build-System kombiniert werden. Für detaillierte Informationen zu einzelnen Externals siehe die [Detail-Guides](#7-detail-guides).
+This guide explains how external libraries are combined in the CMake Architecture build system. For detailed information on individual externals, see the [detail guides](#7-detail-guides).
 
-### External-Typen
+### External Types
 
-| Typ | Quelle | Examples |
-|-----|--------|-----------|
+| Type | Source | Examples |
+|------|--------|----------|
 | **Local** | `path` | doctest, lua54, glad, BASS |
 | **Git** | `git` | glfw, imgui, googletest, Qt6 |
 
-### Grundprinzip
+### Basic Principle
 
 ```json
 {
@@ -53,7 +53,7 @@ Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture Build-Syst
 
 ---
 
-## 2. Externe Bibliotheken einbinden
+## 2. Integrating External Libraries
 
 ### 2.1 Local External
 
@@ -80,7 +80,7 @@ Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture Build-Syst
 }
 ```
 
-### 2.3 Git External ohne CMake-Support
+### 2.3 Git External Without CMake Support
 
 ```json
 {
@@ -94,7 +94,7 @@ Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture Build-Syst
 }
 ```
 
-### 2.4 Mit Options
+### 2.4 With Options
 
 ```json
 {
@@ -115,17 +115,17 @@ Dieser Guide erklärt, wie externe Bibliotheken im CMake Architecture Build-Syst
 
 ---
 
-## 3. Kombinationen
+## 3. Combinations
 
-### 3.1 OpenGL GUI-Anwendung
+### 3.1 OpenGL GUI Application
 
-Die klassische Kombination für OpenGL-basierte GUI-Anwendungen:
+The classic combination for OpenGL-based GUI applications:
 
-| External | Typ | Funktion |
-|----------|-----|----------|
-| **glad** | Local | OpenGL Function Loader |
-| **glfw** | Git | Window & Input |
-| **imgui** | Git | Immediate Mode GUI |
+| External | Type | Function |
+|----------|------|----------|
+| **glad** | Local | OpenGL function loader |
+| **glfw** | Git | Window & input |
+| **imgui** | Git | Immediate mode GUI |
 
 ```json
 {
@@ -146,12 +146,12 @@ Die klassische Kombination für OpenGL-basierte GUI-Anwendungen:
 
 ### 3.2 Scripted Application
 
-Lua-Scripting mit komfortablen C++ Bindings:
+Lua scripting with convenient C++ bindings:
 
-| External | Typ | Funktion |
-|----------|-----|----------|
-| **lua54** | Local | Lua 5.4 Core Engine |
-| **sol2** | Git | Modern C++ Bindings |
+| External | Type | Function |
+|----------|------|----------|
+| **lua54** | Local | Lua 5.4 core engine |
+| **sol2** | Git | Modern C++ bindings |
 
 ```json
 {
@@ -170,11 +170,11 @@ Lua-Scripting mit komfortablen C++ Bindings:
 
 ### 3.3 Audio Player
 
-Professionelle Audio-Wiedergabe mit Plugins:
+Professional audio playback with plugins:
 
-| External | Typ | Funktion |
-|----------|-----|----------|
-| **BASS** | Local | Audio Core + Plugins |
+| External | Type | Function |
+|----------|------|----------|
+| **BASS** | Local | Audio core + plugins |
 
 ```json
 {
@@ -199,11 +199,11 @@ Professionelle Audio-Wiedergabe mit Plugins:
 
 ### 3.4 Unit Testing
 
-| Kombination | Anwendungsfall |
-|-------------|----------------|
-| **doctest** (Local) | Schnelle Tests, Header-Only |
-| **googletest** (Git) | Mocking mit GMock |
-| **catch2** (Git) | BDD-Style Testing |
+| Combination | Use case |
+|-------------|----------|
+| **doctest** (Local) | Fast tests, header-only |
+| **googletest** (Git) | Mocking with GMock |
+| **catch2** (Git) | BDD-style testing |
 
 ```json
 {
@@ -222,11 +222,11 @@ Professionelle Audio-Wiedergabe mit Plugins:
 
 ### 3.5 Qt6 Desktop Application
 
-Professionelle Desktop-Anwendung mit Qt6:
+Professional desktop application with Qt6:
 
-| External | Typ | Funktion |
-|----------|-----|----------|
-| **Qt6** | System | GUI Framework |
+| External | Type | Function |
+|----------|------|----------|
+| **Qt6** | System | GUI framework |
 
 ```json
 {
@@ -246,9 +246,9 @@ Professionelle Desktop-Anwendung mit Qt6:
 }
 ```
 
-### 3.6 Game mit Scripting und Audio
+### 3.6 Game with Scripting and Audio
 
-Komplexe Kombination für Spiele:
+Complex combination for games:
 
 ```json
 {
@@ -275,37 +275,37 @@ Komplexe Kombination für Spiele:
 
 ---
 
-## 4. Reihenfolge und Dependencies
+## 4. Order and Dependencies
 
-### 4.1 Kritische Reihenfolgen
+### 4.1 Critical Orders
 
-Einige Externals haben **Dependencies**, die eine bestimmte Reihenfolge erfordern:
+Some externals have **dependencies** that require a specific order:
 
-| Kombination | Reihenfolge | Grund |
-|-------------|-------------|-------|
-| OpenGL + ImGui | glad → glfw → imgui | imgui benötigt OpenGL-Kontext |
+| Combination | Order | Reason |
+|-------------|-------|--------|
+| OpenGL + ImGui | glad → glfw → imgui | imgui needs an OpenGL context |
 | Lua + sol2 | lua54 → sol2 | sol2 wraps lua54 |
 
 ### 4.2 glad → glfw → imgui
 
 ```
-1. glad      - Lädt OpenGL-Functions
-2. glfw      - Erstellt Window mit OpenGL-Kontext
-3. imgui     - Verwendet OpenGL für Rendering
+1. glad      - Loads OpenGL functions
+2. glfw      - Creates a window with an OpenGL context
+3. imgui     - Uses OpenGL for rendering
 ```
 
-**Im Code:**
+**In code:**
 
 ```cpp
-// 1. GLFW initialisieren
+// 1. Initialize GLFW
 glfwInit();
 GLFWwindow* window = glfwCreateWindow(800, 600, "App", nullptr, nullptr);
 glfwMakeContextCurrent(window);
 
-// 2. GLAD laden (NACH MakeContextCurrent!)
+// 2. Load GLAD (AFTER MakeContextCurrent!)
 gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-// 3. ImGui initialisieren (NACH GLAD!)
+// 3. Initialize ImGui (AFTER GLAD!)
 IMGUI_CHECKVERSION();
 ImGui::CreateContext();
 ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -315,25 +315,25 @@ ImGui_ImplOpenGL3_Init("#version 330");
 ### 4.3 lua54 → sol2
 
 ```
-1. lua54    - Lua Core Engine
-2. sol2     - C++ Wrapper um lua54
+1. lua54    - Lua core engine
+2. sol2     - C++ wrapper around lua54
 ```
 
-**Im Code:**
+**In code:**
 
 ```cpp
-// sol2 inkludiert lua automatisch
+// sol2 includes lua automatically
 #include <sol/sol.hpp>
 
-sol::state lua;  // Verwendet lua54 intern
+sol::state lua;  // Uses lua54 internally
 lua.open_libraries(sol::lib::base);
 ```
 
 ---
 
-## 5. Typische Projektsetups
+## 5. Typical Project Setups
 
-### 5.1 Minimales GUI-Projekt
+### 5.1 Minimal GUI Project
 
 ```json
 {
@@ -355,7 +355,7 @@ lua.open_libraries(sol::lib::base);
 }
 ```
 
-### 5.2 Projekt mit Tests
+### 5.2 Project with Tests
 
 ```json
 {
@@ -389,7 +389,7 @@ lua.open_libraries(sol::lib::base);
 }
 ```
 
-### 5.3 Multi-Executable Projekt
+### 5.3 Multi-Executable Project
 
 ```json
 {
@@ -430,27 +430,27 @@ lua.open_libraries(sol::lib::base);
 
 ### 6.1 "undefined reference to gl..."
 
-**Problem:** OpenGL-Functions nicht gefunden
+**Problem:** OpenGL functions not found
 
-**Lösung:** glad vor glfw in externals-Liste, und `gladLoadGLLoader()` nach `glfwMakeContextCurrent()` aufrufen.
+**Solution:** Put glad before glfw in the externals list, and call `gladLoadGLLoader()` after `glfwMakeContextCurrent()`.
 
 ### 6.2 "imgui.h not found"
 
-**Problem:** ImGui-Header nicht gefunden
+**Problem:** ImGui header not found
 
-**Lösung:** `"cmakeSupport": false` für imgui setzen, PostFetch-Hook prüfen.
+**Solution:** Set `"cmakeSupport": false` for imgui, check the PostFetch hook.
 
-### 6.3 "lua.h not found" mit sol2
+### 6.3 "lua.h not found" with sol2
 
-**Problem:** sol2 findet Lua nicht
+**Problem:** sol2 does not find Lua
 
-**Lösung:** lua54 VOR sol2 in der externals-Liste.
+**Solution:** lua54 BEFORE sol2 in the externals list.
 
-### 6.4 BASS-Plugin nicht geladen
+### 6.4 BASS Plugin Not Loaded
 
-**Problem:** FLAC/Opus-Dateien werden nicht abgespielt
+**Problem:** FLAC/Opus files are not played
 
-**Lösung:** Entsprechende Option in `external_options` aktivieren:
+**Solution:** Enable the corresponding option in `external_options`:
 
 ```json
 "external_options": {
@@ -458,11 +458,11 @@ lua.open_libraries(sol::lib::base);
 }
 ```
 
-### 6.5 Qt6 nicht gefunden
+### 6.5 Qt6 Not Found
 
-**Problem:** CMake findet Qt6 nicht
+**Problem:** CMake does not find Qt6
 
-**Lösung:** `CMAKE_PREFIX_PATH` auf Qt6-Installation setzen:
+**Solution:** Set `CMAKE_PREFIX_PATH` to the Qt6 installation:
 
 ```bash
 cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/6.x.x/gcc_64 ..
@@ -470,43 +470,44 @@ cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/6.x.x/gcc_64 ..
 
 ---
 
-## 7. Detail-Guides
+## 7. Detail Guides
 
-Für detaillierte Informationen zu einzelnen Externals:
+For detailed information on individual externals:
 
 ### Local Externals
 
 | External | Guide | Description |
-|----------|-------|--------------|
-| doctest | [externals/doctest.md](externals/doctest.md) | Header-Only Testing |
-| lua54 | [externals/lua54.md](externals/lua54.md) | Lua 5.4 Scripting |
-| glad | [externals/glad.md](externals/glad.md) | OpenGL Loader |
-| BASS | [externals/bass.md](externals/bass.md) | Audio mit Plugins |
+|----------|-------|-------------|
+| doctest | [externals/doctest.md](externals/Doctest.md) | Header-only testing |
+| lua54 | [externals/lua54.md](externals/Lua54.md) | Lua 5.4 scripting |
+| glad | [externals/glad.md](externals/Glad.md) | OpenGL loader |
+| BASS | [externals/bass.md](externals/Bass.md) | Audio with plugins |
 
 ### Git Externals
 
 | External | Guide | Description |
-|----------|-------|--------------|
-| glfw | [externals/glfw.md](externals/glfw.md) | Window & Input |
-| imgui | [externals/imgui.md](externals/imgui.md) | Immediate Mode GUI |
-| googletest | [externals/googletest.md](externals/googletest.md) | Testing + GMock |
-| catch2 | [externals/catch2.md](externals/catch2.md) | BDD-Style Testing |
-| Qt6 | [externals/qt6.md](externals/qt6.md) | Desktop GUI Framework |
+|----------|-------|-------------|
+| glfw | [externals/glfw.md](externals/Glfw.md) | Window & input |
+| imgui | [externals/imgui.md](externals/Imgui.md) | Immediate mode GUI |
+| googletest | [externals/googletest.md](externals/Googletest.md) | Testing + GMock |
+| catch2 | [externals/catch2.md](externals/Catch2.md) | BDD-style testing |
+| Qt6 | [externals/qt6.md](externals/Qt6.md) | Desktop GUI framework |
 
 ---
 
 ## 8. See Also
 
-- [Externals.md](../references/Externals.md) — Reference aller Externals
-- [Local_Externals.md](../references/externals/Local_Externals.md) — Local Externals Reference
-- [Git_Externals.md](../references/externals/Git_Externals.md) — Git Externals Reference
-- [Solution_Schema.md](../references/Solution_Schema.md) — JSON-Schema
+- [Externals.md](../references/Externals.md) — Reference of all externals
+- [Local_Externals.md](../references/externals/Local_Externals.md) — Local externals reference
+- [Git_Externals.md](../references/externals/Git_Externals.md) — Git externals reference
+- [Solution_Schema.md](../references/Solution_Schema.md) — JSON schema
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Fokus auf Kombinationen; Detail-Guides ausgelagert** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Focus on combinations; detail guides moved out |
 | 0.5.0 | 2025-12-14 | Initial |

@@ -1,12 +1,12 @@
 # Git Externals: Media & Math — Referenz
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Media.md](Git_Externals_Media.md)
+> **English:** [Git_Externals_Media.md](../../../../en/guide/references/externals/Git_Externals_Media.md)
 
 ---
 
@@ -344,4 +344,5 @@ for (auto [entity, pos, vel] : view.each()) {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: Ausgelagert aus Git_Externals_Reference |

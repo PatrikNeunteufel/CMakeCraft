@@ -190,9 +190,9 @@ if(NOT TARGET pocketfft)
     target_include_directories(pocketfft SYSTEM INTERFACE
         "${CMAKE_CURRENT_SOURCE_DIR}/externals/pocketfft")
     target_compile_definitions(pocketfft INTERFACE [=[POCKETFFT_NO_MULTITHREADING]=])
-    set_property(GLOBAL PROPERTY CRAFT_PACKAGE_EXTERNAL_pocketfft_SHA256 "<Prüfsumme>")
+    set_property(GLOBAL PROPERTY CRAFT_PACKAGE_EXTERNAL_pocketfft_SHA256 "<checksum>")
 else()
-    # gleiche Prüfsumme verlangt, sonst Abbruch
+    # same checksum required, otherwise abort
 endif()
 ```
 
@@ -415,6 +415,7 @@ name every source tried and the reason.
 
 - [Solution_Schema.md](Solution_Schema.md) — schema of `Solution.json`
 - [ErrorCodes.md](ErrorCodes.md) — error code reference
+- [Neues_Projekt_Guide.md](../userguides/Neues_Projekt_Guide.md) — consuming CMakeCraft itself (`cmakecraft.pin`)
 
 ---
 

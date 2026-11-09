@@ -1,48 +1,48 @@
-# Warnings.cmake — Modul-Dokumentation
+# Warnings.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** In Development (Pre-Release)  
+> **Status:** In development (pre-release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Warnings.md](Warnings.md)  
-> **Module:** [`cmake/core/Warnings.cmake`](../../../../cmake/core/Warnings.cmake)  
+> **German:** [Warnings.md](../../../../de/guide/module/core/Warnings.md)  
+> **Module:** [`cmake/core/Warnings.cmake`](../../../../../cmake/core/Warnings.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [API-Reference](#4-api-referenz)
-5. [Usagesbeispiele](#5-verwendungsbeispiele)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [API Reference](#4-api-reference)
+5. [Usage Examples](#5-usage-examples)
 6. [Third-Party Code](#6-third-party-code)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Warnings.cmake` Modul konfiguriert **compiler-spezifische Warning-Level** für Targets. Es aktiviert hohe Warnstufen um Code-Qualität zu fördern.
+The `Warnings.cmake` module configures **compiler-specific warning levels** for targets. It enables high warning levels to promote code quality.
 
-### Kernidee
+### Core Idea
 
-Einheitliche, hohe Warnstufen für alle Targets — konsistent über alle Compiler hinweg.
+Uniform, high warning levels for all targets — consistent across all compilers.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| MSVC | /W4 (hohe Warnstufe) |
+| Area | Description |
+|------|-------------|
+| MSVC | /W4 (high warning level) |
 | GCC | -Wall -Wextra -Wpedantic |
 | Clang | -Wall -Wextra -Wpedantic |
 
-### Usage durch
+### Used By
 
 - ExecutableCreate.cmake
 - LibraryCreate.cmake
@@ -51,52 +51,52 @@ Einheitliche, hohe Warnstufen für alle Targets — konsistent über alle Compil
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
-| — | — | Keine (Standalone-Modul) |
+| Module | Version | Usage |
+|--------|---------|-------|
+| — | — | None (standalone module) |
 
-**Design-Entscheidung:** Warnings.cmake ist ein minimalistisches Standalone-Modul ohne Debug- oder Error-Integration.
+**Design decision:** Warnings.cmake is a minimalist standalone module without debug or error integration.
 
-→ Siehe [Offene Abklärungen](../../../konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md) für Details zu möglicher dbg()-Integration.
+→ See [Open clarifications](../../../konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md) for details on a possible dbg() integration.
 
 ---
 
 ## 3. Concept
 
-### 3.1 Compiler-spezifische Flags
+### 3.1 Compiler-Specific Flags
 
 | Compiler | Flags | Description |
-|----------|-------|--------------|
-| MSVC | `/W4` | Hohe Warnstufe |
-| GCC | `-Wall -Wextra -Wpedantic` | Standard + Extra + Pedantic |
-| Clang | `-Wall -Wextra -Wpedantic` | Wie GCC |
+|----------|-------|-------------|
+| MSVC | `/W4` | High warning level |
+| GCC | `-Wall -Wextra -Wpedantic` | Standard + extra + pedantic |
+| Clang | `-Wall -Wextra -Wpedantic` | Same as GCC |
 
-### 3.2 Warning-Level (MSVC)
+### 3.2 Warning Levels (MSVC)
 
-| Level | Bedeutung |
-|-------|-----------|
-| `/W0` | Keine Warningen |
-| `/W1` | Nur schwere |
-| `/W2` | Signifikante |
-| `/W3` | Produktions-Qualität |
-| `/W4` | Informative (empfohlen) ✅ |
-| `/Wall` | Alle (sehr viele!) |
+| Level | Meaning |
+|-------|---------|
+| `/W0` | No warnings |
+| `/W1` | Severe only |
+| `/W2` | Significant |
+| `/W3` | Production quality |
+| `/W4` | Informational (recommended) ✅ |
+| `/Wall` | All (very many!) |
 
-### 3.3 Warning-Flags (GCC/Clang)
+### 3.3 Warning Flags (GCC/Clang)
 
-| Flag | Bedeutung |
-|------|-----------|
-| `-Wall` | "All" (wichtigste Warningen) |
-| `-Wextra` | Zusätzliche Warningen |
-| `-Wpedantic` | Strikte ISO-C++ Konformität |
+| Flag | Meaning |
+|------|---------|
+| `-Wall` | "All" (most important warnings) |
+| `-Wextra` | Additional warnings |
+| `-Wpedantic` | Strict ISO C++ conformance |
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 apply_warnings()
 
-Setzt Warning-Level für ein Target.
+Sets the warning level for a target.
 
 ```cmake
 apply_warnings(<TARGET_NAME>)
@@ -104,13 +104,13 @@ apply_warnings(<TARGET_NAME>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `TARGET_NAME` | String | ✓ | CMake Target (muss bereits existieren) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `TARGET_NAME` | String | ✓ | CMake target (must already exist) |
 
-**Voraussetzung:** Das Target muss bereits mit `add_executable()` oder `add_library()` erstellt worden sein.
+**Prerequisite:** The target must already have been created with `add_executable()` or `add_library()`.
 
-**Rückgabe:** Keine (setzt Compile-Options)
+**Returns:** Nothing (sets compile options)
 
 **Example:**
 
@@ -121,16 +121,16 @@ apply_warnings(MyApp)
 
 ---
 
-## 5. Usagesbeispiele
+## 5. Usage Examples
 
-### 5.1 Einfache Anwendung
+### 5.1 Simple Usage
 
 ```cmake
 add_executable(MyApp main.cpp)
 apply_warnings(MyApp)
 ```
 
-### 5.2 In der Executable-Pipeline
+### 5.2 In the Executable Pipeline
 
 ```cmake
 function(_create_executable_target CTX)
@@ -138,12 +138,12 @@ function(_create_executable_target CTX)
     
     add_executable(${_name} ${_sources})
     setup_output_dirs(${_name})
-    apply_warnings(${_name})           # ← Warningen
-    apply_compiler_options(${_name})   # ← Weitere Optionen
+    apply_warnings(${_name})           # ← warnings
+    apply_compiler_options(${_name})   # ← further options
 endfunction()
 ```
 
-### 5.3 Für Libraries
+### 5.3 For Libraries
 
 ```cmake
 add_library(CoreLib STATIC core.cpp)
@@ -154,16 +154,16 @@ apply_warnings(CoreLib)
 
 ## 6. Third-Party Code
 
-### 6.1 Warningen deaktivieren
+### 6.1 Disabling Warnings
 
-Für externen Code ohne strikte Warningen:
+For external code without strict warnings:
 
 ```cmake
-# Eigener Code mit Warningen
+# Own code with warnings
 add_library(MyLib ...)
 apply_warnings(MyLib)
 
-# Third-Party ohne strikte Warningen
+# Third-party without strict warnings
 add_library(ThirdParty ...)
 if(MSVC)
     target_compile_options(ThirdParty PRIVATE /W0)
@@ -172,26 +172,26 @@ else()
 endif()
 ```
 
-### 6.2 Einzelne Warningen deaktivieren
+### 6.2 Disabling Individual Warnings
 
 ```cmake
-# MSVC: Specific warnings deaktivieren
+# MSVC: disable specific warnings
 target_compile_options(${TARGET} PRIVATE 
     /wd4996   # deprecated functions
     /wd4100   # unused parameter
 )
 
-# GCC/Clang: Specific warnings deaktivieren
+# GCC/Clang: disable specific warnings
 target_compile_options(${TARGET} PRIVATE 
     -Wno-unused-parameter
     -Wno-deprecated-declarations
 )
 ```
 
-### 6.3 Zusätzliche Warningen aktivieren
+### 6.3 Enabling Additional Warnings
 
 ```cmake
-# Optionale strikte Warningen
+# Optional strict warnings
 target_compile_options(${TARGET} PRIVATE 
     -Wshadow           # Variable shadows another
     -Wconversion       # Implicit conversions
@@ -203,16 +203,17 @@ target_compile_options(${TARGET} PRIVATE
 
 ## 7. See Also
 
-- [CompilerOptions.cmake](CompilerOptions.md) — Weitere Compiler-Optionen (Clang-Tidy, RTTI, Exceptions)
-- [ExecutableCreate.cmake](../project/ExecutableCreate.md) — Verwendet apply_warnings
-- [LibraryCreate.cmake](../project/LibraryCreate.md) — Verwendet apply_warnings
+- [CompilerOptions.cmake](CompilerOptions.md) — further compiler options (Clang-Tidy, RTTI, exceptions)
+- [ExecutableCreate.cmake](../project/ExecutableCreate.md) — uses apply_warnings
+- [LibraryCreate.cmake](../project/LibraryCreate.md) — uses apply_warnings
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): apply_warnings für MSVC/GCC/Clang |
+| 0.1.0 | 2025-12-03 | Initial (clean start): apply_warnings for MSVC/GCC/Clang |

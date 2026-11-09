@@ -1,4 +1,4 @@
-# phase4.cmake — Modul-Dokumentation
+# phase4.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
@@ -6,27 +6,28 @@
 > **Path:** `cmake/buildSystemTest/phase4.cmake`  
 > **Status:** Stable  
 > **Language:** English  
+> **German:** [Phase4_doc.md](../../../../de/guide/module/buildSystemTest/Phase4_doc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Tests](#2-tests)
-3. [Successs-Flag](#3-erfolgs-flag)
-4. [See Also](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+3. [Success Flag](#3-success-flag)
+4. [See Also](#4-see-also)
+5. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Phase 4** testet die **Library Pipeline** — das Erstellen von Library-Targets.
+**Phase 4** tests the **library pipeline** — the creation of library targets.
 
-| Aspekt | Description |
-|--------|--------------|
-| **Zweck** | Library Pipeline Validation |
-| **Debug-ID** | `PHASE4_TEST` |
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Library pipeline validation |
+| **Debug ID** | `PHASE4_TEST` |
 | **Dependencies** | Phase 1-2, Libraries.cmake |
 
 ---
@@ -35,7 +36,7 @@
 
 ### 2.1 Libraries Array
 
-Prüft, dass `libraries` in Solution.json existiert:
+Checks that `libraries` exists in Solution.json:
 
 ```cmake
 _json_has_key("${_solution_json}" "libraries" _has_libraries)
@@ -44,10 +45,10 @@ _json_array_length("${_solution_json}" "libraries" _lib_count)
 
 ### 2.2 BasicLogger Target
 
-| Prüfung | Erwartet |
-|---------|----------|
-| Target existiert | `TARGET BasicLogger` |
-| Target-Typ | `INTERFACE_LIBRARY` |
+| Check | Expected |
+|-------|----------|
+| Target exists | `TARGET BasicLogger` |
+| Target type | `INTERFACE_LIBRARY` |
 
 ### 2.3 Include Directories
 
@@ -55,11 +56,11 @@ _json_array_length("${_solution_json}" "libraries" _lib_count)
 get_target_property(_includes BasicLogger INTERFACE_INCLUDE_DIRECTORIES)
 ```
 
-Prüft, dass Include-Verzeichnisse gesetzt sind.
+Checks that include directories are set.
 
-### 2.4 Executable-Linking
+### 2.4 Executable Linking
 
-Prüft, dass `MinimalConsole` gegen `BasicLogger` linkt:
+Checks that `MinimalConsole` links against `BasicLogger`:
 
 ```cmake
 get_target_property(_deps MinimalConsole LINK_LIBRARIES)
@@ -70,7 +71,7 @@ endif()
 
 ---
 
-## 3. Successs-Flag
+## 3. Success Flag
 
 ```cmake
 set(PHASE4_TEST_PASSED TRUE CACHE BOOL "Phase 4 Test passed" FORCE)
@@ -88,7 +89,8 @@ set(PHASE4_TEST_PASSED TRUE CACHE BOOL "Phase 4 Test passed" FORCE)
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 format |
 | 0.1.0 | 2025-12-07 | Initial |

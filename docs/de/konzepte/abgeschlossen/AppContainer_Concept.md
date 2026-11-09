@@ -1,13 +1,13 @@
 # App-Container — Architektur-Konzept
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Concept  
 > **Status:** Implementiert  
 > **Phase:** 8 (abgeschlossen)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [AppContainer_Concept.md](AppContainer_Concept.md)
+> **English:** [AppContainer_Concept.md](../../../en/konzepte/abgeschlossen/AppContainer_Concept.md)
 
 ---
 
@@ -453,6 +453,8 @@ Für eine App `MyVisualizer` mit 3 Test-Targets:
 | W402 | Test with serial type has parallel=true |
 | W403 | Tests directory exists but no sources found |
 
+> **Stand Code (2026-11-09):** E306 gibt es im Code nicht. Einen Test-Pfad ohne Quelldateien meldet die Warnung W403 `Test '${TARGET_NAME}': No source files found` und überspringt den Test (`cmake/project/AppCreate.cmake:702`); W403 steht außerdem für `App '${_name}': tests.targets configured but no tests/ directory` (`AppCreate.cmake:577`). W401 meldet neben dem fehlenden `include/` (`AppCreate.cmake:96`) auch `App '${_name}': tests.targets is empty` (`cmake/project/AppCollect.cmake:338`). Einen App-Eintrag ohne Namen meldet `cmake/project/Apps.cmake:86` mit E401; `AppCollect.cmake:183` prüft dasselbe mit E400.
+
 ---
 
 ## 7. Build-Ausgabe Struktur
@@ -637,7 +639,7 @@ projects/apps/MyApp/
 - [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible Test-Konfiguration
 - [Solution_Schema.md](../../guide/references/Solution_Schema.md) — JSON-Schema Referenz
 - [ErrorCodes.md](../../guide/references/ErrorCodes.md) — Fehlercodes
-- [App Template](../../../../projects/templates/App/README.md) — Template für neue Apps
+- [App Template](../../../../templates/App/README_de.md) — Template für neue Apps
 
 ---
 
@@ -645,5 +647,7 @@ projects/apps/MyApp/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Phase 8 abgeschlossen: Neue tests.targets[] Struktur (ersetzt tests.unit/integration), Skip-Feature (global + per-target), Type-based Defaults, Framework Override, W402 parallel Warning, Status auf "Implementiert"** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Hinweis „Stand Code“ zu §6 (E306 entfällt, W401/W403 wie im Code belegt, E400)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.6.0 | 2025-12-18 | Phase 8 abgeschlossen: Neue tests.targets[] Struktur (ersetzt tests.unit/integration), Skip-Feature (global + per-target), Type-based Defaults, Framework Override, W402 parallel Warning, Status auf "Implementiert" |
 | 0.5.0 | 2025-12-14 | Initial: Konzept für Core/Runner-Trennung |

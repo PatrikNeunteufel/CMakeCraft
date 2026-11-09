@@ -1,54 +1,54 @@
-# LibraryCreate.cmake — Modul-Dokumentation
+# LibraryCreate.cmake — Module Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.2  
+> **Date:** 2026-11-07  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [LibraryCreate.md](LibraryCreate.md)  
-> **Module:** [`cmake/project/LibraryCreate.cmake`](../../../../cmake/project/LibraryCreate.cmake)  
+> **German:** [LibraryCreate.md](../../../../de/guide/module/project/LibraryCreate.md)  
+> **Module:** [`cmake/project/LibraryCreate.cmake`](../../../../../cmake/project/LibraryCreate.cmake)  
 > **Module Version:** 1.1.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
-4. [Library-Typen](#4-library-typen)
-5. [Verarbeitung](#5-verarbeitung)
-6. [Errorbehandlung](#6-fehlerbehandlung)
-7. [See Also](#7-siehe-auch)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
+4. [Library Types](#4-library-types)
+5. [Processing](#5-processing)
+6. [Error Handling](#6-error-handling)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-Das `LibraryCreate.cmake` Modul **erstellt CMake-Library-Targets** aus einem vorbereiteten Context. Es unterstützt STATIC, SHARED und INTERFACE Libraries.
+The `LibraryCreate.cmake` module **creates CMake library targets** from a prepared context. It supports STATIC, SHARED and INTERFACE libraries.
 
-### Kernidee
+### Core Idea
 
-Analog zu ExecutableCreate — der Context enthält alle Daten, Create erstellt das Target.
+Analogous to ExecutableCreate — the context contains all the data, Create creates the target.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Target-Erstellung | add_library() mit korrektem Typ |
-| Source-Sammlung | GLOB oder Source.cmake |
-| Public Headers | Include-Directories setzen |
-| Dependencies | Interne Libraries, Externals |
+| Area | Description |
+|------|-------------|
+| Target creation | add_library() with the correct type |
+| Source collection | GLOB or Source.cmake |
+| Public headers | Set include directories |
+| Dependencies | Internal libraries, externals |
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Context.cmake | 0.5.0 | `ctx_get` |
 | Errors.cmake | 0.5.0 | `cmake_fatal`, `cmake_warn` |
 | Debug.cmake | 0.5.0 | `dbg` |
@@ -59,11 +59,11 @@ Analog zu ExecutableCreate — der Context enthält alle Daten, Create erstellt 
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
 ### 3.1 _create_library_target()
 
-Erstellt ein CMake-Library-Target aus dem Context.
+Creates a CMake library target from the context.
 
 ```cmake
 _create_library_target(<CTX>)
@@ -71,29 +71,29 @@ _create_library_target(<CTX>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `CTX` | String | ✓ | Context-Prefix (z.B. `LIB_0`) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `CTX` | String | ✓ | Context prefix (e.g. `LIB_0`) |
 
-**Erwartete Context-Keys:**
+**Expected context keys:**
 
 | Key | Usage |
-|-----|------------|
-| NAME | Target-Name |
-| PATH | Source-Verzeichnis |
+|-----|-------|
+| NAME | Target name |
+| PATH | Source directory |
 | TYPE | STATIC, SHARED, INTERFACE |
-| VERSION | Target-Version |
-| PUBLIC_HEADERS | Öffentliche Include-Verzeichnis |
-| DEPENDENCIES | Interne Libraries |
-| EXTERNALS | Externe Dependencies |
-| EXTERNAL_OPTIONS | Per-External Optionen (JSON) |
+| VERSION | Target version |
+| PUBLIC_HEADERS | Public include directory |
+| DEPENDENCIES | Internal libraries |
+| EXTERNALS | External dependencies |
+| EXTERNAL_OPTIONS | Per-external options (JSON) |
 | OUTPUT_NAME | File name without extension (empty = target name) |
 | DEFINES | Preprocessor definitions; `{version}` stands for VERSION |
 | COMPILE_OPTIONS | Compiler flags of the library (PRIVATE, after `apply_compiler_options`); E105 for INTERFACE |
 
 ---
 
-## 4. Library-Typen
+## 4. Library Types
 
 ### 4.1 STATIC Library
 
@@ -101,7 +101,7 @@ _create_library_target(<CTX>)
 add_library(${name} STATIC ${sources})
 ```
 
-Standard für die meisten Libraries.
+Default for most libraries.
 
 ### 4.2 SHARED Library
 
@@ -109,7 +109,7 @@ Standard für die meisten Libraries.
 add_library(${name} SHARED ${sources})
 ```
 
-Erzeugt .dll/.so/.dylib.
+Produces .dll/.so/.dylib.
 
 ### 4.3 INTERFACE Library
 
@@ -118,50 +118,50 @@ add_library(${name} INTERFACE)
 target_include_directories(${name} INTERFACE ${public_headers})
 ```
 
-Header-Only Library — keine Sources, nur Include-Directories.
+Header-only library — no sources, only include directories.
 
 ---
 
-## 5. Verarbeitung
+## 5. Processing
 
-### 5.1 Ablauf
+### 5.1 Flow
 
 ```
 _create_library_target(CTX)
     │
-    ├── 1. Context-Daten lesen
+    ├── 1. Read context data
     │
     ├── 2. TYPE == INTERFACE?
     │   ├── Yes → E105 if COMPILE_OPTIONS is set
     │   │       add_library(INTERFACE)
-    │   │       └── Nur Public Headers setzen
+    │   │       └── Set public headers only
     │   │
-    │   └── No → Weiter mit STATIC/SHARED
+    │   └── No → Continue with STATIC/SHARED
     │
-    ├── 3. Source-Verzeichnis validieren
-    │   └── E001 wenn nicht existiert
+    ├── 3. Validate source directory
+    │   └── E001 if it does not exist
     │
-    ├── 4. Target erstellen (STATIC/SHARED)
+    ├── 4. Create target (STATIC/SHARED)
     │
-    ├── 5. Sources sammeln (GLOB)
+    ├── 5. Collect sources (GLOB)
     │
-    ├── 6. Public Headers setzen
-    │   └── PUBLIC Include-Directory
+    ├── 6. Set public headers
+    │   └── PUBLIC include directory
     │
-    ├── 7. Interne Dependencies linken
+    ├── 7. Link internal dependencies
     │
     ├── 8. Apply externals (with options)
     │   ├── _craft_target_snapshot()          state before
     │   ├── apply_external_to_target(name, ext, options)
     │   └── _craft_record_external_effect()   what the external added
     │
-    ├── 9. Standard-Module anwenden
+    ├── 9. Apply standard modules
     │   ├── apply_warnings()
     │   ├── apply_compiler_options()
     │   ├── target_compile_options(PRIVATE COMPILE_OPTIONS)   afterwards
     │   └── setup_output_dirs()
     │
-    ├── 10. Version als Property setzen
+    ├── 10. Set version as a property
     │
     └── 11. Description for a source package (CRAFT_LIB_*)
 ```
@@ -175,8 +175,8 @@ target_include_directories(${name}
 )
 ```
 
-- **PUBLIC:** Für Consumer der Library sichtbar
-- **PRIVATE:** Nur intern verwendet
+- **PUBLIC:** Visible to consumers of the library
+- **PRIVATE:** Used internally only
 
 If `PUBLIC_HEADERS` is set, the target also receives the property `CRAFT_PUBLIC_HEADERS_DIR` with the absolute path (`${CMAKE_SOURCE_DIR}/${public_headers}`) — for INTERFACE libraries as well. [Packages.cmake](Packages.md) reads it for `headers_of`.
 
@@ -204,11 +204,14 @@ apply_compiler_options(${name})
 target_compile_options(${name} PRIVATE ${compile_options})   # only if not empty
 ```
 
-The flags of the library come **after** the defaults, so that a flag of the library overrides a default (with MSVC the later `/fp:` wins). Generator expressions stay unchanged. An INTERFACE library with `compile_options` aborts with **E105**.
+The flags of the library come **after** the defaults, so that a flag of the library overrides
+a default (with MSVC the later `/fp:` wins). Generator expressions stay unchanged.
+An INTERFACE library with `compile_options` aborts with **E105**.
 
 ### 5.5 Description for a Source Package (since v0.14.0)
 
-At the end, for STATIC/SHARED, the module sets the properties from which [SourcePackage.cmake](SourcePackage.md) builds the generated `CMakeLists.txt`:
+At the end, for STATIC/SHARED, the module sets the properties from which
+[SourcePackage.cmake](SourcePackage.md) builds the generated `CMakeLists.txt`:
 
 | Property | Content |
 |----------|---------|
@@ -224,43 +227,47 @@ At the end, for STATIC/SHARED, the module sets the properties from which [Source
 | `CRAFT_EXT_<ext>_PUBLIC` | those of them linked PUBLIC (without `$<LINK_ONLY:…>` in `INTERFACE_LINK_LIBRARIES`) |
 | `CRAFT_EXT_<ext>_OTHER` | names of all other properties the external changed on the target |
 
-For this, `_craft_target_snapshot` and `_craft_record_external_effect` compare the properties in `_CRAFT_EXTERNAL_EFFECT_PROPERTIES` (link, include, define, options, feature, link options, source and PCH properties, each also `INTERFACE_*`) before and after `apply_external_to_target`.
+For this, `_craft_target_snapshot` and `_craft_record_external_effect` compare the properties
+in `_CRAFT_EXTERNAL_EFFECT_PROPERTIES` (link, include, define, options, feature,
+link options, source and PCH properties, each also `INTERFACE_*`) before and after
+`apply_external_to_target`.
 
 ---
 
-## 6. Errorbehandlung
+## 6. Error Handling
 
 ### 6.1 Fatal Errors
 
-| Code | Bedingung | Lösung |
-|------|-----------|--------|
-| E001 | Source-Pfad existiert nicht | Pfad prüfen/anlegen |
-| E101 | Interne Dependency existiert nicht | Library-Reihenfolge prüfen |
+| Code | Condition | Solution |
+|------|-----------|----------|
+| E001 | Source path does not exist | Check/create the path |
+| E101 | Internal dependency does not exist | Check the library order |
 | E105 | `compile_options` on an INTERFACE library | Move the flags to a STATIC library or remove them |
 
 ### 6.2 Warnings
 
-| Code | Bedingung | Empfehlung |
-|------|-----------|------------|
-| W101 | Keine Sources gefunden | Source-Dateien hinzufügen |
+| Code | Condition | Recommendation |
+|------|-----------|----------------|
+| W101 | No sources found | Add source files |
 
 ---
 
 ## 7. See Also
 
-- [Libraries.cmake](Libraries.md) — Ruft _create_library_target auf
-- [LibraryCollect.cmake](LibraryCollect.md) — Befüllt den Context
-- [ExecutableCreate.cmake](ExecutableCreate.md) — Analoges Modul für Executables
+- [Libraries.cmake](Libraries.md) — Calls _create_library_target
+- [LibraryCollect.cmake](LibraryCollect.md) — Fills the context
+- [ExecutableCreate.cmake](ExecutableCreate.md) — Analogous module for executables
 
 ---
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.14.0** | **2026-11-07** | **COMPILE_OPTIONS (PRIVATE, after `apply_compiler_options`, E105 for INTERFACE); description for source packages (`CRAFT_LIB_*`, `CRAFT_EXT_*`); module version 1.1.0** |
-| 0.10.0 | 2026-10-09 | OUTPUT_NAME and DEFINES (with `{version}`); target property `CRAFT_PUBLIC_HEADERS_DIR` |
-| 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS Support: apply_external_to_target() statt direktem Linking |
-| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
-| 0.1.0 | 2025-12-07 | Initial (Clean Start): STATIC/SHARED/INTERFACE Support |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.2** | **2026-11-07** | **CMakeCraft v0.14.0: COMPILE_OPTIONS (PRIVATE, after `apply_compiler_options`, E105 for INTERFACE); description for source packages (`CRAFT_LIB_*`, `CRAFT_EXT_*`); module version 1.1.0** |
+| 1.0.1 | 2026-10-09 | CMakeCraft v0.10.0: OUTPUT_NAME and DEFINES (with `{version}`); target property `CRAFT_PUBLIC_HEADERS_DIR` |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS support: apply_external_to_target() instead of direct linking |
+| 0.5.1 | 2025-12-17 | collect_sources() integration, SourceCollect.cmake dependency |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0 |
+| 0.1.0 | 2025-12-07 | Initial (clean start): STATIC/SHARED/INTERFACE support |

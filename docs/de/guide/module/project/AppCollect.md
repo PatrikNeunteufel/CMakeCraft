@@ -1,15 +1,15 @@
 # AppCollect.cmake — Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2026-07-20  
+> **Version:** 1.0.3  
+> **Datum:** 2026-10-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
-> **Modul:** [cmake/project/AppCollect.cmake](../../../../cmake/project/AppCollect.cmake)  
+> **Modul:** [cmake/project/AppCollect.cmake](../../../../../cmake/project/AppCollect.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
-> **English:** [AppCollect.md](AppCollect.md)
+> **English:** [AppCollect.md](../../../../en/guide/module/project/AppCollect.md)
 
 ---
 
@@ -388,9 +388,10 @@ AppCollect löst nur Parsing-Fehler aus. Validierungsfehler (Pfad existiert nich
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.8.0** | **2026-10-09** | **Neuer Key TESTS_TARGET_{n}_COMPILE_OPTIONS (§ 5.6): `targets[].compile_options` wird gesammelt (CMakeCraft v0.11.0)** |
-| **0.7.4** | **2026-10-05** | **Neuer Key TESTS_TARGET_{n}_EXTERNAL_OPTIONS (§ 5.6): `targets[].external_options` wird gesammelt — bisher wurde der Schlüssel am App-Test ignoriert** |
-| **0.7.3** | **2026-07-20** | **Test-Keys auf tests.targets[]-Stand gebracht (§ 5.5/5.6): TESTS_TARGET_{n}_*-Keys inkl. neuem DEPENDENCIES-Key dokumentiert, altes tests.unit/tests.integration-Schema entfernt; Beispiel 6.2 und Fehlerliste (§ 7) korrigiert (E400 statt E401, E303/E304, W401/W402)** |
+| **1.0.3** | **2026-10-09** | **Neuer Key TESTS_TARGET_{n}_COMPILE_OPTIONS (§ 5.6): `targets[].compile_options` wird gesammelt (CMakeCraft v0.11.0)** |
+| **1.0.2** | **2026-10-05** | **Neuer Key TESTS_TARGET_{n}_EXTERNAL_OPTIONS (§ 5.6): `targets[].external_options` wird gesammelt — bisher wurde der Schlüssel am App-Test ignoriert** |
+| **1.0.1** | **2026-07-20** | **Test-Keys auf tests.targets[]-Stand gebracht (§ 5.5/5.6): TESTS_TARGET_{n}_*-Keys inkl. neuem DEPENDENCIES-Key dokumentiert, altes tests.unit/tests.integration-Schema entfernt; Beispiel 6.2 und Fehlerliste (§ 7) korrigiert (E400 statt E401, E303/E304, W401/W402)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS hinzugefügt |
 | 0.5.1 | 2025-12-18 | PCH-Defaults korrigiert: header auf pch.h, PCH_SOURCE entfernt, PCH_PATH hinzugefügt, implizite Aktivierung dokumentiert |
 | 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container JSON-Parsing, Core/Runner/Tests-Trennung, vollständige Context-Keys |

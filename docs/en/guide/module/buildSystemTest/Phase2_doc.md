@@ -1,4 +1,4 @@
-# phase2.cmake — Modul-Dokumentation
+# phase2.cmake — Module Documentation
 
 > **Version:** 1.2.0  
 > **Date:** 2026-10-24  
@@ -6,27 +6,28 @@
 > **Path:** `cmake/buildSystemTest/phase2.cmake`  
 > **Status:** Stable  
 > **Language:** English  
+> **German:** [Phase2_doc.md](../../../../de/guide/module/buildSystemTest/Phase2_doc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Tests](#2-tests)
-3. [Successs-Flag](#3-erfolgs-flag)
-4. [See Also](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+3. [Success Flag](#3-success-flag)
+4. [See Also](#4-see-also)
+5. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Phase 2** testet die **Solution.json Verarbeitung** — das Laden und Validieren der Projektkonfiguration.
+**Phase 2** tests the **Solution.json processing** — loading and validating the project configuration.
 
-| Aspekt | Description |
-|--------|--------------|
-| **Zweck** | Solution.json Validation |
-| **Debug-ID** | `PHASE2_TEST` |
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Solution.json validation |
+| **Debug ID** | `PHASE2_TEST` |
 | **Dependencies** | Phase 1, Solution.cmake |
 
 ---
@@ -36,7 +37,7 @@
 ### 2.1 Solution Properties
 
 | Property | Required |
-|----------|---------|
+|----------|----------|
 | `SOLUTION_NAME` | ✅ |
 | `SOLUTION_VERSION` | ✅ |
 | `SOLUTION_SCHEMA_VERSION` | ✅ |
@@ -46,7 +47,7 @@
 ### 2.2 Settings Properties
 
 | Property | Required | Default |
-|----------|---------|---------|
+|----------|----------|---------|
 | `SOLUTION_CXX_STANDARD` | ✅ | 17 |
 | `SOLUTION_C_STANDARD` | ❌ | 11 |
 | `SOLUTION_DEFAULT_LIBRARY_TYPE` | ✅ | STATIC |
@@ -56,10 +57,10 @@
 
 ### 2.3 CMake Cache Variables
 
-| Variable | Prüft |
-|----------|-------|
-| `CMAKE_CXX_STANDARD` | Gesetzt aus Solution |
-| `CMAKE_C_STANDARD` | Gesetzt aus Solution |
+| Variable | Checks |
+|----------|--------|
+| `CMAKE_CXX_STANDARD` | Set from Solution |
+| `CMAKE_C_STANDARD` | Set from Solution |
 | `CMAKE_CXX_STANDARD_REQUIRED` | TRUE |
 | `CMAKE_CXX_EXTENSIONS` | OFF |
 | `CMAKE_C_FLAGS_TESTING`, `CMAKE_CXX_FLAGS_TESTING` | not empty (Configurations.cmake) |
@@ -67,25 +68,25 @@
 ### 2.4 Externals Policy
 
 | Property | Required |
-|----------|---------|
+|----------|----------|
 | `SOLUTION_EXTERNALS_CACHE_ROOT` | ✅ |
 | `SOLUTION_EXTERNALS_SOURCE_ROOT` | ❌ |
 | `SOLUTION_EXTERNALS_UPDATE_POLICY` | ✅ |
 
 ### 2.5 Externals JSON
 
-Prüft, dass `SOLUTION_EXTERNALS_JSON` vorhanden und nicht leer ist.
+Checks that `SOLUTION_EXTERNALS_JSON` is present and not empty.
 
-### 2.6 project() Kompatibilität
+### 2.6 project() Compatibility
 
-| Prüfung | Erwartet |
-|---------|----------|
+| Check | Expected |
+|-------|----------|
 | `PROJECT_NAME` | = `SOLUTION_NAME` |
 | `PROJECT_VERSION` | = `SOLUTION_VERSION` |
 
 ---
 
-## 3. Successs-Flag
+## 3. Success Flag
 
 ```cmake
 set(PHASE2_TEST_PASSED TRUE CACHE BOOL "Phase 2 Test passed" FORCE)
@@ -102,9 +103,9 @@ set(PHASE2_TEST_PASSED TRUE CACHE BOOL "Phase 2 Test passed" FORCE)
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
+| Version | Date | Changes |
+|---------|------|---------|
 | **1.2.0** | **2026-10-24** | **Checks the flags of the `Testing` configuration (CMakeCraft v0.13.0)** |
 | 1.1.0 | 2026-10-23 | Checks `SOLUTION_MSVC_PARALLEL_COMPILE` (CMakeCraft v0.12.0) |
-| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 format |
 | 0.1.0 | 2025-12-05 | Initial |

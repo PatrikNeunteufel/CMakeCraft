@@ -3,7 +3,7 @@
 > **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../../en/modules/core/README.md)
+> **English:** [core_README.md](../../../../en/guide/module/core/core_README.md)
 
 ---
 
@@ -129,6 +129,6 @@ Core-Module verwenden die Bereiche:
 ## Siehe auch
 
 - [../README.md](../README.md) — Modul-Übersicht
-- [../project/README.md](../project/README.md) — Projekt-Module
+- [../project/project_README.md](../project/project_README.md) — Projekt-Module
 - [../../references/ErrorCodes.md](../../references/ErrorCodes.md) — Fehlercode-Referenz
 - [../../projects/buildsystem/standards/Guidelines.md](../../../konzepte/Guidelines.md) — CMake-Coding-Standards

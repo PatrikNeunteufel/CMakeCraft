@@ -1,14 +1,14 @@
 # hooks/HookLoader.cmake — Pre/PostFetch Hook System
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [HookLoader_cmake.md](HookLoader_cmake.md)  
-> **Modul:** [cmake/externals/hooks/HookLoader.cmake](../../../cmake/externals/hooks/HookLoader.cmake)  
+> **English:** [HookLoader_cmake.md](../../../../../en/guide/module/externals/hooks/HookLoader_cmake.md)  
+> **Modul:** [cmake/externals/hooks/HookLoader.cmake](../../../../../../cmake/externals/hooks/HookLoader.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -43,11 +43,18 @@
 
 ```
 cmake/externals/hooks/
+├── HookLoader.cmake
 ├── prefetch/
+│   ├── catch2.cmake
 │   ├── glfw.cmake
-│   └── spdlog.cmake
+│   ├── googletest.cmake
+│   ├── qt-ads.cmake
+│   └── qt-ads110.cmake
 └── postfetch/
-    └── imgui.cmake
+    ├── imgui.cmake
+    ├── qt-ads.cmake
+    ├── qt-ads110.cmake
+    └── stb.cmake
 ```
 
 ---
@@ -59,7 +66,7 @@ cmake/externals/hooks/
 | `Errors.cmake` | Fehlerbehandlung |
 | `Debug.cmake` | Debug-Ausgaben |
 | `Json.cmake` | JSON-Parsing |
-| `Core/Fetch.cmake` | `_get_external_source_dir()` |
+| `core/Fetch.cmake` | `_get_external_source_dir()` |
 
 ---
 
@@ -200,10 +207,10 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## 10. Siehe auch
 
-- [Handler_cmake.md](Handler_cmake.md) — Hook-Aufrufer
+- [Handler_cmake.md](../fetched/Handler_cmake.md) — Hook-Aufrufer
 - [Targets_cmake.md](../registry/Targets_cmake.md) — Target-Registrierung
-- [glfw_PreFetch.md](glfw_PreFetch.md) — GLFW PreFetch Hook
-- [imgui_PostFetch.md](imgui_PostFetch.md) — ImGui PostFetch Hook
+- [glfw_PreFetch.md](prefetch/Glfw.md) — GLFW PreFetch Hook
+- [imgui_PostFetch.md](postfetch/Imgui.md) — ImGui PostFetch Hook
 
 ---
 
@@ -211,4 +218,6 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Beispielbaum mit den vorhandenen Hooks (statt des nicht vorhandenen `prefetch/spdlog.cmake`); `core/Fetch.cmake` klein** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

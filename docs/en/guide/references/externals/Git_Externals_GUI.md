@@ -1,36 +1,36 @@
 # Git Externals: GUI & Graphics — Reference
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_GUI.md](Git_Externals_GUI.md)
+> **German:** [Git_Externals_GUI.md](../../../../de/guide/references/externals/Git_Externals_GUI.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Window & Input](#2-window--input)
 3. [Immediate Mode GUI](#3-immediate-mode-gui)
 4. [Game Development](#4-game-development)
 5. [Vulkan / Low-Level Graphics](#5-vulkan--low-level-graphics)
-6. [Schnellreferenz](#6-schnellreferenz)
-7. [See Also](#7-siehe-auch)
+6. [Quick Reference](#6-quick-reference)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Bibliotheken für grafische Benutzeroberflächen, Fenster-Management und Rendering.
+This document describes libraries for graphical user interfaces, window management and rendering.
 
-### Kategorien
+### Categories
 
-| Kategorie | Bibliotheken |
-|-----------|--------------|
+| Category | Libraries |
+|----------|-----------|
 | Window & Input | glfw, SDL2, SDL3 |
 | Immediate Mode GUI | imgui, imgui_docking |
 | Game Development | raylib, sokol |
@@ -42,14 +42,14 @@ This document describes Bibliotheken für grafische Benutzeroberflächen, Fenste
 
 ### 2.1 glfw
 
-> **Zweck:** Cross-platform Window/Input-Handling für OpenGL, Vulkan und OpenGL ES.
+> **Purpose:** Cross-platform window/input handling for OpenGL, Vulkan and OpenGL ES.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/glfw/glfw.git` |
-| **Aktueller Tag** | `3.4` |
+| **Current Tag** | `3.4` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch erforderlich |
+| **Hook** | PreFetch required |
 | **Target** | `glfw` |
 
 ```json
@@ -83,14 +83,14 @@ glfwTerminate();
 
 ### 2.2 SDL2
 
-> **Zweck:** Cross-platform Multimedia (Video, Audio, Input, Threading).
+> **Purpose:** Cross-platform multimedia (video, audio, input, threading).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/libsdl-org/SDL.git` |
-| **Aktueller Tag** | `release-2.30.0` |
+| **Current Tag** | `release-2.30.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "sdl2": {
@@ -110,14 +110,14 @@ set(SDL2_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 
 ### 2.3 SDL3
 
-> **Zweck:** Nächste Generation von SDL mit verbesserter API.
+> **Purpose:** Next generation of SDL with an improved API.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/libsdl-org/SDL.git` |
-| **Aktueller Tag** | `release-3.2.0` |
+| **Current Tag** | `release-3.2.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "sdl3": {
@@ -132,14 +132,14 @@ set(SDL2_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 
 ### 3.1 imgui
 
-> **Zweck:** Bloat-free Immediate Mode GUI für Tools und Debug-UIs.
+> **Purpose:** Bloat-free immediate mode GUI for tools and debug UIs.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/ocornut/imgui.git` |
-| **Aktueller Tag** | `v1.91.6` (stable), `v1.91.6-docking` (docking) |
+| **Current Tag** | `v1.91.6` (stable), `v1.91.6-docking` (docking) |
 | **CMake Support** | ❌ |
-| **Hook** | PostFetch erforderlich 🔧 |
+| **Hook** | PostFetch required 🔧 |
 | **Dependencies** | Backend (GLFW, SDL, etc.) + Renderer (OpenGL, Vulkan, etc.) |
 
 ```json
@@ -150,7 +150,7 @@ set(SDL2_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 }
 ```
 
-**Docking-Variante (gleicher Hook):**
+**Docking variant (same hook):**
 ```json
 "imgui_docking": {
     "git": "https://github.com/ocornut/imgui.git",
@@ -160,24 +160,24 @@ set(SDL2_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 }
 ```
 
-**PostFetch Hook:** Siehe `cmake/externals/Hooks/PostFetch/imgui.cmake`
+**PostFetch Hook:** See `cmake/externals/hooks/postfetch/imgui.cmake`
 
-Der Hook erstellt ein `imgui` Target mit:
+The hook creates an `imgui` target with:
 - Core ImGui files
-- OpenGL3 Backend
-- GLFW Backend
-- Win32 Backend (auf Windows)
+- OpenGL3 backend
+- GLFW backend
+- Win32 backend (on Windows)
 
-**Automatisches Linking:**
-- `glad` (wenn vorhanden) + `IMGUI_IMPL_OPENGL_LOADER_GLAD`
-- `glfw` (wenn vorhanden)
+**Automatic linking:**
+- `glad` (if present) + `IMGUI_IMPL_OPENGL_LOADER_GLAD`
+- `glfw` (if present)
 
-**Important - Reihenfolge in Solution.json:**
+**Important - order in Solution.json:**
 ```json
 "externals": {
-    "glad": { ... },   // 1. zuerst
-    "glfw": { ... },   // 2. dann
-    "imgui": { ... }   // 3. zuletzt
+    "glad": { ... },   // 1. first
+    "glfw": { ... },   // 2. then
+    "imgui": { ... }   // 3. last
 }
 ```
 
@@ -210,14 +210,14 @@ ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 ### 4.1 raylib
 
-> **Zweck:** Einfache Bibliothek für Spiele-Entwicklung und Rapid Prototyping.
+> **Purpose:** Simple library for game development and rapid prototyping.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/raysan5/raylib.git` |
-| **Aktueller Tag** | `5.0` |
+| **Current Tag** | `5.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "raylib": {
@@ -250,14 +250,14 @@ CloseWindow();
 
 ### 4.2 sokol
 
-> **Zweck:** Minimale Cross-platform Libraries (App, GFX, Audio, etc.).
+> **Purpose:** Minimal cross-platform libraries (app, gfx, audio, etc.).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/floooh/sokol.git` |
-| **Aktueller Tag** | – (branch: master) |
-| **CMake Support** | ❌ (Header-only) |
-| **Hook** | PostFetch erforderlich 🔧 |
+| **Current Tag** | – (branch: master) |
+| **CMake Support** | ❌ (header-only) |
+| **Hook** | PostFetch required 🔧 |
 
 ```json
 "sokol": {
@@ -280,12 +280,12 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ### 5.1 Vulkan-Headers
 
-> **Zweck:** Offizielle Vulkan API Headers.
+> **Purpose:** Official Vulkan API headers.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/KhronosGroup/Vulkan-Headers.git` |
-| **Aktueller Tag** | `v1.3.280` |
+| **Current Tag** | `v1.3.280` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 
@@ -300,12 +300,12 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ### 5.2 volk (Vulkan Loader)
 
-> **Zweck:** Meta-loader für Vulkan (lädt Funktionspointer dynamisch).
+> **Purpose:** Meta-loader for Vulkan (loads function pointers dynamically).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/zeux/volk.git` |
-| **Aktueller Tag** | `1.3.280` |
+| **Current Tag** | `1.3.280` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 
@@ -320,12 +320,12 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ### 5.3 VulkanMemoryAllocator
 
-> **Zweck:** Einfache Vulkan Memory-Allokation.
+> **Purpose:** Simple Vulkan memory allocation.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git` |
-| **Aktueller Tag** | `v3.0.1` |
+| **Current Tag** | `v3.0.1` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 
@@ -338,10 +338,10 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ---
 
-## 6. Schnellreferenz
+## 6. Quick Reference
 
-| Bibliothek | Tag | CMake | Hook | Hauptverwendung |
-|------------|-----|-------|------|-----------------|
+| Library | Tag | CMake | Hook | Main Use |
+|---------|-----|-------|------|----------|
 | glfw | 3.4 | ✅ | PreFetch | Window/Input |
 | sdl2 | release-2.30.0 | ✅ | PreFetch | Multimedia |
 | sdl3 | release-3.2.0 | ✅ | PreFetch | Multimedia (next-gen) |
@@ -356,7 +356,7 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## 7. See Also
 
-- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Main overview
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Logging & Testing
 - [Git_Externals_Media.md](Git_Externals_Media.md) — Audio & Math
 - [Externals.md](../Externals.md) — Local Externals (glad)
@@ -365,6 +365,8 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: hook path in lower case (`cmake/externals/hooks/postfetch/`, `cmake/externals/hooks/HookLoader.cmake:40`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-14 | Initial: extracted from Git_Externals_Reference |

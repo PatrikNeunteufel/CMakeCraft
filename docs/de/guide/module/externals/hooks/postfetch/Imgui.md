@@ -1,14 +1,14 @@
 # PostFetch/imgui.cmake — ImGui PostFetch Hook
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [imgui_PostFetch.md](../../en/modules/externals/imgui_PostFetch.md)  
-> **Hook:** [cmake/externals/hooks/postfetch/imgui.cmake](../../../cmake/externals/hooks/postfetch/imgui.cmake)  
+> **English:** [imgui_PostFetch.md](../../../../../../en/guide/module/externals/hooks/postfetch/Imgui.md)  
+> **Hook:** [cmake/externals/hooks/postfetch/imgui.cmake](../../../../../../../cmake/externals/hooks/postfetch/imgui.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -131,7 +131,7 @@ Der Target-Name entspricht dem External-Namen:
 
 - [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook-System
 - [Targets_cmake.md](../../registry/Targets_cmake.md) — Target-Registrierung
-- [glfw_PreFetch.md](glfw_PreFetch.md) — GLFW PreFetch Hook
+- [glfw_PreFetch.md](../prefetch/Glfw.md) — GLFW PreFetch Hook
 
 ---
 
@@ -139,4 +139,5 @@ Der Target-Name entspricht dem External-Namen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

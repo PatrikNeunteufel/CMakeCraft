@@ -1,14 +1,14 @@
 # Handler.cmake — System External Handler
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Handler_cmake.md](../../../../en/modules/externals/system/Handler_cmake.md)  
-> **Modul:** [cmake/externals/system/Handler.cmake](../../../../../cmake/externals/system/Handler.cmake)  
+> **English:** [Handler_cmake.md](../../../../../en/guide/module/externals/system/Handler_cmake.md)  
+> **Modul:** [cmake/externals/system/Handler.cmake](../../../../../../cmake/externals/system/Handler.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
@@ -105,11 +105,17 @@ _handle_system_external(EXT_NAME EXT_JSON)
 
 | Feld | Typ | Default | Beschreibung |
 |------|-----|---------|--------------|
-| `version` | string | — | Versionsanforderung |
+| `version` | string | — | Mindestversion für `find_package()` (z. B. `"6.5"`, keine `>=`-Operatoren) |
 | `components` | array | `[]` | Paket-Komponenten |
 | `hints` | array | `[]` | Zusätzliche Suchpfade |
 | `backup` | string | — | Fallback-Pfad (mit Warnung) |
-| `required` | bool | `true` | Optional wenn `false` |
+| `required` | bool | `true` | Bei `false` kein Fehler, wenn das Paket fehlt |
+
+`find_package()` läuft immer **ohne** `REQUIRED` (`Handler.cmake:270`, `:273`): mit `REQUIRED`
+bräche CMake mit seiner eigenen Meldung ab, bevor CMakeCraft die Ursache benennen kann. CMakes
+Diagnose erscheint ohne `REQUIRED` weiterhin, als Warnung. Ist das Paket nicht gefunden und das
+External `required`, ruft der Handler `_system_external_not_found()` auf (`Handler.cmake:290`);
+sonst meldet er nur `[<name>] <Paket> not found (optional)` (`:293`).
 
 ---
 
@@ -131,6 +137,41 @@ _apply_system_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 1. Holt registrierten Package-Namen und Komponenten
 2. Linkt `Package::Component` Targets
 3. Ruft `_Package_configure_target()` Hook auf (falls definiert)
+
+Ist das External nicht registriert, folgt E503 `System external '<name>' not properly registered`
+(`Handler.cmake:331`).
+
+---
+
+### 3.3 _system_external_not_found()
+
+Benennt die Ursache, wenn `find_package()` ein `required` External nicht gefunden hat, und bricht
+mit E503, E504 oder E505 ab (`Handler.cmake:52–133`).
+
+```cmake
+_system_external_not_found(EXT_NAME PACKAGE VERSION COMPONENTS)
+```
+
+| Parameter | Typ | Beschreibung |
+|-----------|-----|--------------|
+| `EXT_NAME` | String | Name des Externals |
+| `PACKAGE` | String | Paketname aus `package` |
+| `VERSION` | String | `version` aus Solution.json, oder leer |
+| `COMPONENTS` | Liste | `components` aus Solution.json, oder leer |
+
+Sie liest die Variablen, die `find_package()` im Aufrufer hinterlässt: `<Paket>_DIR`,
+`<Paket>_CONSIDERED_CONFIGS`, `<Paket>_CONSIDERED_VERSIONS` und `<Paket>_NOT_FOUND_MESSAGE`
+(`Handler.cmake:53–56`).
+
+| Lage nach `find_package()` | Ergebnis | Zeile |
+|-----------------------------|----------|-------|
+| `<Paket>_DIR` gesetzt (Konfiguration angenommen), `components` gesetzt | E504 mit dem Grund des Pakets | `:91` |
+| `<Paket>_DIR` gesetzt, keine `components` | E503 mit dem Grund des Pakets | `:101` |
+| Konfigurationen betrachtet, keine angenommen, `version` gesetzt | E505 mit jeder betrachteten Datei und ihrer Version | `:109` |
+| Konfigurationen betrachtet, keine angenommen, keine `version` | E503 mit denselben Zeilen `Considered:` | `:120` |
+| nichts betrachtet | E503 (Paket nicht gefunden) | `:128` |
+
+Alle E503-Fassungen enden mit denselben Lösungszeilen (`Handler.cmake:73–86`).
 
 ---
 
@@ -158,11 +199,13 @@ _handle_system_external(EXT_NAME, EXT_JSON)
     │
     ├── 5. find_package() aufrufen
     │   ├── Mit COMPONENTS wenn angegeben
-    │   └── Mit REQUIRED wenn required=true
+    │   └── Nie mit REQUIRED (CMakes Diagnose erscheint als Warnung)
     │
     ├── 6. Ergebnis prüfen
     │   ├── Gefunden → Post-Find Hook aufrufen
-    │   └── Nicht gefunden → E503 (wenn required)
+    │   ├── Nicht gefunden, required → _system_external_not_found()
+    │   │                              → E503 / E504 / E505
+    │   └── Nicht gefunden, required=false → Statusmeldung, weiter
     │
     └── 7. Registrieren
         ├── EXTERNAL_{name}_TYPE = "SYSTEM"
@@ -254,8 +297,10 @@ _apply_system_external_to_target("MyApp" "qt6" "{}")
 
 | Code | Fehler | Beschreibung |
 |------|--------|--------------|
-| E502 | Package-Feld fehlt | `package` ist Pflichtfeld |
-| E503 | find_package fehlgeschlagen | Paket nicht gefunden (bei required=true) |
+| E502 | Package-Feld fehlt | `package` ist Pflichtfeld (`Handler.cmake:180`) |
+| E503 | find_package fehlgeschlagen | Paket nicht gefunden oder keine Konfiguration angenommen (bei required=true; `:101`, `:120`, `:128`); External beim Verlinken nicht registriert (`:331`) |
+| E504 | Komponente fehlt | Paket gefunden, aber nicht mit allen Komponenten aus `components` (`:91`) |
+| E505 | Version nicht erfüllt | `version` gesetzt, nur Konfigurationen mit unpassender Version betrachtet (`:109`) |
 
 ### Warnungen
 
@@ -264,6 +309,8 @@ _apply_system_external_to_target("MyApp" "qt6" "{}")
 | W501 | Backup verwendet | Fallback-Pfad statt ENV/hints |
 
 ### E503 Fehlermeldung
+
+Paket nicht gefunden (`Handler.cmake:128`):
 
 ```
 [E503] System external 'qt6': find_package(Qt6) failed.
@@ -279,6 +326,31 @@ _apply_system_external_to_target("MyApp" "qt6" "{}")
       "package": "Qt6",
       "hints": ["C:/Path/To/Qt6"]
     }
+```
+
+### E504 Fehlermeldung
+
+```
+[E504] System external 'qt6': Qt6 was found (<Qt6_DIR>), but not with all requested components: Core, Widgets, Charts
+  Reason given by the package: <Qt6_NOT_FOUND_MESSAGE>
+
+  Possible solutions:
+    1. Install the missing component(s) for this Qt6 installation
+    2. Remove components the project does not use from 'components' in Solution.json
+```
+
+Die Meldung nennt alle angeforderten Komponenten; welche fehlt, sagt der Grund des Pakets.
+
+### E505 Fehlermeldung
+
+```
+[E505] System external 'qt6': no Qt6 with a version compatible to the requested '6.9' was found.
+  Considered:
+    C:/Qt/6.8.0/msvc2022_64/lib/cmake/Qt6/Qt6Config.cmake (version 6.8.0)
+
+  Possible solutions:
+    1. Install a compatible Qt6 version and point Qt6_ROOT or 'hints' to it
+    2. Adjust 'version' in Solution.json
 ```
 
 ---
@@ -316,4 +388,6 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" ..
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.1** | **2026-11-09** | **Modul 1.1.0 (CMakeCraft v0.14.1): `find_package()` ohne `REQUIRED`; neue Funktion `_system_external_not_found()` (§3.3) benennt E503, E504 oder E505; Ablauf §4 und Fehlertabelle §7 angepasst, Meldungen von E504 und E505** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.6.0** | **2025-12-18** | **Initial: Phase 9 System Externals, find_package Integration, Package-Hooks** |

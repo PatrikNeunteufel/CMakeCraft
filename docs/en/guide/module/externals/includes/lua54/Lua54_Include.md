@@ -1,128 +1,128 @@
 # lua54/Include.cmake — Lua 5.4 Scripting Engine Integration
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers, C++ Developers  
 > **Language:** English  
-> **German:** [lua54_Include.md](../../../../../../de/guide/module/externals/includes/lua54/lua54_Include.md)  
-> **Module:** [cmake/externals/includes/lua54/Include.cmake](../../../../cmake/externals/includes/lua54/Include.cmake)  
+> **German:** [Lua54_Include.md](../../../../../../de/guide/module/externals/includes/lua54/Lua54_Include.md)  
+> **Module:** [cmake/externals/includes/lua54/Include.cmake](../../../../../../../cmake/externals/includes/lua54/Include.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Verfügbare Variablen](#2-verfügbare-variablen)
-3. [Erstellte Targets](#3-erstellte-targets)
+1. [Overview](#1-overview)
+2. [Available Variables](#2-available-variables)
+3. [Created Targets](#3-created-targets)
 4. [Options](#4-options)
-5. [Plattform-Unterstützung](#5-plattform-unterstützung)
-6. [Usagesbeispiele](#6-verwendungsbeispiele)
-7. [Verzeichnisstruktur](#7-verzeichnisstruktur)
-8. [Errorbehandlung](#8-fehlerbehandlung)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+5. [Platform Support](#5-platform-support)
+6. [Usage Examples](#6-usage-examples)
+7. [Directory Structure](#7-directory-structure)
+8. [Error Handling](#8-error-handling)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Die `lua54/Include.cmake` integriert die **Lua 5.4 Scripting Engine** als lokales External in das Build-System.
+`lua54/Include.cmake` integrates the **Lua 5.4 scripting engine** into the build system as a local external.
 
-### Kernfunktionen
+### Core Functions
 
-| Funktion | Description |
-|----------|--------------|
-| Embedded Scripting | Lua in C++ Anwendungen einbetten |
-| Configuration | Lua-Dateien als Configurationsformat |
-| Erweiterbar | C-Functions nach Lua exportieren |
-| Lightweight | Minimaler Footprint (~300KB) |
+| Function | Description |
+|----------|-------------|
+| Embedded scripting | Embed Lua in C++ applications |
+| Configuration | Lua files as a configuration format |
+| Extensible | Export C functions to Lua |
+| Lightweight | Minimal footprint (~300KB) |
 
-### Target-Erstellung
+### Integration
 
-Erstellt ein `STATIC` Target `lua54` das die Lua-Quellen kompiliert.
+Creates **no target of its own** and compiles no Lua sources. The module attaches the shipped, prebuilt files from `externals/lua54/` to the target `EXECUTABLE_NAME`: include path, library (`win/lib/lua54.lib` or `linux/lib/liblua54.a`/`.so`) and, on Windows in the dynamic case, `lua54.dll` next to the target.
 
 ---
 
-## 2. Verfügbare Variablen
+## 2. Available Variables
 
-Diese Variablen werden vom Orchestrator bereitgestellt:
+These variables are provided by the orchestrator:
 
 | Variable | Description |
-|----------|--------------|
+|----------|-------------|
 | `EXTERNAL_NAME` | `"lua54"` |
-| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/lua54` |
-| `EXTERNAL_JSON` | JSON-Element aus Solution.json |
-| `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
+| `EXTERNAL_ROOT` | Absolute path to `externals/lua54` (`path` from Solution.json) |
+| `EXTERNAL_OPTIONS` | Target-specific options (JSON) |
+| `EXECUTABLE_NAME` | Target that Lua is attached to |
 
 ---
 
-## 3. Erstellte Targets
+## 3. Created Targets
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `lua54` | STATIC | Lua 5.4 Library (aus Quellen kompiliert) |
+| Target | Type | Description |
+|--------|------|-------------|
+| — | — | No target of its own; everything is attached `PRIVATE` to `EXECUTABLE_NAME` |
 
-### Include-Directories
+### What Is Set on the Target
 
-```cmake
-target_include_directories(lua54 PUBLIC
-    "${EXTERNAL_ROOT}/src"
-)
-```
+| Platform | Include path | Linked | Other |
+|----------|--------------|--------|-------|
+| Windows | `win/include` | `win/lib/lua54.lib` (in both modes) | dynamic: POST_BUILD copy of `win/bin/lua54.dll` next to the target |
+| Linux | `win/include` | `linux/lib/liblua54.a` (embedded) or `liblua54.so` (dynamic), plus `dl`, `m` | define `LUA_USE_LINUX`; with `LUA_USE_READLINE`: define `LUA_USE_READLINE`, links `readline` |
+| macOS | `win/include` | `lua` (system Lua, e.g. via Homebrew) | define `LUA_USE_MACOSX`; warning `macOS: Using system Lua or compile from sources` |
+| other | — | — | warning `Unsupported platform`, the module returns |
 
 ---
 
 ## 4. Options
 
-| Option | Typ | Default | Description |
-|--------|-----|---------|--------------|
-| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; on Windows `true` needs a static `lua54.lib` — with an import library the target links but cannot start without `lua54.dll` |
-| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile definition `LUA_32BITS`) |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; on Windows `true` needs a static `lua54.lib` — with an import library the target links but does not start without `lua54.dll` |
+| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile define `LUA_32BITS`) |
 | `LUA_USE_READLINE` | bool | `false` | Readline support (Linux only; links `readline`) |
 
 ### 4.1 LUA_EMBEDDED
 
-If `true`, Lua is linked statically and no `lua54.dll` is copied next to the target. The default is `false` (dynamic): the target links against `lua54.lib` and `lua54.dll` is copied next to it after the build.
+If `true`, Lua is linked statically and no `lua54.dll` is copied next to the target. The default is `false` (dynamic): linking is against `lua54.lib`, and `lua54.dll` is copied next to the target after the build.
 
-On Windows `true` requires a **static** `lua54.lib`. If the file is an import library for the DLL, the target links but does not start because the DLL is missing.
+On Windows, `true` requires a **static** `lua54.lib`. If the file is an import library for the DLL, the target links but does not start, because the DLL is missing.
 
 ### 4.2 LUA_32BIT_COMPAT
 
-Für ressourcenbeschränkte Systeme. Verwendet 32-bit Integer und Float statt 64-bit.
+For resource-constrained systems. Uses 32-bit integer and float instead of 64-bit.
 
 ---
 
-## 5. Plattform-Unterstützung
+## 5. Platform Support
 
-### 5.1 Kompilierung aus Quellen
+### 5.1 Prebuilt Libraries per Platform
 
-Da Lua aus Quellen kompiliert wird, funktioniert es auf allen Plattformen:
+Lua is not built from sources; the module uses what lies under `externals/lua54/`:
 
-| Plattform | Status | Notee |
-|-----------|--------|----------|
-| Windows | ✅ | MSVC, Clang, MinGW |
-| Linux | ✅ | GCC, Clang |
-| macOS | ✅ | Clang, GCC |
+| Platform | Status | Notes |
+|----------|--------|-------|
+| Windows | ✅ | `win/lib/lua54.lib`, `win/bin/lua54.dll` |
+| Linux | ✅ | `linux/lib/liblua54.a`, `linux/lib/liblua54.so` |
+| macOS | ⚠️ | No shipped library; links the system Lua `lua` |
 
-### 5.2 Plattform-Defines
+### 5.2 Platform Defines
 
 ```cmake
-if(UNIX AND NOT APPLE)
-    target_compile_definitions(lua54 PRIVATE LUA_USE_LINUX)
-elseif(APPLE)
-    target_compile_definitions(lua54 PRIVATE LUA_USE_MACOSX)
-endif()
+# Linux
+target_compile_definitions(${EXECUTABLE_NAME} PRIVATE LUA_USE_LINUX)
+# macOS
+target_compile_definitions(${EXECUTABLE_NAME} PRIVATE LUA_USE_MACOSX)
 ```
 
 ---
 
-## 6. Usagesbeispiele
+## 6. Usage Examples
 
-### 6.1 Basis-Usage
+### 6.1 Basic Usage
 
 **Solution.json:**
 
@@ -158,7 +158,7 @@ int main() {
 }
 ```
 
-### 6.2 Configurationsdatei laden
+### 6.2 Loading a Configuration File
 
 **config.lua:**
 
@@ -192,35 +192,35 @@ if (luaL_dofile(L, "config.lua") == LUA_OK) {
     const char* title = lua_tostring(L, -1);
     lua_pop(L, 2);
     
-    // Verwende width, fullscreen, title...
+    // Use width, fullscreen, title...
 }
 
 lua_close(L);
 ```
 
-### 6.3 C-Funktion nach Lua exportieren
+### 6.3 Exporting a C Function to Lua
 
 **C++:**
 
 ```cpp
-// Funktion die von Lua aufgerufen werden kann
+// Function that can be called from Lua
 int lua_add(lua_State* L) {
     double a = luaL_checknumber(L, 1);
     double b = luaL_checknumber(L, 2);
     lua_pushnumber(L, a + b);
-    return 1;  // Ein Return Value
+    return 1;  // One return value
 }
 
 int main() {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
     
-    // Funktion registrieren
+    // Register the function
     lua_pushcfunction(L, lua_add);
     lua_setglobal(L, "add");
     
-    // In Lua verwenden
-    luaL_dostring(L, "print(add(2, 3))");  // Ausgabe: 5
+    // Use it in Lua
+    luaL_dostring(L, "print(add(2, 3))");  // Output: 5
     
     lua_close(L);
     return 0;
@@ -229,56 +229,28 @@ int main() {
 
 ---
 
-## 7. Verzeichnisstruktur
+## 7. Directory Structure
 
 ```
 externals/lua54/
-└── src/
-    ├── lua.h
-    ├── luaconf.h
-    ├── lualib.h
-    ├── lauxlib.h
-    ├── lapi.c
-    ├── lcode.c
-    ├── ldebug.c
-    ├── ldo.c
-    ├── lfunc.c
-    ├── lgc.c
-    ├── llex.c
-    ├── lmem.c
-    ├── lobject.c
-    ├── lopcodes.c
-    ├── lparser.c
-    ├── lstate.c
-    ├── lstring.c
-    ├── ltable.c
-    ├── ltm.c
-    ├── lundump.c
-    ├── lvm.c
-    ├── lzio.c
-    ├── lauxlib.c
-    ├── lbaselib.c
-    ├── lcorolib.c
-    ├── ldblib.c
-    ├── liolib.c
-    ├── lmathlib.c
-    ├── loadlib.c
-    ├── loslib.c
-    ├── lstrlib.c
-    ├── ltablib.c
-    └── lutf8lib.c
+├── win/
+│   ├── include/      ← lua.h, lua.hpp, luaconf.h, lualib.h, lauxlib.h
+│   ├── lib/          ← lua54.lib
+│   └── bin/          ← lua54.dll
+└── linux/
+    └── lib/          ← liblua54.a, liblua54.so
 ```
 
 ---
 
-## 8. Errorbehandlung
+## 8. Error Handling
 
 | Code | Description |
-|------|--------------|
-| E213 | Include.cmake nicht gefunden |
-| E214 | External-Pfad existiert nicht |
+|------|-------------|
+| E213 | Include.cmake not found (`Orchestrator.cmake`) |
+| E214 | External path does not exist (`local/Attach.cmake`) |
 
-### Lua Runtime-Error
+### Lua Runtime Errors
 
 ```cpp
 if (luaL_dofile(L, "script.lua") != LUA_OK) {
@@ -292,16 +264,18 @@ if (luaL_dofile(L, "script.lua") != LUA_OK) {
 
 ## 9. See Also
 
-- [Externals_Reference.md](../../../reference/Externals_Reference.md) — Alle Externals
-- [Externals_UserGuide.md](../../../guides/Externals_UserGuide.md) — Usagesanleitung
-- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local External Handler
-- [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/) — Offizielle Dokumentation
+- [Externals_Reference.md](../../../../references/Externals.md) — All externals
+- [Externals_UserGuide.md](../../../../userguides/Externals.md) — Usage guide
+- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local external handler
+- [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/) — Official documentation
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/lua54/`** |
-| 0.1.0 | 2025-12-05 | Initial: Lua 5.4 aus Quellen kompiliert |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: no STATIC target built from sources, but the prebuilt `win/lib/lua54.lib` (+ `lua54.dll`) or `linux/lib/liblua54.a`/`.so` on the target `EXECUTABLE_NAME`; variables (`EXECUTABLE_NAME` instead of `EXTERNAL_JSON`), platforms, defines and directory structure as in the code** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0, convention path `cmake/externals/includes/lua54/` |
+| 0.1.0 | 2025-12-05 | Initial: Lua 5.4 compiled from sources |

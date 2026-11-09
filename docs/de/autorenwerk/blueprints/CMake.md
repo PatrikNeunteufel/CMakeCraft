@@ -1,14 +1,14 @@
 # CMake — Standard für CMake-Scripts
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Blueprint v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Geltungsbereich:** Alle .cmake Dateien  
 > **Sprache:** Deutsch  
-> **English:** [CMake.md](CMake.md)
+> **English:** [CMake.md](../../../en/autorenwerk/blueprints/CMake.md)
 
 ---
 
@@ -25,7 +25,7 @@
 9. [Best Practices](#9-best-practices)
 10. [Review-Checkliste](#10-review-checkliste)
 11. [Siehe auch](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+12. [Changelog](#changelog)
 
 ---
 
@@ -234,7 +234,7 @@ include_guard(GLOBAL)
 set(EXAMPLE_DEBUG OFF CACHE BOOL "Enable debug output")
 
 # 4. Dependencies (Optional)
-include(cmake/core/Errors.cmake)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
 # 5. Private Helpers (Optional)
 function(_example_helper)
@@ -269,7 +269,7 @@ endfunction()
 Immer das Errors-Modul verwenden:
 
 ```cmake
-include(cmake/core/Errors.cmake)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
 # Fataler Fehler (bricht ab)
 cmake_fatal(E0501 "Executable '${name}' not found")
@@ -311,6 +311,13 @@ Bei jeder Änderung:
 1. Version im Header erhöhen
 2. Date aktualisieren
 3. Dokumentation anpassen (falls nötig)
+
+### 8.3 Gemeinsame Major-Nummer ab CMakeCraft v2.0.0
+
+Die Version eines Moduls ist unabhängig von der CMakeCraft-Version (viele Module stehen schon auf 1.x). Das erste
+Major-Release von CMakeCraft heißt **v2.0.0** (nicht v1.0.0); mit ihm gehen alle `.cmake`-Dateien und alle
+Dokumente auf 2.0.0. Ab dann teilen Produkt, Module und Doku die Major-Nummer; Minor und Patch zählt jede Datei für
+sich. Regel: [Doku_Standard.md](../standards/Doku_Standard.md) §2.
 
 ---
 
@@ -373,5 +380,7 @@ Vor Merge eines CMake-Moduls prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Inhaltsverzeichnis mit Ankern, Error-Handling-Kategorien, Best Practices erweitert** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Module werden über `${CMAKECRAFT_DIR}` eingebunden, nie über relative `cmake/…`-Pfade (§ 6.1, § 7.1; `CMakeCraft.cmake`:133, :149, `cmake/project/Apps.cmake`:36); § 8.3 gemeinsame Major-Nummer ab CMakeCraft v2.0.0 (Entscheid V2 a)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Inhaltsverzeichnis mit Ankern, Error-Handling-Kategorien, Best Practices erweitert |
 | 0.1.0 | 2025-12-03 | Initial (als CMake_Blueprint) |

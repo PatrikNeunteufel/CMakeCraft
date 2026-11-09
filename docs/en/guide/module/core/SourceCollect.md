@@ -1,51 +1,51 @@
-# SourceCollect.cmake — Modul-Dokumentation
+# SourceCollect.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** In Development (Pre-Release)  
+> **Status:** In development (pre-release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [SourceCollect.md](SourceCollect.md)  
-> **Module:** [`cmake/core/SourceCollect.cmake`](../../../../cmake/core/SourceCollect.cmake)  
+> **German:** [SourceCollect.md](../../../../de/guide/module/core/SourceCollect.md)  
+> **Module:** [`cmake/core/SourceCollect.cmake`](../../../../../cmake/core/SourceCollect.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [API-Reference](#4-api-referenz)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [API Reference](#4-api-reference)
 5. [Source.cmake Format](#5-sourcecmake-format)
-6. [Usagesbeispiele](#6-verwendungsbeispiele)
-7. [Errorbehandlung](#7-fehlerbehandlung)
+6. [Usage Examples](#6-usage-examples)
+7. [Error Handling](#7-error-handling)
 8. [Best Practices](#8-best-practices)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `SourceCollect.cmake` Modul verwaltet **Source-Dateien** für Executables, Libraries und Tests. Es unterstützt explizite Deklaration via Source.cmake sowie GLOB als Fallback.
+The `SourceCollect.cmake` module manages **source files** for executables, libraries and tests. It supports explicit declaration via Source.cmake as well as GLOB as a fallback.
 
-### Kernidee
+### Core Idea
 
-Explizite Source-Kontrolle als Standard, mit flexiblen Modi für verschiedene Anwendungsfälle.
+Explicit source control as the default, with flexible modes for different use cases.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Sammlung | Sources, Headers, Templates, Module |
-| Modi | explicit, glob, auto |
-| Kategorien | Compilable, Headers, Extras, C++20 Modules |
-| Include-Pfade | Automatisch + aus Source.cmake |
+| Area | Description |
+|------|-------------|
+| Collection | Sources, headers, templates, modules |
+| Modes | explicit, glob, auto |
+| Categories | Compilable, headers, extras, C++20 modules |
+| Include paths | Automatic + from Source.cmake |
 
-### Usage durch
+### Used By
 
 - ExecutableCreate.cmake
 - LibraryCreate.cmake
@@ -55,8 +55,8 @@ Explizite Source-Kontrolle als Standard, mit flexiblen Modi für verschiedene An
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Errors.cmake | 0.1.2 | `cmake_fatal`, `cmake_warn` |
 | Debug.cmake | 0.1.1 | `dbg` |
 
@@ -64,28 +64,28 @@ Explizite Source-Kontrolle als Standard, mit flexiblen Modi für verschiedene An
 
 ## 3. Concept
 
-### 3.1 Source-Modi
+### 3.1 Source Modes
 
-| Modus | Description | Empfohlen |
-|-------|--------------|-----------|
-| `explicit` | Source.cmake erforderlich (Default) | ✅ Yes |
-| `glob` | Automatisches Sammeln via Wildcard | ⚠️ Nur für Prototypen |
-| `auto` | Source.cmake wenn vorhanden, sonst GLOB | ⚪ Übergang |
+| Mode | Description | Recommended |
+|------|-------------|-------------|
+| `explicit` | Source.cmake required (default) | ✅ Yes |
+| `glob` | Automatic collection via wildcard | ⚠️ Only for prototypes |
+| `auto` | Source.cmake if present, otherwise GLOB | ⚪ Transition |
 
-> Bei `auto`: Source.cmake wird verwendet wenn vorhanden **und nicht-leer**. Bei leerer Source.cmake → Fallback auf GLOB mit W111 + W110.
+> With `auto`: Source.cmake is used if present **and non-empty**. With an empty Source.cmake → fallback to GLOB with W111 + W110.
 
-### 3.2 Datei-Kategorien
+### 3.2 File Categories
 
-| Kategorie | Variablen-Suffix | Extensions | Description |
-|-----------|------------------|------------|--------------|
-| Sources | `_SOURCES` | .cpp, .cxx, .cc, .c | Kompilierbare Dateien |
-| Headers | `_HEADERS` | .h, .hpp, .hxx, .hh | Deklarationen |
-| Templates | `_TEMPLATES` | .tpp, .txx, .ipp | Template-Implementationen |
-| Inlines | `_INLINES` | .inl | Inline-Implementationen |
-| Impl | `_IMPL` | .impl | PIMPL-Details |
-| Modules | `_MODULES` | .ixx, .cppm, .mpp | C++20 Module (experimentell) |
+| Category | Variable suffix | Extensions | Description |
+|----------|-----------------|------------|-------------|
+| Sources | `_SOURCES` | .cpp, .cxx, .cc, .c | Compilable files |
+| Headers | `_HEADERS` | .h, .hpp, .hxx, .hh | Declarations |
+| Templates | `_TEMPLATES` | .tpp, .txx, .ipp | Template implementations |
+| Inlines | `_INLINES` | .inl | Inline implementations |
+| Impl | `_IMPL` | .impl | PIMPL details |
+| Modules | `_MODULES` | .ixx, .cppm, .mpp | C++20 modules (experimental) |
 
-### 3.3 Verarbeitungsfluss
+### 3.3 Processing Flow
 
 ```
 collect_sources()
@@ -99,17 +99,17 @@ collect_sources()
     │       └── file(GLOB_RECURSE ...)
     │
     └── Mode = auto?
-        ├── Source.cmake vorhanden? → _collect_sources_from_cmake()
-        └── Nicht vorhanden? → _collect_sources_glob()
+        ├── Source.cmake present? → _collect_sources_from_cmake()
+        └── Not present? → _collect_sources_glob()
 ```
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 collect_sources()
 
-Haupteinstiegspunkt für Source-Sammlung.
+Main entry point for source collection.
 
 ```cmake
 collect_sources(<TARGET_NAME> <SOURCE_DIR> 
@@ -118,15 +118,15 @@ collect_sources(<TARGET_NAME> <SOURCE_DIR>
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `TARGET_NAME` | String | ✓ | Name des Targets |
-| `SOURCE_DIR` | Path | ✓ | Source-Verzeichnis |
-| `OUT_SOURCES` | Variable | ✓ | Output: Compilable files |
-| `OUT_HEADERS` | Variable | ✓ | Output: Header files |
-| `OUT_EXTRAS` | Variable | ✓ | Output: Templates + Inlines + Impl |
-| `OUT_MODULES` | Variable | ✓ | Output: C++20 Module Units |
-| `OUT_INCLUDES` | Variable | ✓ | Output: Include-Pfade |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `TARGET_NAME` | String | ✓ | Name of the target |
+| `SOURCE_DIR` | Path | ✓ | Source directory |
+| `OUT_SOURCES` | Variable | ✓ | Output: compilable files |
+| `OUT_HEADERS` | Variable | ✓ | Output: header files |
+| `OUT_EXTRAS` | Variable | ✓ | Output: templates + inlines + impl |
+| `OUT_MODULES` | Variable | ✓ | Output: C++20 module units |
+| `OUT_INCLUDES` | Variable | ✓ | Output: include paths |
 
 **Example:**
 
@@ -139,66 +139,66 @@ collect_sources(MyApp "${_source_dir}"
 
 ### 4.2 _collect_sources_from_cmake()
 
-Lädt Source.cmake und sammelt alle definierten Dateien.
+Loads Source.cmake and collects all defined files.
 
 ```cmake
 _collect_sources_from_cmake(<TARGET_NAME> <SOURCE_DIR>
                             <OUT_SOURCES> <OUT_HEADERS> <OUT_EXTRAS> <OUT_MODULES> <OUT_INCLUDES>)
 ```
 
-**Error:**
+**Errors:**
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| E104 | Source.cmake nicht gefunden |
+| E104 | Source.cmake not found |
 
-**Warningen:**
+**Warnings:**
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| W101 | Keine compilable Files definiert |
-| W109 | C++20 Module verwendet |
+| W101 | No compilable files defined |
+| W109 | C++20 modules used |
 
 ---
 
 ### 4.3 _collect_sources_glob()
 
-GLOB-basierte Sammlung (Fallback).
+GLOB-based collection (fallback).
 
 ```cmake
 _collect_sources_glob(<SOURCE_DIR>
                       <OUT_SOURCES> <OUT_HEADERS> <OUT_EXTRAS> <OUT_MODULES>)
 ```
 
-**Warningen:**
+**Warnings:**
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| W101 | Source.cmake defines no files | explicit-Modus |
-| W110 | GLOB fallback active | Immer bei GLOB |
-| W111 | Source.cmake exists but is empty | auto-Modus mit Pfad |
+| W101 | Source.cmake defines no files | explicit mode |
+| W110 | GLOB fallback active | Always with GLOB |
+| W111 | Source.cmake exists but is empty | auto mode with path |
 
 ---
 
 ### 4.4 _apply_sources_to_target()
 
-Wendet gesammelte Dateien auf ein Target an.
+Applies collected files to a target.
 
 ```cmake
 _apply_sources_to_target(<TARGET_NAME>
                          <SOURCES> <HEADERS> <EXTRAS> <MODULES> <INCLUDES> <SOURCE_DIR>)
 ```
 
-**Automatisch hinzugefügte Include-Pfade:**
+**Automatically added include paths:**
 
-1. `SOURCE_DIR` — immer
-2. `SOURCE_DIR/pch/` — wenn vorhanden
+1. `SOURCE_DIR` — always
+2. `SOURCE_DIR/pch/` — if present
 
 ---
 
 ### 4.5 collect_files()
 
-Helper für kontrollierte Wildcards in Source.cmake.
+Helper for controlled wildcards in Source.cmake.
 
 ```cmake
 collect_files(<OUT_VAR>
@@ -210,19 +210,19 @@ collect_files(<OUT_VAR>
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `OUT_VAR` | Variable | ✓ | Output für Datei-Liste |
-| `DIRECTORY` | Path | ✓ | Zu durchsuchendes Verzeichnis |
-| `EXTENSIONS` | List | ✓ | Extensions ohne Punkt |
-| `EXCLUDE` | List | — | Regex-Pattern zum Ausschließen |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `OUT_VAR` | Variable | ✓ | Output for the file list |
+| `DIRECTORY` | Path | ✓ | Directory to search |
+| `EXTENSIONS` | List | ✓ | Extensions without dot |
+| `EXCLUDE` | List | — | Regex patterns to exclude |
 
-**Error:**
+**Errors:**
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| E001 | DIRECTORY fehlt |
-| E001 | EXTENSIONS fehlt |
+| E001 | DIRECTORY missing |
+| E001 | EXTENSIONS missing |
 
 **Example:**
 
@@ -239,25 +239,25 @@ list(APPEND ${TARGET}_SOURCES ${_generated})
 
 ### 4.6 _get_source_mode()
 
-Ermittelt den Source-Modus aus Solution-Settings.
+Determines the source mode from the solution settings.
 
 ```cmake
 _get_source_mode(<OUT_VAR>)
 ```
 
-**Rückgabe:** "explicit" (Default), "glob", oder "auto"
+**Returns:** "explicit" (default), "glob", or "auto"
 
-**Warningen:**
+**Warnings:**
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| W101 | Ungültiger Modus |
+| W101 | Invalid mode |
 
 ---
 
 ## 5. Source.cmake Format
 
-### 5.1 Minimale Source.cmake
+### 5.1 Minimal Source.cmake
 
 ```cmake
 set(${TARGET}_SOURCES
@@ -265,7 +265,7 @@ set(${TARGET}_SOURCES
 )
 ```
 
-### 5.2 Vollständige Source.cmake
+### 5.2 Complete Source.cmake
 
 ```cmake
 # Compilable sources
@@ -310,7 +310,7 @@ set(${TARGET}_INCLUDES
 )
 ```
 
-### 5.3 Mit collect_files() für generierte Dateien
+### 5.3 With collect_files() for Generated Files
 
 ```cmake
 set(${TARGET}_SOURCES
@@ -329,7 +329,7 @@ list(APPEND ${TARGET}_SOURCES ${_generated})
 
 ---
 
-## 6. Usagesbeispiele
+## 6. Usage Examples
 
 ### 6.1 In ExecutableCreate.cmake
 
@@ -340,14 +340,14 @@ function(_create_executable_target CTX)
     
     set(_source_dir "${CMAKE_SOURCE_DIR}/${_path}")
     
-    # Sources sammeln
+    # Collect sources
     collect_sources(${_name} "${_source_dir}"
         _sources _headers _extras _modules _includes)
     
-    # Target erstellen
+    # Create the target
     add_executable(${_name} ${_sources})
     
-    # Sources anwenden
+    # Apply sources
     _apply_sources_to_target(${_name}
         "${_sources}" "${_headers}" "${_extras}" "${_modules}" "${_includes}"
         "${_source_dir}")
@@ -356,31 +356,31 @@ endfunction()
 
 ---
 
-## 7. Errorbehandlung
+## 7. Error Handling
 
 ### 7.1 Fatal Errors
 
-| Code | Description | Lösung |
-|------|--------------|--------|
-| E104 | Source.cmake nicht gefunden | Source.cmake erstellen oder Modus auf `auto` ändern |
-| E001 | Requiredfeld fehlt (collect_files) | DIRECTORY und EXTENSIONS angeben |
+| Code | Description | Solution |
+|------|-------------|----------|
+| E104 | Source.cmake not found | Create Source.cmake or change the mode to `auto` |
+| E001 | Required field missing (collect_files) | Specify DIRECTORY and EXTENSIONS |
 
 ### 7.2 Warnings
 
-| Code | Description | Empfehlung |
-|------|--------------|------------|
-| W101 | Keine Sources definiert | Source.cmake prüfen |
-| W109 | C++20 Module verwendet | Experimentell — nur mit CMake 3.28+ |
-| W110 | GLOB Fallback aktiv | Auf explizite Source.cmake migrieren |
+| Code | Description | Recommendation |
+|------|-------------|----------------|
+| W101 | No sources defined | Check Source.cmake |
+| W109 | C++20 modules used | Experimental — only with CMake 3.28+ |
+| W110 | GLOB fallback active | Migrate to an explicit Source.cmake |
 
 ---
 
 ## 8. Best Practices
 
-### 8.1 Modus "explicit" bevorzugen
+### 8.1 Prefer the "explicit" Mode
 
 ```cmake
-# ✅ Gut - explizite Kontrolle
+# ✅ Good - explicit control
 # In Solution.json:
 "settings": {
     "source": {
@@ -389,42 +389,43 @@ endfunction()
 }
 ```
 
-### 8.2 Source.cmake für jedes Target
+### 8.2 Source.cmake for Every Target
 
 ```
 projects/exec/MyApp/
 ├── src/
-│   ├── Source.cmake    # ← Required bei mode=explicit
+│   ├── Source.cmake    # ← required with mode=explicit
 │   ├── main.cpp
 │   └── ...
 ```
 
-### 8.3 collect_files() nur für generierte Dateien
+### 8.3 collect_files() Only for Generated Files
 
 ```cmake
-# ✅ Gut - nur für generierte Dateien
+# ✅ Good - only for generated files
 collect_files(_gen DIRECTORY "${_dir}/generated" ...)
 
-# ❌ Schlecht - für normale Sources
-collect_files(_all DIRECTORY "${_dir}" ...)  # Besser: Explizit listen!
+# ❌ Bad - for normal sources
+collect_files(_all DIRECTORY "${_dir}" ...)  # Better: list explicitly!
 ```
 
 ---
 
 ## 9. See Also
 
-- [ExecutableCreate.cmake](../project/ExecutableCreate.md) — Verwendet SourceCollect
-- [LibraryCreate.cmake](../project/LibraryCreate.md) — Verwendet SourceCollect
-- [Solution.cmake](../project/Solution.md) — Setzt SOLUTION_SOURCE_MODE
+- [ExecutableCreate.cmake](../project/ExecutableCreate.md) — uses SourceCollect
+- [LibraryCreate.cmake](../project/LibraryCreate.md) — uses SourceCollect
+- [Solution.cmake](../project/Solution.md) — sets SOLUTION_SOURCE_MODE
 - [ErrorCodes.md](../../references/ErrorCodes.md) — E104, W101, W109, W110
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.1 | 2025-12-17 | collect_sources() integration, SourceCollect.cmake dependency |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): collect_sources, _collect_sources_from_cmake, _collect_sources_glob, _apply_sources_to_target, collect_files, _get_source_mode |
+| 0.1.0 | 2025-12-03 | Initial (clean start): collect_sources, _collect_sources_from_cmake, _collect_sources_glob, _apply_sources_to_target, collect_files, _get_source_mode |

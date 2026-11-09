@@ -3,35 +3,35 @@
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [Handler_cmake.md](../../en/modules/externals/Handler_cmake.md)  
-> **Module:** [cmake/externals/Fetched/Handler.cmake](../../../cmake/externals/Fetched/Handler.cmake)  
+> **German:** [Handler_cmake.md](../../../../../de/guide/module/externals/fetched/Handler_cmake.md)  
+> **Module:** [cmake/externals/Fetched/Handler.cmake](../../../../../../cmake/externals/fetched/Handler.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
 4. [Processing Pipeline](#4-processing-pipeline)
-5. [Hook-Integration](#5-hook-integration)
-6. [Usagesbeispiele](#6-verwendungsbeispiele)
-7. [Errorbehandlung](#7-fehlerbehandlung)
-8. [See Also](#8-siehe-auch)
+5. [Hook Integration](#5-hook-integration)
+6. [Usage Examples](#6-usage-examples)
+7. [Error Handling](#7-error-handling)
+8. [See Also](#8-see-also)
 9. [Changelog](#9-changelog)
 
 ---
 
 ## 1. Overview
 
-`Fetched/Handler.cmake` orchestriert die komplette Verarbeitung von Git-basierten Externals.
+`Fetched/Handler.cmake` orchestrates the complete processing of Git-based externals.
 
-### Pipeline-Overview
+### Pipeline Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -51,25 +51,25 @@
 
 ## 2. Dependencies
 
-### Benötigte Module
+### Required Modules
 
-| Modul | Zweck |
-|-------|-------|
-| `Errors.cmake` | Errorbehandlung |
-| `Debug.cmake` | Debug-Ausgaben |
-| `Json.cmake` | JSON-Parsing |
+| Module | Purpose |
+|--------|---------|
+| `Errors.cmake` | Error handling |
+| `Debug.cmake` | Debug output |
+| `Json.cmake` | JSON parsing |
 
-### Auto-geladene Module
+### Auto-loaded Modules
 
-| Modul | Zweck |
-|-------|-------|
-| `Core/Fetch.cmake` | FetchContent Wrapper |
-| `Hooks/HookLoader.cmake` | Hook-System |
-| `Registry/Targets.cmake` | Target-Registry |
+| Module | Purpose |
+|--------|---------|
+| `Core/Fetch.cmake` | FetchContent wrapper |
+| `Hooks/HookLoader.cmake` | Hook system |
+| `Registry/Targets.cmake` | Target registry |
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
 ### 3.1 _handle_fetched_external()
 
@@ -77,12 +77,12 @@
 _handle_fetched_external(EXT_NAME EXT_JSON)
 ```
 
-| Parameters | Typ | Description |
-|-----------|-----|--------------|
-| `EXT_NAME` | String | Name des Externals |
-| `EXT_JSON` | JSON | JSON-Definition |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `EXT_NAME` | String | Name of the external |
+| `EXT_JSON` | JSON | JSON definition |
 
-**Setzt Property:** `EXTERNAL_${NAME}_READY = TRUE`
+**Sets property:** `EXTERNAL_${NAME}_READY = TRUE`
 
 ---
 
@@ -92,40 +92,40 @@ _handle_fetched_external(EXT_NAME EXT_JSON)
 _is_external_ready(EXT_NAME OUT_VAR)
 ```
 
-Prüft ob ein External vollständig verarbeitet wurde.
+Checks whether an external has been completely processed.
 
 ---
 
 ## 4. Processing Pipeline
 
-### Detaillierter Flow
+### Detailed Flow
 
-| Step | Aktion | Description |
-|------|--------|--------------|
-| 1 | Declare | `_fetch_git_external()` — Prüft Cache |
-| 2 | PreFetch | `_load_prefetch_hook()` — CMake Optionen setzen |
+| Step | Action | Description |
+|------|--------|-------------|
+| 1 | Declare | `_fetch_git_external()` — Checks the cache |
+| 2 | PreFetch | `_load_prefetch_hook()` — Sets CMake options |
 | 3 | Available | `_make_external_available()` — Download |
-| 4 | PostFetch | `_load_postfetch_hook()` — Targets erstellen |
-| 5 | Register | `_auto_register_external_targets()` — Targets registrieren |
-| 6 | Validate | `_validate_external_targets()` — Prüfen |
+| 4 | PostFetch | `_load_postfetch_hook()` — Creates targets |
+| 5 | Register | `_auto_register_external_targets()` — Registers targets |
+| 6 | Validate | `_validate_external_targets()` — Checks |
 | 7 | Ready | `EXTERNAL_${NAME}_READY = TRUE` |
 
 ---
 
-## 5. Hook-Integration
+## 5. Hook Integration
 
-### Wann werden Hooks benötigt?
+### When Are Hooks Needed?
 
-| Szenario | PreFetch | PostFetch |
+| Scenario | PreFetch | PostFetch |
 |----------|----------|-----------|
-| CMake-Support, Standard-Config | ✗ | ✗ |
-| CMake-Support, Tests deaktivieren | ✓ | ✗ |
-| Kein CMake-Support (z.B. ImGui) | ✗ | ✓ |
-| Spezielle Target-Namen | ✓ | ✗ |
+| CMake support, standard config | ✗ | ✗ |
+| CMake support, disable tests | ✓ | ✗ |
+| No CMake support (e.g. ImGui) | ✗ | ✓ |
+| Special target names | ✓ | ✗ |
 
 ---
 
-## 6. Usagesbeispiele
+## 6. Usage Examples
 
 ### Standard CMake External
 
@@ -138,7 +138,7 @@ Prüft ob ein External vollständig verarbeitet wurde.
 }
 ```
 
-### External ohne CMake-Support
+### External Without CMake Support
 
 ```json
 {
@@ -152,26 +152,27 @@ Prüft ob ein External vollständig verarbeitet wurde.
 
 ---
 
-## 7. Errorbehandlung
+## 7. Error Handling
 
 | Code | Error | Description |
-|------|--------|--------------|
-| E201 | Keine Targets | External ohne Targets, PostFetch Hook fehlt |
-| E202 | Fetch fehlgeschlagen | FetchContent konnte nicht laden |
+|------|-------|-------------|
+| E201 | No targets | External without targets, PostFetch hook missing |
+| E202 | Fetch failed | FetchContent could not load it |
 
 ---
 
 ## 8. See Also
 
-- [Fetch_cmake.md](../core/Fetch_cmake.md) — FetchContent Wrapper
-- [HookLoader_cmake.md](../hooks/HookLoader_cmake.md) — Hook-System
-- [Targets_cmake.md](../registry/Targets_cmake.md) — Target-Registry
-- [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Type Dispatcher
+- [Fetch_cmake.md](../core/Fetch_cmake.md) — FetchContent wrapper
+- [HookLoader_cmake.md](../hooks/HookLoader_cmake.md) — Hook system
+- [Targets_cmake.md](../registry/Targets_cmake.md) — Target registry
+- [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Type dispatcher
 
 ---
 
 ## 9. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Documentation migrated to Blueprint v0.5.0 |

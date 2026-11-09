@@ -1,13 +1,13 @@
 # Testing – Benutzerhandbuch
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** C++ Entwickler  
 > **Modul:** Tests.cmake, TestCollect.cmake, TestCreate.cmake  
 > **Sprache:** Deutsch  
-> **English:** [Testing_UserGuide.md](Testing.md)
+> **English:** [Testing_UserGuide.md](../../../en/guide/userguides/Testing.md)
 
 ---
 
@@ -127,13 +127,13 @@ TEST_CASE("Calculator add") {
 
 ```bash
 # Konfigurieren mit Tests
-cmake --preset windows-ninja-debug -DBUILD_TESTS=ON
+cmake --preset windows-ninja-debug-msvc -DBUILD_TESTS=ON
 
 # Bauen
-cmake --build out/build/windows-ninja-debug
+cmake --build out/build/windows-ninja-debug-msvc
 
 # Tests ausführen
-ctest --test-dir out/build/windows-ninja-debug
+ctest --test-dir out/build/windows-ninja-debug-msvc
 ```
 
 ---
@@ -495,7 +495,7 @@ TEST_CASE("Sorting Benchmark", "[benchmark]") {
 ### 9.1 Alle Tests
 
 ```bash
-ctest --test-dir out/build/windows-ninja-debug
+ctest --test-dir out/build/windows-ninja-debug-msvc
 ```
 
 ### 9.2 Nach Label filtern
@@ -773,5 +773,7 @@ cmake --build ... --target help | grep -i test
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An den Code angeglichen: Preset `windows-ninja-debug` gibt es nicht, ersetzt durch `windows-ninja-debug-msvc` (`CMakePresets.json`) |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Konformität: Voraussetzungen, Stolpersteine/Troubleshooting getrennt, Siehe auch** |
 | 0.1.0 | 2025-12-11 | Initial: Framework-Vergleich, Konfiguration, Beispiele |

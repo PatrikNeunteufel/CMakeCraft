@@ -1,14 +1,14 @@
 # ExecutableCreate.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Version:** 1.0.1  
+> **Datum:** 2026-10-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [ExecutableCreate.md](ExecutableCreate.md)  
-> **Modul:** [`cmake/project/ExecutableCreate.cmake`](../../../../cmake/project/ExecutableCreate.cmake)  
+> **English:** [ExecutableCreate.md](../../../../en/guide/module/project/ExecutableCreate.md)  
+> **Modul:** [`cmake/project/ExecutableCreate.cmake`](../../../../../cmake/project/ExecutableCreate.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [Plattform-spezifisches Verhalten](#5-plattform-spezifisches-verhalten)
 6. [Fehlerbehandlung](#6-fehlerbehandlung)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -232,7 +232,7 @@ Keine speziellen Anpassungen für GUI-Typ.
 
 - [Executables.cmake](Executables.md) — Ruft _create_executable_target auf
 - [ExecutableCollect.cmake](ExecutableCollect.md) — Befüllt den Context
-- [Orchestrator.cmake](../externals/Orchestrator.md) — apply_external_to_target
+- [Orchestrator.cmake](../externals/Orchestrator_cmake.md) — apply_external_to_target
 - [OutputDirs.cmake](../core/OutputDirs.md) — Output-Verzeichnisse
 - [CompilerOptions.cmake](../core/CompilerOptions.md) — Compiler-Optionen
 
@@ -242,7 +242,8 @@ Keine speziellen Anpassungen für GUI-Typ.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.10.0** | **2026-10-09** | **`{version}` in DEFINES steht für die Version des Targets** |
+| **1.0.1** | **2026-10-09** | **CMakeCraft v0.10.0: `{version}` in DEFINES steht für die Version des Targets** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.2 | 2025-12-09 | APP_WINDOWS_GUI Define für Windows GUI |

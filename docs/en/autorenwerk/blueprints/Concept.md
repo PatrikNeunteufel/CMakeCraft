@@ -1,72 +1,72 @@
-# Concept — Standard für Architecture-Concepte
+# Concept — Standard for Architecture Concepts
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5, Blueprint v0.5  
-> **Target Audience:** Documentation Authors, Architekten  
+> **Target Audience:** Documentation authors, architects  
 > **Language:** English  
-> **German:** [Concept.md](Concept.md)
+> **German:** [Concept.md](../../../de/autorenwerk/blueprints/Concept.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Header-Struktur](#3-header-struktur)
-4. [Requiredabschnitte](#4-pflichtabschnitte)
-5. [Diagramme und Visualisierung](#5-diagramme-und-visualisierung)
-6. [Entscheidungsdokumentation](#6-entscheidungsdokumentation)
-7. [Example: Vollständiges Concept](#7-beispiel-vollständiges-konzept)
-8. [Review Checklist](#8-review-checkliste)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Header Structure](#3-header-structure)
+4. [Required Sections](#4-required-sections)
+5. [Diagrams and Visualization](#5-diagrams-and-visualization)
+6. [Documenting Decisions](#6-documenting-decisions)
+7. [Example: Complete Concept](#7-example-complete-concept)
+8. [Review Checklist](#8-review-checklist)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines die **Struktur für Architecture-Concepte**. Concept-Dokumentationen erklären das **Warum** hinter Design-Entscheidungen.
+This blueprint defines the **structure for architecture concepts**. Concept documents explain the **why** behind design decisions.
 
-### Zielgruppe
+### Target Audience
 
-- Build System Developers
-- Architekten und technische Leads
-- Neue Team-Mitglieder (Onboarding)
+- Build system developers
+- Architects and technical leads
+- New team members (onboarding)
 
-### Abgrenzung
+### Delimitation
 
-| Dokumentations-Typ | Fokus |
+| Documentation type | Focus |
 |-------------------|-------|
-| **Concept** | Warum wurde X so entschieden? |
-| **ModuleDoc** | Wie funktioniert Modul X? |
-| **Guide** | Wie nutze ich X? |
-| **Reference** | Was ist X? |
+| **Concept** | Why was X decided this way? |
+| **ModuleDoc** | How does module X work? |
+| **Guide** | How do I use X? |
+| **Reference** | What is X? |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für:
-- Architecture-Overviewen
-- Design-Entscheidungen (ADRs)
-- System-Concepte
-- Pipeline-Descriptionen
+This blueprint applies to:
+- Architecture overviews
+- Design decisions (ADRs)
+- System concepts
+- Pipeline descriptions
 
-**Typischer Ordner:** `docs/[lang]/concepts/`
+**Typical folder:** `docs/[lang]/konzepte/` (implemented concepts: `konzepte/abgeschlossen/`)
 
 **Examples:**
-- `master_concept_v0_1_0.md`
-- `AppContainer_Concept_v0_2_0.md`
-- `Fetch_v0_2_1_Concept.md`
+- `abgeschlossen/Master_Concept.md`
+- `abgeschlossen/AppContainer_Concept.md`
+- `Konzept_Versionierter_Bezug.md`
 
 ---
 
-## 3. Header-Struktur
+## 3. Header Structure
 
-### 3.1 Standard-Header
+### 3.1 Standard Header
 
 ```markdown
 # [Name] — Concept
@@ -75,60 +75,60 @@ Dieser Blueprint gilt für:
 > **Date:** YYYY-MM-DD  
 > **Type:** Concept  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** Build System Developers, Architekten  
+> **Target Audience:** Build system developers, architects  
 > **Language:** English  
-> **German:** [Name_Concept.md](../../en/concepts/Name_Concept.md)
+> **German:** [Name_Concept.md](../../de/konzepte/Name_Concept.md)
 ```
 
-### 3.2 Optionale Felder
+### 3.2 Optional Fields
 
-| Feld | Description |
+| Field | Description |
 |------|--------------|
-| `Bezug:` | Welche Module/Systeme betrifft dieses Concept? |
+| `Relates to:` | Which modules/systems does this concept affect? |
 
 ---
 
-## 4. Requiredabschnitte
+## 4. Required Sections
 
-Concepte verwenden diese Struktur:
+Concepts use this structure:
 
 ```
 ## Table of Contents
 
-## 1. Einleitung / Vision
-## 2. Problemstellung
-## 3. Lösungsansatz
+## 1. Introduction / Vision
+## 2. Problem Statement
+## 3. Approach
 ## 4. Architecture
-## 5. Design-Entscheidungen
-## 6. Alternativen (verworfen)
-## 7. Offene Punkte
+## 5. Design Decisions
+## 6. Alternatives (rejected)
+## 7. Open Points
 ## 8. See Also
 ## Changelog
 ```
 
-### 4.1 Abschnitts-Details
+### 4.1 Section Details
 
-| # | Abschnitt | Inhalt |
+| # | Section | Content |
 |---|-----------|--------|
-| 1 | Einleitung | Vision, Ziele, Scope |
-| 2 | Problemstellung | Welches Problem wird gelöst? |
-| 3 | Lösungsansatz | Gewählter Ansatz, Kernideen |
-| 4 | Architecture | Struktur, Komponenten, Datenfluss |
-| 5 | Design-Entscheidungen | Warum so und nicht anders? |
-| 6 | Alternativen | Betrachtete aber verworfene Ansätze |
-| 7 | Offene Punkte | Noch zu klären, Future Work |
-| 8 | See Also | Verwandte Concepte, Module |
+| 1 | Introduction | Vision, goals, scope |
+| 2 | Problem statement | Which problem is solved? |
+| 3 | Approach | Chosen approach, core ideas |
+| 4 | Architecture | Structure, components, data flow |
+| 5 | Design decisions | Why this way and not another? |
+| 6 | Alternatives | Approaches considered but rejected |
+| 7 | Open points | Still to be clarified, future work |
+| 8 | See also | Related concepts, modules |
 
 ---
 
-## 5. Diagramme und Visualisierung
+## 5. Diagrams and Visualization
 
-### 5.1 ASCII-Diagramme
+### 5.1 ASCII Diagrams
 
-Für einfache Strukturen:
+For simple structures:
 
 ```markdown
-Pipeline-Flow
+Pipeline flow
 ─────────────
 Solution.json
      │
@@ -143,9 +143,9 @@ Solution.json
 └─────────────┘
 ```
 
-### 5.2 Mermaid-Diagramme
+### 5.2 Mermaid Diagrams
 
-Für komplexere Strukturen (wenn vom Renderer unterstützt):
+For more complex structures (if supported by the renderer):
 ```
 graph TD
     A[Solution.json] --> B[Validation]
@@ -165,142 +165,142 @@ graph TD
     D --> F[LibraryCreate]
 ```
 
-### 5.3 Tabellen für Komponenten
+### 5.3 Tables for Components
 
-| Komponente | Verantwortung | Input | Output |
+| Component | Responsibility | Input | Output |
 |------------|---------------|-------|--------|
-| Validator | Schema-Prüfung | JSON | Error oder OK |
-| Collector | Daten sammeln | JSON | Context |
-| Creator | Target erstellen | Context | CMake Target |
+| Validator | Schema check | JSON | Error or OK |
+| Collector | Collect data | JSON | Context |
+| Creator | Create target | Context | CMake target |
 
 
 ---
 
-## 6. Entscheidungsdokumentation
+## 6. Documenting Decisions
 
-### 6.1 Format für Design-Entscheidungen
+### 6.1 Format for Design Decisions
 
 ```markdown
-### 5.1 Entscheidung: GLOBAL PROPERTY statt PARENT_SCOPE
+### 5.1 Decision: GLOBAL PROPERTY instead of PARENT_SCOPE
 
-**Kontext:**  
-CMake-Variablen haben Funktions-Scope. Bei verschachtelten Aufrufen 
-(A ruft B ruft C) gehen mit PARENT_SCOPE gesetzte Werte verloren.
+**Context:**  
+CMake variables have function scope. With nested calls 
+(A calls B calls C), values set with PARENT_SCOPE are lost.
 
-**Optionen:**
+**Options:**
 
-| Option | Pro | Contra |
+| Option | Pro | Con |
 |--------|-----|--------|
-| PARENT_SCOPE | CMake-Standard | Funktioniert nicht bei > 2 Ebenen |
-| CACHE INTERNAL | Persistent | Verschmutzt Cache, langsam |
-| GLOBAL PROPERTY | Sofort global | Kein Auto-Cleanup |
+| PARENT_SCOPE | CMake standard | Does not work with > 2 levels |
+| CACHE INTERNAL | Persistent | Pollutes cache, slow |
+| GLOBAL PROPERTY | Immediately global | No auto-cleanup |
 
-**Entscheidung:**  
-GLOBAL PROPERTY mit Namenskonvention `${PREFIX}_${KEY}`.
+**Decision:**  
+GLOBAL PROPERTY with naming convention `${PREFIX}_${KEY}`.
 
-**Begründung:**  
-Zuverlässige Propagation ist wichtiger als Auto-Cleanup. 
-Namenskonvention verhindert Kollisionen.
+**Rationale:**  
+Reliable propagation is more important than auto-cleanup. 
+The naming convention prevents collisions.
 
-**Konsequenzen:**
-- Alle Collector-Module müssen GLOBAL PROPERTY nutzen
-- Debugging erfordert `ctx_dump()` statt `message()`
+**Consequences:**
+- All collector modules must use GLOBAL PROPERTY
+- Debugging requires `ctx_dump()` instead of `message()`
 ```
 
 ### 6.2 ADR-Light Format
 
-Für wichtige Entscheidungen kann das ADR-Format verwendet werden:
+For important decisions, the ADR format can be used:
 
 ```markdown
-### ADR-001: JSON als Configurationsformat
+### ADR-001: JSON as configuration format
 
-**Status:** Akzeptiert (2025-12-01)
+**Status:** Accepted (2025-12-01)
 
-**Kontext:**  
-Wir brauchen ein maschinenlesbares Format für Solution-Configuration.
+**Context:**  
+We need a machine-readable format for the solution configuration.
 
-**Entscheidung:**  
-JSON mit CMake 3.19+ `file(READ)` und `string(JSON)`.
+**Decision:**  
+JSON with CMake 3.19+ `file(READ)` and `string(JSON)`.
 
-**Konsequenzen:**
-- Positive: Native CMake-Unterstützung, weit verbreitet
-- Negative: Keine Kommentare im Standard-JSON
+**Consequences:**
+- Positive: Native CMake support, widely used
+- Negative: No comments in standard JSON
 ```
 
 ---
 
-## 7. Example: Vollständiges Concept
+## 7. Example: Complete Concept
 
-```markdown
+````markdown
 # Context Pattern — Concept
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-13  
 > **Type:** Concept  
 > **Status:** Stable  
-> **Target Audience:** Build System Developers  
-> **Bezug:** cmake/core/Context.cmake  
+> **Target Audience:** Build system developers  
+> **Relates to:** cmake/core/Context.cmake  
 > **Language:** English  
-> **German:** [Context_Pattern_Concept.md](../../en/concepts/Context_Pattern_Concept.md)
+> **German:** [Context_Pattern_Concept.md](../../de/konzepte/Context_Pattern_Concept.md)
 
 ---
 
 ## Table of Contents
 
-1. [Einleitung](#1-einleitung)
-2. [Problemstellung](#2-problemstellung)
-3. [Lösungsansatz](#3-lösungsansatz)
-4. [Architecture](#4-architektur)
-5. [Design-Entscheidungen](#5-design-entscheidungen)
-6. [Verworfene Alternativen](#6-verworfene-alternativen)
-7. [Offene Punkte](#7-offene-punkte)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+1. [Introduction](#1-introduction)
+2. [Problem Statement](#2-problem-statement)
+3. [Approach](#3-approach)
+4. [Architecture](#4-architecture)
+5. [Design Decisions](#5-design-decisions)
+6. [Rejected Alternatives](#6-rejected-alternatives)
+7. [Open Points](#7-open-points)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
-## 1. Einleitung
+## 1. Introduction
 
-Das Context Pattern ermöglicht **isolierte Namespaces** für die 
-Datensammlung während der Pipeline-Verarbeitung. Es löst das 
-Problem der Variable-Scope-Limitierung in CMake.
+The context pattern enables **isolated namespaces** for 
+collecting data during pipeline processing. It solves the 
+problem of the variable scope limitation in CMake.
 
-### Ziele
+### Goals
 
-- Zuverlässige Datenpropagation über Funktionsebenen
-- Isolierte Namespaces pro Executable/Library/Test
-- Einfaches Debugging
+- Reliable data propagation across function levels
+- Isolated namespaces per executable/library/test
+- Simple debugging
 
 ---
 
-## 2. Problemstellung
+## 2. Problem Statement
 
-CMake-Variablen haben Funktions-Scope:
+CMake variables have function scope:
 
 ```cmake
 function(outer)
-    set(MY_VAR "value" PARENT_SCOPE)  # Setzt in Caller
+    set(MY_VAR "value" PARENT_SCOPE)  # Sets in caller
 endfunction()
 
 function(middle)
     outer()
-    message("${MY_VAR}")  # LEER - nicht propagiert
+    message("${MY_VAR}")  # EMPTY - not propagated
 endfunction()
 ```
 
-Bei verschachtelten Pipeline-Aufrufen geht Information verloren.
+With nested pipeline calls, information is lost.
 
 ---
 
-## 3. Lösungsansatz
+## 3. Approach
 
-GLOBAL PROPERTY als Speicher mit Namenskonvention:
+GLOBAL PROPERTY as storage with a naming convention:
 
 ```cmake
-# Statt PARENT_SCOPE
+# Instead of PARENT_SCOPE
 set_property(GLOBAL PROPERTY EXE_MyApp_NAME "MyApp")
 
-# Lesen von überall
+# Read from anywhere
 get_property(_name GLOBAL PROPERTY EXE_MyApp_NAME)
 ```
 
@@ -308,7 +308,7 @@ get_property(_name GLOBAL PROPERTY EXE_MyApp_NAME)
 
 ## 4. Architecture
 
-```
+````
 ctx_create(EXE_MyApp)
         │
         ▼
@@ -325,38 +325,38 @@ ctx_get(EXE_MyApp NAME _var)
 
 ---
 
-## 5. Design-Entscheidungen
+## 5. Design Decisions
 
-### 5.1 GLOBAL PROPERTY statt PARENT_SCOPE
+### 5.1 GLOBAL PROPERTY instead of PARENT_SCOPE
 
-[... wie in Abschnitt 6.1 beschrieben ...]
+[... as described in section 6.1 ...]
 
-### 5.2 Namenskonvention ${PREFIX}_${KEY}
+### 5.2 Naming Convention ${PREFIX}_${KEY}
 
-**Kontext:** Mehrere Contexts könnten kollidieren.
+**Context:** Multiple contexts could collide.
 
-**Entscheidung:** Prefixes: `EXE_`, `LIB_`, `TEST_`
+**Decision:** Prefixes: `EXE_`, `LIB_`, `TEST_`
 
-**Begründung:** Eindeutig, selbstdokumentierend.
+**Rationale:** Unambiguous, self-documenting.
 
 ---
 
-## 6. Verworfene Alternativen
+## 6. Rejected Alternatives
 
 ### 6.1 CACHE INTERNAL
 
-**Problem:** Persistiert über Configurationsläufe, verschmutzt Cache.
+**Problem:** Persists across configure runs, pollutes the cache.
 
-### 6.2 Globale Variablen
+### 6.2 Global Variables
 
-**Problem:** Keine Isolation zwischen Targets.
+**Problem:** No isolation between targets.
 
 ---
 
-## 7. Offene Punkte
+## 7. Open Points
 
-- [ ] Automatisches Cleanup nach Pipeline-Durchlauf
-- [ ] Performance bei >100 Targets
+- [ ] Automatic cleanup after a pipeline run
+- [ ] Performance with >100 targets
 
 ---
 
@@ -369,7 +369,7 @@ ctx_get(EXE_MyApp NAME _var)
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
 | **0.1.0** | **2025-12-13** | **Initial** |
 ```
@@ -378,32 +378,34 @@ ctx_get(EXE_MyApp NAME _var)
 
 ## 8. Review Checklist
 
-Zusätzlich zur Doc.md Checkliste:
+In addition to the Doc.md checklist:
 
-**Inhalt:**
-- [ ] Problemstellung klar beschrieben
-- [ ] Lösungsansatz nachvollziehbar
-- [ ] Architecture visualisiert (Diagramm/Tabelle)
-- [ ] Design-Entscheidungen dokumentiert mit Begründung
-- [ ] Verworfene Alternativen genannt
+**Content:**
+- [ ] Problem statement clearly described
+- [ ] Approach comprehensible
+- [ ] Architecture visualized (diagram/table)
+- [ ] Design decisions documented with rationale
+- [ ] Rejected alternatives named
 
-**Qualität:**
-- [ ] "Warum" beantwortet, nicht nur "Was"
-- [ ] Für neue Team-Mitglieder verständlich
-- [ ] Offene Punkte ehrlich benannt
+**Quality:**
+- [ ] "Why" answered, not just "what"
+- [ ] Understandable for new team members
+- [ ] Open points honestly named
 
 ---
 
 ## 9. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [ModuleDoc.md](ModuleDoc.md) — Für Modul-Details
+- [Doc.md](Doc.md) — General documentation rules
+- [ModuleDoc.md](ModuleDoc.md) — For module details
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Diagramm-Formate, ADR-Light, Entscheidungsdokumentation** |
-| 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: location `docs/[lang]/konzepte/` with `abgeschlossen/` (§ 2), example file names without version, jump path `../../de/konzepte/`** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: diagram formats, ADR-Light, decision documentation |
+| 0.1.0 | 2025-12-03 | Initial (part of Documentation_Blueprint) |

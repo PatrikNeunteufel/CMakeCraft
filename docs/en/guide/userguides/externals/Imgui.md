@@ -4,47 +4,47 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [imgui.md](../../../en/userguides/externals/Imgui.md)
+> **German:** [Imgui.md](../../../../de/guide/userguides/externals/Imgui.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Solution.json Configuration](#2-solutionjson-konfiguration)
-3. [C++ Usage](#3-c-verwendung)
+1. [Overview](#1-overview)
+2. [Solution.json Configuration](#2-solutionjson-configuration)
+3. [C++ Usage](#3-c-usage)
 4. [Widgets](#4-widgets)
 5. [Layouts](#5-layouts)
 6. [Styling](#6-styling)
-7. [Fortgeschrittene Techniken](#7-fortgeschrittene-techniken)
+7. [Advanced Techniques](#7-advanced-techniques)
 8. [Troubleshooting](#8-troubleshooting)
-9. [Weiterführende Informationen](#9-weiterführende-informationen)
-10. [Changelog](#10-changelog)
+9. [Further Information](#9-further-information)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Dear ImGui** ist ein Immediate Mode GUI Framework für C++.
+**Dear ImGui** is an immediate mode GUI framework for C++.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Git External (kein CMake-Support) |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Git External (no CMake support) |
 | **Repository** | https://github.com/ocornut/imgui |
-| **Empfohlener Tag** | v1.91.6 |
-| **Lizenz** | MIT |
+| **Recommended Tag** | v1.91.6 |
+| **License** | MIT |
 | **Website** | [github.com/ocornut/imgui](https://github.com/ocornut/imgui) |
 
-### Warum ImGui?
+### Why ImGui?
 
-| Vorteil | Description |
-|---------|--------------|
-| ⚡ **Immediate Mode** | Keine Widget-Objekte verwalten |
-| 🎨 **Flexibel** | Vollständig anpassbar |
-| 🛠️ **Tool-Ready** | Ideal für Debug-UIs |
-| 📦 **Leichtgewichtig** | Minimale Dependencies |
+| Advantage | Description |
+|-----------|-------------|
+| ⚡ **Immediate Mode** | No widget objects to manage |
+| 🎨 **Flexible** | Fully customizable |
+| 🛠️ **Tool-Ready** | Ideal for debug UIs |
+| 📦 **Lightweight** | Minimal dependencies |
 
 ### Immediate Mode vs Retained Mode
 
@@ -56,7 +56,7 @@ layout->addWidget(btn);
 
 // Immediate Mode (ImGui)
 if (ImGui::Button("Click me")) {
-    // Wird sofort ausgeführt wenn geklickt
+    // Executed immediately when clicked
 }
 ```
 
@@ -64,7 +64,7 @@ if (ImGui::Button("Click me")) {
 
 ## 2. Solution.json Configuration
 
-### 2.1 Mit GLAD und GLFW
+### 2.1 With GLAD and GLFW
 
 ```json
 {
@@ -106,7 +106,7 @@ if (ImGui::Button("Click me")) {
 ```cmake
 # cmake/externals/hooks/postfetch/imgui.cmake
 
-# Quellen sammeln
+# Collect sources
 set(_imgui_sources
     "${HOOK_SOURCE_DIR}/imgui.cpp"
     "${HOOK_SOURCE_DIR}/imgui_draw.cpp"
@@ -117,7 +117,7 @@ set(_imgui_sources
     "${HOOK_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp"
 )
 
-# Library erstellen
+# Create library
 add_library(${HOOK_EXTERNAL_NAME} STATIC ${_imgui_sources})
 
 target_include_directories(${HOOK_EXTERNAL_NAME} PUBLIC
@@ -145,7 +145,7 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 #include <imgui_impl_opengl3.h>
 
 int main() {
-    // GLFW Setup
+    // GLFW setup
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -158,7 +158,7 @@ int main() {
     // GLAD
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     
-    // ImGui Context
+    // ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -168,23 +168,23 @@ int main() {
     // Style
     ImGui::StyleColorsDark();
     
-    // Platform/Renderer Backends
+    // Platform/renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
     
-    // Main Loop
+    // Main loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         
-        // ImGui Frame starten
+        // Start ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
-        // UI Code hier
+        // UI code here
         ImGui::ShowDemoWindow();
         
-        // Rendern
+        // Render
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -206,7 +206,7 @@ int main() {
 }
 ```
 
-### 3.2 Einfaches Fenster
+### 3.2 Simple Window
 
 ```cpp
 ImGui::Begin("My Window");
@@ -214,7 +214,7 @@ ImGui::Text("Hello, World!");
 ImGui::End();
 ```
 
-### 3.3 Fenster mit Optionen
+### 3.3 Window with Options
 
 ```cpp
 bool open = true;
@@ -225,7 +225,7 @@ if (ImGui::Begin("Settings", &open, flags)) {
 }
 ImGui::End();
 
-// open == false wenn X geklickt
+// open == false when X is clicked
 ```
 
 ---
@@ -241,7 +241,7 @@ ImGui::TextDisabled("Disabled text");
 ImGui::TextWrapped("Long text that will wrap...");
 ImGui::BulletText("Bullet point");
 
-// Formatiert
+// Formatted
 ImGui::Text("Value: %d", 42);
 ImGui::Text("Float: %.2f", 3.14159f);
 ```
@@ -250,22 +250,22 @@ ImGui::Text("Float: %.2f", 3.14159f);
 
 ```cpp
 if (ImGui::Button("Click me")) {
-    // Button wurde geklickt
+    // Button was clicked
 }
 
 if (ImGui::Button("Sized", ImVec2(100, 50))) {
-    // Button mit fester Größe
+    // Button with a fixed size
 }
 
 ImGui::SmallButton("Small");
 
-// Toggle Button
+// Toggle button
 static bool toggled = false;
 if (ImGui::Button(toggled ? "ON" : "OFF")) {
     toggled = !toggled;
 }
 
-// Arrow Buttons
+// Arrow buttons
 ImGui::ArrowButton("left", ImGuiDir_Left);
 ImGui::SameLine();
 ImGui::ArrowButton("right", ImGuiDir_Right);
@@ -286,14 +286,14 @@ ImGui::RadioButton("Option C", &radio, 2);
 ### 4.4 Input
 
 ```cpp
-// Text Input
+// Text input
 static char text[128] = "Hello";
 ImGui::InputText("Name", text, sizeof(text));
 
 static char multiline[1024] = "";
 ImGui::InputTextMultiline("Description", multiline, sizeof(multiline));
 
-// Zahlen
+// Numbers
 static int intVal = 0;
 ImGui::InputInt("Integer", &intVal);
 
@@ -316,11 +316,11 @@ ImGui::SliderFloat("Alpha", &floatSlider, 0.0f, 1.0f);
 static float angle = 0.0f;
 ImGui::SliderAngle("Rotation", &angle);
 
-// Drag (unbegrenzt)
+// Drag (unbounded)
 static float dragVal = 0.0f;
 ImGui::DragFloat("Speed", &dragVal, 0.1f);
 
-// Mit Bereich
+// With range
 ImGui::DragFloat("Clamped", &dragVal, 0.1f, 0.0f, 100.0f);
 ```
 
@@ -413,8 +413,8 @@ ImGui::Text("Section 1");
 ImGui::Separator();
 ImGui::Text("Section 2");
 
-ImGui::Spacing();  // Vertikaler Abstand
-ImGui::Dummy(ImVec2(0, 20));  // Größerer Abstand
+ImGui::Spacing();  // Vertical spacing
+ImGui::Dummy(ImVec2(0, 20));  // Larger spacing
 ```
 
 ### 5.3 Groups
@@ -509,13 +509,13 @@ ImGui::PopStyleVar();
 ```cpp
 ImGuiIO& io = ImGui::GetIO();
 
-// Default Font ersetzen
+// Replace the default font
 io.Fonts->AddFontFromFileTTF("Roboto-Regular.ttf", 16.0f);
 
-// Zusätzliche Fonts
+// Additional fonts
 ImFont* boldFont = io.Fonts->AddFontFromFileTTF("Roboto-Bold.ttf", 16.0f);
 
-// Font verwenden
+// Use a font
 ImGui::PushFont(boldFont);
 ImGui::Text("Bold text");
 ImGui::PopFont();
@@ -523,7 +523,7 @@ ImGui::PopFont();
 
 ---
 
-## 7. Fortgeschrittene Techniken
+## 7. Advanced Techniques
 
 ### 7.1 Menus
 
@@ -609,14 +609,14 @@ if (ImGui::BeginDragDropTarget()) {
 ImGuiIO& io = ImGui::GetIO();
 io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-// In Render Loop
+// In the render loop
 ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 ```
 
-### 7.5 Plots (mit ImPlot)
+### 7.5 Plots (with ImPlot)
 
 ```cpp
-// Benötigt ImPlot Addon
+// Requires the ImPlot addon
 #include <implot.h>
 
 ImPlot::CreateContext();
@@ -637,72 +637,73 @@ ImPlot::DestroyContext();
 
 ### 8.1 "imgui.h not found"
 
-**Problem:** Header nicht gefunden
+**Problem:** Header not found
 
-**Lösung:** PostFetch Hook prüfen, Include-Pfade setzen.
+**Solution:** Check the PostFetch hook, set include paths.
 
-### 8.2 Schwarzes Fenster
+### 8.2 Black Window
 
-**Problem:** ImGui wird nicht gerendert
+**Problem:** ImGui is not rendered
 
-**Lösung:** Render-Reihenfolge prüfen:
+**Solution:** Check the render order:
 ```cpp
-ImGui_ImplOpenGL3_NewFrame();  // 1. Zuerst
+ImGui_ImplOpenGL3_NewFrame();  // 1. First
 ImGui_ImplGlfw_NewFrame();
 ImGui::NewFrame();
-// UI Code                      // 2. Dann UI
-ImGui::Render();               // 3. Dann Render
-ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());  // 4. Zuletzt
+// UI code                      // 2. Then UI
+ImGui::Render();               // 3. Then render
+ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());  // 4. Last
 ```
 
-### 8.3 Input funktioniert nicht
+### 8.3 Input Does Not Work
 
-**Problem:** Klicks werden nicht erkannt
+**Problem:** Clicks are not detected
 
-**Lösung:** `ImGui_ImplGlfw_InitForOpenGL(window, true)` — zweiter Parameters `true`!
+**Solution:** `ImGui_ImplGlfw_InitForOpenGL(window, true)` — second parameter `true`!
 
-### 8.4 Fonts nicht geladen
+### 8.4 Fonts Not Loaded
 
-**Problem:** Fonts erscheinen nicht
+**Problem:** Fonts do not appear
 
-**Lösung:** Font vor dem ersten Frame laden:
+**Solution:** Load the font before the first frame:
 ```cpp
 io.Fonts->AddFontFromFileTTF("font.ttf", 16.0f);
-// DANN erst Main Loop starten
+// ONLY THEN start the main loop
 ```
 
 ---
 
-## 9. Weiterführende Informationen
+## 9. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **GitHub** | [github.com/ocornut/imgui](https://github.com/ocornut/imgui) |
 | **Wiki** | [github.com/ocornut/imgui/wiki](https://github.com/ocornut/imgui/wiki) |
-| **Demo** | `ImGui::ShowDemoWindow()` im Code |
+| **Demo** | `ImGui::ShowDemoWindow()` in code |
 | **FAQ** | [github.com/ocornut/imgui/blob/master/docs/FAQ.md](https://github.com/ocornut/imgui/blob/master/docs/FAQ.md) |
 
 ### Addons
 
 | Addon | Description | Link |
-|-------|--------------|------|
+|-------|-------------|------|
 | **ImPlot** | Plotting | [github.com/epezent/implot](https://github.com/epezent/implot) |
-| **ImGuizmo** | 3D Gizmos | [github.com/CedricGuillemet/ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) |
-| **ImGuiFileDialog** | File Dialogs | [github.com/aiekick/ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) |
+| **ImGuizmo** | 3D gizmos | [github.com/CedricGuillemet/ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) |
+| **ImGuiFileDialog** | File dialogs | [github.com/aiekick/ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Git_Externals_GUI.md](../../references/externals/Git_Externals_GUI.md) — Reference
-- [glad.md](glad.md) — OpenGL Loader
-- [glfw.md](glfw.md) — Window & Input
+- [glad.md](Glad.md) — OpenGL loader
+- [glfw.md](Glfw.md) — Window & Input
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Dear ImGui** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for Dear ImGui |

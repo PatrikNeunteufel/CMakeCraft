@@ -1,9 +1,9 @@
 # Externals — Library-spezifische Guides
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../../en/userguides/externals/README.md)
+> **English:** [README.md](../../../../en/guide/userguides/externals/README.md)
 
 ---
 
@@ -51,7 +51,7 @@ Library-spezifische User Guides zeigen, wie einzelne externe Libraries in Projek
 |-------|---------|-----|
 | [Glfw.md](Glfw.md) | GLFW | Git (fetched) |
 | [Imgui.md](Imgui.md) | Dear ImGui | Git (fetched) |
-| [Qt6.md](Qt6.md) | Qt6 Framework | Local |
+| [Qt6.md](Qt6.md) | Qt6 Framework | System (find_package) |
 
 ### OpenGL
 
@@ -80,5 +80,14 @@ Library-spezifische User Guides zeigen, wie einzelne externe Libraries in Projek
 - [../README.md](../README.md) — User Guides Übersicht
 - [../Externals.md](../Externals.md) — Externals Übersicht
 - [../Adding_Externals.md](../Adding_Externals.md) — Neue External hinzufügen
-- [../../references/externals/](../../references/externals/README.md) — Externals-Referenz
-- [../../modules/externals/](../../modules/externals/README.md) — Externals-Module
+- [../../references/externals/](../../references/Externals.md) — Externals-Referenz
+- [../../modules/externals/](../../module/externals/README.md) — Externals-Module
+
+---
+
+## Changelog
+
+| Version | Datum | Änderungen |
+|---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An den Code angeglichen: Qt6 als System External (`find_package`) statt „Local“ |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |

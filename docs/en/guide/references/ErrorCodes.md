@@ -1,75 +1,76 @@
 # ErrorCodes — Reference
 
-> **Version:** 1.6.0  
-> **Date:** 2026-11-07  
+> **Version:** 1.6.1  
+> **Date:** 2026-11-09  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [ErrorCodes.md](ErrorCodes.md)
+> **German:** [ErrorCodes.md](../../../de/guide/references/ErrorCodes.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
 3. [Fatal Errors (E)](#3-fatal-errors-e)
 4. [Warnings (W)](#4-warnings-w)
-5. [Schnellreferenz](#5-schnellreferenz)
-6. [Usage in Code](#6-verwendung-in-code)
-7. [See Also](#7-siehe-auch)
+5. [Quick Reference](#5-quick-reference)
+6. [Usage in Code](#6-usage-in-code)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-This reference documents alle Errorcodes des CMake Architecture Build-Systems mit Erklärungen und Lösungsvorschlägen.
+This reference documents all error codes of the CMake Architecture build system with explanations and suggested fixes.
 
-### Errorcode-Format
+### Error Code Format
 
 ```
 [E|W][K][NN]
 
-E = Error (Build bricht ab)
-W = Warning (Build läuft weiter)
-K = Kategorie (1 Ziffer)
-NN = Nummer (2 Ziffern)
+E = Error (build aborts)
+W = Warning (build continues)
+K = Category (1 digit)
+NN = Number (2 digits)
 ```
 
-### Zielgruppe
+### Target Audience
 
-- Entwickler bei der Errorsuche
-- Build System Developers für konsistente Errormeldungen
+- Developers troubleshooting a build
+- Build system developers, for consistent error messages
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### 2.1 Errorcode-Bereiche
+### 2.1 Error Code Ranges
 
-| Bereich | Codes | Description |
-|---------|-------|--------------|
-| JSON/Parsing | `E0xx` | Fehlende Requiredfelder, ungültiges JSON |
-| Target-Erstellung | `E1xx` | Target existiert bereits, Abhängigkeit fehlt |
-| Externals | `E2xx` | Fetch fehlgeschlagen, Include.cmake fehlt |
-| Tests | `E3xx` | Framework, Source-Error |
-| App-Container | `E4xx` | App-Struktur, Verzeichnisse |
-| System Externals | `E5xx` | find_package, Komponenten |
-| Deprecation | `W0xx` | Deprecatede Features/Syntax |
-| Configuration | `W1xx` | Suboptimale Einstellungen |
-| Tools/Setup | `W2xx` | Fehlende Tools |
-| External-Caching | `W3xx` | Offline-Modus, Hook-Wiederverwendung |
-| App-Container | `W4xx` | Optionale Verzeichnisse |
-| System External-Warningen | `W5xx` | Backup-Usage |
+| Range | Codes | Description |
+|-------|-------|-------------|
+| JSON/parsing | `E0xx` | Missing required fields, invalid JSON |
+| Target creation | `E1xx` | Target already exists, dependency missing |
+| Externals | `E2xx` | Fetch failed, Include.cmake missing |
+| Tests | `E3xx` | Framework, source errors |
+| App container | `E4xx` | App structure, directories |
+| System externals | `E5xx` | find_package, components |
+| Deprecation | `W0xx` | Outdated features/syntax |
+| Configuration | `W1xx` | Suboptimal settings |
+| Tools/setup | `W2xx` | Missing tools |
+| External caching | `W3xx` | Offline mode, hook reuse |
+| App container | `W4xx` | Optional directories |
+| System external warnings | `W5xx` | Backup usage |
+| Phase tests | `W6xx`–`W9xx` | Warnings of the self-tests (only with `RUN_BUILD_SYSTEM_TESTS=ON`) |
 
-### 2.2 Schweregrade
+### 2.2 Severity Levels
 
-| Symbol | Typ | Bedeutung |
-|--------|-----|-----------|
-| ⛔ | FATAL_ERROR | Build bricht ab |
-| ⚠️ | WARNING | Build läuft weiter |
+| Symbol | Type | Meaning |
+|--------|------|---------|
+| ⛔ | FATAL_ERROR | Build aborts |
+| ⚠️ | WARNING | Build continues |
 
 ---
 
@@ -77,19 +78,24 @@ NN = Nummer (2 Ziffern)
 
 ### 3.1 E0xx — JSON/Parsing Errors
 
-#### E001 — Requiredfeld fehlt
+#### E001 — Required field missing
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Message** (examples):
 ```
-[E001] Executable 'MyApp' hat kein 'name' Feld
+[E001] Executable has no 'name' field
+[E001] Executable 'MyApp': Required field 'name' missing
+[E001] Solution.json: 'solution.name' missing
 ```
 
-**Lösung:**
+Depending on the location, the text names the object (`Executable`, `Library`, `Test`, `Package`, `Local external` …)
+and the missing or empty field.
+
+**Fix:**
 ```json
 {
     "name": "MyApp",
@@ -99,34 +105,65 @@ NN = Nummer (2 Ziffern)
 
 ---
 
-#### E002 — Solution.json nicht gefunden
+#### E002 — Solution.json not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Lösung:**
-- Stelle sicher, dass `Solution.json` im Projekt-Root liegt
-- Prüfe Schreibweise (Groß-/Kleinschreibung)
+**Message:**
+```
+[E002] Solution.json not found: <path>/Solution.json
+[E002] Solution.json: 'schemaVersion' missing or invalid JSON
+[E002] Solution.json: 'schemaVersion' has invalid format '1' (expected: MAJOR.MINOR)
+```
+
+**Fix:**
+- Make sure `Solution.json` is located in the project root
+- Give `schemaVersion` as `"MAJOR.MINOR"` (currently `"1.0"`)
+- Check the spelling (upper/lower case)
+
+---
+
+#### E003 — Schema version incompatible
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.6.0 |
+
+**Message:**
+```
+[E003] Solution.json: schemaVersion 0.6 incompatible (expected major: 1, current: 1.0)
+[E003] Invalid library type 'OBJECT' for 'MyLib'. Valid: STATIC, SHARED, INTERFACE
+```
+
+**Cause:** The major version of the schema in Solution.json does not match the version supported by the build
+system (currently `1.0`, `cmake/project/Solution.cmake:50`). The same code also reports an invalid library type
+(`LibraryCollect.cmake:105`).
+
+**Fix:**
+- Set `schemaVersion` in Solution.json to a compatible version (e.g. `"1.0"`)
+- Or update the build system if a newer schema version is needed
 
 ---
 
 #### E004 — Invalid value in the settings block
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⛔ FATAL |
 | **Since** | v0.12.0 |
 
 **Message:**
 ```
-[E004] Solution.json: settings.msvc.parallel_compile must be a non-negative integer, got 'many'
+[E004] Solution.json: settings.msvc.parallel_compile must be a non-negative integer, got 'viele'
 ```
 
 **Cause:** A field in the `settings` block has a value CMakeCraft cannot use.
 
-**Solution:**
+**Fix:**
 - Give `settings.msvc.parallel_compile` as an integer ≥ 0 (`0` or `1` = off), see
   [Solution_Schema.md §4.4](Solution_Schema.md#44-msvc)
 
@@ -135,7 +172,7 @@ NN = Nummer (2 Ziffern)
 #### E005 — Top-level CMakeLists.txt without project()
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⛔ FATAL |
 | **Since** | v0.13.0 |
 
@@ -144,34 +181,35 @@ NN = Nummer (2 Ziffern)
 [E005] .../CMakeLists.txt has no project() line. Add 'project(<Name> LANGUAGES NONE)' directly after cmake_minimum_required() ...
 ```
 
-**Cause:** Without a literal `project()` in the top-level `CMakeLists.txt`, CMake inserts
-`project(Project)` on line 1, **before** `cmake_minimum_required()`. The compilers are then set
-up under old policies: `CMAKE_MSVC_RUNTIME_LIBRARY` is ignored, and the `Testing`
-configuration builds with the static CRT (`/MT`).
+**Cause:** Without an explicit `project()` in the top-level `CMakeLists.txt`, CMake inserts its
+own `project(Project)` on line 1, **before** `cmake_minimum_required()`. The compilers are then
+set up under the old rules: `CMAKE_MSVC_RUNTIME_LIBRARY` has no effect, and the configuration
+`Testing` builds with the static CRT (`/MT`).
 
-**Solution:**
+**Fix:**
 ```cmake
 cmake_minimum_required(VERSION 3.26)
-project(MyProject LANGUAGES NONE)   # name/version come from Solution.json
+project(MeinProjekt LANGUAGES NONE)   # name/version come from Solution.json
 include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")
 ```
-Then configure once with `--fresh` — the cache still holds the old flags otherwise.
+Then configure once with `--fresh` — otherwise the cache still holds the old flags.
 
 ---
 
-#### E010 — External nicht in externals-Block definiert
+#### E010 — External not defined in the externals block
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Message:**
 ```
-[E010] External 'imgui' nicht in externals-Block definiert
+[E010] External 'imgui' not defined in externals block
+[E010] Test framework 'doctest' not defined in externals block
 ```
 
-**Lösung:**
+**Fix:**
 ```json
 {
     "externals": {
@@ -185,104 +223,112 @@ Then configure once with `--fresh` — the cache still holds the old flags other
 
 ---
 
-#### E012 — External-Source-Feld Error
+#### E012 — External source field error
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Message:**
 ```
-[E012] External 'mylib': Kein Source-Feld (path/git) angegeben
-[E012] External 'mylib': Mehrere Source-Felder angegeben (nur eines erlaubt)
+[E012] External 'mylib': No source field specified.
+  Required: one of 'system', 'git', 'path', or 'archive'
+  ...
+[E012] External 'mylib': Multiple source fields specified: path;git
+  Only one source field is allowed.
 ```
 
-**Lösung:** Genau EIN Source-Feld pro External (path ODER git).
+**Fix:** Exactly ONE source field per external: `system`, `git`, `path` or `archive`
+(`Validation.cmake:58`; `vcpkg`, `conan`, `find_package` pass the check but end in the orchestrator with
+`[E012] External 'mylib': No valid source field (system/git/path/archive)`).
 
 ---
 
-#### E013 — Geskipptes External verwendet
+#### E013 — Skipped external used
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.7.1 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.7.1 |
 
-**Meldung:**
+**Message:**
 ```
 [E013] External 'future_lib' is skipped but used by target 'MyApp'. Remove from externals list or set skip: false
 ```
 
-**Ursache:** Ein External mit `skip: true` wird von einem Target referenziert.
+**Cause:** An external with `skip: true` is referenced by a target.
 
-**Lösung:** 
-- External aus der `externals`-Liste des Targets entfernen, ODER
-- `skip: false` setzen (oder `skip` entfernen) im External-Block
-
----
-
-### 3.2 E1xx — Target-Erstellung Errors
-
-#### E101 — Abhängigkeit existiert nicht
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
-
-**Lösung:** Library in Solution.json definieren oder Schreibfehler korrigieren.
+**Fix:** 
+- Remove the external from the target's `externals` list, OR
+- Set `skip: false` (or remove `skip`) in the external block
 
 ---
 
-#### E102 — Target existiert bereits
+### 3.2 E1xx — Target Creation Errors
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+#### E101 — Dependency does not exist
 
-**Lösung:** Target-Namen müssen über Libraries, Executables UND Tests hinweg eindeutig sein.
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
----
-
-#### E103 — Zirkuläre Abhängigkeit
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
-
-**Description:** Eine zirkuläre Abhängigkeit zwischen Targets wurde erkannt (A → B → C → A).
-
-**Lösung:** Gemeinsamen Code in separate Library extrahieren.
+**Fix:** Define the library in Solution.json or correct the typo.
 
 ---
 
-#### E104 — Source.cmake nicht gefunden
+#### E102 — Target already exists
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Description:** Der Source-Mode ist `explicit` und das Source-Verzeichnis enthält keine `Source.cmake` Datei.
+**Fix:** Target names must be unique across libraries, executables AND tests.
 
-**Lösung:** Source.cmake erstellen oder Mode auf `auto` ändern.
+---
+
+#### E103 — Circular dependency
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
+
+> Currently not raised (as of 2026-11-09). The case is not reported: CMakeCraft does
+> not detect circular dependencies between targets (`cmake/core/Errors.cmake:97`).
+
+**Description:** A circular dependency between targets was detected (A → B → C → A).
+
+**Fix:** Extract shared code into a separate library.
+
+---
+
+#### E104 — Source.cmake not found
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
+
+**Description:** The source mode is `explicit` and the source directory contains no `Source.cmake` file.
+
+**Fix:** Create Source.cmake or change the mode to `auto`.
 
 ---
 
 #### E105 — compile_options on an INTERFACE library
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⛔ FATAL |
 | **Since** | v0.14.0 |
 
 **Description:** A library with `"type": "INTERFACE"` carries `compile_options`. A header
 library has no compilation of its own; the flag would have no effect anywhere.
 
-**Solution:** Put the computation into `.cpp` files of a `STATIC` library and set the flags
+**Fix:** Move the computation into `.cpp` files of a `STATIC` library and set the flags
 there — or remove `compile_options`.
 
 ---
@@ -290,123 +336,150 @@ there — or remove `compile_options`.
 #### E106 — Source package cannot be expressed
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⛔ FATAL |
 | **Since** | v0.14.0 |
 
 **Description:** An entry `{ "library": … }` in the `packages` block names a library that
-cannot be described in plain CMake: it is not `STATIC`, has C++20 modules, a file or an
-include folder lies outside `path` and `public_headers`, or an external is not local (system,
-fetched, archive) or brings more than one header-only `INTERFACE` target with include folders
-in its own folder, defines, compile options and compile features. The message names the
-library and, where applicable, the external.
+cannot be described in plain CMake: it is not `STATIC`, has C++20 modules, a file or an include
+folder lies outside `path` and `public_headers`, or an external is not local (system, fetched,
+archive) or brings more than a header-only `INTERFACE` target with include folders in its own
+folder, defines, compile options and compile features. The message names the library and, where
+applicable, the external.
 
-**Solution:** Change the library or the external so that it fits, or do not build a source
+**Fix:** Rearrange the library or the external so that it fits, or do not build a source
 package (binary package with `contents`). See [Packages.md](Packages.md) §2.5.
 
 ---
 
 ### 3.3 E2xx — Externals Errors
 
-#### E201 — Fetched External: Kein Target in Registry
+#### E201 — Fetched external: no target in registry
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Message:**
 ```
-[E201] Fetched external 'mylib': Kein Target in Registry
+[E201] Fetched external 'mylib': No target in registry. PostFetch hook required?
+[E201] Fetched external 'mylib': No CMake support, PostFetch hook required but no targets created
 ```
 
-**Lösung:**
-1. Prüfe ob das External ein CMake-Projekt ist
-2. Erstelle ggf. einen PostFetch-Hook
-3. Oder verwende lokales External mit eigenem Include.cmake
+The second message appears with `cmakeSupport: false` when no target is registered after the PostFetch hook
+(`cmake/externals/fetched/Handler.cmake:118`).
+
+**Fix:**
+1. Check whether the external is a CMake project
+2. Create a PostFetch hook if needed
+3. Or use a local external with its own Include.cmake
 
 ---
 
-#### E202 — External Fetch fehlgeschlagen
+#### E202 — External fetch failed
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Lösung:**
-- Netzwerkverbindung prüfen
-- URL in Solution.json prüfen
-- Tag/Branch existiert?
-
----
-
-#### E213 — Lokales External: Include.cmake nicht gefunden
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
-
-**Lösung:** Datei erstellen: `externals/${name}/Include.cmake`
+**Fix:**
+- Check the network connection
+- Check the URL in Solution.json
+- Does the tag/branch exist?
 
 ---
 
-#### E214 — Lokales External: Pfad existiert nicht
+#### E203 — Target of an external not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | — |
 
-**Lösung:** Pfad in Solution.json prüfen.
+**Message:**
+```
+[E203] Target 'glfw' for external 'glfw' not found
+```
 
----
+**Description:** The main target registered for an external does not exist when linking
+(`cmake/externals/registry/Targets.cmake:263`).
 
-#### E215 — Fetched External: Kein tag/branch/commit
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
-
-**Lösung:** Eines von `tag`, `branch` oder `commit` angeben.
+**Fix:** Check the hook or Include.cmake that creates and registers the target.
 
 ---
 
-#### E216 — Explizit angegebener Hook nicht gefunden
+#### E213 — Local external: Include.cmake not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Lösung:** Hook-Datei erstellen oder Hook-Angabe entfernen.
+**Fix:** Create the file: `externals/${name}/Include.cmake`
 
 ---
 
-#### E217 — PostFetch Hook erforderlich aber nicht vorhanden
+#### E214 — Local external: path does not exist
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.1 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Fix:** Check the path in Solution.json.
+
+---
+
+#### E215 — Fetched external: no tag/branch/commit
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
+
+**Fix:** Specify one of `tag`, `branch` or `commit`.
+
+---
+
+#### E216 — Explicitly specified hook not found
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
+
+**Fix:** Create the hook file or remove the hook entry.
+
+---
+
+#### E217 — PostFetch hook required but not present
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.1 |
+
+**Message:**
 ```
 [E217] External 'imgui': PostFetch hook required (cmakeSupport=false) but not found
 ```
 
-**Lösung:**
-1. PostFetch Hook erstellen: `cmake/externals/Hooks/PostFetch/${name}.cmake`
-2. Oder `cmakeSupport: true` setzen (wenn External doch CMakeLists.txt hat)
+> Currently not raised (as of 2026-11-09). The case is reported as E201:
+> `Fetched external '<name>': No CMake support, PostFetch hook required but no targets created`
+> (`cmake/externals/fetched/Handler.cmake:118`).
+
+**Fix:**
+1. Create a PostFetch hook: `cmake/externals/hooks/postfetch/${name}.cmake`
+2. Or set `cmakeSupport: true` (if the external does have a CMakeLists.txt after all)
 
 ---
 
 #### E218 — Not cached and offline mode enabled
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⛔ FATAL |
 | **Since** | v0.1.2 |
 
@@ -415,20 +488,20 @@ package (binary package with `contents`). See [Packages.md](Packages.md) §2.5.
 [E218] External 'glfw': Not cached and offline mode enabled
 ```
 
-**Description:** `EXTERNALS_OFFLINE` forbids fetching, but there is nothing
-usable under `.externals/<name>/`. Since v0.9.1 the message also covers the case
-where something *is* there but is not a complete clone.
+**Description:** `EXTERNALS_OFFLINE` forbids fetching, but there is nothing usable under
+`.externals/<name>/`. Since v0.9.1 the message also covers the case where something is
+there but it is not a complete clone.
 
 **Fix:**
 1. Configure once with a network connection and without `EXTERNALS_OFFLINE`
-2. Or copy a populated `.externals/` from another working copy
+2. Or take over a populated `.externals/` from another working copy
 
 ---
 
 #### E219 — Cache directory cannot be removed
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⛔ FATAL |
 | **Since** | v0.9.1 |
 
@@ -440,29 +513,28 @@ where something *is* there but is not a complete clone.
   ...
 ```
 
-**Description:** An unusable cache directory has to go before a fresh clone can
-happen — but removing it failed. There is nothing the build system can do at
-that point.
+**Description:** An unusable cache directory has to go before a new clone can be made —
+but deleting it failed. The build system can do nothing more at this point.
 
 **Fix:**
-1. Close whatever holds a file in the directory (editor, file manager window,
-   a terminal sitting in it, virus scanner)
+1. Close programs that keep something open in the directory (editor, Explorer window,
+   terminal that `cd`'d there, virus scanner)
 2. Delete `.externals/<name>/` by hand
 3. Configure again
 
-If it persists, the **path is usually too long**: the project path plus the
-directory depth of the third-party project exceeds what the Windows toolchain
-handles. Move the project to a shorter path, or enable long paths in Windows
-and Git (`git config --global core.longpaths true`).
+If it persists, the **path is usually too long**: the project path plus the directory
+depth of the third-party project exceeds the limit of the toolchain on Windows. Then move
+the project to a shorter path or enable long paths in Windows and Git
+(`git config --global core.longpaths true`).
 
 ---
 
 #### E220 — Archive external: field `pin` missing
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.10.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.10.0 |
 
 **Message:**
 ```
@@ -479,177 +551,312 @@ checksum live only there.
 
 ### 3.4 E3xx — Test Errors
 
-#### E301 — Unbekanntes Test-Framework
+#### E301 — Unknown test framework
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.4 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.4 |
 
-**Lösung:** Gültige Frameworks: `doctest`, `googletest`, `catch2`
-
----
-
-#### E302 — source_from Executable existiert nicht
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.4 |
-
-**Lösung:** Executable-Name in `source_from` prüfen.
-
----
-
-#### E303 — Test-Source-Verzeichnis nicht gefunden
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.4 |
-
-**Lösung:** Pfad in Solution.json prüfen oder Verzeichnis erstellen.
-
----
-
-### 3.5 E4xx — App-Container Errors
-
-#### E401 — App: name ist Requiredfeld
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
-
-**Meldung:**
+**Message:**
 ```
-[E401] App definition: 'name' is required
+[E301] Test 'MyTests': Unknown framework 'boost'. Valid: doctest;googletest;catch2
+[E301] App 'MyApp': No framework specified for test 'UnitTests'. Set tests.framework or targets[].framework
 ```
 
-**Lösung:** `name` Feld in der App-Definition hinzufügen.
+**Fix:** Valid frameworks: `doctest`, `googletest`, `catch2`
 
 ---
 
-#### E402 — App-Pfad existiert nicht
+#### E302 — source_from executable does not exist
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.4 |
 
-**Lösung:** Pfad prüfen oder Verzeichnis erstellen.
+**Message:**
+```
+[E302] source_from: Executable 'MyApp' not found
+```
 
----
+For apps, the same code reports an unknown framework of a test target:
+`[E302] App 'MyApp': Unknown framework 'boost' for test 'UnitTests'. Valid: doctest;googletest;catch2`
+(`AppCreate.cmake:630`).
 
-#### E403 — App hat kein src/ Verzeichnis
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
-
-**Lösung:** `src/` Verzeichnis im App-Container erstellen.
+**Fix:** Check the executable name in `source_from`.
 
 ---
 
-#### E404 — App hat keine Source-Dateien in src/
+#### E303 — Test source directory not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.4 |
 
-**Lösung:** Source-Dateien (.cpp) in `src/` hinzufügen.
+**Message:**
+```
+[E303] Test 'MyTests': Source path does not exist: <path>
+```
 
----
+For apps, the same code reports a test target without `name`:
+`[E303] App 'MyApp': Test target [0] missing required 'name' field` (`AppCollect.cmake:351`).
 
-#### E405 — App-Dependency nicht gefunden
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
-
-**Lösung:** Abhängigkeit in Solution.json definieren.
+**Fix:** Check the path in Solution.json or create the directory.
 
 ---
 
-#### E406 — App hat kein main/ Verzeichnis
+#### E304 — App test target without type
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | — |
 
-**Lösung:** `main/` Verzeichnis für Entry-Point erstellen.
+**Message:**
+```
+[E304] App 'MyApp': Test target 'UnitTests' missing required 'type' field
+```
+
+**Fix:** Give `type` in the entry of `apps[].tests.targets[]` (`unit`, `integration`, …).
 
 ---
 
-#### E407 — App hat keine Source-Dateien in main/
+#### E305 — Path of an app test target does not exist
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 (Phase 8) |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | — |
 
-**Lösung:** Entry-Point Datei (main.cpp) in `main/` hinzufügen.
+**Message:**
+```
+[E305] App 'MyApp': Test 'UnitTests' path does not exist: <path>
+```
+
+**Fix:** Create the folder or correct `path` (default: `tests/{type}/{name}`).
+
+---
+
+### 3.5 E4xx — App Container Errors
+
+#### E400 — App definition without name (collect phase)
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Message:**
+```
+[E400] App definition missing required 'name' field
+```
+
+**Description:** Check while reading an app (`AppCollect.cmake:183`). In the normal flow E401 reports the
+same error first.
+
+**Fix:** Add the `name` field to the app definition.
+
+---
+
+#### E401 — App: name is a required field
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Message:**
+```
+[E401] App #0 has no 'name' field
+```
+
+**Fix:** Add the `name` field to the app definition.
+
+---
+
+#### E402 — App path does not exist
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Fix:** Check the path or create the directory.
+
+---
+
+#### E403 — App has no src/ directory
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Fix:** Create a `src/` directory in the app container.
+
+---
+
+#### E404 — App has no source files in src/
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Fix:** Add source files (.cpp) to `src/`.
+
+---
+
+#### E405 — App dependency not found
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Fix:** Define the dependency in Solution.json.
+
+---
+
+#### E406 — App has no main/ directory
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Fix:** Create a `main/` directory for the entry point.
+
+---
+
+#### E407 — App has no source files in main/
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Fix:** Add an entry point file (main.cpp) to `main/`.
 
 ---
 
 ### 3.6 E5xx — System External Errors
 
-#### E501 — System External nicht gefunden
+The system handler calls `find_package()` **without** `REQUIRED`
+(`cmake/externals/system/Handler.cmake:270`, `:273`). If `<Package>_FOUND` stays false and the
+external is `required` (default), `_system_external_not_found()` names the cause as E503, E504
+or E505 (`Handler.cmake:290`). CMake's own diagnostics appear before it as a warning. If the
+external is `"required": false`, there is no error, only `[<name>] <Package> not found (optional)`
+(`Handler.cmake:293`).
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 |
+#### E502 — package field missing
 
-**Lösung:** Hint-Pfad oder Umgebungsvariable prüfen.
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 |
 
----
+**Message** (`cmake/core/Validation.cmake:94`, `cmake/externals/system/Handler.cmake:180`):
+```
+[E502] System external 'qt6': 'package' field is required.
+  Example: { "system": true, "package": "Qt6" }
+```
 
-#### E502 — package-Feld fehlt
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 |
-
-**Lösung:** `package` Feld für System Externals angeben.
-
----
-
-#### E503 — find_package fehlgeschlagen
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 |
-
-**Lösung:** Installation prüfen, CMAKE_PREFIX_PATH setzen.
+**Fix:** Specify the `package` field for system externals.
 
 ---
 
-#### E504 — Komponente nicht gefunden
+#### E503 — find_package failed
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 |
 
-**Lösung:** Komponenten-Name prüfen, Installation vervollständigen.
+**Message** when CMake finds no configuration file of the package (`Handler.cmake:128`):
+```
+[E503] System external 'qt6': find_package(Qt6) failed.
+
+  Possible solutions:
+    1. Set Qt6_ROOT environment variable
+    2. Add 'hints' in Solution.json
+    3. Install Qt6 to a standard location
+
+  Example Solution.json:
+    "qt6": {
+      "system": true,
+      "package": "Qt6",
+      "hints": ["C:/Path/To/Qt6"]
+    }
+```
+
+Two further variants with the same solution lines:
+
+- Configuration files found, but none accepted and no `version` set
+  (`Handler.cmake:120`): `find_package(Qt6) failed - no configuration file was accepted.`,
+  followed by `Considered:` with one line `<file> (version <version>)` each.
+- Configuration accepted, but the package reports itself as not found, without `components`
+  being set (`Handler.cmake:101`): additionally
+  `Reason given by the package: <Package>_NOT_FOUND_MESSAGE`.
+
+An external that is not registered when it is linked reports
+`[E503] System external '<name>' not properly registered` (`Handler.cmake:331`).
+
+**Fix:** Install the package or give its location via `<Package>_ROOT`, `hints` in
+Solution.json or `CMAKE_PREFIX_PATH`.
 
 ---
 
-#### E505 — Version nicht erfüllt
+#### E504 — Component not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.2.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (raised since v0.14.1) |
 
-**Lösung:** Neuere Version installieren oder Constraint anpassen.
+**Message** (`Handler.cmake:91`):
+```
+[E504] System external 'qt6': Qt6 was found (<Qt6_DIR>), but not with all requested components: Core, Widgets, Charts
+  Reason given by the package: <Qt6_NOT_FOUND_MESSAGE>
+
+  Possible solutions:
+    1. Install the missing component(s) for this Qt6 installation
+    2. Remove components the project does not use from 'components' in Solution.json
+```
+
+**Description:** The package configuration was accepted (`<Package>_DIR` set), but at least
+one of the components in `components` is missing. The message names all requested components;
+which one is missing is stated in the package's reason (`<Package>_NOT_FOUND_MESSAGE`).
+
+**Fix:** Install the missing component for this installation or remove it from `components`.
+
+---
+
+#### E505 — Version not satisfied
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.2.0 (raised since v0.14.1) |
+
+**Message** (`Handler.cmake:109`):
+```
+[E505] System external 'qt6': no Qt6 with a version compatible to the requested '6.9' was found.
+  Considered:
+    C:/Qt/6.8.0/msvc2022_64/lib/cmake/Qt6/Qt6Config.cmake (version 6.8.0)
+
+  Possible solutions:
+    1. Install a compatible Qt6 version and point Qt6_ROOT or 'hints' to it
+    2. Adjust 'version' in Solution.json
+```
+
+**Description:** `version` is set, and CMake only considered configuration files with an
+unsuitable version. Without `version` the same case is E503.
+
+**Fix:** Install a suitable version and point `<Package>_ROOT` or `hints` to it, or adjust
+`version` in Solution.json.
 
 ---
 
@@ -657,143 +864,205 @@ checksum live only there.
 
 ### 4.1 W0xx — Deprecation Warnings
 
-#### W001 — Deprecatedes Schema
+#### W001 — Outdated schema
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
 
-**Description:** Die Solution.json verwendet ein veraltetes Schema.
+> Currently not raised (as of 2026-11-09). The case is reported as E002, E003, W101 or W102
+> (`cmake/project/Solution.cmake:82`, `:94`, `:102`, `:107`, `:109`). W001 only appears in
+> `validate_solution_schema()` (`cmake/core/Validation.cmake:221`, `:227`), which nothing calls.
+
+**Description:** The Solution.json uses an outdated schema.
 
 ---
 
-#### W002 — Deprecatede Syntax/Feld
+#### W002 — Outdated syntax/field
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
 
-**Description:** Ein Feld oder Syntax wird in Zukunft entfernt.
+> Currently not raised (as of 2026-11-09). The case is not reported: no module checks
+> for outdated fields.
+
+**Description:** A field or syntax will be removed in the future.
 
 ---
 
 ### 4.2 W1xx — Configuration/Validation Warnings
 
-#### W101 — Suboptimale Configuration
+#### W101 — Schema version too low
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.6.0 |
 
-**Examples:**
-- Keine Source-Dateien gefunden
-- PCH aktiviert aber Header nicht gefunden
+**Message:**
+```
+[W101] Solution.json: schemaVersion <MAJOR.MINOR> < 1.0, some features may not be available
+```
 
----
+**Description:** The Solution.json uses an older minor version of the schema. Newer features of the build system
+may not be available. With today's `1.0` (minor 0) this message cannot occur.
 
-#### W103 — Include.cmake erstellt Executables
+**Further triggers:** The code also uses W101 for other notices, among them:
+`Invalid source.mode '<mode>', using 'explicit'` (`SourceCollect.cmake:75`),
+`Source.cmake for '<target>' defines no compilable files` (`SourceCollect.cmake:417`),
+`Executable|Library '<name>': No source files found in <path>`, `Test '<name>': No source files found`,
+`Executable|Library '<name>': PCH enabled but '<header>' not found in pch/, src/, or root`,
+`External '<name>' not ready when applying to <target>` and `External '<name>': No target to link`.
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
-
-**Description:** Eine Include.cmake eines Externals erstellt Executable-Targets (IDE Clutter).
-
----
-
-#### W104 — Include.cmake bindet Examples ein
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
-
-**Description:** Eine Include.cmake bindet Example- oder Test-Verzeichnisse ein.
+**Fix:** Update `schemaVersion` in Solution.json to the current version.
 
 ---
 
-#### W105 — Version nicht SemVer-konform
+#### W102 — Schema version too high
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.6.0 |
 
-**Korrektes Format:** `MAJOR.MINOR.PATCH` (z.B. `1.0.0`)
+**Message:**
+```
+[W102] Solution.json: schemaVersion 1.1 > 1.0, some features may not work correctly
+```
 
----
+**Description:** The Solution.json uses a newer schema version than the build system supports. Some features may not work correctly.
 
-#### W109 — C++20 Module verwendet
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
-
-**Description:** Das Target verwendet C++20 Module Interface Units, die noch experimentell sind.
+**Fix:** Update the build system or lower `schemaVersion`.
 
 ---
 
-#### W110 — GLOB-Fallback aktiv
+#### W103 — Include.cmake creates executables
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
 
-**Description:** Keine Source.cmake gefunden, GLOB wird als Fallback verwendet.
+**Description:** An external's Include.cmake creates executable targets (IDE clutter).
+
+---
+
+#### W104 — Include.cmake includes examples
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
+
+**Description:** An Include.cmake includes example or test directories.
+
+---
+
+#### W105 — Version not SemVer-compliant
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
+
+> Currently not raised (as of 2026-11-09). The case is not reported: no module checks
+> the version format. W106–W108 are never raised either (`cmake/core/Errors.cmake:180–183`).
+
+**Correct format:** `MAJOR.MINOR.PATCH` (e.g. `1.0.0`)
+
+---
+
+#### W109 — C++20 modules used
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
+
+**Description:** The target uses C++20 module interface units, which are still experimental.
+
+---
+
+#### W110 — GLOB fallback active
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
+
+**Description:** No Source.cmake found, GLOB is used as a fallback.
+
+---
+
+#### W111 — Source.cmake present but empty
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | — |
+
+**Message:**
+```
+[W111] Source.cmake exists but defines no files: <path>/Source.cmake
+```
+
+**Description:** In source mode `auto` there is a `Source.cmake` that lists no files; the build system falls
+back to GLOB (`SourceCollect.cmake:435`).
 
 ---
 
 #### W112 — Package names a target that does not exist
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.10.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.10.0 |
 
-**Description:** An entry of `packages[].contents` (`headers_of`, `binary_of`,
+**Description:** An entry in `packages[].contents` (`headers_of`, `binary_of`,
 `output_dir_of`) names a target that does not exist in this configure — skipped, hidden by
-`BUILD_ONLY`, or meant for another platform. The target `package_<name>` is then not created.
+`BUILD_ONLY`, or for another platform. The target `package_<name>` is then not created.
 
-**Fix:** If the name is right, nothing is to be done. Otherwise correct the name in `Solution.json`.
+**Fix:** If the name is correct, there is nothing to do. Otherwise correct the name in `Solution.json`.
 
 ---
 
 ### 4.3 W2xx — Tools/Setup Warnings
 
-#### W201 — Clang-Tidy nicht gefunden
+#### W201 — Clang-Tidy not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.0 |
 
-**Description:** `ENABLE_CLANG_TIDY=ON` ist gesetzt, aber clang-tidy wurde nicht gefunden.
+**Description:** `ENABLE_CLANG_TIDY=ON` is set, but clang-tidy was not found.
 
 ---
 
-### 4.4 W3xx — External-Caching Warnings
+### 4.4 W3xx — External Caching Warnings
 
-#### W301 — External aus Cache verwendet (Offline-Modus)
+#### W301 — External used from cache (offline mode)
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.1.2 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.1.2 |
 
-**Description:** Offline-Modus aktiv, gecachtes External wird verwendet.
+> Currently not raised (as of 2026-11-09). The case is not reported: a matching cache
+> is used silently (`cmake/externals/core/Fetch.cmake:143–146`); if the version differs, W302
+> follows (`Fetch.cmake:151`).
+
+**Description:** Offline mode active, the cached external is used.
 
 ---
 
 #### W302 — Version differs, offline mode uses the cache
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⚠️ WARNING |
 | **Since** | v0.1.2 |
 
@@ -802,50 +1071,49 @@ checksum live only there.
 [W302] External 'glfw': Version mismatch but offline mode - using cached
 ```
 
-**Description:** The cached copy does not match the tag/branch/commit given in
-`Solution.json`. Because `EXTERNALS_OFFLINE` is set, it is used anyway instead
-of failing the build.
+**Description:** The cached version does not match the tag/branch/commit given in
+`Solution.json`. Because `EXTERNALS_OFFLINE` is set, it is used anyway instead of aborting
+the build.
 
-**Fix:** Configure without offline mode so the requested version gets fetched.
+**Fix:** Configure without offline mode so that the right version is fetched.
 
 ---
 
 #### W303 — Incomplete clone in the cache
 
 | Aspect | Value |
-|--------|------|
+|--------|-------|
 | **Severity** | ⚠️ WARNING |
 | **Since** | v0.9.1 |
 
 **Message:**
 ```
-[W303] External 'glfw': Incomplete clone in cache (leftover of an aborted fetch)
-       - removing and fetching again: .../.externals/glfw
+[W303] External 'glfw': Incomplete clone in cache (leftover of an aborted fetch) - removing and fetching again: .../.externals/glfw
+[W303] External 'glfw': Cache directory is not a git clone - removing and fetching again: .../.externals/glfw
 ```
 
-**Description:** `.externals/<name>/` held the remains of an aborted clone — a
-`.git` with nothing checked out. `git clone` creates `.git` early and fills it
-afterwards; if it is interrupted (network loss, Ctrl-C, full disk), that is
-exactly what stays behind.
+**Description:** `.externals/<name>/` contained the remains of an aborted clone — a `.git`
+without a checked-out state. `git clone` creates `.git` early and fills it afterwards; if the
+operation aborts (network gone, Ctrl-C, disk full), exactly that is left behind.
 
-CMakeCraft detects this, removes the directory and fetches again. **Nothing to
-do** — the warning only explains why a download happens at a point where the
-cache appeared to hold something.
+CMakeCraft detects this, deletes the directory and fetches again. **There is nothing to
+do** — the warning only says why a download happens at this point although something
+seemed to be in the cache.
 
-Before v0.9.1 this state was reported as "version mismatch", which pointed in
-the wrong direction.
+Before v0.9.1 this state was reported as "Version mismatch", which pointed in the wrong
+direction.
 
-**Fix:** none. If the warning shows up on *every* configure, the clone is
-failing reproducibly — check the network connection or the free disk space.
+**Fix:** none. If the warning appears on *every* configure, the clone aborts
+reproducibly — then check the network connection or the disk space.
 
 ---
 
 #### W304 — Archive external not available
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.10.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.10.0 |
 
 **Message:**
 ```
@@ -853,159 +1121,196 @@ failing reproducibly — check the network connection or the free disk space.
 ```
 
 **Description:** The package could not be obtained from any source (cache empty, no network,
-nothing in the fallback paths, checksum or version does not match). Right before it there is a
-`[CraftPackage]` warning naming every source tried and the reason.
+no match in the fallback paths, checksum or version does not match). Immediately before it
+there is a `[CraftPackage]` warning that names every source tried, with the reason.
 
-The build goes on: targets naming the external get neither include path nor define nor
+The build continues: targets that name the external get neither include path nor define nor
 runtime files.
 
-**Fix:** Connect to the network, put the archive into a fallback path, or set
+**Fix:** Restore the network, put the archive into a fallback path, or set
 `-D<NAME>_LOCAL_DIR=<unpacked package>` — see [Packages.md](Packages.md) §3.4.
 
 ---
 
-### 4.5 W4xx — App-Container Warnings
+### 4.5 W4xx — App Container Warnings
 
-#### W401 — App hat kein include/ Verzeichnis
+#### W401 — App has no include/ directory
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.2.0 (Phase 8) |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.2.0 (Phase 8) |
 
-**Description:** Das App-Container Verzeichnis hat kein `include/` für Public Headers.
+**Description:** The app container directory has no `include/` for public headers.
 
----
-
-#### W402 — PCH aktiviert aber Header nicht gefunden
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.2.0 (Phase 8) |
-
-**Description:** Precompiled Header ist aktiviert, aber die angegebene Header-Datei existiert nicht.
+**Further trigger:** `[W401] App '<name>': tests.targets is empty` (`AppCollect.cmake:338`).
 
 ---
 
-#### W403 — Tests-Verzeichnis existiert aber keine Sources
+#### W402 — PCH enabled but header not found
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.2.0 (Phase 8) |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.2.0 (Phase 8) |
 
-**Description:** Ein `tests/` Verzeichnis existiert im App-Container, enthält aber keine Test-Dateien.
+**Description:** The precompiled header is enabled, but the specified header file does not exist.
+
+**Further trigger:** a test target with `parallel: true` whose type usually runs serially
+(`[W402] App '<name>': Test '<test>' (type '<type>') has parallel=true. …`, `AppCollect.cmake:435`).
+
+---
+
+#### W403 — Tests directory exists but no sources
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.2.0 (Phase 8) |
+
+**Description:** A `tests/` directory exists in the app container but contains no test files.
+
+**Messages:**
+```
+[W403] App 'MyApp': tests.targets configured but no tests/ directory
+[W403] Test 'MyApp.UnitTests': No source files found
+```
 
 ---
 
 ### 4.6 W5xx — System External Warnings
 
-#### W501 — Backup-Pfad verwendet
+#### W501 — Backup path used
 
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.2.0 |
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.2.0 |
 
-**Description:** Primärer Pfad nicht gefunden, Backup-Pfad wird verwendet.
+**Message** (`cmake/externals/system/Handler.cmake:245`):
+```
+[W501] [qt6] Using backup location: C:/Qt/6.8.0/msvc2022_64
+  Consider setting Qt6_ROOT environment variable.
+```
 
----
-
-#### W502 — Version-Mismatch
-
-| Aspekt | Wert |
-|--------|------|
-| **Schweregrad** | ⚠️ WARNING |
-| **Seit** | v0.2.0 |
-
-**Description:** Gefundene Version weicht von angeforderter Version ab.
+**Description:** Primary path not found, the backup path is used.
 
 ---
 
-## 5. Schnellreferenz
+### 4.7 W6xx–W9xx — Phase Test Warnings
+
+Only in the self-test (`RUN_BUILD_SYSTEM_TESTS=ON`, preset `craft-selftest`); files under
+`cmake/buildSystemTest/`. They indicate that a check step could not run, or not completely.
+
+| Code | File | Message | Meaning |
+|------|------|---------|---------|
+| W601 | `phase6.cmake:36`, `:213` | `GLFW target not found - may not be used by any executable` / `Phase 6: could not create the test repository - clone detection not verified` | Git external test: target `glfw` missing, or the test repository for clone detection could not be created |
+| W602 | `phase6.cmake:117` | `SOLUTION_EXTERNALS_JSON not set` | externals block not loaded, check skipped |
+| W701 | `phase7.cmake:77` | `SOLUTION_JSON not available` | Solution.json not loaded, phase 7 skipped |
+| W801 | `phase8.cmake:75` | `SOLUTION_JSON not available` | Solution.json not loaded, phase 8 (app container) skipped |
+| W802 | `phase8.cmake:253` | `Core library should be STATIC, found: <type>` | `<App>.Core` is not a STATIC library |
+| W803 | `phase8.cmake:289` | `Runner does not link against Core` | The app executable does not link `<App>.Core` |
+| W901 | `phase9.cmake:121` | `System external '<name>' missing 'package' field` | System external without `package` |
+| W902 | `phase9.cmake:217` | `<n> external(s) have conflicting type fields` | Externals with more than one of `system`, `git`, `path` |
+| W999 | `phase1.cmake:120`, `phase3.cmake:68`, `:235` | `Test warning (expected, can be ignored)` and others | Probe warning of phase 1 (expected); phase 3: no executables defined or no targets created |
+
+---
+
+## 5. Quick Reference
 
 ### 5.1 Fatal Errors (E)
 
-| Code | Kategorie | Description |
-|------|-----------|--------------|
-| E001 | JSON | Requiredfeld fehlt |
-| E002 | JSON | Solution.json nicht gefunden |
+| Code | Category | Description |
+|------|----------|-------------|
+| E001 | JSON | Required field missing |
+| E002 | JSON | Solution.json not found |
+| E003 | JSON | Schema version incompatible (major) |
 | E004 | JSON | Invalid value in the settings block |
 | E005 | Setup | Top-level CMakeLists.txt without project() |
-| E010 | JSON | External nicht im externals-Block |
-| E012 | JSON | Kein/mehrere Source-Felder |
-| E013 | External | Geskipptes External verwendet |
-| E101 | Target | Abhängigkeit existiert nicht |
-| E102 | Target | Target existiert bereits |
-| E103 | Target | Zirkuläre Abhängigkeit |
-| E104 | Target | Source.cmake nicht gefunden (mode=explicit) |
+| E010 | JSON | External not in the externals block |
+| E012 | JSON | No/multiple source fields |
+| E013 | External | Skipped external used |
+| E101 | Target | Dependency does not exist |
+| E102 | Target | Target already exists |
+| E103 | Target | Circular dependency (currently not raised) |
+| E104 | Target | Source.cmake not found (mode=explicit) |
 | E105 | Target | compile_options on an INTERFACE library |
 | E106 | Target | Source package cannot be expressed in plain CMake |
-| E201 | External | Fetched External: kein Target in Registry |
-| E202 | External | External Fetch fehlgeschlagen |
-| E213 | External | Lokales External: Include.cmake fehlt |
-| E214 | External | Lokales External: Pfad existiert nicht |
-| E215 | External | Fetched External: kein tag/branch/commit |
-| E216 | External | Explizit angegebener Hook fehlt |
-| E217 | External | PostFetch Hook erforderlich (cmakeSupport=false) |
+| E201 | External | Fetched external: no target in registry |
+| E202 | External | External fetch failed |
+| E203 | External | Target of an external not found |
+| E213 | External | Local external: Include.cmake missing |
+| E214 | External | Local external: path does not exist |
+| E215 | External | Fetched external: no tag/branch/commit |
+| E216 | External | Explicitly specified hook missing |
+| E217 | External | PostFetch hook required (cmakeSupport=false; currently not raised, reported as E201) |
 | E218 | External | Not cached and offline mode enabled |
 | E219 | External | Cache directory cannot be removed |
 | E220 | External | Archive external: field `pin` missing |
-| E301 | Test | Unbekanntes Test-Framework |
-| E302 | Test | source_from Executable existiert nicht |
-| E303 | Test | Test-Source-Verzeichnis nicht gefunden |
-| E401 | AppContainer | name ist Requiredfeld |
-| E402 | AppContainer | App-Pfad existiert nicht |
-| E403 | AppContainer | Kein src/ Verzeichnis |
-| E404 | AppContainer | Keine Sources in src/ |
-| E405 | AppContainer | Dependency nicht gefunden |
-| E406 | AppContainer | Kein main/ Verzeichnis |
-| E407 | AppContainer | Keine Sources in main/ |
-| E501 | System | System External nicht gefunden |
-| E502 | System | package-Feld fehlt |
-| E503 | System | find_package fehlgeschlagen |
-| E504 | System | Komponente nicht gefunden |
-| E505 | System | Version nicht erfüllt |
+| E301 | Test | Unknown test framework |
+| E302 | Test | source_from executable does not exist |
+| E303 | Test | Test source directory not found |
+| E304 | Test | App test target without type |
+| E305 | Test | Path of an app test target does not exist |
+| E400 | AppContainer | App definition without name (collect phase) |
+| E401 | AppContainer | name is a required field |
+| E402 | AppContainer | App path does not exist |
+| E403 | AppContainer | No src/ directory |
+| E404 | AppContainer | No sources in src/ |
+| E405 | AppContainer | Dependency not found |
+| E406 | AppContainer | No main/ directory |
+| E407 | AppContainer | No sources in main/ |
+| E502 | System | package field missing |
+| E503 | System | find_package failed |
+| E504 | System | Component not found |
+| E505 | System | Version not satisfied |
 
 ### 5.2 Warnings (W)
 
-| Code | Kategorie | Description |
-|------|-----------|--------------|
-| W001 | Deprecation | Deprecatedes Schema |
-| W002 | Deprecation | Deprecatede Syntax/Feld |
-| W101 | Config | Suboptimale Configuration |
-| W103 | Config | Include.cmake erstellt Executables |
-| W104 | Config | Include.cmake bindet Example-Verzeichnisse ein |
-| W105 | Config | Version nicht SemVer-konform |
-| W109 | Config | C++20 Module verwendet (experimentell) |
-| W110 | Config | GLOB-Fallback aktiv |
+| Code | Category | Description |
+|------|----------|-------------|
+| W001 | Deprecation | Outdated schema (currently not raised) |
+| W002 | Deprecation | Outdated syntax/field (currently not raised) |
+| W101 | Config | Schema version too low |
+| W102 | Config | Schema version too high |
+| W103 | Config | Include.cmake creates executables |
+| W104 | Config | Include.cmake includes example directories |
+| W105 | Config | Version not SemVer-compliant (currently not raised) |
+| W109 | Config | C++20 modules used (experimental) |
+| W110 | Config | GLOB fallback active |
+| W111 | Config | Source.cmake present but empty |
 | W112 | Config | Package names a target that does not exist |
-| W201 | Tools | Clang-Tidy nicht gefunden |
-| W301 | Caching | External aus Cache (Offline-Modus) |
+| W201 | Tools | Clang-Tidy not found |
+| W301 | Caching | External from cache (offline mode; currently not raised) |
 | W302 | Caching | Version differs, offline mode uses the cache |
 | W303 | Caching | Incomplete clone in the cache — removed and fetched again |
 | W304 | Externals | Archive external not available — targets build without it |
-| W401 | AppContainer | Kein include/ Verzeichnis |
-| W402 | AppContainer | PCH Header nicht gefunden |
-| W403 | AppContainer | Tests-Verzeichnis ohne Sources |
-| W501 | System | Backup-Pfad verwendet |
-| W502 | System | Version-Mismatch |
+| W401 | AppContainer | No include/ directory |
+| W402 | AppContainer | PCH header not found |
+| W403 | AppContainer | Tests directory without sources |
+| W501 | System | Backup path used |
+| W601–W999 | Phase tests | Warnings of the self-tests, see §4.7 |
 
 ---
 
 ## 6. Usage in Code
 
 ```cmake
-include(cmake/core/Errors.cmake)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
-# Error auslösen (Build bricht ab)
-cmake_fatal(E0101 "Solution.json not found at: ${path}")
+# Raise an error (build aborts)
+cmake_fatal("E002" "Solution.json not found: ${_solution_file}")
 
-# Warning auslösen (Build läuft weiter)
-cmake_warn(W0201 "Deprecated option '${opt}' used")
+# Multi-part message: all parts after CODE are joined without separator,
+# also parts with a semicolon (since Errors.cmake 1.1.0, CMakeCraft v0.14.1)
+cmake_fatal("E012"
+    "External '${EXT_NAME}': Multiple source fields specified: ${_found_fields}\n"
+    "  Only one source field is allowed.")
 
-# Assertion (sollte nie auftreten)
+# Raise a warning (build continues)
+cmake_warn("W201" "ENABLE_CLANG_TIDY=ON but clang-tidy not found for target '${TARGET_NAME}'")
+
+# Assertion (should never occur)
 cmake_assert(condition "Internal error: invalid state")
 ```
 
@@ -1013,20 +1318,23 @@ cmake_assert(condition "Internal error: invalid state")
 
 ## 7. See Also
 
-- [Errors.cmake](../module/core/Errors.md) — Error-Modul Dokumentation
-- [Debug.cmake](../module/core/Debug.md) — Debug-System
-- [Solution_Schema.md](Solution_Schema.md) — JSON-Schema Reference
+- [Errors.cmake](../module/core/Errors.md) — Error module documentation
+- [Debug.cmake](../module/core/Debug.md) — Debug system
+- [Solution_Schema.md](Solution_Schema.md) — JSON schema reference
 
 ---
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.6.1** | **2026-11-09** | **Aligned with the code: messages of E001, E002, E003, E010, E012, E201, E301–E303, E401, W101, W102, W303, W403 verbatim; E003 with schema `1.0` (`cmake/project/Solution.cmake:50`); further triggers of E003, E302, E303, W101, W401, W402; E203, E304, E305, E400, W111 and the phase test warnings W601–W999 (§4.7) added; E217 hook path in lower case; §6 with three-digit codes. CMakeCraft v0.14.1: E501 and W502 dropped; E503 with the three variants from `system/Handler.cmake`, E504 and E505 raised and with message; messages of E502 and W501; E103, E217, W001, W002, W105 (W106–W108) and W301 marked as currently not raised; §6 with a multi-part message** |
 | **1.6.0** | **2026-11-07** | **E105 (compile_options on an INTERFACE library) and E106 (source package cannot be expressed) added, CMakeCraft v0.14.0** |
 | 1.5.0 | 2026-10-24 | **E005 added (top-level CMakeLists.txt without project(), CMakeCraft v0.13.0)** |
 | 1.4.0 | 2026-10-23 | E004 added (invalid value in the settings block, CMakeCraft v0.12.0) |
-| 1.3.0 | 2026-10-09 | E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0) |
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, E3xx (Tests), E4xx/W4xx (AppContainer), E5xx/W5xx (System Externals), W3xx (Caching)** |
-| 0.1.1 | 2025-12-09 | E217 hinzugefügt (PostFetch Hook required for cmakeSupport=false) |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): Alle Codes aus v1.4 |
+| **1.3.0** | **2026-10-09** | **E220, W112 and W304 added (packages and archive externals, CMakeCraft v0.10.0)** |
+| 1.2.0 | 2026-08-08 | E219 and W303 (incomplete clone in the cache) added; E218 documented retroactively; W302 description corrected to match the code (until then it described "hook reuse") |
+| 1.1.0 | 2025-12-28 | E003 (schema major incompatible), W101/W102 (schema minor warnings) added |
+| 1.0.0 | 2025-12-14 | Blueprint v0.5.0 format: numbered TOC, E3xx (tests), E4xx/W4xx (AppContainer), E5xx/W5xx (system externals), W3xx (caching) |
+| 0.1.1 | 2025-12-09 | E217 added (PostFetch hook required for cmakeSupport=false) |
+| 0.1.0 | 2025-12-03 | Initial (clean start): all codes from v1.4 |

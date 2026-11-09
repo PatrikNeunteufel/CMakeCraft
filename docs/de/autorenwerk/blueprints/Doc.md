@@ -1,13 +1,13 @@
 # Doc — Standard für alle Dokumentationen
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [Doc.md](Doc.md)
+> **English:** [Doc.md](../../../en/autorenwerk/blueprints/Doc.md)
 
 ---
 
@@ -26,7 +26,7 @@
 11. [Changelog-Format](#11-changelog-format)
 12. [Review-Checkliste](#12-review-checkliste)
 13. [Siehe auch](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+14. [Changelog](#changelog)
 
 ---
 
@@ -106,7 +106,7 @@ Jede Dokumentation **MUSS** mit diesem Header beginnen:
 > **Status:** [In Entwicklung | Stabil | Deprecated]  
 > **Zielgruppe:** [Wer soll dieses Dokument lesen?]  
 > **Sprache:** Deutsch  
-> **English:** [Dateiname.md](../../en/[ordner]/Dateiname.md)
+> **English:** [Dateiname.md](../../../en/[bereich]/[ordner]/Dateiname.md)
 ```
 
 ### 4.2 Header-Felder
@@ -119,7 +119,7 @@ Jede Dokumentation **MUSS** mit diesem Header beginnen:
 | **Status** | ✓ | Vordefiniert | `Stabil` |
 | **Zielgruppe** | ✓ | Kurzbeschreibung | `C++ Entwickler` |
 | **Sprache** | ✓ | Vordefiniert | `Deutsch` |
-| **English** | ✓ | Relativer Pfad | `[...](.../.../en/...)` |
+| **English** | ✓ | Relativer Pfad | `[...](../../../en/...)` (Tiefe siehe § 4.5) |
 | **Basiert auf** | Optional | Name + Version | `Doc v0.5` |
 
 ### 4.3 Zielgruppe — Werte und Erläuterung
@@ -137,7 +137,7 @@ Die Zielgruppe im Header ist eine **Kurzform**. Im ersten Abschnitt (Übersicht)
 | `Neue Team-Mitglieder` | Onboarding, Einstieg ins Projekt |
 | `Architekten` | Technische Entscheidungsträger |
 
-### 4.3 Erweiterte Header-Felder
+### 4.4 Erweiterte Header-Felder
 
 Spezialisierte Blueprints definieren zusätzliche Felder:
 
@@ -149,21 +149,24 @@ Spezialisierte Blueprints definieren zusätzliche Felder:
 | Concept | — |
 | Standard | `Geltungsbereich:` |
 
-### 4.4 English-Link Format
+### 4.5 English-Link Format
 
 Der Link zur englischen Version folgt dem Muster:
 
 ```markdown
-> **English:** [Dateiname.md](../../en/[ordner]/Dateiname.md)
+> **English:** [Dateiname.md](../../../en/[bereich]/[ordner]/Dateiname.md)
 ```
 
-| Ordner im deutschen | Ordner im englischen |
-|---------------------|---------------------|
-| `de/modules/core/` | `en/modules/core/` |
-| `de/guides/` | `en/guides/` |
-| `de/blueprints/` | `en/blueprints/` |
+Der Pfad führt über `docs/` zurück: je Ordnerebene unter `de/` ein `../`, dazu eins für `de/` selbst.
 
-**Wichtig:** Dateinamen sind **immer auf Englisch** (auch im deutschen Ordner).
+| Ordner im deutschen | Ordner im englischen | Sprungpfad |
+|---------------------|---------------------|------------|
+| `de/konzepte/` | `en/konzepte/` | `../../en/` |
+| `de/guide/userguides/` | `en/guide/userguides/` | `../../../en/` |
+| `de/autorenwerk/blueprints/` | `en/autorenwerk/blueprints/` | `../../../en/` |
+| `de/guide/module/core/` | `en/guide/module/core/` | `../../../../en/` |
+
+**Wichtig:** Eine Datei heißt in beiden Sprachordnern **gleich**; der Name darf deutsch sein (siehe [Language_Standard.md](../standards/Language_Standard.md) §4.3).
 
 ---
 
@@ -210,7 +213,7 @@ Das Inhaltsverzeichnis steht **direkt nach dem Header**, getrennt durch horizont
    - [Linux](#22-linux)
 3. [Konfiguration](#3-konfiguration)
 4. [Troubleshooting](#4-troubleshooting)
-5. [Changelog](#5-changelog)
+5. [Changelog](#changelog)
 ```
 
 ---
@@ -298,16 +301,16 @@ Anker vor Commit testen:
 | Datei-Art | Dateiname | Version |
 |-----------|-----------|---------|
 | **Aktuell** | `Doc.md` | Im Header: `> **Version:** 1.0.0` |
-| **Archiviert** | `Doc_v0_4_0.md` | Im Dateinamen + Header |
+| **Frühere Fassung** | — (keine Kopie) | In der Git-Historie |
 
 ### 8.2 Allgemeine Regeln
 
 | Regel | Richtig | Falsch |
 |-------|---------|--------|
-| Englisch | `Getting_Started.md` | `Erste_Schritte.md` |
+| Gleicher Name in allen Sprachordnern | `de/…/Getting_Started.md` und `en/…/Getting_Started.md` | `de/…/Erste_Schritte.md` neben `en/…/Getting_Started.md` |
 | Keine Version (aktuell) | `Doc.md` | `Doc_v0_5_0.md` |
-| Underscores als Trenner | `Error_Codes.md` | `ErrorCodes.md` |
-| Keine Leerzeichen | `Error_Codes.md` | `Error Codes.md` |
+| Ein zusammengesetzter Begriff wird zusammengeschrieben, mehrere Begriffe trennt ein Underscore | `ErrorCodes.md`, `Getting_Started.md` | `Error Codes.md` |
+| Keine Leerzeichen | `ErrorCodes.md` | `Error Codes.md` |
 | **Großbuchstabe am Anfang** | `Context.md` | `context.md` |
 | **CamelCase bei Komposita** | `Solution_Schema.md` | `solution_schema.md` |
 | **Wörter mit Underscore trennen** | `Getting_Started.md` | `GettingStarted.md` |
@@ -324,8 +327,8 @@ Anker vor Commit testen:
 | Typ | Beispiel |
 |-----|----------|
 | Blueprint | `Doc.md`, `CMake.md` |
-| ModuleDoc | `Context_cmake.md`, `Errors_cmake.md` |
-| Guide | `Qt6_Integration_UserGuide.md` |
+| ModuleDoc | `Context.md`, `Errors.md` |
+| Guide | `Qt6_Integration.md`, `Getting_Started.md` |
 | Reference | `Solution_Schema.md`, `ErrorCodes.md` |
 | Concept | `AppContainer_Concept.md` |
 
@@ -335,43 +338,33 @@ Anker vor Commit testen:
 |-----|--------|----------|
 | Blueprint | `[Name].md` | `Doc.md`, `CMake.md` |
 | ModuleDoc | `[Modul].md` | `Context.md`, `Errors.md` |
-| Guide | `[Name]_UserGuide.md` | `Qt6_Integration_UserGuide.md` |
+| Guide | `[Name].md` | `Qt6_Integration.md`, `Testing.md` |
 | Reference | `[Name].md` | `Solution_Schema.md`, `ErrorCodes.md` |
 | Concept | `[Name]_Concept.md` | `AppContainer_Concept.md` |
 | Standard | `[Name]_Standard.md` | `Cpp_Coding_Standard.md` |
 
-### 8.4 Archivierte Dateien (mit Version)
+### 8.4 Frühere Fassungen (keine Kopien)
 
-Bei Major- oder Minor-Updates wird die alte Version archiviert:
+Es gibt **keine Versionskopien** einer Datei — **Git ist die Historie** (siehe [Doku_Standard.md § 5](../standards/Doku_Standard.md#5-ablage-regeln-kurzform)). Eine frühere Fassung holt man aus Git:
 
-| Typ | Muster | Beispiel |
-|-----|--------|----------|
-| Blueprint | `[Name]_v[X]_[Y]_[Z].md` | `Doc_v0_4_0.md` |
-| ModuleDoc | `[Modul]_v[X]_[Y]_[Z].md` | `Context_v0_1_0.md` |
-| Guide | `[Name]_UserGuide_v[X]_[Y]_[Z].md` | `Qt6_Integration_UserGuide_v0_1_0.md` |
+```bash
+git log --oneline -- docs/de/autorenwerk/blueprints/Doc.md   # Fassungen finden
+git show <commit>:docs/de/autorenwerk/blueprints/Doc.md        # Fassung anzeigen
+```
 
-### 8.5 Versionierung im Dateinamen (nur Archiv)
+### 8.5 Keine Version im Dateinamen
 
 | Regel | Richtig | Falsch |
 |-------|---------|--------|
-| Lowercase `v` | `_v0_5_0` | `_V0_5_0` |
-| Underscores | `_v0_5_0` | `_v0.5.0` |
-| Am Ende vor `.md` | `Doc_v0_5_0.md` | `v0_5_0_Doc.md` |
+| Keine Versionsnummer | `Doc.md` | `Doc_v0_5_0.md` |
+| Keine Versionsnummer | `Context.md` | `Context_doc_v1.md` |
+| Keine Kopie mit Kürzel | `Doc.md` | `Doc050.md` |
 
-### 8.6 Archivierungs-Workflow
+### 8.6 Workflow bei Updates
 
-1. **Vor Major/Minor-Update:**
-   - Aktuelle Datei kopieren: `Doc.md` → `Doc_v0_4_0.md`
-   - In Archiv-Ordner verschieben (optional)
-
-2. **Nach Update:**
-   - `Doc.md` enthält neue Version
-   - Links bleiben unverändert
-
-3. **Wann archivieren?**
-   - Bei Breaking Changes (MAJOR)
-   - Bei signifikanten Änderungen (MINOR)
-   - PATCH-Updates: Keine Archivierung nötig
+1. Datei an Ort und Stelle ändern, **Version + Datum** im Header anpassen, Changelog-Eintrag ergänzen.
+2. Links bleiben unverändert, weil sich der Dateiname nicht ändert.
+3. Die en-Fassung übernimmt dieselbe Version (siehe [Doku_Standard.md](../standards/Doku_Standard.md)).
 
 ### 8.7 Vorteile
 
@@ -379,8 +372,8 @@ Bei Major- oder Minor-Updates wird die alte Version archiviert:
 |---------|--------------|
 | **Stabile Links** | URLs ändern sich nicht bei Updates |
 | **Einfachere Wartung** | Keine Link-Updates in anderen Dokumenten |
-| **Klare Aktualität** | Datei ohne Version = aktuelle Version |
-| **Historische Versionen** | Bei Bedarf im Archiv verfügbar |
+| **Klare Aktualität** | Es gibt nur eine Datei — die aktuelle |
+| **Historische Versionen** | Bei Bedarf in der Git-Historie verfügbar |
 
 ### 8.8 Ordnernamen-Konvention
 
@@ -388,7 +381,7 @@ Ordnernamen werden **immer kleingeschrieben**.
 
 | Regel | Richtig | Falsch |
 |-------|---------|--------|
-| Kleingeschrieben | `modules/` | `Modules/` |
+| Kleingeschrieben | `module/` | `Module/` |
 | Kleingeschrieben | `blueprints/` | `Blueprints/` |
 | Kleingeschrieben | `hooks/prefetch/` | `Hooks/PreFetch/` |
 | snake_case bei Bedarf | `user_guides/` | `UserGuides/` |
@@ -407,17 +400,19 @@ Ordnernamen werden **immer kleingeschrieben**.
 ```markdown
 docs/
 ├── de/
-│   ├── blueprints/        ✓ (nicht: Blueprints/)
-│   ├── modules/
-│   │   ├── core/          ✓ (nicht: Core/)
-│   │   └── externals/
-│   └── reference/
+│   ├── autorenwerk/
+│   │   └── blueprints/    ✓ (nicht: Blueprints/)
+│   └── guide/
+│       ├── module/
+│       │   ├── core/      ✓ (nicht: Core/)
+│       │   └── externals/
+│       └── references/
 cmake/
 └── externals/
-├── includes/          ✓ (nicht: Includes/)
-└── hooks/
-├── prefetch/      ✓ (nicht: PreFetch/)
-└── postfetch/     ✓ (nicht: PostFetch/)
+    ├── includes/          ✓ (nicht: Includes/)
+    └── hooks/
+        ├── prefetch/      ✓ (nicht: PreFetch/)
+        └── postfetch/     ✓ (nicht: PostFetch/)
 ```
 
 ### 8.9 Ausnahme: Projekt-Ordner
@@ -427,27 +422,28 @@ cmake/
 | Regel | Beispiel | Begründung |
 |-------|----------|------------|
 | Ordnername = Target-Name | `projects/apps/DemoPlayer/` | Konsistenz zwischen Ordner und CMake-Target |
-| Ordnername = Target-Name | `projects/exec/MinimalConsole/` | IDE-Navigation, Zuordnung |
-| Ordnername = Target-Name | `projects/libs/BasicLogger/` | Klare 1:1-Beziehung |
+| Ordnername = Target-Name | `projects/demos/exec/MinimalConsole/` | IDE-Navigation, Zuordnung |
+| Ordnername = Target-Name | `projects/demos/libs/BasicLogger/` | Klare 1:1-Beziehung |
 
 **Betroffene Pfade:**
 ```
 projects/
 ├── apps/
 │   └── DemoPlayer/        ← Target: DemoPlayer, DemoPlayer.Core
-├── exec/
-│   └── MinimalConsole/    ← Target: MinimalConsole
-├── libs/
-│   └── BasicLogger/       ← Target: BasicLogger
+├── demos/
+│   ├── exec/
+│   │   └── MinimalConsole/    ← Target: MinimalConsole
+│   └── libs/
+│       └── BasicLogger/       ← Target: BasicLogger
 └── tests/
     └── unit/
-        └── CoreLib_Tests/ ← Target: CoreLib_Tests
+        └── BasicLogger_Tests/ ← Target: BasicLogger_Tests
 ```
 
 **Nicht betroffen** (weiterhin lowercase):
 
 - `projects/` selbst
-- Typ-Unterordner: `apps/`, `exec/`, `libs/`, `tests/`
+- Typ-Unterordner: `apps/`, `demos/`, `exec/`, `libs/`, `tests/`
 - Alle System-Ordner: `cmake/`, `docs/`, `externals/`
 
 ---
@@ -459,14 +455,14 @@ projects/
 ```
 docs/
 ├── de/                    ← Deutsche Dokumentation
-│   ├── blueprints/
-│   ├── modules/
-│   └── guides/
+│   ├── guide/
+│   ├── konzepte/
+│   └── autorenwerk/
 │
 └── en/                    ← Englische Dokumentation
-    ├── blueprints/
-    ├── modules/
-    └── guides/
+    ├── guide/
+    ├── konzepte/
+    └── autorenwerk/
 ```
 
 ### 9.2 Primärsprache
@@ -476,11 +472,11 @@ docs/
 
 ### 9.3 Dateinamen
 
-Dateinamen sind **immer auf Englisch**, auch im deutschen Ordner:
+Eine Datei heißt in beiden Sprachordnern **gleich**. Der Name darf deutsch sein (`Neues_Projekt_Guide.md`, `Glossar.md`); der englische Baum übernimmt ihn unverändert:
 
 ```
-de/guides/Qt6_Integration_UserGuide.md   ← Inhalt auf Deutsch
-en/guides/Qt6_Integration_UserGuide.md   ← Inhalt auf Englisch
+de/guide/userguides/Qt6_Integration.md   ← Inhalt auf Deutsch
+en/guide/userguides/Qt6_Integration.md   ← Inhalt auf Englisch
 ```
 
 **Hinweis:** Keine Version im Dateinamen (siehe Abschnitt 8).
@@ -488,7 +484,7 @@ en/guides/Qt6_Integration_UserGuide.md   ← Inhalt auf Englisch
 ### 9.4 Querverweise
 
 - Innerhalb derselben Sprache: Relativer Pfad
-- Zur anderen Sprache: Via `../../en/` oder `../../de/`
+- Zur anderen Sprache: zurück bis `docs/`, dann `en/` oder `de/` — bei `de/guide/userguides/` also `../../../en/` (Tiefe siehe § 4.5)
 
 ---
 
@@ -591,6 +587,9 @@ Der Changelog steht **immer am Ende** des Dokuments.
 - Aktuelle Version **fett**
 - Kurze, prägnante Beschreibungen
 - Breaking Changes mit ⚠️ kennzeichnen
+- Jede Änderung ist ein neuer Eintrag mit höherer Nummer; `Version` und `Datum` im Kopf sind die des jüngsten
+  Eintrags. Kommt die Änderung mit einer CMakeCraft-Version, nennt der Eintrag sie (`CMakeCraft v0.14.1: …`).
+  Die CMakeCraft-Version steht nicht im Kopf. Regeln: [Doku_Standard.md](../standards/Doku_Standard.md) §2
 
 ---
 
@@ -641,7 +640,9 @@ Vor Fertigstellung einer Dokumentation prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-17** | **Zusatzartikel zu Ordnernamen für Projekte unter § 8.9** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Sprungpfad zur anderen Sprache nach heutiger Tiefe (`../../../en/` bei `de/<bereich>/<ordner>/`, § 4.1, § 4.5, § 9.4); doppelter Abschnitt 4.3 aufgelöst (Erweiterte Header-Felder → 4.4, English-Link Format → 4.5); keine Versionskopien mehr, Git ist die Historie (§ 8.1, § 8.4–8.7); Ordner- und Dateibeispiele auf `guide/`, `konzepte/`, `autorenwerk/` und `projects/demos/` umgestellt (§ 8.2, § 8.3, § 8.8, § 8.9, § 9.1, § 9.3); Dateinamen in beiden Sprachordnern gleich, deutsche Namen zulässig (Entscheid S1 a, § 4.5, § 8.2, § 9.3); Regel für zusammengesetzte Begriffe statt „Underscores als Trenner“ (Entscheid N1 a, § 8.2); § 11.3 Versionsregeln (Entscheide K1/K2 a)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.2 | 2025-12-17 | Zusatzartikel zu Ordnernamen für Projekte unter § 8.9 |
 | 0.5.1 | 2025-12-15 | Explizite Dateinamen-Konvention (§ 8.2): Title_Case. Neue Ordnernamen-Konvention (§ 8.8): immer kleingeschrieben |
 | 0.5.0 | 2025-12-13 | Neu: Pflicht-Inhaltsverzeichnis mit Ankern, Zielgruppe-Pflichtfeld im Header, English-Link im Header, Kapitel-Nummerierung, Anker-Konventionen |
 | 0.1.0 | 2025-12-03 | Initial (als Documentation_Blueprint) |

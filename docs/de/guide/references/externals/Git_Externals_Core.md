@@ -1,12 +1,12 @@
 # Git Externals — Core & Utility
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Core.md](Git_Externals_Core.md)
+> **English:** [Git_Externals_Core.md](../../../../en/guide/references/externals/Git_Externals_Core.md)
 
 ---
 
@@ -328,5 +328,6 @@ int main(int argc, char* argv[]) {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Testing → Git_Externals_Testing.md ausgelagert; Fokus auf Logging & Utility** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Testing → Git_Externals_Testing.md ausgelagert; Fokus auf Logging & Utility |
 | 0.5.0 | 2025-12-14 | Initial: Ausgelagert aus Git_Externals_Reference |

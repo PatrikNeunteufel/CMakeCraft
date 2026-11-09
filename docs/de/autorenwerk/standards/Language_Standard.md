@@ -1,14 +1,14 @@
 # Language Standard – Sprachrichtlinien
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Geltungsbereich:** Code, Dokumentation, Git, Kommunikation  
 > **Durchsetzung:** Code Review, CI (Commit-Message-Linting)  
 > **Sprache:** Deutsch  
-> **English:** [Language_Standard.md](Language_Standard.md)
+> **English:** [Language_Standard.md](../../../en/autorenwerk/standards/Language_Standard.md)
 
 ---
 
@@ -25,7 +25,7 @@
 9. [Checkliste](#9-checkliste)
 10. [Migration](#10-migration)
 11. [Siehe auch](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+12. [Changelog](#changelog)
 
 ---
 
@@ -51,7 +51,8 @@ Alle Entwickler, die Code schreiben, Dokumentation erstellen oder mit Git arbeit
 - **Englisch ist Pflicht** für jede Veröffentlichung (z.B. GitHub)
 - **Weitere Sprachen sind erwünscht** – sie maximieren die Reichweite
 - **Primärsprache** kann je nach Team/Entwickler variieren (hier: Deutsch)
-- Die Primärsprache dient als Arbeitsversion, Englisch als Release-Version
+- Die Primärsprache ist **maßgeblich** (SSOT, siehe [Doku_Standard.md](Doku_Standard.md)); Englisch ist die
+  vollständige Übersetzung für die Veröffentlichung
 
 ---
 
@@ -127,8 +128,8 @@ endfunction()
 
 | Sprache | Status | Beschreibung |
 |---------|--------|--------------|
-| **Englisch** | Pflicht | Release-Version, internationale Zugänglichkeit |
-| **Primärsprache** | Optional | Arbeitsversion (z.B. Deutsch, Französisch, ...) |
+| **Englisch** | Pflicht | Vollständige Übersetzung für die Veröffentlichung, internationale Zugänglichkeit |
+| **Primärsprache** | Maßgeblich, wo vorhanden | Quelle aller Übersetzungen (hier Deutsch, SSOT) |
 | **Weitere Sprachen** | Erwünscht | Maximiert Reichweite, Community-Beiträge |
 
 **Vorteile mehrerer Sprachen:**
@@ -140,17 +141,15 @@ endfunction()
 
 ```
 docs/
-├── en/                    ← Englisch (PFLICHT für Release)
-│   ├── blueprints/
-│   ├── standards/
-│   ├── modules/
-│   └── guides/
+├── de/                    ← Deutsch (Primärsprache hier, maßgeblich)
+│   ├── guide/             ← module/, references/, userguides/, cheatsheets/
+│   ├── konzepte/
+│   └── autorenwerk/       ← blueprints/, standards/
 │
-├── de/                    ← Deutsch (Primärsprache hier)
-│   ├── blueprints/
-│   ├── standards/
-│   ├── modules/
-│   └── guides/
+├── en/                    ← Englisch (PFLICHT für Release, gleicher Baum)
+│   ├── guide/
+│   ├── konzepte/
+│   └── autorenwerk/
 │
 ├── fr/                    ← Französisch (optional)
 ├── es/                    ← Spanisch (optional)
@@ -160,23 +159,27 @@ docs/
 
 ### 4.3 Dateinamen
 
-**Regel:** Dateinamen sind **immer auf Englisch**, unabhängig vom Sprachordner.
+**Regel:** Eine Datei heißt in **jedem Sprachordner gleich** (gleicher relativer Pfad, gleicher Name). Der Name
+darf aus der Primärsprache stammen (z. B. `Neues_Projekt_Guide.md`, `Glossar.md`); die Übersetzungen übernehmen ihn
+unverändert.
 
 **Verbindlichkeit:** MUSS
 
-**Begründung:** Ermöglicht einfaches Mapping zwischen Sprachversionen.
+**Begründung:** Ermöglicht einfaches Mapping zwischen Sprachversionen (der Pre-Commit-Hook und die Kopfverweise
+`English:`/`German:` setzen den gleichen Pfad voraus).
 
 **Richtig:**
 ```
-docs/en/guides/Qt6_Integration_UserGuide.md   ← Englisch (Pflicht)
-docs/de/guides/Qt6_Integration_UserGuide.md   ← Deutsch
-docs/fr/guides/Qt6_Integration_UserGuide.md   ← Französisch
+docs/de/guide/userguides/Qt6_Integration.md      ← Deutsch (maßgeblich)
+docs/en/guide/userguides/Qt6_Integration.md      ← Englisch
+docs/de/guide/userguides/Neues_Projekt_Guide.md  ← deutscher Name, in en gleich
+docs/en/guide/userguides/Neues_Projekt_Guide.md
 ```
 
 **Falsch:**
 ```
-docs/de/guides/Qt6_Integration_Benutzerhandbuch.md
-docs/fr/guides/Qt6_Integration_Guide_Utilisateur.md
+docs/de/guide/userguides/Qt6_Integration_Benutzerhandbuch.md
+docs/en/guide/userguides/New_Project_Guide.md   ← anderer Name als in de
 ```
 
 ### 4.4 Dokumentations-Header
@@ -187,25 +190,26 @@ docs/fr/guides/Qt6_Integration_Guide_Utilisateur.md
 
 > **Version:** 1.0.0  
 > **Language:** English  
-> **Translations:** [Deutsch](../../de/modules/core/Module_Name.md) · [Français](../../fr/modules/core/Module_Name.md)
+> **German:** [Module_Name.md](../../../../de/guide/module/core/Module_Name.md)
 ```
 
-**Andere Sprachen (de/, fr/, ...) – Optional:**
+**Primärsprache (hier de/, maßgeblich):**
 ```markdown
 # Modul-Name – Dokumentation
 
 > **Version:** 1.0.0  
 > **Sprache:** Deutsch  
-> **English:** [Module_Name.md](../../en/modules/core/Module_Name.md)
+> **English:** [Module_Name.md](../../../../en/guide/module/core/Module_Name.md)
 ```
 
 ### 4.5 Übersetzungs-Regeln
 
 | Regel | Beschreibung |
 |-------|--------------|
-| Englisch zuerst | Englische Version muss vor Release vollständig sein |
-| Vollständigkeit | Übersetzungen sollten inhaltlich identisch sein |
-| Aktualität | Bei Änderungen zuerst Englisch aktualisieren |
+| Primärsprache zuerst | Änderungen passieren zuerst in der maßgeblichen Primärsprache (hier `de/`) |
+| Gleicher Commit | Die englische Fassung wird im selben Commit nachgezogen (der Pre-Commit-Hook meldet Lücken) |
+| Release | Vor einer Veröffentlichung ist die englische Fassung vollständig |
+| Vollständigkeit | Übersetzungen sind inhaltlich identisch |
 | Fachbegriffe | Konsistent übersetzen (siehe Glossar) |
 | Code-Beispiele | Bleiben unverändert (sind bereits Englisch) |
 | Versionierung | Alle Sprachversionen haben gleiche Versionsnummer |
@@ -404,12 +408,12 @@ set(_deutscher_name "value")
 
 ### 9.2 Neue Dokumentation
 
-- [ ] Englische Version erstellt (Pflicht für Release)
-- [ ] Primärsprache-Version erstellt (optional)
+- [ ] Primärsprache-Version erstellt (maßgeblich)
+- [ ] Englische Version im selben Commit erstellt (Pflicht für Release)
 - [ ] Fachbegriffe konsistent verwendet
 - [ ] Code-Beispiele in Englisch
-- [ ] Translations-Link im Header vorhanden
-- [ ] Dateiname auf Englisch
+- [ ] Sprachverweis im Header vorhanden (`English:` bzw. `German:`)
+- [ ] Dateiname in allen Sprachordnern gleich
 
 ### 9.3 Git Commit
 
@@ -469,6 +473,8 @@ set(_deutscher_name "value")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An `Doku_Standard` angeglichen (Entscheid S1 a): Primärsprache maßgeblich, Englisch im selben Commit (§1, §4.1, §4.5, §9.2); Dateinamen in allen Sprachordnern gleich, Namen aus der Primärsprache zulässig (§4.3); Ordnerbaum und Kopfbeispiele auf den heutigen Baum (§4.2, §4.4) |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.0** | **2025-12-14** | **Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung, Mehrsprachen-Modell (Englisch Pflicht, weitere Sprachen erwünscht), Verbindlichkeits-Stufen, Checklisten erweitert** |
 | 0.1.1 | 2025-12-04 | Dateistruktur: /de/ und /en/ Subfolder statt Suffix-Variante |
 | 0.1.0 | 2025-12-04 | Initial: Code-Sprache, Dokumentations-Sprache, Git, Migration |

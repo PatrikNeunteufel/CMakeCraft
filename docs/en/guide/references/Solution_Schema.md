@@ -1,19 +1,20 @@
 # Solution Schema — Reference
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.7  
+> **Solution Schema Version:** 1.0  
+> **Date:** 2026-11-09  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Solution_Schema.md](Solution_Schema.md)
+> **German:** [Solution_Schema.md](../../../de/guide/references/Solution_Schema.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
 3. [solution Block](#3-solution-block)
 4. [settings Block](#4-settings-block)
 5. [externals Block](#5-externals-block)
@@ -21,23 +22,23 @@
 7. [libraries Array](#7-libraries-array)
 8. [tests Array](#8-tests-array)
 9. [apps Array](#9-apps-array)
-10. [Schnellreferenz](#10-schnellreferenz)
-11. [Vollständiges Example](#11-vollständiges-beispiel)
-12. [Error-Codes](#12-fehler-codes)
-13. [See Also](#13-siehe-auch)
+10. [Quick Reference](#10-quick-reference)
+11. [Complete Example](#11-complete-example)
+12. [Error Codes](#12-error-codes)
+13. [See Also](#13-see-also)
 14. [Changelog](#14-changelog)
 
 ---
 
 ## 1. Overview
 
-Diese Reference beschreibt das vollständige Schema der Solution.json für das CMake Architecture Build-System. Die Solution.json ist das Herzstück der deklarativen Configuration.
+This reference describes the complete schema of Solution.json for the CMake Architecture build system. Solution.json is the heart of the declarative configuration.
 
-### Root-Level Struktur
+### Root-Level Structure
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": { },
     "settings": { },
     "externalsPolicy": { },
@@ -50,39 +51,39 @@ Diese Reference beschreibt das vollständige Schema der Solution.json für das C
 }
 ```
 
-### Block-Overview
+### Block Overview
 
 | Block | Required | Description |
-|-------|---------|--------------|
-| `schemaVersion` | ✅ | Version des JSON-Schemas (nur MAJOR.MINOR) |
-| `solution` | ✅ | Metadaten (Name, Version, Autoren) |
-| `settings` | – | Globale Build-Einstellungen |
-| `externalsPolicy` | – | External-Verhalten |
-| `externals` | – | Zentrale External-Definitionen |
-| `libraries` | – | Interne Libraries |
-| `executables` | – | Ausführbare Programme |
-| `tests` | – | Test-Targets |
-| `apps` | – | App-Container (Core/Runner Separation) |
+|-------|----------|-------------|
+| `schemaVersion` | ✅ | Version of the JSON schema (MAJOR.MINOR only) |
+| `solution` | ✅ | Metadata (name, version, authors) |
+| `settings` | – | Global build settings |
+| `externalsPolicy` | – | External behavior |
+| `externals` | – | Central external definitions |
+| `libraries` | – | Internal libraries |
+| `executables` | – | Executable programs |
+| `tests` | – | Test targets |
+| `apps` | – | App containers (Core/Runner separation) |
 | `packages` | – | Build packages: target `package_<name>` (see [Packages.md](Packages.md)) |
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### Symbole
+### Symbols
 
-| Symbol | Bedeutung |
-|--------|-----------|
-| ✅ | Requiredfeld |
-| – | Optional / Standard |
+| Symbol | Meaning |
+|--------|---------|
+| ✅ | Required field |
+| – | Optional / default |
 
-### Pfad-Konventionen
+### Path Conventions
 
-Alle Pfade sind relativ zu `CMAKE_SOURCE_DIR` (Projekt-Root).
+All paths are relative to `CMAKE_SOURCE_DIR` (project root).
 
-### Umgebungsvariablen
+### Environment Variables
 
-Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
+Syntax: `${VAR_NAME}` is expanded to `$ENV{VAR_NAME}`.
 
 ```json
 "hint": "${QT_ROOT}"        // → C:/Qt/6.10.1/msvc2022_64
@@ -97,17 +98,17 @@ Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
 "solution": {
     "name": "MySolution",
     "version": "1.0.0",
-    "description": "Description",
+    "description": "Beschreibung",
     "authors": ["Name"]
 }
 ```
 
-| Feld | Required | Typ | Description |
-|------|---------|-----|--------------|
-| `name` | ✅ | string | Projektname (→ PROJECT_NAME) |
-| `version` | ✅ | string | Semantische Version (MAJOR.MINOR.PATCH) |
-| `description` | – | string | Description für IDEs/Dokumentation |
-| `authors` | – | string[] | Autoren-Liste |
+| Field | Required | Type | Description |
+|-------|----------|------|-------------|
+| `name` | ✅ | string | Project name (→ PROJECT_NAME) |
+| `version` | ✅ | string | Semantic version (MAJOR.MINOR.PATCH) |
+| `description` | – | string | Description for IDEs/documentation |
+| `authors` | – | string[] | List of authors |
 
 ---
 
@@ -135,57 +136,57 @@ Syntax: `${VAR_NAME}` wird zu `$ENV{VAR_NAME}` expandiert.
 
 ### 4.1 standards
 
-| Feld | Default | Description |
-|------|---------|--------------|
-| `cxx_standard` | 20 | C++ Standard (11, 14, 17, 20, 23) |
-| `cxx_standard_required` | true | Standard erzwingen |
-| `cxx_extensions` | false | Compiler-Erweiterungen |
+| Field | Default | Description |
+|-------|---------|-------------|
+| `cxx_standard` | 20 | C++ standard (11, 14, 17, 20, 23) |
+| `cxx_standard_required` | true | Enforce the standard |
+| `cxx_extensions` | false | Compiler extensions |
 
 ### 4.2 defaults
 
-| Feld | Default | Description |
-|------|---------|--------------|
-| `library_type` | `"STATIC"` | Standard Library-Typ |
-| `executable_type` | `"CONSOLE"` | Standard Executable-Typ |
+| Field | Default | Description |
+|-------|---------|-------------|
+| `library_type` | `"STATIC"` | Default library type |
+| `executable_type` | `"CONSOLE"` | Default executable type |
 
 ### 4.3 sources
 
-| Feld | Default | Description |
-|------|---------|--------------|
-| `mode` | `"auto"` | Source-Collection (explicit, glob, auto) |
+| Field | Default | Description |
+|-------|---------|-------------|
+| `mode` | `"auto"` | Source collection (explicit, glob, auto) |
 
 ### 4.4 msvc
 
-Settings seen only by the MSVC compiler (`cl.exe`) — clang-cl, Clang and GCC are left
-alone. Since CMakeCraft v0.12.0.
+Settings seen only by the MSVC compiler (`cl.exe`) — clang-cl, Clang and GCC are not affected.
+Since CMakeCraft v0.12.0.
 
 | Field | Default | Description |
-|------|---------|--------------|
+|-------|---------|-------------|
 | `parallel_compile` | 8 | Number of parallel compiler processes per target (`/MP<n>`). `0` or `1` = off. Integer ≥ 0, otherwise E004 |
 
 `parallel_compile` applies to every target CMakeCraft creates: libraries, executables, apps
-(core, runner and `tests.targets[]`) and tests. There is no per-target field. `/MP` takes
-effect under the Visual Studio generators: otherwise MSBuild compiles the files of a target
-one after another on a single core. Ninja starts a compiler per file anyway.
-If a target cannot use `/MP` (`#import`, `/Gm`), `"parallel_compile": 0` switches it off for
+(Core, Runner and `tests.targets[]`) and tests. There is no per-target field. `/MP` takes effect
+under the Visual Studio generators: otherwise MSBuild compiles the files of a target one after
+another on a single core. Ninja starts its own compiler per file anyway.
+If a target cannot handle `/MP` (`#import`, `/Gm`), `"parallel_compile": 0` switches it off for
 the solution.
 
 ---
 
 ## 5. externals Block
 
-Der zentrale Ort für alle External-Definitionen.
+The central place for all external definitions.
 
-### 5.1 External-Typen
+### 5.1 External Types
 
-| Typ | Erkennungsmerkmal | Description |
-|-----|-------------------|--------------|
-| **Local** | `path` Feld | Vorkompilierte Bibliotheken in `externals/` |
-| **Fetched** | `git` Feld | Via Git geklont |
-| **System** | `system: true` | Große externe Installationen (Qt6, Boost) via find_package() |
+| Type | Identifying Feature | Description |
+|------|---------------------|-------------|
+| **Local** | `path` field | Precompiled libraries in `externals/` |
+| **Fetched** | `git` field | Cloned via Git |
+| **System** | `system: true` | Large external installations (Qt6, Boost) via find_package() |
 | **Archive** | `archive: true` | Prebuilt package in a pinned version (archive with checksum) |
 
-> **Typ-Priorität:** `system` → `git` → `path` → `archive`
+> **Type priority:** `system` → `git` → `path` → `archive`
 
 ### 5.2 Local Externals
 ```json
@@ -196,31 +197,31 @@ Der zentrale Ort für alle External-Definitionen.
 }
 ```
 
-| Feld | Required | Description |
-|------|---------|--------------|
-| `path` | ✅ | Pfad relativ zu CMAKE_SOURCE_DIR |
-| `include` | — | Pfad zur Include.cmake (optional) |
+| Field | Required | Description |
+|-------|----------|-------------|
+| `path` | ✅ | Path relative to CMAKE_SOURCE_DIR |
+| `include` | — | Path to the Include.cmake (optional) |
 
 #### Include.cmake Convention
 
-**Default-Pfad (Convention over Configuration):**
+**Default path (convention over configuration):**
 
 ```markdown
 cmake/externals/includes/{name}/Include.cmake
 ```
-Wobei `{name}` der External-Schlüssel ist (z.B. `bass`, `lua54`).
+Where `{name}` is the external key (e.g. `bass`, `lua54`).
 
 **Examples:**
 
-| External | Convention-Pfad |
+| External | Convention Path |
 |----------|-----------------|
 | `"bass": {...}` | `cmake/externals/includes/bass/Include.cmake` |
 | `"lua54": {...}` | `cmake/externals/includes/lua54/Include.cmake` |
 | `"doctest": {...}` | `cmake/externals/includes/doctest/Include.cmake` |
 
-**Custom Include (optional):**
+**Custom include (optional):**
 
-Nur verwenden wenn vom Default abgewichen werden muss:
+Use only when the default has to be overridden:
 ```json
 "externals": {
     "mylib": {
@@ -230,7 +231,7 @@ Nur verwenden wenn vom Default abgewichen werden muss:
 }
 ```
 
-> **Empfehlung:** Immer die Convention verwenden. Das `include` Feld nur für Sonderfälle.
+> **Recommendation:** Always use the convention. Use the `include` field only for special cases.
 
 ### 5.3 Fetched Externals
 
@@ -245,22 +246,22 @@ Nur verwenden wenn vom Default abgewichen werden muss:
 }
 ```
 
-| Feld | Required | Description |
-|------|---------|--------------|
-| `git` | ✅ | Repository-URL |
-| `tag` | – | Git Tag oder Branch |
-| `commit` | – | Spezifischer Commit-Hash |
-| `shallow` | – | Shallow Clone (Default: true) |
-| `cmakeSupport` | – | Hat CMakeLists.txt (Default: true) |
+| Field | Required | Description |
+|-------|----------|-------------|
+| `git` | ✅ | Repository URL |
+| `tag` | – | Git tag or branch |
+| `commit` | – | Specific commit hash |
+| `shallow` | – | Shallow clone (default: true) |
+| `cmakeSupport` | – | Has a CMakeLists.txt (default: true) |
 | `hooks.preFetch` | – | Path to the PreFetch hook (object `hooks`, relative to CMAKE_SOURCE_DIR) |
 | `hooks.postFetch` | – | Path to the PostFetch hook (object `hooks`, relative to CMAKE_SOURCE_DIR) |
-| `hook` | – | Hook-Wiederverwendung |
+| `hook` | – | Hook reuse |
 
 ### 5.4 System Externals (Phase 9)
 
-Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV.
+For large, externally installed libraries such as Qt6, Boost, OpenCV.
 
-**Keine lokale Kopie nötig** – nutzt `find_package()` direkt.
+**No local copy needed** – uses `find_package()` directly.
 
 ```json
 "externals": {
@@ -276,38 +277,38 @@ Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV.
 }
 ```
 
-| Feld | Required | Typ | Description |
-|------|---------|-----|--------------|
-| `system` | ✅ | boolean | Muss `true` sein |
-| `package` | ✅ | string | Name für find_package() (z.B. "Qt6", "Boost") |
+| Field | Required | Type | Description |
+|-------|----------|------|-------------|
+| `system` | ✅ | boolean | Must be `true` |
+| `package` | ✅ | string | Name for find_package() (e.g. "Qt6", "Boost") |
 | `version` | – | string | Minimum version, passed unchanged to find_package() (e.g. "6.5.0"; no comparison operator) |
 | `components` | – | string[] | find_package() COMPONENTS |
-| `hints` | – | string[] | Zusätzliche Suchpfade |
-| `backup` | – | string | Fallback-Pfad (löst W501 aus) |
-| `required` | – | boolean | find_package() REQUIRED (Default: true) |
+| `hints` | – | string[] | Additional search paths |
+| `backup` | – | string | Fallback path (triggers W501) |
+| `required` | – | boolean | Package must be found, otherwise E503/E504/E505 (default: true); `find_package()` always runs without `REQUIRED` |
 
-#### Pfad-Auflösung (Reihenfolge)
+#### Path Resolution (Order)
 
-1. **Umgebungsvariablen:** `Qt6_ROOT`, `QT_ROOT`, `Qt6_DIR`, etc.
-2. **hints[]** aus Solution.json (mit `${VAR}` Expansion)
-3. **Standard-Pfade** aus Package-Hook (plattformspezifisch)
-4. **backup** Pfad (mit W501 Warning)
-5. **find_package() Default** (CMake-eigene Suche)
+1. **Environment variables:** `Qt6_ROOT`, `QT_ROOT`, `Qt6_DIR`, etc.
+2. **hints[]** from Solution.json (with `${VAR}` expansion)
+3. **Standard paths** from the package hook (platform-specific)
+4. **backup** path (with W501 warning)
+5. **find_package() default** (CMake's own search)
 
-#### Package-Hooks
+#### Package Hooks
 
-Optionale plattformspezifische Configuration in:
+Optional platform-specific configuration in:
 ```
 cmake/externals/system/packages/{Package}.cmake
 ```
 
-Vordefinierte Hooks:
-- `Qt6.cmake` – Standard-Installationspfade, AUTOMOC/AUTOUIC/AUTORCC, windeployqt
-- `Boost.cmake` – Standard-Pfade, MSVC auto-linking Deaktivierung
+Predefined hooks:
+- `Qt6.cmake` – standard installation paths, AUTOMOC/AUTOUIC/AUTORCC, windeployqt
+- `Boost.cmake` – standard paths, disabling MSVC auto-linking
 
-#### Migration von Local zu System
+#### Migration from Local to System
 
-**Vorher (Workaround mit leerem Ordner):**
+**Before (workaround with an empty folder):**
 ```json
 "qt6": {
     "path": "externals/qt6",
@@ -315,7 +316,7 @@ Vordefinierte Hooks:
 }
 ```
 
-**Nachher (kein lokaler Ordner nötig):**
+**After (no local folder needed):**
 ```json
 "qt6": {
     "system": true,
@@ -326,12 +327,12 @@ Vordefinierte Hooks:
 
 ### 5.5 cmakeSupport Flag
 
-| Wert | Bedeutung | Hook-Anforderung |
-|------|-----------|------------------|
-| `true` (default) | External hat CMakeLists.txt | PostFetch optional |
-| `false` | Kein CMakeLists.txt | PostFetch **PFLICHT** |
+| Value | Meaning | Hook Requirement |
+|-------|---------|------------------|
+| `true` (default) | External has a CMakeLists.txt | PostFetch optional |
+| `false` | No CMakeLists.txt | PostFetch **REQUIRED** |
 
-### 5.6 hook Feld (Hook-Wiederverwendung)
+### 5.6 hook Field (Hook Reuse)
 
 ```json
 "externals": {
@@ -349,24 +350,24 @@ Vordefinierte Hooks:
 }
 ```
 
-| External | Hook-Datei | `HOOK_EXTERNAL_NAME` | Target |
-|----------|------------|----------------------|--------|
+| External | Hook File | `HOOK_EXTERNAL_NAME` | Target |
+|----------|-----------|----------------------|--------|
 | `imgui` | `imgui.cmake` | `"imgui"` | `imgui` |
 | `imgui_docking` | `imgui.cmake` | `"imgui_docking"` | `imgui_docking` |
 
 ---
 
-### 5.7 Gemeinsame Felder (alle Typen)
+### 5.7 Common Fields (All Types)
 
-Diese Felder funktionieren für Local, Fetched und System Externals:
+These fields work for local, fetched and system externals:
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `skip` | bool | `false` | External überspringen (nicht laden) |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `skip` | bool | `false` | Skip the external (do not load it) |
 
-#### skip (External deaktivieren)
+#### skip (Disable an External)
 
-Mit `skip: true` kann ein External vorbereitet werden, ohne es zu laden:
+With `skip: true` an external can be prepared without loading it:
 
 ```json
 "externals": {
@@ -387,22 +388,22 @@ Mit `skip: true` kann ein External vorbereitet werden, ohne es zu laden:
 }
 ```
 
-**Verhalten:**
-- External wird nicht geladen (kein FetchContent, kein find_package, kein Include)
-- Wird trotzdem im externals-Block validiert
-- **FATAL ERROR (E013)** wenn ein geskipptes External von einem Target verwendet wird
+**Behavior:**
+- The external is not loaded (no FetchContent, no find_package, no include)
+- It is still validated in the externals block
+- **FATAL ERROR (E013)** if a skipped external is used by a target
 
-**Anwendungsfälle:**
-- Externals für spätere Features vorbereiten
-- Optionale Dependencies temporär deaktivieren
-- Platform-spezifische Externals (manuell oder via Preset)
+**Use cases:**
+- Preparing externals for later features
+- Temporarily disabling optional dependencies
+- Platform-specific externals (manually or via preset)
 
 ---
 
 ### 5.8 Archive Externals (since v0.10.0)
 
 A prebuilt package (headers, runtime files, tools) in a pinned version. Nothing is linked:
-targets get an include path, a define and — executables — the runtime files next to the
+targets get an include path, a define and — for executables — the runtime files next to the
 executable.
 
 ```json
@@ -424,13 +425,13 @@ executable.
 | `pin` | ✅ | string | Pin file (version, address, checksum, fallback paths) |
 | `platforms` | – | string[] | Platform filter; elsewhere the external is absent without a warning |
 | `include_dirs` | – | string[] | Include folders inside the package |
-| `define` | – | string | Definition `<name>=1` on the target |
-| `runtime` | – | object | `files` and `dirs` copied next to each executable (on every build, by the target `<executable>_deploy_<external>`) |
+| `define` | – | string | Define `<name>=1` on the target |
+| `runtime` | – | object | `files` and `dirs` copied next to each executable (on every build, via the target `<executable>_deploy_<external>`) |
 
 Can be switched off per target: `"external_options": { "sichttest": { "runtime": false } }`.
 If the package cannot be obtained, W304 is issued and the targets build without it.
 
-Pin file, order of sources and the `packages` block for building:
+Pin file, order of sources and the `packages` block for building packages:
 [Packages.md](Packages.md).
 
 ---
@@ -455,41 +456,41 @@ Pin file, order of sources and the `packages` block for building:
 ]
 ```
 
-### 6.1 Requiredfelder
+### 6.1 Required Fields
 
-| Feld | Description |
-|------|--------------|
-| `name` | Eindeutiger Target-Name |
+| Field | Description |
+|-------|-------------|
+| `name` | Unique target name |
 
-### 6.2 Optionale Felder
+### 6.2 Optional Fields
 
-| Feld | Default | Description |
-|------|---------|--------------|
-| `displayName` | `name` | Anzeigename |
-| `version` | Solution-Version | Executable-Version |
+| Field | Default | Description |
+|-------|---------|-------------|
+| `displayName` | `name` | Display name |
+| `version` | solution version | Executable version |
 | `type` | `CONSOLE` | `CONSOLE`, `GUI`, `WORKER` |
-| `path` | `projects/exec/{name}/src` | Source-Verzeichnis |
-| `skip` | `false` | Build überspringen |
-| `pch` | – | Precompiled Headers Config (siehe [§ 6.5](#65-pch-object-precompiled-headers)) |
-| `dependencies` | `[]` | Interne Libraries |
-| `externals` | `[]` | External-Referenceen |
-| `external_options` | `{}` | Per-External Options |
-| `platforms` | `[]` (alle) | Plattform-Filter |
+| `path` | `projects/exec/{name}/src` | Source directory |
+| `skip` | `false` | Skip the build |
+| `pch` | – | Precompiled headers config (see [§ 6.5](#65-pch-object-precompiled-headers)) |
+| `dependencies` | `[]` | Internal libraries |
+| `externals` | `[]` | External references |
+| `external_options` | `{}` | Per-external options |
+| `platforms` | `[]` (all) | Platform filter |
 | `defines` | `[]` | Preprocessor definitions; `{version}` is replaced by the version of the target |
-| `compile_options` | `[]` | Compiler-Flags |
-| `link_options` | `[]` | Linker-Flags |
+| `compile_options` | `[]` | Compiler flags |
+| `link_options` | `[]` | Linker flags |
 
-### 6.3 type Werte
+### 6.3 type Values
 
-| Typ | Windows | macOS | Linux |
-|-----|---------|-------|-------|
+| Type | Windows | macOS | Linux |
+|------|---------|-------|-------|
 | `CONSOLE` | Normal | Normal | Normal |
 | `GUI` | WIN32 | MACOSX_BUNDLE | Normal |
 | `WORKER` | Normal | Normal | Normal |
 
 ### 6.4 external_options
 
-Per-Target Options für Externals:
+Per-target options for externals:
 
 ```json
 "external_options": {
@@ -510,28 +511,28 @@ Per-Target Options für Externals:
 }
 ```
 
-| Feld | Default | Description |
-|------|---------|--------------|
-| `enabled` | `false` | PCH aktivieren |
-| `header` | `pch.h` | Name der PCH-Datei |
-| `path` | – | Custom-Pfad (relativ zu `projects/`) |
+| Field | Default | Description |
+|-------|---------|-------------|
+| `enabled` | `false` | Enable PCH |
+| `header` | `pch.h` | Name of the PCH file |
+| `path` | – | Custom path (relative to `projects/`) |
 
-**Aktivierung (implizit):**
+**Activation (implicit):**
 
-PCH wird automatisch aktiviert wenn:
-- `enabled: true` explizit gesetzt ist, ODER
-- `header` angegeben ist und `enabled` nicht `false`, ODER
-- `path` angegeben ist und `enabled` nicht `false`
+PCH is enabled automatically if:
+- `enabled: true` is set explicitly, OR
+- `header` is given and `enabled` is not `false`, OR
+- `path` is given and `enabled` is not `false`
 
-**Suchpfad-Priorität** (wenn `path` nicht angegeben):
+**Search path priority** (if `path` is not given):
 
-| Priorität | Pfad |
-|-----------|------|
+| Priority | Path |
+|----------|------|
 | 1 | `{target-path}/pch/{header}` |
 | 2 | `{target-path}/src/{header}` |
 | 3 | `{target-path}/{header}` |
 
-Wenn `path` angegeben: `projects/{path}/{header}`
+If `path` is given: `projects/{path}/{header}`
 
 ---
 
@@ -556,21 +557,21 @@ Wenn `path` angegeben: `projects/{path}/{header}`
 ]
 ```
 
-| Feld | Default | Description |
-|------|---------|--------------|
-| `name` | ✅ Required | Target-Name |
-| `version` | Solution-Version | Library-Version |
-| `type` | Settings-Default | `STATIC`, `SHARED`, `INTERFACE` |
-| `path` | Convention | Source-Verzeichnis |
-| `public_headers` | – | Public Include-Verzeichnis |
+| Field | Default | Description |
+|-------|---------|-------------|
+| `name` | ✅ required | Target name |
+| `version` | solution version | Library version |
+| `type` | settings default | `STATIC`, `SHARED`, `INTERFACE` |
+| `path` | convention | Source directory |
+| `public_headers` | – | Public include directory |
 | `output_name` | target name | File name without extension (since v0.10.0) |
 | `defines` | `[]` | Preprocessor definitions; `{version}` is replaced by the version of the target (since v0.10.0) |
 | `compile_options` | `[]` | Compiler flags of this library (PRIVATE), `STATIC`/`SHARED` only; for `INTERFACE` error E105 (since v0.14.0) |
 | `platform` | – (all) | Platform filter: `windows`, `linux`, `macos`, `unix` |
-| `dependencies` | `[]` | Andere Libraries (Dependencies) |
-| `externals` | `[]` | Externe Dependencies |
-| `external_options` | `{}` | Per-External Options |
-| `pch` | – | Precompiled Headers Config (siehe [§ 6.5](#65-pch-object-precompiled-headers)) |
+| `dependencies` | `[]` | Other libraries (dependencies) |
+| `externals` | `[]` | External dependencies |
+| `external_options` | `{}` | Per-external options |
+| `pch` | – | Precompiled headers config (see [§ 6.5](#65-pch-object-precompiled-headers)) |
 
 ### compile_options (since v0.14.0)
 
@@ -595,7 +596,7 @@ configuration error (**E105**), not silently skipped. A source package of the li
 
 ## 8. tests Array
 
-### 8.1 Grundstruktur
+### 8.1 Basic Structure
 
 ```json
 "tests": [
@@ -613,53 +614,53 @@ configuration error (**E105**), not silently skipped. A source package of the li
 ]
 ```
 
-### 8.2 Requiredfelder
+### 8.2 Required Fields
 
-| Feld | Typ | Description |
-|------|-----|--------------|
-| `name` | string | Eindeutiger Test-Target-Name |
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Unique test target name |
 
-### 8.3 Optionale Felder
+### 8.3 Optional Fields
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `displayName` | string | `name` | Anzeigename |
-| `version` | string | Solution-Version | Test-Version |
-| `type` | string | `"unit"` | Test-Typ |
-| `framework` | string | `"doctest"` | Test-Framework |
-| `path` | string | Convention | Source-Verzeichnis |
-| `target` | string | – | Zu testendes Target (für Coverage) |
-| `dependencies` | string[] | `[]` | Interne Libraries |
-| `externals` | string[] | `[]` | Externe Libraries |
-| `external_options` | object | `{}` | Per-External Options |
-| `timeout` | int | 60 | Timeout in Sekunden |
-| `labels` | string[] | `[type]` | CTest Labels |
-| `parallel` | bool | true | Parallel ausführbar |
-| `skip` | bool | false | Test überspringen |
-| `source_from` | string | – | Sources von Executable übernehmen |
-| `exclude_sources` | string[] | `[]` | Auszuschließende Sources |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `displayName` | string | `name` | Display name |
+| `version` | string | solution version | Test version |
+| `type` | string | `"unit"` | Test type |
+| `framework` | string | `"doctest"` | Test framework |
+| `path` | string | convention | Source directory |
+| `target` | string | – | Target under test (for coverage) |
+| `dependencies` | string[] | `[]` | Internal libraries |
+| `externals` | string[] | `[]` | External libraries |
+| `external_options` | object | `{}` | Per-external options |
+| `timeout` | int | 60 | Timeout in seconds |
+| `labels` | string[] | `[type]` | CTest labels |
+| `parallel` | bool | true | Can run in parallel |
+| `skip` | bool | false | Skip the test |
+| `source_from` | string | – | Take over sources from an executable |
+| `exclude_sources` | string[] | `[]` | Sources to exclude |
 
-### 8.4 Test-Typen
+### 8.4 Test Types
 
-| Typ | Description | Empfohlene Labels |
-|-----|--------------|-------------------|
-| `unit` | Einzelne Functions/Klassen testen | `fast`, `isolated` |
-| `integration` | Komponenten-Zusammenspiel | `slow`, `database` |
-| `system` | Gesamtsystem (End-to-End) | `e2e`, `slow` |
-| `performance` | Benchmarks, Performance-Tests | `benchmark`, `slow` |
-| `smoke` | Schnelle Basis-Tests | `fast`, `critical` |
+| Type | Description | Recommended Labels |
+|------|-------------|--------------------|
+| `unit` | Test individual functions/classes | `fast`, `isolated` |
+| `integration` | Interaction of components | `slow`, `database` |
+| `system` | Whole system (end-to-end) | `e2e`, `slow` |
+| `performance` | Benchmarks, performance tests | `benchmark`, `slow` |
+| `smoke` | Fast basic tests | `fast`, `critical` |
 
-### 8.5 Unterstützte Frameworks
+### 8.5 Supported Frameworks
 
-| Framework | External-Name | Description |
-|-----------|---------------|--------------|
-| `doctest` | `doctest` | Schnell, Header-only, ideal für Unit Tests |
-| `googletest` | `googletest` | Feature-reich, Mocking (GMock) |
-| `catch2` | `catch2` | BDD-Style, Sections, Benchmarks |
+| Framework | External Name | Description |
+|-----------|---------------|-------------|
+| `doctest` | `doctest` | Fast, header-only, ideal for unit tests |
+| `googletest` | `googletest` | Feature-rich, mocking (GMock) |
+| `catch2` | `catch2` | BDD style, sections, benchmarks |
 
-### 8.6 source_from (Executable-Sources testen)
+### 8.6 source_from (Testing Executable Sources)
 
-Für Tests die Module aus einem Executable testen (ohne dessen main):
+For tests that test modules of an executable (without its main):
 
 ```json
 "tests": [
@@ -674,27 +675,27 @@ Für Tests die Module aus einem Executable testen (ohne dessen main):
 ]
 ```
 
-### 8.7 CTest-Integration
+### 8.7 CTest Integration
 
 ```bash
-# Alle Tests ausführen
+# Run all tests
 ctest --test-dir build
 
-# Nach Label filtern
-ctest -L unit        # Nur Unit Tests
-ctest -L fast        # Nur schnelle Tests
-ctest -LE slow       # Keine langsamen Tests
+# Filter by label
+ctest -L unit        # unit tests only
+ctest -L fast        # fast tests only
+ctest -LE slow       # no slow tests
 
-# Parallel ausführen
-ctest -j8            # 8 parallele Jobs
+# Run in parallel
+ctest -j8            # 8 parallel jobs
 ```
 
 ---
 ## 9. apps Array
 
-Das `apps` Array definiert App-Container mit Core/Runner Separation für maximale Testbarkeit.
+The `apps` array defines app containers with Core/Runner separation for maximum testability.
 
-### 9.1 Grundstruktur
+### 9.1 Basic Structure
 
 ```json
 "apps": [
@@ -747,30 +748,30 @@ Das `apps` Array definiert App-Container mit Core/Runner Separation für maximal
 ]
 ```
 
-### 9.2 Requiredfelder
+### 9.2 Required Fields
 
-| Feld | Typ | Description |
-|------|-----|--------------|
-| `name` | string | Eindeutiger App-Name (Präfix für alle Targets) |
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Unique app name (prefix for all targets) |
 
-### 9.3 Optionale Felder (Root)
+### 9.3 Optional Fields (Root)
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `displayName` | string | `name` | Anzeigename |
-| `version` | string | Solution-Version | App-Version |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `displayName` | string | `name` | Display name |
+| `version` | string | solution version | App version |
 | `description` | string | `""` | Description |
-| `skip` | bool | `false` | Gesamte App überspringen |
-| `path` | string | `projects/apps/{name}` | Pfad zum App-Verzeichnis |
-| `core` | object | `{}` | Core-Library Configuration |
-| `runner` | object | `{}` | Runner-Executable Configuration |
-| `pch` | object | `{}` | Precompiled Header Configuration |
-| `tests` | object | `{}` | Test-Configuration |
-| `platforms` | string[] | `[]` | Plattform-Filter |
+| `skip` | bool | `false` | Skip the entire app |
+| `path` | string | `projects/apps/{name}` | Path to the app directory |
+| `core` | object | `{}` | Core library configuration |
+| `runner` | object | `{}` | Runner executable configuration |
+| `pch` | object | `{}` | Precompiled header configuration |
+| `tests` | object | `{}` | Test configuration |
+| `platforms` | string[] | `[]` | Platform filter |
 
 ### 9.4 core Object
 
-Konfiguriert die Core-Library (`{AppName}.Core`).
+Configures the core library (`{AppName}.Core`).
 
 ```json
 "core": {
@@ -784,15 +785,15 @@ Konfiguriert die Core-Library (`{AppName}.Core`).
 }
 ```
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `dependencies` | string[] | `[]` | Interne Libraries (aus `libraries[]`) |
-| `externals` | string[] | `[]` | Externe Dependencies |
-| `external_options` | object | `{}` | Per-External Options |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `dependencies` | string[] | `[]` | Internal libraries (from `libraries[]`) |
+| `externals` | string[] | `[]` | External dependencies |
+| `external_options` | object | `{}` | Per-external options |
 
 ### 9.5 runner Object
 
-Konfiguriert das Runner-Executable (`{AppName}`).
+Configures the runner executable (`{AppName}`).
 
 ```json
 "runner": {
@@ -806,22 +807,22 @@ Konfiguriert das Runner-Executable (`{AppName}`).
 }
 ```
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `type` | string | `"CONSOLE"` | Executable-Typ (`GUI` / `CONSOLE`) |
-| `externals` | string[] | `[]` | Runner-spezifische Externals |
-| `external_options` | object | `{}` | Per-External Options |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `type` | string | `"CONSOLE"` | Executable type (`GUI` / `CONSOLE`) |
+| `externals` | string[] | `[]` | Runner-specific externals |
+| `external_options` | object | `{}` | Per-external options |
 
 **runner.type:**
 
-| Typ | Windows | Linux/macOS |
-|-----|---------|-------------|
-| `GUI` | `WinMain` (kein Konsolenfenster) | `main` |
-| `CONSOLE` | `main` (mit Konsole) | `main` |
+| Type | Windows | Linux/macOS |
+|------|---------|-------------|
+| `GUI` | `WinMain` (no console window) | `main` |
+| `CONSOLE` | `main` (with console) | `main` |
 
 ### 9.6 pch Object
 
-Konfiguriert Precompiled Header.
+Configures the precompiled header.
 
 ```json
 "pch": {
@@ -830,19 +831,19 @@ Konfiguriert Precompiled Header.
 }
 ```
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `enabled` | bool | `false` | PCH aktivieren |
-| `header` | string | `"pch.h"` | PCH-Header Dateiname |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `enabled` | bool | `false` | Enable PCH |
+| `header` | string | `"pch.h"` | PCH header file name |
 
-**PCH-Scope:**
-- Core (`src/`): Verwendet PCH wenn aktiviert
-- Runner (`main/`): Verwendet PCH NICHT
-- Tests: Verwenden PCH NICHT
+**PCH scope:**
+- Core (`src/`): uses the PCH when enabled
+- Runner (`main/`): does NOT use the PCH
+- Tests: do NOT use the PCH
 
 ### 9.7 tests Object
 
-Konfiguriert App-Tests mit flexiblem targets[] Array.
+Configures app tests with a flexible targets[] array.
 
 ```json
 "tests": {
@@ -852,15 +853,15 @@ Konfiguriert App-Tests mit flexiblem targets[] Array.
 }
 ```
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `skip` | bool | `false` | **Alle Tests dieser App überspringen** |
-| `framework` | string | — | Default-Framework für alle Tests |
-| `targets` | array | `[]` | Test-Target Definitionen |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `skip` | bool | `false` | **Skip all tests of this app** |
+| `framework` | string | — | Default framework for all tests |
+| `targets` | array | `[]` | Test target definitions |
 
 ### 9.8 tests.targets[] Object
 
-Jedes Element definiert ein Test-Target.
+Each element defines a test target.
 
 ```json
 {
@@ -880,36 +881,36 @@ Jedes Element definiert ein Test-Target.
 }
 ```
 
-| Feld | Typ | Required | Default | Description |
-|------|-----|---------|---------|--------------|
-| `name` | string | ✅ | — | Target-Name (→ `{AppName}.{name}`) |
-| `type` | string | ✅ | — | Test-Typ |
-| `skip` | bool | — | `false` | **Diesen Test überspringen** |
-| `path` | string | — | `tests/{type}/{name}` | Pfad relativ zum App-Verzeichnis |
-| `framework` | string | — | `tests.framework` | Test-Framework |
-| `timeout` | number | — | Typ-abhängig | CTest Timeout (Sekunden) |
-| `labels` | string[] | — | Typ-abhängig | CTest Labels |
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `name` | string | ✅ | — | Target name (→ `{AppName}.{name}`) |
+| `type` | string | ✅ | — | Test type |
+| `skip` | bool | — | `false` | **Skip this test** |
+| `path` | string | — | `tests/{type}/{name}` | Path relative to the app directory |
+| `framework` | string | — | `tests.framework` | Test framework |
+| `timeout` | number | — | type-dependent | CTest timeout (seconds) |
+| `labels` | string[] | — | type-dependent | CTest labels |
 | `dependencies` | string[] | — | `[]` | Internal libraries (linked directly, in addition to `{AppName}.Core`) |
-| `externals` | string[] | — | `[]` | Zusätzliche Externals |
+| `externals` | string[] | — | `[]` | Additional externals |
 | `external_options` | object | — | `{}` | Per-external options for the entries in `externals` |
 | `compile_options` | string[] | — | `[]` | Compiler flags for this test target only (PRIVATE) |
-| `parallel` | bool | — | Typ-abhängig | Parallele Ausführung |
+| `parallel` | bool | — | type-dependent | Parallel execution |
 
-`external_options` only applies to externals listed in `externals` of the same test target.
+`external_options` only affects externals listed in `externals` of the same test target.
 The test framework (`framework`) is always applied without options — an entry such as
 `external_options.doctest` has no effect.
 
-`compile_options` applies to every compiler the project builds with. A flag only one of them
-understands goes into a generator expression:
+`compile_options` applies to every compiler the project builds with. A flag that only one of
+them understands goes into a generator expression:
 
 ```json
 "compile_options": [ "$<$<CXX_COMPILER_ID:MSVC>:/bigobj>" ]
 ```
 
-### 9.9 Test-Typen und Defaults
+### 9.9 Test Types and Defaults
 
-| Typ | Default Timeout | Default Parallel | Default Labels |
-|-----|-----------------|------------------|----------------|
+| Type | Default Timeout | Default Parallel | Default Labels |
+|------|-----------------|------------------|----------------|
 | `unit` | 30s | true | `["unit", "fast"]` |
 | `integration` | 120s | true | `["integration"]` |
 | `performance` | 300s | false | `["performance", "benchmark"]` |
@@ -919,51 +920,51 @@ understands goes into a generator expression:
 | `security` | 120s | false | `["security"]` |
 | `ui` | 180s | false | `["ui", "slow"]` |
 | `api` | 60s | true | `["api", "integration"]` |
-| *(unbekannt)* | 60s | true | `["{type}"]` |
+| *(unknown)* | 60s | true | `["{type}"]` |
 
-### 9.10 Skip-Logik
+### 9.10 Skip Logic
 
-| `tests.skip` | `targets[].skip` | Ergebnis |
-|--------------|------------------|----------|
-| `true` | egal | Test übersprungen |
-| `false`/fehlt | `true` | Test übersprungen |
-| `false`/fehlt | `false`/fehlt | Test wird erstellt |
+| `tests.skip` | `targets[].skip` | Result |
+|--------------|------------------|--------|
+| `true` | any | Test skipped |
+| `false`/missing | `true` | Test skipped |
+| `false`/missing | `false`/missing | Test is created |
 
-**Globales Skip hat Vorrang** — wenn `tests.skip: true`, werden alle Tests übersprungen.
+**Global skip takes precedence** — if `tests.skip: true`, all tests are skipped.
 
-### 9.11 Generierte Targets
+### 9.11 Generated Targets
 
-Für jede App werden folgende CMake Targets erstellt:
+The following CMake targets are created for each app:
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `{AppName}.Core` | STATIC Library | Business-Logik (include/ + src/) |
-| `{AppName}` | Executable | Entry Point (main/) |
-| `{AppName}.{TestName}` | Executable | Test (für jedes Target in tests.targets[]) |
+| Target | Type | Description |
+|--------|------|-------------|
+| `{AppName}.Core` | STATIC library | Business logic (include/ + src/) |
+| `{AppName}` | Executable | Entry point (main/) |
+| `{AppName}.{TestName}` | Executable | Test (for each target in tests.targets[]) |
 
 **Example:**
 
 ```
-MyVisualizer.Core              ← STATIC Library
-MyVisualizer                   ← GUI Executable
-MyVisualizer.UnitTests         ← Test Executable
-MyVisualizer.IntegrationTests  ← Test Executable
+MyVisualizer.Core              ← STATIC library
+MyVisualizer                   ← GUI executable
+MyVisualizer.UnitTests         ← test executable
+MyVisualizer.IntegrationTests  ← test executable
 ```
 
-### 9.12 Ordnerstruktur
+### 9.12 Folder Structure
 
 ```
 projects/apps/{AppName}/
-├── include/                    # Öffentliche Header → {AppName}.Core
+├── include/                    # Public headers → {AppName}.Core
 │   ├── Source.cmake
 │   └── *.hpp
 ├── src/                        # Implementation → {AppName}.Core
 │   ├── Source.cmake
 │   └── *.cpp
-├── main/                       # Entry Point → {AppName}
+├── main/                       # Entry point → {AppName}
 │   ├── Source.cmake
 │   └── main.cpp
-├── pch/                        # Precompiled Header
+├── pch/                        # Precompiled header
 │   └── pch.h
 └── tests/
     └── {type}/
@@ -973,7 +974,7 @@ projects/apps/{AppName}/
             └── test_*.cpp
 ```
 
-### 9.13 Vollständiges Example
+### 9.13 Complete Example
 
 ```json
 {
@@ -1034,12 +1035,12 @@ projects/apps/{AppName}/
 
 ---
 
-## 10. Schnellreferenz
+## 10. Quick Reference
 
-### 10.1 Requiredfelder
+### 10.1 Required Fields
 
-| Block | Feld |
-|-------|------|
+| Block | Field |
+|-------|-------|
 | Root | `schemaVersion` |
 | solution | `name`, `version` |
 | executables[] | `name` |
@@ -1056,25 +1057,25 @@ projects/apps/{AppName}/
 
 ### 10.2 Defaults
 
-| Einstellung | Default-Wert |
-|-------------|--------------|
-| C++ Standard | 20 |
-| Library-Typ | STATIC |
-| Executable-Typ | CONSOLE |
-| Source-Mode | auto |
-| Test-Framework | doctest |
-| Test-Timeout | 60s |
+| Setting | Default Value |
+|---------|---------------|
+| C++ standard | 20 |
+| Library type | STATIC |
+| Executable type | CONSOLE |
+| Source mode | auto |
+| Test framework | doctest |
+| Test timeout | 60s |
 | App runner.type | CONSOLE |
 | App PCH | disabled |
 | App tests.skip | false |
 
 ---
 
-## 11. Vollständiges Example
+## 11. Complete Example
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": {
         "name": "MyProject",
         "version": "1.0.0",
@@ -1145,108 +1146,112 @@ projects/apps/{AppName}/
     ]
 }
 ```
-> **Note:** Für lokale externals ist **kein** `include` Feld nötig — die Convention `cmake/externals/includes/{name}/Include.cmake` wird automatisch verwendet.
+> **Note:** Local externals need **no** `include` field — the convention `cmake/externals/includes/{name}/Include.cmake` is used automatically.
 
 ---
 
 
-## 12. Error-Codes
+## 12. Error Codes
 
-### 12.1 External-bezogene Error
+### 12.1 External-Related Errors
 
 | Code | Description |
-|------|--------------|
-| E010 | External nicht in externals Block definiert |
-| E012 | External hat weder path, git noch system Feld |
-| E213 | Include.cmake für lokales External nicht gefunden |
-| E214 | Local external path existiert nicht |
+|------|-------------|
+| E010 | External not defined in the externals block |
+| E012 | External has neither a path, git nor system field |
+| E213 | Include.cmake for local external not found |
+| E214 | Local external path does not exist |
 | E216 | Explicitly specified hook not found |
-| E217 | PostFetch hook required (cmakeSupport: false) |
+| E217 | PostFetch hook required (cmakeSupport: false) — currently not raised, reported as E201 |
 | E218 | Not cached and offline mode enabled |
 | E220 | Archive external: `pin` field missing |
-| **E502** | **System external: `package` Feld fehlt** |
-| **E503** | **System external: find_package() fehlgeschlagen** |
+| **E502** | **System external: `package` field missing** |
+| **E503** | **System external: find_package() failed** |
+| **E504** | **System external: package found, but not all components from `components`** |
+| **E505** | **System external: no version matching `version` found** |
 
-### 12.2 Test-bezogene Error (standalone tests[])
-
-| Code | Description |
-|------|--------------|
-| E301 | Unbekanntes Test-Framework |
-| E302 | source_from Executable existiert nicht |
-| E303 | Test-Source-Verzeichnis nicht gefunden |
-
-### 12.3 App-Container Error (apps[])
+### 12.2 Test-Related Errors (standalone tests[])
 
 | Code | Description |
-|------|--------------|
-| E401 | App: `name` ist Requiredfeld |
-| E402 | App-Pfad existiert nicht |
-| E403 | App hat kein `src/` Verzeichnis |
-| E404 | App hat keine Source-Dateien in `src/` |
-| E405 | App-Dependency nicht gefunden |
-| E406 | App hat kein `main/` Verzeichnis |
-| E407 | App hat keine Source-Dateien in `main/` |
+|------|-------------|
+| E301 | Unknown test framework |
+| E302 | source_from executable does not exist |
+| E303 | Test source directory not found |
 
-### 12.4 App-Tests Error (apps[].tests.targets[])
+### 12.3 App Container Errors (apps[])
 
 | Code | Description |
-|------|--------------|
+|------|-------------|
+| E401 | App: `name` is a required field |
+| E402 | App path does not exist |
+| E403 | App has no `src/` directory |
+| E404 | App has no source files in `src/` |
+| E405 | App dependency not found |
+| E406 | App has no `main/` directory |
+| E407 | App has no source files in `main/` |
+
+### 12.4 App Test Errors (apps[].tests.targets[])
+
+| Code | Description |
+|------|-------------|
 | E101 | Test dependency (internal library) does not exist |
-| E301 | Kein Framework angegeben (weder global noch per-target) |
-| E302 | Unbekanntes Test-Framework |
-| E303 | Test-Target: `name` fehlt |
-| E304 | Test-Target: `type` fehlt |
-| E305 | Test-Pfad existiert nicht |
-| E306 | Keine Source-Dateien im Test-Pfad |
+| E301 | No framework specified (neither global nor per target) |
+| E302 | Unknown test framework |
+| E303 | Test target: `name` missing |
+| E304 | Test target: `type` missing |
+| E305 | Test path does not exist |
+| E306 | No source files in the test path |
 
-### 12.5 Warningen
+### 12.5 Warnings
 
-| Code | Bereich | Description |
-|------|---------|--------------|
+| Code | Area | Description |
+|------|------|-------------|
 | W112 | Packages | Package names a target that does not exist — `package_<name>` is not created |
-| W302 | Externals | Version mismatch, offline mode uses the cache |
+| W302 | Externals | Version differs, offline mode uses the cache |
 | W304 | Externals | Archive external not available — targets build without it |
-| W401 | App-Container | App hat kein `include/` Verzeichnis |
-| W402 | App-Container | PCH aktiviert aber Header nicht gefunden |
-| W402 | App-Tests | Test mit seriellem Typ hat `parallel: true` gesetzt |
-| W403 | App-Container | Tests-Verzeichnis existiert aber keine Sources |
-| **W501** | **System Externals** | **Backup-Pfad verwendet (nicht empfohlen)** |
+| W401 | App container | App has no `include/` directory |
+| W402 | App container | PCH enabled but header not found |
+| W402 | App tests | Test of a serial type has `parallel: true` set |
+| W403 | App container | Tests directory exists but no sources |
+| **W501** | **System externals** | **Backup path used (not recommended)** |
 
-**Note zu W402:** Der Code W402 wird in zwei Kontexten verwendet:
-- Bei PCH: Warning wenn `pch.enabled: true` aber `pch/{header}` nicht gefunden
-- Bei Tests: Warning wenn `parallel: true` für Typen wie `performance`, `system`, `fuzz`, `security`, `ui` gesetzt wird
+**Note on W402:** The code W402 is used in two contexts:
+- For PCH: warning if `pch.enabled: true` but `pch/{header}` is not found
+- For tests: warning if `parallel: true` is set for types such as `performance`, `system`, `fuzz`, `security`, `ui`
 
 ---
 
 ## 13. See Also
 
-- [Packages.md](Packages.md) — building and consuming packages
-- [Externals.md](Externals.md) — External Libraries Reference
-- [ErrorCodes.md](ErrorCodes.md) — Vollständige Errorcode-Reference
-- [CMakePresets Reference](CMakePresets.md) — Build-Presets
-- [App Tests Targets Concept](../../konzepte/abgeschlossen/App_Tests_Targets_Concept.md) — Concept für flexible App-Tests
+- [Packages.md](Packages.md) — Building and consuming packages
+- [Externals.md](Externals.md) — External libraries reference
+- [ErrorCodes.md](ErrorCodes.md) — Complete error code reference
+- [CMakePresets Reference](CMakePresets.md) — Build presets
+- [App Tests Targets Concept](../../konzepte/abgeschlossen/App_Tests_Targets_Concept.md) — Concept for flexible app tests
 
 ---
 
 ## 14. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.11.0** | **2026-11-07** | **CMakeCraft v0.14.0: `compile_options` for libraries[] (§7, E105 for INTERFACE); source package of a library in the `packages` block (`library` instead of `contents`, [Packages.md](Packages.md) §2.5, E106)** |
-| **0.10.0** | **2026-10-23** | **CMakeCraft v0.12.0: block `settings.msvc` with `parallel_compile` (§4.4, default 8), E004** |
-| **0.9.0** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` for apps[].tests.targets[] (§9.8); runtime files of an archive external are copied by a target of its own on every build (§5.8)** |
-| **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: `packages` block, archive externals (§5.8), `output_name` and `defines` for libraries[], `{version}` in `defines`. Corrected: hook paths are `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` of a system external is a minimum version without operator (§5.4), error table §12.1 (E216–E220) and W302 aligned with the code** |
-| **0.7.4** | **2026-10-05** | **Fix: `external_options` for apps[].tests.targets[] (§9.8) is applied — until now the test target received every external with empty options. Existing entries take effect for the first time. The test framework stays without options** |
-| 0.7.3 | 2026-07-20 | New: `dependencies` for apps[].tests.targets[] (§9.8) — internal libraries are linked directly to the test target (E101 on unknown dependency). Previously the key was ignored |
-| 0.7.2 | 2025-12-20 | Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Usage geskippter Externals |
-| 0.7.1 | 2025-12-20 | Konsistente external_options: Für libraries[], apps.core, apps.runner hinzugefügt (fehlte bisher). Nun einheitlich wie executables[] und tests[] |
-| 0.7.0 | 2025-12-18 | Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen |
-| 0.6.0 | 2025-12-18 | Neu: apps[] Array mit Core/Runner Separation, tests.targets[] flexible Test-Configuration, Skip-Feature (tests.skip, targets[].skip), App-Container Error-Codes (E4xx, W4xx) |
-| 0.5.2 | 2025-12-18 | PCH-Objekt vollständig dokumentiert (§ 6.5): implizite Aktivierung, Suchpfad-Priorität, pch für libraries hinzugefügt |
-| 0.5.1 | 2025-12-15 | Include.cmake Convention dokumentiert (§ 5.2), include Feld als optional, Hook-Pfade kleingeschrieben |
-| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Änderungsblöcke ins Changelog integriert |
-| 0.1.4 | 2025-12-12 | tests Array dokumentiert: Typen, Frameworks, source_from, CTest |
-| 0.1.3 | 2025-12-11 | System Externals: options Feld (hint, backup, components) |
-| 0.1.2 | 2025-12-10 | Hook-Wiederverwendung (hook Feld) |
-| 0.1.1 | 2025-12-09 | Git Externals (git, tag, cmakeSupport) |
-| 0.1.0 | 2025-12-05 | Initial Schema |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.7** | **2026-11-09** | **Aligned with the code: `schemaVersion` in the complete example §11 is `"1.0"` (`cmake/project/Solution.cmake:50`); CMakeCraft v0.14.1: `required` without `find_package(… REQUIRED)`, E504/E505 in §12.1, E217 as not raised** |
+| **1.0.6** | **2026-11-07** | **CMakeCraft v0.14.0: `compile_options` for libraries[] (§7, E105 for INTERFACE); source package of a library in the `packages` block (`library` instead of `contents`, [Packages.md](Packages.md) §2.5, E106)** |
+| **1.0.5** | **2026-10-23** | **CMakeCraft v0.12.0: block `settings.msvc` with `parallel_compile` (§4.4, default 8), E004** |
+| **1.0.4** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` for apps[].tests.targets[] (§9.8); runtime files of an archive external are copied by a target of its own on every build (§5.8)** |
+| **1.0.3** | **2026-10-09** | **CMakeCraft v0.10.0: block `packages`, archive externals (§5.8), `output_name` and `defines` for libraries[], `{version}` in `defines`. Corrected: hook paths are called `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` of a system external is a minimum version without operator (§5.4), error table §12.1 (E216–E220) and W302 aligned with the code** |
+| **1.0.2** | **2026-10-05** | **Fix: `external_options` for apps[].tests.targets[] (§9.8) is applied — previously the test target got every external with empty options. Existing entries thus take effect for the first time. The test framework stays without options** |
+| 1.0.1 | 2026-07-20 | New: `dependencies` for apps[].tests.targets[] (§9.8) — internal libraries are linked directly to the test target (E101 for an unknown dependency). Previously the key was ignored |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.7.2 | 2025-12-20 | New: `skip` for externals (§5.7) - prepare externals without loading them. E013 when skipped externals are used |
+| 0.7.1 | 2025-12-20 | Consistent external_options: added for libraries[], apps.core, apps.runner (was missing). Now uniform like executables[] and tests[] |
+| 0.7.0 | 2025-12-18 | Phase 9: system externals with `system: true` syntax, find_package() integration, package hooks (Qt6, Boost), error codes E502/E503/W501, path resolution with ENV variables |
+| 0.6.0 | 2025-12-18 | New: apps[] array with Core/Runner separation, tests.targets[] flexible test configuration, skip feature (tests.skip, targets[].skip), app container error codes (E4xx, W4xx) |
+| 0.5.2 | 2025-12-18 | PCH object fully documented (§ 6.5): implicit activation, search path priority, pch added for libraries |
+| 0.5.1 | 2025-12-15 | Include.cmake convention documented (§ 5.2), include field optional, hook paths lower case |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 format: numbered TOC, reference header, quick reference, change blocks integrated into the changelog |
+| 0.1.4 | 2025-12-12 | tests array documented: types, frameworks, source_from, CTest |
+| 0.1.3 | 2025-12-11 | System externals: options field (hint, backup, components) |
+| 0.1.2 | 2025-12-10 | Hook reuse (hook field) |
+| 0.1.1 | 2025-12-09 | Git externals (git, tag, cmakeSupport) |
+| 0.1.0 | 2025-12-05 | Initial schema |

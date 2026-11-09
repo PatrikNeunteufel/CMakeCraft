@@ -7,8 +7,8 @@
 > **Basiert auf:** ModuleDoc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Boost_cmake.md](Boost_cmake.md)  
-> **Modul:** [cmake/externals/system/packages/Boost.cmake](../../../../../../cmake/externals/system/packages/Boost.cmake)  
+> **English:** [Boost_cmake.md](../../../../../../en/guide/module/externals/system/packages/Boost_cmake.md)  
+> **Modul:** [cmake/externals/system/packages/Boost.cmake](../../../../../../../cmake/externals/system/packages/Boost.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
@@ -260,4 +260,5 @@ Boost::thread
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Initial: Standard-Pfade, Post-Find Debug, BOOST_ALL_NO_LIB für MSVC** |
+| **1.0.0** | **2025-12-20** | **Release-Fassung (Datum laut Kopf; die Datei kam erst mit `6fc7f4a` ins Repo)** |
+| 0.6.0 | 2025-12-18 | Initial: Standard-Pfade, Post-Find Debug, BOOST_ALL_NO_LIB für MSVC |

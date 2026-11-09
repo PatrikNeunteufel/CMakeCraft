@@ -1,12 +1,12 @@
 # doctest — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [doctest.md](Doctest.md)
+> **English:** [doctest.md](../../../../en/guide/userguides/externals/Doctest.md)
 
 ---
 
@@ -20,7 +20,7 @@
 6. [Best Practices](#6-best-practices)
 7. [Troubleshooting](#7-troubleshooting)
 8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -525,8 +525,8 @@ CHECK(result == doctest::Approx(3.14159).epsilon(0.001));
 
 - [Externals.md](../Externals.md) — Externals Kombinationen
 - [Local_Externals_Testing.md](../../references/externals/Local_Externals_Testing.md) — Referenz
-- [googletest.md](googletest.md) — Alternative mit Mocking
-- [catch2.md](catch2.md) — Alternative mit BDD
+- [googletest.md](Googletest.md) — Alternative mit Mocking
+- [catch2.md](Catch2.md) — Alternative mit BDD
 
 ---
 
@@ -534,4 +534,5 @@ CHECK(result == doctest::Approx(3.14159).epsilon(0.001));
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für doctest** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für doctest |

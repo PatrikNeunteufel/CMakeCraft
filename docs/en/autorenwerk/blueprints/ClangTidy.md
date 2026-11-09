@@ -1,237 +1,238 @@
-# ClangTidy Blueprint – Statische Analyse
+# ClangTidy Blueprint – Static Analysis
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development (Pre-Release)  
-> **Scope:** Alle `.clang-tidy`-Configurationen  
-> **Bezug:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1, ClangFormat_Blueprint v0.1  
+> **Scope:** All `.clang-tidy` configurations  
+> **Related to:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1, ClangFormat_Blueprint v0.1  
 > **Language:** English  
+> **German:** [ClangTidy.md](../../../de/autorenwerk/blueprints/ClangTidy.md)
 
 ---
 
-## 1. Zweck
+## 1. Purpose
 
-Dieses Blueprint definiert **Struktur und Wartung** der `.clang-tidy`-Configuration.
+This blueprint defines the **structure and maintenance** of the `.clang-tidy` configuration.
 
-**Was dieses Dokument ist:**
-- Conceptuelle Grundlage für statische Analyse
-- Definition der Check-Kategorien und Profile
-- Erklärung der Namenskonventionen
+**What this document is:**
+- Conceptual basis for static analysis
+- Definition of the check categories and profiles
+- Explanation of the naming conventions
 
-**Was dieses Dokument nicht ist:**
-- Die technische Configuration selbst (→ `.clang-tidy`-Datei)
+**What this document is not:**
+- The technical configuration itself (→ `.clang-tidy` file)
 
 ---
 
-## 2. Verhältnis zu anderen Standards
+## 2. Relationship to Other Standards
 
-| Dokument | Definiert |
+| Document | Defines |
 |----------|-----------|
-| **Cpp_Coding_Standard** | Strukturelle und sprachliche Regeln |
-| **C_Coding_Standard** | Embedded-spezifische Regeln |
-| **`.clang-tidy`** | Technische Durchsetzung |
+| **Cpp_Coding_Standard** | Structural and language rules |
+| **C_Coding_Standard** | Embedded-specific rules |
+| **`.clang-tidy`** | Technical enforcement |
 
-### Konfliktauflösung
+### Conflict Resolution
 
-| Konflikttyp | Priorität |
+| Conflict type | Priority |
 |-------------|-----------|
-| Formatierung | `.clang-format` gewinnt |
-| Naming/Statische Regeln | `.clang-tidy` gewinnt |
-| Architecture/Funktional | Schriftlicher Standard gewinnt |
+| Formatting | `.clang-format` wins |
+| Naming/static rules | `.clang-tidy` wins |
+| Architecture/functional | Written standard wins |
 
 ---
 
-## 3. Philosophie und Strategie
+## 3. Philosophy and Strategy
 
-### 3.1 Ziele
+### 3.1 Goals
 
-- Bugs früh erkennen
-- Code-Klarheit verbessern
-- Verantwortungsvolle Modernisierung (keine Stil-Kriege)
-- Namens-Konsistenz durchsetzen
-- MISRA/CERT-Alignment wo sinnvoll
+- Detect bugs early
+- Improve code clarity
+- Responsible modernization (no style wars)
+- Enforce naming consistency
+- MISRA/CERT alignment where sensible
 
-### 3.2 Profile
+### 3.2 Profiles
 
-| Profil | Zweck | Usage |
+| Profile | Purpose | Usage |
 |--------|-------|------------|
-| **Dev-Gentle** | Alltags-Entwicklung | Default |
-| **Dev-Strict** | Schärfere Checks | Vor Merge |
-| **CI-Strict** | Pull Requests / Merge Gates | CI Pipeline |
-| **API-Gate** | Öffentliche Libraries | Höchste Stufe |
+| **Dev-Gentle** | Everyday development | Default |
+| **Dev-Strict** | Stricter checks | Before merge |
+| **CI-Strict** | Pull requests / merge gates | CI pipeline |
+| **API-Gate** | Public libraries | Highest level |
 
-**Aktuelles Default-Profil:** `Dev-Gentle`
+**Current default profile:** `Dev-Gentle`
 
-### 3.3 Verantwortlichkeit
+### 3.3 Responsibility
 
-- `.clang-tidy` wird zentral von Architecture/Tooling gepflegt
-- Projekte können Changes vorschlagen
-- Keine leichtfertigen Forks
+- `.clang-tidy` is maintained centrally by architecture/tooling
+- Projects can propose changes
+- No careless forks
 
 ---
 
-## 4. Namenskonventionen
+## 4. Naming Conventions
 
-Durchgesetzt via `readability-identifier-naming`.
+Enforced via `readability-identifier-naming`.
 
-### 4.1 C++ (PC-Applikationen)
+### 4.1 C++ (PC Applications)
 
-| Entität | Konvention | Example |
+| Entity | Convention | Example |
 |---------|------------|----------|
 | Namespace | `lower_case` | `audio`, `core_utils` |
-| Klasse/Struct/Enum | `CamelCase` | `LogManager`, `AudioBuffer` |
-| Enum-Konstante | `CamelCase` | `LogLevelInfo`, `ColorRed` |
-| Funktion/Methode | `camelBack` | `writeLog()`, `openFile()` |
-| Parameters | `camelBack` | `filePath`, `bufferSize` |
-| Lokale Variable | `camelBack` | `currentIndex`, `tempValue` |
-| Member-Variable | `m_` Prefix | `m_buffer`, `m_logger` |
-| Globale Konstante | `UPPER_CASE` | `MAX_BUFFER_SIZE` |
-| Globale Variable | `g_` Prefix | `g_logger` |
-| Statische interne Variable | `s_` Prefix | `s_cache` |
-| Makro | `UPPER_CASE` | `DEBUG_LOG` |
+| Class/struct/enum | `CamelCase` | `LogManager`, `AudioBuffer` |
+| Enum constant | `CamelCase` | `LogLevelInfo`, `ColorRed` |
+| Function/method | `camelBack` | `writeLog()`, `openFile()` |
+| Parameter | `camelBack` | `filePath`, `bufferSize` |
+| Local variable | `camelBack` | `currentIndex`, `tempValue` |
+| Member variable | `m_` prefix | `m_buffer`, `m_logger` |
+| Global constant | `UPPER_CASE` | `MAX_BUFFER_SIZE` |
+| Global variable | `g_` prefix | `g_logger` |
+| Static internal variable | `s_` prefix | `s_cache` |
+| Macro | `UPPER_CASE` | `DEBUG_LOG` |
 
 ### 4.2 C (Embedded)
 
-| Entität | Konvention | Example |
+| Entity | Convention | Example |
 |---------|------------|----------|
-| Modul-Funktion | `modul_snake_case` | `timer_init()`, `gpio_set()` |
-| Typ-Alias | `CamelCase` oder `snake_case` | `TimerHandle`, `gpio_pin_t` |
-| Lokale Variable | `snake_case` | `current_state` |
-| Globale Variable | `g_` Prefix | `g_systemState` |
-| Statische Variable | `s_` Prefix | `s_bufferIndex` |
-| Konstante/Makro | `UPPER_CASE` | `ADC_TIMEOUT_TICKS` |
+| Module function | `modul_snake_case` | `timer_init()`, `gpio_set()` |
+| Type alias | `CamelCase` or `snake_case` | `TimerHandle`, `gpio_pin_t` |
+| Local variable | `snake_case` | `current_state` |
+| Global variable | `g_` prefix | `g_systemState` |
+| Static variable | `s_` prefix | `s_bufferIndex` |
+| Constant/macro | `UPPER_CASE` | `ADC_TIMEOUT_TICKS` |
 
 ---
 
-## 5. Check-Kategorien
+## 5. Check Categories
 
-### 5.1 Aktivierte Check-Gruppen
+### 5.1 Enabled Check Groups
 
-| Gruppe | Zweck | Priorität |
+| Group | Purpose | Priority |
 |--------|-------|-----------|
-| `clang-analyzer-*` | UB, Leaks, Null-Deref | **Kritisch** |
-| `bugprone-*` | Logik-Error | **Kritisch** |
-| `performance-*` | Ineffiziente Patterns | Hoch |
-| `readability-*` | Lesbarkeit, Naming | Mittel |
-| `modernize-*` | C++-Modernisierung | Mittel |
+| `clang-analyzer-*` | UB, leaks, null deref | **Critical** |
+| `bugprone-*` | Logic errors | **Critical** |
+| `performance-*` | Inefficient patterns | High |
+| `readability-*` | Readability, naming | Medium |
+| `modernize-*` | C++ modernization | Medium |
 
-### 5.2 Umgang mit Warningen
+### 5.2 Handling Warnings
 
-| Check-Typ | Anforderung |
+| Check type | Requirement |
 |-----------|-------------|
-| `clang-analyzer-*`, `bugprone-*` | **Muss behoben** oder begründet unterdrückt werden |
-| `modernize-*` | Fallweise bewerten, kein Zwang |
-| `performance-*` | Aktiviert wo Klarheit nicht leidet |
+| `clang-analyzer-*`, `bugprone-*` | **Must be fixed** or suppressed with justification |
+| `modernize-*` | Assess case by case, no obligation |
+| `performance-*` | Enabled where clarity does not suffer |
 
-### 5.3 Deaktivierte Checks
+### 5.3 Disabled Checks
 
-Folgende Checks sind im Dev-Gentle-Profil deaktiviert (zu viel Rauschen):
+The following checks are disabled in the Dev-Gentle profile (too much noise):
 
-- `modernize-use-trailing-return-type` – Stilfrage
-- `modernize-use-auto` – Explizite Typen oft lesbarer
-- `readability-implicit-bool-conversion` – Zu strikt
-- `readability-identifier-naming` – Optional aktivierbar
+- `modernize-use-trailing-return-type` – A matter of style
+- `modernize-use-auto` – Explicit types are often more readable
+- `readability-implicit-bool-conversion` – Too strict
+- `readability-identifier-naming` – Can optionally be enabled
 
 ---
 
 ## 6. Magic Numbers
 
-### 6.1 Erlaubte Werte
+### 6.1 Allowed Values
 
-Automatisch toleriert:
+Tolerated automatically:
 - `-1`, `0`, `1`, `2`
-- Alle Zweierpotenzen (für Bitmasken, Alignment)
+- All powers of two (for bit masks, alignment)
 
-### 6.2 Empfehlung
+### 6.2 Recommendation
 
-Domänenwerte (z.B. `44100` Hz, `2.2` Gamma) sollten als `constexpr` oder `enum` benannt werden:
+Domain values (e.g. `44100` Hz, `2.2` gamma) should be named as `constexpr` or `enum`:
 
 ```cpp
-// ❌ Magic Number
+// ❌ Magic number
 setSampleRate(44100);
 
-// ✅ Benannte Konstante
+// ✅ Named constant
 constexpr int SAMPLE_RATE_CD = 44100;
 setSampleRate(SAMPLE_RATE_CD);
 ```
 
 ---
 
-## 7. Value-Parameters-Optimierung
+## 7. Value Parameter Optimization
 
-Bestimmte Typen dürfen per Value übergeben werden:
+Certain types may be passed by value:
 
 - `std::string_view`
 - `std::span`
 - `std::optional`
 
-Dies entspricht modernen C++-Guidelines und vermeidet unnötige Indirektion.
+This matches modern C++ guidelines and avoids unnecessary indirection.
 
 ---
 
-## 8. Änderungsmanagement
+## 8. Change Management
 
-### 8.1 Wann ändern?
+### 8.1 When to Change?
 
-Changes nur wenn:
-- Regel verursacht wiederholt begründete Unterdrückungen
-- Regel kollidiert mit Plattform-/Embedded-Constraints
-- Neue Regel verbessert Sicherheit oder Klarheit
+Changes only if:
+- A rule repeatedly causes justified suppressions
+- A rule conflicts with platform/embedded constraints
+- A new rule improves safety or clarity
 
-### 8.2 Prozess
+### 8.2 Process
 
-1. **Vorschlag:** Motivation, Kategorien, Example-Warningen
-2. **Review:** Tooling/Architecture-Freigabe
-3. **Umsetzung:** `.clang-tidy` und Version-Tag aktualisieren
-4. **Dokumentation:** Bei konzeptueller Änderung Blueprint aktualisieren
+1. **Proposal:** Motivation, categories, example warnings
+2. **Review:** Tooling/architecture approval
+3. **Implementation:** Update `.clang-tidy` and the version tag
+4. **Documentation:** For a conceptual change, update the blueprint
 
-### 8.3 Datei-Header
+### 8.3 File Header
 
 ```yaml
-# C/C++ clang-tidy Configuration
+# C/C++ clang-tidy configuration
 # Version: 0.1.0
-# Blueprint: Documentations/Blueprints/ClangTidy_Blueprint_v0_1_0.md
-# Profil: Dev-Gentle
+# Blueprint: docs/de/autorenwerk/blueprints/ClangTidy.md
+# Profile: Dev-Gentle
 # Date: 2025-12-05
 ```
 
 ---
 
-## 9. Integration in CI und Entwicklung
+## 9. Integration into CI and Development
 
-| Kontext | Usage |
+| Context | Usage |
 |---------|------------|
 | IDE (on-save) | Optional, Dev-Gentle |
-| Pre-Commit | Optional |
-| CI Pipeline | Empfohlen, Dev-Strict oder CI-Strict |
+| Pre-commit | Optional |
+| CI pipeline | Recommended, Dev-Strict or CI-Strict |
 
-### Profile via CLI
+### Profiles via CLI
 
 ```bash
-# Dev-Strict (Warnings als Errors für Analyzer/Bugprone)
+# Dev-Strict (warnings as errors for analyzer/bugprone)
 clang-tidy -warnings-as-errors=clang-analyzer-*,bugprone-* ...
 
-# API-Gate (alle Warnings als Errors)
+# API-Gate (all warnings as errors)
 clang-tidy -warnings-as-errors=* ...
 ```
 
 ---
 
-## 10. Third-Party-Code
+## 10. Third-Party Code
 
-### Header-Filter
+### Header Filter
 
 ```yaml
 HeaderFilterRegex: '^(?!.*[/\\](external|third_party|deps)[/\\]).*'
 ```
 
-### Quellen
+### Sources
 
-Third-Party-Quellen werden über CMake ausgeschlossen:
+Third-party sources are excluded via CMake:
 
 ```cmake
-# Kein clang-tidy für External
+# No clang-tidy for externals
 set_target_properties(ThirdPartyLib PROPERTIES
     CXX_CLANG_TIDY ""
 )
@@ -241,14 +242,16 @@ set_target_properties(ThirdPartyLib PROPERTIES
 
 ## 11. See Also
 
-- [Cpp_Coding_Standard](../standards/Cpp_Coding_Standard.md) – C++ Stil-Richtlinien
-- [C_Coding_Standard](../standards/C_Coding_Standard.md) – C Stil-Richtlinien
-- [ClangFormat_Blueprint](ClangFormat.md) – Formatierung
+- [Cpp_Coding_Standard](../standards/Cpp_Coding_Standard.md) – C++ style guidelines
+- [C_Coding_Standard](../standards/C_Coding_Standard.md) – C style guidelines
+- [ClangFormat_Blueprint](ClangFormat.md) – Formatting
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-05** | **Initial: Profile, Check-Kategorien, Namenskonventionen** |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: header pattern points to today's path `docs/de/autorenwerk/blueprints/ClangTidy.md`** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.1.0 | 2025-12-05 | Initial: profiles, check categories, naming conventions |

@@ -1,7 +1,7 @@
 # CMakeCraftPackage.cmake — Vorgebaute Pakete beziehen und ausliefern
 
-> **Version:** 1.1.1  
-> **Datum:** 2026-10-11  
+> **Version:** 1.1.2  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5  
@@ -55,8 +55,9 @@ Beim Einbinden setzt die Datei:
 | Wirkung | Beschreibung |
 |---------|--------------|
 | `include_guard(GLOBAL)` | Mehrfaches Einbinden ist unschädlich |
-| `CMAKECRAFT_PACKAGE_VERSION` | Variable mit der Version dieser Datei (`1.0.0`) |
+| `CMAKECRAFT_PACKAGE_VERSION` | Variable mit der Version dieser Datei (`1.1.1`) |
 | Policy `CMP0174` → `NEW` | Nur wenn die Policy existiert; ein leeres `ROOT` gilt damit als regulärer Parameter von `craft_package_deploy()` |
+| Policy `CMP0112` → `NEW` | Immer; `$<TARGET_FILE_DIR:...>` im Deploy-Target erzeugt keine Abhängigkeit auf die ausführbare Datei (siehe §4.2) |
 
 ---
 
@@ -279,9 +280,9 @@ Die Datei verwendet keine Fehlercodes des CMakeCraft-Kerns.
 
 | Bedingung | Meldung |
 |-----------|---------|
-| CMake älter als 3.26 | `[CraftPackage] CMake 3.26 or newer is required` |
-| `craft_package_fetch` ohne `NAME`, `PIN_FILE` oder `OUT_ROOT` | `NAME, PIN_FILE and OUT_ROOT are mandatory` |
-| `craft_package_deploy` mit leerem oder unbekanntem `TARGET` | `TARGET '<name>' does not exist` |
+| CMake älter als 3.26 | `[CraftPackage] CMake 3.26 or newer is required (found <version>).` |
+| `craft_package_fetch` ohne `NAME`, `PIN_FILE` oder `OUT_ROOT` | `[CraftPackage] craft_package_fetch: NAME, PIN_FILE and OUT_ROOT are mandatory.` |
+| `craft_package_deploy` mit leerem oder unbekanntem `TARGET` | `[CraftPackage] craft_package_deploy: TARGET '<name>' does not exist.` |
 
 ### Warnungen (Build läuft ohne das Paket weiter)
 
@@ -307,6 +308,7 @@ Die Datei verwendet keine Fehlercodes des CMakeCraft-Kerns.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.1** | **2026-10-11** | **CMakeCraft v0.11.1: das Deploy-Target schreibt unter den Visual-Studio-Generatoren keine Deploy-Recipe-Datei — keine MSBuild-Warnung mehr in Projekten, die `IntDir` über `Directory.Build.targets` umleiten** |
+| **1.1.2** | **2026-11-09** | **An den Code angeglichen: `CMAKECRAFT_PACKAGE_VERSION` ist `1.1.1` (`CMakeCraftPackage.cmake:65`); Policy CMP0112 in §2 (`:79`); fatale Meldungen in §7 wörtlich (`:68`, `:177`, `:342`)** |
+| 1.1.1 | 2026-10-11 | CMakeCraft v0.11.1: das Deploy-Target schreibt unter den Visual-Studio-Generatoren keine Deploy-Recipe-Datei — keine MSBuild-Warnung mehr in Projekten, die `IntDir` über `Directory.Build.targets` umleiten** |
 | 1.1.0 | 2026-10-09 | CMakeCraft v0.11.0: craft_package_deploy kopiert über ein eigenes Target `<target>_deploy_<name>` statt `POST_BUILD` — die Kopie läuft bei jedem Build, auch ohne neues Linken. Neues Argument `NAME` |
 | 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): craft_package_fetch, craft_package_deploy |

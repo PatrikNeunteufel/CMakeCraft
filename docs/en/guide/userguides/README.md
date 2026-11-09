@@ -1,105 +1,105 @@
-# User Guides — Benutzerhandbücher
+# User Guides
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-15  
 > **Language:** English  
-> **German:** [README.md](../../en/userguides/README.md)
+> **German:** [README.md](../../../de/guide/userguides/README.md)
 
 ---
 
-## Quick-Start
+## Quick Start
 
-**Neu im Projekt?**
-1. [Getting_Started.md](Getting_Started.md) — Erste Schritte, Projekt einrichten
-2. [../references/Glossar.md](../references/Glossar.md) — Begriffe klären
+**New to the project?**
+1. [Getting_Started.md](Getting_Started.md) — First steps, setting up the project
+2. [../references/Glossar.md](../references/Glossar.md) — Clarify terms
 
-**Externe Libraries nutzen?**
-1. [Externals.md](Externals.md) — Overview Externals-System
-2. [Adding_Externals.md](Adding_Externals.md) — Neue External hinzufügen
-3. [externals/](externals/README.md) — Library-spezifische Guides
+**Using external libraries?**
+1. [Externals.md](Externals.md) — Overview of the externals system
+2. [Adding_Externals.md](Adding_Externals.md) — Adding a new external
+3. [externals/](externals/README.md) — Library-specific guides
 
-**Tests schreiben?**
-1. [Testing.md](Testing.md) — Test-Framework einrichten und nutzen
-2. [externals/Doctest.md](externals/Doctest.md) — doctest Guide
-3. [externals/Googletest.md](externals/Googletest.md) — GoogleTest Guide
+**Writing tests?**
+1. [Testing.md](Testing.md) — Setting up and using the test framework
+2. [externals/Doctest.md](externals/Doctest.md) — doctest guide
+3. [externals/Googletest.md](externals/Googletest.md) — GoogleTest guide
 
-**Build konfigurieren?**
-1. [CMakeUserPresets.md](CMakeUserPresets.md) — Eigene Presets erstellen
-2. [../references/CMakePresets.md](../references/CMakePresets.md) — Preset-Reference
+**Configuring the build?**
+1. [CMakeUserPresets.md](CMakeUserPresets.md) — Creating your own presets
+2. [../references/CMakePresets.md](../references/CMakePresets.md) — Preset reference
 
-**Qt6 nutzen?**
-1. [Qt6_Integration.md](Qt6_Integration.md) — Qt6 einrichten
-2. [externals/Qt6.md](externals/Qt6.md) — Qt6 Details
+**Using Qt6?**
+1. [Qt6_Integration.md](Qt6_Integration.md) — Setting up Qt6
+2. [externals/Qt6.md](externals/Qt6.md) — Qt6 details
 
 ---
 
 ## Overview
 
-User Guides sind praktische Anleitungen für konkrete Aufgaben. Sie folgen dem [Guide Blueprint](../../autorenwerk/blueprints/Guide.md) und sind auf End Users ausgerichtet.
+User guides are practical instructions for concrete tasks. They follow the [Guide Blueprint](../../autorenwerk/blueprints/Guide.md) and are aimed at end users.
 
 ---
 
-## Dateien
+## Files
 
-| Datei | Description |
-|-------|--------------|
-| [Getting_Started.md](Getting_Started.md) | Erste Schritte — Projekt klonen, konfigurieren, bauen |
-| [Externals.md](Externals.md) | Externals nutzen — Git + Local Libraries einbinden |
-| [Adding_Externals.md](Adding_Externals.md) | Neue External hinzufügen — Schritt-für-Schritt |
-| [Testing.md](Testing.md) | Tests schreiben — Framework einrichten, Tests erstellen |
-| [CMakeUserPresets.md](CMakeUserPresets.md) | CMakeUserPresets.json — Eigene Build-Configurationen |
-| [Qt6_Integration.md](Qt6_Integration.md) | Qt6 Integration — Setup und Usage |
-
----
-
-## Unterordner
-
-| Ordner | Dateien | Description |
-|--------|---------|--------------|
-| [externals/](externals/README.md) | 9 | Library-spezifische Guides |
+| File | Description |
+|------|-------------|
+| [Getting_Started.md](Getting_Started.md) | First steps — clone, configure, build the project |
+| [Externals.md](Externals.md) | Using externals — integrating Git and local libraries |
+| [Adding_Externals.md](Adding_Externals.md) | Adding a new external — step by step |
+| [Testing.md](Testing.md) | Writing tests — setting up the framework, creating tests |
+| [CMakeUserPresets.md](CMakeUserPresets.md) | CMakeUserPresets.json — your own build configurations |
+| [Qt6_Integration.md](Qt6_Integration.md) | Qt6 integration — setup and usage |
 
 ---
 
-## Library-Guides (Direktzugriff)
+## Subfolders
+
+| Folder | Files | Description |
+|--------|-------|-------------|
+| [externals/](externals/README.md) | 9 | Library-specific guides |
+
+---
+
+## Library Guides (Direct Access)
 
 ### Audio
 
 | Guide | Description |
-|-------|--------------|
-| [externals/Bass.md](externals/Bass.md) | BASS Audio Library — Setup, Plugins, Examples |
+|-------|-------------|
+| [externals/Bass.md](externals/Bass.md) | BASS Audio Library — setup, plugins, examples |
 
 ### GUI
 
 | Guide | Description |
-|-------|--------------|
-| [externals/Glfw.md](externals/Glfw.md) | GLFW — Window/Input Library |
-| [externals/Imgui.md](externals/Imgui.md) | Dear ImGui — Immediate Mode GUI |
-| [externals/Qt6.md](externals/Qt6.md) | Qt6 — Framework-Integration |
+|-------|-------------|
+| [externals/Glfw.md](externals/Glfw.md) | GLFW — window/input library |
+| [externals/Imgui.md](externals/Imgui.md) | Dear ImGui — immediate mode GUI |
+| [externals/Qt6.md](externals/Qt6.md) | Qt6 — framework integration |
 
 ### OpenGL
 
 | Guide | Description |
-|-------|--------------|
-| [externals/Glad.md](externals/Glad.md) | GLAD — OpenGL Loader |
+|-------|-------------|
+| [externals/Glad.md](externals/Glad.md) | GLAD — OpenGL loader |
 
 ### Scripting
 
 | Guide | Description |
-|-------|--------------|
-| [externals/Lua54.md](externals/Lua54.md) | Lua 5.4 — Scripting Engine |
+|-------|-------------|
+| [externals/Lua54.md](externals/Lua54.md) | Lua 5.4 — scripting engine |
 
 ### Testing
 
 | Guide | Description |
-|-------|--------------|
-| [externals/Doctest.md](externals/Doctest.md) | doctest — Schnelles Testing |
-| [externals/Googletest.md](externals/Googletest.md) | Google Test — Umfangreiches Testing |
-| [externals/Catch2.md](externals/Catch2.md) | Catch2 — BDD-Style Testing |
+|-------|-------------|
+| [externals/Doctest.md](externals/Doctest.md) | doctest — fast testing |
+| [externals/Googletest.md](externals/Googletest.md) | Google Test — comprehensive testing |
+| [externals/Catch2.md](externals/Catch2.md) | Catch2 — BDD-style testing |
 
 ---
 
 ## See Also
 
-- [../README.md](../README.md) — Germane Dokumentation Overview
+- [../../README.md](../../README.md) — English documentation overview
 - [../blueprints/Guide.md](../../autorenwerk/blueprints/Guide.md) — Guide Blueprint
-- [../references/](../references/README.md) — Nachschlagewerke
+- [../references/](../references/README.md) — References

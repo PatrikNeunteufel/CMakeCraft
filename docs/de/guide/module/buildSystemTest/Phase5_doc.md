@@ -1,11 +1,12 @@
 # phase5.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Pfad:** `cmake/buildSystemTest/phase5.cmake`  
 > **Status:** Stabil  
 > **Sprache:** Deutsch  
+> **English:** [Phase5_doc.md](../../../../en/guide/module/buildSystemTest/Phase5_doc.md)  
 
 ---
 
@@ -15,7 +16,7 @@
 2. [Tests](#2-tests)
 3. [Erfolgs-Flag](#3-erfolgs-flag)
 4. [Siehe auch](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+5. [Changelog](#changelog)
 
 ---
 
@@ -89,9 +90,9 @@ set(PHASE5_TEST_PASSED TRUE CACHE BOOL "Phase 5 Test passed" FORCE)
 
 ## 4. Siehe auch
 
-- [Externals.md](../modules/project/Externals.md)
-- [Orchestrator.md](../modules/externals/Orchestrator.md)
-- [Attach.md](../modules/externals/Local/Attach.md)
+- [Externals.md](../project/Externals.md)
+- [Orchestrator.md](../externals/Orchestrator_cmake.md)
+- [Attach.md](../externals/locals/Attach_cmake.md)
 - [Local_Externals.md](../../references/externals/Local_Externals.md)
 
 ---
@@ -100,5 +101,6 @@ set(PHASE5_TEST_PASSED TRUE CACHE BOOL "Phase 5 Test passed" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-08 | Initial |

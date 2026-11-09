@@ -1,28 +1,28 @@
-# App-Container — Architecture-Concept
+# App Container — Architecture Concept
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Concept  
-> **Status:** Implementiert  
-> **Phase:** 8 (abgeschlossen)  
-> **Target Audience:** Build System Developers, Architekten  
+> **Status:** Implemented  
+> **Phase:** 8 (completed)  
+> **Target Audience:** Build System Developers, Architects  
 > **Language:** English  
-> **German:** [AppContainer_Concept.md](AppContainer_Concept.md)
+> **German:** [AppContainer_Concept.md](../../../de/konzepte/abgeschlossen/AppContainer_Concept.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Verzeichnisstruktur](#2-verzeichnisstruktur)
+1. [Overview](#1-overview)
+2. [Directory Structure](#2-directory-structure)
 3. [Solution.json Integration](#3-solutionjson-integration)
-4. [Tests-Configuration](#4-tests-konfiguration)
-5. [CMake-Module](#5-cmake-module)
+4. [Tests Configuration](#4-tests-configuration)
+5. [CMake Modules](#5-cmake-modules)
 6. [Error Codes](#6-error-codes)
-7. [Build-Ausgabe Struktur](#7-build-ausgabe-struktur)
-8. [Example: Vollständiger App-Container](#8-beispiel-vollständiger-app-container)
-9. [Migration: Executable → App-Container](#9-migration-executable--app-container)
-10. [See Also](#10-siehe-auch)
+7. [Build Output Structure](#7-build-output-structure)
+8. [Example: Complete App Container](#8-example-complete-app-container)
+9. [Migration: Executable → App Container](#9-migration-executable--app-container)
+10. [See Also](#10-see-also)
 11. [Changelog](#11-changelog)
 
 ---
@@ -31,17 +31,17 @@
 
 ### 1.1 Motivation
 
-Das aktuelle Build-System unterstützt Executables als monolithische Einheiten. Das führt zu Problemen bei der Testbarkeit:
+The current build system supports executables as monolithic units. This leads to problems with testability:
 
 | Problem | Description |
 |---------|--------------|
-| **Nicht testbar** | Business-Logik ist mit `main()` vermischt |
-| **Code-Duplizierung** | Um Module zu testen, müssen Sources manuell kopiert werden |
-| **Zirkuläre Dependencies** | Test-Targets können nicht einfach gegen Executable-Code linken |
+| **Not testable** | Business logic is mixed with `main()` |
+| **Code duplication** | To test modules, sources have to be copied manually |
+| **Circular dependencies** | Test targets cannot simply link against executable code |
 
-### 1.2 Lösung: App-Container
+### 1.2 Solution: App Container
 
-Ein **App-Container** trennt die Anwendungslogik von der Einstiegspunkt-Logik:
+An **app container** separates the application logic from the entry point logic:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -68,47 +68,47 @@ Ein **App-Container** trennt die Anwendungslogik von der Einstiegspunkt-Logik:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.3 Kompatibilität
+### 1.3 Compatibility
 
-| Modus | JSON-Array | Description | Testbarkeit |
+| Mode | JSON array | Description | Testability |
 |-------|------------|--------------|-------------|
-| **Executable** | `executables[]` | Monolithisches Executable | Eingeschränkt |
-| **App-Container** | `apps[]` | Getrennte Core-Library + Runner | Volle Testbarkeit |
+| **Executable** | `executables[]` | Monolithic executable | Limited |
+| **App container** | `apps[]` | Separate core library + runner | Full testability |
 
-**Beide Modi verwenden dieselben Default-Pfade:**
+**Both modes use the same default paths:**
 - Executables: `projects/exec/{name}/`
-- App-Container: `projects/apps/{name}/`
+- App containers: `projects/apps/{name}/`
 
-**Bestehende Projekte funktionieren weiterhin** — die `executables[]` Sektion bleibt vollständig unterstützt.
+**Existing projects continue to work** — the `executables[]` section remains fully supported.
 
-### 1.4 Designprinzipien
+### 1.4 Design Principles
 
-| Prinzip | Umsetzung |
+| Principle | Implementation |
 |---------|-----------|
-| **Single Source of Truth** | Alles in `Solution.json`, keine separate `app.json` |
-| **Convention over Configuration** | Feste Verzeichnisstruktur, minimale Configuration |
-| **Zentrale Externals** | Externals nur in `externals{}` Block, nie in Apps |
-| **Konsistenz** | Gleiche Patterns wie Legacy (Source.cmake, PCH, etc.) |
-| **Flexible Tests** | Beliebig viele Tests pro App via `tests.targets[]` |
+| **Single Source of Truth** | Everything in `Solution.json`, no separate `app.json` |
+| **Convention over Configuration** | Fixed directory structure, minimal configuration |
+| **Central externals** | Externals only in the `externals{}` block, never in apps |
+| **Consistency** | Same patterns as legacy (Source.cmake, PCH, etc.) |
+| **Flexible tests** | Any number of tests per app via `tests.targets[]` |
 
 ---
 
-## 2. Verzeichnisstruktur
+## 2. Directory Structure
 
-### 2.1 App-Container Layout
+### 2.1 App Container Layout
 
 ```
 projects/apps/{AppName}/
-├── include/                    # PUBLIC Headers → {AppName}.Core
+├── include/                    # PUBLIC headers → {AppName}.Core
 │   ├── Source.cmake
 │   └── *.hpp
 ├── src/                        # Implementation → {AppName}.Core
 │   ├── Source.cmake
 │   └── *.cpp
-├── main/                       # Entry Point → {AppName}
+├── main/                       # Entry point → {AppName}
 │   ├── Source.cmake
 │   └── main.cpp
-├── pch/                        # Precompiled Header (optional)
+├── pch/                        # Precompiled header (optional)
 │   └── pch.h
 └── tests/
     ├── unit/
@@ -124,7 +124,7 @@ projects/apps/{AppName}/
             └── ...
 ```
 
-### 2.2 Symmetrie include/ ↔ src/
+### 2.2 Symmetry include/ ↔ src/
 
 ```
 include/                    src/
@@ -137,20 +137,20 @@ include/                    src/
     └── Application.hpp         └── Application.cpp
 ```
 
-### 2.3 Gesamtstruktur im Projekt
+### 2.3 Overall Structure in the Project
 
 ```
 project_root/
 ├── Solution.json
 ├── projects/
-│   ├── apps/                    # App-Container
+│   ├── apps/                    # App containers
 │   │   ├── MyVisualizer/
 │   │   └── DemoPlayer/
-│   ├── exec/                    # Legacy Executables
+│   ├── exec/                    # Legacy executables
 │   │   └── MinimalConsole/
 │   ├── libs/                    # Libraries
 │   │   └── CoreLib/
-│   └── tests/                   # Standalone Tests
+│   └── tests/                   # Standalone tests
 │       └── CoreLib_UnitTests/
 └── externals/
     └── bass/
@@ -160,7 +160,7 @@ project_root/
 
 ## 3. Solution.json Integration
 
-### 3.1 Vollständiges Example
+### 3.1 Complete Example
 
 ```json
 {
@@ -219,121 +219,121 @@ project_root/
 }
 ```
 
-### 3.2 App-Definition Schema
+### 3.2 App Definition Schema
 
-| Feld | Typ | Required | Default | Description |
+| Field | Type | Required | Default | Description |
 |------|-----|---------|---------|--------------|
-| `name` | string | ✅ | — | Eindeutiger App-Name |
-| `displayName` | string | — | `name` | Anzeigename |
-| `version` | string | — | Solution-Version | App-Version |
+| `name` | string | ✅ | — | Unique app name |
+| `displayName` | string | — | `name` | Display name |
+| `version` | string | — | Solution version | App version |
 | `description` | string | — | `""` | Description |
-| `skip` | bool | — | `false` | Gesamte App überspringen |
-| `path` | string | — | `projects/apps/{name}` | Basis-Pfad |
-| `core` | object | — | `{}` | Core-Library Configuration |
-| `runner` | object | — | `{}` | Runner-Executable Configuration |
-| `pch` | object | — | `{}` | PCH Configuration |
-| `tests` | object | — | `{}` | Test-Configuration |
-| `platforms` | array | — | alle | Zielplattformen |
+| `skip` | bool | — | `false` | Skip the entire app |
+| `path` | string | — | `projects/apps/{name}` | Base path |
+| `core` | object | — | `{}` | Core library configuration |
+| `runner` | object | — | `{}` | Runner executable configuration |
+| `pch` | object | — | `{}` | PCH configuration |
+| `tests` | object | — | `{}` | Test configuration |
+| `platforms` | array | — | all | Target platforms |
 
-### 3.3 Core-Definition Schema
+### 3.3 Core Definition Schema
 
-| Feld | Typ | Default | Description |
+| Field | Type | Default | Description |
 |------|-----|---------|--------------|
-| `dependencies` | array | `[]` | Interne Library-Dependencies |
-| `externals` | array | `[]` | Externe Dependencies |
+| `dependencies` | array | `[]` | Internal library dependencies |
+| `externals` | array | `[]` | External dependencies |
 
-### 3.4 Runner-Definition Schema
+### 3.4 Runner Definition Schema
 
-| Feld | Typ | Default | Description |
+| Field | Type | Default | Description |
 |------|-----|---------|--------------|
-| `type` | string | `"CONSOLE"` | CONSOLE oder GUI |
-| `externals` | array | `[]` | Zusätzliche Externals (GUI, etc.) |
+| `type` | string | `"CONSOLE"` | CONSOLE or GUI |
+| `externals` | array | `[]` | Additional externals (GUI, etc.) |
 
-### 3.5 PCH-Definition Schema
+### 3.5 PCH Definition Schema
 
-| Feld | Typ | Default | Description |
+| Field | Type | Default | Description |
 |------|-----|---------|--------------|
-| `enabled` | bool | `false` | PCH aktivieren |
-| `header` | string | `"pch.h"` | Header-Dateiname in `pch/` |
+| `enabled` | bool | `false` | Enable PCH |
+| `header` | string | `"pch.h"` | Header file name in `pch/` |
 
 ---
 
-## 4. Tests-Configuration
+## 4. Tests Configuration
 
-### 4.1 Flexible Test-Targets
+### 4.1 Flexible Test Targets
 
-Die Tests werden über ein `targets[]` Array konfiguriert, das beliebig viele Tests mit individueller Configuration erlaubt.
+The tests are configured via a `targets[]` array, which allows any number of tests with individual configuration.
 
-→ **Detail-Concept:** [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md)
+→ **Detailed concept:** [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md)
 
-### 4.2 Tests-Definition Schema
+### 4.2 Tests Definition Schema
 
-| Feld | Typ | Default | Description |
+| Field | Type | Default | Description |
 |------|-----|---------|--------------|
-| `skip` | bool | `false` | **Alle Tests dieser App überspringen** |
-| `framework` | string | — | Default-Framework für alle Tests |
-| `targets` | array | `[]` | Test-Target Definitionen |
+| `skip` | bool | `false` | **Skip all tests of this app** |
+| `framework` | string | — | Default framework for all tests |
+| `targets` | array | `[]` | Test target definitions |
 
-### 4.3 Test-Target Schema
+### 4.3 Test Target Schema
 
-| Feld | Typ | Required | Default | Description |
+| Field | Type | Required | Default | Description |
 |------|-----|---------|---------|--------------|
-| `name` | string | ✅ | — | Target-Name (→ `{AppName}.{name}`) |
-| `type` | string | ✅ | — | Test-Typ (unit, integration, etc.) |
-| `skip` | bool | — | `false` | Diesen Test überspringen |
-| `path` | string | — | `tests/{type}/{name}` | Pfad relativ zum App-Verzeichnis |
-| `framework` | string | — | `tests.framework` | Framework Override |
-| `timeout` | number | — | Typ-abhängig | CTest Timeout (Sekunden) |
-| `labels` | array | — | Typ-abhängig | CTest Labels |
-| `externals` | array | — | `[]` | Zusätzliche Externals |
-| `parallel` | bool | — | Typ-abhängig | Parallele Ausführung |
+| `name` | string | ✅ | — | Target name (→ `{AppName}.{name}`) |
+| `type` | string | ✅ | — | Test type (unit, integration, etc.) |
+| `skip` | bool | — | `false` | Skip this test |
+| `path` | string | — | `tests/{type}/{name}` | Path relative to the app directory |
+| `framework` | string | — | `tests.framework` | Framework override |
+| `timeout` | number | — | Type-dependent | CTest timeout (seconds) |
+| `labels` | array | — | Type-dependent | CTest labels |
+| `externals` | array | — | `[]` | Additional externals |
+| `parallel` | bool | — | Type-dependent | Parallel execution |
 
-### 4.4 Bekannte Test-Typen
+### 4.4 Known Test Types
 
-| Typ | Default Timeout | Default Parallel | Description |
+| Type | Default Timeout | Default Parallel | Description |
 |-----|-----------------|------------------|--------------|
-| `unit` | 30s | true | Isolierte Funktions-/Klassen-Tests |
-| `integration` | 120s | true | Komponenten-Interaktionen |
-| `performance` | 300s | false | Benchmarks, Zeitmessungen |
-| `system` | 180s | false | End-to-End Tests |
-| `smoke` | 10s | true | Schnelle Basis-Checks |
-| `fuzz` | 60s | false | Zufällige/ungültige Eingaben |
-| `security` | 120s | false | Sicherheitstests |
-| `ui` | 180s | false | Benutzeroberflächen-Tests |
-| `api` | 60s | true | API-Endpunkt-Tests |
+| `unit` | 30s | true | Isolated function/class tests |
+| `integration` | 120s | true | Component interactions |
+| `performance` | 300s | false | Benchmarks, time measurements |
+| `system` | 180s | false | End-to-end tests |
+| `smoke` | 10s | true | Quick basic checks |
+| `fuzz` | 60s | false | Random/invalid inputs |
+| `security` | 120s | false | Security tests |
+| `ui` | 180s | false | User interface tests |
+| `api` | 60s | true | API endpoint tests |
 
-### 4.5 Skip-Feature
+### 4.5 Skip Feature
 
-Das Skip-Feature ermöglicht temporäres Deaktivieren von Tests:
+The skip feature allows tests to be disabled temporarily:
 
 ```json
 "tests": {
-    "skip": true,           // Global: Alle Tests überspringen
+    "skip": true,           // Global: skip all tests
     "framework": "doctest",
     "targets": [
         {
             "name": "UnitTests",
             "type": "unit",
-            "skip": false    // Ignoriert wenn global skip=true
+            "skip": false    // Ignored if global skip=true
         },
         {
             "name": "SlowTests",
             "type": "performance",
-            "skip": true     // Individuell übersprungen
+            "skip": true     // Skipped individually
         }
     ]
 }
 ```
 
-**Skip-Logik:**
+**Skip logic:**
 
-| Global `tests.skip` | Target `skip` | Ergebnis |
+| Global `tests.skip` | Target `skip` | Result |
 |---------------------|---------------|----------|
-| `true` | egal | ⏭️ Übersprungen |
-| `false`/fehlt | `true` | ⏭️ Übersprungen |
-| `false`/fehlt | `false`/fehlt | ✅ Wird gebaut |
+| `true` | any | ⏭️ Skipped |
+| `false`/missing | `true` | ⏭️ Skipped |
+| `false`/missing | `false`/missing | ✅ Is built |
 
-### 4.6 Example: Mehrere Tests
+### 4.6 Example: Multiple Tests
 
 ```json
 "tests": {
@@ -369,59 +369,59 @@ Das Skip-Feature ermöglicht temporäres Deaktivieren von Tests:
 
 ---
 
-## 5. CMake-Module
+## 5. CMake Modules
 
-### 5.1 Modul-Overview
+### 5.1 Module Overview
 
-| Modul | Version | Description |
+| Module | Version | Description |
 |-------|---------|--------------|
-| `Apps.cmake` | v0.5.x | Pipeline-Orchestrator, Filter |
-| `AppCollect.cmake` | v0.6.1 | JSON → Context, Tests-Parsing |
-| `AppCreate.cmake` | v0.6.1 | Core, Runner, Tests erstellen |
-| `Json.cmake` | v0.6.0 | JSON-Helper (zentral) |
+| `Apps.cmake` | v0.5.x | Pipeline orchestrator, filter |
+| `AppCollect.cmake` | v0.6.1 | JSON → context, tests parsing |
+| `AppCreate.cmake` | v0.6.1 | Create core, runner, tests |
+| `Json.cmake` | v0.6.0 | JSON helper (central) |
 
 ### 5.2 Pipeline
 
 ```
-1. Apps.cmake: apps Array iterieren
-2. AppCollect: JSON parsen, Context erstellen
-   - App-Metadaten
-   - Core-Configuration
-   - Runner-Configuration
-   - Tests mit targets[]
-3. Filter prüfen:
+1. Apps.cmake: iterate the apps array
+2. AppCollect: parse JSON, create context
+   - App metadata
+   - Core configuration
+   - Runner configuration
+   - Tests with targets[]
+3. Check filters:
    - skip
    - platforms
    - BUILD_ONLY
 4. AppCreate:
-   a. Core Library erstellen (STATIC)
-   b. PCH konfigurieren (wenn enabled)
-   c. Runner Executable erstellen
-   d. Tests erstellen (für jedes Target in tests.targets[])
-      - Global skip prüfen
-      - Per-Target skip prüfen
-      - Type-Defaults anwenden
-      - Framework auflösen
-      - CTest registrieren
+   a. Create core library (STATIC)
+   b. Configure PCH (if enabled)
+   c. Create runner executable
+   d. Create tests (for each target in tests.targets[])
+      - Check global skip
+      - Check per-target skip
+      - Apply type defaults
+      - Resolve framework
+      - Register with CTest
 ```
 
-### 5.3 Generierte Targets
+### 5.3 Generated Targets
 
-Für eine App `MyVisualizer` mit 3 Test-Targets:
+For an app `MyVisualizer` with 3 test targets:
 
-| Target | Typ | Description |
+| Target | Type | Description |
 |--------|-----|--------------|
-| `MyVisualizer.Core` | STATIC Library | Business-Logik |
-| `MyVisualizer` | Executable | Entry Point + Core |
-| `MyVisualizer.UnitTests` | Executable | Unit Tests |
-| `MyVisualizer.IntegrationTests` | Executable | Integration Tests |
-| `MyVisualizer.Benchmarks` | Executable | Performance Tests |
+| `MyVisualizer.Core` | STATIC Library | Business logic |
+| `MyVisualizer` | Executable | Entry point + core |
+| `MyVisualizer.UnitTests` | Executable | Unit tests |
+| `MyVisualizer.IntegrationTests` | Executable | Integration tests |
+| `MyVisualizer.Benchmarks` | Executable | Performance tests |
 
 ---
 
 ## 6. Error Codes
 
-### 6.1 App-Container Errors (E4xx)
+### 6.1 App Container Errors (E4xx)
 
 | Code | Description |
 |------|--------------|
@@ -433,7 +433,7 @@ Für eine App `MyVisualizer` mit 3 Test-Targets:
 | E406 | App has no main/ directory |
 | E407 | App has no source files in main/ |
 
-### 6.2 App-Tests Errors
+### 6.2 App Tests Errors
 
 | Code | Description |
 |------|--------------|
@@ -444,7 +444,7 @@ Für eine App `MyVisualizer` mit 3 Test-Targets:
 | E305 | Test path does not exist |
 | E306 | No source files in test path |
 
-### 6.3 App-Container Warnings (W4xx)
+### 6.3 App Container Warnings (W4xx)
 
 | Code | Description |
 |------|--------------|
@@ -453,9 +453,11 @@ Für eine App `MyVisualizer` mit 3 Test-Targets:
 | W402 | Test with serial type has parallel=true |
 | W403 | Tests directory exists but no sources found |
 
+> **Code today (2026-11-09):** E306 does not exist in the code. A test path without source files is reported by warning W403 `Test '${TARGET_NAME}': No source files found`, and the test is skipped (`cmake/project/AppCreate.cmake:702`); W403 is also used for `App '${_name}': tests.targets configured but no tests/ directory` (`AppCreate.cmake:577`). Besides the missing `include/` (`AppCreate.cmake:96`), W401 also reports `App '${_name}': tests.targets is empty` (`cmake/project/AppCollect.cmake:338`). An app entry without a name is reported by `cmake/project/Apps.cmake:86` with E401; `AppCollect.cmake:183` checks the same with E400.
+
 ---
 
-## 7. Build-Ausgabe Struktur
+## 7. Build Output Structure
 
 ```
 out/build/{preset}/
@@ -480,7 +482,7 @@ out/build/{preset}/
 
 ---
 
-## 8. Example: Vollständiger App-Container
+## 8. Example: Complete App Container
 
 ### 8.1 Solution.json
 
@@ -535,7 +537,7 @@ out/build/{preset}/
 }
 ```
 
-### 8.2 CMake-Ausgabe
+### 8.2 CMake Output
 
 ```
 [Apps] --- Processing: AudioPlayer ---
@@ -554,9 +556,9 @@ out/build/{preset}/
 
 ---
 
-## 9. Migration: Executable → App-Container
+## 9. Migration: Executable → App Container
 
-### 9.1 Vorher (Executable)
+### 9.1 Before (Executable)
 
 ```json
 "executables": [
@@ -577,7 +579,7 @@ projects/exec/MyApp/
     └── Application.hpp
 ```
 
-### 9.2 Nachher (App-Container)
+### 9.2 After (App Container)
 
 ```json
 "apps": [
@@ -615,35 +617,37 @@ projects/apps/MyApp/
             └── test_Application.cpp
 ```
 
-### 9.3 Migrations-Schritte
+### 9.3 Migration Steps
 
-1. **Verzeichnis erstellen:** `projects/apps/{name}/`
-2. **Sources aufteilen:**
+1. **Create the directory:** `projects/apps/{name}/`
+2. **Split the sources:**
    - Headers → `include/`
    - Implementation → `src/`
    - main.cpp → `main/`
-3. **Solution.json anpassen:**
-   - Von `executables[]` nach `apps[]` verschieben
-   - Externals in `core` oder `runner` aufteilen
-4. **Tests hinzufügen:**
-   - `tests/unit/{TestName}/` erstellen
-   - `test_main.cpp` mit Framework-Main
-   - Test-Dateien erstellen
+3. **Adjust Solution.json:**
+   - Move from `executables[]` to `apps[]`
+   - Split externals into `core` or `runner`
+4. **Add tests:**
+   - Create `tests/unit/{TestName}/`
+   - `test_main.cpp` with the framework main
+   - Create test files
 
 ---
 
 ## 10. See Also
 
-- [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible Test-Configuration
-- [Solution_Schema.md](../../guide/references/Solution_Schema.md) — JSON-Schema Reference
-- [ErrorCodes.md](../../guide/references/ErrorCodes.md) — Errorcodes
-- [App Template](../../../../projects/templates/App/README.md) — Template für neue Apps
+- [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible test configuration
+- [Solution_Schema.md](../../guide/references/Solution_Schema.md) — JSON schema reference
+- [ErrorCodes.md](../../guide/references/ErrorCodes.md) — Error codes
+- [App Template](../../../../templates/App/README.md) — Template for new apps
 
 ---
 
 ## 11. Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Phase 8 abgeschlossen: Neue tests.targets[] Struktur (ersetzt tests.unit/integration), Skip-Feature (global + per-target), Type-based Defaults, Framework Override, W402 parallel Warning, Status auf "Implementiert"** |
-| 0.5.0 | 2025-12-14 | Initial: Concept für Core/Runner-Trennung |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: "Code today" note on §6 (no E306, W401/W403 as used in the code, E400)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.6.0 | 2025-12-18 | Phase 8 completed: new tests.targets[] structure (replaces tests.unit/integration), skip feature (global + per target), type-based defaults, framework override, W402 parallel warning, status set to "Implemented" |
+| 0.5.0 | 2025-12-14 | Initial: concept for core/runner separation |

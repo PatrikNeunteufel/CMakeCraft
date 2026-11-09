@@ -1,83 +1,95 @@
 # App Template Reference
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Reference  
-> **Status:** Entwurf  
-> **Target Audience:** Entwickler  
-> **Language:** English
+> **Status:** Draft  
+> **Target Audience:** Developers  
+> **Language:** English  
+> **German:** [App_Template_Reference.md](../../../de/guide/references/App_Template_Reference.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Verzeichnisstruktur](#2-verzeichnisstruktur)
+1. [Overview](#1-overview)
+2. [Directory Structure](#2-directory-structure)
 3. [main.cpp](#3-maincpp)
 4. [Application Interface](#4-application-interface)
 5. [Source.cmake](#5-sourcecmake)
 6. [Precompiled Header](#6-precompiled-header)
-7. [Build-Defines](#7-build-defines)
-8. [CMake-Integration](#8-cmake-integration)
-9. [See Also](#9-siehe-auch)
+7. [Build Defines](#7-build-defines)
+8. [CMake Integration](#8-cmake-integration)
+9. [See Also](#9-see-also)
 10. [Changelog](#10-changelog)
 
 ---
 
 ## 1. Overview
 
-Das App-Template definiert die Standardstruktur für App-Container im CMake Architecture Build-System. Es trennt Entry Point (main/) von Anwendungslogik (include/, src/) für maximale Testbarkeit.
+The app template defines the standard structure for app containers in the CMake Architecture build system. It separates the entry point (main/) from the application logic (include/, src/) for maximum testability.
 
-### Pfad
+### Path
 
 ```
-projects/templates/App/
+templates/App/
 ```
 
 ---
 
-## 2. Verzeichnisstruktur
+## 2. Directory Structure
 
 ```
 App/
-├── README.md                      # Kurzanleitung
-├── include/                       # Header
+├── README.md                      # Quick guide (English)
+├── README_de.md                   # Quick guide (German)
+├── include/                       # Headers
 │   ├── Source.cmake
 │   └── Application.hpp
 ├── src/                           # Implementation
 │   ├── Source.cmake
 │   └── Application.cpp
-├── main/                          # Entry Point
+├── main/                          # Entry point
 │   ├── Source.cmake
-│   └── main.cpp                   # Generisch, nicht ändern
-├── pch/                           # Precompiled Header
+│   └── main.cpp                   # Generic, do not modify
+├── pch/                           # Precompiled header
 │   └── pch.h
-└── tests/
-    └── unit/                      # Unit Tests
-        └── Application_Tests.cpp
+└── tests/                         # Tests: tests/<type>/<Name>/
+    ├── unit/UnitTests/            # Unit tests
+    │   ├── Source.cmake
+    │   ├── test_main.cpp
+    │   └── Application_Tests.cpp
+    ├── integration/IntegrationTests/   # Integration tests
+    │   ├── Source.cmake
+    │   ├── test_main.cpp
+    │   └── Application_Integration_Tests.cpp
+    └── performance/PerformanceTests/   # Performance tests
+        ├── Source.cmake
+        ├── test_main.cpp
+        └── Application_Performance_Tests.cpp
 ```
 
-### Komponenten
+### Components
 
-| Verzeichnis | Description | Testbar |
-|-------------|--------------|---------|
-| `include/` | Header-Dateien (.hpp) | ✅ |
+| Directory | Description | Testable |
+|-----------|-------------|----------|
+| `include/` | Header files (.hpp) | ✅ |
 | `src/` | Implementation (.cpp) | ✅ |
-| `main/` | Entry Point (main.cpp) | ❌ |
-| `pch/` | Precompiled Header | — |
-| `tests/unit/` | Unit Tests | — |
+| `main/` | Entry point (main.cpp) | ❌ |
+| `pch/` | Precompiled header | — |
+| `tests/<type>/<Name>/` | One folder per test target with `Source.cmake`, `test_main.cpp` and the tests. Default for `apps[].tests.targets[].path` is `tests/{type}/{name}` (`AppCollect.cmake:373`) | — |
 
 ---
 
 ## 3. main.cpp
 
-### Pfad
+### Path
 
 ```
 main/main.cpp
 ```
 
-### Inhalt
+### Content
 
 ```cpp
 #include "Application.hpp"
@@ -103,7 +115,7 @@ int commonMain(int argc, char* argv[]) {
 
 } // namespace
 
-#if defined(_WIN32) && defined(APP_GUI)
+#if defined(_WIN32) && defined(APP_WINDOWS_GUI)
 
 int WINAPI WinMain(
     [[maybe_unused]] HINSTANCE hInstance,
@@ -123,25 +135,25 @@ int main(int argc, char* argv[]) {
 #endif
 ```
 
-### Eigenschaften
+### Properties
 
-| Eigenschaft | Wert |
-|-------------|------|
-| Änderbar | ❌ No |
-| Plattformspezifisch | ✅ Yes (via Präprozessor) |
-| Dependencies | Nur `Application.hpp` |
+| Property | Value |
+|----------|-------|
+| Modifiable | ❌ No |
+| Platform-specific | ✅ Yes (via preprocessor) |
+| Dependencies | Only `Application.hpp` |
 
 ---
 
 ## 4. Application Interface
 
-### Pfad
+### Path
 
 ```
 include/Application.hpp
 ```
 
-### Required-Interface
+### Required Interface
 
 ```cpp
 class Application {
@@ -163,15 +175,15 @@ public:
 };
 ```
 
-### Lifecycle-Methoden
+### Lifecycle Methods
 
-| Methode | Description | Rückgabe |
-|---------|--------------|----------|
-| `init()` | Initialisierung (Qt, Audio, Config) | `true` bei Success |
-| `run()` | Hauptschleife (`QApplication::exec()`) | Exit-Code |
-| `shutdown()` | Ressourcen freigeben | — |
+| Method | Description | Return |
+|--------|-------------|--------|
+| `init()` | Initialization (Qt, audio, config) | `true` on success |
+| `run()` | Main loop (`QApplication::exec()`) | Exit code |
+| `shutdown()` | Release resources | — |
 
-### Aufruf-Reihenfolge
+### Call Order
 
 ```
 main() → Application() → init() → run() → shutdown() → ~Application()
@@ -181,12 +193,12 @@ main() → Application() → init() → run() → shutdown() → ~Application()
 
 ## 5. Source.cmake
 
-Jeder Ordner mit Quellcode enthält eine `Source.cmake` zur expliziten Datei-Registrierung.
+Every folder containing source code has a `Source.cmake` for explicit file registration.
 
-### Struktur
+### Structure
 
 ```cmake
-# Source.cmake für {ordner}/
+# Source.cmake for {folder}/
 dbg(DBG_OFTEN "${CMAKE_CURRENT_LIST_DIR}/Source.cmake..." ID INCLUDE_MSG)
 
 set(_local_sources
@@ -218,31 +230,31 @@ unset(_local_sources)
 # include("${CMAKE_CURRENT_LIST_DIR}/subfolder/Source.cmake")
 ```
 
-### Datei-Typen
+### File Types
 
 | Variable | Extensions | Description |
-|----------|------------|--------------|
-| `_local_sources` | .c, .cpp | Kompilierbare Quellen |
-| `_local_headers` | .h, .hpp | Header-Dateien |
-| `_local_templates` | .t, .tpp | Template-Implementationen |
-| `_local_inlines` | .inl | Inline-Implementationen |
-| `_local_impl` | .impl | Pimpl-Implementationen |
+|----------|------------|-------------|
+| `_local_sources` | .c, .cpp | Compilable sources |
+| `_local_headers` | .h, .hpp | Header files |
+| `_local_templates` | .t, .tpp | Template implementations |
+| `_local_inlines` | .inl | Inline implementations |
+| `_local_impl` | .impl | Pimpl implementations |
 
 ---
 
 ## 6. Precompiled Header
 
-### Pfad
+### Path
 
 ```
 pch/pch.h
 ```
 
-### Zweck
+### Purpose
 
-Häufig verwendete, stabile Includes zur Reduzierung der Build-Zeit.
+Frequently used, stable includes to reduce build time.
 
-### Inhalt
+### Content
 
 ```cpp
 #pragma once
@@ -253,108 +265,94 @@ Häufig verwendete, stabile Includes zur Reduzierung der Build-Zeit.
 #include <vector>
 // ...
 
-// Framework (projektspezifisch)
+// Framework (project-specific)
 // #include <QApplication>
 // #include <bass.h>
 ```
 
 ### Extension
 
-Die `.h` Extension ist Standard für PCH, auch bei C++. Einige Compiler/Tools verarbeiten `.hpp` nicht korrekt.
+The `.h` extension is standard for PCH, even for C++. Some compilers/tools do not handle `.hpp` correctly.
 
-### Suchpfad-Priorität
+### Search Path Priority
 
-Wenn PCH aktiviert und kein custom `path` angegeben ist:
+If PCH is enabled and no custom `path` is given:
 
-| Priorität | Pfad |
-|-----------|------|
+| Priority | Path |
+|----------|------|
 | 1 | `{app-path}/pch/{header}` |
 | 2 | `{app-path}/src/{header}` |
 | 3 | `{app-path}/{header}` |
 
-Bei custom `path`: `projects/{path}/{header}`
+With a custom `path`: `projects/{path}/{header}`
 
 ### Best Practices
 
-| Include | PCH geeignet |
-|---------|--------------|
-| Standard Library | ✅ Yes |
-| Qt/Framework Headers | ✅ Yes |
-| Eigene Header | ❌ No (ändern sich oft) |
+| Include | Suitable for PCH |
+|---------|------------------|
+| Standard library | ✅ Yes |
+| Qt/framework headers | ✅ Yes |
+| Own headers | ❌ No (change often) |
 
 ---
 
-## 7. Build-Defines
+## 7. Build Defines
 
-Das Build-System setzt automatisch:
+The build system sets automatically:
 
-| Define | Bedingung | Description |
-|--------|-----------|--------------|
-| `APP_GUI` | `runner.type = "GUI"` | Windows: WinMain |
-| `APP_CONSOLE` | `runner.type = "CONSOLE"` | Standard main |
+| Define | Condition | Description |
+|--------|-----------|-------------|
+| `APP_WINDOWS_GUI` | Windows and `runner.type = "GUI"` or `"WINDOW"` | `main.cpp` uses `WinMain` (`AppCreate.cmake:385`) |
 
-### Plattform-Verhalten
+For `CONSOLE` the build system sets no define; `main.cpp` then uses `main`.
+
+### Platform Behavior
 
 | runner.type | Windows | Linux | macOS |
 |-------------|---------|-------|-------|
-| `GUI` | `WinMain` (kein Console) | `main` | `main` |
-| `CONSOLE` | `main` (mit Console) | `main` | `main` |
+| `GUI`/`WINDOW` | `WinMain` (no console, `add_executable(... WIN32 ...)`) | `main` | `main` (`MACOSX_BUNDLE`) |
+| `CONSOLE` | `main` (with console) | `main` | `main` |
 
 ---
 
-## 8. CMake-Integration
+## 8. CMake Integration
 
-### Generierte Targets
+### Generated Targets
 
-Für eine App `MyApp`:
+For an app `MyApp` the build system creates (`cmake/project/AppCreate.cmake`):
 
-```cmake
-# Executable
-add_executable(MyApp WIN32  # Bei GUI
-    # Sources aus Source.cmake aggregiert
-)
-
-# Include Directories
-target_include_directories(MyApp PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/pch
-)
-
-# Externals
-target_link_libraries(MyApp PRIVATE Qt6::Widgets bass::bass)
-
-# Define
-target_compile_definitions(MyApp PRIVATE APP_GUI)
-
-# PCH
-target_precompile_headers(MyApp PRIVATE pch/pch.h)
-```
-
-### WIN32 Flag
-
-Bei `runner.type = "GUI"` wird unter Windows das `WIN32` Flag gesetzt:
+| Target | Kind | Content |
+|--------|------|---------|
+| `MyApp.Core` | `STATIC` library | `include/` (PUBLIC), `src/`, PCH from `pch/` (include path PUBLIC), dependencies PUBLIC, `core.externals` |
+| `MyApp` | Executable | `main/`, links `MyApp.Core` (PRIVATE), `runner.externals`; no PCH |
+| `MyApp.<TestName>` | Executable per test target | Sources from `tests/<type>/<Name>/`, links `MyApp.Core` |
 
 ```cmake
-if(WIN32 AND runner_type STREQUAL "GUI")
-    add_executable(${APP_NAME} WIN32 ...)
-else()
-    add_executable(${APP_NAME} ...)
-endif()
+# Simplified
+add_library(MyApp.Core STATIC)
+target_include_directories(MyApp.Core PUBLIC include pch)
+target_precompile_headers(MyApp.Core PRIVATE pch/pch.h)
+
+add_executable(MyApp WIN32 ...)        # WIN32 only on Windows for GUI/WINDOW
+target_compile_definitions(MyApp PRIVATE APP_WINDOWS_GUI)   # likewise
+target_link_libraries(MyApp PRIVATE MyApp.Core)
 ```
 
 ---
 
 ## 9. See Also
 
-- [App Creation Guide](../userguides/App_Creation_Guide.md) — Schritt-für-Schritt Anleitung
-- [Solution Schema](Solution_Schema.md) — apps Array Dokumentation
-- [AppContainer Concept](../../konzepte/abgeschlossen/AppContainer_Concept.md) — Architecture-Concept
+- [App Creation Guide](../userguides/App_Creation_Guide.md) — Step-by-step guide
+- [Solution Schema](Solution_Schema.md) — apps array documentation
+- [AppContainer Concept](../../konzepte/abgeschlossen/AppContainer_Concept.md) — Architecture concept
 
 ---
 
 ## 10. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.1.1** | **2025-12-18** | **PCH Suchpfad-Priorität dokumentiert** |
-| 0.1.0 | 2025-12-17 | Initial mit korrekter Struktur (include/, src/, main/, pch/) |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: template under `templates/App/`; test layout `tests/<type>/<Name>/` as in the template; define `APP_WINDOWS_GUI` instead of `APP_GUI`/`APP_CONSOLE` (`AppCreate.cmake:385`); §8 with the targets `MyApp.Core`, `MyApp`, `MyApp.<TestName>`** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.1.1 | 2025-12-18 | PCH search path priority documented |
+| 0.1.0 | 2025-12-17 | Initial with correct structure (include/, src/, main/, pch/) |

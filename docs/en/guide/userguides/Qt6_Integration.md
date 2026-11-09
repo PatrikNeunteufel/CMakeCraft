@@ -1,89 +1,93 @@
-# Qt6 Integration – Benutzerhandbuch
+# Qt6 Integration – User Guide
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** C++ Developers  
-> **Module:** externals/qt6/Include.cmake v0.6.0  
+> **Target Audience:** C++ developers  
+> **Module:** cmake/externals/system/packages/Qt6.cmake v1.1.0 (handler: cmake/externals/system/Handler.cmake)  
 > **Language:** English  
-> **German:** [Qt6_Integration_UserGuide.md](Qt6_Integration.md)
+> **German:** [Qt6_Integration_UserGuide.md](../../../de/guide/userguides/Qt6_Integration.md)
 
 ---
 
 ## Table of Contents
 
-1. [Überblick](#1-überblick)
-2. [Prerequisites](#2-voraussetzungen)
-3. [Schnellstart](#3-schnellstart)
-4. [Installation von Qt6](#4-installation-von-qt6)
-5. [Configuration](#5-konfiguration)
-6. [Umgebungsvariablen](#6-umgebungsvariablen)
-7. [Exampleprojekt](#7-beispielprojekt)
-8. [Plattform-spezifische Notee](#8-plattform-spezifische-hinweise)
-9. [Verfügbare Komponenten](#9-verfügbare-komponenten)
-10. [Stolpersteine und Lösungen](#10-stolpersteine-und-lösungen)
+1. [Overview](#1-overview)
+2. [Prerequisites](#2-prerequisites)
+3. [Quick Start](#3-quick-start)
+4. [Installing Qt6](#4-installing-qt6)
+5. [Configuration](#5-configuration)
+6. [Environment Variables](#6-environment-variables)
+7. [Example Project](#7-example-project)
+8. [Platform-Specific Notes](#8-platform-specific-notes)
+9. [Available Components](#9-available-components)
+10. [Pitfalls and Solutions](#10-pitfalls-and-solutions)
 11. [Troubleshooting](#11-troubleshooting)
-12. [See Also](#12-siehe-auch)
+12. [See Also](#12-see-also)
 
 ---
 
-## 1. Überblick
+## 1. Overview
 
-Die Qt6-Integration ermöglicht die Usage von Qt6 in CMake Architecture Projekten.
+The Qt6 integration enables the use of Qt6 in CMake Architecture projects.
 
 ### Features
 
-- Flexible Pfad-Erkennung (Umgebungsvariablen, Hints, Auto-Detection)
-- Backup-Pfade (USB-Stick, Netzlaufwerk)
-- Automatisches DLL-Deployment (Windows)
-- RPATH-Configuration (Linux/macOS)
-- Komponentenauswahl
+- Flexible path detection (environment variables, hints, standard paths)
+- Backup paths (USB stick, network drive)
+- AUTOMOC, AUTOUIC and AUTORCC for every target that uses Qt6
+- Explicit entry point for Windows GUI programs (MSVC and Clang)
+- Automatic DLL deployment (Windows, windeployqt)
+- RPATH configuration (Linux/macOS)
+- Component selection
 
-**Important:** Qt6 ist ein **System External** – die Installation erfolgt außerhalb des Projekts.
+**Important:** Qt6 is a **system external** – it is installed outside the project.
+In Solution.json it is declared with `"system": true` and `"package": "Qt6"`; the rest is done by
+the handler `cmake/externals/system/Handler.cmake` (`find_package`) and the package hook
+`cmake/externals/system/packages/Qt6.cmake`. No `externals/qt6/` folder is needed in the project.
 
-### Unterstützte Plattformen
+### Supported Platforms
 
-| Plattform | Compiler | Deployment |
-|-----------|----------|------------|
-| Windows | MSVC 2022, Clang | windeployqt (automatisch) |
-| Linux | GCC, Clang | RPATH (automatisch) |
-| macOS | Apple Clang | macdeployqt (für Bundles) |
+| Platform | Compiler | Deployment |
+|----------|----------|------------|
+| Windows | MSVC 2022, Clang | windeployqt (automatic, if found) |
+| Linux | GCC, Clang | RPATH (automatic) |
+| macOS | Apple Clang | macdeployqt (automatic for bundles, if found) |
 
 ---
 
 ## 2. Prerequisites
 
-### Checkliste
+### Checklist
 
-- [ ] **Qt6 installiert** (Version 6.5 oder höher empfohlen)
-- [ ] **CMake 3.24+** (für Qt6-Unterstützung)
-- [ ] **Compiler:** MSVC 2022, GCC 11+, oder Clang 14+
-- [ ] **CMake Architecture** eingerichtet
-- [ ] **externals/qt6/Include.cmake** vorhanden (v0.6.0+)
+- [ ] **Qt6 installed** (version 6.5 or higher recommended)
+- [ ] **CMake 3.26+** (minimum version of CMakeCraft)
+- [ ] **Compiler:** MSVC 2022, GCC 11+, or Clang 14+
+- [ ] **CMake Architecture** set up ([New Project Guide](Neues_Projekt_Guide.md))
 
-### Empfohlene Versionen
+### Recommended Versions
 
-| Komponente | Minimum | Empfohlen |
-|------------|---------|-----------|
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
 | Qt6 | 6.2 | 6.7+ |
-| CMake | 3.21 | 3.28+ |
-| Include.cmake | 0.5.0 | 0.6.0 |
+| CMake | 3.26 | 3.28+ |
+| CMakeCraft | – | v0.14.1+ (entry point for Windows GUI programs) |
 
 ---
 
-## 3. Schnellstart
+## 3. Quick Start
 
-### 3.1 Minimale Solution.json
+### 3.1 Minimal Solution.json
 
 ```json
 {
     "externals": {
         "qt6": {
-            "path": "externals/qt6",
-            "options": {
-                "hint": "${QT_ROOT}"
-            }
+            "system": true,
+            "package": "Qt6",
+            "components": ["Core", "Gui", "Widgets"],
+            "hints": ["${QT_ROOT}"]
         }
     },
     "executables": [
@@ -96,32 +100,35 @@ Die Qt6-Integration ermöglicht die Usage von Qt6 in CMake Architecture Projekte
 }
 ```
 
+`package` is required (if it is missing, configuring aborts with E502). `components` should list
+every Qt module in use: `Qt6::<Component>` is linked for each component.
+
 ### 3.2 Build
 
 ```bash
-# Konfigurieren
-cmake --preset windows-ninja-debug
+# Configure
+cmake --preset windows-ninja-debug-msvc
 
-# Bauen
-cmake --build out/build/windows-ninja-debug
+# Build
+cmake --build out/build/windows-ninja-debug-msvc
 
-# Ausführen
-./out/build/windows-ninja-debug/bin/Debug/MyQtApp.exe
+# Run
+./out/build/windows-ninja-debug-msvc/exec/MyQtApp/bin/Debug/MyQtApp.exe
 ```
 
 ---
 
-## 4. Installation von Qt6
+## 4. Installing Qt6
 
-### 4.1 Qt Online Installer (Empfohlen)
+### 4.1 Qt Online Installer (Recommended)
 
 **Download:** https://www.qt.io/download-qt-installer
 
-**Installationsschritte:**
+**Installation steps:**
 
-1. Qt Maintenance Tool herunterladen und starten
-2. Qt Account erstellen (kostenlos für Open Source)
-3. Installation auswählen:
+1. Download and start the Qt Maintenance Tool
+2. Create a Qt account (free for open source)
+3. Select the installation:
    - Qt → Qt 6.x.x → Desktop
    - Windows: MSVC 2022 64-bit
    - Linux: GCC 64-bit
@@ -129,22 +136,22 @@ cmake --build out/build/windows-ninja-debug
 4. Optional: Additional Libraries (OpenGL, Network, etc.)
 5. Developer and Designer Tools → CMake, Ninja (optional)
 
-**Typische Installationspfade:**
+**Typical installation paths:**
 
-| Plattform | Pfad |
-|-----------|------|
+| Platform | Path |
+|----------|------|
 | Windows | `C:\Qt\6.10.1\msvc2022_64` |
 | Linux | `~/Qt/6.10.1/gcc_64` |
 | macOS | `~/Qt/6.10.1/macos` |
 
-### 4.2 System-Pakete (Linux)
+### 4.2 System Packages (Linux)
 
 **Ubuntu/Debian:**
 ```bash
-# Basis-Entwicklung
+# Basic development
 sudo apt install qt6-base-dev qt6-tools-dev
 
-# Zusätzliche Module
+# Additional modules
 sudo apt install qt6-multimedia-dev     # Multimedia
 sudo apt install qt6-webengine-dev      # WebEngine
 sudo apt install qt6-declarative-dev    # QML/Quick
@@ -172,178 +179,185 @@ sudo zypper install qt6-base-devel qt6-tools-devel
 # Installation
 brew install qt@6
 
-# Pfad ermitteln
+# Determine the path
 brew --prefix qt@6
-# Ergebnis: /opt/homebrew/opt/qt@6 (Apple Silicon)
-#           /usr/local/opt/qt@6 (Intel)
+# Result: /opt/homebrew/opt/qt@6 (Apple Silicon)
+#         /usr/local/opt/qt@6 (Intel)
 ```
 
-**Umgebungsvariable setzen:**
+**Set the environment variable:**
 ```bash
 echo 'export QT_ROOT="$(brew --prefix qt@6)"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-### 4.4 Manuelle Installation
+### 4.4 Manual Installation
 
 1. **Download:** https://download.qt.io/archive/qt/
-2. Gewünschte Version wählen (z.B. 6.7.0)
-3. Passende Architecture wählen:
-   - Windows: `qt-everywhere-src-6.7.0.zip` oder Online Installer
+2. Select the desired version (e.g. 6.7.0)
+3. Select the matching architecture:
+   - Windows: `qt-everywhere-src-6.7.0.zip` or the online installer
    - Linux: `qt-everywhere-src-6.7.0.tar.xz`
-4. Entpacken nach gewünschtem Pfad
-5. Pfad als Umgebungsvariable setzen
+4. Unpack to the desired path
+5. Set the path as an environment variable
 
 ---
 
 ## 5. Configuration
 
-### 5.1 Pfad-Auflösung (Priorität)
+### 5.1 Path Resolution (Priority)
 
-Die Include.cmake sucht Qt6 in folgender Reihenfolge:
+The handler (`cmake/externals/system/PathResolver.cmake`) searches for Qt6 in the following order:
 
 ```
-1. QT_ROOT Umgebungsvariable        ← Höchste Priorität
-2. QT6_DIR Umgebungsvariable
-3. CMAKE_PREFIX_PATH
-4. hint aus Solution.json options
-5. Standard-Pfade (Auto-Detection)
-6. backup aus Solution.json options ← Mit WARNING
+1. Environment variables Qt6ROOT, Qt6DIR, Qt6HOME, Qt6_ROOT, Qt6_DIR, Qt6_HOME,
+   then QtROOT, QtDIR, QtHOME, Qt_ROOT, Qt_DIR, Qt_HOME   ← Highest priority
+2. hints[] from Solution.json (${VAR} = environment variable)
+3. Standard paths from packages/Qt6.cmake (e.g. C:/Qt/6.10.1/msvc2022_64)
+4. backup from Solution.json                                ← With WARNING (W501)
+5. find_package(Qt6)'s own search (CMAKE_PREFIX_PATH etc.)
 ```
 
-### 5.2 Minimale Configuration
+The first path that exists is prepended to `CMAKE_PREFIX_PATH`; then
+`find_package(Qt6 [version] COMPONENTS …)` follows — without `REQUIRED`: if CMake does not find
+Qt, CMakeCraft names the cause itself (E503, E504, E505; §10.5, §11).
 
-```json
-"externals": {
-    "qt6": {
-        "path": "externals/qt6"
-    }
-}
-```
+**Case sensitivity:** On Windows, environment variable names are case-insensitive — `QT_ROOT` is
+found there as `Qt_ROOT`. On Linux and macOS they are not: there `QT_ROOT` only takes effect
+through a hint `"${QT_ROOT}"` (which is why all examples in this guide include it).
 
-**Voraussetzung:** `QT_ROOT` oder `QT6_DIR` muss gesetzt sein.
+### 5.2 Fields
 
-### 5.3 Mit Pfad-Hint
+| Field | Required? | Meaning |
+|-------|-----------|---------|
+| `system` | ✅ | `true` — makes the external a system external |
+| `package` | ✅ | Name for `find_package()`, here `"Qt6"` (otherwise E502) |
+| `components` | recommended | Qt modules; `Qt6::<Component>` is linked for each entry |
+| `hints` | – | List of additional search paths; `${VAR}` is replaced by the environment variable |
+| `backup` | – | Fallback path, only if everything else fails (W501) |
+| `version` | – | Minimum version, passed to `find_package()`, e.g. `"6.5"` |
+| `required` | – | Default `true`; `false` makes Qt6 optional |
 
-```json
-"qt6": {
-    "path": "externals/qt6",
-    "options": {
-        "hint": "C:/Qt/6.10.1/msvc2022_64"
-    }
-}
-```
-
-### 5.4 Mit Umgebungsvariable im Hint
+### 5.3 With a Path Hint
 
 ```json
 "qt6": {
-    "path": "externals/qt6",
-    "options": {
-        "hint": "${QT_ROOT}"
-    }
+    "system": true,
+    "package": "Qt6",
+    "components": ["Core", "Gui", "Widgets"],
+    "hints": ["C:/Qt/6.10.1/msvc2022_64"]
 }
 ```
 
-### 5.5 Mit Backup-Pfad
-
-Für portable Installationen (USB-Stick, Netzlaufwerk):
+### 5.4 With an Environment Variable in the Hint
 
 ```json
 "qt6": {
-    "path": "externals/qt6",
-    "options": {
-        "hint": "${QT_ROOT}",
-        "backup": "E:/Backup/Qt/6.10.1/msvc2022_64"
-    }
+    "system": true,
+    "package": "Qt6",
+    "components": ["Core", "Gui", "Widgets"],
+    "hints": ["${QT_ROOT}"]
 }
 ```
 
-**Verhalten:**
-- Backup wird NUR verwendet wenn alle anderen Pfade fehlschlagen
-- Es erscheint eine **WARNING** (kein Error)
-- Build läuft weiter
+### 5.5 With a Backup Path
 
-**Warning-Ausgabe:**
-```
-CMake Warning:
-  [qt6] Primary Qt6 installation not found!
-    Using BACKUP location: E:/Backup/Qt/6.10.1/msvc2022_64
-    
-    This may be slower (USB/network drive) and is not recommended for production.
-```
-
-### 5.6 Mit Komponenten-Auswahl
+For portable installations (USB stick, network drive):
 
 ```json
 "qt6": {
-    "path": "externals/qt6",
-    "options": {
-        "hint": "${QT_ROOT}",
-        "components": ["Core", "Widgets", "Gui", "OpenGL", "Network"]
-    }
+    "system": true,
+    "package": "Qt6",
+    "components": ["Core", "Gui", "Widgets"],
+    "hints": ["${QT_ROOT}"],
+    "backup": "E:/Backup/Qt/6.10.1/msvc2022_64"
 }
 ```
 
-**Standard-Komponenten (wenn nicht angegeben):** Core, Gui, Widgets
+**Behavior:**
+- The backup is ONLY used if all other paths fail
+- A **WARNING** appears (not an error)
+- The build continues
 
-### 5.7 Vollständiges Example
+**Warning output:**
+```
+[W501] [qt6] Using backup location: E:/Backup/Qt/6.10.1/msvc2022_64
+```
+
+### 5.6 With Component Selection
 
 ```json
 "qt6": {
-    "path": "externals/qt6",
-    "options": {
-        "hint": "${QT_ROOT}",
-        "backup": "E:/Backup/Qt/6.10.1/msvc2022_64",
-        "components": ["Core", "Widgets", "Gui", "OpenGL"]
-    }
+    "system": true,
+    "package": "Qt6",
+    "components": ["Core", "Widgets", "Gui", "OpenGL", "Network"],
+    "hints": ["${QT_ROOT}"]
+}
+```
+
+**Without `components`** the handler only calls `find_package(Qt6)` and links `Qt6::Qt6` or `Qt6`
+if such a target exists — the Qt package provides none. So list every module in use in
+`components`.
+
+### 5.7 Complete Example
+
+```json
+"qt6": {
+    "system": true,
+    "package": "Qt6",
+    "version": "6.5",
+    "components": ["Core", "Widgets", "Gui", "OpenGL"],
+    "hints": ["${QT_ROOT}"],
+    "backup": "E:/Backup/Qt/6.10.1/msvc2022_64"
 }
 ```
 
 ---
 
-## 6. Umgebungsvariablen
+## 6. Environment Variables
 
-### 6.1 QT_ROOT (Empfohlen)
+### 6.1 QT_ROOT (Recommended)
 
-**Windows (dauerhaft – Systemvariable):**
+**Windows (permanent – system variable):**
 ```cmd
 setx QT_ROOT "C:\Qt\6.10.1\msvc2022_64"
 ```
-→ Neues Terminal öffnen!
+→ Open a new terminal!
 
-**Windows (temporär – aktuelle Session):**
+**Windows (temporary – current session):**
 ```cmd
 set QT_ROOT=C:\Qt\6.10.1\msvc2022_64
 ```
 
-**Linux/macOS (.bashrc oder .zshrc):**
+**Linux/macOS (.bashrc or .zshrc):**
 ```bash
 export QT_ROOT="$HOME/Qt/6.10.1/gcc_64"
 ```
-→ `source ~/.bashrc` ausführen!
+→ Run `source ~/.bashrc`! On Linux/macOS, `QT_ROOT` only takes effect through the hint `"${QT_ROOT}"` (§5.1).
 
-### 6.2 Alternative: QT6_DIR
+### 6.2 Alternative: Qt6_ROOT
 
 ```bash
-export QT6_DIR="/opt/Qt/6.10.1/gcc_64"
+export Qt6_ROOT="/opt/Qt/6.10.1/gcc_64"
 ```
 
-### 6.3 Visual Studio und Umgebungsvariablen
+The handler finds `Qt6_ROOT` on every platform without a hint (§5.1).
 
-**Problem:** Visual Studio erbt NICHT automatisch System-Umgebungsvariablen, die nach dem Start von VS gesetzt wurden.
+### 6.3 Visual Studio and Environment Variables
 
-**Symptom:** CMake findet Qt nicht, obwohl `echo %QT_ROOT%` den korrekten Pfad zeigt.
+**Problem:** Visual Studio does NOT automatically inherit system environment variables that were set after VS was started.
 
-**Lösungen:**
+**Symptom:** CMake does not find Qt, although `echo %QT_ROOT%` shows the correct path.
 
-#### Option A: Visual Studio neu starten (nach setx)
+**Solutions:**
 
-Nach `setx QT_ROOT "..."` muss Visual Studio **komplett** neu gestartet werden.
+#### Option A: Restart Visual Studio (after setx)
 
-#### Option B: CMakeUserPresets.json (Empfohlen)
+After `setx QT_ROOT "..."`, Visual Studio must be restarted **completely**.
 
-Erstelle `CMakeUserPresets.json` im Projekt-Root:
+#### Option B: CMakeUserPresets.json (Recommended)
+
+Create `CMakeUserPresets.json` in the project root:
 
 ```json
 {
@@ -376,38 +390,40 @@ Erstelle `CMakeUserPresets.json` im Projekt-Root:
 }
 ```
 
-**Important:** `CMakeUserPresets.json` in `.gitignore` aufnehmen (benutzerspezifisch)!
+**Important:** Add `CMakeUserPresets.json` to `.gitignore` (user-specific)!
+`QT_ROOT` belongs under `environment`, not under `cacheVariables`: the handler reads environment
+variables, not cache variables.
 
-#### Option C: hint in Solution.json
+#### Option C: hints in Solution.json
 
 ```json
-"options": {
-    "hint": "C:/Qt/6.10.1/msvc2022_64"
-}
+"hints": ["C:/Qt/6.10.1/msvc2022_64"]
 ```
 
 ---
 
-## 7. Exampleprojekt
+## 7. Example Project
 
-### 7.1 Projektstruktur
+### 7.1 Project Structure
 
 ```
 MyProject/
 ├── CMakeLists.txt
+├── CMakeCraftBootstrap.cmake
+├── cmakecraft.pin
 ├── CMakePresets.json
-├── CMakeUserPresets.json          ← Benutzerspezifisch (nicht committen)
+├── CMakeUserPresets.json          ← User-specific (do not commit)
 ├── Solution.json
-├── externals/
-│   └── qt6/
-│       └── Include.cmake
 └── projects/
     └── demos/
         └── exec/
             └── QtMarkdownViewer/
                 └── src/
+                    ├── Source.cmake
                     └── main.cpp
 ```
+
+Qt6 itself needs no file in the project: it lives outside, and the package hook comes with CMakeCraft.
 
 ### 7.2 main.cpp
 
@@ -444,7 +460,7 @@ int main(int argc, char* argv[])
     return app.exec();
 }
 
-// WICHTIG: MOC-Include am Ende der Datei!
+// IMPORTANT: MOC include at the end of the file!
 #include "main.moc"
 ```
 
@@ -452,7 +468,7 @@ int main(int argc, char* argv[])
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": {
         "name": "QtDemo",
         "version": "1.0.0"
@@ -464,11 +480,10 @@ int main(int argc, char* argv[])
     },
     "externals": {
         "qt6": {
-            "path": "externals/qt6",
-            "options": {
-                "hint": "${QT_ROOT}",
-                "components": ["Core", "Widgets", "Gui"]
-            }
+            "system": true,
+            "package": "Qt6",
+            "components": ["Core", "Widgets", "Gui"],
+            "hints": ["${QT_ROOT}"]
         }
     },
     "executables": [
@@ -484,225 +499,217 @@ int main(int argc, char* argv[])
 }
 ```
 
-### 7.4 Build-Befehle
+### 7.4 Build Commands
 
 ```bash
-# Konfigurieren
+# Configure
 cmake --preset windows-ninja-debug-clang-qt
 
-# Bauen
+# Build
 cmake --build out/build/windows-ninja-debug-clang-qt
 
-# Ausführen
-./out/build/windows-ninja-debug-clang-qt/bin/Debug/QtMarkdownViewer.exe
+# Run
+./out/build/windows-ninja-debug-clang-qt/exec/QtMarkdownViewer/bin/Debug/QtMarkdownViewer.exe
 ```
 
 ---
 
-## 8. Plattform-spezifische Notee
+## 8. Platform-Specific Notes
 
 ### 8.1 Windows
 
-**DLL-Deployment:**
-- `windeployqt` kopiert automatisch alle benötigten DLLs
-- Debug-DLLs enden auf `d` (z.B. `Qt6Cored.dll`)
-- Release-DLLs ohne Suffix (z.B. `Qt6Core.dll`)
+**DLL deployment:**
+- `windeployqt` runs after every build of the target and copies the required DLLs next to the .exe
+  (options `--no-translations --no-system-d3d-compiler --no-opengl-sw`)
+- If `windeployqt` is not found (`<Qt>/bin`), the step is skipped without a warning
+- Debug DLLs end with `d` (e.g. `Qt6Cored.dll`)
+- Release DLLs have no suffix (e.g. `Qt6Core.dll`)
 
-**Qt-Verzeichnis zum PATH hinzufügen (Alternative zu windeployqt):**
+**Entry point (since v0.14.1):** GUI programs (`"type": "GUI"`) get the linker switch
+`/ENTRY:WinMainCRTStartup` under MSVC and Clang (MSVC ABI). `Qt6EntryPoint.lib` defines `WinMain`
+and `wWinMain`; without this choice lld-link warns on every link. MinGW is not affected.
+Details: [Qt6_cmake.md §2.4](../module/externals/system/packages/Qt6_cmake.md#24-_qt6_configure_entry_point).
+
+**Add the Qt directory to PATH (alternative to windeployqt):**
 ```cmd
 set PATH=%QT_ROOT%\bin;%PATH%
 ```
 
-**Compiler-Kompatibilität:**
-- Qt für MSVC 2022 → MSVC oder Clang (mit MSVC-Target)
-- Qt für MinGW → Nur MinGW
+**Compiler compatibility:**
+- Qt for MSVC 2022 → MSVC or Clang (with MSVC target)
+- Qt for MinGW → MinGW only
 
 ### 8.2 Linux
 
 **RPATH:**
-- Automatisch konfiguriert in Include.cmake
-- Zeigt auf Qt-Installation
-- Kein `LD_LIBRARY_PATH` nötig
+- Configured automatically in `packages/Qt6.cmake`
+- `BUILD_RPATH` points to `<Qt>/lib`, `INSTALL_RPATH` to `$ORIGIN/../lib` and `<Qt>/lib`
+- No `LD_LIBRARY_PATH` needed
 
-**System-Qt vs Installer-Qt:**
+**System Qt vs installer Qt:**
 ```bash
-# System-Qt
+# System Qt
 qmake6 --version  # /usr/bin/qmake6
 
-# Installer-Qt
+# Installer Qt
 ~/Qt/6.10.1/gcc_64/bin/qmake --version
 ```
 
-**AppImage erstellen (optional):**
+**Create an AppImage (optional):**
 ```bash
-# linuxdeployqt installieren
+# Install linuxdeployqt
 # https://github.com/probonopd/linuxdeployqt
 linuxdeployqt MyApp -appimage
 ```
 
 ### 8.3 macOS
 
-**Bundle vs Executable:**
-- GUI-Apps sollten als Bundle gebaut werden
-- `type: "GUI"` in Solution.json setzt `MACOSX_BUNDLE`
+**Bundle vs executable:**
+- GUI apps should be built as a bundle
+- `type: "GUI"` in Solution.json sets `MACOSX_BUNDLE`
 
 **macdeployqt:**
+- Runs automatically after the build for bundles, if it is found (`<Qt>/bin`)
 ```bash
-# Manuell ausführen
+# Run manually
 ~/Qt/6.10.1/macos/bin/macdeployqt MyApp.app
 ```
 
-**Code Signing (für Distribution):**
+**Code signing (for distribution):**
 ```bash
 codesign --deep --force --sign "Developer ID" MyApp.app
 ```
 
 ---
 
-## 9. Verfügbare Komponenten
+## 9. Available Components
 
-### Basis-Module
+### Base Modules
 
-| Komponente | Description | Typische Usage |
-|------------|--------------|---------------------|
-| **Core** | Basisklassen, Container, IO | Immer benötigt |
-| **Gui** | GUI-Basis, Fonts, Images | Desktop-/Mobile-Apps |
-| **Widgets** | Desktop-Widgets | Desktop-Anwendungen |
+| Component | Description | Typical usage |
+|-----------|-------------|---------------|
+| **Core** | Base classes, containers, IO | Always needed |
+| **Gui** | GUI base, fonts, images | Desktop/mobile apps |
+| **Widgets** | Desktop widgets | Desktop applications |
 
-### Erweiterte Module
+### Extended Modules
 
-| Komponente | Description |
-|------------|--------------|
-| **OpenGL** | OpenGL-Integration |
+| Component | Description |
+|-----------|-------------|
+| **OpenGL** | OpenGL integration |
 | **Network** | HTTP, TCP, UDP |
-| **Sql** | Datenbank-Abstraktion |
-| **Xml** | XML-Parser |
-| **Concurrent** | Threading-Utilities |
-| **PrintSupport** | Druckfunktionen |
+| **Sql** | Database abstraction |
+| **Xml** | XML parser |
+| **Concurrent** | Threading utilities |
+| **PrintSupport** | Printing functions |
 
 ### QML/Quick
 
-| Komponente | Description |
-|------------|--------------|
-| **Qml** | QML-Engine |
-| **Quick** | Qt Quick (QML-UI) |
-| **QuickControls2** | Moderne UI-Komponenten |
+| Component | Description |
+|-----------|-------------|
+| **Qml** | QML engine |
+| **Quick** | Qt Quick (QML UI) |
+| **QuickControls2** | Modern UI components |
 
 ### Multimedia
 
-| Komponente | Description |
-|------------|--------------|
-| **Multimedia** | Audio/Video |
-| **MultimediaWidgets** | Media-Player-Widgets |
+| Component | Description |
+|-----------|-------------|
+| **Multimedia** | Audio/video |
+| **MultimediaWidgets** | Media player widgets |
 
-### Spezial
+### Special
 
-| Komponente | Description |
-|------------|--------------|
-| **WebEngine** | Chromium-Browser |
-| **WebChannel** | Web-Integration |
-| **Charts** | Diagramme |
-| **3D** | 3D-Rendering |
-| **Svg** | SVG-Support |
-| **Pdf** | PDF-Rendering |
+| Component | Description |
+|-----------|-------------|
+| **WebEngine** | Chromium browser |
+| **WebChannel** | Web integration |
+| **Charts** | Charts |
+| **3D** | 3D rendering |
+| **Svg** | SVG support |
+| **Pdf** | PDF rendering |
 
 ---
 
-## 10. Stolpersteine und Lösungen
+## 10. Pitfalls and Solutions
 
-### 10.1 AUTOMOC funktioniert nicht
+### 10.1 AUTOMOC Does Not Work
 
 **Problem:**
 ```
 fatal error: 'main.moc' file not found
 ```
 
-**Ursache:** `CMAKE_AUTOMOC ON` wurde global gesetzt, wirkt aber nur auf Targets die **danach** erstellt werden.
+**Cause:** Setting `CMAKE_AUTOMOC ON` globally only affects targets created **afterwards** — by then the build system's targets already exist.
 
-**Hintergrund:** Im Build-System wird das Executable VOR dem Aufruf der Include.cmake erstellt. Die globale `CMAKE_AUTOMOC` Einstellung hat zu diesem Zeitpunkt keine Wirkung mehr.
+**Solution:** Do not set anything yourself. The package hook turns on `AUTOMOC`, `AUTOUIC` and
+`AUTORCC` for every target that uses the external `qt6` (`_Qt6_configure_target()`). If the error
+occurs: is `"qt6"` in the target's `externals`, and does the external have `"package": "Qt6"`? Only
+then is `packages/Qt6.cmake` loaded.
 
-**Lösung:** AUTOMOC muss direkt auf dem Target gesetzt werden:
-```cmake
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES
-    AUTOMOC ON
-    AUTOUIC ON
-    AUTORCC ON
-)
-```
-
-**Status:** ✅ In Include.cmake v0.4.0+ behoben.
-
-### 10.2 Qt-Header werden nicht gefunden
+### 10.2 Qt Headers Are Not Found
 
 **Problem:**
 ```
 fatal error: 'QApplication' file not found
 ```
 
-**Ursache:** Der Qt6-Alias (INTERFACE Library) wurde nicht mit Include-Directories erstellt.
+**Cause:** The component is missing from `components`. Only `Qt6::<Component>` is linked for each
+component listed there; `QApplication` comes from `Widgets`.
 
-**Hintergrund:** CMake's `find_package(Qt6)` stellt nur einzelne Targets bereit (`Qt6::Core`, `Qt6::Widgets`). Das Build-System erwartet aber ein einziges Target `qt6`.
-
-**Lösung:** Include.cmake erstellt ein Alias-Target:
-```cmake
-add_library(qt6 INTERFACE)
-target_link_libraries(qt6 INTERFACE Qt6::Core Qt6::Gui Qt6::Widgets)
+**Solution:** Add the component:
+```json
+"components": ["Core", "Gui", "Widgets"]
 ```
 
-**Status:** ✅ In Include.cmake v0.3.0+ behoben.
-
-### 10.3 DLLs fehlen zur Laufzeit (Windows)
+### 10.3 DLLs Missing at Runtime (Windows)
 
 **Problem:**
 ```
 Die Ausführung des Codes kann nicht fortgesetzt werden, da Qt6Cored.dll nicht gefunden wurde.
 ```
 
-**Ursache:** Qt-DLLs müssen im selben Verzeichnis wie die .exe liegen oder im PATH sein.
+**Cause:** Qt DLLs must be in the same directory as the .exe or in PATH.
 
-**Lösung:** `windeployqt` kopiert alle benötigten DLLs automatisch nach dem Build:
-```cmake
-find_program(_WINDEPLOYQT windeployqt HINTS "${_QT6_PREFIX}/bin")
-add_custom_command(TARGET ${TARGET} POST_BUILD
-    COMMAND "${_WINDEPLOYQT}" "$<TARGET_FILE:${TARGET}>"
-)
-```
+**Solution:** `windeployqt` copies the DLLs after every build of the target (§8.1). If they are
+still missing, `windeployqt` was not found: is it under `<Qt>/bin` of the installation found?
+Stopgap: put Qt's `bin` on PATH (§8.1).
 
-**Status:** ✅ In Include.cmake v0.5.0+ implementiert.
+### 10.4 Debug/Release DLLs Are Mixed Up (Multi-Config)
 
-### 10.4 Debug/Release DLLs werden verwechselt (Multi-Config)
+**Problem:** With Visual Studio (multi-config generator), the DLLs come from the wrong configuration.
 
-**Problem:** Bei Visual Studio (Multi-Config-Generator) werden zur Configure-Zeit die falschen DLLs kopiert.
+**Background:** With multi-config generators, `CMAKE_BUILD_TYPE` is **empty** at configure time;
+the configuration is only chosen at build time.
 
-**Ursache:** `CMAKE_BUILD_TYPE` ist bei Multi-Config-Generatoren zur Configure-Zeit **leer**. Die Configuration wird erst beim Build gewählt.
+**Solution:** Already solved in the build system: `windeployqt` runs as a post-build step on
+`$<TARGET_FILE:…>`, i.e. on the file just built, and chooses the matching DLLs itself. If mixed
+DLLs still appear, empty the configuration's output directory and rebuild.
 
-**Hintergrund:**
-```cmake
-# Ninja (Single-Config): CMAKE_BUILD_TYPE = "Debug" oder "Release"
-# Visual Studio (Multi-Config): CMAKE_BUILD_TYPE = "" (leer!)
-```
-
-**Lösung:** Generator Expressions verwenden:
-```cmake
-# Kopiert Qt6Cored.dll nur bei Debug, sonst "true" (no-op)
-$<IF:$<CONFIG:Debug>,copy_if_different,true>
-```
-
-**Status:** ✅ In Include.cmake v0.5.1+ behoben.
-
-### 10.5 Qt wird trotz Installation nicht gefunden
+### 10.5 Qt Is Not Found Despite Being Installed
 
 **Problem:**
 ```
-[qt6] Qt6 not found!
-  Searched paths:
-    - C:/Qt/6.10.1/msvc2022_64
-    ...
+CMake Warning at …/externals/system/Handler.cmake:… (find_package):
+  … Could not find a package configuration file provided by "Qt6" …
+CMake Error at …/core/Errors.cmake:… (message):
+  [E503] System external 'qt6': find_package(Qt6) failed.
+  …
+  Possible solutions:
+    1. Set Qt6_ROOT environment variable
+    …
 ```
 
-**Ursache:** Umgebungsvariable nicht gesetzt oder Visual Studio erbt sie nicht.
+CMake's own diagnostics appear as a warning; the abort is reported by E503
+(`cmake/externals/system/Handler.cmake:128`). If CMake finds Qt but not every module from
+`components`, E504 follows instead; if `version` is set and no Qt version found matches, E505
+(§11).
 
-**Diagnose:**
+**Cause:** None of the sources from §5.1 leads to a Qt installation — environment variable not
+set (or spelled differently on Linux/macOS), no hint, or Visual Studio does not inherit the
+variable.
+
+**Diagnosis:**
 ```bash
 # Windows
 echo %QT_ROOT%
@@ -711,68 +718,80 @@ dir "%QT_ROOT%\lib\cmake\Qt6"
 # Linux/macOS
 echo $QT_ROOT
 ls "$QT_ROOT/lib/cmake/Qt6"
+
+# Log the find_package search
+cmake --preset ... --debug-find-pkg=Qt6
 ```
 
-**Mögliche Ursachen und Lösungen:**
+**Possible causes and solutions:**
 
-| Ursache | Lösung |
-|---------|--------|
-| Umgebungsvariable nicht gesetzt | `setx QT_ROOT "..."` |
-| VS erbt Variable nicht | CMakeUserPresets.json verwenden |
-| Falscher Pfad/Version | Pfad überprüfen |
-| Beschädigte Installation | Qt neu installieren |
-| Falsches Compiler-Kit | MSVC-Qt für MSVC, GCC-Qt für GCC |
+| Cause | Solution |
+|-------|----------|
+| Environment variable not set | `setx QT_ROOT "..."` |
+| Linux/macOS: `QT_ROOT` without a hint | Add the hint `"${QT_ROOT}"` or set `Qt6_ROOT` (§5.1) |
+| VS does not inherit the variable | Use CMakeUserPresets.json |
+| Wrong path/version | Check the path |
+| Damaged installation | Reinstall Qt |
+| Wrong compiler kit | MSVC Qt for MSVC, GCC Qt for GCC |
 
 ---
 
 ## 11. Troubleshooting
 
-### Checkliste bei Problemen
+### Checklist for Problems
 
-1. ☐ Qt installiert?
-2. ☐ Richtiger Pfad? (`dir %QT_ROOT%\lib\cmake\Qt6`)
-3. ☐ Umgebungsvariable gesetzt?
-4. ☐ VS neu gestartet nach `setx`?
-5. ☐ Include.cmake aktuell (v0.6.0)?
-6. ☐ CMake-Cache gelöscht? (`cmake --fresh`)
-7. ☐ Richtige Komponenten in `components`?
+1. ☐ Qt installed?
+2. ☐ Correct path? (`dir %QT_ROOT%\lib\cmake\Qt6`)
+3. ☐ Environment variable set?
+4. ☐ VS restarted after `setx`?
+5. ☐ External declared with `"system": true` and `"package": "Qt6"`?
+6. ☐ CMake cache deleted? (`cmake --fresh`)
+7. ☐ Correct components in `components`?
 
-### Häufige Error
+### Common Errors
 
-| Error | Lösung |
-|--------|--------|
-| `Qt6 not found` | Umgebungsvariable/hint prüfen |
-| `QApplication file not found` | Include.cmake v0.3.0+ verwenden |
-| `main.moc file not found` | Include.cmake v0.4.0+ verwenden |
-| `Qt6Cored.dll not found` | Include.cmake v0.5.0+ verwenden, rebuild |
-| `undefined reference to QApplication` | "Widgets" in components hinzufügen |
+| Error | Solution |
+|-------|----------|
+| `[E503] System external 'qt6': find_package(Qt6) failed.` (preceded by the warning `Could not find a package configuration file provided by "Qt6"`) | Check the environment variable/`hints` (§5.1, §10.5) |
+| `[E504] System external 'qt6': Qt6 was found (…), but not with all requested components: …` | The line `Reason given by the package` says which module is missing; install the module (Qt Maintenance Tool) or remove it from `components` |
+| `[E505] System external 'qt6': no Qt6 with a version compatible to the requested '…' was found.` | `Considered:` lists the versions found; install a suitable Qt version and point `QT_ROOT`/`hints` to it, or adjust `version` |
+| `[E502] System external 'qt6': 'package' field is required.` | Add `"package": "Qt6"` |
+| `QApplication file not found` | Add `Widgets` to `components` |
+| `main.moc file not found` | `qt6` in the target's `externals`, `package` set (§10.1) |
+| `Qt6Cored.dll not found` | `windeployqt` under `<Qt>/bin`? Rebuild |
+| `undefined reference to QApplication` | Add "Widgets" to components |
 
-### Debug-Ausgabe aktivieren
+### Enable Debug Output
 
-```bash
-cmake --preset ... --debug-output
+During configure, the handler reports what it found:
+```
+[Externals] [qt6] Found Qt6 6.10.1
 ```
 
-Oder in CMakeLists.txt:
-```cmake
-set(CMAKE_MESSAGE_LOG_LEVEL DEBUG)
+The `find_package` search in detail:
+```bash
+cmake --preset ... --debug-find-pkg=Qt6
 ```
 
 ---
 
 ## 12. See Also
 
-- [Solution_Schema.md](../references/Solution_Schema.md) – JSON-Schema Reference
-- [Externals.md](../references/Externals.md) – Externals Reference
-- [Adding_Externals Uuserguide](Adding_Externals.md) – Neue Externals hinzufügen
-- [CMakeUserPresets_Reference.md](../references/CMakeUserPresets.md) – User Presets Configuration
+- [Solution_Schema.md](../references/Solution_Schema.md) – JSON schema reference
+- [Externals.md](../references/Externals.md) – Externals reference
+- [Qt6_cmake.md](../module/externals/system/packages/Qt6_cmake.md) – Module documentation of the package hook
+- [externals/Qt6.md](externals/Qt6.md) – Qt6 as an external (quick reference)
+- [Adding_Externals Uuserguide](Adding_Externals.md) – Adding new externals
+- [CMakeUserPresets_Reference.md](../references/CMakeUserPresets.md) – User presets configuration
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Konformität: Prerequisites, Stolpersteine/Troubleshooting getrennt, See Also** |
-| 0.2.0 | 2025-12-11 | Umfassende Überarbeitung: Stolpersteine, detaillierte Installation, VS-Workarounds, Plattform-Support |
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | 2026-11-09 | Aligned with the code: Qt6 as a system external (`"system": true`, `"package": "Qt6"`, `components`, `hints`, `backup`) instead of a local `externals/qt6/Include.cmake`; path resolution per `PathResolver.cmake`, field table, AUTOMOC/entry point/windeployqt from `packages/Qt6.cmake`, messages W501/E502, pitfalls and troubleshooting without Include.cmake versions, presets and output paths; CMakeCraft v0.14.1: `find_package` without `REQUIRED` (§5.1), failure case §10.5 with E503, E503/E504/E505 in §11 |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 conformance: prerequisites, pitfalls/troubleshooting separated, see also** |
+| 0.2.0 | 2025-12-11 | Comprehensive revision: pitfalls, detailed installation, VS workarounds, platform support |
 | 0.1.0 | 2025-12-10 | Initial |

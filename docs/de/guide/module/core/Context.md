@@ -1,14 +1,14 @@
 # Context.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Context.md](Context.md)  
-> **Modul:** [`cmake/core/Context.cmake`](../../../../cmake/core/Context.cmake)  
+> **English:** [Context.md](../../../../en/guide/module/core/Context.md)  
+> **Modul:** [`cmake/core/Context.cmake`](../../../../../cmake/core/Context.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -26,7 +26,7 @@
 9. [Debugging](#9-debugging)
 10. [Bekannte Einschränkungen](#10-bekannte-einschränkungen)
 11. [Siehe auch](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+12. [Changelog](#changelog)
 
 ---
 
@@ -452,7 +452,7 @@ ctx_dump(EXE_MyApp)
 - [Debug.cmake](Debug.md) — Debug-System
 - [ExecutableCollect.cmake](../project/ExecutableCollect.md) — Verwendet Context
 - [LibraryCollect.cmake](../project/LibraryCollect.md) — Verwendet Context
-- [guidelines](../../../concepts/guidelines.md) — Coding-Konventionen
+- [guidelines](../../../konzepte/Guidelines.md) — Coding-Konventionen
 
 ---
 
@@ -460,6 +460,7 @@ ctx_dump(EXE_MyApp)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung, Standard Context Keys Abschnitt** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung, Standard Context Keys Abschnitt |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): GLOBAL PROPERTY statt PARENT_SCOPE, ctx_create/set/get/dump API |

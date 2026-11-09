@@ -1,14 +1,14 @@
 # LibraryCreate.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Version:** 1.0.2  
+> **Datum:** 2026-11-07  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [LibraryCreate.md](LibraryCreate.md)  
-> **Modul:** [`cmake/project/LibraryCreate.cmake`](../../../../cmake/project/LibraryCreate.cmake)  
+> **English:** [LibraryCreate.md](../../../../en/guide/module/project/LibraryCreate.md)  
+> **Modul:** [`cmake/project/LibraryCreate.cmake`](../../../../../cmake/project/LibraryCreate.cmake)  
 > **Modul-Version:** 1.1.0
 
 ---
@@ -264,8 +264,9 @@ Link-Options-, Source- und PCH-Properties, jeweils auch `INTERFACE_*`) vor und n
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.14.0** | **2026-11-07** | **COMPILE_OPTIONS (PRIVATE, nach `apply_compiler_options`, E105 bei INTERFACE); Beschreibung für Quellpakete (`CRAFT_LIB_*`, `CRAFT_EXT_*`); Modul-Version 1.1.0** |
-| 0.10.0 | 2026-10-09 | OUTPUT_NAME und DEFINES (mit `{version}`); Target-Property `CRAFT_PUBLIC_HEADERS_DIR` |
+| **1.0.2** | **2026-11-07** | **CMakeCraft v0.14.0: COMPILE_OPTIONS (PRIVATE, nach `apply_compiler_options`, E105 bei INTERFACE); Beschreibung für Quellpakete (`CRAFT_LIB_*`, `CRAFT_EXT_*`); Modul-Version 1.1.0** |
+| 1.0.1 | 2026-10-09 | CMakeCraft v0.10.0: OUTPUT_NAME und DEFINES (mit `{version}`); Target-Property `CRAFT_PUBLIC_HEADERS_DIR` |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS Support: apply_external_to_target() statt direktem Linking |
 | 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |

@@ -1,14 +1,14 @@
 # Boost.cmake — Boost Package Hook
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-20  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [Boost_cmake.md](Boost_cmake.md)  
-> **Module:** [cmake/externals/system/packages/Boost.cmake](../../../../../../cmake/externals/system/packages/Boost.cmake)  
+> **German:** [Boost_cmake.md](../../../../../../de/guide/module/externals/system/packages/Boost_cmake.md)  
+> **Module:** [cmake/externals/system/packages/Boost.cmake](../../../../../../../cmake/externals/system/packages/Boost.cmake)  
 > **Module Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
@@ -16,28 +16,28 @@
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [API-Reference](#2-api-referenz)
-3. [Standard-Pfade](#3-standard-pfade)
-4. [Target-Configuration](#4-target-konfiguration)
-5. [Usagesbeispiele](#5-verwendungsbeispiele)
-6. [Boost-Komponenten](#6-boost-komponenten)
-7. [See Also](#7-siehe-auch)
+1. [Overview](#1-overview)
+2. [API Reference](#2-api-reference)
+3. [Standard Paths](#3-standard-paths)
+4. [Target Configuration](#4-target-configuration)
+5. [Usage Examples](#5-usage-examples)
+6. [Boost Components](#6-boost-components)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-`Boost.cmake` ist ein **Package-Hook** für Boost System Externals. Er wird automatisch von `system/Handler.cmake` geladen, wenn `package="Boost"` in der External-Definition steht.
+`Boost.cmake` is a **package hook** for Boost system externals. It is loaded automatically by `system/Handler.cmake` when `package="Boost"` is in the external definition.
 
-### Kernfunktionen
+### Core Functions
 
-- **Standard-Pfade** — Plattform-spezifische Boost-Installationsorte
-- **Post-Find** — Debug-Ausgabe nach erfolgreichem find_package
-- **MSVC Auto-Linking** — Deaktiviert für explizites Linking
+- **Standard paths** — Platform-specific Boost installation locations
+- **Post-find** — Debug output after a successful find_package
+- **MSVC auto-linking** — Disabled in favor of explicit linking
 
-### Architecture-Position
+### Architecture Position
 
 ```
 system/Handler.cmake
@@ -45,7 +45,7 @@ system/Handler.cmake
        ├── package = "Boost"
        ▼
 ┌───────────────────────┐
-│  packages/Boost.cmake │  ← Dieser Hook
+│  packages/Boost.cmake │  ← This hook
 └───────────────────────┘
        │
        ├── _get_Boost_standard_paths()
@@ -55,57 +55,57 @@ system/Handler.cmake
 
 ---
 
-## 2. API-Reference
+## 2. API Reference
 
 ### 2.1 _get_Boost_standard_paths()
 
-Liefert plattform-spezifische Boost-Installationspfade.
+Returns platform-specific Boost installation paths.
 
 ```cmake
 _get_Boost_standard_paths(OUT_VAR)
 ```
 
-| Parameters | Typ | Description |
-|-----------|-----|--------------|
-| `OUT_VAR` | Var | Ausgabe: Liste von Pfaden |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `OUT_VAR` | Var | Output: list of paths |
 
-**Aufruf:** Automatisch von `system/Handler.cmake` vor `find_package()`.
+**Call:** Automatically by `system/Handler.cmake` before `find_package()`.
 
 ---
 
 ### 2.2 _Boost_post_find()
 
-Wird nach erfolgreichem `find_package(Boost)` aufgerufen.
+Called after a successful `find_package(Boost)`.
 
 ```cmake
 _Boost_post_find()
 ```
 
-**Aktionen:**
-- Debug-Ausgabe: Version und Include-Pfad
-- Keine weitere Configuration erforderlich
+**Actions:**
+- Debug output: version and include path
+- No further configuration required
 
 ---
 
 ### 2.3 _Boost_configure_target()
 
-Konfiguriert ein CMake-Target für Boost-Usage.
+Configures a CMake target for Boost use.
 
 ```cmake
 _Boost_configure_target(TARGET_NAME)
 ```
 
-| Parameters | Typ | Description |
-|-----------|-----|--------------|
-| `TARGET_NAME` | String | CMake-Target |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `TARGET_NAME` | String | CMake target |
 
-**Aktionen (nur MSVC):**
-- Definiert `BOOST_ALL_NO_LIB` — Deaktiviert Auto-Linking
-- Ermöglicht explizites Linking via `target_link_libraries()`
+**Actions (MSVC only):**
+- Defines `BOOST_ALL_NO_LIB` — disables auto-linking
+- Enables explicit linking via `target_link_libraries()`
 
 ---
 
-## 3. Standard-Pfade
+## 3. Standard Paths
 
 ### Windows
 
@@ -129,34 +129,34 @@ _Boost_configure_target(TARGET_NAME)
 ### Linux
 
 ```cmake
-"/usr/include/boost"        # System-Paket (Debian/Ubuntu)
-"/usr/local/include/boost"  # Manuell installiert
+"/usr/include/boost"        # System package (Debian/Ubuntu)
+"/usr/local/include/boost"  # Installed manually
 ```
 
 ---
 
-## 4. Target-Configuration
+## 4. Target Configuration
 
 ### MSVC Auto-Linking Problem
 
-MSVC hat eine Boost-spezifische "Auto-Linking" Funktion, die automatisch Libraries verlinkt basierend auf `#pragma comment(lib, ...)`. Dies kann zu Konflikten führen.
+MSVC has a Boost-specific "auto-linking" feature that links libraries automatically based on `#pragma comment(lib, ...)`. This can lead to conflicts.
 
-### Lösung
+### Solution
 
 ```cmake
 target_compile_definitions(${TARGET_NAME} PRIVATE BOOST_ALL_NO_LIB)
 ```
 
-**Effekt:** 
-- Deaktiviert Auto-Linking
-- Alle Boost-Libraries müssen explizit via CMake gelinkt werden
-- Verhindert Versionskonflikte
+**Effect:** 
+- Disables auto-linking
+- All Boost libraries must be linked explicitly via CMake
+- Prevents version conflicts
 
 ---
 
-## 5. Usagesbeispiele
+## 5. Usage Examples
 
-### Solution.json — Basis
+### Solution.json — Basic
 
 ```json
 {
@@ -170,7 +170,7 @@ target_compile_definitions(${TARGET_NAME} PRIVATE BOOST_ALL_NO_LIB)
 }
 ```
 
-### Solution.json — Mit Komponenten
+### Solution.json — With Components
 
 ```json
 {
@@ -191,7 +191,7 @@ target_compile_definitions(${TARGET_NAME} PRIVATE BOOST_ALL_NO_LIB)
 }
 ```
 
-### Empfohlene Umgebungsvariable
+### Recommended Environment Variable
 
 ```bash
 # Windows
@@ -203,15 +203,15 @@ export BOOST_ROOT=/usr/local/boost_1_84_0
 
 ---
 
-## 6. Boost-Komponenten
+## 6. Boost Components
 
-### Header-Only (keine Komponente nötig)
+### Header-Only (No Component Needed)
 
-Diese Boost-Libraries sind Header-Only und brauchen keine `components`:
+These Boost libraries are header-only and need no `components`:
 
 - `boost/algorithm`
 - `boost/any`
-- `boost/asio` (meist)
+- `boost/asio` (mostly)
 - `boost/bind`
 - `boost/function`
 - `boost/lexical_cast`
@@ -221,23 +221,23 @@ Diese Boost-Libraries sind Header-Only und brauchen keine `components`:
 
 ### Compiled Components
 
-Diese benötigen explizite `components`:
+These need explicit `components`:
 
-| Komponente | Description |
-|------------|--------------|
-| `filesystem` | Dateisystem-Operationen |
-| `system` | System-Errorbehandlung |
-| `thread` | Threading-Support |
-| `regex` | Reguläre Ausdrücke |
-| `date_time` | Datum/Zeit |
-| `serialization` | Objektserialisierung |
-| `program_options` | Kommandozeilenparser |
-| `iostreams` | I/O-Streams |
-| `log` | Logging-Framework |
+| Component | Description |
+|-----------|-------------|
+| `filesystem` | File system operations |
+| `system` | System error handling |
+| `thread` | Threading support |
+| `regex` | Regular expressions |
+| `date_time` | Date/time |
+| `serialization` | Object serialization |
+| `program_options` | Command-line parser |
+| `iostreams` | I/O streams |
+| `log` | Logging framework |
 
-### CMake-Targets
+### CMake Targets
 
-Nach `find_package(Boost COMPONENTS ...)`:
+After `find_package(Boost COMPONENTS ...)`:
 
 ```cmake
 Boost::filesystem
@@ -250,14 +250,15 @@ Boost::thread
 
 ## 7. See Also
 
-- [Handler_cmake.md](../Handler_cmake.md) — Lädt diesen Hook
-- [PathResolver_cmake.md](../PathResolver_cmake.md) — Pfad-Auflösung
+- [Handler_cmake.md](../Handler_cmake.md) — Loads this hook
+- [PathResolver_cmake.md](../PathResolver_cmake.md) — Path resolution
 - [Boost CMake Documentation](https://cmake.org/cmake/help/latest/module/FindBoost.html) — CMake FindBoost
 
 ---
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Initial: Standard-Pfade, Post-Find Debug, BOOST_ALL_NO_LIB für MSVC** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-20** | **Release version (date from the header; the file entered the repo only with `6fc7f4a`)** |
+| 0.6.0 | 2025-12-18 | Initial: standard paths, post-find debug, BOOST_ALL_NO_LIB for MSVC |

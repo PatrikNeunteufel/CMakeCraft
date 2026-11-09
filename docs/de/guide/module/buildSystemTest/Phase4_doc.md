@@ -1,11 +1,12 @@
 # phase4.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Pfad:** `cmake/buildSystemTest/phase4.cmake`  
 > **Status:** Stabil  
 > **Sprache:** Deutsch  
+> **English:** [Phase4_doc.md](../../../../en/guide/module/buildSystemTest/Phase4_doc.md)  
 
 ---
 
@@ -15,7 +16,7 @@
 2. [Tests](#2-tests)
 3. [Erfolgs-Flag](#3-erfolgs-flag)
 4. [Siehe auch](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+5. [Changelog](#changelog)
 
 ---
 
@@ -90,5 +91,6 @@ set(PHASE4_TEST_PASSED TRUE CACHE BOOL "Phase 4 Test passed" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-07 | Initial |

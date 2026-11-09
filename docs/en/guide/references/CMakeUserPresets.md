@@ -4,45 +4,45 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [CMakeUserPresets_Reference.md](../../en/references/CMakeUserPresets_Reference.md)
+> **German:** [CMakeUserPresets.md](../../../de/guide/references/CMakeUserPresets.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
 3. [Hidden Building Blocks](#3-hidden-building-blocks)
 4. [Configure Presets](#4-configure-presets)
 5. [Build Presets](#5-build-presets)
 6. [Test Presets](#6-test-presets)
 7. [Package Presets](#7-package-presets)
 8. [Workflow Presets](#8-workflow-presets)
-9. [Schnellreferenz](#9-schnellreferenz)
-10. [Usage](#10-verwendung)
-11. [Anpassung](#11-anpassung)
-12. [See Also](#12-siehe-auch)
+9. [Quick Reference](#9-quick-reference)
+10. [Usage](#10-usage)
+11. [Customization](#11-customization)
+12. [See Also](#12-see-also)
 13. [Changelog](#13-changelog)
 
 ---
 
 ## 1. Overview
 
-This reference documents die persönlichen User-Presets in `CMakeUserPresets.json`. User-Presets erweitern die Team-Presets um lokale Configurationen wie vcpkg-Pfade, parallele Builds und Code-Signing.
+This reference documents the personal user presets in `CMakeUserPresets.json`. User presets extend the team presets with local configurations such as vcpkg paths, parallel builds and code signing.
 
-### Preset-Kategorien
+### Preset Categories
 
-| Kategorie | Anzahl | Description |
-|-----------|--------|--------------|
-| Configure Presets | 7 | vcpkg-Kombinationen |
-| Build Presets | 6 | Parallelisierte Builds |
-| Test Presets | 3 | CTest-Configurationen |
-| Package Presets | 1 | Code-Signing |
-| Workflow Presets | 1 | Release + Signing |
+| Category | Count | Description |
+|----------|-------|-------------|
+| Configure Presets | 7 | vcpkg combinations |
+| Build Presets | 6 | Parallelized builds |
+| Test Presets | 3 | CTest configurations |
+| Package Presets | 1 | Code signing |
+| Workflow Presets | 1 | Release + signing |
 
-### Vendor-Metadaten
+### Vendor Metadata
 
 ```json
 {
@@ -58,24 +58,24 @@ This reference documents die persönlichen User-Presets in `CMakeUserPresets.jso
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### Namensschema
+### Naming Scheme
 
 ```
-[basis-preset]+[erweiterung]
+[base-preset]+[extension]
 
 Examples:
 - windows-vs-x64-debug_dynamic+vcpkg
 - ninjamulti_testing+vcpkg
 ```
 
-### Symbole
+### Symbols
 
-| Symbol | Bedeutung |
-|--------|-----------|
-| + | Erweiterung eines Team-Presets |
-| jobs=N | Parallele Build-Jobs |
+| Symbol | Meaning |
+|--------|---------|
+| + | Extension of a team preset |
+| jobs=N | Parallel build jobs |
 
 ---
 
@@ -83,7 +83,7 @@ Examples:
 
 ### 3.1 with-vcpkg
 
-Basis-Preset für lokale vcpkg-Integration:
+Base preset for local vcpkg integration:
 
 ```json
 {
@@ -97,22 +97,22 @@ Basis-Preset für lokale vcpkg-Integration:
 }
 ```
 
-| Variable | Wert | Description |
-|----------|------|--------------|
-| `VCPKG_ROOT` | C:/dev/vcpkg | Lokaler vcpkg-Pfad |
-| `CMAKE_TOOLCHAIN_FILE` | .../vcpkg.cmake | Toolchain-Integration |
-| `VCPKG_FEATURE_FLAGS` | manifests,versions | Moderne Features |
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `VCPKG_ROOT` | C:/dev/vcpkg | Local vcpkg path |
+| `CMAKE_TOOLCHAIN_FILE` | .../vcpkg.cmake | Toolchain integration |
+| `VCPKG_FEATURE_FLAGS` | manifests,versions | Modern features |
 
-> **Note:** Pfade anpassen an lokale Installation!
+> **Note:** Adjust paths to your local installation!
 
 ---
 
 ## 4. Configure Presets
 
-### 4.1 vcpkg-Kombinationen
+### 4.1 vcpkg Combinations
 
-| Preset | Erbt von | Description |
-|--------|----------|--------------|
+| Preset | Inherits From | Description |
+|--------|---------------|-------------|
 | `windows-vs-x64-debug_dynamic+vcpkg` | windows-vs-x64-debug_dynamic, with-vcpkg | VS Debug + vcpkg |
 | `windows-vs-x64-testing_dynamic+vcpkg` | windows-vs-x64-testing_dynamic, with-vcpkg | VS Testing + vcpkg |
 | `windows-ninja-multi+vcpkg` | windows-ninja-multi, with-vcpkg | Ninja Multi + vcpkg |
@@ -124,7 +124,7 @@ Basis-Preset für lokale vcpkg-Integration:
 
 ## 5. Build Presets
 
-### 5.1 Parallelisierte Builds (jobs=8)
+### 5.1 Parallelized Builds (jobs=8)
 
 | Preset | Configure Preset | Config | Jobs |
 |--------|------------------|--------|------|
@@ -133,7 +133,7 @@ Basis-Preset für lokale vcpkg-Integration:
 | `vs_x64_debug_md` | windows-vs-x64-debug_dynamic | Debug | 8 |
 | `vs_x64_testing_md` | windows-vs-x64-testing_dynamic | Testing | 8 |
 
-### 5.2 vcpkg-Varianten
+### 5.2 vcpkg Variants
 
 | Preset | Configure Preset | Config | Jobs |
 |--------|------------------|--------|------|
@@ -154,7 +154,7 @@ Basis-Preset für lokale vcpkg-Integration:
 
 ## 7. Package Presets
 
-### 7.1 Code-Signing Variante
+### 7.1 Code Signing Variant
 
 ```json
 {
@@ -169,11 +169,11 @@ Basis-Preset für lokale vcpkg-Integration:
 }
 ```
 
-| Einstellung | Wert | Description |
-|-------------|------|--------------|
-| Basis | package-windows-inno-Release | Team-Preset |
-| ISCC Args | /Qp;/Smysigntool=$p | Quiet + Signtool |
-| Output | dist/ | Lokales Ausgabeverzeichnis |
+| Setting | Value | Description |
+|---------|-------|-------------|
+| Base | package-windows-inno-Release | Team preset |
+| ISCC args | /Qp;/Smysigntool=$p | Quiet + signtool |
+| Output | dist/ | Local output directory |
 
 ---
 
@@ -181,47 +181,47 @@ Basis-Preset für lokale vcpkg-Integration:
 
 ### 8.1 wf-vs-x64-release-inno+sign
 
-Komplette Release-Pipeline mit Code-Signing:
+Complete release pipeline with code signing:
 
-| Schritt | Type | Preset |
-|---------|------|--------|
+| Step | Type | Preset |
+|------|------|--------|
 | 1 | configure | windows-vs-x64-release_dynamic |
 | 2 | build | build-vs-x64-Release |
 | 3 | package | package-windows-inno-Release+sign |
 
 ---
 
-## 9. Schnellreferenz
+## 9. Quick Reference
 
-### 9.1 Häufigste Kombinationen
+### 9.1 Most Common Combinations
 
-| Anwendungsfall | Configure | Build |
-|----------------|-----------|-------|
+| Use Case | Configure | Build |
+|----------|-----------|-------|
 | VS Debug + vcpkg | `windows-vs-x64-debug_dynamic+vcpkg` | `vs_x64_debug_md` |
 | Ninja Testing + vcpkg | `windows-ninja-multi-tests+vcpkg` | `ninjamulti_testing+vcpkg` |
-| Release + Signing | (Teil von Workflow) | `wf-vs-x64-release-inno+sign` |
+| Release + signing | (part of workflow) | `wf-vs-x64-release-inno+sign` |
 
-### 9.2 User-Preset vs Team-Preset
+### 9.2 User Preset vs Team Preset
 
-| Aspekt | Team-Preset | User-Preset |
+| Aspect | Team Preset | User Preset |
 |--------|-------------|-------------|
-| Datei | CMakePresets.json | CMakeUserPresets.json |
+| File | CMakePresets.json | CMakeUserPresets.json |
 | Git | ✓ Committed | ✗ .gitignored |
-| Lokale Pfade | ✗ | ✓ |
+| Local paths | ✗ | ✓ |
 | vcpkg | ✗ | ✓ |
-| Code-Signing | ✗ | ✓ |
+| Code signing | ✗ | ✓ |
 
 ---
 
 ## 10. Usage
 
-### 10.1 Tägliche Entwicklung
+### 10.1 Daily Development
 
 ```bash
-# VS Debug mit vcpkg
+# VS Debug with vcpkg
 cmake --preset windows-vs-x64-debug_dynamic+vcpkg
 
-# Schneller Build (8 Jobs)
+# Fast build (8 jobs)
 cmake --build --preset vs_x64_debug_md
 ```
 
@@ -234,7 +234,7 @@ cmake --build --preset ninjamulti_testing+vcpkg
 ctest --preset ninjamulti_test_testing
 ```
 
-### 10.3 Release mit Signing
+### 10.3 Release with Signing
 
 ```bash
 cmake --workflow --preset wf-vs-x64-release-inno+sign
@@ -242,9 +242,9 @@ cmake --workflow --preset wf-vs-x64-release-inno+sign
 
 ---
 
-## 11. Anpassung
+## 11. Customization
 
-### 11.1 vcpkg-Pfad ändern
+### 11.1 Change the vcpkg Path
 
 ```json
 {
@@ -257,7 +257,7 @@ cmake --workflow --preset wf-vs-x64-release-inno+sign
 }
 ```
 
-### 11.2 Job-Anzahl ändern
+### 11.2 Change the Job Count
 
 ```json
 {
@@ -267,7 +267,7 @@ cmake --workflow --preset wf-vs-x64-release-inno+sign
 }
 ```
 
-### 11.3 Eigene Kombinationen
+### 11.3 Custom Combinations
 
 ```json
 {
@@ -284,15 +284,16 @@ cmake --workflow --preset wf-vs-x64-release-inno+sign
 
 ## 12. See Also
 
-- [CMakePresets_Manual.md](CMakePresets.md) — Concepte
-- [CMakePresets_Reference.md](CMakePresets.md) — Team-Presets
+- [CMakePresets_Manual.md](CMakePresets.md) — Concepts
+- [CMakePresets_Reference.md](CMakePresets.md) — Team presets
 - [CMakeUserPresets_Example.md](../userguides/CMakeUserPresets.md) — Template
 
 ---
 
 ## 13. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Autor-Feld entfernt** |
-| 0.1.0 | 2025-12-03 | Initial: vcpkg-Integration, parallelisierte Builds, Code-Signing |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 format: numbered TOC, reference header, quick reference, author field removed |
+| 0.1.0 | 2025-12-03 | Initial: vcpkg integration, parallelized builds, code signing |

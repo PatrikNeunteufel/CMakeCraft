@@ -2,8 +2,8 @@
 # ==========================================
 # Qt6-specific configuration for system externals
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-11-09
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -14,12 +14,16 @@
 #   - _get_Qt6_standard_paths(OUT_VAR) - Platform-specific Qt installation paths
 #   - _Qt6_post_find()                 - Called after find_package(Qt6)
 #   - _Qt6_configure_target(TARGET)    - Configure target (AUTOMOC etc.)
+#   - _Qt6_configure_entry_point(TARGET) - Explicit /ENTRY for Windows GUI (MSVC ABI)
 #   - _Qt6_configure_deployment(TARGET) - Setup deployment (windeployqt etc.)
 #
 # Used by:
 #   - system/Handler.cmake
 #
 # Changelog:
+#   v1.1.0 (2026-11-09): Explicit entry point /ENTRY:WinMainCRTStartup for
+#                        Windows GUI executables (MSVC and clang, MSVC ABI);
+#                        removes lld-link "found both wWinMain and WinMain"
 #   v1.0.0 (2025-12-26): Release version
 #   v0.6.1 (2025-12-21): Fix: Skip windeployqt for STATIC_LIBRARY targets
 #   v0.6.0 (2025-12-18): Initial version
@@ -135,9 +139,58 @@ function(_Qt6_configure_target TARGET_NAME)
     )
     
     dbg(${DBG_RARE} "  [Qt6] AUTOMOC/AUTOUIC/AUTORCC enabled for ${TARGET_NAME}" ID EXTERNALS)
-    
+
+    # Explicit entry point for Windows GUI executables
+    _Qt6_configure_entry_point(${TARGET_NAME})
+
     # Configure deployment
     _Qt6_configure_deployment(${TARGET_NAME})
+endfunction()
+
+# ==============================================================================
+# _Qt6_configure_entry_point - Explicit entry point for Windows GUI executables
+# ==============================================================================
+#[[
+    _Qt6_configure_entry_point(TARGET_NAME)
+
+    Qt6::EntryPoint (Qt6EntryPoint.lib) defines BOTH WinMain and wWinMain;
+    both forward to the same helper that calls main(). Without an explicit
+    entry point, lld-link (clang) warns "found both wWinMain and WinMain;
+    using latter" on every link; link.exe (MSVC) silently picks
+    WinMainCRTStartup -> WinMain.
+
+    This function makes that choice explicit for both MSVC-ABI linkers:
+    /ENTRY:WinMainCRTStartup. The condition mirrors the one under which Qt
+    links Qt6::EntryPoint (WIN32_EXECUTABLE, no QT_NO_ENTRYPOINT). It is a
+    generator expression because executables get WIN32_EXECUTABLE only after
+    their externals are applied (ExecutableCreate.cmake). Never set this
+    globally: CMake's compiler check links a console program without WinMain.
+
+    MinGW is untouched (different entry point handling).
+
+    Parameters:
+        TARGET_NAME - CMake target (only executables are affected)
+]]
+function(_Qt6_configure_entry_point TARGET_NAME)
+    if(NOT WIN32)
+        return()
+    endif()
+    if(NOT (MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+        return()
+    endif()
+
+    get_target_property(_target_type ${TARGET_NAME} TYPE)
+    if(NOT _target_type STREQUAL "EXECUTABLE")
+        return()
+    endif()
+
+    set(_gui "$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},WIN32_EXECUTABLE>>")
+    set(_qt_entry "$<NOT:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},QT_NO_ENTRYPOINT>>>")
+    target_link_options(${TARGET_NAME} PRIVATE
+        "$<$<AND:${_gui},${_qt_entry}>:LINKER:/ENTRY:WinMainCRTStartup>"
+    )
+
+    dbg(${DBG_RARE} "  [Qt6] Entry point WinMainCRTStartup for GUI target ${TARGET_NAME}" ID EXTERNALS)
 endfunction()
 
 # ==============================================================================

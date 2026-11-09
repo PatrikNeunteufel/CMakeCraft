@@ -1,14 +1,14 @@
 # Registry/Targets.cmake — External Target Registry
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Targets_cmake.md](Targets_cmake.md)  
-> **Modul:** [cmake/externals/Registry/Targets.cmake](../../../cmake/externals/Registry/Targets.cmake)  
+> **English:** [Targets_cmake.md](../../../../../en/guide/module/externals/registry/Targets_cmake.md)  
+> **Modul:** [cmake/externals/Registry/Targets.cmake](../../../../../../cmake/externals/registry/Targets.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -118,11 +118,15 @@ _link_external_to_target(CONSUMER_TARGET EXT_NAME [SCOPE <scope>])
 
 ```cmake
 # cmake/externals/hooks/prefetch/catch2.cmake
-set_property(GLOBAL PROPERTY HOOK_KNOWN_TARGETS_catch2 
-    "Catch2::Catch2WithMain" "Catch2::Catch2")
-set_property(GLOBAL PROPERTY HOOK_PRIMARY_TARGET_catch2 
-    "Catch2::Catch2WithMain")
+set_property(GLOBAL PROPERTY HOOK_KNOWN_TARGETS_${HOOK_EXTERNAL_NAME}
+    "Catch2;Catch2WithMain"
+)
+set_property(GLOBAL PROPERTY HOOK_PRIMARY_TARGET_${HOOK_EXTERNAL_NAME}
+    "Catch2WithMain"
+)
 ```
+
+`HOOK_EXTERNAL_NAME` ist der Name des Externals aus `Solution.json` (für die Demo-Solution `catch2`).
 
 ---
 
@@ -166,7 +170,7 @@ _link_external_to_target(MyLibrary spdlog SCOPE PUBLIC)
 
 ## 8. Siehe auch
 
-- [Handler_cmake.md](Handler_cmake.md) — Ruft Auto-Register auf
+- [Handler_cmake.md](../fetched/Handler_cmake.md) — Ruft Auto-Register auf
 - [HookLoader_cmake.md](../hooks/HookLoader_cmake.md) — Hook-System
 - [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Ruft Linking auf
 
@@ -176,4 +180,6 @@ _link_external_to_target(MyLibrary spdlog SCOPE PUBLIC)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: § 4 catch2-Hint wie in `hooks/prefetch/catch2.cmake` (`"Catch2;Catch2WithMain"`, Primär `Catch2WithMain`, Property-Name über `HOOK_EXTERNAL_NAME`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

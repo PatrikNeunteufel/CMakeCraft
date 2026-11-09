@@ -1,12 +1,12 @@
 # CMakePresets — Referenz
 
-> **Version:** 1.1.1  
-> **Datum:** 2026-10-24  
+> **Version:** 1.1.2  
+> **Datum:** 2026-11-09  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CMakePresets_Reference.md](../../en/references/CMakePresets_Reference.md)
+> **English:** [CMakePresets.md](../../../en/guide/references/CMakePresets.md)
 
 ---
 
@@ -36,9 +36,9 @@ Diese Referenz dokumentiert alle verfügbaren Team-Presets in `CMakePresets.json
 
 | Kategorie | Anzahl | Beschreibung |
 |-----------|--------|--------------|
-| Configure Presets | 35+ | Build-Umgebung konfigurieren |
-| Build Presets | 20+ | Kompilieren |
-| Test Presets | 12 | CTest ausführen |
+| Configure Presets | 27 (dazu 25 versteckte Bausteine) | Build-Umgebung konfigurieren |
+| Build Presets | 24 | Kompilieren |
+| Test Presets | 11 | CTest ausführen |
 | Package Presets | 3 | Installer erstellen |
 | Workflow Presets | 5 | Komplette Pipelines |
 
@@ -49,9 +49,9 @@ Diese Referenz dokumentiert alle verfügbaren Team-Presets in `CMakePresets.json
     "version": 6,
     "vendor": {
         "cmake-architecture-v2": {
-            "version": "0.5.0",
-            "date": "2025-12-14",
-            "description": "Team-weite Presets für CMake Architecture"
+            "version": "0.1.0",
+            "date": "2025-12-03",
+            "description": "Team-weite Presets für CMake Architecture V2"
         }
     }
 }
@@ -118,6 +118,12 @@ Abschnitten je Objektdatei (C1128). `/bigobj` je Datei oder in `compile_options`
 | `windows-ninja-debug-clang` | Clang | Debug | – |
 | `windows-ninja-release-clang` | Clang | Release | – |
 | `windows-ninja-testing-clang` | Clang | Testing | Tests aktiviert |
+| `craft-selftest` | Clang | Debug | Phasentests des Build-Systems (`RUN_BUILD_SYSTEM_TESTS=ON`) |
+
+**`craft-selftest`** erbt von `win-ninja-clang` (Ninja, `clang`/`clang++`) und setzt
+`CMAKE_BUILD_TYPE=Debug` und `RUN_BUILD_SYSTEM_TESTS=ON`: Der Configure-Lauf führt die Phasentests
+unter `cmake/buildSystemTest/` aus; „grün“ heißt Configure ohne Fehler. Eine einzelne Phase mit
+zusätzlich `-DTEST_PHASE=<n>`. In Konsumenten-Projekten nur als Smoke-Check nach einem Snapshot-Sync nötig.
 
 ### 3.3 Windows • Ninja (Multi-Config)
 
@@ -209,6 +215,7 @@ Abschnitten je Objektdatei (C1128). `/bigobj` je Datei oder in `compile_options`
 | Preset | Configure Preset | Config |
 |--------|------------------|--------|
 | `ctest-vs-x64-Debug` | windows-vs-x64-debug_dynamic | Debug |
+| `ctest-vs-x64-Release` | windows-vs-x64-release_dynamic | Release |
 | `ctest-vs-x64-Testing` | windows-vs-x64-testing_dynamic | Testing |
 | `ctest-ninja-multi-Debug` | windows-ninja-multi | Debug |
 | `ctest-ninja-multi-Testing` | windows-ninja-multi-tests | Testing |
@@ -363,8 +370,8 @@ cmake --list-presets=test
 
 ## 12. Siehe auch
 
-- [CMakePresets_Manual.md](CMakePresets_Manual.md) — Konzepte und Best Practices
-- [CMakeUserPresets_Reference.md](CMakeUserPresets_Reference.md) — User-Presets
+- CMakePresets_Manual.md — Konzepte und Best Practices
+- [CMakeUserPresets.md](CMakeUserPresets.md) — User-Presets
 - [CMakeUserPresets_Example.md](../userguides/CMakeUserPresets.md) — Template
 
 ---
@@ -373,7 +380,8 @@ cmake --list-presets=test
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.1.1** | **2026-10-24** | **`/bigobj` unter MSVC (CMakeCraft v0.13.1)** |
+| **1.1.2** | **2026-11-09** | **An den Code angeglichen: Presets `craft-selftest` (§3.2) und `ctest-vs-x64-Release` (§5.1, Schritt von `wf-vs-x64-release-inno`) ergänzt; Anzahlen und Vendor-Metadaten wie in `CMakePresets.json`** |
+| 1.1.1 | 2026-10-24 | `/bigobj` unter MSVC (CMakeCraft v0.13.1) |
 | 1.1.0 | 2026-10-24 | Konfiguration `Testing` beschrieben (optimiert, Asserts, Debug-Info; CMakeCraft v0.13.0) |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Verwendung |
 | 0.1.0 | 2025-12-03 | Initial: Alle Team-Presets dokumentiert, Hidden Building Blocks, Variablen |

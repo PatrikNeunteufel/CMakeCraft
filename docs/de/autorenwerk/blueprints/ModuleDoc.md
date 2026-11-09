@@ -1,13 +1,13 @@
 # ModuleDoc — Standard für CMake-Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller, Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [ModuleDoc.md](ModuleDoc.md)
+> **English:** [ModuleDoc.md](../../../en/autorenwerk/blueprints/ModuleDoc.md)
 
 ---
 
@@ -22,7 +22,7 @@
 7. [Beispiel: Vollständige ModuleDoc](#7-beispiel-vollständige-moduledoc)
 8. [Review-Checkliste](#8-review-checkliste)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -50,7 +50,7 @@ Dieser Blueprint definiert die **Struktur für CMake-Modul-Dokumentationen**. Er
 
 Dieser Blueprint gilt für alle Dokumentationen, die:
 - Ein einzelnes CMake-Modul (`.cmake`-Datei) beschreiben
-- Im Ordner `docs/[lang]/modules/` liegen
+- Im Ordner `docs/[lang]/guide/module/` liegen
 
 **Nicht betroffen:**
 - CMakeLists.txt (→ Reference)
@@ -84,7 +84,7 @@ Zusätzlich zu den Feldern aus Doc.md:
 > **Modul-Version:** X.Y.Z  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
-> **English:** [ModulName.md](../../en/modules/[pfad]/ModulName.md)
+> **English:** [ModulName.md](../../../../en/guide/module/[pfad]/ModulName.md)
 ```
 
 ### 3.3 Modul-Link
@@ -92,7 +92,7 @@ Zusätzlich zu den Feldern aus Doc.md:
 Das `Modul:`-Feld kann auch als Link formatiert werden:
 
 ```markdown
-> **Modul:** [cmake/core/Context.cmake](../../../cmake/core/Context.cmake)
+> **Modul:** [cmake/core/Context.cmake](../../../../../cmake/core/Context.cmake)
 ```
 
 ### 3.4 Versionierung erklärt
@@ -158,7 +158,7 @@ ModuleDoc verwendet diese Struktur:
 
 Jede Funktion/Macro wird so dokumentiert:
 
-```markdown
+````markdown
 ### 4.1 function_name()
 
 ```cmake
@@ -187,11 +187,11 @@ function_name("wert1" "wert2")
 
 **Fehler:**  
 - `E0xxx` wenn Bedingung nicht erfüllt
-```
+````
 
 ### 5.2 Beispiel: ctx_set()
 
-```markdown
+````markdown
 ### 4.2 ctx_set()
 
 ```cmake
@@ -223,7 +223,7 @@ ctx_set(EXE_MyApp EXTERNALS "bass;imgui;glfw")
 
 **Fehler:**  
 Keine — leere Werte sind erlaubt.
-```
+````
 
 ---
 
@@ -244,12 +244,12 @@ Aktuelle Dokumentationen haben **keine Version im Dateinamen**:
 
 ```
 cmake/core/Context.cmake          ← Modul (Version im Header: 0.1.1)
-docs/de/modules/core/Context.md   ← Dokumentation (Version im Header)
+docs/de/guide/module/core/Context.md   ← Dokumentation (Version im Header)
 ```
 
 ### 6.3 Bei Modul-Version-Bump
 
-1. Alte Dokumentation archivieren (falls gewünscht): `Context.md` → `Context_v0_1_0.md`
+1. Keine Kopie der alten Dokumentation anlegen — frühere Fassungen liegen in der Git-Historie
 2. `Context.md` aktualisieren mit neuer Version
 3. Links bleiben unverändert
 
@@ -265,11 +265,11 @@ docs/de/modules/core/Context.md   ← Dokumentation (Version im Header)
 > **Typ:** ModuleDoc  
 > **Status:** Stabil  
 > **Zielgruppe:** Build-System-Entwickler  
-> **Modul:** [cmake/core/Context.cmake](../../../cmake/core/Context.cmake)  
+> **Modul:** [cmake/core/Context.cmake](../../../../../cmake/core/Context.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
-> **English:** [Context.md](../../guide/module/core/Context.md)
+> **English:** [Context.md](../../../../en/guide/module/core/Context.md)
 
 ---
 
@@ -283,7 +283,7 @@ docs/de/modules/core/Context.md   ← Dokumentation (Version im Header)
 6. [Fehlerbehandlung](#6-fehlerbehandlung)
 7. [Best Practices](#7-best-practices)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -328,7 +328,7 @@ ctx_create(EXE_MyApp)
     │
     └── ctx_get(EXE_MyApp, NAME, _var)
             └── _var = "MyApp"
-```
+````
 
 ---
 
@@ -376,8 +376,8 @@ Dieses Modul wirft keine eigenen Fehler.
 
 ## 8. Siehe auch
 
-- [Errors.cmake](Errors_cmake_v0_1_1_doc_v1.md) — Fehlerbehandlung
-- [ExecutableCollect.cmake](../project/ExecutableCollect_cmake_v0_1_0_doc_v1.md) — Verwendet Context
+- [Errors.cmake](Errors.md) — Fehlerbehandlung
+- [ExecutableCollect.cmake](../project/ExecutableCollect.md) — Verwendet Context
 
 ---
 
@@ -387,7 +387,7 @@ Dieses Modul wirft keine eigenen Fehler.
 |---------|-------|------------|
 | **0.1.1 (doc v2)** | **2025-12-13** | **Format nach ModuleDoc v0.5 aktualisiert** |
 | 0.1.1 (doc v1) | 2025-12-05 | Initial für Modul v0.1.1 |
-```
+````
 
 ---
 
@@ -425,5 +425,7 @@ Zusätzlich zur Doc.md Checkliste:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Modul-Link im Header, API-Referenz-Format, Versionskopplung, vollständiges Beispiel** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/guide/module/` (§ 2, § 6.2), Sprung- und Modulpfade nach heutiger Tiefe (§ 3.2, § 3.3, § 7), keine Archivkopien mehr (§ 6.3), Beispiel-Verweise ohne Versionen im Dateinamen (§ 7)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Modul-Link im Header, API-Referenz-Format, Versionskopplung, vollständiges Beispiel |
 | 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |

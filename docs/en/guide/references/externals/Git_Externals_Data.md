@@ -4,35 +4,35 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_Data.md](Git_Externals_Data.md)
+> **German:** [Git_Externals_Data.md](../../../../de/guide/references/externals/Git_Externals_Data.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [JSON](#2-json)
-3. [Andere Formate](#3-andere-formate)
+3. [Other Formats](#3-other-formats)
 4. [Database](#4-database)
 5. [Compression](#5-compression)
-6. [Schnellreferenz](#6-schnellreferenz)
-7. [See Also](#7-siehe-auch)
+6. [Quick Reference](#6-quick-reference)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Bibliotheken für Daten-Serialisierung, Datenbanken und Kompression.
+This document describes libraries for data serialization, databases and compression.
 
-### Kategorien
+### Categories
 
-| Kategorie | Bibliotheken |
-|-----------|--------------|
+| Category | Libraries |
+|----------|-----------|
 | JSON | nlohmann_json, rapidjson, simdjson |
-| Andere Formate | yaml-cpp, tomlplusplus |
+| Other formats | yaml-cpp, tomlplusplus |
 | Database | SQLiteCpp |
 | Compression | zstd, lz4 |
 
@@ -42,14 +42,14 @@ This document describes Bibliotheken für Daten-Serialisierung, Datenbanken und 
 
 ### 2.1 nlohmann_json
 
-> **Zweck:** JSON for Modern C++ - intuitive, STL-ähnliche API.
+> **Purpose:** JSON for Modern C++ - intuitive, STL-like API.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/nlohmann/json.git` |
-| **Aktueller Tag** | `v3.11.3` |
+| **Current Tag** | `v3.11.3` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -82,14 +82,14 @@ std::string value = parsed["key"];
 
 ### 2.2 rapidjson
 
-> **Zweck:** Extrem schneller JSON Parser/Generator (SAX & DOM).
+> **Purpose:** Extremely fast JSON parser/generator (SAX & DOM).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/Tencent/rapidjson.git` |
-| **Aktueller Tag** | `v1.1.0` |
+| **Current Tag** | `v1.1.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -120,14 +120,14 @@ const char* value = d["key"].GetString();
 
 ### 2.3 simdjson
 
-> **Zweck:** SIMD-beschleunigter JSON Parser (schnellster verfügbar).
+> **Purpose:** SIMD-accelerated JSON parser (fastest available).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/simdjson/simdjson.git` |
-| **Aktueller Tag** | `v3.6.3` |
+| **Current Tag** | `v3.6.3` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "simdjson": {
@@ -154,18 +154,18 @@ std::string_view value = doc["key"];
 
 ---
 
-## 3. Andere Formate
+## 3. Other Formats
 
 ### 3.1 yaml-cpp
 
-> **Zweck:** YAML 1.2 Parser und Emitter für C++.
+> **Purpose:** YAML 1.2 parser and emitter for C++.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/jbeder/yaml-cpp.git` |
-| **Aktueller Tag** | `0.8.0` |
+| **Current Tag** | `0.8.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "yaml-cpp": {
@@ -195,12 +195,12 @@ int port = config["server"]["port"].as<int>();
 
 ### 3.2 tomlplusplus
 
-> **Zweck:** Header-only TOML v1.0 Parser und Serializer.
+> **Purpose:** Header-only TOML v1.0 parser and serializer.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/marzer/tomlplusplus.git` |
-| **Aktueller Tag** | `v3.4.0` |
+| **Current Tag** | `v3.4.0` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 | **Header-only** | ✅ |
@@ -226,14 +226,14 @@ std::string_view name = config["package"]["name"].value_or("default"sv);
 
 ### 4.1 SQLiteCpp
 
-> **Zweck:** Moderner C++ Wrapper für SQLite3.
+> **Purpose:** Modern C++ wrapper for SQLite3.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/SRombauts/SQLiteCpp.git` |
-| **Aktueller Tag** | `3.3.1` |
+| **Current Tag** | `3.3.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Dependencies** | SQLite3 (bundled) |
 
 ```json
@@ -271,14 +271,14 @@ while (query.executeStep()) {
 
 ### 5.1 zstd
 
-> **Zweck:** Schnelle Kompression mit hoher Kompressionsrate (Facebook).
+> **Purpose:** Fast compression with a high compression ratio (Facebook).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/facebook/zstd.git` |
-| **Aktueller Tag** | `v1.5.5` |
+| **Current Tag** | `v1.5.5` |
 | **CMake Support** | ✅ (in build/cmake) |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Note** | SOURCE_SUBDIR: `build/cmake` |
 
 ```json
@@ -288,7 +288,7 @@ while (query.executeStep()) {
 }
 ```
 
-**Note:** CMakeLists.txt ist in `build/cmake/`. Bei FetchContent:
+**Note:** CMakeLists.txt is in `build/cmake/`. With FetchContent:
 ```cmake
 FetchContent_Declare(zstd
     GIT_REPOSITORY https://github.com/facebook/zstd.git
@@ -309,14 +309,14 @@ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
 
 ### 5.2 lz4
 
-> **Zweck:** Extrem schnelle Kompression (beste Dekompressionsgeschwindigkeit).
+> **Purpose:** Extremely fast compression (best decompression speed).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/lz4/lz4.git` |
-| **Aktueller Tag** | `v1.9.4` |
+| **Current Tag** | `v1.9.4` |
 | **CMake Support** | ✅ (in build/cmake) |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Note** | SOURCE_SUBDIR: `build/cmake` |
 
 ```json
@@ -328,10 +328,10 @@ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
 
 ---
 
-## 6. Schnellreferenz
+## 6. Quick Reference
 
-| Bibliothek | Tag | CMake | Hook | Hauptverwendung |
-|------------|-----|-------|------|-----------------|
+| Library | Tag | CMake | Hook | Main Use |
+|---------|-----|-------|------|----------|
 | nlohmann_json | v3.11.3 | ✅ | PreFetch | Intuitive JSON API |
 | rapidjson | v1.1.0 | ✅ | PreFetch | High-performance JSON |
 | simdjson | v3.6.3 | ✅ | PreFetch | SIMD-accelerated JSON |
@@ -341,13 +341,13 @@ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
 | zstd | v1.5.5 | ✅* | PreFetch | Fast compression |
 | lz4 | v1.9.4 | ✅* | PreFetch | Fastest decompression |
 
-*SOURCE_SUBDIR erforderlich
+*SOURCE_SUBDIR required
 
 ---
 
 ## 7. See Also
 
-- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Main overview
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Logging & Testing
 - [Git_Externals_Network.md](Git_Externals_Network.md) — Networking
 
@@ -355,6 +355,7 @@ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: extracted from Git_Externals_Reference |

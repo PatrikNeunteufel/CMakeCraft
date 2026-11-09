@@ -1,270 +1,270 @@
-# Tutorial — Standard für Step-by-Step Anleitungen
+# Tutorial — Standard for Step-by-Step Instructions
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5, Blueprint v0.5  
 > **Target Audience:** Documentation Authors  
 > **Language:** English  
-> **German:** [Tutorial.md](Tutorial.md)
+> **German:** [Tutorial.md](../../../de/autorenwerk/blueprints/Tutorial.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Abgrenzung zu Guide](#2-abgrenzung-zu-guide)
-3. [Header-Erweiterungen](#3-header-erweiterungen)
-4. [Requiredabschnitte](#4-pflichtabschnitte)
-5. [Schreibstil](#5-schreibstil)
-6. [Code-Examples](#6-code-beispiele)
-7. [Struktur-Muster](#7-struktur-muster)
-8. [Example-Tutorial](#8-beispiel-tutorial)
-9. [Review Checklist](#9-review-checkliste)
-10. [See Also](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+1. [Overview](#1-overview)
+2. [Distinction from Guide](#2-distinction-from-guide)
+3. [Header Extensions](#3-header-extensions)
+4. [Required Sections](#4-required-sections)
+5. [Writing Style](#5-writing-style)
+6. [Code Examples](#6-code-examples)
+7. [Structure Patterns](#7-structure-patterns)
+8. [Example Tutorial](#8-example-tutorial)
+9. [Review Checklist](#9-review-checklist)
+10. [See Also](#10-see-also)
+11. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines den Standard für **Tutorials** — praktische Step-by-Step Anleitungen, die den Leser durch ein konkretes Projekt oder eine Aufgabe führen.
+This blueprint defines the standard for **tutorials** — practical step-by-step instructions that guide the reader through a concrete project or task.
 
-### Zielgruppe
+### Target Audience
 
-- Documentation Authors, die Tutorials schreiben
-- Jeder, der lernen möchte, wie gute Tutorials aufgebaut sind
+- Documentation authors who write tutorials
+- Anyone who wants to learn how good tutorials are structured
 
-### Was ist ein Tutorial?
+### What Is a Tutorial?
 
-| Merkmal | Description |
-|---------|--------------|
-| **Ziel** | Konkretes Ergebnis am Ende |
-| **Methode** | Learning by Doing |
-| **Struktur** | Nummerierte Schritte |
-| **Fokus** | "Folge mir und baue X" |
+| Characteristic | Description |
+|----------------|-------------|
+| **Goal** | Concrete result at the end |
+| **Method** | Learning by doing |
+| **Structure** | Numbered steps |
+| **Focus** | "Follow me and build X" |
 
 ---
 
-## 2. Abgrenzung zu Guide
+## 2. Distinction from Guide
 
-| Aspekt | Tutorial | Guide |
+| Aspect | Tutorial | Guide |
 |--------|----------|-------|
-| **Struktur** | Linear, Schritt für Schritt | Thematisch, Nachschlagewerk |
-| **Ziel** | Konkretes Projekt bauen | Concepte verstehen |
-| **Leser** | Folgt Anweisungen | Sucht spezifische Info |
-| **Example** | "Erstelle dein erstes Executable" | "Wie konfiguriere ich Qt6?" |
-| **Ergebnis** | Funktionierendes Artefakt | Wissen/Verständnis |
+| **Structure** | Linear, step by step | Thematic, reference work |
+| **Goal** | Build a concrete project | Understand concepts |
+| **Reader** | Follows instructions | Looks for specific information |
+| **Example** | "Create your first executable" | "How do I configure Qt6?" |
+| **Result** | Working artifact | Knowledge/understanding |
 
-**Faustregel:**
-- **Tutorial:** "Am Ende hast du X gebaut"
-- **Guide:** "So funktioniert X"
+**Rule of thumb:**
+- **Tutorial:** "At the end you have built X"
+- **Guide:** "This is how X works"
 
 ---
 
-## 3. Header-Erweiterungen
+## 3. Header Extensions
 
-### 3.1 Zusätzliche Felder
+### 3.1 Additional Fields
 
-Tutorials erweitern den Standard-Header um:
+Tutorials extend the standard header with:
 
 ```markdown
-> **Prerequisites:** [Was muss der Leser vorher wissen/haben?]  
-> **Zeitaufwand:** [Geschätzte Dauer, z.B. "~30 Minuten"]  
-> **Schwierigkeit:** [Einsteiger | Fortgeschritten | Experte]  
-> **Ergebnis:** [Was hat der Leser am Ende?]
+> **Prerequisites:** [What must the reader know/have beforehand?]  
+> **Time Required:** [Estimated duration, e.g. "~30 minutes"]  
+> **Difficulty:** [Beginner | Intermediate | Expert]  
+> **Result:** [What does the reader have at the end?]
 ```
 
-### 3.2 Vollständiger Header
+### 3.2 Complete Header
 
 ```markdown
-# [Titel] — Tutorial
+# [Title] — Tutorial
 
 > **Version:** X.Y.Z  
 > **Date:** YYYY-MM-DD  
 > **Type:** Tutorial  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** [Wer soll dieses Tutorial machen?]  
-> **Prerequisites:** [Guide X gelesen, Tool Y installiert]  
-> **Zeitaufwand:** ~30 Minuten  
-> **Schwierigkeit:** Einsteiger  
-> **Ergebnis:** [Funktionierendes X]  
+> **Target Audience:** [Who should do this tutorial?]  
+> **Prerequisites:** [Guide X read, tool Y installed]  
+> **Time Required:** ~30 minutes  
+> **Difficulty:** Beginner  
+> **Result:** [Working X]  
 > **Language:** English  
-> **German:** [Title_Tutorial.md](../../en/tutorials/Title_Tutorial.md)
+> **German:** [Title_Tutorial.md](../../../de/guide/userguides/Title_Tutorial.md)
 ```
 
 ### 3.3 Example
 
 ```markdown
-# GoogleTest und Catch2 hinzufügen — Tutorial
+# Adding GoogleTest and Catch2 — Tutorial
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-10  
 > **Type:** Tutorial  
 > **Status:** Stable  
 > **Target Audience:** C++ Developers  
-> **Prerequisites:** [Adding_Externals_UserGuide.md](../guides/Adding_Externals_UserGuide.md)  
-> **Zeitaufwand:** ~45 Minuten  
-> **Schwierigkeit:** Fortgeschritten  
-> **Ergebnis:** Funktionierende Test-Executables mit GoogleTest und Catch2  
+> **Prerequisites:** [Adding_Externals.md](Adding_Externals.md)  
+> **Time Required:** ~45 minutes  
+> **Difficulty:** Intermediate  
+> **Result:** Working test executables with GoogleTest and Catch2  
 > **Language:** English  
-> **German:** [GoogleTest_Catch2_Tutorial.md](../../en/tutorials/GoogleTest_Catch2_Tutorial.md)
+> **German:** [GoogleTest_Catch2_Tutorial.md](../../../de/guide/userguides/GoogleTest_Catch2_Tutorial.md)
 ```
 
 ---
 
-## 4. Requiredabschnitte
+## 4. Required Sections
 
-### 4.1 Struktur
+### 4.1 Structure
 
 ```markdown
-# [Titel] — Tutorial
+# [Title] — Tutorial
 
 > [Header]
 
 ---
 
 ## Table of Contents
-[Nummeriert mit Ankern]
+[Numbered with anchors]
 
 ---
 
 ## 1. Overview
-[Was wird gebaut? Warum? Endergebnis-Vorschau]
+[What is being built? Why? Preview of the end result]
 
 ---
 
 ## 2. Prerequisites
-[Checkliste: Tools, Wissen, Dateien]
+[Checklist: tools, knowledge, files]
 
 ---
 
-## 3. Schritt 1: [Erste Aktion]
-[Anweisungen + Code + Erklärung]
+## 3. Step 1: [First Action]
+[Instructions + code + explanation]
 
 ---
 
-## 4. Schritt 2: [Zweite Aktion]
+## 4. Step 2: [Second Action]
 [...]
 
 ---
 
-## N. Schritt N: [Letzte Aktion]
+## N. Step N: [Last Action]
 [...]
 
 ---
 
-## N+1. Ergebnis testen
-[Wie verifiziert man das Ergebnis?]
+## N+1. Testing the Result
+[How is the result verified?]
 
 ---
 
 ## N+2. Summary
-[Was wurde gelernt? Nächste Schritte?]
+[What was learned? Next steps?]
 
 ---
 
 ## N+3. Troubleshooting
-[Häufige Probleme und Lösungen]
+[Common problems and solutions]
 
 ---
 
 ## See Also
-[Weiterführende Dokumentation]
+[Further documentation]
 
 ---
 
 ## Changelog
-[Versionshistorie]
+[Version history]
 ```
 
-### 4.2 Requiredabschnitte im Detail
+### 4.2 Required Sections in Detail
 
-| Abschnitt | Required | Description |
-|-----------|---------|--------------|
-| **Overview** | ✓ | Was wird gebaut, warum, Vorschau |
-| **Prerequisites** | ✓ | Checkliste vor dem Start |
-| **Schritte** | ✓ | Nummerierte Anweisungen |
-| **Ergebnis testen** | ✓ | Verifizierung des Endergebnisses |
-| **Summary** | ✓ | Was gelernt wurde |
-| **Troubleshooting** | — | Häufige Probleme (empfohlen) |
-| **Dateien-Overview** | — | Finale Struktur (empfohlen) |
+| Section | Required | Description |
+|---------|----------|-------------|
+| **Overview** | ✓ | What is being built, why, preview |
+| **Prerequisites** | ✓ | Checklist before starting |
+| **Steps** | ✓ | Numbered instructions |
+| **Testing the Result** | ✓ | Verification of the end result |
+| **Summary** | ✓ | What was learned |
+| **Troubleshooting** | — | Common problems (recommended) |
+| **Files Overview** | — | Final structure (recommended) |
 
 ---
 
-## 5. Schreibstil
+## 5. Writing Style
 
-### 5.1 Grundregeln
+### 5.1 Basic Rules
 
-| Regel | Richtig | Falsch |
-|-------|---------|--------|
-| Imperativ | "Erstelle die Datei" | "Die Datei sollte erstellt werden" |
-| Direkt | "Öffne `Solution.json`" | "Man öffnet die Datei" |
-| Konkret | "Füge folgende Zeile hinzu:" | "Configuration anpassen" |
-| Kurz | "Speichere die Datei" | "Nun solltest du die Datei speichern" |
+| Rule | Correct | Wrong |
+|------|---------|-------|
+| Imperative | "Create the file" | "The file should be created" |
+| Direct | "Open `Solution.json`" | "One opens the file" |
+| Concrete | "Add the following line:" | "Adjust configuration" |
+| Short | "Save the file" | "Now you should save the file" |
 
-### 5.2 Schritt-Struktur
+### 5.2 Step Structure
 
-Jeder Schritt folgt dem Muster:
+Each step follows the pattern:
 
-```markdown
-## N. Schritt N: [Aktions-Titel]
+````markdown
+## N. Step N: [Action Title]
 
-[1-2 Sätze: Was wird gemacht und warum]
+[1-2 sentences: What is done and why]
 
-**Datei:** `pfad/zur/datei.ext`
+**File:** `path/to/file.ext`
 
 ```code
-[Code oder Configuration]
+[Code or configuration]
 ```
 
-**Erklärung:**
+**Explanation:**
 - `element1`: Description
 - `element2`: Description
 
-[Optional: Note-Box für wichtige Infos]
-```
+[Optional: note box for important information]
+````
 
-### 5.3 Note-Boxen
+### 5.3 Note Boxes
 
 ```markdown
-> **Note:** Allgemeine Information
+> **Note:** General information
 
-> **Important:** Kritische Information
+> **Important:** Critical information
 
-> **Warning:** Potenzielle Probleme
+> **Warning:** Potential problems
 
-> **Tip:** Optionale Verbesserung
+> **Tip:** Optional improvement
 ```
 
-### 5.4 Fortschritts-Indikatoren
+### 5.4 Progress Indicators
 
-Bei längeren Tutorials optional:
+Optional for longer tutorials:
 
 ```markdown
 ---
-**Fortschritt:** ████████░░ 80% — Schritt 4 von 5
+**Progress:** ████████░░ 80% — Step 4 of 5
 ---
 ```
 
 ---
 
-## 6. Code-Examples
+## 6. Code Examples
 
-### 6.1 Regeln
+### 6.1 Rules
 
-| Regel | Description |
-|-------|--------------|
-| **Vollständig** | Kein Code ohne Kontext |
-| **Kopierbar** | Direkt verwendbar |
-| **Kommentiert** | Importante Zeilen erklärt |
-| **Getestet** | Muss funktionieren! |
+| Rule | Description |
+|------|-------------|
+| **Complete** | No code without context |
+| **Copyable** | Directly usable |
+| **Commented** | Important lines explained |
+| **Tested** | Must work! |
 
-### 6.2 Code-Block-Format
+### 6.2 Code Block Format
 
-```markdown
-**Datei:** `cmake/externals/Hooks/PreFetch/googletest.cmake`
+````markdown
+**File:** `cmake/externals/hooks/prefetch/googletest.cmake`
 
 ```cmake
 # GoogleTest PreFetch Hook
@@ -272,19 +272,19 @@ Bei längeren Tutorials optional:
 
 message(STATUS "[${HOOK_EXTERNAL_NAME}] PreFetch: Configuring GoogleTest")
 
-# Windows CRT Fix (WICHTIG!)
+# Windows CRT Fix (IMPORTANT!)
 if(WIN32)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 endif()
 ```
-```
+````
 
-### 6.3 Diff-Darstellung
+### 6.3 Diff Representation
 
-Bei Changes an existierenden Dateien:
+For changes to existing files:
 
-```markdown
-**Änderung in** `Solution.json`:
+````markdown
+**Change in** `Solution.json`:
 
 ```diff
 {
@@ -296,12 +296,12 @@ Bei Changes an existierenden Dateien:
     }
 }
 ```
-```
+````
 
-### 6.4 Erwartete Ausgabe
+### 6.4 Expected Output
 
-```markdown
-**Erwartete Ausgabe:**
+````markdown
+**Expected output:**
 
 ```
 [==========] Running 2 tests from 1 test suite.
@@ -310,123 +310,123 @@ Bei Changes an existierenden Dateien:
 [       OK ] ExampleTest.BasicAssertions (0 ms)
 [  PASSED  ] 2 tests.
 ```
-```
+````
 
 ---
 
-## 7. Struktur-Muster
+## 7. Structure Patterns
 
-### 7.1 Einfaches Tutorial (1 Teil)
+### 7.1 Simple Tutorial (1 Part)
 
 ```markdown
-# [Thema] — Tutorial
+# [Topic] — Tutorial
 
 ## 1. Overview
 ## 2. Prerequisites
-## 3. Schritt 1: [...]
-## 4. Schritt 2: [...]
-## 5. Schritt 3: [...]
-## 6. Ergebnis testen
+## 3. Step 1: [...]
+## 4. Step 2: [...]
+## 5. Step 3: [...]
+## 6. Testing the Result
 ## 7. Summary
 ```
 
-### 7.2 Mehrteiliges Tutorial
+### 7.2 Multi-Part Tutorial
 
-Bei komplexen Themen in Teile aufteilen:
+Split complex topics into parts:
 
 ```markdown
-# [Thema] — Tutorial
+# [Topic] — Tutorial
 
 ## Overview
 ## Prerequisites
 
 ---
 
-# Teil 1: [Untertitel]
+# Part 1: [Subtitle]
 
-## 1.1 [Schritt]
-## 1.2 [Schritt]
-## 1.3 Zwischenergebnis testen
+## 1.1 [Step]
+## 1.2 [Step]
+## 1.3 Testing the Intermediate Result
 
 ---
 
-# Teil 2: [Untertitel]
+# Part 2: [Subtitle]
 
-## 2.1 [Schritt]
-## 2.2 [Schritt]
-## 2.3 Zwischenergebnis testen
+## 2.1 [Step]
+## 2.2 [Step]
+## 2.3 Testing the Intermediate Result
 
 ---
 
 # Summary
 
-## Dateien-Overview
-## Vergleich/Fazit
+## Files Overview
+## Comparison/Conclusion
 ## See Also
 ```
 
-### 7.3 Vergleichs-Tutorial
+### 7.3 Comparison Tutorial
 
-Wenn mehrere Alternativen gezeigt werden (z.B. GoogleTest vs Catch2):
+When several alternatives are shown (e.g. GoogleTest vs Catch2):
 
 ```markdown
-# [Alternative A] und [Alternative B] — Tutorial
+# [Alternative A] and [Alternative B] — Tutorial
 
 ## Overview
 
-| Aspekt | Alternative A | Alternative B |
+| Aspect | Alternative A | Alternative B |
 |--------|---------------|---------------|
 | ... | ... | ... |
 
 ---
 
-# Teil 1: Alternative A
-[Vollständiges Tutorial für A]
+# Part 1: Alternative A
+[Complete tutorial for A]
 
 ---
 
-# Teil 2: Alternative B
-[Vollständiges Tutorial für B]
+# Part 2: Alternative B
+[Complete tutorial for B]
 
 ---
 
-# Vergleich
-[Entscheidungshilfe]
+# Comparison
+[Decision aid]
 ```
 
 ---
 
-## 8. Example-Tutorial
+## 8. Example Tutorial
 
-### 8.1 Prerequisites-Abschnitt
+### 8.1 Prerequisites Section
 
 ```markdown
 ## 2. Prerequisites
 
-Bevor du beginnst, stelle sicher:
+Before you begin, make sure that:
 
 **Tools:**
-- [ ] CMake 3.19 oder höher installiert
-- [ ] C++ Compiler (MSVC, GCC, oder Clang)
-- [ ] Git installiert
+- [ ] CMake 3.19 or higher is installed
+- [ ] C++ compiler (MSVC, GCC, or Clang)
+- [ ] Git is installed
 
-**Wissen:**
-- [ ] [Adding_Externals_UserGuide.md](../guides/Adding_Externals_UserGuide.md) gelesen
-- [ ] Grundkenntnisse in CMake
+**Knowledge:**
+- [ ] [Adding_Externals.md](Adding_Externals.md) read
+- [ ] Basic knowledge of CMake
 
-**Dateien:**
-- [ ] Funktionierendes CMake Architecture Projekt
-- [ ] `Solution.json` vorhanden
+**Files:**
+- [ ] Working CMake Architecture project
+- [ ] `Solution.json` present
 ```
 
-### 8.2 Schritt-Abschnitt
+### 8.2 Step Section
 
-```markdown
-## 3. Schritt 1: External in Solution.json hinzufügen
+````markdown
+## 3. Step 1: Add External to Solution.json
 
-Füge GoogleTest als External hinzu.
+Add GoogleTest as an external.
 
-**Datei:** `Solution.json`
+**File:** `Solution.json`
 
 ```json
 {
@@ -439,106 +439,107 @@ Füge GoogleTest als External hinzu.
 }
 ```
 
-**Erklärung:**
-- `git`: Repository-URL
-- `tag`: Stablee Version (v1.14.0 ist die aktuelle Release)
+**Explanation:**
+- `git`: Repository URL
+- `tag`: Stable version (v1.14.0 is the current release)
 
-> **Note:** Verwende immer Tags statt Branches für reproduzierbare Builds.
+> **Note:** Always use tags instead of branches for reproducible builds.
+````
+
+### 8.3 Files Overview
+
+````markdown
+## Files Overview
+
+After completing the tutorial you have:
+
 ```
-
-### 8.3 Dateien-Overview
-
-```markdown
-## Dateien-Overview
-
-Nach Abschluss des Tutorials hast du:
-
-```
-cmake/externals/Hooks/PreFetch/
+cmake/externals/hooks/prefetch/
 ├── googletest.cmake        ← GoogleTest PreFetch Hook
 └── catch2.cmake            ← Catch2 PreFetch Hook
 
 projects/tests/MyTests/src/
-└── main.cpp                ← Test-Datei
+└── main.cpp                ← Test file
 
-Solution.json               ← External + Test konfiguriert
+Solution.json               ← External + test configured
 ```
-```
+````
 
-### 8.4 Troubleshooting-Abschnitt
+### 8.4 Troubleshooting Section
 
-```markdown
+````markdown
 ## Troubleshooting
 
-### Problem: Linker-Error auf Windows
+### Problem: Linker Error on Windows
 
 **Symptom:**
 ```
 LNK2038: mismatch detected for 'RuntimeLibrary'
 ```
 
-**Ursache:** GoogleTest verwendet statische CRT, Projekt dynamische.
+**Cause:** GoogleTest uses the static CRT, the project the dynamic one.
 
-**Lösung:** `gtest_force_shared_crt` im PreFetch Hook setzen:
+**Solution:** Set `gtest_force_shared_crt` in the PreFetch hook:
 ```cmake
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 ```
 
 ---
 
-### Problem: Tests werden nicht gefunden
+### Problem: Tests Are Not Found
 
-**Symptom:** `ctest` findet keine Tests.
+**Symptom:** `ctest` finds no tests.
 
-**Lösung:** 
-1. Prüfe ob `enable_testing()` in CMakeLists.txt
-2. Prüfe ob Test-Executable korrekt registriert
-```
-```
+**Solution:** 
+1. Check whether `enable_testing()` is in CMakeLists.txt
+2. Check whether the test executable is registered correctly
+````
 
 ---
 
 ## 9. Review Checklist
 
-Vor Veröffentlichung eines Tutorials prüfen:
+Check before publishing a tutorial:
 
 **Header:**
-- [ ] Alle Requiredfelder vorhanden
-- [ ] Prerequisites vollständig
-- [ ] Zeitaufwand realistisch
-- [ ] Schwierigkeit korrekt
+- [ ] All required fields present
+- [ ] Prerequisites complete
+- [ ] Time required realistic
+- [ ] Difficulty correct
 
-**Inhalt:**
-- [ ] Overview erklärt Ziel und Ergebnis
-- [ ] Prerequisites als Checkliste
-- [ ] Schritte nummeriert und logisch
-- [ ] Jeder Schritt hat: Aktion + Code + Erklärung
-- [ ] Ergebnis-Test vorhanden
-- [ ] Summary mit "Was gelernt"
+**Content:**
+- [ ] Overview explains goal and result
+- [ ] Prerequisites as checklist
+- [ ] Steps numbered and logical
+- [ ] Each step has: action + code + explanation
+- [ ] Result test present
+- [ ] Summary with "What was learned"
 
 **Code:**
-- [ ] Alle Code-Examples getestet
-- [ ] Dateipfade angegeben
-- [ ] Erwartete Ausgaben gezeigt
-- [ ] Keine Syntax-Error
+- [ ] All code examples tested
+- [ ] File paths given
+- [ ] Expected outputs shown
+- [ ] No syntax errors
 
-**Qualität:**
-- [ ] Tutorial von Anfang bis Ende durchgegangen
-- [ ] Auf frischem System getestet (wenn möglich)
-- [ ] Troubleshooting für bekannte Probleme
+**Quality:**
+- [ ] Tutorial walked through from start to finish
+- [ ] Tested on a fresh system (if possible)
+- [ ] Troubleshooting for known problems
 
 ---
 
 ## 10. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [Guide.md](Guide.md) — Für thematische Anleitungen
-- [GoogleTest_Catch2_Tutorial.md](../tutorials/GoogleTest_Catch2_Tutorial.md) — Example-Tutorial
+- [Doc.md](Doc.md) — General documentation rules
+- [Guide.md](Guide.md) — For thematic guides
+- GoogleTest_Catch2_Tutorial.md — Example tutorial
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Initial: Abgrenzung zu Guide, Header-Erweiterungen, Schritt-Struktur, Code-Examples, Mehrteilige Tutorials** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: hook path `cmake/externals/hooks/prefetch/` (lowercase, as in the repo), tutorials live in `docs/[lang]/guide/userguides/` (jump path `../../../de/`), prerequisite `Adding_Externals.md`** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Initial: distinction from Guide, header extensions, step structure, code examples, multi-part tutorials |

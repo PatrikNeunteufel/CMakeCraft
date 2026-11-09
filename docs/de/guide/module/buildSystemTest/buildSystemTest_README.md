@@ -1,9 +1,9 @@
 # Build-System-Tests — Phasen-Testdokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../../en/modules/buildSystemTest/README.md)
+> **English:** [buildSystemTest_README.md](../../../../en/guide/module/buildSystemTest/buildSystemTest_README.md)
 
 ---
 
@@ -11,8 +11,9 @@
 
 **Build-System testen?**
 ```bash
-cmake -B build -DRUN_BUILD_SYSTEM_TESTS=ON
-cmake -B build -DTEST_PHASE=8  # Nur Phase 8
+cmake --preset craft-selftest                             # im CMakeCraft-Repo
+cmake -B build -DRUN_BUILD_SYSTEM_TESTS=ON                # allgemein
+cmake -B build -DRUN_BUILD_SYSTEM_TESTS=ON -DTEST_PHASE=8  # Nur Phase 8
 ```
 
 **Einzelne Phase verstehen?**
@@ -28,20 +29,24 @@ Die Build-System-Tests validieren die korrekte Funktion aller CMake-Module. Jede
 ### Test-Architektur
 
 ```
-CMakeLists.txt
+CMakeCraft.cmake  (nach der Pipeline)
      │
-     └── if(RUN_BUILD_SYSTEM_TESTS)
+     └── if(RUN_BUILD_SYSTEM_TESTS)          ← Default OFF
+             │   foreach 1..11, gefiltert über TEST_PHASE
              │
-             ├── Phase1.cmake  → Core-Module
-             ├── Phase2.cmake  → Solution
-             ├── Phase3.cmake  → Executables
-             ├── Phase4.cmake  → Libraries
-             ├── Phase5.cmake  → Local Externals
-             ├── Phase6.cmake  → Git Externals
-             ├── Phase7.cmake  → Tests
-             ├── Phase8.cmake  → App-Container (neu)
-             ├── Phase10.cmake → Packages, Archive Externals
-             └── Phase11.cmake → compile_options je Library, Quellpakete
+             ├── phase1.cmake  → Core-Module
+             ├── phase2.cmake  → Solution
+             ├── phase3.cmake  → Executables
+             ├── phase4.cmake  → Libraries
+             ├── phase5.cmake  → Local Externals
+             ├── phase6.cmake  → Git Externals
+             ├── phase7.cmake  → Tests
+             ├── phase8.cmake  → App-Container (neu)
+             ├── phase9.cmake  → System Externals
+             ├── phase10.cmake → Packages, Archive Externals
+             └── phase11.cmake → compile_options je Library, Quellpakete
+
+Dateien: cmake/buildSystemTest/phase<n>.cmake
 ```
 
 ---
@@ -58,6 +63,7 @@ CMakeLists.txt
 | [Phase6_doc.md](Phase6_doc.md) | 6 | Git Externals + Hooks |
 | [Phase7_doc.md](Phase7_doc.md) | 7 | Test-Pipeline |
 | [Phase8_doc.md](Phase8_doc.md) | 8 | App-Container-Pipeline |
+| [Phase9_doc.md](Phase9_doc.md) | 9 | System Externals, Einstiegspunkt von Qt-GUI-Programmen |
 | [Phase10_doc.md](Phase10_doc.md) | 10 | Packages, CMakeCraftPackage, Archive Externals |
 | [Phase11_doc.md](Phase11_doc.md) | 11 | compile_options je Library, Quellpaket, E105, E106 |
 
@@ -75,6 +81,7 @@ CMakeLists.txt
 | **6** | ✅ Stabil | Externals (Git) | FetchContent, Hooks, Caching |
 | **7** | ✅ Stabil | Tests, TestCollect, TestCreate | Framework-Integration, CTest |
 | **8** | ✅ In Entwicklung | Apps, AppCollect, AppCreate | Core/Runner/Tests Targets |
+| **9** | ✅ Stabil | Externals (System), system/Handler, system/PathResolver, system/packages/Qt6 | Typ-Erkennung, Felder, Typ-Priorität, Package-Hooks, Einstiegspunkt von Qt-GUI-Programmen |
 | **10** | ✅ Stabil | Packages, CMakeCraftPackage, archive/Handler | Package-Target, output_name/defines, Bezug über URL/Cache/Ausweichpfad, Anwenden auf Target |
 | **11** | ✅ Stabil | LibraryCreate, SourcePackage, PackageBuild, CompilerOptions | compile_options am Ziel, erzeugtes CMakeLists.txt, Paket bauen, Bezieher ohne CMakeCraft bauen und ausführen, E105, E106 |
 
@@ -84,23 +91,26 @@ CMakeLists.txt
 
 | Flag | Default | Beschreibung |
 |------|---------|--------------|
-| `RUN_BUILD_SYSTEM_TESTS` | ON | Build-System-Tests aktivieren |
-| `TEST_PHASE` | "" (alle) | Spezifische Phase(n) testen |
+| `RUN_BUILD_SYSTEM_TESTS` | OFF | Build-System-Tests aktivieren (im CMakeCraft-Repo: Preset `craft-selftest`) |
+| `TEST_PHASE` | "" (alle) | Spezifische Phase(n) testen (`1`–`11`, Liste mit `;`); wirkt nur mit `RUN_BUILD_SYSTEM_TESTS=ON` |
 | `BUILD_TESTS` | OFF | Projekt-Tests aktivieren (für Phase 7/8) |
 
 ### Beispiele
 
 ```bash
-# Alle Phasen testen
+# Alle Phasen testen (im CMakeCraft-Repo)
+cmake --preset craft-selftest
+
+# Alle Phasen testen (allgemein)
 cmake -B build -DRUN_BUILD_SYSTEM_TESTS=ON
 
 # Nur Phase 8 testen
-cmake -B build -DTEST_PHASE=8
+cmake --preset craft-selftest -DTEST_PHASE=8
 
 # Phase 7+8 mit Projekt-Tests
-cmake -B build -DBUILD_TESTS=ON -DTEST_PHASE="7;8"
+cmake -B build -DRUN_BUILD_SYSTEM_TESTS=ON -DBUILD_TESTS=ON -DTEST_PHASE="7;8"
 
-# Tests deaktivieren
+# Danach wieder ohne Phasentests (Cache-Wert zurücksetzen)
 cmake -B build -DRUN_BUILD_SYSTEM_TESTS=OFF
 ```
 
@@ -136,6 +146,7 @@ Jede Phase setzt ein Cache-Flag bei Erfolg:
 | 6 | `PHASE6_TEST_PASSED` |
 | 7 | `PHASE7_TEST_PASSED` |
 | 8 | `PHASE8_TEST_PASSED` |
+| 9 | `PHASE9_TEST_PASSED` |
 | 10 | `PHASE10_TEST_PASSED` |
 | 11 | `PHASE11_TEST_PASSED` |
 
@@ -144,5 +155,14 @@ Jede Phase setzt ein Cache-Flag bei Erfolg:
 ## Siehe auch
 
 - [../README.md](../README.md) — Modul-Übersicht
-- [../../projects/buildsystem/concepts/Implementation_Plan.md](../../projects/buildsystem/concepts/Implementation_Plan.md) — Phasen-Planung
+- [Implementation_Plan.md](../../../konzepte/abgeschlossen/Implementation_Plan.md) — Phasen-Planung
 - [../../references/ErrorCodes.md](../../references/ErrorCodes.md) — Fehlercodes
+
+---
+
+## Changelog
+
+| Version | Datum | Änderungen |
+|---------|-------|------------|
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: `RUN_BUILD_SYSTEM_TESTS` Default `OFF`, Preset `craft-selftest`; Phasentests laufen aus `CMakeCraft.cmake`, Dateinamen `phase<n>.cmake` klein; `TEST_PHASE` wirkt nur zusammen mit `RUN_BUILD_SYSTEM_TESTS=ON`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |

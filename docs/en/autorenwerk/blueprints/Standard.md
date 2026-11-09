@@ -1,78 +1,78 @@
-# Standard — Standard für Coding/Project Standards
+# Standard — Standard for Coding/Project Standards
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5, Blueprint v0.5  
-> **Target Audience:** Documentation Authors  
+> **Target Audience:** Documentation authors  
 > **Language:** English  
-> **German:** [Standard.md](Standard.md)
+> **German:** [Standard.md](../../../de/autorenwerk/blueprints/Standard.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Header-Erweiterungen](#3-header-erweiterungen)
-4. [Requiredabschnitte](#4-pflichtabschnitte)
-5. [Regel-Format](#5-regel-format)
-6. [Example: Vollständiger Standard](#6-beispiel-vollständiger-standard)
-7. [Review Checklist](#7-review-checkliste)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Header Extensions](#3-header-extensions)
+4. [Required Sections](#4-required-sections)
+5. [Rule Format](#5-rule-format)
+6. [Example: Complete Standard](#6-example-complete-standard)
+7. [Review Checklist](#7-review-checklist)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines die **Struktur für Coding- und Projekt-Standards**. Standards legen verbindliche Regeln für Code-Stil, Namenskonventionen und Workflows fest.
+This blueprint defines the **structure for coding and project standards**. Standards lay down binding rules for code style, naming conventions and workflows.
 
-### Zielgruppe
+### Target Audience
 
-- Alle Entwickler im Team
-- CI/CD-Systeme (automatisierte Prüfung)
-- Code-Review-Prozesse
+- All developers in the team
+- CI/CD systems (automated checks)
+- Code review processes
 
-### Abgrenzung
+### Delimitation
 
-| Dokumentations-Typ | Fokus |
+| Documentation type | Focus |
 |-------------------|-------|
-| **Standard** | "So MUSS Code geschrieben werden" |
-| **Guide** | "So KANN man X erreichen" |
-| **Concept** | "Warum wurde X so entschieden" |
-| **Blueprint** | "So MUSS Dokumentation geschrieben werden" |
+| **Standard** | "This is how code MUST be written" |
+| **Guide** | "This is how you CAN achieve X" |
+| **Concept** | "Why X was decided this way" |
+| **Blueprint** | "This is how documentation MUST be written" |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für:
-- Coding Standards (C++, C, CMake)
-- Git Workflows
-- Review-Richtlinien
-- Projekt-Konventionen
+This blueprint applies to:
+- Coding standards (C++, C, CMake)
+- Git workflows
+- Review guidelines
+- Project conventions
 
-**Typischer Ordner:** `docs/[lang]/standards/`
+**Typical folder:** `docs/[lang]/autorenwerk/standards/`
 
 **Examples:**
-- `Cpp_Coding_Standard_v0_1_0.md`
-- `CMake_Standard_v0_1_0.md`
-- `Git_Standard_v0_1_0.md`
+- `Cpp_Coding_Standard.md`
+- `CMake_Standard.md`
+- `Git_Standard.md`
 
 ---
 
-## 3. Header-Erweiterungen
+## 3. Header Extensions
 
-### 3.1 Zusätzliche Requiredfelder
+### 3.1 Additional Required Fields
 
-| Feld | Required | Description |
+| Field | Required | Description |
 |------|---------|--------------|
-| `Scope:` | ✓ | Welcher Code/Workflow betroffen |
-| `Durchsetzung:` | Optional | Wie wird der Standard erzwungen? |
+| `Scope:` | ✓ | Which code/workflow is affected |
+| `Enforcement:` | Optional | How is the standard enforced? |
 
-### 3.2 Vollständiger Header
+### 3.2 Complete Header
 
 ```markdown
 # [Name] — Standard
@@ -81,191 +81,191 @@ Dieser Blueprint gilt für:
 > **Date:** YYYY-MM-DD  
 > **Type:** Standard  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** Alle Entwickler  
-> **Scope:** [C++ Code | CMake Scripts | Git Workflow | ...]  
-> **Durchsetzung:** [clang-format | clang-tidy | CI | Review | ...]  
+> **Target Audience:** All developers  
+> **Scope:** [C++ code | CMake scripts | Git workflow | ...]  
+> **Enforcement:** [clang-format | clang-tidy | CI | Review | ...]  
 > **Language:** English  
-> **German:** [Name_Standard.md](../../en/standards/Name_Standard.md)
+> **German:** [Name_Standard.md](../../../de/autorenwerk/standards/Name_Standard.md)
 ```
 
 ---
 
-## 4. Requiredabschnitte
+## 4. Required Sections
 
-Standards verwenden diese Struktur:
+Standards use this structure:
 
 ```
 ## Table of Contents
 
 ## 1. Overview
 ## 2. Scope
-## 3. [Thematische Regel-Abschnitte]
-## 4. Ausnahmen
-## 5. Tool-Configuration
+## 3. [Thematic rule sections]
+## 4. Exceptions
+## 5. Tool Configuration
 ## 6. Migration
-## 7. Checkliste
+## 7. Checklist
 ## 8. See Also
 ## Changelog
 ```
 
-### 4.1 Abschnitts-Details
+### 4.1 Section Details
 
-| # | Abschnitt | Inhalt |
+| # | Section | Content |
 |---|-----------|--------|
-| 1 | Overview | Warum dieser Standard? Ziele |
-| 2 | Scope | Welcher Code, welche Dateien |
-| 3 | Regeln | Die eigentlichen Vorschriften |
-| 4 | Ausnahmen | Wann darf abgewichen werden? |
-| 5 | Tool-Configuration | clang-format, clang-tidy, etc. |
-| 6 | Migration | Umstellung von altem Code |
-| 7 | Checkliste | Schnellprüfung für Reviews |
-| 8 | See Also | Verwandte Standards |
+| 1 | Overview | Why this standard? Goals |
+| 2 | Scope | Which code, which files |
+| 3 | Rules | The actual regulations |
+| 4 | Exceptions | When may one deviate? |
+| 5 | Tool configuration | clang-format, clang-tidy, etc. |
+| 6 | Migration | Converting old code |
+| 7 | Checklist | Quick check for reviews |
+| 8 | See also | Related standards |
 
 ---
 
-## 5. Regel-Format
+## 5. Rule Format
 
-### 5.1 Regel-Dokumentation
+### 5.1 Rule Documentation
 
-Jede Regel wird so dokumentiert:
+Each rule is documented like this:
 
-```markdown
-### 3.2 Namenskonvention für Functions
+````markdown
+### 3.2 Naming Convention for Functions
 
-**Regel:** Functions verwenden `snake_case`.
+**Rule:** Functions use `snake_case`.
 
-**Verbindlichkeit:** MUSS
+**Obligation:** MUST
 
-**Richtig:**
+**Correct:**
 ```cpp
 void calculate_checksum();
 void parse_json_file();
 ```
 
-**Falsch:**
+**Wrong:**
 ```cpp
 void CalculateChecksum();   // PascalCase
 void calculateChecksum();   // camelCase
 void CALCULATE_CHECKSUM();  // UPPER_CASE
 ```
 
-**Begründung:**  
-Konsistenz mit CMake-API und C-Stil-Code.
+**Rationale:**  
+Consistency with the CMake API and C-style code.
 
-**Ausnahmen:**  
-Keine.
+**Exceptions:**  
+None.
 
-**Prüfung:**  
-clang-tidy Check `readability-identifier-naming`
-```
+**Check:**  
+clang-tidy check `readability-identifier-naming`
+````
 
-### 5.2 Verbindlichkeits-Stufen
+### 5.2 Obligation Levels
 
-| Stufe | Bedeutung | Keyword |
+| Level | Meaning | Keyword |
 |-------|-----------|---------|
-| **MUSS** | Keine Ausnahmen | Required, Mandatory |
-| **SOLL** | Empfohlen, Ausnahmen möglich | Should, Recommended |
-| **KANN** | Optional, bei Bedarf | May, Optional |
-| **DARF NICHT** | Verboten | Must Not, Forbidden |
+| **MUST** | No exceptions | Required, Mandatory |
+| **SHOULD** | Recommended, exceptions possible | Should, Recommended |
+| **MAY** | Optional, as needed | May, Optional |
+| **MUST NOT** | Forbidden | Must Not, Forbidden |
 
-### 5.3 Regel-Tabellen
+### 5.3 Rule Tables
 
-Für Overviewen kompakte Tabellenform:
+For overviews, a compact table form:
 
 ```markdown
-| Regel | Richtig | Falsch | Verbindlichkeit |
+| Rule | Correct | Wrong | Obligation |
 |-------|---------|--------|-----------------|
-| Functions | `snake_case` | `camelCase` | MUSS |
-| Klassen | `PascalCase` | `snake_case` | MUSS |
-| Konstanten | `kPascalCase` | `UPPER_CASE` | SOLL |
+| Functions | `snake_case` | `camelCase` | MUST |
+| Classes | `PascalCase` | `snake_case` | MUST |
+| Constants | `kPascalCase` | `UPPER_CASE` | SHOULD |
 ```
 
 ---
 
-## 6. Example: Vollständiger Standard
+## 6. Example: Complete Standard
 
-```markdown
+````markdown
 # C++ Coding Standard
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-13  
 > **Type:** Standard  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
-> **Scope:** Alle C++ Dateien (*.cpp, *.hpp, *.tpp)  
-> **Durchsetzung:** clang-format, clang-tidy, Code Review  
+> **Target Audience:** All developers  
+> **Scope:** All C++ files (*.cpp, *.hpp, *.tpp)  
+> **Enforcement:** clang-format, clang-tidy, code review  
 > **Language:** English  
-> **German:** [Cpp_Coding_Standard.md](../standards/Cpp_Coding_Standard.md)
+> **German:** [Cpp_Coding_Standard.md](../../../de/autorenwerk/standards/Cpp_Coding_Standard.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Namenskonventionen](#3-namenskonventionen)
-4. [Formatierung](#4-formatierung)
-5. [Sprachfeatures](#5-sprachfeatures)
-6. [Ausnahmen](#6-ausnahmen)
-7. [Tool-Configuration](#7-tool-konfiguration)
-8. [Checkliste](#8-checkliste)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Naming Conventions](#3-naming-conventions)
+4. [Formatting](#4-formatting)
+5. [Language Features](#5-language-features)
+6. [Exceptions](#6-exceptions)
+7. [Tool Configuration](#7-tool-configuration)
+8. [Checklist](#8-checklist)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Dieser Standard definiert verbindliche Regeln für C++ Code im Projekt.
+This standard defines binding rules for C++ code in the project.
 
-### Ziele
+### Goals
 
-- Einheitlicher Code-Stil
-- Lesbarkeit und Wartbarkeit
-- Automatische Prüfbarkeit
+- Uniform code style
+- Readability and maintainability
+- Automatic checkability
 
 ---
 
 ## 2. Scope
 
-| Dateityp | Betroffen |
+| File type | Affected |
 |----------|-----------|
 | `*.cpp` | ✓ |
 | `*.hpp` | ✓ |
 | `*.tpp` | ✓ |
-| `*.h` (C-Header) | Nur wenn C++-Code |
+| `*.h` (C header) | Only if C++ code |
 
-**Nicht betroffen:** Third-Party-Code in `externals/`
+**Not affected:** third-party code in `externals/`
 
 ---
 
-## 3. Namenskonventionen
+## 3. Naming Conventions
 
 ### 3.1 Overview
 
-| Element | Stil | Example |
+| Element | Style | Example |
 |---------|------|----------|
 | Namespaces | `snake_case` | `audio_engine` |
-| Klassen | `PascalCase` | `AudioPlayer` |
+| Classes | `PascalCase` | `AudioPlayer` |
 | Functions | `snake_case` | `play_sound()` |
-| Variablen | `snake_case` | `sample_rate` |
-| Konstanten | `kPascalCase` | `kMaxVolume` |
+| Variables | `snake_case` | `sample_rate` |
+| Constants | `kPascalCase` | `kMaxVolume` |
 | Macros | `UPPER_CASE` | `AUDIO_API` |
-| Member | `m_snake_case` | `m_buffer_size` |
+| Members | `m_snake_case` | `m_buffer_size` |
 
-### 3.2 Klassen und Structs
+### 3.2 Classes and Structs
 
-**Regel:** `PascalCase`
+**Rule:** `PascalCase`
 
-**Verbindlichkeit:** MUSS
+**Obligation:** MUST
 
-**Richtig:**
+**Correct:**
 ```cpp
 class AudioPlayer {};
 struct SoundBuffer {};
 ```
 
-**Falsch:**
+**Wrong:**
 ```cpp
 class audio_player {};  // snake_case
 class audioPlayer {};   // camelCase
@@ -273,76 +273,76 @@ class audioPlayer {};   // camelCase
 
 ---
 
-## 4. Formatierung
+## 4. Formatting
 
-### 4.1 Einrückung
+### 4.1 Indentation
 
-**Regel:** 4 Spaces, keine Tabs
+**Rule:** 4 spaces, no tabs
 
-**Verbindlichkeit:** MUSS
+**Obligation:** MUST
 
-**Prüfung:** clang-format `IndentWidth: 4`
+**Check:** clang-format `IndentWidth: 4`
 
-### 4.2 Klammern (Allman-Stil)
+### 4.2 Braces (Allman Style)
 
-**Regel:** Öffnende Klammer auf neuer Zeile
+**Rule:** Opening brace on a new line
 
-**Verbindlichkeit:** MUSS
+**Obligation:** MUST
 
-**Richtig:**
+**Correct:**
 ```cpp
 if (condition)
 {
-    doSomething();
+    do_something();
 }
 ```
 
-**Falsch:**
+**Wrong:**
 ```cpp
 if (condition) {
-    doSomething();
+    do_something();
 }
 ```
 
 ---
 
-## 5. Sprachfeatures
+## 5. Language Features
 
-### 5.1 auto-Usage
+### 5.1 Use of auto
 
-**Regel:** `auto` nur bei komplexen Typen
+**Rule:** `auto` only for complex types
 
-**Verbindlichkeit:** SOLL
+**Obligation:** SHOULD
 
-**Richtig:**
+**Correct:**
 ```cpp
 auto it = container.begin();
 auto ptr = std::make_unique<Widget>();
 ```
 
-**Falsch:**
+**Wrong:**
 ```cpp
-auto i = 0;        // int ist klar
-auto name = "str"; // const char* ist klar
+auto i = 0;        // int is obvious
+auto name = "str"; // const char* is obvious
 ```
 
 ---
 
-## 6. Ausnahmen
+## 6. Exceptions
 
-| Situation | Erlaubte Abweichung |
+| Situation | Permitted deviation |
 |-----------|---------------------|
-| Third-Party-Integration | Deren Stil beibehalten |
-| Performance-kritischer Code | Dokumentierte Optimierungen |
-| Legacy-Migration | Temporär mit TODO |
+| Third-party integration | Keep their style |
+| Performance-critical code | Documented optimizations |
+| Legacy migration | Temporary, with TODO |
 
 ---
 
-## 7. Tool-Configuration
+## 7. Tool Configuration
 
 ### clang-format
 
-Siehe: [.clang-format](../../.clang-format)
+See: [.clang-format](../../.clang-format)
 
 ### clang-tidy
 
@@ -355,66 +355,68 @@ Checks: >
 
 ---
 
-## 8. Checkliste
+## 8. Checklist
 
-Vor Code Review prüfen:
+Check before code review:
 
-- [ ] Namenskonventionen eingehalten
-- [ ] clang-format ausgeführt
-- [ ] Keine Compiler-Warnings
-- [ ] Keine clang-tidy Error
-- [ ] Kommentare aktuell
+- [ ] Naming conventions followed
+- [ ] clang-format run
+- [ ] No compiler warnings
+- [ ] No clang-tidy errors
+- [ ] Comments up to date
 
 ---
 
 ## 9. See Also
 
-- [ClangFormat_Blueprint](../blueprints/ClangFormat_Blueprint_v0_1_0.md)
-- [ClangTidy_Blueprint](../blueprints/ClangTidy_Blueprint_v0_1_0.md)
-- [CMake_Standard](CMake_Standard_v0_1_0.md)
+- [ClangFormat_Blueprint](../blueprints/ClangFormat.md)
+- [ClangTidy_Blueprint](../blueprints/ClangTidy.md)
+- [CMake_Standard](CMake_Standard.md)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
 | **0.1.0** | **2025-12-13** | **Initial** |
-```
+````
 
 ---
 
 ## 7. Review Checklist
 
-Zusätzlich zur Doc.md Checkliste:
+In addition to the Doc.md checklist:
 
-**Regeln:**
-- [ ] Alle Regeln mit Verbindlichkeit versehen
-- [ ] Richtig/Falsch-Examples für jede Regel
-- [ ] Begründungen angegeben
-- [ ] Ausnahmen dokumentiert
+**Rules:**
+- [ ] Every rule has an obligation level
+- [ ] Correct/wrong examples for every rule
+- [ ] Rationales given
+- [ ] Exceptions documented
 
-**Durchsetzung:**
-- [ ] Tool-Configuration vorhanden oder verlinkt
-- [ ] Automatische Prüfung möglich (wo sinnvoll)
+**Enforcement:**
+- [ ] Tool configuration present or linked
+- [ ] Automatic checking possible (where sensible)
 
-**Praxis:**
-- [ ] Checkliste für Reviews vorhanden
-- [ ] Migrationshinweise (falls Legacy-Code existiert)
+**Practice:**
+- [ ] Checklist for reviews present
+- [ ] Migration notes (if legacy code exists)
 
 ---
 
 ## 8. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [ClangFormat_Blueprint.md](ClangFormat_Blueprint.md) — Formatierungs-Standard
-- [ClangTidy_Blueprint.md](ClangTidy_Blueprint.md) — Statische Analyse
+- [Doc.md](Doc.md) — General documentation rules
+- [ClangFormat.md](ClangFormat.md) — Formatting standard
+- [ClangTidy.md](ClangTidy.md) — Static analysis
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Regel-Format mit Verbindlichkeitsstufen, Tool-Configuration, Checkliste** |
-| 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: location `docs/[lang]/autorenwerk/standards/` (§ 2), file names without version, jump path `../../../de/`; example § 4.2 `do_something()` per its own `snake_case` rule (§ 3.1 of the example)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: rule format with obligation levels, tool configuration, checklist |
+| 0.1.0 | 2025-12-03 | Initial (part of Documentation_Blueprint) |

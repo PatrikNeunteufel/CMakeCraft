@@ -4,46 +4,46 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_Testing.md](Git_Externals_Testing.md)
+> **German:** [Git_Externals_Testing.md](../../../../de/guide/references/externals/Git_Externals_Testing.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [googletest](#2-googletest)
 3. [catch2](#3-catch2)
 4. [benchmark](#4-benchmark)
-5. [Schnellreferenz](#5-schnellreferenz)
-6. [See Also](#6-siehe-auch)
-7. [Changelog](#7-changelog)
+5. [Quick Reference](#5-quick-reference)
+6. [See Also](#6-see-also)
+7. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Git Testing-Externals für das CMake Architecture Build-System.
+This document describes Git testing externals for the CMake Architecture build system.
 
 | Library | Description | CMake | Hook |
-|---------|--------------|-------|------|
+|---------|-------------|-------|------|
 | **googletest** | Google Test + GMock | ✅ | PreFetch |
-| **catch2** | BDD-Style Testing | ✅ | PreFetch |
+| **catch2** | BDD-style testing | ✅ | PreFetch |
 | **benchmark** | Google Benchmark | ✅ | PreFetch |
 
 ---
 
 ## 2. googletest
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | https://github.com/google/googletest |
-| **Empfohlener Tag** | v1.14.0 |
-| **CMake-Support** | ✅ |
-| **Hook** | PreFetch (empfohlen) |
+| **Recommended Tag** | v1.14.0 |
+| **CMake Support** | ✅ |
+| **Hook** | PreFetch (recommended) |
 
 ### Solution.json
 
@@ -67,7 +67,7 @@ set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 ```
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #include <gtest/gtest.h>
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-### Mit GMock
+### With GMock
 
 ```cpp
 #include <gmock/gmock.h>
@@ -109,24 +109,24 @@ TEST(DatabaseTest, ConnectCalled) {
 ### Targets
 
 | Target | Description |
-|--------|--------------|
-| `gtest` | Google Test Core |
-| `gtest_main` | Mit main() |
-| `gmock` | Google Mock Core |
-| `gmock_main` | Mit main() |
+|--------|-------------|
+| `gtest` | Google Test core |
+| `gtest_main` | With main() |
+| `gmock` | Google Mock core |
+| `gmock_main` | With main() |
 
 ---
 
 ## 3. catch2
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | https://github.com/catchorg/Catch2 |
-| **Empfohlener Tag** | v3.5.2 |
-| **CMake-Support** | ✅ |
-| **Hook** | PreFetch (empfohlen) |
+| **Recommended Tag** | v3.5.2 |
+| **CMake Support** | ✅ |
+| **Hook** | PreFetch (recommended) |
 
 ### Solution.json
 
@@ -150,7 +150,7 @@ set(CATCH_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
 set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
 ```
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #include <catch2/catch_test_macros.hpp>
@@ -167,7 +167,7 @@ TEST_CASE("Math operations", "[math]") {
 }
 ```
 
-### BDD-Style
+### BDD Style
 
 ```cpp
 #include <catch2/catch_test_macros.hpp>
@@ -190,22 +190,22 @@ SCENARIO("Vector can be sized and resized", "[vector]") {
 ### Targets
 
 | Target | Description |
-|--------|--------------|
-| `Catch2::Catch2` | Header-Only Interface |
-| `Catch2::Catch2WithMain` | Mit main() |
+|--------|-------------|
+| `Catch2::Catch2` | Header-only interface |
+| `Catch2::Catch2WithMain` | With main() |
 
 ---
 
 ## 4. benchmark
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | https://github.com/google/benchmark |
-| **Empfohlener Tag** | v1.8.3 |
-| **CMake-Support** | ✅ |
-| **Hook** | PreFetch (empfohlen) |
+| **Recommended Tag** | v1.8.3 |
+| **CMake Support** | ✅ |
+| **Hook** | PreFetch (recommended) |
 
 ### Solution.json
 
@@ -229,7 +229,7 @@ set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "" FORCE)
 ```
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #include <benchmark/benchmark.h>
@@ -262,13 +262,13 @@ BENCHMARK_MAIN();
 ### Targets
 
 | Target | Description |
-|--------|--------------|
-| `benchmark::benchmark` | Core Library |
-| `benchmark::benchmark_main` | Mit main() |
+|--------|-------------|
+| `benchmark::benchmark` | Core library |
+| `benchmark::benchmark_main` | With main() |
 
 ---
 
-## 5. Schnellreferenz
+## 5. Quick Reference
 
 | Library | Tag | CMake | Hook | Targets |
 |---------|-----|-------|------|---------|
@@ -276,12 +276,12 @@ BENCHMARK_MAIN();
 | catch2 | v3.5.2 | ✅ | PreFetch | Catch2::Catch2WithMain |
 | benchmark | v1.8.3 | ✅ | PreFetch | benchmark::benchmark_main |
 
-### Vergleich mit Local-Alternative
+### Comparison with the Local Alternative
 
 | Feature | doctest (Local) | googletest (Git) | catch2 (Git) |
 |---------|-----------------|------------------|--------------|
 | **Header-Only** | ✅ | ❌ | ✅ |
-| **Kompilierzeit** | ⚡ Sehr schnell | 🐢 Langsam | 🐌 Langsamer |
+| **Compile time** | ⚡ Very fast | 🐢 Slow | 🐌 Slower |
 | **Mocking** | ❌ | ✅ GMock | ❌ |
 | **BDD Subcases** | ✅ | ❌ | ✅ |
 
@@ -289,15 +289,16 @@ BENCHMARK_MAIN();
 
 ## 6. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
-- [Git_Externals.md](Git_Externals.md) — Git Externals Overview
+- [Externals.md](../Externals.md) — Main overview of all externals
+- [Git_Externals.md](Git_Externals.md) — Git Externals overview
 - [Local_Externals_Testing.md](Local_Externals_Testing.md) — Local Testing (doctest)
-- [Testing_UserGuide.md](../../userguides/Testing.md) — Test-Anleitung
+- [Testing_UserGuide.md](../../userguides/Testing.md) — Testing guide
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Testing (aus Git_Externals_Core ausgelagert)** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Own category Testing (split out from Git_Externals_Core) |

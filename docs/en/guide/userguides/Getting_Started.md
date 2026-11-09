@@ -1,80 +1,80 @@
-# Erste Schritte – Benutzerhandbuch
+# Getting Started – User Guide
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** C++ Developers (Einsteiger und Fortgeschrittene)  
+> **Target Audience:** C++ developers (beginners and advanced)  
 > **Language:** English  
-> **German:** [Getting_Started_UserGuide.md](Getting_Started.md)
+> **German:** [Getting_Started_UserGuide.md](../../../de/guide/userguides/Getting_Started.md)
 
 ---
 
 ## Table of Contents
 
-1. [Überblick](#1-überblick)
-2. [Prerequisites](#2-voraussetzungen)
-3. [Schnellstart](#3-schnellstart)
-4. [Projektstruktur verstehen](#4-projektstruktur-verstehen)
-5. [Solution.json – Das Herzstück](#5-solutionjson--das-herzstück)
-6. [Erstes Executable erstellen](#6-erstes-executable-erstellen)
-7. [Erste Library erstellen](#7-erste-library-erstellen)
-8. [Build-Befehle](#8-build-befehle)
-9. [Externals verwenden](#9-externals-verwenden)
-10. [Tests hinzufügen](#10-tests-hinzufügen)
-11. [Workflow-Summary](#11-workflow-zusammenfassung)
-12. [Stolpersteine und Lösungen](#12-stolpersteine-und-lösungen)
+1. [Overview](#1-overview)
+2. [Prerequisites](#2-prerequisites)
+3. [Quick Start](#3-quick-start)
+4. [Understanding the Project Structure](#4-understanding-the-project-structure)
+5. [Solution.json – The Core](#5-solutionjson--the-core)
+6. [Creating Your First Executable](#6-creating-your-first-executable)
+7. [Creating Your First Library](#7-creating-your-first-library)
+8. [Build Commands](#8-build-commands)
+9. [Using Externals](#9-using-externals)
+10. [Adding Tests](#10-adding-tests)
+11. [Workflow Summary](#11-workflow-summary)
+12. [Pitfalls and Solutions](#12-pitfalls-and-solutions)
 13. [Troubleshooting](#13-troubleshooting)
-14. [Nächste Schritte](#14-nächste-schritte)
-15. [See Also](#15-siehe-auch)
+14. [Next Steps](#14-next-steps)
+15. [See Also](#15-see-also)
 
 ---
 
-## 1. Überblick
+## 1. Overview
 
-Willkommen zum **CMake Architecture** Build-System! Dieses Guide führt dich durch alle Schritte, um dein erstes Projekt erfolgreich zu erstellen und zu bauen.
+Welcome to the **CMake Architecture** build system! This guide walks you through all the steps to successfully create and build your first project.
 
-### Was ist CMake Architecture?
+### What Is CMake Architecture?
 
-Ein **JSON-gesteuertes Build-System** für C++ Projekte, das:
+A **JSON-driven build system** for C++ projects that:
 
-- **Deklarativ** arbeitet – beschreibe WAS, nicht WIE
-- **Multi-Projekt** unterstützt – mehrere Executables und Libraries in einer Solution
-- **Externe Bibliotheken** automatisch verwaltet
-- **Plattformübergreifend** funktioniert (Windows, Linux, macOS)
-- **IDE-Integration** bietet (Visual Studio, CLion, VS Code)
+- Works **declaratively** – describe WHAT, not HOW
+- Supports **multiple projects** – several executables and libraries in one solution
+- Manages **external libraries** automatically
+- Works **cross-platform** (Windows, Linux, macOS)
+- Offers **IDE integration** (Visual Studio, CLion, VS Code)
 
-### Das wichtigste Prinzip
+### The Most Important Principle
 
-> **Wenn es nicht in der Solution.json steht, existiert es nicht.**
+> **If it is not in Solution.json, it does not exist.**
 
-Alles – Executables, Libraries, Tests, Externals – wird in `Solution.json` definiert. Das Build-System generiert daraus automatisch die CMake-Configuration.
+Everything – executables, libraries, tests, externals – is defined in `Solution.json`. The build system automatically generates the CMake configuration from it.
 
-### Was du am Ende dieses Guides haben wirst
+### What You Will Have at the End of This Guide
 
-- Ein funktionierendes Projekt mit Executable und Library
-- Verständnis der Projektstruktur
-- Wissen, wie du neue Module hinzufügst
-- Grundlagen für Tests und Externals
+- A working project with an executable and a library
+- An understanding of the project structure
+- Knowledge of how to add new modules
+- Basics for tests and externals
 
 ---
 
 ## 2. Prerequisites
 
-### Checkliste
+### Checklist
 
-- [ ] **CMake 3.24+** installiert
-- [ ] **C++ Compiler:** MSVC 2022, GCC 11+, oder Clang 14+
-- [ ] **Git** installiert
-- [ ] **IDE** (empfohlen): Visual Studio 2022, CLion, oder VS Code mit CMake-Extension
-- [ ] **Ninja** (empfohlen für schnellere Builds)
+- [ ] **CMake 3.26+** installed
+- [ ] **C++ compiler:** MSVC 2022, GCC 11+, or Clang 14+
+- [ ] **Git** installed
+- [ ] **IDE** (recommended): Visual Studio 2022, CLion, or VS Code with the CMake extension
+- [ ] **Ninja** (recommended for faster builds)
 
-### Installation prüfen
+### Check the Installation
 
 ```bash
-# CMake Version
+# CMake version
 cmake --version
-# Sollte 3.24 oder höher sein
+# Should be 3.26 or higher
 
 # Compiler
 cl /?          # Windows (MSVC)
@@ -84,15 +84,15 @@ clang++ --version  # macOS/Linux (Clang)
 # Git
 git --version
 
-# Ninja (optional aber empfohlen)
+# Ninja (optional but recommended)
 ninja --version
 ```
 
-### Empfohlene Versionen
+### Recommended Versions
 
-| Tool | Minimum | Empfohlen |
-|------|---------|-----------|
-| CMake | 3.24 | 3.28+ |
+| Tool | Minimum | Recommended |
+|------|---------|-------------|
+| CMake | 3.26 | 3.28+ |
 | MSVC | 2019 | 2022 |
 | GCC | 11 | 13+ |
 | Clang | 14 | 17+ |
@@ -100,26 +100,40 @@ ninja --version
 
 ---
 
-## 3. Schnellstart
+## 3. Quick Start
 
-### 3.1 Projekt klonen/erstellen
+### 3.1 Create the Project
+
+CMakeCraft does not live in the project: the project carries only three small files, and the build
+system itself is fetched in the pinned version into `.externals/cmakecraft/<version>/` on the first
+configure. The templates are in CMakeCraft under [`templates/consumer/`](../../../../templates/consumer/):
 
 ```bash
-# Neues Projekt aus Template
-git clone https://github.com/your-org/cmake-v2-template.git MyProject
-cd MyProject
+mkdir MyProject && cd MyProject
+git init
 
-# Oder bestehendes Projekt
-cd /path/to/existing/project
+# from a CMakeCraft working copy, here ../CMakeCraft
+cp ../CMakeCraft/templates/consumer/CMakeCraftBootstrap.cmake .
+cp ../CMakeCraft/templates/consumer/cmakecraft.pin .
+cp ../CMakeCraft/templates/consumer/CMakeLists.txt .
+cp ../CMakeCraft/CMakePresets.json .
 ```
 
-### 3.2 Solution.json erstellen
+- `CMakeCraftBootstrap.cmake` — take it over unchanged.
+- `cmakecraft.pin` — the CMakeCraft version as a Git tag, e.g. `set(CMAKECRAFT_VERSION "v0.14.1")`.
+- `CMakeLists.txt` — only adjust the name in `project(<Name> LANGUAGES NONE)`. The line is
+  required (since v0.13.0, otherwise E005); CMakeCraft sets name and version from Solution.json.
 
-Erstelle `Solution.json` im Projekt-Root:
+The complete setup (`.gitignore`, user presets, first commit) is described in the
+[New Project Guide](Neues_Projekt_Guide.md).
+
+### 3.2 Create Solution.json
+
+Create `Solution.json` in the project root:
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": {
         "name": "MyProject",
         "version": "1.0.0"
@@ -138,9 +152,9 @@ Erstelle `Solution.json` im Projekt-Root:
 }
 ```
 
-### 3.3 Source-Datei erstellen
+### 3.3 Create the Source File
 
-Erstelle `projects/demos/exec/HelloWorld/src/main.cpp`:
+Create `projects/exec/HelloWorld/src/main.cpp` (default path of an executable, §4.3):
 
 ```cpp
 #include <iostream>
@@ -151,102 +165,116 @@ int main() {
 }
 ```
 
-### 3.4 Bauen und Ausführen
+Next to it, the file list `projects/exec/HelloWorld/src/Source.cmake` — sources are listed
+explicitly (default `settings.sources.mode = "explicit"`, §6.6):
 
-```bash
-# Konfigurieren
-cmake --preset windows-ninja-debug    # Windows
-cmake --preset linux-ninja-debug      # Linux
-cmake --preset macos-ninja-debug      # macOS
-
-# Bauen
-cmake --build out/build/windows-ninja-debug
-
-# Ausführen
-./out/build/windows-ninja-debug/bin/Debug/HelloWorld.exe    # Windows
-./out/build/linux-ninja-debug/bin/Debug/HelloWorld          # Linux
+```cmake
+list(APPEND ${TARGET_NAME}_SOURCES "${CMAKE_CURRENT_LIST_DIR}/main.cpp")
 ```
 
-**Geschafft!** Du hast dein erstes Projekt gebaut. 🎉
+### 3.4 Build and Run
+
+```bash
+# Configure (the first time, CMakeCraft is fetched according to cmakecraft.pin)
+cmake --preset windows-ninja-debug-msvc   # Windows (or windows-ninja-debug-clang)
+cmake --preset linux-gcc-debug            # Linux
+cmake --preset macos-ninja-debug          # macOS
+
+# Build
+cmake --build out/build/windows-ninja-debug-msvc
+
+# Run
+./out/build/windows-ninja-debug-msvc/exec/HelloWorld/bin/Debug/HelloWorld.exe   # Windows
+./out/build/linux-gcc-debug/exec/HelloWorld/bin/Debug/HelloWorld                # Linux
+```
+
+**Done!** You have built your first project. 🎉
 
 ---
 
-## 4. Projektstruktur verstehen
+## 4. Understanding the Project Structure
 
-### 4.1 Standard-Verzeichnisstruktur
+### 4.1 Standard Directory Structure
 
 ```
 MyProject/
-├── CMakeLists.txt              ← Haupt-CMake-Datei (generiert vom System)
-├── CMakePresets.json           ← Team-weite Build-Presets
-├── CMakeUserPresets.json       ← Persönliche Presets (nicht committen!)
-├── Solution.json               ← ZENTRALE KONFIGURATION
+├── CMakeLists.txt              ← Thin version (template templates/consumer/)
+├── CMakeCraftBootstrap.cmake   ← fetches CMakeCraft (unchanged from the template)
+├── cmakecraft.pin              ← CMakeCraft version (Git tag)
+├── CMakePresets.json           ← Team-wide build presets
+├── CMakeUserPresets.json       ← Personal presets (do not commit!)
+├── Solution.json               ← CENTRAL CONFIGURATION
 │
-├── cmake/                      ← Build-System Module
-│   ├── core/                   ← Kern-Module
-│   ├── externals/              ← External-Verwaltung
-│   └── project/                ← Projekt-Erstellung
-│
-├── externals/                  ← Lokale externe Bibliotheken
+├── externals/                  ← Local external libraries
 │   ├── bass/
 │   ├── doctest/
 │   └── lua54/
 │
-├── projects/                   ← DEIN CODE
-│   ├── demos/                  ← Demo-Projekte
-│   │   ├── exec/               ← Executables
-│   │   │   └── HelloWorld/
-│   │   │       └── src/
-│   │   │           └── main.cpp
-│   │   └── libs/               ← Libraries
-│   │       └── CoreLib/
-│   │           ├── include/
-│   │           │   └── CoreLib/
-│   │           │       └── Calculator.h
-│   │           └── src/
-│   │               └── Calculator.cpp
-│   └── tests/                  ← Test-Projekte
+├── projects/                   ← YOUR CODE
+│   ├── exec/                   ← Executables
+│   │   └── HelloWorld/
+│   │       └── src/
+│   │           ├── Source.cmake
+│   │           └── main.cpp
+│   ├── libs/                   ← Libraries
+│   │   └── CoreLib/
+│   │       ├── include/
+│   │       │   └── CoreLib/
+│   │       │       └── Calculator.h
+│   │       └── src/
+│   │           ├── Source.cmake
+│   │           └── Calculator.cpp
+│   └── tests/                  ← Test projects
 │       └── unit/
 │           └── CoreLib_Tests/
+│               └── src/
 │
-└── out/                        ← Build-Ausgabe (generiert)
+├── .externals/                 ← fetched during configure (do not commit)
+│   └── cmakecraft/<version>/   ← the build system itself
+│
+└── out/                        ← Build output (generated)
     └── build/
-        └── windows-ninja-debug/
-            └── bin/
-                └── Debug/
-                    └── HelloWorld.exe
+        └── windows-ninja-debug-msvc/
+            └── exec/
+                └── HelloWorld/
+                    └── bin/
+                        └── Debug/
+                            └── HelloWorld.exe
 ```
 
-### 4.2 Importante Dateien
+### 4.2 Important Files
 
-| Datei | Zweck | Bearbeiten? |
-|-------|-------|-------------|
-| `Solution.json` | Projekt-Definition | ✅ JA |
-| `CMakeLists.txt` | CMake-Einstiegspunkt | ❌ No (generiert) |
-| `CMakePresets.json` | Team-Presets | ⚠️ Selten |
-| `CMakeUserPresets.json` | Persönliche Presets | ✅ JA |
+| File | Purpose | Edit? |
+|------|---------|-------|
+| `Solution.json` | Project definition | ✅ YES |
+| `CMakeLists.txt` | CMake entry point (thin version from `templates/consumer/`) | ⚠️ Only the name in `project(<Name> LANGUAGES NONE)` — the line is required (since v0.13.0, otherwise E005) |
+| `cmakecraft.pin` | CMakeCraft version (Git tag) and sources | ⚠️ When changing the version |
+| `CMakeCraftBootstrap.cmake` | Fetches CMakeCraft into `.externals/cmakecraft/<version>/` | ❌ No (take over unchanged) |
+| `CMakePresets.json` | Team presets | ⚠️ Rarely |
+| `CMakeUserPresets.json` | Personal presets | ✅ YES |
 
-### 4.3 Pfad-Konventionen
+### 4.3 Path Conventions
 
-Das Build-System erwartet standardmäßig diese Pfade:
+By default, the build system expects these paths:
 
-| Typ | Pfad-Muster |
-|-----|-------------|
-| Executable | `projects/demos/exec/{name}/src/` |
-| Library | `projects/demos/libs/{name}/` |
+| Type | Path pattern |
+|------|--------------|
+| Executable | `projects/exec/{name}/src/` |
+| Library | `projects/libs/{name}/src/` (public headers: `projects/libs/{name}/include/`, if present) |
 | Test | `projects/tests/{type}/{name}/src/` |
 
-Du kannst diese mit dem `path` Feld überschreiben.
+You can override them with the `path` field (a library's headers with `public_headers`).
+In the source directory the build system expects a `Source.cmake` with the file list (§6.6).
 
 ---
 
-## 5. Solution.json – Das Herzstück
+## 5. Solution.json – The Core
 
-### 5.1 Grundstruktur
+### 5.1 Basic Structure
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": {
         "name": "MySolution",
         "version": "1.0.0"
@@ -255,23 +283,25 @@ Du kannst diese mit dem `path` Feld überschreiben.
     "externals": { ... },
     "libraries": [ ... ],
     "executables": [ ... ],
+    "apps": [ ... ],
     "tests": [ ... ]
 }
 ```
 
-### 5.2 Abschnitte erklärt
+### 5.2 Sections Explained
 
-| Abschnitt | Zweck | Required? |
-|-----------|-------|----------|
-| `schemaVersion` | Schema-Version | ✅ Yes |
-| `solution` | Projekt-Metadaten | ✅ Yes |
-| `settings` | Globale Einstellungen | ❌ Optional |
-| `externals` | Externe Bibliotheken | ❌ Optional |
-| `libraries` | Interne Libraries | ❌ Optional |
-| `executables` | Ausführbare Programme | ❌ Optional |
-| `tests` | Test-Executables | ❌ Optional |
+| Section | Purpose | Required? |
+|---------|---------|-----------|
+| `schemaVersion` | Schema version (currently `1.0`; a different major aborts with E003) | ✅ Yes |
+| `solution` | Project metadata | ✅ Yes |
+| `settings` | Global settings | ❌ Optional |
+| `externals` | External libraries | ❌ Optional |
+| `libraries` | Internal libraries | ❌ Optional |
+| `executables` | Executable programs | ❌ Optional |
+| `apps` | App containers (core lib + runner + tests), see [App_Creation_Guide](App_Creation_Guide.md) | ❌ Optional |
+| `tests` | Test executables | ❌ Optional |
 
-### 5.3 Settings-Abschnitt
+### 5.3 Settings Section
 
 ```json
 "settings": {
@@ -279,39 +309,50 @@ Du kannst diese mit dem `path` Feld überschreiben.
         "cxx_standard": 20,
         "c_standard": 17
     },
-    "output": {
-        "binDir": "bin",
-        "libDir": "lib"
+    "defaults": {
+        "library_type": "STATIC",
+        "executable_type": "CONSOLE"
+    },
+    "sources": {
+        "mode": "explicit"
     }
 }
 ```
 
-### 5.4 Reihenfolge der Verarbeitung
+`sources.mode`: `explicit` (default — `Source.cmake` is required), `auto` (`Source.cmake` if it
+lists files, otherwise all files in the directory) or `glob` (always all files).
+The output directories are fixed (§4.1) and cannot be set in Solution.json.
+
+### 5.4 Processing Order
 
 ```
-1. settings      → Globale Einstellungen
-2. externals     → Externe Bibliotheken laden
-3. libraries     → Interne Libraries erstellen
-4. executables   → Executables erstellen (können Libraries nutzen)
-5. tests         → Tests erstellen (können Libraries nutzen)
+1. settings      → Global settings
+2. externals     → Load external libraries
+3. libraries     → Create internal libraries
+4. executables   → Create executables (can use libraries)
+5. apps          → Create app containers
+6. packages      → Create package targets
+7. tests         → Create tests (only with BUILD_TESTS=ON)
 ```
 
-**Important:** Libraries müssen VOR Executables definiert werden, wenn diese voneinander abhängen.
+**Important:** The sections run in this order regardless of where they appear in the file.
+Within `libraries`, however, the order of the entries matters: a library must come **after** the
+libraries it depends on (otherwise E101).
 
 ---
 
-## 6. Erstes Executable erstellen
+## 6. Creating Your First Executable
 
 ### 6.1 Workflow
 
 ```
-1. Solution.json Eintrag erstellen  ← IMMER ZUERST!
-2. CMake konfigurieren
-3. Dateien anlegen
-4. Bauen und testen
+1. Create the Solution.json entry  ← ALWAYS FIRST!
+2. Configure CMake
+3. Create files
+4. Build and test
 ```
 
-### 6.2 Solution.json Eintrag
+### 6.2 Solution.json Entry
 
 ```json
 {
@@ -326,14 +367,16 @@ Du kannst diese mit dem `path` Feld überschreiben.
 }
 ```
 
-### 6.3 Executable-Typen
+### 6.3 Executable Types
 
-| Typ | Description | Windows-Subsystem |
-|-----|--------------|-------------------|
-| `CONSOLE` | Konsolen-Anwendung | CONSOLE |
-| `GUI` | Grafische Anwendung (kein Konsolenfenster) | WINDOWS |
+| Type | Description | Windows subsystem |
+|------|-------------|-------------------|
+| `CONSOLE` | Console application | CONSOLE |
+| `GUI` | Graphical application (no console window) | WINDOWS |
 
-### 6.4 Vollständige Configuration
+`CLI`, `HEADLESS` and `WORKER` are built like `CONSOLE`.
+
+### 6.4 Complete Configuration
 
 ```json
 {
@@ -341,7 +384,7 @@ Du kannst diese mit dem `path` Feld überschreiben.
     "displayName": "My Application",
     "version": "1.0.0",
     "type": "CONSOLE",
-    "path": "projects/demos/exec/MyApp/src",
+    "path": "projects/exec/MyApp/src",
     "dependencies": ["CoreLib", "UtilLib"],
     "externals": ["spdlog", "bass"],
     "defines": ["APP_VERSION=\"1.0.0\""],
@@ -349,21 +392,21 @@ Du kannst diese mit dem `path` Feld überschreiben.
 }
 ```
 
-### 6.5 Felder-Reference
+### 6.5 Field Reference
 
-| Feld | Typ | Default | Description |
-|------|-----|---------|--------------|
-| `name` | string | **Required** | Target-Name |
-| `displayName` | string | `name` | Anzeigename |
-| `version` | string | `"0.1.0"` | Semantic Version |
-| `type` | string | `"CONSOLE"` | CONSOLE oder GUI |
-| `path` | string | Convention | Source-Verzeichnis |
-| `dependencies` | string[] | `[]` | Interne Libraries |
-| `externals` | string[] | `[]` | Externe Libraries |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `name` | string | **Required** | Target name |
+| `displayName` | string | `name` | Display name |
+| `version` | string | Solution version | Semantic version |
+| `type` | string | `"CONSOLE"` (or `settings.defaults.executable_type`) | CONSOLE or GUI |
+| `path` | string | Convention | Source directory |
+| `dependencies` | string[] | `[]` | Internal libraries |
+| `externals` | string[] | `[]` | External libraries |
 
-### 6.6 Source-Dateien
+### 6.6 Source Files
 
-Erstelle die Source-Dateien im angegebenen Path:
+Create the source files in the given path:
 
 **main.cpp:**
 ```cpp
@@ -375,13 +418,21 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-Das Build-System findet automatisch alle `.cpp`, `.c`, `.hpp`, `.h` Dateien im Source-Verzeichnis.
+**Source.cmake** (in the same directory):
+```cmake
+list(APPEND ${TARGET_NAME}_SOURCES "${CMAKE_CURRENT_LIST_DIR}/main.cpp")
+```
+
+Sources are **explicit**: every new file goes into `Source.cmake` (`list(APPEND …)`, never
+glob); if the file is missing, configuring aborts with E104. Format and templates:
+[templates/README.md](../../../../templates/README.md). Only with `settings.sources.mode` `auto` or
+`glob` does the build system collect the files of the directory itself.
 
 ---
 
-## 7. Erste Library erstellen
+## 7. Creating Your First Library
 
-### 7.1 Solution.json Eintrag
+### 7.1 Solution.json Entry
 
 ```json
 {
@@ -395,15 +446,15 @@ Das Build-System findet automatisch alle `.cpp`, `.c`, `.hpp`, `.h` Dateien im S
 }
 ```
 
-### 7.2 Library-Typen
+### 7.2 Library Types
 
-| Typ | Description | Wann verwenden? |
-|-----|--------------|-----------------|
-| `STATIC` | Statisch gelinkt (.lib/.a) | Standard, einfachste Option |
-| `SHARED` | Dynamisch gelinkt (.dll/.so) | Wenn mehrere Programme teilen |
-| `INTERFACE` | Header-only | Keine .cpp Dateien |
+| Type | Description | When to use? |
+|------|-------------|--------------|
+| `STATIC` | Statically linked (.lib/.a) | Default, simplest option |
+| `SHARED` | Dynamically linked (.dll/.so) | When several programs share it |
+| `INTERFACE` | Header-only | No .cpp files |
 
-### 7.3 Vollständige Configuration
+### 7.3 Complete Configuration
 
 ```json
 {
@@ -411,25 +462,26 @@ Das Build-System findet automatisch alle `.cpp`, `.c`, `.hpp`, `.h` Dateien im S
     "displayName": "Core Library",
     "version": "1.0.0",
     "type": "STATIC",
-    "path": "projects/demos/libs/CoreLib",
-    "public_headers": "projects/demos/libs/CoreLib/include",
+    "path": "projects/libs/CoreLib/src",
+    "public_headers": "projects/libs/CoreLib/include",
     "dependencies": [],
     "externals": []
 }
 ```
 
-### 7.4 Verzeichnisstruktur
+### 7.4 Directory Structure
 
 ```
-projects/demos/libs/CoreLib/
+projects/libs/CoreLib/
 ├── include/
 │   └── CoreLib/
 │       └── Calculator.h
 └── src/
+    ├── Source.cmake
     └── Calculator.cpp
 ```
 
-### 7.5 Header-Datei
+### 7.5 Header File
 
 **include/CoreLib/Calculator.h:**
 ```cpp
@@ -479,7 +531,12 @@ double Calculator::divide(int a, int b) const {
 } // namespace CoreLib
 ```
 
-### 7.7 Library in Executable verwenden
+Plus `src/Source.cmake`:
+```cmake
+list(APPEND ${TARGET_NAME}_SOURCES "${CMAKE_CURRENT_LIST_DIR}/Calculator.cpp")
+```
+
+### 7.7 Using the Library in an Executable
 
 ```json
 {
@@ -506,71 +563,74 @@ int main() {
 
 ---
 
-## 8. Build-Befehle
+## 8. Build Commands
 
-### 8.1 CMake Presets verwenden
+### 8.1 Using CMake Presets
 
 ```bash
-# Verfügbare Presets anzeigen
+# Show available presets
 cmake --list-presets
 
-# Konfigurieren
-cmake --preset windows-ninja-debug
+# Configure
+cmake --preset windows-ninja-debug-msvc
 
-# Bauen
-cmake --build out/build/windows-ninja-debug
+# Build
+cmake --build out/build/windows-ninja-debug-msvc
 
-# Oder mit Preset
-cmake --build --preset build-windows-ninja-debug
+# Or with a preset
+cmake --build --preset build-ninja-debug-msvc
 ```
 
-### 8.2 Häufige Presets
+### 8.2 Common Presets
 
-| Preset | Plattform | Compiler | Build-Type |
-|--------|-----------|----------|------------|
-| `windows-ninja-debug` | Windows | Auto | Debug |
-| `windows-ninja-release` | Windows | Auto | Release |
-| `windows-ninja-debug-clang` | Windows | Clang | Debug |
+| Preset | Platform | Compiler | Build type |
+|--------|----------|----------|------------|
 | `windows-ninja-debug-msvc` | Windows | MSVC | Debug |
-| `linux-ninja-debug` | Linux | GCC | Debug |
+| `windows-ninja-release-msvc` | Windows | MSVC | Release |
+| `windows-ninja-debug-clang` | Windows | Clang | Debug |
+| `windows-ninja-testing-msvc` | Windows | MSVC | Testing |
+| `linux-gcc-debug` | Linux | GCC | Debug |
+| `linux-clang-debug` | Linux | Clang | Debug |
 | `macos-ninja-debug` | macOS | Clang | Debug |
 
-### 8.3 Einzelnes Target bauen
+All presets: `cmake --list-presets` or [CMakePresets.md](../references/CMakePresets.md).
+
+### 8.3 Building a Single Target
 
 ```bash
-# Nur bestimmtes Target
-cmake --build out/build/windows-ninja-debug --target MyApp
+# Only a specific target
+cmake --build out/build/windows-ninja-debug-msvc --target MyApp
 
-# Nur Tests
-cmake --build out/build/windows-ninja-debug --target all_tests
+# Only one test target (name as in Solution.json)
+cmake --build out/build/windows-ninja-debug-msvc --target CoreLib_Tests
 ```
 
 ### 8.4 Clean Build
 
 ```bash
-# Cache löschen und neu konfigurieren
-cmake --preset windows-ninja-debug --fresh
+# Delete the cache and configure again
+cmake --preset windows-ninja-debug-msvc --fresh
 
-# Build-Verzeichnis löschen
-rm -rf out/build/windows-ninja-debug
-cmake --preset windows-ninja-debug
+# Delete the build directory
+rm -rf out/build/windows-ninja-debug-msvc
+cmake --preset windows-ninja-debug-msvc
 ```
 
-### 8.5 Parallel bauen
+### 8.5 Building in Parallel
 
 ```bash
-# Mit 8 Jobs
-cmake --build out/build/windows-ninja-debug -j8
+# With 8 jobs
+cmake --build out/build/windows-ninja-debug-msvc -j8
 
-# Alle CPUs
-cmake --build out/build/windows-ninja-debug -j
+# All CPUs
+cmake --build out/build/windows-ninja-debug-msvc -j
 ```
 
 ---
 
-## 9. Externals verwenden
+## 9. Using Externals
 
-### 9.1 Lokales External
+### 9.1 Local External
 
 ```json
 {
@@ -601,7 +661,7 @@ cmake --build out/build/windows-ninja-debug -j
 }
 ```
 
-### 9.3 Usage im Code
+### 9.3 Usage in Code
 
 ```cpp
 #include <spdlog/spdlog.h>
@@ -612,13 +672,13 @@ int main() {
 }
 ```
 
-Mehr Details: → [Externals UserGuide](Externals.md)
+More details: → [Externals UserGuide](Externals.md)
 
 ---
 
-## 10. Tests hinzufügen
+## 10. Adding Tests
 
-### 10.1 Solution.json Eintrag
+### 10.1 Solution.json Entry
 
 ```json
 {
@@ -637,7 +697,7 @@ Mehr Details: → [Externals UserGuide](Externals.md)
 }
 ```
 
-### 10.2 Test-Datei
+### 10.2 Test File
 
 **projects/tests/unit/CoreLib_Tests/src/test_main.cpp:**
 ```cpp
@@ -652,144 +712,150 @@ TEST_CASE("Calculator::add") {
 }
 ```
 
-### 10.3 Tests ausführen
+Plus `src/Source.cmake` with `list(APPEND ${TARGET_NAME}_SOURCES "${CMAKE_CURRENT_LIST_DIR}/test_main.cpp")`.
+
+### 10.3 Running Tests
 
 ```bash
-# Mit Tests bauen
-cmake --preset windows-ninja-debug -DBUILD_TESTS=ON
-cmake --build out/build/windows-ninja-debug
+# Build with tests (the Ninja presets already set BUILD_TESTS to ON)
+cmake --preset windows-ninja-debug-msvc -DBUILD_TESTS=ON
+cmake --build out/build/windows-ninja-debug-msvc
 
-# Tests ausführen
-ctest --test-dir out/build/windows-ninja-debug
+# Run tests
+ctest --test-dir out/build/windows-ninja-debug-msvc
 ```
 
-Mehr Details: → [Testing UserGuide](Testing.md)
+More details: → [Testing UserGuide](Testing.md)
 
 ---
 
-## 11. Workflow-Summary
+## 11. Workflow Summary
 
-### Der goldene Workflow
+### The Golden Workflow
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ 1. Solution.json Eintrag erstellen       ← IMMER ZUERST!   │
-│    └─ Name, Version, Typ definieren                        │
+│ 1. Create the Solution.json entry        ← ALWAYS FIRST!   │
+│    └─ Define name, version, type                           │
 ├─────────────────────────────────────────────────────────────┤
-│ 2. CMake konfigurieren                                      │
-│    └─ cmake --preset windows-ninja-debug                   │
+│ 2. Configure CMake                                          │
+│    └─ cmake --preset windows-ninja-debug-msvc              │
 ├─────────────────────────────────────────────────────────────┤
-│ 3. Dateien anlegen                                          │
-│    └─ main.cpp / Header / Source                           │
+│ 3. Create files                                             │
+│    └─ main.cpp / header / source                           │
 ├─────────────────────────────────────────────────────────────┤
-│ 4. Bauen                                                    │
-│    └─ cmake --build out/build/windows-ninja-debug          │
+│ 4. Build                                                    │
+│    └─ cmake --build out/build/windows-ninja-debug-msvc     │
 ├─────────────────────────────────────────────────────────────┤
-│ 5. Testen                                                   │
-│    └─ Programm ausführen / ctest                           │
+│ 5. Test                                                     │
+│    └─ Run the program / ctest                              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Checkliste: Neues Modul hinzufügen
+### Checklist: Adding a New Module
 
-- [ ] Solution.json Eintrag schreiben
-- [ ] CMake konfigurieren / generieren
-- [ ] Dateien anlegen (src/, include/)
-- [ ] Bauen und Error beheben
-- [ ] Dokumentation erstellen
-- [ ] Changelog aktualisieren
+- [ ] Write the Solution.json entry
+- [ ] Configure / generate CMake
+- [ ] Create files (src/, include/) and list them in `Source.cmake`
+- [ ] Build and fix errors
+- [ ] Write documentation
+- [ ] Update the changelog
 
-### Reihenfolge bei Dependencies
+### Order with Dependencies
 
 ```json
 {
     "libraries": [
-        { "name": "BaseLib" },           // 1. Keine Dependencies
+        { "name": "BaseLib" },           // 1. No dependencies
         { "name": "MiddleLib", "dependencies": ["BaseLib"] },  // 2.
         { "name": "TopLib", "dependencies": ["MiddleLib"] }    // 3.
     ],
     "executables": [
-        { "name": "App", "dependencies": ["TopLib"] }  // 4. Nutzt alles
+        { "name": "App", "dependencies": ["TopLib"] }  // 4. Uses everything
     ]
 }
 ```
 
 ---
 
-## 12. Stolpersteine und Lösungen
+## 12. Pitfalls and Solutions
 
-### 12.1 "Target existiert nicht"
-
-**Problem:**
-```
-CMake Error: The target "MyLib" does not exist.
-```
-
-**Ursache:** Library nicht in Solution.json definiert oder Schreibfehler.
-
-**Lösung:**
-1. Prüfe ob Library in `libraries` Array existiert
-2. Prüfe Schreibweise (case-sensitive!)
-3. Stelle sicher, dass Library VOR dem Executable definiert ist
-
-### 12.2 "Source-Dateien nicht gefunden"
+### 12.1 "Target does not exist"
 
 **Problem:**
 ```
-[E0401] No source files found in path: projects/demos/exec/MyApp/src
+[E101] Dependency 'MyLib' for 'MyApp' does not exist
 ```
 
-**Ursache:** Pfad existiert nicht oder enthält keine Source-Dateien.
+**Cause:** Library not defined in Solution.json, a typo, or a library comes before the library it
+depends on in the `libraries` array.
 
-**Lösung:**
-1. Verzeichnis erstellen: `mkdir -p projects/demos/exec/MyApp/src`
-2. main.cpp anlegen
-3. Oder expliziten `path` in Solution.json angeben
+**Solution:**
+1. Check whether the library exists in the `libraries` array
+2. Check the spelling (case-sensitive!)
+3. If a library depends on another one: list it **after** its dependency in the `libraries` array
 
-### 12.3 "Include-Pfad nicht gefunden"
+### 12.2 "Source files not found"
+
+**Problem:**
+```
+[E001] Executable 'MyApp': Source path does not exist: projects/exec/MyApp/src
+[E104] Source.cmake not found: /path/to/MyProject/projects/exec/MyApp/src/Source.cmake
+```
+
+**Cause:** The source directory is missing (E001), or it lacks the `Source.cmake` with the file
+list (E104, default `sources.mode = "explicit"`). If `Source.cmake` lists no compilable file, the
+build system warns with W101.
+
+**Solution:**
+1. Create the directory: `mkdir -p projects/exec/MyApp/src`
+2. Create main.cpp and `Source.cmake` (§6.6)
+3. Or specify an explicit `path` in Solution.json
+
+### 12.3 "Include path not found"
 
 **Problem:**
 ```
 fatal error: 'CoreLib/Calculator.h' file not found
 ```
 
-**Ursache:** Library nicht in `dependencies` aufgeführt.
+**Cause:** Library not listed in `dependencies`.
 
-**Lösung:**
+**Solution:**
 ```json
 {
     "name": "MyApp",
-    "dependencies": ["CoreLib"]  // ← Hinzufügen!
+    "dependencies": ["CoreLib"]  // ← Add this!
 }
 ```
 
-### 12.4 "CMake-Cache veraltet"
+### 12.4 "CMake cache outdated"
 
-**Problem:** Changes in Solution.json werden nicht übernommen.
+**Problem:** Changes in Solution.json are not applied.
 
-**Ursache:** CMake-Cache enthält alte Configuration.
+**Cause:** The CMake cache contains an old configuration.
 
-**Lösung:**
+**Solution:**
 ```bash
-# Cache neu generieren
-cmake --preset windows-ninja-debug --fresh
+# Regenerate the cache
+cmake --preset windows-ninja-debug-msvc --fresh
 ```
 
-### 12.5 "Preset nicht gefunden"
+### 12.5 "Preset not found"
 
 **Problem:**
 ```
 CMake Error: Could not read presets: No such preset: "my-preset"
 ```
 
-**Ursache:** Preset existiert nicht oder JSON-Syntaxfehler.
+**Cause:** The preset does not exist, or a JSON syntax error.
 
-**Lösung:**
+**Solution:**
 ```bash
-# Verfügbare Presets anzeigen
+# Show available presets
 cmake --list-presets
 
-# JSON-Syntax prüfen
+# Check the JSON syntax
 cat CMakePresets.json | python -m json.tool
 ```
 
@@ -797,72 +863,78 @@ cat CMakePresets.json | python -m json.tool
 
 ## 13. Troubleshooting
 
-### Checkliste bei Build-Problemen
+### Checklist for Build Problems
 
-1. ☐ Solution.json Syntax korrekt? (JSON validieren)
-2. ☐ Alle Dependencies definiert?
-3. ☐ Pfade existieren?
-4. ☐ CMake-Cache aktuell? (`--fresh`)
-5. ☐ Compiler installiert und im PATH?
-6. ☐ Preset existiert? (`--list-presets`)
+1. ☐ Solution.json syntax correct? (validate JSON)
+2. ☐ All dependencies defined?
+3. ☐ Paths exist?
+4. ☐ CMake cache up to date? (`--fresh`)
+5. ☐ Compiler installed and in PATH?
+6. ☐ Preset exists? (`--list-presets`)
 
-### Häufige Error
+### Common Errors
 
-| Error | Ursache | Lösung |
-|--------|---------|--------|
-| "Target does not exist" | Dependency fehlt | Zu `libraries` hinzufügen |
-| "No source files" | Leeres Verzeichnis | Dateien anlegen |
-| "file not found" | Include fehlt | `dependencies` prüfen |
-| "undefined reference" | Linking-Error | `dependencies` oder `externals` |
-| "Preset not found" | Tipfehler | `--list-presets` |
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "[E101] Dependency … does not exist" | Dependency missing or listed too late | Add to `libraries`, check the order |
+| "[E104] Source.cmake not found" | File list missing | Create `Source.cmake` (§6.6) |
+| "[W101] … No source files found" / "defines no compilable files" | File list empty | List the files in `Source.cmake` |
+| "file not found" | Include missing | Check `dependencies` |
+| "undefined reference" | Linking error | `dependencies` or `externals` |
+| "Preset not found" | Typo | `--list-presets` |
 
-### Debug-Tips
+### Debug Tips
 
 ```bash
-# Verbose CMake-Output
+# Verbose CMake output
 cmake --preset ... --debug-output
 
-# CMake-Variablen anzeigen
-cmake -LAH out/build/windows-ninja-debug
+# More build-system messages (level 1–5, default 2; areas with their own level such as Externals stay at 3)
+cmake --preset ... -DDEBUG_DEFAULT_LEVEL=3
 
-# Generierte Targets anzeigen
+# Show CMake variables
+cmake -LAH out/build/windows-ninja-debug-msvc
+
+# Show generated targets
 cmake --build out/build/... --target help
 ```
 
 ---
 
-## 14. Nächste Schritte
+## 14. Next Steps
 
-### Du hast die Grundlagen gemeistert! Weiter geht's mit:
+### You Have Mastered the Basics! Continue With:
 
-| Thema | Guide | Was du lernst |
-|-------|-------|---------------|
-| **Externe Bibliotheken** | [Externals UserGuide](Externals.md) | BASS, ImGui, spdlog einbinden |
-| **Neue Externals hinzufügen** | [Adding_Externals UserGuide](Adding_Externals.md) | Eigene Hooks schreiben |
+| Topic | Guide | What you learn |
+|-------|-------|----------------|
+| **External libraries** | [Externals UserGuide](Externals.md) | Integrating BASS, ImGui, spdlog |
+| **Adding new externals** | [Adding_Externals UserGuide](Adding_Externals.md) | Writing your own hooks |
 | **Testing** | [Testing UserGuide](Testing.md) | doctest, GoogleTest, Catch2 |
-| **Qt6** | [Qt6_Integration UserGuide](Qt6_Integration.md) | Qt6 GUI-Anwendungen |
-| **User Presets** | [CMakeUserPresets UserGuide](CMakeUserPresets.md) | Persönliche Build-Configuration |
+| **Qt6** | [Qt6_Integration UserGuide](Qt6_Integration.md) | Qt6 GUI applications |
+| **User presets** | [CMakeUserPresets UserGuide](CMakeUserPresets.md) | Personal build configuration |
 
-### Fortgeschrittene Themen
+### Advanced Topics
 
-- **Multi-Plattform-Builds** – Windows, Linux, macOS gleichzeitig
-- **CI/CD-Integration** – GitHub Actions, GitLab CI
-- **Code-Qualität** – clang-format, clang-tidy
-- **Packaging** – Installer erstellen mit CPack
+- **Multi-platform builds** – Windows, Linux, macOS at the same time
+- **CI/CD integration** – GitHub Actions, GitLab CI
+- **Code quality** – clang-format, clang-tidy
+- **Packaging** – creating installers with CPack
 
 ---
 
 ## 15. See Also
 
-- [Solution_Schema.md](../references/Solution_Schema.md) – Vollständige JSON-Schema-Reference
-- [Externals.md](../references/Externals.md) – Alle verfügbaren Externals
-- [ErrorCodes.md](../references/ErrorCodes.md) – Errorcodes und Lösungen
-- [CMakePresets_Reference.md](../references/CMakePresets.md) – Preset-Reference
+- [Solution_Schema.md](../references/Solution_Schema.md) – Complete JSON schema reference
+- [Externals.md](../references/Externals.md) – All available externals
+- [ErrorCodes.md](../references/ErrorCodes.md) – Error codes and solutions
+- [CMakePresets_Reference.md](../references/CMakePresets.md) – Preset reference
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Umfassender Einstiegs-Guide für CMake Architecture** |
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | 2026-11-09 | Aligned with the code: consumption via `templates/consumer/` and `cmakecraft.pin` (§3.1, §4), `CMakeLists.txt` as a thin version with the required line `project(<Name> LANGUAGES NONE)`, `schemaVersion` `1.0`, default paths `projects/exec/…` and `projects/libs/…`, `Source.cmake` (explicit sources), output path `exec/<Name>/bin/<Config>/`, existing presets, error messages E001/E101/E104 instead of `[E0401]`, `settings.output` and `all_tests` removed |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.0** | **2025-12-14** | **Initial: comprehensive getting-started guide for CMake Architecture** |

@@ -1,12 +1,12 @@
 # Catch2 — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [catch2.md](../../../en/userguides/externals/Catch2.md)
+> **English:** [catch2.md](../../../../en/guide/userguides/externals/Catch2.md)
 
 ---
 
@@ -20,7 +20,7 @@
 6. [Fortgeschrittene Techniken](#6-fortgeschrittene-techniken)
 7. [Troubleshooting](#7-troubleshooting)
 8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -583,8 +583,8 @@ CATCH_REGISTER_LISTENER(MyListener)
 
 - [Externals.md](../Externals.md) — Externals Kombinationen
 - [Git_Externals_Testing.md](../../references/externals/Git_Externals_Testing.md) — Referenz
-- [doctest.md](doctest.md) — Leichtgewichtige Alternative
-- [googletest.md](googletest.md) — Alternative mit GMock
+- [doctest.md](Doctest.md) — Leichtgewichtige Alternative
+- [googletest.md](Googletest.md) — Alternative mit GMock
 
 ---
 
@@ -592,4 +592,5 @@ CATCH_REGISTER_LISTENER(MyListener)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Catch2** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für Catch2 |

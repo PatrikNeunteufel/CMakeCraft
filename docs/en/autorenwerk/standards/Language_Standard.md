@@ -1,105 +1,106 @@
-# Language Standard – Sprachrichtlinien
+# Language Standard – Language Guidelines
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Standard  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
-> **Scope:** Code, Dokumentation, Git, Kommunikation  
-> **Durchsetzung:** Code Review, CI (Commit-Message-Linting)  
+> **Target Audience:** All developers  
+> **Scope:** Code, documentation, Git, communication  
+> **Enforcement:** Code review, CI (commit message linting)  
 > **Language:** English  
-> **German:** [Language_Standard.md](Language_Standard.md)
+> **German:** [Language_Standard.md](../../../de/autorenwerk/standards/Language_Standard.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Code-Sprache](#3-code-sprache)
-4. [Dokumentations-Sprache](#4-dokumentations-sprache)
-5. [Git und Repository](#5-git-und-repository)
-6. [Errormeldungen und Logs](#6-fehlermeldungen-und-logs)
-7. [Glossar und Konsistenz](#7-glossar-und-konsistenz)
-8. [Ausnahmen](#8-ausnahmen)
-9. [Checkliste](#9-checkliste)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Code Language](#3-code-language)
+4. [Documentation Language](#4-documentation-language)
+5. [Git and Repository](#5-git-and-repository)
+6. [Error Messages and Logs](#6-error-messages-and-logs)
+7. [Glossary and Consistency](#7-glossary-and-consistency)
+8. [Exceptions](#8-exceptions)
+9. [Checklist](#9-checklist)
 10. [Migration](#10-migration)
-11. [See Also](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+11. [See Also](#11-see-also)
+12. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Dieser Standard definiert **verbindliche Sprachrichtlinien** für alle Aspekte der Softwareentwicklung. Ziel ist Konsistenz und internationale Zugänglichkeit.
+This standard defines **binding language guidelines** for all aspects of software development. The goal is consistency and international accessibility.
 
-### Zielgruppe
+### Target Audience
 
-Alle Entwickler, die Code schreiben, Dokumentation erstellen oder mit Git arbeiten. Dieser Standard ist verbindlich für alle neuen Projekte und empfohlen bei Modernisierung bestehender Projekte.
+All developers who write code, create documentation or work with Git. This standard is mandatory for all new projects and recommended when modernizing existing projects.
 
-### Grundprinzip
+### Basic Principle
 
-| Bereich | Sprache | Begründung |
-|---------|---------|------------|
-| **Code & Technisches** | Englisch | International, Industrie-Standard |
-| **Dokumentation (Release)** | Englisch (Required) | Internationale Zugänglichkeit |
-| **Dokumentation (Zusätzlich)** | Beliebig (erwünscht) | Maximiert Reichweite |
-| **Git** | Englisch | Teil des technischen Kontexts |
+| Area | Language | Rationale |
+|------|----------|-----------|
+| **Code & technical matters** | English | International, industry standard |
+| **Documentation (release)** | English (mandatory) | International accessibility |
+| **Documentation (additional)** | Any (welcome) | Maximizes reach |
+| **Git** | English | Part of the technical context |
 
-### Mehrsprachen-Philosophie
+### Multi-Language Philosophy
 
-- **Englisch ist Required** für jede Veröffentlichung (z.B. GitHub)
-- **Weitere Sprachen sind erwünscht** – sie maximieren die Reichweite
-- **Primärsprache** kann je nach Team/Entwickler variieren (hier: German)
-- Die Primärsprache dient als Arbeitsversion, Englisch als Release-Version
+- **English is mandatory** for every publication (e.g. GitHub)
+- **Further languages are welcome** – they maximize the reach
+- The **primary language** may vary by team/developer (here: German)
+- The primary language is **authoritative** (SSOT, see [Doku_Standard.md](Doku_Standard.md)); English is the
+  complete translation for publication
 
 ---
 
 ## 2. Scope
 
-### 2.1 Betroffene Artefakte
+### 2.1 Affected Artifacts
 
-| Artefakt | Sprache | Anmerkung |
-|----------|---------|-----------|
-| `.cmake` | Englisch | CMake-Module, Presets |
-| `.cpp`, `.hpp`, `.h`, `.c` | Englisch | C/C++ Code |
-| `.py` | Englisch | Python-Skripte |
-| `.sh`, `.bat`, `.ps1` | Englisch | Shell-Skripte |
-| `.json` (technisch) | Englisch | CMakePresets.json, Solution.json |
-| `.yaml`, `.yml` | Englisch | CI/CD, Configuration |
-| `.md` (Dokumentation) | Mehrsprachig | Englisch Required, weitere erwünscht |
-| Git (Commits, Branches) | Englisch | Technischer Kontext |
+| Artifact | Language | Remark |
+|----------|----------|--------|
+| `.cmake` | English | CMake modules, presets |
+| `.cpp`, `.hpp`, `.h`, `.c` | English | C/C++ code |
+| `.py` | English | Python scripts |
+| `.sh`, `.bat`, `.ps1` | English | Shell scripts |
+| `.json` (technical) | English | CMakePresets.json, Solution.json |
+| `.yaml`, `.yml` | English | CI/CD, configuration |
+| `.md` (documentation) | Multilingual | English mandatory, others welcome |
+| Git (commits, branches) | English | Technical context |
 
-### 2.2 Nicht betroffen
+### 2.2 Not Affected
 
-- UI-Texte mit Internationalisierung (i18n)
-- Language Packs und Übersetzungsdateien
-- Domänen-spezifische Fachbegriffe ohne englisches Äquivalent
+- UI texts with internationalization (i18n)
+- Language packs and translation files
+- Domain-specific technical terms without an English equivalent
 
 ---
 
-## 3. Code-Sprache
+## 3. Code Language
 
-### 3.1 Grundregel
+### 3.1 Basic Rule
 
-**Regel:** Alle Code-Artefakte sind durchgehend in Englisch zu halten.
+**Rule:** All code artifacts are to be kept in English throughout.
 
-**Verbindlichkeit:** MUSS
+**Obligation level:** MUST
 
-### 3.2 Betroffene Elemente
+### 3.2 Affected Elements
 
-| Element | Sprache | Example |
-|---------|---------|----------|
-| Variablennamen | Englisch | `_source_count`, `_has_path` |
-| Funktionsnamen | Englisch | `collect_sources()`, `validate_external()` |
-| Kommentare | Englisch | `// Check if file exists` |
-| Log-Ausgaben | Englisch | `"Source.cmake not found"` |
-| Errormeldungen | Englisch | `"Missing required field 'name'"` |
-| Docstrings | Englisch | Header-Kommentare, API-Dokumentation |
+| Element | Language | Example |
+|---------|----------|---------|
+| Variable names | English | `_source_count`, `_has_path` |
+| Function names | English | `collect_sources()`, `validate_external()` |
+| Comments | English | `// Check if file exists` |
+| Log output | English | `"Source.cmake not found"` |
+| Error messages | English | `"Missing required field 'name'"` |
+| Docstrings | English | Header comments, API documentation |
 
 ### 3.3 Examples
 
-**Richtig:**
+**Correct:**
 ```cmake
 # Check if source file exists
 function(validate_source_path SOURCE_DIR)
@@ -109,7 +110,7 @@ function(validate_source_path SOURCE_DIR)
 endfunction()
 ```
 
-**Falsch:**
+**Wrong:**
 ```cmake
 # Prüfe ob Source-Datei existiert
 function(pruefe_source_pfad QUELL_VERZEICHNIS)
@@ -121,119 +122,121 @@ endfunction()
 
 ---
 
-## 4. Dokumentations-Sprache
+## 4. Documentation Language
 
-### 4.1 Mehrsprachen-Modell
+### 4.1 Multi-Language Model
 
-| Sprache | Status | Description |
-|---------|--------|--------------|
-| **Englisch** | Required | Release-Version, internationale Zugänglichkeit |
-| **Primärsprache** | Optional | Arbeitsversion (z.B. German, Französisch, ...) |
-| **Weitere Sprachen** | Erwünscht | Maximiert Reichweite, Community-Beiträge |
+| Language | Status | Description |
+|----------|--------|-------------|
+| **English** | Mandatory | Complete translation for publication, international accessibility |
+| **Primary language** | Authoritative where present | Source of all translations (here German, SSOT) |
+| **Further languages** | Welcome | Maximize reach, community contributions |
 
-**Vorteile mehrerer Sprachen:**
-- Größere internationale Reichweite
-- Niedrigere Einstiegshürde für Nicht-Englisch-Muttersprachler
-- Community kann Übersetzungen beitragen
+**Advantages of several languages:**
+- Greater international reach
+- Lower entry barrier for non-native English speakers
+- The community can contribute translations
 
-### 4.2 Ordnerstruktur
+### 4.2 Folder Structure
 
 ```
 docs/
-├── en/                    ← Englisch (PFLICHT für Release)
-│   ├── blueprints/
-│   ├── standards/
-│   ├── modules/
-│   └── guides/
+├── de/                    ← German (primary language here, authoritative)
+│   ├── guide/             ← module/, references/, userguides/, cheatsheets/
+│   ├── konzepte/
+│   └── autorenwerk/       ← blueprints/, standards/
 │
-├── de/                    ← German (Primärsprache hier)
-│   ├── blueprints/
-│   ├── standards/
-│   ├── modules/
-│   └── guides/
+├── en/                    ← English (MANDATORY for release, same tree)
+│   ├── guide/
+│   ├── konzepte/
+│   └── autorenwerk/
 │
-├── fr/                    ← Französisch (optional)
-├── es/                    ← Spanisch (optional)
-├── zh/                    ← Chinesisch (optional)
-└── ...                    ← Weitere Sprachen willkommen
+├── fr/                    ← French (optional)
+├── es/                    ← Spanish (optional)
+├── zh/                    ← Chinese (optional)
+└── ...                    ← Further languages welcome
 ```
 
-### 4.3 Dateinamen
+### 4.3 File Names
 
-**Regel:** Dateinamen sind **immer auf Englisch**, unabhängig vom Sprachordner.
+**Rule:** A file has the **same name in every language folder** (same relative path, same name). The name may
+come from the primary language (e.g. `Neues_Projekt_Guide.md`, `Glossar.md`); translations keep it unchanged.
 
-**Verbindlichkeit:** MUSS
+**Obligation level:** MUST
 
-**Begründung:** Ermöglicht einfaches Mapping zwischen Sprachversionen.
+**Rationale:** Enables simple mapping between language versions (the pre-commit hook and the header links
+`English:`/`German:` rely on the same path).
 
-**Richtig:**
+**Correct:**
 ```
-docs/en/guides/Qt6_Integration_UserGuide.md   ← Englisch (Required)
-docs/de/guides/Qt6_Integration_UserGuide.md   ← German
-docs/fr/guides/Qt6_Integration_UserGuide.md   ← Französisch
-```
-
-**Falsch:**
-```
-docs/de/guides/Qt6_Integration_Benutzerhandbuch.md
-docs/fr/guides/Qt6_Integration_Guide_Utilisateur.md
+docs/de/guide/userguides/Qt6_Integration.md      ← German (authoritative)
+docs/en/guide/userguides/Qt6_Integration.md      ← English
+docs/de/guide/userguides/Neues_Projekt_Guide.md  ← German name, identical in en
+docs/en/guide/userguides/Neues_Projekt_Guide.md
 ```
 
-### 4.4 Dokumentations-Header
+**Wrong:**
+```
+docs/de/guide/userguides/Qt6_Integration_Benutzerhandbuch.md
+docs/en/guide/userguides/New_Project_Guide.md   ← different name than in de
+```
 
-**Englisch (en/) – Required:**
+### 4.4 Documentation Header
+
+**English (en/) – mandatory:**
 ```markdown
 # Module Name – Documentation
 
 > **Version:** 1.0.0  
 > **Language:** English  
-> **Translations:** [German](../../de/modules/core/Module_Name.md) · [Français](../../fr/modules/core/Module_Name.md)
+> **German:** [Module_Name.md](../../../../de/guide/module/core/Module_Name.md)
 ```
 
-**Andere Sprachen (de/, fr/, ...) – Optional:**
+**Primary language (here de/, authoritative):**
 ```markdown
 # Modul-Name – Dokumentation
 
 > **Version:** 1.0.0  
-> **Language:** English  
-> **German:** [Module_Name.md](../../en/modules/core/Module_Name.md)
+> **Sprache:** Deutsch  
+> **English:** [Module_Name.md](../../../../en/guide/module/core/Module_Name.md)
 ```
 
-### 4.5 Übersetzungs-Regeln
+### 4.5 Translation Rules
 
-| Regel | Description |
-|-------|--------------|
-| Englisch zuerst | Englische Version muss vor Release vollständig sein |
-| Vollständigkeit | Übersetzungen sollten inhaltlich identisch sein |
-| Aktualität | Bei Changes zuerst Englisch aktualisieren |
-| Fachbegriffe | Konsistent übersetzen (siehe Glossar) |
-| Code-Examples | Bleiben unverändert (sind bereits Englisch) |
-| Versionierung | Alle Sprachversionen haben gleiche Versionsnummer |
-| Teilübersetzungen | Erlaubt – besser als keine Übersetzung |
+| Rule | Description |
+|------|-------------|
+| Primary language first | Changes happen first in the authoritative primary language (here `de/`) |
+| Same commit | The English version is updated in the same commit (the pre-commit hook reports gaps) |
+| Release | The English version is complete before a publication |
+| Completeness | Translations are identical in content |
+| Technical terms | Translate consistently (see glossary) |
+| Code examples | Remain unchanged (already in English) |
+| Versioning | All language versions have the same version number |
+| Partial translations | Allowed – better than no translation |
 
-### 4.6 Workflow für Übersetzungen
+### 4.6 Workflow for Translations
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Primärsprache  │ ──▶ │    Englisch     │ ──▶ │ Weitere Sprachen│
-│  (Arbeitsversion)│     │  (Release-Required)│     │   (Optional)    │
+│ Primary language│ ──▶ │     English     │ ──▶ │Further languages│
+│(working version)│     │(release, mandatory)│  │   (optional)    │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
-**Bei Veröffentlichung (z.B. GitHub):**
-1. Englische Version muss vollständig sein
-2. Primärsprache kann parallel existieren
-3. Weitere Sprachen sind Bonus
+**On publication (e.g. GitHub):**
+1. The English version must be complete
+2. The primary language may exist in parallel
+3. Further languages are a bonus
 
 ---
 
-## 5. Git und Repository
+## 5. Git and Repository
 
 ### 5.1 Commit Messages
 
-**Regel:** Commit Messages sind in Englisch zu verfassen.
+**Rule:** Commit messages are to be written in English.
 
-**Verbindlichkeit:** MUSS
+**Obligation level:** MUST
 
 **Format:**
 ```
@@ -244,7 +247,7 @@ docs/fr/guides/Qt6_Integration_Guide_Utilisateur.md
 [optional footer]
 ```
 
-**Richtig:**
+**Correct:**
 ```
 feat(core): add SourceCollect.cmake module
 
@@ -253,31 +256,31 @@ feat(core): add SourceCollect.cmake module
 - Includes C++20 module support (experimental)
 ```
 
-**Falsch:**
+**Wrong:**
 ```
 feat(core): SourceCollect.cmake Modul hinzugefügt
 
 - Implementiert drei Sammel-Modi: explicit, glob, auto
 ```
 
-### 5.2 Branch-Namen
+### 5.2 Branch Names
 
-**Regel:** Branch-Namen sind in Englisch zu halten.
+**Rule:** Branch names are to be kept in English.
 
-**Verbindlichkeit:** MUSS
+**Obligation level:** MUST
 
-| Typ | Format | Example |
-|-----|--------|----------|
+| Type | Format | Example |
+|------|--------|---------|
 | Feature | `feature/<description>` | `feature/source-collect-module` |
 | Bugfix | `fix/<description>` | `fix/context-scope-issue` |
 | Release | `release/<version>` | `release/0.1.0` |
 | Hotfix | `hotfix/<description>` | `hotfix/critical-path-error` |
 
-### 5.3 Tags und Releases
+### 5.3 Tags and Releases
 
-**Regel:** Tags und Release-Notes sind in Englisch.
+**Rule:** Tags and release notes are in English.
 
-**Verbindlichkeit:** MUSS
+**Obligation level:** MUST
 
 ```
 v0.1.0
@@ -287,102 +290,102 @@ v0.1.0-beta.1
 
 ### 5.4 Pull/Merge Requests
 
-| Element | Sprache | Verbindlichkeit |
-|---------|---------|-----------------|
-| Titel | Englisch | MUSS |
-| Description | Englisch | SOLL |
-| Kommentare | Englisch oder German | KANN |
+| Element | Language | Obligation level |
+|---------|----------|------------------|
+| Title | English | MUST |
+| Description | English | SHOULD |
+| Comments | English or German | MAY |
 
 ---
 
-## 6. Errormeldungen und Logs
+## 6. Error Messages and Logs
 
 ### 6.1 User-Facing Messages
 
-**Regel:** Alle Meldungen die Entwickler sehen sind in Englisch.
+**Rule:** All messages that developers see are in English.
 
-**Verbindlichkeit:** MUSS
+**Obligation level:** MUST
 
-**Richtig:**
+**Correct:**
 ```cmake
 cmake_fatal("E001" "Executable 'MyApp': Required field 'name' missing")
 cmake_warn("W110" "GLOB fallback active - explicit Source.cmake recommended")
 ```
 
-**Falsch:**
+**Wrong:**
 ```cmake
-cmake_fatal("E001" "Executable 'MyApp': Requiredfeld 'name' fehlt")
+cmake_fatal("E001" "Executable 'MyApp': Pflichtfeld 'name' fehlt")
 ```
 
-### 6.2 Debug-Ausgaben
+### 6.2 Debug Output
 
-**Richtig:**
+**Correct:**
 ```cmake
 dbg(${DBG_COMMON} "Collecting sources for ${TARGET_NAME}" ID SOURCE_COLLECT)
 dbg(${DBG_RARE} "  Found ${_count} source files" ID SOURCE_COLLECT)
 ```
 
-**Falsch:**
+**Wrong:**
 ```cmake
 dbg(${DBG_COMMON} "Sammle Quellen für ${TARGET_NAME}" ID SOURCE_COLLECT)
 ```
 
-### 6.3 ErrorCodes-Dokumentation
+### 6.3 ErrorCodes Documentation
 
-Die ErrorCodes-Reference wird **zweisprachig** geführt:
+The ErrorCodes reference is maintained **bilingually**:
 
-| Code | English | German |
+| Code | English | Deutsch |
 |------|---------|---------|
-| E001 | Required field missing | Requiredfeld fehlt |
+| E001 | Required field missing | Pflichtfeld fehlt |
 | E104 | Source.cmake not found | Source.cmake nicht gefunden |
 
 ---
 
-## 7. Glossar und Konsistenz
+## 7. Glossary and Consistency
 
-### 7.1 Nicht übersetzte Begriffe
+### 7.1 Untranslated Terms
 
-Diese technischen Begriffe werden **nicht übersetzt**:
+These technical terms are **not translated**:
 
-| Begriff | Kontext | Begründung |
-|---------|---------|------------|
-| Target | CMake | CMake-Fachbegriff |
-| Preset | CMake | CMake-Fachbegriff |
-| Context | Build-System | Projekt-spezifischer Begriff |
-| External | Build-System | Projekt-spezifischer Begriff |
-| Solution | Build-System | Projekt-spezifischer Begriff |
-| Hook | Build-System | Etablierter Begriff |
-| Pipeline | Build-System | Etablierter Begriff |
+| Term | Context | Rationale |
+|------|---------|-----------|
+| Target | CMake | CMake technical term |
+| Preset | CMake | CMake technical term |
+| Context | Build system | Project-specific term |
+| External | Build system | Project-specific term |
+| Solution | Build system | Project-specific term |
+| Hook | Build system | Established term |
+| Pipeline | Build system | Established term |
 
-### 7.2 Übersetzungs-Glossar
+### 7.2 Translation Glossary
 
-| German | Englisch | Kontext |
-|---------|----------|---------|
-| Ausführbare Datei | Executable | Target-Typ |
-| Bibliothek | Library | Target-Typ |
-| Abhängigkeit | Dependency | Build-Configuration |
-| Requiredfeld | Required field | Validierung |
-| Warning | Warning | Errorbehandlung |
-| Verzeichnis | Directory | Dateisystem |
-| Scope | Scope | Variablen |
-| Arbeitsbereich | Workspace | Entwicklungsumgebung |
+| Deutsch | English | Context |
+|---------|---------|---------|
+| Ausführbare Datei | Executable | Target type |
+| Bibliothek | Library | Target type |
+| Abhängigkeit | Dependency | Build configuration |
+| Pflichtfeld | Required field | Validation |
+| Warnung | Warning | Error handling |
+| Verzeichnis | Directory | File system |
+| Geltungsbereich | Scope | Variables |
+| Arbeitsbereich | Workspace | Development environment |
 
 ---
 
-## 8. Ausnahmen
+## 8. Exceptions
 
-### 8.1 Erlaubte Abweichungen
+### 8.1 Permitted Deviations
 
-| Situation | Erlaubte Sprache | Bedingung |
-|-----------|------------------|-----------|
-| UI-Texte mit i18n | Lokalisiert | Über Übersetzungssystem |
-| Domänen-Fachbegriffe | Original | Kein englisches Äquivalent |
-| Interne Team-Diskussion | German | PR-Kommentare, Chat |
-| Legacy-Code | German (temporär) | Mit TODO zur Migration |
+| Situation | Permitted Language | Condition |
+|-----------|--------------------|-----------|
+| UI texts with i18n | Localized | Via the translation system |
+| Domain-specific terms | Original | No English equivalent |
+| Internal team discussion | German | PR comments, chat |
+| Legacy code | German (temporary) | With a TODO for migration |
 
-### 8.2 Dokumentation von Abweichungen
+### 8.2 Documenting Deviations
 
-Intentionale Abweichungen müssen dokumentiert werden:
+Intentional deviations must be documented:
 
 ```cmake
 # NOTE: German variable name retained for compatibility with legacy API
@@ -392,61 +395,61 @@ set(_deutscher_name "value")
 
 ---
 
-## 9. Checkliste
+## 9. Checklist
 
-### 9.1 Neue Code-Datei
+### 9.1 New Code File
 
-- [ ] Alle Variablennamen in Englisch
-- [ ] Alle Funktionsnamen in Englisch
-- [ ] Alle Kommentare in Englisch
-- [ ] Alle Log-/Errormeldungen in Englisch
-- [ ] Header-Dokumentation in Englisch
+- [ ] All variable names in English
+- [ ] All function names in English
+- [ ] All comments in English
+- [ ] All log/error messages in English
+- [ ] Header documentation in English
 
-### 9.2 Neue Dokumentation
+### 9.2 New Documentation
 
-- [ ] Englische Version erstellt (Required für Release)
-- [ ] Primärsprache-Version erstellt (optional)
-- [ ] Fachbegriffe konsistent verwendet
-- [ ] Code-Examples in Englisch
-- [ ] Translations-Link im Header vorhanden
-- [ ] Dateiname auf Englisch
+- [ ] Primary language version created (authoritative)
+- [ ] English version created in the same commit (mandatory for release)
+- [ ] Technical terms used consistently
+- [ ] Code examples in English
+- [ ] Language link present in the header (`English:` or `German:`)
+- [ ] Same file name in all language folders
 
 ### 9.3 Git Commit
 
-- [ ] Commit Message in Englisch
-- [ ] Branch-Name in Englisch
-- [ ] Conventional Commit Format
-- [ ] Aussagekräftige Description
+- [ ] Commit message in English
+- [ ] Branch name in English
+- [ ] Conventional commit format
+- [ ] Meaningful description
 
 ### 9.4 Code Review
 
-- [ ] Keine deutschen Variablen-/Funktionsnamen
-- [ ] Keine deutschen Kommentare
-- [ ] Keine deutschen Errormeldungen
-- [ ] Glossar-Begriffe korrekt verwendet
+- [ ] No German variable/function names
+- [ ] No German comments
+- [ ] No German error messages
+- [ ] Glossary terms used correctly
 
 ---
 
 ## 10. Migration
 
-### 10.1 Priorisierung
+### 10.1 Prioritization
 
-| Priorität | Artefakt | Aufwand |
-|-----------|----------|---------|
-| **1 (Hoch)** | CMake-Module (.cmake) | Kommentare, Errormeldungen |
-| **2 (Mittel)** | ErrorCodes-Reference | Zweisprachig führen |
-| **3 (Normal)** | Concept-Dokumentationen | Englische Version erstellen |
-| **4 (Niedrig)** | Modul-Dokumentationen | Englische Version erstellen |
+| Priority | Artifact | Effort |
+|----------|----------|--------|
+| **1 (High)** | CMake modules (.cmake) | Comments, error messages |
+| **2 (Medium)** | ErrorCodes reference | Maintain bilingually |
+| **3 (Normal)** | Concept documentation | Create English version |
+| **4 (Low)** | Module documentation | Create English version |
 
-### 10.2 Migrations-Workflow
+### 10.2 Migration Workflow
 
-1. **Audit:** Betroffene Dateien identifizieren
-2. **Planung:** Aufwand schätzen, priorisieren
-3. **Umsetzung:** Schrittweise migrieren
-4. **Review:** Konsistenz prüfen
-5. **Dokumentation:** Changes nachführen
+1. **Audit:** Identify affected files
+2. **Planning:** Estimate effort, prioritize
+3. **Implementation:** Migrate step by step
+4. **Review:** Check consistency
+5. **Documentation:** Update changes
 
-### 10.3 Legacy-Kennzeichnung
+### 10.3 Legacy Marking
 
 ```cmake
 # LEGACY: German comments - migration pending
@@ -457,18 +460,20 @@ set(_deutscher_name "value")
 
 ## 11. See Also
 
-- [Git_Standard.md](Git_Standard.md) – Git-Workflow und Commit-Konventionen
-- [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md) – C++ Code-Stil
-- [CMake_Standard.md](CMake_Standard.md) – Build-System-Konventionen
-- [Doc.md](../blueprints/Doc.md) – Dokumentations-Regeln
-- [Structure.md](../blueprints/Structure.md) – Ordnerstruktur
+- [Git_Standard.md](Git_Standard.md) – Git workflow and commit conventions
+- [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md) – C++ code style
+- [CMake_Standard.md](CMake_Standard.md) – Build system conventions
+- [Doc.md](../blueprints/Doc.md) – Documentation rules
+- [Structure.md](../blueprints/Structure.md) – Folder structure
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Migration auf Blueprint v0.5: Neuer Header, Table of Contents mit Ankern, Kapitel-Nummerierung, Mehrsprachen-Modell (Englisch Required, weitere Sprachen erwünscht), Verbindlichkeits-Stufen, Checklisten erweitert** |
-| 0.1.1 | 2025-12-04 | Dateistruktur: /de/ und /en/ Subfolder statt Suffix-Variante |
-| 0.1.0 | 2025-12-04 | Initial: Code-Sprache, Dokumentations-Sprache, Git, Migration |
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | 2026-11-09 | Aligned with `Doku_Standard` (decision S1 a): primary language authoritative, English in the same commit (§1, §4.1, §4.5, §9.2); same file names in all language folders, names from the primary language allowed (§4.3); folder tree and header examples on today's tree (§4.2, §4.4) |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.0** | **2025-12-14** | **Migration to Blueprint v0.5: new header, table of contents with anchors, chapter numbering, multi-language model (English mandatory, further languages welcome), obligation levels, checklists extended** |
+| 0.1.1 | 2025-12-04 | File structure: /de/ and /en/ subfolders instead of suffix variant |
+| 0.1.0 | 2025-12-04 | Initial: code language, documentation language, Git, migration |

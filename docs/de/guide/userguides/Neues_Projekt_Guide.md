@@ -1,11 +1,12 @@
 # Neues Projekt mit CMakeCraft — Bedienungsanleitung
 
-> **Version:** 1.4.0
-> **Datum:** 2026-11-07
+> **Version:** 1.4.2
+> **Datum:** 2026-11-09
 > **Typ:** Guide
 > **Status:** Entwurf
 > **Zielgruppe:** Entwickler, die ein neues, eigenständiges Projekt-Repo auf Basis von CMakeCraft aufsetzen
 > **Sprache:** Deutsch
+> **English:** [Neues_Projekt_Guide.md](../../../en/guide/userguides/Neues_Projekt_Guide.md)
 
 ---
 
@@ -30,17 +31,18 @@ wichtigste Regel dieses Guides:
 > **Versioniert wird das Projekt (z. B. LumiViz) in seinem eigenen Repo.
 > CMakeCraft wird separat in seinem eigenen Repo versioniert und ist die
 > Single Source of Truth (SSOT) für alle `cmake/`-Module.
-> Die `cmake/`-Kopie im Projekt ist ein Snapshot — niemals der Ort der Wahrheit.**
+> Das Projekt trägt nur die Versionsangabe (`cmakecraft.pin`); das Build-System wird
+> beim Konfigurieren in dieser Version geholt.**
 
 | Rolle | Repo | Enthält | Ändert sich durch |
 |---|---|---|---|
 | **Build-System** | `CMakeCraft/` | `cmake/` (core, project, externals, buildSystemTest), `templates/`, Build-System-Doku | Build-System-Entwicklung (eigene Commits/Tags) |
-| **Projekt** | z. B. `LumiViz/` | `Solution.json`, `projects/`, `externals/`, Presets, App-Doku — **plus Snapshot von `cmake/`** | Projektentwicklung; Build-System nur per Sync (§5) |
+| **Projekt** | z. B. `LumiViz/` | `Solution.json`, `projects/`, `externals/`, Presets, App-Doku — **plus `CMakeCraftBootstrap.cmake` und `cmakecraft.pin`** | Projektentwicklung; Build-System nur per Pin-Wechsel (§5) |
 
-> **Stand seit v0.7.0 (2026-07-18):** Der Bezug läuft über **Bootstrap-Fetch** — das Projekt
-> committet nur noch `CMakeCraftBootstrap.cmake` + `cmakecraft.pin` (Version); das Build-System
-> wird beim Configure nach `.externals/cmakecraft/<version>/` geholt. Ein `cmake/`-Snapshot im
-> Projekt ist damit Geschichte (Konzept: `docs/de/konzepte/Konzept_Versionierter_Bezug.md`).
+> **Bezug (seit v0.7.0, 2026-07-18):** **Bootstrap-Fetch** — das Projekt committet nur
+> `CMakeCraftBootstrap.cmake` + `cmakecraft.pin` (Version); das Build-System wird beim Configure
+> nach `.externals/cmakecraft/<version>/` geholt. Das frühere Snapshot-Verfahren (`cmake/`-Kopie
+> im Projekt) ist damit abgelöst (Konzept: `docs/de/konzepte/Konzept_Versionierter_Bezug.md`).
 
 ---
 
@@ -64,9 +66,10 @@ git init
 
 ### Schritt 2: Bootstrap-Dateien übernehmen (KEIN cmake/-Snapshot mehr)
 
-Die drei Pflichtdateien liegen als Vorlage in CMakeCraft unter
-[`templates/consumer/`](../../../../templates/consumer/) — von dort in den
-Projekt-Root kopieren:
+Die drei Bezugsdateien (`CMakeCraftBootstrap.cmake`, `cmakecraft.pin`, `CMakeLists.txt`) liegen
+als Vorlage in CMakeCraft unter [`templates/consumer/`](../../../../templates/consumer/) — von dort
+in den Projekt-Root kopieren. Die übrigen Pflichtdateien der Tabelle kommen aus dem CMakeCraft-Root
+bzw. werden für das Projekt angelegt:
 
 | Datei | Zweck | Pflicht? |
 |---|---|---|
@@ -98,7 +101,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.14.0")
+set(CMAKECRAFT_VERSION "v0.14.1")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -118,7 +121,7 @@ darum nicht ins Repo — committe stattdessen eine `CMakeUserPresets.example.jso
   "configurePresets": [
     {
       "name": "user-paths", "hidden": true,
-      "cacheVariables": { "QT_ROOT": "C:/Qt/6.7.0/msvc2022_64" }
+      "environment": { "QT_ROOT": "C:/Qt/6.10.1/msvc2022_64" }
     }
   ]
 }
@@ -159,13 +162,13 @@ Cheatsheet: [Solution_Cheatsheet.md](../cheatsheets/Solution_Cheatsheet.md)
   — Startpunkt ist eine Kopie von `templates/App/` nach `projects/apps/<Name>/`.
 - **Einfaches Executable / Library**: [Getting_Started.md](Getting_Started.md), Abschnitte 6–7.
 - **Source-Listen sind explizit**: jede neue Datei in die zugehörige `Source.cmake` eintragen
-  (`list(APPEND …)`, nie globben) — Format siehe [templates/README.md](../../../templates/README.md).
+  (`list(APPEND …)`, nie globben) — Format siehe [templates/README.md](../../../../templates/README.md).
 
 ### Schritt 7: Konfigurieren und Bauen
 
 ```bash
-cmake --preset vs-debug        # oder: ninja-debug / ninja-release
-cmake --build --preset build
+cmake --preset windows-vs-x64-debug_dynamic   # oder: windows-ninja-debug-msvc / windows-ninja-release-clang
+cmake --build --preset build-vs-x64-Debug   # passend: build-ninja-debug-msvc / build-ninja-release-clang
 ```
 
 Beim ersten Configure werden Git-Externals (falls deklariert) nach `.externals/` gefetcht —
@@ -175,7 +178,7 @@ dafür ist einmalig Netz nötig. Build-Ausgaben landen unter `out/`.
 
 ```bash
 git add .
-git commit -m "chore: Projekt-Setup mit CMakeCraft-Snapshot @<hash>"
+git commit -m "chore: Projekt-Setup mit CMakeCraft <version> (cmakecraft.pin)"
 ```
 
 Checkliste, was im ersten Commit **nicht** enthalten sein darf: `out/`, `.externals/`,
@@ -229,7 +232,7 @@ git ls-files -o -i --exclude-standard -z -- externals \
 **Variante B — Download von un4seen.com:** je benötigtem Addon das ZIP laden und in die
 vorhandene SDK-Struktur entpacken. Was wohin gehört und welche Pakete ein Projekt braucht,
 steht in der `externals/bass/SETUP.md` des jeweiligen Projekts
-(Vorlage: [LumiViz/externals/bass/SETUP.md](../../../../LumiViz/externals/bass/SETUP.md)).
+(Vorlage: [LumiViz/externals/bass/SETUP.md](../../../../../LumiViz/externals/bass/SETUP.md)).
 
 **Regeln für neue Projekte mit BASS:**
 1. SDK-Struktur aus einem bestehenden Projekt oder von un4seen übernehmen und committen
@@ -287,7 +290,7 @@ CMakeCraft ändern → gegen das Projekt testen → committen + taggen → Pin b
 | Änderung | Ort |
 |---|---|
 | Neues Target, neue App, External **deklarieren**, Optionen | **Projekt** (Solution.json, projects/) |
-| Neues External-**Include** (`cmake/externals/includes/<name>/`), Pre-/Post-Fetch-**Hook**, neuer **Error-Code**, Fix in core/project-Modulen, neue Template-Variante | **CMakeCraft** (dann Sync) |
+| Neues External-**Include** (`cmake/externals/includes/<name>/`), Pre-/Post-Fetch-**Hook**, neuer **Error-Code**, Fix in core/project-Modulen, neue Template-Variante | **CMakeCraft** (dann Tag + Pin-Wechsel, §5.1) |
 | Projekt-spezifische Presets | **Projekt** (`CMakePresets.json` des Projekts / UserPresets lokal) |
 | Doku zum Build-System | **CMakeCraft** (`docs/`) |
 | Doku zur App | **Projekt** |
@@ -301,7 +304,8 @@ Faustregel: **Könnte ein zweites Projekt davon profitieren → CMakeCraft.**
 | Artefakt | Projekt-Repo | CMakeCraft-Repo | nur lokal |
 |---|---|---|---|
 | Solution.json, projects/, App-Doku | ✅ | | |
-| `cmake/`-Snapshot + `BUILDSYSTEM_VERSION.md` | ✅ (als Kopie) | ✅ (als SSOT) | |
+| `CMakeCraftBootstrap.cmake` + `cmakecraft.pin` (Version) | ✅ | (Vorlage in `templates/consumer/`) | |
+| `cmake/` (Build-System-Module) | ❌ (geholt nach `.externals/cmakecraft/<version>/`) | ✅ (SSOT) | |
 | templates/, Build-System-Doku | (Kopie optional) | ✅ | |
 | externals/ SDK-Strukturen + SETUP.md | ✅ | | |
 | **Proprietäre Binaries (bass.lib, DLLs, …)** | ❌ nie | ❌ nie | ✅ |
@@ -323,9 +327,9 @@ Kopien/USB — Klone von USB-Sticks haben schon Dateien verloren.
 | qt-ads/Git-External fehlt | `.externals/` noch nicht gefetcht (erster Configure braucht Netz) | Configure mit Netzverbindung wiederholen |
 | Qt nicht gefunden | `QT_ROOT` nicht gesetzt | `CMakeUserPresets.json` (§3.4) |
 | Neue Datei wird nicht gebaut | nicht in `Source.cmake` eingetragen | `list(APPEND …)` ergänzen (§3.6) |
-| Linker: `undefined symbol … staticMetaObject / qt_metacall / Signale` | AUTOMOC lief nicht — `cmake/externals/system/packages/Qt6.cmake` fehlt im Checkout (historisch: VS-Regel `**/packages/*` hatte sie verschluckt) | Snapshot-Sync aus CMakeCraft (§5.1 Schritt 4); danach frisch konfigurieren |
+| Linker: `undefined symbol … staticMetaObject / qt_metacall / Signale` | AUTOMOC lief nicht — `cmake/externals/system/packages/Qt6.cmake` fehlt in der bezogenen CMakeCraft-Fassung (historisch: VS-Regel `**/packages/*` hatte sie verschluckt) | Pin auf eine Version heben, die die Datei enthält (§5.1 Schritt 4); danach mit `--fresh` konfigurieren |
 | `[Bootstrap] … konnte aus keiner Quelle geholt werden` | kein Netz + kein Cache + kein lokaler Fallback | Netz herstellen, `CMAKECRAFT_FALLBACK_PATHS` auf lokalen Checkout zeigen lassen, oder `-DCMAKECRAFT_LOCAL_DIR=<pfad>` |
-| `CMake Warning (dev): No project() command is present` beim Configure | erwartet: `project()` wird im CMakeCraft-Entry-Point gerufen, nicht wörtlich in der Dünnfassungs-CMakeLists | harmlos — ignorieren (oder `-Wno-dev`) |
+| `[E005] /path/to/MyProject/CMakeLists.txt has no project() line. Add 'project(<Name> LANGUAGES NONE)' directly after cmake_minimum_required() - name and version still come from Solution.json. Then configure with --fresh.` | Pflichtzeile `project(<Name> LANGUAGES NONE)` fehlt in der Dünnfassung (Pflicht seit v0.13.0) | Zeile nach `cmake_minimum_required()` ergänzen (§3 Schritt 2), dann mit `--fresh` konfigurieren |
 | Build-System verhält sich „alt" trotz neuem Pin | `.externals/cmakecraft/<version>/` ist ein Cache pro Version; gleicher Tag wird nie neu geholt | Tags nie umhängen! Neuer Stand = neuer Tag. Notfalls `.externals/cmakecraft/` löschen |
 | Build-System verhält sich anders als erwartet | vergessener `CMAKECRAFT_LOCAL_DIR`-Override im Cache | Configure-Ausgabe prüfen (`[Bootstrap] … LOKAL-OVERRIDE`); Variable leeren |
 | CLI: `Could not read presets` / VS zeigt nur noch x64-Debug-Standardkonfigurationen | Preset-Datei verletzt das Schema. Achtung: **Preset-JSONs vertragen KEINE Kommentare** — `/* */` bricht das CLI, `"$comment"` bräuchte Schema v10 (CMake ≥ 3.31), aber Visual Studio kann nur v2–v9 und fällt bei v10 still auf Default-Konfigurationen zurück | Presets über `displayName`/`description` dokumentieren, Schema-Version 6 belassen. Kommentar-Konvention `"_comment"` gilt nur für **Nicht-Preset-JSONs** (z. B. Solution.json). Nach Reparatur: in VS den Ordner neu laden |
@@ -349,6 +353,8 @@ Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgab
 
 ## Changelog
 
+- **1.4.2** (2026-11-09): An den Code angeglichen: Reste des Snapshot-Verfahrens auf den Bezug mit `cmakecraft.pin` umgestellt (§1, §5.3, §6, Schritt 8, Troubleshooting Qt6/AUTOMOC), „drei Pflichtdateien“ gegen die Tabelle berichtigt (Schritt 2), Troubleshooting-Zeile `No project() command is present` durch E005 ersetzt; `QT_ROOT` als `environment` statt `cacheVariables` (der Resolver liest nur Umgebungsvariablen, `PathResolver.cmake:108-116`), vorhandene Preset-Namen (Schritt 7)
+- **1.4.1** (2026-11-09): Pin-Beispiel v0.14.1 (ausdrücklicher Einstiegspunkt für Qt-GUI-Programme unter Windows)
 - **1.4.0** (2026-11-07): Pin-Beispiel v0.14.0 (`compile_options` je Bibliothek, Quellpaket einer Bibliothek)
 - **1.3.0** (2026-10-24): Pin-Beispiel v0.13.0, Pflichtzeile `project(<Name> LANGUAGES NONE)` (Schritt 2)
 - **1.2.0** (2026-10-23): Pin-Beispiel v0.12.0, parallele Kompilierung unter MSVC (`settings.msvc`, Schritt 5)

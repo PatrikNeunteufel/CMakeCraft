@@ -1,154 +1,155 @@
-# Solution.cmake — Modul-Dokumentation
+# Solution.cmake — Module Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5, Solution_Schema v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Solution.md](Solution.md)  
-> **Module:** [`cmake/project/Solution.cmake`](../../../../cmake/project/Solution.cmake)  
+> **German:** [Solution.md](../../../../de/guide/module/project/Solution.md)  
+> **Module:** [`cmake/project/Solution.cmake`](../../../../../cmake/project/Solution.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Gesetzte Properties](#3-gesetzte-properties)
-4. [Verarbeitung](#4-verarbeitung)
-5. [Debug-Ausgaben](#5-debug-ausgaben)
-6. [Errorbehandlung](#6-fehlerbehandlung)
-7. [Usagesbeispiele](#7-verwendungsbeispiele)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Properties Set](#3-properties-set)
+4. [Processing](#4-processing)
+5. [Debug Output](#5-debug-output)
+6. [Error Handling](#6-error-handling)
+7. [Usage Examples](#7-usage-examples)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Solution.cmake` Modul ist der **zentrale Configurationslader** des Build-Systems. Es liest die `Solution.json` und setzt globale Properties für alle nachfolgenden Module.
+The `Solution.cmake` module is the **central configuration loader** of the build system. It reads `Solution.json` and sets global properties for all subsequent modules.
 
-### Kernidee
+### Core Idea
 
-Eine JSON-Datei definiert die gesamte Projekt-Configuration — Solution.cmake macht diese für CMake verfügbar.
+One JSON file defines the entire project configuration — Solution.cmake makes it available to CMake.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| JSON-Laden | Liest und validiert Solution.json |
-| Metadata | Name, Version, Description, Autoren |
-| Standards | C/C++ Standard, Extensions |
-| Defaults | Library/Executable Typen |
-| Externals | Cache-Pfade, Update-Policy |
+| Area | Description |
+|------|-------------|
+| JSON loading | Reads and validates Solution.json |
+| Metadata | Name, version, description, authors |
+| Standards | C/C++ standard, extensions |
+| Defaults | Library/executable types |
+| Externals | Cache paths, update policy |
 
-### Usage durch
+### Used By
 
-- Alle nachfolgenden Module (Executables, Libraries, Externals, Tests)
+- All subsequent modules (Executables, Libraries, Externals, Tests)
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Errors.cmake | 0.5.0 | `cmake_fatal`, `cmake_warn` |
 | Debug.cmake | 0.5.0 | `dbg`, `dbg_init`, `enddbgblock` |
-| Json.cmake | 0.5.0 | Alle `_json_*` Functions |
-| Validation.cmake | 0.5.0 | Schema-Validierung (indirekt) |
+| Json.cmake | 0.5.0 | All `_json_*` functions |
+| Validation.cmake | 0.5.0 | Schema validation (indirect) |
 
-**Ladereihenfolge:** Solution.cmake muss nach den Core-Modulen geladen werden.
+**Load order:** Solution.cmake must be loaded after the core modules.
 
 ---
 
-## 3. Gesetzte Properties
+## 3. Properties Set
 
-### 3.1 Globale Properties
+### 3.1 Global Properties
 
-| Property | Typ | Description |
-|----------|-----|--------------|
-| `SOLUTION_JSON` | String | Kompletter JSON-String |
-| `SOLUTION_NAME` | String | Projekt-Name |
-| `SOLUTION_VERSION` | String | Projekt-Version (z.B. "1.0.0") |
-| `SOLUTION_DESCRIPTION` | String | Projekt-Description |
-| `SOLUTION_AUTHORS` | List | Autoren (Semikolon-getrennt) |
-| `SOLUTION_SCHEMA_VERSION` | String | Schema-Version (z.B. "0.1") |
-| `SOLUTION_SETTINGS_JSON` | String | settings-Block als JSON |
-| `SOLUTION_EXTERNALS_JSON` | String | externals-Block als JSON |
-| `SOLUTION_LIBRARIES_JSON` | String | libraries-Array als JSON |
-| `SOLUTION_EXECUTABLES_JSON` | String | executables-Array als JSON |
-| `SOLUTION_CXX_STANDARD` | Int | C++ Standard (z.B. 20) |
-| `SOLUTION_C_STANDARD` | Int | C Standard (z.B. 17) |
+| Property | Type | Description |
+|----------|------|-------------|
+| `SOLUTION_JSON` | String | Complete JSON string |
+| `SOLUTION_NAME` | String | Project name |
+| `SOLUTION_VERSION` | String | Project version (e.g. "1.0.0") |
+| `SOLUTION_DESCRIPTION` | String | Project description |
+| `SOLUTION_AUTHORS` | List | Authors (semicolon-separated) |
+| `SOLUTION_SCHEMA_VERSION` | String | Schema version (e.g. "0.1") |
+| `SOLUTION_SETTINGS_JSON` | String | settings block as JSON |
+| `SOLUTION_EXTERNALS_JSON` | String | externals block as JSON |
+| `SOLUTION_LIBRARIES_JSON` | String | libraries array as JSON |
+| `SOLUTION_EXECUTABLES_JSON` | String | executables array as JSON |
+| `SOLUTION_CXX_STANDARD` | Int | C++ standard (e.g. 20) |
+| `SOLUTION_C_STANDARD` | Int | C standard (e.g. 17) |
 | `SOLUTION_DEFAULT_LIBRARY_TYPE` | String | Default: "STATIC" |
 | `SOLUTION_DEFAULT_EXECUTABLE_TYPE` | String | Default: "CONSOLE" |
-| `SOLUTION_SOURCE_MODE` | String | "explicit", "glob", oder "auto" |
+| `SOLUTION_SOURCE_MODE` | String | "explicit", "glob", or "auto" |
 | `SOLUTION_EXTERNALS_CACHE_ROOT` | Path | Default: "externals/_cache" |
 | `SOLUTION_EXTERNALS_SOURCE_ROOT` | Path | Default: "externals/_src" |
 | `SOLUTION_EXTERNALS_UPDATE_POLICY` | String | Default: "checkout" |
-| `SOLUTION_EXTERNALS_POLICY_JSON` | String | externalsPolicy-Block als JSON |
+| `SOLUTION_EXTERNALS_POLICY_JSON` | String | externalsPolicy block as JSON |
 
-### 3.2 CMake Cache-Variablen
+### 3.2 CMake Cache Variables
 
-| Variable | Wert | Description |
-|----------|------|--------------|
-| `CMAKE_CXX_STANDARD` | Aus settings.standards | C++ Standard |
-| `CMAKE_CXX_STANDARD_REQUIRED` | ON/OFF | Standard erforderlich |
-| `CMAKE_CXX_EXTENSIONS` | ON/OFF | Compiler-Extensions |
-| `CMAKE_C_STANDARD` | Aus settings.standards | C Standard |
-| `CMAKE_C_STANDARD_REQUIRED` | ON/OFF | Standard erforderlich |
-| `CMAKE_C_EXTENSIONS` | ON/OFF | Compiler-Extensions |
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `CMAKE_CXX_STANDARD` | From settings.standards | C++ standard |
+| `CMAKE_CXX_STANDARD_REQUIRED` | ON/OFF | Standard required |
+| `CMAKE_CXX_EXTENSIONS` | ON/OFF | Compiler extensions |
+| `CMAKE_C_STANDARD` | From settings.standards | C standard |
+| `CMAKE_C_STANDARD_REQUIRED` | ON/OFF | Standard required |
+| `CMAKE_C_EXTENSIONS` | ON/OFF | Compiler extensions |
 
 ---
 
-## 4. Verarbeitung
+## 4. Processing
 
-### 4.1 Ablauf
+### 4.1 Flow
 
 ```
 Solution.json
     │
-    ├── 1. Datei lesen
-    │   └── E002 wenn nicht gefunden
+    ├── 1. Read file
+    │   └── E002 if not found
     │
-    ├── 2. Schema-Version prüfen
-    │   ├── E002 wenn fehlt
-    │   └── W001 wenn < 0.1
+    ├── 2. Check schema version
+    │   ├── E002 if missing or not MAJOR.MINOR
+    │   ├── E003 if MAJOR ≠ 1
+    │   └── W101 / W102 if MINOR lower / higher than current
     │
-    ├── 3. solution-Block extrahieren
-    │   ├── E001 wenn fehlt
-    │   ├── name (Required) → SOLUTION_NAME
+    ├── 3. Extract solution block
+    │   ├── E001 if missing
+    │   ├── name (required) → SOLUTION_NAME
     │   ├── version → SOLUTION_VERSION
     │   ├── description → SOLUTION_DESCRIPTION
     │   └── authors[] → SOLUTION_AUTHORS
     │
-    ├── 4. settings-Block extrahieren
+    ├── 4. Extract settings block
     │   ├── standards → CMAKE_*_STANDARD
     │   ├── defaults → SOLUTION_DEFAULT_*
     │   └── sources.mode → SOLUTION_SOURCE_MODE
     │
-    ├── 5. externalsPolicy extrahieren
+    ├── 5. Extract externalsPolicy
     │   ├── cacheRoot → SOLUTION_EXTERNALS_CACHE_ROOT
     │   ├── sourceRoot → SOLUTION_EXTERNALS_SOURCE_ROOT
     │   └── updatePolicy → SOLUTION_EXTERNALS_UPDATE_POLICY
     │
-    └── 6. Arrays extrahieren
+    └── 6. Extract arrays
         ├── externals → SOLUTION_EXTERNALS_JSON
         ├── libraries → SOLUTION_LIBRARIES_JSON
         └── executables → SOLUTION_EXECUTABLES_JSON
 ```
 
-### 4.2 Version-Parsing
+### 4.2 Version Parsing
 
-Die Version kann als String oder Objekt angegeben werden:
+The version can be given as a string or as an object:
 
 ```json
-// String-Format
+// String format
 "version": "1.2.3"
 
-// Objekt-Format
+// Object format
 "version": {
     "major": 1,
     "minor": 2,
@@ -158,9 +159,9 @@ Die Version kann als String oder Objekt angegeben werden:
 
 ---
 
-## 5. Debug-Ausgaben
+## 5. Debug Output
 
-### 5.1 Standard-Output (SHOW_LEVEL = 2)
+### 5.1 Standard Output (SHOW_LEVEL = 2)
 
 ```
 -- [Solution] Solution.json loaded
@@ -172,7 +173,7 @@ Die Version kann als String oder Objekt angegeben werden:
 -- -------------------------------------------
 ```
 
-### 5.2 Verbose-Output (SHOW_LEVEL = 5)
+### 5.2 Verbose Output (SHOW_LEVEL = 5)
 
 ```bash
 cmake -B build -DDEBUG_DEFAULT_LEVEL=5
@@ -199,28 +200,33 @@ cmake -B build -DDEBUG_DEFAULT_LEVEL=5
 
 ---
 
-## 6. Errorbehandlung
+## 6. Error Handling
 
 ### 6.1 Fatal Errors
 
-| Code | Bedingung | Lösung |
-|------|-----------|--------|
-| E001 | `solution`-Block fehlt | Block zur JSON hinzufügen |
-| E001 | `solution.name` fehlt | Name-Feld hinzufügen |
-| E002 | Solution.json nicht gefunden | Datei im Projekt-Root erstellen |
-| E002 | `schemaVersion` fehlt | Feld hinzufügen |
+| Code | Condition | Solution |
+|------|-----------|----------|
+| E001 | `solution` block missing | Add the block to the JSON |
+| E001 | `solution.name` missing | Add the name field |
+| E002 | Solution.json not found | Create the file in the project root |
+| E002 | `schemaVersion` missing or not in the format `MAJOR.MINOR` (`cmake/project/Solution.cmake:82`, `:94`) | Add or correct the field |
+| E003 | `schemaVersion` with a different major version (`Solution.cmake:102`) | Use schema `1.x` |
 
 ### 6.2 Warnings
 
-| Code | Bedingung | Empfehlung |
-|------|-----------|------------|
-| W001 | schemaVersion < 0.1 | Schema auf 0.1 aktualisieren |
+| Code | Condition | Recommendation |
+|------|-----------|----------------|
+| W101 | schemaVersion lower than the current one (`Solution.cmake:107`) | Raise the schema to the current version |
+| W102 | schemaVersion higher than the current one (`Solution.cmake:109`) | Update CMakeCraft |
+
+Solution.cmake does not raise W001 (schema < 0.1); it only appears in `validate_solution_schema()`,
+which nothing calls (as of 2026-11-09, see [Validation.md §3.5](../core/Validation.md#35-validate_solution_schema)).
 
 ---
 
-## 7. Usagesbeispiele
+## 7. Usage Examples
 
-### 7.1 Minimale Solution.json
+### 7.1 Minimal Solution.json
 
 ```json
 {
@@ -231,7 +237,7 @@ cmake -B build -DDEBUG_DEFAULT_LEVEL=5
 }
 ```
 
-### 7.2 Vollständige Solution.json
+### 7.2 Complete Solution.json
 
 ```json
 {
@@ -269,10 +275,10 @@ cmake -B build -DDEBUG_DEFAULT_LEVEL=5
 }
 ```
 
-### 7.3 Properties abfragen
+### 7.3 Querying Properties
 
 ```cmake
-# In anderen Modulen
+# In other modules
 get_property(_name GLOBAL PROPERTY SOLUTION_NAME)
 get_property(_version GLOBAL PROPERTY SOLUTION_VERSION)
 get_property(_cxx GLOBAL PROPERTY SOLUTION_CXX_STANDARD)
@@ -284,18 +290,20 @@ message(STATUS "Building ${_name} v${_version} with C++${_cxx}")
 
 ## 8. See Also
 
-- [Solution_Schema.md](../../references/Solution_Schema.md) — JSON-Schema Reference
-- [Executables.cmake](Executables.md) — Verwendet SOLUTION_EXECUTABLES_JSON
-- [Libraries.cmake](Libraries.md) — Verwendet SOLUTION_LIBRARIES_JSON
-- [Externals.cmake](Externals.md) — Verwendet SOLUTION_EXTERNALS_JSON
-- [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E002, W001
+- [Solution_Schema.md](../../references/Solution_Schema.md) — JSON schema reference
+- [Executables.cmake](Executables.md) — Uses SOLUTION_EXECUTABLES_JSON
+- [Libraries.cmake](Libraries.md) — Uses SOLUTION_LIBRARIES_JSON
+- [Externals.cmake](Externals.md) — Uses SOLUTION_EXTERNALS_JSON
+- [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E002, E003, W101, W102
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung** |
-| 0.1.1 | 2025-12-07 | SOLUTION_LIBRARIES_JSON, SOLUTION_EXECUTABLES_JSON hinzugefügt |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): JSON-Parsing, Global Properties, Debug-Output |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: schema version check with E002, E003, W101, W102 instead of W001 (§4.1, §6; W001 is never raised)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.0** | **2025-12-15** | **Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering** |
+| 0.1.1 | 2025-12-07 | SOLUTION_LIBRARIES_JSON, SOLUTION_EXECUTABLES_JSON added |
+| 0.1.0 | 2025-12-03 | Initial (clean start): JSON parsing, global properties, debug output |

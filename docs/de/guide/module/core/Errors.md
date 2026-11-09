@@ -1,14 +1,14 @@
 # Errors.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.2  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5, ErrorCodes v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Errors.md](Errors.md)  
-> **Modul:** [`cmake/core/Errors.cmake`](../../../../cmake/core/Errors.cmake)  
+> **English:** [Errors.md](../../../../en/guide/module/core/Errors.md)  
+> **Modul:** [`cmake/core/Errors.cmake`](../../../../../cmake/core/Errors.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -23,7 +23,7 @@
 6. [Fehlercode-Kategorien](#6-fehlercode-kategorien)
 7. [Best Practices](#7-best-practices)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -94,7 +94,7 @@ NN = Nummer (2 Ziffern)
 Bricht den Build mit einem Fehlercode ab.
 
 ```cmake
-cmake_fatal(<CODE> <MESSAGE>)
+cmake_fatal(<CODE> <MESSAGE>...)
 ```
 
 **Parameter:**
@@ -102,7 +102,14 @@ cmake_fatal(<CODE> <MESSAGE>)
 | Parameter | Typ | Pflicht | Beschreibung |
 |-----------|-----|---------|--------------|
 | `CODE` | String | ✓ | Fehlercode (z.B. `E001`, `E012`) |
-| `MESSAGE` | String | ✓ | Fehlerbeschreibung |
+| `MESSAGE...` | String(s) | ✓ | Fehlerbeschreibung; mehrere Teile werden ohne Trenner aneinandergehängt |
+
+**Mehrteilige Meldungen** (seit Modul 1.1.0, CMakeCraft v0.14.1): Alle Argumente nach `CODE`
+werden ohne Trenner zusammengefügt; so lässt sich eine lange Meldung als mehrere Zeilen in
+Anführungszeichen schreiben. Die Funktion liest dafür `ARGV1` … `ARGV<n-1>` statt `ARGN`, damit
+ein Teil mit Semikolon (etwa `path;git`) unverändert bleibt (`cmake/core/Errors.cmake:65–69`,
+`:145–152`). Bis Modul 0.1.5 kam nur der erste Teil an; betroffen waren E012, E502, E220, E503
+und W501.
 
 **Rückgabe:** Keine (bricht Build ab)
 
@@ -118,6 +125,10 @@ CMake Error at cmake/core/Errors.cmake:XX (message):
 cmake_fatal("E001" "Executable 'MyApp': Pflichtfeld 'name' fehlt")
 cmake_fatal("E002" "Solution.json nicht gefunden: ${CMAKE_SOURCE_DIR}/Solution.json")
 cmake_fatal("E012" "External 'imgui': Kein Source-Feld (path/git) angegeben")
+
+# Mehrteilig: ergibt eine Meldung über zwei Zeilen
+cmake_fatal("E012" "External 'mylib': Multiple source fields specified: path;git\n"
+                   "  Only one source field is allowed.")
 ```
 
 ---
@@ -127,7 +138,7 @@ cmake_fatal("E012" "External 'imgui': Kein Source-Feld (path/git) angegeben")
 Gibt eine Warnung aus, Build läuft weiter.
 
 ```cmake
-cmake_warn(<CODE> <MESSAGE>)
+cmake_warn(<CODE> <MESSAGE>...)
 ```
 
 **Parameter:**
@@ -135,7 +146,7 @@ cmake_warn(<CODE> <MESSAGE>)
 | Parameter | Typ | Pflicht | Beschreibung |
 |-----------|-----|---------|--------------|
 | `CODE` | String | ✓ | Warnungscode (z.B. `W001`, `W201`) |
-| `MESSAGE` | String | ✓ | Warnungsbeschreibung |
+| `MESSAGE...` | String(s) | ✓ | Warnungsbeschreibung; Teile wie bei `cmake_fatal()` zusammengefügt (`cmake/core/Errors.cmake:212–219`) |
 
 **Rückgabe:** Keine (gibt Warnung aus)
 
@@ -310,6 +321,15 @@ endfunction()
 | `W112` | Package nennt ein Target, das nicht existiert | `project/Packages.cmake` |
 | `W304` | Archive External nicht verfügbar — Targets bauen ohne es | `externals/archive/Handler.cmake` |
 
+### 6.4 Katalog seit Modul 1.1.0
+
+Der Kopfkommentar der Funktionen nennt zusätzlich die Bereiche E3xx (Tests), E4xx (Apps),
+E5xx (System Externals), W4xx (Apps) und W5xx (System Externals) (`cmake/core/Errors.cmake:117–138`,
+`:199–205`). E504 und E505 löst der System-Handler seit CMakeCraft v0.14.1 aus; E501 und W502
+entfallen. Codes, die nirgends ausgelöst werden, sind dort als „currently not raised“
+gekennzeichnet: E103, E217, W001, W002, W105–W108, W301 (`Errors.cmake:97`, `:110`, `:168–171`,
+`:179–183`, `:193`).
+
 ---
 
 ## 7. Best Practices
@@ -364,7 +384,7 @@ endfunction()
 - [ErrorCodes.md](../../references/ErrorCodes.md) — Vollständige Fehlercode-Referenz
 - [Debug.cmake](Debug.md) — Für Debug-Ausgaben (nicht Fehler)
 - [Context.cmake](Context.md) — Für cmake_require_field()
-- [guidelines](../../../standards/guidelines.md) — Error-Handling Konventionen
+- [guidelines](../../../konzepte/Guidelines.md) — Error-Handling Konventionen
 
 ---
 
@@ -372,7 +392,9 @@ endfunction()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.10.0** | **2026-10-09** | **E220, W112, W304 dokumentiert (Modul v0.1.4)** |
+| **1.0.2** | **2026-11-09** | **`cmake_fatal`/`cmake_warn` mit mehreren Meldungsteilen (`<MESSAGE>...`, Modul 1.1.0, CMakeCraft v0.14.1); §6.4 Katalog: E3xx–E5xx, W4xx, W5xx, E504/E505 ausgelöst, E501/W502 entfallen, nie ausgelöste Codes gekennzeichnet** |
+| **1.0.1** | **2026-10-09** | **CMakeCraft v0.10.0: E220, W112, W304 dokumentiert (Modul v0.1.4)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.2 | 2025-12-09 | W3xx Range für Externals, E218, W302 dokumentiert |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |

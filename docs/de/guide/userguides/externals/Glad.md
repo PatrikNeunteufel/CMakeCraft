@@ -1,12 +1,12 @@
 # GLAD — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [glad.md](Glad.md)
+> **English:** [glad.md](../../../../en/guide/userguides/externals/Glad.md)
 
 ---
 
@@ -20,7 +20,7 @@
 6. [Mit ImGui kombinieren](#6-mit-imgui-kombinieren)
 7. [Troubleshooting](#7-troubleshooting)
 8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -368,7 +368,7 @@ int main() {
 }
 ```
 
-Siehe [glfw.md](glfw.md) für mehr Details zu GLFW.
+Siehe [glfw.md](Glfw.md) für mehr Details zu GLFW.
 
 ---
 
@@ -459,7 +459,7 @@ int main() {
 }
 ```
 
-Siehe [imgui.md](imgui.md) für mehr Details zu ImGui.
+Siehe [imgui.md](Imgui.md) für mehr Details zu ImGui.
 
 ---
 
@@ -535,8 +535,8 @@ externals/glad/include/glad/glad.h  ← Muss existieren
 
 - [Externals.md](../Externals.md) — Externals Kombinationen
 - [Local_Externals_GUI.md](../../references/externals/Local_Externals_GUI.md) — Referenz
-- [glfw.md](glfw.md) — Window & Input
-- [imgui.md](imgui.md) — Immediate Mode GUI
+- [glfw.md](Glfw.md) — Window & Input
+- [imgui.md](Imgui.md) — Immediate Mode GUI
 
 ---
 
@@ -544,4 +544,5 @@ externals/glad/include/glad/glad.h  ← Muss existieren
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für GLAD** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für GLAD |

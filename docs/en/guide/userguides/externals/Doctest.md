@@ -4,45 +4,45 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [doctest.md](Doctest.md)
+> **German:** [Doctest.md](../../../../de/guide/userguides/externals/Doctest.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Installation](#2-installation)
-3. [Solution.json Configuration](#3-solutionjson-konfiguration)
-4. [C++ Usage](#4-c-verwendung)
-5. [Fortgeschrittene Techniken](#5-fortgeschrittene-techniken)
+3. [Solution.json Configuration](#3-solutionjson-configuration)
+4. [C++ Usage](#4-c-usage)
+5. [Advanced Techniques](#5-advanced-techniques)
 6. [Best Practices](#6-best-practices)
 7. [Troubleshooting](#7-troubleshooting)
-8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+8. [Further Information](#8-further-information)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**doctest** ist ein schnelles, Header-Only C++ Testing Framework mit minimaler Kompilierzeit.
+**doctest** is a fast, header-only C++ testing framework with minimal compile time.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Local External (Header-Only) |
-| **Pfad** | `externals/doctest` |
-| **Lizenz** | MIT |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Local External (header-only) |
+| **Path** | `externals/doctest` |
+| **License** | MIT |
 | **Website** | [github.com/doctest/doctest](https://github.com/doctest/doctest) |
 
-### Warum doctest?
+### Why doctest?
 
-| Vorteil | Description |
-|---------|--------------|
-| ⚡ **Schnell** | Extrem schnelle Kompilierung |
-| 📄 **Header-Only** | Nur ein Header, keine Library |
-| 🪶 **Lightweight** | Minimaler Overhead (~17KB) |
-| 🔀 **Subcases** | BDD-Style verschachtelte Tests |
+| Advantage | Description |
+|-----------|-------------|
+| ⚡ **Fast** | Extremely fast compilation |
+| 📄 **Header-Only** | Just one header, no library |
+| 🪶 **Lightweight** | Minimal overhead (~17KB) |
+| 🔀 **Subcases** | BDD-style nested tests |
 
 ---
 
@@ -51,16 +51,16 @@
 ### 2.1 Download
 
 ```bash
-# Von GitHub
+# From GitHub
 git clone https://github.com/doctest/doctest.git externals/doctest
 
-# Oder nur den Header
+# Or just the header
 mkdir -p externals/doctest/include/doctest
 curl -o externals/doctest/include/doctest/doctest.h \
   https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h
 ```
 
-### 2.2 Verzeichnisstruktur
+### 2.2 Directory Structure
 
 ```
 externals/doctest/
@@ -92,7 +92,7 @@ externals/doctest/
 }
 ```
 
-### 3.2 Mit Library-Tests
+### 3.2 With Library Tests
 
 ```json
 {
@@ -118,7 +118,7 @@ externals/doctest/
 }
 ```
 
-### 3.3 Mehrere Test-Suites
+### 3.3 Multiple Test Suites
 
 ```json
 {
@@ -143,7 +143,7 @@ externals/doctest/
 
 ## 4. C++ Usage
 
-### 4.1 Einfacher Test
+### 4.1 Simple Test
 
 ```cpp
 // tests/test_math.cpp
@@ -164,18 +164,18 @@ TEST_CASE("Subtraction") {
 
 ### 4.2 Assertions
 
-| Assertion | Description | Bei Error |
-|-----------|--------------|------------|
-| `CHECK(expr)` | Prüft Expression | Weiter |
-| `REQUIRE(expr)` | Prüft Expression | Abbruch |
-| `CHECK_EQ(a, b)` | Gleichheit | Weiter |
-| `CHECK_NE(a, b)` | Ungleichheit | Weiter |
-| `CHECK_LT(a, b)` | a < b | Weiter |
-| `CHECK_GT(a, b)` | a > b | Weiter |
-| `CHECK_LE(a, b)` | a <= b | Weiter |
-| `CHECK_GE(a, b)` | a >= b | Weiter |
-| `CHECK_THROWS(expr)` | Exception erwartet | Weiter |
-| `CHECK_NOTHROW(expr)` | Keine Exception | Weiter |
+| Assertion | Description | On Failure |
+|-----------|-------------|------------|
+| `CHECK(expr)` | Checks expression | Continue |
+| `REQUIRE(expr)` | Checks expression | Abort |
+| `CHECK_EQ(a, b)` | Equality | Continue |
+| `CHECK_NE(a, b)` | Inequality | Continue |
+| `CHECK_LT(a, b)` | a < b | Continue |
+| `CHECK_GT(a, b)` | a > b | Continue |
+| `CHECK_LE(a, b)` | a <= b | Continue |
+| `CHECK_GE(a, b)` | a >= b | Continue |
+| `CHECK_THROWS(expr)` | Exception expected | Continue |
+| `CHECK_NOTHROW(expr)` | No exception | Continue |
 
 ```cpp
 TEST_CASE("Various assertions") {
@@ -192,13 +192,13 @@ TEST_CASE("Various assertions") {
 }
 ```
 
-### 4.3 Subcases (BDD-Style)
+### 4.3 Subcases (BDD Style)
 
-Subcases ermöglichen verschachtelte Tests mit gemeinsamen Setup:
+Subcases enable nested tests with shared setup:
 
 ```cpp
 TEST_CASE("String operations") {
-    std::string s = "Hello";  // Gemeinsames Setup
+    std::string s = "Hello";  // Shared setup
     
     SUBCASE("append") {
         s += " World";
@@ -223,7 +223,7 @@ TEST_CASE("String operations") {
 }
 ```
 
-**Ausführungsreihenfolge:**
+**Execution order:**
 ```
 String operations → append
 String operations → clear
@@ -256,12 +256,12 @@ TEST_SUITE("Strings") {
 ```cpp
 struct DatabaseFixture {
     DatabaseFixture() {
-        // Setup: Wird vor jedem TEST_CASE_FIXTURE aufgerufen
+        // Setup: called before each TEST_CASE_FIXTURE
         db.connect("test.db");
     }
     
     ~DatabaseFixture() {
-        // Teardown: Wird nach jedem TEST_CASE_FIXTURE aufgerufen
+        // Teardown: called after each TEST_CASE_FIXTURE
         db.disconnect();
     }
     
@@ -280,16 +280,16 @@ TEST_CASE_FIXTURE(DatabaseFixture, "Delete record") {
 }
 ```
 
-### 4.6 Parametrisierte Tests
+### 4.6 Parameterized Tests
 
 ```cpp
-TEST_CASE("Parametersized test") {
+TEST_CASE("Parameterized test") {
     std::vector<std::pair<int, int>> test_data = {
         {1, 1}, {2, 4}, {3, 9}, {4, 16}
     };
     
     for (const auto& [input, expected] : test_data) {
-        CAPTURE(input);  // Zeigt Wert bei Error
+        CAPTURE(input);  // Shows the value on failure
         CHECK(input * input == expected);
     }
 }
@@ -314,9 +314,9 @@ TEST_CASE("Exception handling") {
 
 ---
 
-## 5. Fortgeschrittene Techniken
+## 5. Advanced Techniques
 
-### 5.1 Eigene main()-Funktion
+### 5.1 Your Own main() Function
 
 ```cpp
 #define DOCTEST_CONFIG_IMPLEMENT
@@ -325,14 +325,14 @@ TEST_CASE("Exception handling") {
 int main(int argc, char** argv) {
     doctest::Context context;
     
-    // Defaults setzen
+    // Set defaults
     context.setOption("abort-after", 5);
     context.setOption("order-by", "name");
     
-    // Command-Line parsen
+    // Parse command line
     context.applyCommandLine(argc, argv);
     
-    // Tests ausführen
+    // Run tests
     int res = context.run();
     
     // Cleanup
@@ -340,56 +340,56 @@ int main(int argc, char** argv) {
         return res;
     }
     
-    // Eigener Code nach Tests
+    // Your own code after the tests
     return res;
 }
 ```
 
-### 5.2 Tests in Produktionscode deaktivieren
+### 5.2 Disabling Tests in Production Code
 
 ```cpp
-// In Release-Builds keine Tests kompilieren
+// Do not compile tests in release builds
 #ifdef NDEBUG
 #define DOCTEST_CONFIG_DISABLE
 #endif
 
 #include <doctest/doctest.h>
 
-// Diese Tests werden in Release-Builds ignoriert
+// These tests are ignored in release builds
 TEST_CASE("Debug only test") {
     CHECK(1 == 1);
 }
 ```
 
-### 5.3 Test-Filter (Command Line)
+### 5.3 Test Filters (Command Line)
 
 ```bash
-# Nur Tests mit "Math" im Namen
+# Only tests with "Math" in the name
 ./tests --test-case="*Math*"
 
-# Tests ausschließen
+# Exclude tests
 ./tests --test-case-exclude="*Slow*"
 
-# Bestimmte Suite
+# Specific suite
 ./tests --test-suite="Unit"
 
-# Verbose Output
+# Verbose output
 ./tests --success
 
-# Liste aller Tests
+# List all tests
 ./tests --list-test-cases
 ```
 
-### 5.4 Reporter
+### 5.4 Reporters
 
 ```bash
-# Standard (Console)
+# Standard (console)
 ./tests
 
 # Compact
 ./tests --reporters=compact
 
-# XML (für CI)
+# XML (for CI)
 ./tests --reporters=xml --out=results.xml
 ```
 
@@ -397,7 +397,7 @@ TEST_CASE("Debug only test") {
 
 ## 6. Best Practices
 
-### 6.1 Dateiorganisation
+### 6.1 File Organization
 
 ```
 project/
@@ -406,9 +406,9 @@ project/
 ├── include/
 │   └── math.h
 └── tests/
-    ├── test_main.cpp      # Nur DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-    ├── test_math.cpp      # Tests ohne main()
-    └── test_strings.cpp   # Tests ohne main()
+    ├── test_main.cpp      # Only DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+    ├── test_math.cpp      # Tests without main()
+    └── test_strings.cpp   # Tests without main()
 ```
 
 **test_main.cpp:**
@@ -427,27 +427,27 @@ TEST_CASE("Math functions") {
 }
 ```
 
-### 6.2 Aussagekräftige Errormeldungen
+### 6.2 Meaningful Error Messages
 
 ```cpp
 TEST_CASE("User validation") {
-    User user{"John", -5};  // Ungültiges Alter
+    User user{"John", -5};  // Invalid age
     
-    // Schlecht: Keine Info bei Error
+    // Bad: no info on failure
     CHECK(user.isValid());
     
-    // Besser: Mit INFO
+    // Better: with INFO
     INFO("User: ", user.name, ", Age: ", user.age);
     CHECK(user.isValid());
     
-    // Noch besser: Mit CAPTURE
+    // Even better: with CAPTURE
     CAPTURE(user.name);
     CAPTURE(user.age);
     CHECK(user.isValid());
 }
 ```
 
-### 6.3 AAA-Pattern
+### 6.3 AAA Pattern
 
 ```cpp
 TEST_CASE("Order total calculation") {
@@ -470,68 +470,69 @@ TEST_CASE("Order total calculation") {
 
 ### 7.1 "doctest/doctest.h not found"
 
-**Problem:** Header nicht gefunden
+**Problem:** Header not found
 
-**Lösung:** Pfad in Solution.json prüfen:
+**Solution:** Check the path in Solution.json:
 ```json
 "doctest": {
-    "path": "externals/doctest"  // Muss include/doctest/doctest.h enthalten
+    "path": "externals/doctest"  // Must contain include/doctest/doctest.h
 }
 ```
 
 ### 7.2 "multiple definition of main"
 
-**Problem:** main() mehrfach definiert
+**Problem:** main() defined more than once
 
-**Lösung:** `DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN` nur in EINER Datei:
+**Solution:** `DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN` in ONE file only:
 ```cpp
-// test_main.cpp - NUR HIER
+// test_main.cpp - ONLY HERE
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-// andere_tests.cpp - OHNE main
+// other_tests.cpp - WITHOUT main
 #include <doctest/doctest.h>
 ```
 
-### 7.3 Floating-Point Vergleiche
+### 7.3 Floating-Point Comparisons
 
-**Problem:** Float-Vergleiche schlagen fehl
+**Problem:** Float comparisons fail
 
-**Lösung:** `doctest::Approx` verwenden:
+**Solution:** Use `doctest::Approx`:
 ```cpp
 CHECK(result == doctest::Approx(3.14159).epsilon(0.001));
 ```
 
-### 7.4 Tests werden nicht ausgeführt
+### 7.4 Tests Are Not Executed
 
-**Problem:** Tests erscheinen nicht
+**Problem:** Tests do not show up
 
-**Lösung:** Prüfen ob `DOCTEST_CONFIG_DISABLE` gesetzt ist.
+**Solution:** Check whether `DOCTEST_CONFIG_DISABLE` is set.
 
 ---
 
-## 8. Weiterführende Informationen
+## 8. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **GitHub** | [github.com/doctest/doctest](https://github.com/doctest/doctest) |
-| **Dokumentation** | [github.com/doctest/doctest/blob/master/doc/markdown/readme.md](https://github.com/doctest/doctest/blob/master/doc/markdown/readme.md) |
+| **Documentation** | [github.com/doctest/doctest/blob/master/doc/markdown/readme.md](https://github.com/doctest/doctest/blob/master/doc/markdown/readme.md) |
 | **Tutorial** | [github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md](https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md) |
 | **Assertion Reference** | [github.com/doctest/doctest/blob/master/doc/markdown/assertions.md](https://github.com/doctest/doctest/blob/master/doc/markdown/assertions.md) |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Local_Externals_Testing.md](../../references/externals/Local_Externals_Testing.md) — Reference
-- [googletest.md](googletest.md) — Alternative mit Mocking
-- [catch2.md](catch2.md) — Alternative mit BDD
+- [googletest.md](Googletest.md) — Alternative with mocking
+- [catch2.md](Catch2.md) — Alternative with BDD
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für doctest** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for doctest |

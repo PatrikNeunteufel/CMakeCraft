@@ -6,7 +6,7 @@
 # This file is exactly what a consuming project's CMakeLists.txt looks like —
 # CMakeCraft "dogfoods" its own entry point against the demo Solution.json.
 #
-# Consumers: see docs/de/userguides/Neues_Projekt_Guide.md
+# Consumers: see docs/de/guide/userguides/Neues_Projekt_Guide.md
 #
 # ==============================================================================
 

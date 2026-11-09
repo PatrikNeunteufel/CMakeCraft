@@ -4,16 +4,16 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Externals.md](../../en/references/Externals.md)
+> **German:** [Externals.md](../../../de/guide/references/Externals.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Kategorien](#2-kategorien)
+1. [Overview](#1-overview)
+2. [Categories](#2-categories)
 3. [Testing](#3-testing)
 4. [Scripting](#4-scripting)
 5. [GUI](#5-gui)
@@ -22,24 +22,24 @@
 8. [Data](#8-data)
 9. [Network](#9-network)
 10. [AI](#10-ai)
-11. [Schnellreferenz](#11-schnellreferenz)
-12. [See Also](#12-siehe-auch)
-13. [Changelog](#13-changelog)
+11. [Quick Reference](#11-quick-reference)
+12. [See Also](#12-see-also)
+13. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Diese Reference bietet eine **kategorisierte Overview** aller verfügbaren External Libraries für das CMake Architecture Build-System.
+This reference provides a **categorized overview** of all available external libraries for the CMake Architecture build system.
 
-### External-Typen
+### External Types
 
-| Typ | Quelle | Description |
-|-----|--------|--------------|
-| **Local** | `path` | Vorkompilierte/generierte Libraries im `externals/` Ordner |
-| **Git** | `git` | Via Git geklonte Libraries |
+| Type | Source | Description |
+|------|--------|-------------|
+| **Local** | `path` | Precompiled/generated libraries in the `externals/` folder |
+| **Git** | `git` | Libraries cloned via Git |
 
-### Grundlegende Usage
+### Basic Usage
 
 ```json
 {
@@ -62,27 +62,27 @@ Diese Reference bietet eine **kategorisierte Overview** aller verfügbaren Exter
 
 ---
 
-## 2. Kategorien
+## 2. Categories
 
 ### Overview
 
-Die Kategorien sind für **Local und Git parallel** strukturiert:
+The categories are structured **in parallel for Local and Git**:
 
-| Kategorie | Local | Git | Hauptverwendung |
-|-----------|-------|-----|-----------------|
-| [Testing](#3-testing) | doctest | googletest, catch2, benchmark | Unit Tests, Benchmarks |
-| [Scripting](#4-scripting) | lua54 | sol2, pybind11, chaiscript | Embedded Scripting |
-| [GUI](#5-gui) | glad | glfw, imgui, SDL2/3, raylib | Graphics, Window, UI |
-| [Media](#6-media) | BASS | miniaudio, openal-soft, stb, glm | Audio, Image, Math |
-| [Core](#7-core) | — | spdlog, fmt, abseil, magic_enum | Logging, Utility |
-| [Data](#8-data) | — | nlohmann_json, yaml-cpp, SQLiteCpp | JSON, DB, Kompression |
-| [Network](#9-network) | — | cpp-httplib, asio, taskflow | HTTP, Threading |
+| Category | Local | Git | Main Use |
+|----------|-------|-----|----------|
+| [Testing](#3-testing) | doctest | googletest, catch2, benchmark | Unit tests, benchmarks |
+| [Scripting](#4-scripting) | lua54 | sol2, pybind11, chaiscript | Embedded scripting |
+| [GUI](#5-gui) | glad | glfw, imgui, SDL2/3, raylib | Graphics, window, UI |
+| [Media](#6-media) | BASS | miniaudio, openal-soft, stb, glm | Audio, image, math |
+| [Core](#7-core) | — | spdlog, fmt, abseil, magic_enum | Logging, utility |
+| [Data](#8-data) | — | nlohmann_json, yaml-cpp, SQLiteCpp | JSON, DB, compression |
+| [Network](#9-network) | — | cpp-httplib, asio, taskflow | HTTP, threading |
 | [AI](#10-ai) | — | llama.cpp, whisper.cpp, onnxruntime | ML, LLM, CUDA |
 
-### Detail-Dokumente
+### Detail Documents
 
-| Kategorie | Local | Git |
-|-----------|-------|-----|
+| Category | Local | Git |
+|----------|-------|-----|
 | Testing | [Local_Externals_Testing.md](externals/Local_Externals_Testing.md) | [Git_Externals_Testing.md](externals/Git_Externals_Testing.md) |
 | Scripting | [Local_Externals_Scripting.md](externals/Local_Externals_Scripting.md) | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
 | GUI | [Local_Externals_GUI.md](externals/Local_Externals_GUI.md) | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
@@ -98,26 +98,26 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 
 ### Local
 
-| Library | Typ | Description | Details |
-|---------|-----|--------------|---------|
-| **doctest** | 📄 Header-Only | Schnelles Testing Framework | [Local_Externals_Testing.md](externals/Local_Externals_Testing.md) |
+| Library | Type | Description | Details |
+|---------|------|-------------|---------|
+| **doctest** | 📄 Header-only | Fast testing framework | [Local_Externals_Testing.md](externals/Local_Externals_Testing.md) |
 
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
+|---------|-------------|-------|------|---------|
 | **googletest** | Google Test + GMock | ✅ | PreFetch | [Git_Externals_Testing.md](externals/Git_Externals_Testing.md) |
-| **catch2** | BDD-Style Testing | ✅ | PreFetch | [Git_Externals_Testing.md](externals/Git_Externals_Testing.md) |
+| **catch2** | BDD-style testing | ✅ | PreFetch | [Git_Externals_Testing.md](externals/Git_Externals_Testing.md) |
 | **benchmark** | Google Benchmark | ✅ | PreFetch | [Git_Externals_Testing.md](externals/Git_Externals_Testing.md) |
 
-### Empfehlung
+### Recommendation
 
-| Anwendungsfall | Empfehlung |
-|----------------|------------|
-| Schnelle Unit Tests | **doctest** (Local) |
-| Mocking benötigt | googletest (Git) |
-| BDD-Style | catch2 (Git) |
-| Performance-Tests | benchmark (Git) |
+| Use Case | Recommendation |
+|----------|----------------|
+| Fast unit tests | **doctest** (Local) |
+| Mocking needed | googletest (Git) |
+| BDD style | catch2 (Git) |
+| Performance tests | benchmark (Git) |
 
 ---
 
@@ -125,25 +125,25 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 
 ### Local
 
-| Library | Typ | Description | Details |
-|---------|-----|--------------|---------|
-| **lua54** | 📝 Source | Lua 5.4 Scripting Engine | [Local_Externals_Scripting.md](externals/Local_Externals_Scripting.md) |
+| Library | Type | Description | Details |
+|---------|------|-------------|---------|
+| **lua54** | 📝 Source | Lua 5.4 scripting engine | [Local_Externals_Scripting.md](externals/Local_Externals_Scripting.md) |
 
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
-| **sol2** | C++ Lua Bindings | ✅ | — | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
-| **pybind11** | Python Bindings | ✅ | — | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
-| **chaiscript** | Embedded Scripting | ✅ | — | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
+|---------|-------------|-------|------|---------|
+| **sol2** | C++ Lua bindings | ✅ | — | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
+| **pybind11** | Python bindings | ✅ | — | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
+| **chaiscript** | Embedded scripting | ✅ | — | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
 
-### Empfehlung
+### Recommendation
 
-| Anwendungsfall | Empfehlung |
-|----------------|------------|
-| Configuration, Modding | **lua54** (Local) + sol2 (Git) |
-| Python-Integration | pybind11 (Git) |
-| C++-ähnliche Syntax | chaiscript (Git) |
+| Use Case | Recommendation |
+|----------|----------------|
+| Configuration, modding | **lua54** (Local) + sol2 (Git) |
+| Python integration | pybind11 (Git) |
+| C++-like syntax | chaiscript (Git) |
 
 ---
 
@@ -151,21 +151,21 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 
 ### Local
 
-| Library | Typ | Description | Details |
-|---------|-----|--------------|---------|
-| **glad** | 🔧 Generiert | OpenGL Function Loader | [Local_Externals_GUI.md](externals/Local_Externals_GUI.md) |
+| Library | Type | Description | Details |
+|---------|------|-------------|---------|
+| **glad** | 🔧 Generated | OpenGL function loader | [Local_Externals_GUI.md](externals/Local_Externals_GUI.md) |
 
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
-| **glfw** | Window/Input Library | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
-| **imgui** | Immediate Mode GUI | ❌ | PostFetch 🔧 | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
-| **SDL2** | Multimedia Library | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
-| **SDL3** | Multimedia (Modern) | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
-| **raylib** | Game Development | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
+|---------|-------------|-------|------|---------|
+| **glfw** | Window/input library | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
+| **imgui** | Immediate mode GUI | ❌ | PostFetch 🔧 | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
+| **SDL2** | Multimedia library | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
+| **SDL3** | Multimedia (modern) | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
+| **raylib** | Game development | ✅ | PreFetch | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
 
-### Typische Kombination (OpenGL + ImGui)
+### Typical Combination (OpenGL + ImGui)
 
 ```json
 "externals": {
@@ -175,7 +175,7 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 }
 ```
 
-> **Reihenfolge wichtig:** glad → glfw → imgui
+> **Order matters:** glad → glfw → imgui
 
 ---
 
@@ -183,27 +183,27 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 
 ### Local
 
-| Library | Typ | Description | Details |
-|---------|-----|--------------|---------|
-| **BASS** | 📦 Vorkompiliert | Audio-Library mit Plugins | [Local_Externals_Media.md](externals/Local_Externals_Media.md) |
+| Library | Type | Description | Details |
+|---------|------|-------------|---------|
+| **BASS** | 📦 Precompiled | Audio library with plugins | [Local_Externals_Media.md](externals/Local_Externals_Media.md) |
 
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
-| **miniaudio** | Single-Header Audio | ❌ | PostFetch 🔧 | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
-| **openal-soft** | 3D Audio | ✅ | PreFetch | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
-| **stb** | Image Loading | ❌ | PostFetch 🔧 | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
+|---------|-------------|-------|------|---------|
+| **miniaudio** | Single-header audio | ❌ | PostFetch 🔧 | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
+| **openal-soft** | 3D audio | ✅ | PreFetch | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
+| **stb** | Image loading | ❌ | PostFetch 🔧 | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
 | **glm** | OpenGL Mathematics | ✅ | PreFetch | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
-| **Eigen** | Linear Algebra | ✅ | PreFetch | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
+| **Eigen** | Linear algebra | ✅ | PreFetch | [Git_Externals_Media.md](externals/Git_Externals_Media.md) |
 
-### Empfehlung
+### Recommendation
 
-| Anwendungsfall | Empfehlung |
-|----------------|------------|
-| Musik-Player, Plugins | **BASS** (Local) |
-| Einfache Sounds | miniaudio (Git) |
-| 3D-Spiele Audio | openal-soft (Git) |
+| Use Case | Recommendation |
+|----------|----------------|
+| Music player, plugins | **BASS** (Local) |
+| Simple sounds | miniaudio (Git) |
+| 3D game audio | openal-soft (Git) |
 
 ---
 
@@ -212,13 +212,13 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
-| **spdlog** | Fast Logging | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
-| **fmt** | String Formatting | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
-| **abseil** | Google's C++ Library | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
-| **magic_enum** | Enum Reflection | ✅ | — | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
-| **argparse** | Argument Parsing | ✅ | — | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
-| **CLI11** | CLI Parsing | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
+|---------|-------------|-------|------|---------|
+| **spdlog** | Fast logging | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
+| **fmt** | String formatting | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
+| **abseil** | Google's C++ library | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
+| **magic_enum** | Enum reflection | ✅ | — | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
+| **argparse** | Argument parsing | ✅ | — | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
+| **CLI11** | CLI parsing | ✅ | PreFetch | [Git_Externals_Core.md](externals/Git_Externals_Core.md) |
 
 ---
 
@@ -227,13 +227,13 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
+|---------|-------------|-------|------|---------|
 | **nlohmann_json** | JSON for Modern C++ | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
 | **rapidjson** | Fast JSON | ✅ | — | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
-| **yaml-cpp** | YAML Parser | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
-| **toml++** | TOML Parser | ✅ | — | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
-| **SQLiteCpp** | SQLite Wrapper | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
-| **zstd** | Fast Compression | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
+| **yaml-cpp** | YAML parser | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
+| **toml++** | TOML parser | ✅ | — | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
+| **SQLiteCpp** | SQLite wrapper | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
+| **zstd** | Fast compression | ✅ | PreFetch | [Git_Externals_Data.md](externals/Git_Externals_Data.md) |
 
 ---
 
@@ -242,12 +242,12 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
-| **cpp-httplib** | HTTP Client/Server | ✅ | — | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
+|---------|-------------|-------|------|---------|
+| **cpp-httplib** | HTTP client/server | ✅ | — | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
 | **cpr** | C++ Requests | ✅ | PreFetch | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
 | **asio** | Async I/O | ⚠️ | PostFetch 🔧 | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
-| **taskflow** | Parallel Programming | ✅ | PreFetch | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
-| **concurrentqueue** | Lock-free Queue | ✅ | — | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
+| **taskflow** | Parallel programming | ✅ | PreFetch | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
+| **concurrentqueue** | Lock-free queue | ✅ | — | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
 
 ---
 
@@ -256,36 +256,36 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 ### Git
 
 | Library | Description | CMake | Hook | Details |
-|---------|--------------|-------|------|---------|
-| **llama.cpp** | LLM Inference | ✅ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
-| **whisper.cpp** | Speech-to-Text | ✅ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
-| **onnxruntime** | ML Inference | ⚠️ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
-| **ncnn** | Neural Network | ✅ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
+|---------|-------------|-------|------|---------|
+| **llama.cpp** | LLM inference | ✅ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
+| **whisper.cpp** | Speech-to-text | ✅ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
+| **onnxruntime** | ML inference | ⚠️ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
+| **ncnn** | Neural network | ✅ | PreFetch | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
 
-> **Note:** AI/ML Libraries sind oft komplex zu integrieren. Siehe Detail-Dokumentation.
+> **Note:** AI/ML libraries are often complex to integrate. See the detail documentation.
 
 ---
 
-## 11. Schnellreferenz
+## 11. Quick Reference
 
-### Alle Local Externals
+### All Local Externals
 
-| Library | Kategorie | Typ | Include.cmake |
-|---------|-----------|-----|---------------|
-| **doctest** | Testing | 📄 Header-Only | `cmake/externals/includes/doctest/` |
+| Library | Category | Type | Include.cmake |
+|---------|----------|------|---------------|
+| **doctest** | Testing | 📄 Header-only | `cmake/externals/includes/doctest/` |
 | **lua54** | Scripting | 📝 Source | `cmake/externals/includes/lua54/` |
-| **glad** | GUI | 🔧 Generiert | `cmake/externals/includes/glad/` |
-| **BASS** | Media | 📦 Vorkompiliert | `cmake/externals/includes/bass/` |
+| **glad** | GUI | 🔧 Generated | `cmake/externals/includes/glad/` |
+| **BASS** | Media | 📦 Precompiled | `cmake/externals/includes/bass/` |
 
-### Beliebte Kombinationen
+### Popular Combinations
 
-| Anwendung | Externals |
-|-----------|-----------|
-| OpenGL GUI App | glad (L), glfw (G), imgui (G) |
-| Audio Player | BASS (L) + BASS_FLAC, BASS_FX |
-| Scripted Game | lua54 (L), sol2 (G), raylib (G) |
-| REST API Client | cpp-httplib (G), nlohmann_json (G) |
-| Unit Test Suite | doctest (L) oder googletest (G) |
+| Application | Externals |
+|-------------|-----------|
+| OpenGL GUI app | glad (L), glfw (G), imgui (G) |
+| Audio player | BASS (L) + BASS_FLAC, BASS_FX |
+| Scripted game | lua54 (L), sol2 (G), raylib (G) |
+| REST API client | cpp-httplib (G), nlohmann_json (G) |
+| Unit test suite | doctest (L) or googletest (G) |
 
 *(L) = Local, (G) = Git*
 
@@ -293,15 +293,15 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 
 ## 12. See Also
 
-### Overviews-Dokumente
+### Overview Documents
 
-- [Local_Externals.md](externals/Local_Externals.md) — Overview Local Externals
-- [Git_Externals.md](externals/Git_Externals.md) — Overview Git Externals
+- [Local_Externals.md](externals/Local_Externals.md) — Overview of local externals
+- [Git_Externals.md](externals/Git_Externals.md) — Overview of Git externals
 
-### Kategorie-Detail-Dokumente
+### Category Detail Documents
 
-| Kategorie | Local | Git |
-|-----------|-------|-----|
+| Category | Local | Git |
+|----------|-------|-----|
 | Testing | [Local_Externals_Testing.md](externals/Local_Externals_Testing.md) | [Git_Externals_Testing.md](externals/Git_Externals_Testing.md) |
 | Scripting | [Local_Externals_Scripting.md](externals/Local_Externals_Scripting.md) | [Git_Externals_Scripting.md](externals/Git_Externals_Scripting.md) |
 | GUI | [Local_Externals_GUI.md](externals/Local_Externals_GUI.md) | [Git_Externals_GUI.md](externals/Git_Externals_GUI.md) |
@@ -311,16 +311,17 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 | Network | — | [Git_Externals_Network.md](externals/Git_Externals_Network.md) |
 | AI | — | [Git_Externals_AI.md](externals/Git_Externals_AI.md) |
 
-### Weitere Referenceen
+### Further References
 
-- [Solution_Schema.md](Solution_Schema.md) — JSON-Schema für externals Block
-- [Externals_UserGuide.md](../userguides/Externals.md) — Usagesanleitung
+- [Solution_Schema.md](Solution_Schema.md) — JSON schema for the externals block
+- [Externals_UserGuide.md](../userguides/Externals.md) — Usage guide
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **8 Kategorien: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel für Local + Git** |
-| 0.5.0 | 2025-12-15 | Kategorisierte Overview für Local + Git Externals |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | 8 categories: Testing, Scripting, GUI, Media, Core, Data, Network, AI — in parallel for Local + Git |
+| 0.5.0 | 2025-12-15 | Categorized overview for Local + Git externals |

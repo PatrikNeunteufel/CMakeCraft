@@ -1,14 +1,14 @@
 # Solution.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5, Solution_Schema v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Solution.md](Solution.md)  
-> **Modul:** [`cmake/project/Solution.cmake`](../../../../cmake/project/Solution.cmake)  
+> **English:** [Solution.md](../../../../en/guide/module/project/Solution.md)  
+> **Modul:** [`cmake/project/Solution.cmake`](../../../../../cmake/project/Solution.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -23,7 +23,7 @@
 6. [Fehlerbehandlung](#6-fehlerbehandlung)
 7. [Verwendungsbeispiele](#7-verwendungsbeispiele)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -114,8 +114,9 @@ Solution.json
     │   └── E002 wenn nicht gefunden
     │
     ├── 2. Schema-Version prüfen
-    │   ├── E002 wenn fehlt
-    │   └── W001 wenn < 0.1
+    │   ├── E002 wenn fehlt oder nicht MAJOR.MINOR
+    │   ├── E003 wenn MAJOR ≠ 1
+    │   └── W101 / W102 wenn MINOR kleiner / größer als aktuell
     │
     ├── 3. solution-Block extrahieren
     │   ├── E001 wenn fehlt
@@ -208,13 +209,18 @@ cmake -B build -DDEBUG_DEFAULT_LEVEL=5
 | E001 | `solution`-Block fehlt | Block zur JSON hinzufügen |
 | E001 | `solution.name` fehlt | Name-Feld hinzufügen |
 | E002 | Solution.json nicht gefunden | Datei im Projekt-Root erstellen |
-| E002 | `schemaVersion` fehlt | Feld hinzufügen |
+| E002 | `schemaVersion` fehlt oder nicht im Format `MAJOR.MINOR` (`cmake/project/Solution.cmake:82`, `:94`) | Feld hinzufügen bzw. korrigieren |
+| E003 | `schemaVersion` mit anderer Major-Version (`Solution.cmake:102`) | Schema `1.x` verwenden |
 
 ### 6.2 Warnings
 
 | Code | Bedingung | Empfehlung |
 |------|-----------|------------|
-| W001 | schemaVersion < 0.1 | Schema auf 0.1 aktualisieren |
+| W101 | schemaVersion kleiner als die aktuelle (`Solution.cmake:107`) | Schema auf die aktuelle Version heben |
+| W102 | schemaVersion größer als die aktuelle (`Solution.cmake:109`) | CMakeCraft aktualisieren |
+
+W001 (Schema < 0.1) löst Solution.cmake nicht aus; es steht nur in `validate_solution_schema()`,
+das niemand aufruft (Stand 2026-11-09, siehe [Validation.md §3.5](../core/Validation.md#35-validate_solution_schema)).
 
 ---
 
@@ -288,7 +294,7 @@ message(STATUS "Building ${_name} v${_version} with C++${_cxx}")
 - [Executables.cmake](Executables.md) — Verwendet SOLUTION_EXECUTABLES_JSON
 - [Libraries.cmake](Libraries.md) — Verwendet SOLUTION_LIBRARIES_JSON
 - [Externals.cmake](Externals.md) — Verwendet SOLUTION_EXTERNALS_JSON
-- [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E002, W001
+- [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E002, E003, W101, W102
 
 ---
 
@@ -296,6 +302,8 @@ message(STATUS "Building ${_name} v${_version} with C++${_cxx}")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Prüfung der Schema-Version mit E002, E003, W101, W102 statt W001 (§4.1, §6; W001 wird nie ausgelöst)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
 | 0.1.1 | 2025-12-07 | SOLUTION_LIBRARIES_JSON, SOLUTION_EXECUTABLES_JSON hinzugefügt |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): JSON-Parsing, Global Properties, Debug-Output |

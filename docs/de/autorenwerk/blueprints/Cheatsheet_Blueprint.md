@@ -1,12 +1,12 @@
 # Blueprint: Cheatsheet
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Datum:** 2025-12-26  
 > **Typ:** Blueprint  
 > **Status:** Stabil  
 > **Zielgruppe:** Dokumentations-Autoren  
 > **Sprache:** Deutsch  
-> **English:** [Cheatsheet_Blueprint.md](Cheatsheet_Blueprint.md)
+> **English:** [Cheatsheet_Blueprint.md](../../../en/autorenwerk/blueprints/Cheatsheet_Blueprint.md)
 
 ---
 
@@ -54,7 +54,7 @@ Dieses Blueprint definiert das Format für **Cheatsheets** — kompakte Schnellr
 
 ### 2.2 Struktur
 
-```markdown
+````markdown
 ## Schnellstart
 
 {2-3 Zeilen: Wichtigste Info sofort}
@@ -90,7 +90,7 @@ Dieses Blueprint definiert das Format für **Cheatsheets** — kompakte Schnellr
 
 - [Link 1](path) — Beschreibung
 - [Link 2](path) — Beschreibung
-```
+````
 
 ---
 
@@ -164,7 +164,7 @@ endfunction()
 
 ## 4. Beispiel: Vollständiges Cheatsheet
 
-```markdown
+````markdown
 # Git — Cheatsheet
 
 > **Version:** 1.0.0  
@@ -249,7 +249,7 @@ git add . && git commit -m "msg" && git push   # Änderungen pushen
 
 - [Git Dokumentation](https://git-scm.com/doc)
 - [Pro Git Buch](https://git-scm.com/book)
-```
+````
 
 ---
 
@@ -314,9 +314,9 @@ Vor Veröffentlichung prüfen:
 
 ## 7. Siehe auch
 
-- [Concept_Blueprint.md](Concept_Blueprint.md) — Für Erklärungen
-- [Reference_Blueprint.md](Reference_Blueprint.md) — Für vollständige Spezifikationen
-- [UserGuide_Blueprint.md](UserGuide_Blueprint.md) — Für Schritt-für-Schritt Anleitungen
+- [Concept_Blueprint.md](Concept.md) — Für Erklärungen
+- [Reference_Blueprint.md](Reference.md) — Für vollständige Spezifikationen
+- [UserGuide_Blueprint.md](Guide.md) — Für Schritt-für-Schritt Anleitungen
 
 ---
 
@@ -324,4 +324,5 @@ Vor Veröffentlichung prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-18** | **Initial: Cheatsheet Blueprint erstellt** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.1.0 | 2025-12-18 | Initial: Cheatsheet Blueprint erstellt |

@@ -1,14 +1,14 @@
 # SourceCollect.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [SourceCollect.md](SourceCollect.md)  
-> **Modul:** [`cmake/core/SourceCollect.cmake`](../../../../cmake/core/SourceCollect.cmake)  
+> **English:** [SourceCollect.md](../../../../en/guide/module/core/SourceCollect.md)  
+> **Modul:** [`cmake/core/SourceCollect.cmake`](../../../../../cmake/core/SourceCollect.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -24,7 +24,7 @@
 7. [Fehlerbehandlung](#7-fehlerbehandlung)
 8. [Best Practices](#8-best-practices)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -424,7 +424,8 @@ collect_files(_all DIRECTORY "${_dir}" ...)  # Besser: Explizit listen!
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): collect_sources, _collect_sources_from_cmake, _collect_sources_glob, _apply_sources_to_target, collect_files, _get_source_mode |

@@ -3,50 +3,50 @@
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [glfw_PreFetch.md](../../en/modules/externals/glfw_PreFetch.md)  
-> **Hook:** [cmake/externals/hooks/prefetch/glfw.cmake](../../../cmake/externals/hooks/prefetch/glfw.cmake)  
+> **German:** [Glfw.md](../../../../../../de/guide/module/externals/hooks/prefetch/Glfw.md)  
+> **Hook:** [cmake/externals/hooks/prefetch/glfw.cmake](../../../../../../../cmake/externals/hooks/prefetch/glfw.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Warum ein PreFetch Hook?](#2-warum-ein-prefetch-hook)
-3. [Gesetzte Optionen](#3-gesetzte-optionen)
-4. [Solution.json Configuration](#4-solutionjson-konfiguration)
-5. [Erstellte Targets](#5-erstellte-targets)
-6. [See Also](#6-siehe-auch)
+1. [Overview](#1-overview)
+2. [Why a PreFetch Hook?](#2-why-a-prefetch-hook)
+3. [Options Set](#3-options-set)
+4. [Solution.json Configuration](#4-solutionjson-configuration)
+5. [Created Targets](#5-created-targets)
+6. [See Also](#6-see-also)
 7. [Changelog](#7-changelog)
 
 ---
 
 ## 1. Overview
 
-Der `glfw.cmake` PreFetch Hook konfiguriert GLFW vor dem Build, um unnötige Komponenten zu deaktivieren.
+The `glfw.cmake` PreFetch hook configures GLFW before the build to disable unneeded components.
 
 ---
 
-## 2. Warum ein PreFetch Hook?
+## 2. Why a PreFetch Hook?
 
-**Ohne Hook:** 20+ zusätzliche Targets im Solution Explorer (Examples, Tests, Docs).
+**Without the hook:** 20+ additional targets in the Solution Explorer (examples, tests, docs).
 
-**Mit Hook:** Nur `glfw` und `update_mappings` Targets.
+**With the hook:** Only the `glfw` and `update_mappings` targets.
 
 ---
 
-## 3. Gesetzte Optionen
+## 3. Options Set
 
-| Option | Wert | Description |
-|--------|------|--------------|
-| `GLFW_BUILD_EXAMPLES` | `OFF` | Keine Example-Programme |
-| `GLFW_BUILD_TESTS` | `OFF` | Keine Test-Programme |
-| `GLFW_BUILD_DOCS` | `OFF` | Keine Dokumentation |
-| `GLFW_INSTALL` | `OFF` | Kein Install-Target |
+| Option | Value | Description |
+|--------|-------|-------------|
+| `GLFW_BUILD_EXAMPLES` | `OFF` | No example programs |
+| `GLFW_BUILD_TESTS` | `OFF` | No test programs |
+| `GLFW_BUILD_DOCS` | `OFF` | No documentation |
+| `GLFW_INSTALL` | `OFF` | No install target |
 
 ---
 
@@ -63,23 +63,24 @@ Der `glfw.cmake` PreFetch Hook konfiguriert GLFW vor dem Build, um unnötige Kom
 
 ---
 
-## 5. Erstellte Targets
+## 5. Created Targets
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `glfw` | STATIC | GLFW Library |
+| Target | Type | Description |
+|--------|------|-------------|
+| `glfw` | STATIC | GLFW library |
 
 ---
 
 ## 6. See Also
 
-- [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook-System
-- [imgui_PostFetch.md](imgui_PostFetch.md) — ImGui Hook (verwendet glfw)
+- [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook system
+- [Imgui.md](../postfetch/Imgui.md) — ImGui hook (uses glfw)
 
 ---
 
 ## 7. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Documentation migrated to Blueprint v0.5.0 |

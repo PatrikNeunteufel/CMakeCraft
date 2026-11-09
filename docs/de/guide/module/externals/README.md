@@ -1,9 +1,9 @@
 # Externals — External-Management-System
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../../en/modules/externals/README.md)
+> **English:** [README.md](../../../../en/guide/module/externals/README.md)
 
 ---
 
@@ -21,7 +21,7 @@
 
 **Lokale Library einbinden?**
 1. [locals/Attach_cmake.md](locals/Attach_cmake.md) — Local-Attach-System
-2. [includes/](includes/README.md) — Include-Definitionen pro Library
+2. [includes/](includes/bass/Bass_Include.md) — Include-Definitionen pro Library
 
 **Vorgebautes Paket beziehen?**
 1. [archive/Handler_cmake.md](archive/Handler_cmake.md) — External-Art `archive`
@@ -39,33 +39,40 @@
 
 ## Übersicht
 
-Das External-Management-System handhabt alle externen Dependencies: Git-basierte (fetched) und lokale (local) Libraries. Es nutzt ein zentralisiertes Registry-System und Hook-Mechanismen.
+Das External-Management-System handhabt alle externen Dependencies: lokale (`path`), Git-basierte (`git`, fetched), System- (`system`, find_package) und Archiv-Externals (`archive`, vorgebaute Pakete). Es nutzt ein zentralisiertes Registry-System und Hook-Mechanismen.
 
 ### Architektur
 
 ```
-Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
-    │
-    ├── registry/Targets.cmake   ← Zentrale Target-Registry
-    │
-    ├── core/Fetch.cmake         ← Git FetchContent
-    │       │
-    │       └── hooks/           ← Pre/Post-Fetch Hooks
-    │           ├── HookLoader.cmake
-    │           ├── prefetch/Glfw.cmake
-    │           └── postfetch/Imgui.cmake
-    │
-    ├── fetched/Handler.cmake    ← Verarbeitet gefetchte Libs
-    │
-    ├── locals/Attach.cmake      ← Bindet lokale Libs ein
-    │
-    ├── archive/Handler.cmake    ← Bezieht vorgebaute Pakete (CMakeCraftPackage.cmake)
-    │
-    └── includes/                ← Library-spezifische Includes
-        ├── bass/Bass_Include.cmake
-        ├── doctest/Doctest_Include.cmake
-        ├── glad/Glad_Include.cmake
-        └── lua54/Lua54_Include.cmake
+cmake/externals/
+├── Orchestrator.cmake           ← Haupt-Entry, erkennt den Typ und verteilt
+│
+├── local/
+│   └── Attach.cmake             ← Bindet lokale Libs ein ("path")
+├── includes/                    ← Include.cmake je lokales External
+│   ├── bass/Include.cmake
+│   ├── doctest/Include.cmake
+│   ├── glad/Include.cmake
+│   └── lua54/Include.cmake
+│
+├── fetched/
+│   └── Handler.cmake            ← Verarbeitet gefetchte Libs ("git")
+├── core/
+│   └── Fetch.cmake              ← Git FetchContent
+├── hooks/                       ← Pre/Post-Fetch Hooks
+│   ├── HookLoader.cmake
+│   ├── prefetch/                ← catch2, glfw, googletest, qt-ads, qt-ads110 (.cmake)
+│   └── postfetch/               ← imgui, qt-ads, qt-ads110, stb (.cmake)
+├── registry/
+│   └── Targets.cmake            ← Zentrale Target-Registry
+│
+├── system/                      ← System-Externals über find_package ("system": true)
+│   ├── Handler.cmake
+│   ├── PathResolver.cmake
+│   └── packages/                ← Qt6.cmake, Boost.cmake
+│
+└── archive/
+    └── Handler.cmake            ← Bezieht vorgebaute Pakete ("archive": true; CMakeCraftPackage.cmake)
 ```
 
 ---
@@ -82,12 +89,14 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 
 | Ordner | Dateien | Beschreibung |
 |--------|---------|--------------|
-| [core/](core/README.md) | 1 | Kern-Funktionen |
-| [fetched/](fetched/README.md) | 1 | Handler für gefetchte Libraries |
-| [hooks/](hooks/README.md) | 3 | Pre/Post-Fetch Hook-System |
-| [includes/](includes/README.md) | 4 | Library-spezifische Includes |
-| [locals/](locals/README.md) | 1 | Lokale Library-Integration |
-| [registry/](registry/README.md) | 1 | Target-Registry |
+| [archive/](archive/Handler_cmake.md) | 1 | Handler für Archive Externals |
+| [core/](core/Fetch_cmake.md) | 1 | Kern-Funktionen |
+| [fetched/](fetched/Handler_cmake.md) | 1 | Handler für gefetchte Libraries |
+| [hooks/](hooks/HookLoader_cmake.md) | 8 | Pre/Post-Fetch Hook-System |
+| [includes/](includes/bass/Bass_Include.md) | 4 | Library-spezifische Includes |
+| [locals/](locals/Attach_cmake.md) | 1 | Lokale Library-Integration (Code: `local/`) |
+| [registry/](registry/Targets_cmake.md) | 1 | Target-Registry |
+| [system/](system/README.md) | 5 | System-Externals (find_package) |
 
 ---
 
@@ -128,8 +137,13 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 | Datei | Beschreibung |
 |-------|--------------|
 | [hooks/HookLoader_cmake.md](hooks/HookLoader_cmake.md) | Hook-Loader und Discovery |
+| [hooks/prefetch/Catch2.md](hooks/prefetch/Catch2.md) | Catch2 Pre-Fetch Hook |
 | [hooks/prefetch/Glfw.md](hooks/prefetch/Glfw.md) | GLFW Pre-Fetch Hook |
+| [hooks/prefetch/Googletest.md](hooks/prefetch/Googletest.md) | GoogleTest Pre-Fetch Hook |
+| [hooks/prefetch/Qt-Ads_PreFetch.md](hooks/prefetch/Qt-Ads_PreFetch.md) | Qt-ADS Pre-Fetch Hook |
 | [hooks/postfetch/Imgui.md](hooks/postfetch/Imgui.md) | ImGui Post-Fetch Hook |
+| [hooks/postfetch/Qt-Ads_PostFetch.md](hooks/postfetch/Qt-Ads_PostFetch.md) | Qt-ADS Post-Fetch Hook |
+| [hooks/postfetch/Stb.md](hooks/postfetch/Stb.md) | stb Post-Fetch Hook |
 
 ### includes/ — Library-Includes
 
@@ -140,6 +154,16 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 | [includes/glad/Glad_Include.md](includes/glad/Glad_Include.md) | GLAD OpenGL Loader |
 | [includes/lua54/Lua54_Include.md](includes/lua54/Lua54_Include.md) | Lua 5.4 Scripting Engine |
 
+### system/ — System-Externals
+
+| Datei | Beschreibung |
+|-------|--------------|
+| [system/README.md](system/README.md) | Übersicht System-Externals |
+| [system/Handler_cmake.md](system/Handler_cmake.md) | find_package-Handler |
+| [system/PathResolver_cmake.md](system/PathResolver_cmake.md) | Suchpfade |
+| [system/packages/Qt6_cmake.md](system/packages/Qt6_cmake.md) | Paket-Hook Qt6 |
+| [system/packages/Boost_cmake.md](system/packages/Boost_cmake.md) | Paket-Hook Boost |
+
 ---
 
 ## External-Typen
@@ -147,7 +171,8 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 | Typ | Quelle | Beispiele | Referenz |
 |-----|--------|-----------|----------|
 | **Git (fetched)** | Git Repository | GLFW, ImGui, doctest | [Git_Externals.md](../../references/externals/Git_Externals.md) |
-| **Local** | System/SDK | BASS, Lua, Qt6 | [Local_Externals.md](../../references/externals/Local_Externals.md) |
+| **Local** | Ordner im Projekt (`path`) | BASS, Lua, glad, doctest | [Local_Externals.md](../../references/externals/Local_Externals.md) |
+| **System** | Installiertes Paket über find_package (`"system": true`) | Qt6, Boost | [system/Handler_cmake.md](system/Handler_cmake.md) |
 | **Archive** | Vorgebautes Paket (Pin-Datei mit Version, URL, SHA256) | — | [archive/Handler_cmake.md](archive/Handler_cmake.md) |
 
 ---
@@ -156,5 +181,14 @@ Orchestrator.cmake           ← Haupt-Entry, koordiniert alles
 
 - [../README.md](../README.md) — Modul-Übersicht
 - [../../references/Externals.md](../../references/Externals.md) — Externals-Referenz
-- [../../references/externals/](../../references/externals/README.md) — External-Definitionen
+- [../../references/externals/](../../references/README.md) — External-Definitionen
 - [../../userguides/Externals.md](../../userguides/Externals.md) — Externals User Guide
+
+---
+
+## Changelog
+
+| Version | Datum | Änderungen |
+|---------|-------|------------|
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Architekturbaum nach `cmake/externals/` (`local/`, `system/`, `archive/`, Hook-Dateien klein, `includes/<name>/Include.cmake`); Ordnertabelle mit `archive/` und `system/`, 8 Hook-Dokumente; System-Externals als eigener Typ** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |

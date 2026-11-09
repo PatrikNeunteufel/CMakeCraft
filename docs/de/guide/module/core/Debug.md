@@ -1,14 +1,14 @@
 # Debug.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Debug.md](Debug.md)  
-> **Modul:** [`cmake/core/Debug.cmake`](../../../../cmake/core/Debug.cmake)  
+> **English:** [Debug.md](../../../../en/guide/module/core/Debug.md)  
+> **Modul:** [`cmake/core/Debug.cmake`](../../../../../cmake/core/Debug.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -25,7 +25,7 @@
 8. [Best Practices](#8-best-practices)
 9. [Interne Implementierung](#9-interne-implementierung)
 10. [Siehe auch](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+11. [Changelog](#changelog)
 
 ---
 
@@ -486,7 +486,7 @@ Das Modul verwendet **DIRECTORY PROPERTY** für Kontext-Speicherung:
 ## 10. Siehe auch
 
 - [Errors.cmake](Errors.md) — Für echte Fehler (cmake_fatal, cmake_warn)
-- [guidelines](../../../standards/guidelines.md) — Debug-Konventionen
+- [guidelines](../../../konzepte/Guidelines.md) — Debug-Konventionen
 - [CMake.md](../../../autorenwerk/blueprints/CMake.md) — Debug in Modulen
 
 ---
@@ -495,6 +495,7 @@ Das Modul verwendet **DIRECTORY PROPERTY** für Kontext-Speicherung:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-04 | Initial (Clean Start): Zwei-Achsen-Filterung, dbg_init/dbg/dbgspace/enddbgblock/setup_debug_from_args API |

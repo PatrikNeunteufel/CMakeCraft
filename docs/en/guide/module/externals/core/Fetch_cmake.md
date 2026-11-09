@@ -1,87 +1,87 @@
-# Core/Fetch.cmake — FetchContent Wrapper mit Caching
+# Core/Fetch.cmake — FetchContent Wrapper with Caching
 
 > **Version:** 1.1.0  
 > **Date:** 2026-08-08  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [Fetch_cmake.md](Fetch_cmake.md)  
-> **Module:** [cmake/externals/Core/Fetch.cmake](../../../cmake/externals/Core/Fetch.cmake)  
+> **German:** [Fetch_cmake.md](../../../../../de/guide/module/externals/core/Fetch_cmake.md)  
+> **Module:** [cmake/externals/Core/Fetch.cmake](../../../../../../cmake/externals/core/Fetch.cmake)  
 > **Module Version:** 1.1.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Configuration](#3-konfiguration)
-4. [API-Reference](#4-api-referenz)
-5. [Caching-Logik](#5-caching-logik)
-6. [Git-Referenceen](#6-git-referenzen)
-7. [Usagesbeispiele](#7-verwendungsbeispiele)
-8. [Errorbehandlung](#8-fehlerbehandlung)
-9. [See Also](#9-siehe-auch)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Configuration](#3-configuration)
+4. [API Reference](#4-api-reference)
+5. [Caching Logic](#5-caching-logic)
+6. [Git References](#6-git-references)
+7. [Usage Examples](#7-usage-examples)
+8. [Error Handling](#8-error-handling)
+9. [See Also](#9-see-also)
 10. [Changelog](#10-changelog)
 
 ---
 
 ## 1. Overview
 
-`Core/Fetch.cmake` ist ein Wrapper um CMakes `FetchContent`, der intelligentes Caching in einem zentralen `.externals/` Verzeichnis implementiert.
+`Core/Fetch.cmake` is a wrapper around CMake's `FetchContent` that implements intelligent caching in a central `.externals/` directory.
 
-### Kernfunktionen
+### Core Functions
 
-- **Preset-übergreifendes Caching** — Alle Build-Presets teilen dieselben Downloads
-- **Offline-Modus** — Arbeiten ohne Netzwerkzugriff
-- **Force-Fetch** — Erzwingen eines erneuten Downloads
-- **Version-Checking** — Automatische Erkennung veralteter Caches
+- **Cross-preset caching** — All build presets share the same downloads
+- **Offline mode** — Working without network access
+- **Force fetch** — Forcing a fresh download
+- **Version checking** — Automatic detection of outdated caches
 
 ### Architecture
 
 ```
-.externals/                     ← Zentrales Cache-Verzeichnis
+.externals/                     ← Central cache directory
 ├── spdlog/
 ├── glfw/
 └── imgui/
 
-build-windows-debug/            ← Build-Verzeichnis (Preset)
-build-linux-release/            ← Anderes Preset, GLEICHER Cache
+build-windows-debug/            ← Build directory (preset)
+build-linux-release/            ← Other preset, SAME cache
 ```
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Zweck |
-|-------|-------|
-| `FetchContent` | CMake Built-in für Downloads |
-| `Errors.cmake` | Errorbehandlung |
-| `Debug.cmake` | Debug-Ausgaben |
-| `Json.cmake` | JSON-Parsing |
+| Module | Purpose |
+|--------|---------|
+| `FetchContent` | CMake built-in for downloads |
+| `Errors.cmake` | Error handling |
+| `Debug.cmake` | Debug output |
+| `Json.cmake` | JSON parsing |
 
 ---
 
 ## 3. Configuration
 
-### Cache-Variablen
+### Cache Variables
 
 | Variable | Default | Description |
-|----------|---------|--------------|
-| `EXTERNALS_FETCH_ROOT` | `${CMAKE_SOURCE_DIR}/.externals` | Cache-Verzeichnis |
+|----------|---------|-------------|
+| `EXTERNALS_FETCH_ROOT` | `${CMAKE_SOURCE_DIR}/.externals` | Cache directory |
 
-### Optionen
+### Options
 
 | Option | Default | Description |
-|--------|---------|--------------|
-| `EXTERNALS_OFFLINE` | `OFF` | Nur Cache verwenden, kein Netzwerk |
-| `EXTERNALS_FORCE_FETCH` | `OFF` | Alle Externals neu herunterladen |
+|--------|---------|-------------|
+| `EXTERNALS_OFFLINE` | `OFF` | Use the cache only, no network |
+| `EXTERNALS_FORCE_FETCH` | `OFF` | Download all externals again |
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 _fetch_git_external()
 
@@ -89,22 +89,22 @@ build-linux-release/            ← Anderes Preset, GLEICHER Cache
 _fetch_git_external(EXT_NAME EXT_JSON)
 ```
 
-| Parameters | Typ | Description |
-|-----------|-----|--------------|
-| `EXT_NAME` | String | Name des Externals |
-| `EXT_JSON` | JSON | JSON-Definition mit `git`, `tag/branch/commit` |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `EXT_NAME` | String | Name of the external |
+| `EXT_JSON` | JSON | JSON definition with `git`, `tag/branch/commit` |
 
-**JSON-Felder:**
+**JSON fields:**
 
-| Feld | Required | Description |
-|------|---------|--------------|
-| `git` | ✓ | Repository-URL |
-| `tag` | ¹ | Git-Tag (z.B. "v1.12.0") |
-| `branch` | ¹ | Git-Branch (z.B. "main") |
-| `commit` | ¹ | Git-Commit-Hash |
-| `shallow` | ✗ | Shallow Clone (default: true) |
+| Field | Required | Description |
+|-------|----------|-------------|
+| `git` | ✓ | Repository URL |
+| `tag` | ¹ | Git tag (e.g. "v1.12.0") |
+| `branch` | ¹ | Git branch (e.g. "main") |
+| `commit` | ¹ | Git commit hash |
+| `shallow` | ✗ | Shallow clone (default: true) |
 
-¹ Genau eines von `tag`, `branch`, `commit` erforderlich.
+¹ Exactly one of `tag`, `branch`, `commit` is required.
 
 ---
 
@@ -114,7 +114,7 @@ _fetch_git_external(EXT_NAME EXT_JSON)
 _make_external_available(EXT_NAME)
 ```
 
-Macht ein deklariertes External verfügbar (Download falls nötig).
+Makes a declared external available (downloads it if necessary).
 
 ---
 
@@ -124,7 +124,7 @@ Macht ein deklariertes External verfügbar (Download falls nötig).
 _is_external_populated(EXT_NAME OUT_VAR)
 ```
 
-Prüft ob ein External verfügbar ist.
+Checks whether an external is available.
 
 ---
 
@@ -134,7 +134,7 @@ Prüft ob ein External verfügbar ist.
 _get_external_source_dir(EXT_NAME OUT_VAR)
 ```
 
-Gibt den Source-Pfad eines Externals zurück.
+Returns the source path of an external.
 
 ---
 
@@ -151,9 +151,9 @@ aborted fetch. The criterion is a resolvable `HEAD`
 (`git rev-parse --verify --quiet HEAD`) — that exists only once the clone got
 far enough to check something out.
 
-Without a `git` executable the question cannot be answered and the clone counts
+Without an available `git` the question cannot be decided; the clone then counts
 as complete. That is harmless: without `git`, `_check_cached_version()` reports
-a mismatch anyway, so the external gets fetched either way.
+"mismatch" anyway, so the external gets fetched again either way.
 
 ---
 
@@ -165,9 +165,9 @@ _purge_cache_dir(EXT_NAME CACHE_DIR)
 
 > **Since:** module version 1.1.0
 
-Removes `CACHE_DIR` completely and verifies it is gone. If the directory
-survives, the function fails with **E219** — naming the path, the usual causes
-(open file, path too long) and what to do.
+Removes `CACHE_DIR` completely and verifies that it is actually gone. If the
+directory survives, the function aborts with **E219** — naming the path, the
+usual causes (open file, path too long) and what to do.
 
 Doing the removal here instead of leaving it to FetchContent is the whole
 point: at this spot it is still known *which* external is affected and *why*
@@ -175,9 +175,9 @@ the directory has to go.
 
 ---
 
-## 5. Caching-Logik
+## 5. Caching Logic
 
-### Entscheidungsbaum
+### Decision Tree
 
 ```
 FORCE_FETCH=ON?  ──YES──► FETCH
@@ -212,35 +212,35 @@ OFFLINE? ──YES──► W302 + USE CACHE
   FETCH
 ```
 
-### Why "clone complete?" is a question of its own
+### Why "Clone Complete?" Is a Question of Its Own
 
-`git clone` creates `.git` early and fills it afterwards. If it is interrupted —
-network loss, Ctrl-C, a full disk — a `.git` without a checked-out commit stays
-behind. The presence of `.git` therefore does **not** mean a usable clone lives
-there.
+`git clone` creates `.git` early and fills it afterwards. If the operation is
+interrupted — network gone, Ctrl-C, disk full — a `.git` without a checked-out
+state stays behind. The existence of `.git` therefore does **not** mean that a
+usable clone lives there.
 
-Until v0.9.0 that distinction was missing, with two consequences:
+Until v0.9.0 this distinction was missing, with two consequences:
 
-1. The version comparison ran against debris and reported **"version mismatch"** —
+1. The version comparison ran on debris and reported **"Version mismatch"** —
    a diagnosis pointing in the wrong direction.
-2. Cleaning up was left to FetchContent. When its removal failed, the message
-   named neither the cause nor a way out.
+2. Cleaning up was left to FetchContent. When its removal attempt failed, the
+   message named neither the cause nor a way out.
 
 Since v0.9.1, [`_is_complete_clone()`](#45-_is_complete_clone) checks whether a
-`HEAD` resolves — which it does only once the clone got far enough. If the clone
-is incomplete, [`_purge_cache_dir()`](#46-_purge_cache_dir) cleans up and, should
-that fail, reports **E219** with cause and remedy.
+`HEAD` can be resolved — which exists only once the clone got far enough. If it
+is incomplete, [`_purge_cache_dir()`](#46-_purge_cache_dir) cleans up itself and,
+on failure, reports **E219** with cause and remedy.
 
 **Deliberately unchanged:** for a *complete* clone with a differing version,
-FetchContent still does the removal. Purging up front there would re-fetch
-branch-pinned externals on every configure — `_check_cached_version()` reports
-"mismatch" for branches by design.
+FetchContent still does the removal. Removing it up front at this spot would
+re-fetch branch-pinned externals on every configure — `_check_cached_version()`
+always reports "mismatch" for branches.
 
 ---
 
-## 6. Git-Referenceen
+## 6. Git References
 
-### Tag (empfohlen)
+### Tag (recommended)
 
 ```json
 {
@@ -262,7 +262,7 @@ branch-pinned externals on every configure — `_check_cached_version()` reports
 }
 ```
 
-### Branch (nicht empfohlen)
+### Branch (not recommended)
 
 ```json
 {
@@ -275,16 +275,16 @@ branch-pinned externals on every configure — `_check_cached_version()` reports
 
 ---
 
-## 7. Usagesbeispiele
+## 7. Usage Examples
 
-### Standard-Usage (via Handler)
+### Standard Usage (via Handler)
 
 ```cmake
 _fetch_git_external("spdlog" "${_ext_json}")
 _make_external_available("spdlog")
 ```
 
-### CI/CD Offline-Build
+### CI/CD Offline Build
 
 ```bash
 cmake -B build-ci -DEXTERNALS_OFFLINE=ON
@@ -292,34 +292,34 @@ cmake -B build-ci -DEXTERNALS_OFFLINE=ON
 
 ---
 
-## 8. Errorbehandlung
+## 8. Error Handling
 
 | Code | Error | Description |
-|------|--------|--------------|
-| E012 | Keine git URL | `git` Feld fehlt oder leer |
-| E202 | Fetch fehlgeschlagen | FetchContent konnte External nicht laden |
-| E215 | Keine Version | Kein tag/branch/commit angegeben |
-| E218 | Offline without cache | External not cached (or only partially), OFFLINE=ON |
-| E219 | Cache not removable | An unusable cache directory could not be removed |
+|------|-------|-------------|
+| E012 | No git URL | `git` field missing or empty |
+| E202 | Fetch failed | FetchContent could not load the external |
+| E215 | No version | No tag/branch/commit given |
+| E218 | Offline without cache | External not cached (or only incompletely), OFFLINE=ON |
+| E219 | Cache not removable | Unusable cache directory could not be removed |
 
 | Code | Warning | Description |
 |------|---------|-------------|
 | W302 | Version differs | Offline mode uses the cache anyway |
-| W303 | Incomplete clone | Debris of an aborted fetch — removed and fetched again |
+| W303 | Incomplete clone | Remains of an aborted fetch — removed and fetched again |
 
 ---
 
 ## 9. See Also
 
-- [Handler_cmake.md](Handler_cmake.md) — Fetched External Pipeline
-- [HookLoader_cmake.md](../hooks/HookLoader_cmake.md) — Pre/PostFetch Hooks
-- [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Type Dispatcher
+- [Handler_cmake.md](../fetched/Handler_cmake.md) — Fetched external pipeline
+- [HookLoader_cmake.md](../hooks/HookLoader_cmake.md) — Pre/PostFetch hooks
+- [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Type dispatcher
 
 ---
 
 ## 10. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
+| Version | Date | Changes |
+|---------|------|---------|
 | **1.1.0** | **2026-08-08** | **Module version 1.1.0: `_is_complete_clone()` and `_purge_cache_dir()` documented; decision tree extended by the completeness check; E219/W303 added** |
-| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |
+| 0.5.0 | 2025-12-15 | Documentation migrated to Blueprint v0.5.0 |

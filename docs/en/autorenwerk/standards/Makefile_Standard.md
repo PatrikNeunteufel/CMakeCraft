@@ -1,63 +1,64 @@
-# Makefile Standard — Stil-Richtlinien
+# Makefile Standard — Style Guidelines
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-19  
 > **Type:** Standard  
 > **Status:** Stable  
-> **Target Audience:** Build System Developers  
-> **Scope:** Alle Makefile-basierten Build-Systeme  
-> **Durchsetzung:** Code Review  
-> **Language:** English
+> **Target Audience:** Build system developers  
+> **Scope:** All Makefile-based build systems  
+> **Enforcement:** Code review  
+> **Language:** English  
+> **German:** [Makefile_Standard.md](../../../de/autorenwerk/standards/Makefile_Standard.md)
 
 ---
 
 ## Table of Contents
 
-1. [Zweck und Scope](#1-zweck-und-geltungsbereich)
-2. [Grundprinzipien](#2-grundprinzipien)
-3. [Datei-Organisation](#3-datei-organisation)
-4. [Formatierung](#4-formatierung)
-5. [Namenskonventionen](#5-namenskonventionen)
-6. [Variablen](#6-variablen)
-7. [Targets und Regeln](#7-targets-und-regeln)
-8. [Kommentare](#8-kommentare)
-9. [Errorbehandlung](#9-fehlerbehandlung)
-10. [Diagnose-Targets](#10-diagnose-targets)
-11. [Shell-Befehle](#11-shell-befehle)
-12. [Portabilität](#12-portabilität)
-13. [See Also](#13-siehe-auch)
+1. [Purpose and Scope](#1-purpose-and-scope)
+2. [Basic Principles](#2-basic-principles)
+3. [File Organization](#3-file-organization)
+4. [Formatting](#4-formatting)
+5. [Naming Conventions](#5-naming-conventions)
+6. [Variables](#6-variables)
+7. [Targets and Rules](#7-targets-and-rules)
+8. [Comments](#8-comments)
+9. [Error Handling](#9-error-handling)
+10. [Diagnostic Targets](#10-diagnostic-targets)
+11. [Shell Commands](#11-shell-commands)
+12. [Portability](#12-portability)
+13. [See Also](#13-see-also)
 14. [Changelog](#14-changelog)
 
 ---
 
-## 1. Zweck und Scope
+## 1. Purpose and Scope
 
-Dieser Standard definiert **Coding-Konventionen für Makefiles** im Unternehmen.
+This standard defines **coding conventions for Makefiles** in the company.
 
-### 1.1 Zielgruppe
+### 1.1 Target Audience
 
-Build System Developers, die Makefiles für Embedded- oder PC-Projekte schreiben.
+Build system developers who write Makefiles for embedded or PC projects.
 
-### 1.2 Anwendungsbereich
+### 1.2 Area of Application
 
-| Projekt-Typ | Gilt für |
-|-------------|----------|
-| Embedded Build-Systeme | TMS320, Microchip, etc. |
-| PC Build-Systeme | Standalone Makefiles |
-| CMake-Projekte | Nicht direkt (siehe CMake_Standard) |
+| Project Type | Applies to |
+|--------------|------------|
+| Embedded build systems | TMS320, Microchip, etc. |
+| PC build systems | Standalone Makefiles |
+| CMake projects | Not directly (see CMake_Standard) |
 
 ---
 
-## 2. Grundprinzipien
+## 2. Basic Principles
 
-1. **Transparenz** — Jeder Schritt soll nachvollziehbar sein
-2. **Fail-Fast** — Error früh erkennen und klar melden
-3. **Modularität** — Wiederverwendbare, unabhängige Module
-4. **Dokumentation** — Diagnose-Targets für Debugging
+1. **Transparency** — Every step should be traceable
+2. **Fail-fast** — Detect errors early and report them clearly
+3. **Modularity** — Reusable, independent modules
+4. **Documentation** — Diagnostic targets for debugging
 
-### 2.1 TODO-Marker
+### 2.1 TODO Markers
 
-Für unfertige Aufgaben: `# TODO:` im Kommentar verwenden.
+For unfinished tasks: use `# TODO:` in the comment.
 
 ```makefile
 # TODO: Add fallback for missing compiler
@@ -66,36 +67,36 @@ Für unfertige Aufgaben: `# TODO:` im Kommentar verwenden.
 
 ---
 
-## 3. Datei-Organisation
+## 3. File Organization
 
-### 3.1 Dateinamen
+### 3.1 File Names
 
-| Typ | Konvention | Example |
-|-----|------------|----------|
-| Haupt-Makefile | `Makefile` | `Makefile` |
-| Modul | `<name>.mk` | `toolchain.mk`, `paths.mk` |
-| Ordner | `lowercase` | `common/`, `make/` |
+| Type | Convention | Example |
+|------|------------|---------|
+| Main Makefile | `Makefile` | `Makefile` |
+| Module | `<name>.mk` | `toolchain.mk`, `paths.mk` |
+| Folder | `lowercase` | `common/`, `make/` |
 
-### 3.2 Modul-Struktur
+### 3.2 Module Structure
 
 ```
 make/
-├── common/          /* Gemeinsame Module    */
+├── common/          /* Shared modules       */
 │   ├── config.mk
 │   ├── paths.mk
 │   └── ...
-└── <project>/       /* Projekt-spezifisch   */
+└── <project>/       /* Project-specific     */
     ├── config.mk
     ├── sources.mk
     └── rules.mk
 ```
 
-### 3.3 Include-Reihenfolge
+### 3.3 Include Order
 
-Die Reihenfolge der Includes ist kritisch:
+The order of the includes is critical:
 
 ```makefile
-# 1. Bootstrap/Argument-Validierung
+# 1. Bootstrap/argument validation
 include common/arguments.mk
 
 # 2. Configuration
@@ -108,7 +109,7 @@ include common/outputs.mk
 # 4. Toolchain
 include common/toolchain.mk
 
-# 5. Projekt-spezifisch
+# 5. Project-specific
 include $(Project)/config.mk
 include $(Project)/sources.mk
 include $(Project)/rules.mk
@@ -116,42 +117,42 @@ include $(Project)/rules.mk
 
 ---
 
-## 4. Formatierung
+## 4. Formatting
 
 ### 4.1 Overview
 
-| Aspekt | Regel |
-|--------|-------|
-| Einrückung in Rezepten | **Tab** (Required in Make) |
-| Einrückung außerhalb | 2 Spaces |
-| Zeilenlänge | 100 Zeichen (soft limit) |
-| Leerzeilen | Zwischen Sektionen |
+| Aspect | Rule |
+|--------|------|
+| Indentation in recipes | **Tab** (mandatory in Make) |
+| Indentation outside | 2 spaces |
+| Line length | 100 characters (soft limit) |
+| Blank lines | Between sections |
 
-### 4.2 Zeilenumbruch
+### 4.2 Line Breaks
 
 ```makefile
-# Lange Listen mit Backslash umbrechen
+# Break long lists with a backslash
 SOURCES := \
     file1.c \
     file2.c \
     file3.c
 
-# Lange Befehle umbrechen
+# Break long commands
 $(CC) \
     $(CFLAGS) \
     -o "$@" \
     "$<"
 ```
 
-### 4.3 Ausrichtung
+### 4.3 Alignment
 
 ```makefile
-# Gleichheitszeichen ausrichten
+# Align equals signs
 CC      := $(CG_TOOL_ROOT)/bin/cl2000
 AR      := $(CG_TOOL_ROOT)/bin/ar2000
 LD      := $(CG_TOOL_ROOT)/bin/lnk2000
 
-# Werte ausrichten
+# Align values
 PROJECT     = MyProject
 CONFIG      = Debug
 OUTPUT_DIR  = $(BUILD_DIR)/out
@@ -159,73 +160,73 @@ OUTPUT_DIR  = $(BUILD_DIR)/out
 
 ---
 
-## 5. Namenskonventionen
+## 5. Naming Conventions
 
 ### 5.1 Overview
 
-| Entität | Konvention | Example |
-|---------|------------|----------|
-| **Exportierte Variable** | UPPER_CASE | `CG_TOOL_ROOT`, `CFLAGS` |
-| **Lokale Variable** | lower_case oder UPPER_CASE | `_temp`, `LOCAL_VAR` |
-| **Funktion (call)** | lower_case mit _ | `_require_dir`, `normpath` |
-| **Target** | lower-case mit - | `all`, `clean`, `check-paths` |
-| **Phony Target** | lower-case mit - | `check-all`, `print-%` |
+| Entity | Convention | Example |
+|--------|------------|---------|
+| **Exported variable** | UPPER_CASE | `CG_TOOL_ROOT`, `CFLAGS` |
+| **Local variable** | lower_case or UPPER_CASE | `_temp`, `LOCAL_VAR` |
+| **Function (call)** | lower_case with _ | `_require_dir`, `normpath` |
+| **Target** | lower-case with - | `all`, `clean`, `check-paths` |
+| **Phony target** | lower-case with - | `check-all`, `print-%` |
 
-### 5.2 Präfixe
+### 5.2 Prefixes
 
-| Präfix | Bedeutung | Example |
-|--------|-----------|----------|
-| `_` | Interne/lokale Variable | `_CG_CAND` |
-| `check-` | Diagnose-Target | `check-paths` |
-| `print-` | Variable ausgeben | `print-CFLAGS` |
+| Prefix | Meaning | Example |
+|--------|---------|---------|
+| `_` | Internal/local variable | `_CG_CAND` |
+| `check-` | Diagnostic target | `check-paths` |
+| `print-` | Print a variable | `print-CFLAGS` |
 
-### 5.3 Modul-Namensraum
+### 5.3 Module Namespace
 
-Variablen aus einem Modul können mit Modul-Präfix versehen werden:
+Variables from a module can be given a module prefix:
 
 ```makefile
 # In paths.mk
 PATHS_INCLUDE_DIRS := ...
 PATHS_LIB_DIRS := ...
 
-# Oder generisch exportieren
+# Or export generically
 INCLUDE_DIRS := ...
 export INCLUDE_DIRS
 ```
 
 ---
 
-## 6. Variablen
+## 6. Variables
 
-### 6.1 Expansion-Arten
+### 6.1 Kinds of Expansion
 
-| Art | Syntax | Usage |
-|-----|--------|------------|
-| **Sofortige Expansion** | `:=` | Pfade, Listen, konstante Werte |
-| **Verzögerte Expansion** | `=` | Werte die von späteren Variablen abhängen |
-| **Bedingte Zuweisung** | `?=` | Defaults, die überschrieben werden können |
-| **Anhängen** | `+=` | Listen erweitern |
+| Kind | Syntax | Usage |
+|------|--------|-------|
+| **Immediate expansion** | `:=` | Paths, lists, constant values |
+| **Deferred expansion** | `=` | Values that depend on later variables |
+| **Conditional assignment** | `?=` | Defaults that can be overridden |
+| **Append** | `+=` | Extend lists |
 
 ### 6.2 Best Practices
 
 ```makefile
-# ✅ Sofortige Expansion für Pfade
+# ✅ Immediate expansion for paths
 OUT_DIR := $(ProjectDir)/Build/out
 
-# ✅ Verzögerte Expansion für abhängige Werte
+# ✅ Deferred expansion for dependent values
 GLOBAL_LIB = $(OUT_DIR)/Global$(ABI_SUFFIX).lib
 
-# ✅ Default mit ?=
+# ✅ Default with ?=
 Config ?= Debug
 
-# ✅ Override für Argument-Normalisierung
+# ✅ Override for argument normalization
 override ProjectDir := $(call normpath,$(ProjectDir))
 
-# ✅ Export für rekursive Aufrufe
+# ✅ Export for recursive calls
 export CC CFLAGS LDFLAGS
 ```
 
-### 6.3 Argument-Validierung
+### 6.3 Argument Validation
 
 ```makefile
 # Pattern: Required argument
@@ -244,28 +245,28 @@ endif
 
 ---
 
-## 7. Targets und Regeln
+## 7. Targets and Rules
 
 ### 7.1 .PHONY
 
-Alle Targets ohne Datei-Output als `.PHONY` deklarieren:
+Declare all targets without file output as `.PHONY`:
 
 ```makefile
 .PHONY: all clean check-all print-%
 ```
 
-### 7.2 Standard-Targets
+### 7.2 Standard Targets
 
 | Target | Description |
-|--------|--------------|
-| `all` | Standard-Build (Default) |
-| `clean` | Build-Artefakte löschen |
-| `check-all` | Alle Diagnosen |
+|--------|-------------|
+| `all` | Standard build (default) |
+| `clean` | Delete build artifacts |
+| `check-all` | All diagnostics |
 
 ### 7.3 Pattern Rules
 
 ```makefile
-# Pattern Rule für C-Dateien
+# Pattern rule for C files
 $(OBJ_DIR)/%.obj: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@echo [CC] $<
 	@"$(CC)" $(CFLAGS) -o "$@" "$<"
@@ -274,42 +275,42 @@ $(OBJ_DIR)/%.obj: $(SRC_DIR)/%.c | $(OBJ_DIR)
 ### 7.4 Order-Only Prerequisites
 
 ```makefile
-# | trennt normale von Order-Only Prerequisites
+# | separates normal from order-only prerequisites
 $(OUT_DIR)/app.out: $(OBJS) | $(OUT_DIR)
 	@echo [LD] $@
 	@"$(LD)" -o "$@" $(OBJS)
 
-# Order-Only: Verzeichnis wird erstellt, triggert aber keinen Rebuild
+# Order-only: the directory is created but does not trigger a rebuild
 $(OUT_DIR):
 	@mkdir -p "$@"
 ```
 
 ---
 
-## 8. Kommentare
+## 8. Comments
 
-### 8.1 Datei-Header
+### 8.1 File Header
 
 ```makefile
-# <module>.mk - <kurze Description>
-# <optionale Details>
+# <module>.mk - <short description>
+# <optional details>
 # !!!!!!!!!!!!!!!!!!!!!!!!! DON'T TOUCH WITHOUT ANY GOOD REASON !!!!!!!!!!!!!!!!!!!!!!
 ```
 
-### 8.2 Sektion-Header
+### 8.2 Section Header
 
 ```makefile
 # ==== Section Name ===============================================================
-# Optionale Description
+# Optional description
 ```
 
-### 8.3 Inline-Kommentare
+### 8.3 Inline Comments
 
 ```makefile
 CC := $(CG_TOOL_ROOT)/bin/cl2000  # TI C2000 compiler
 ```
 
-### 8.4 Parsing-Info
+### 8.4 Parsing Info
 
 ```makefile
 $(info *** parsing <module>.mk ***)
@@ -318,45 +319,45 @@ $(info )
 
 ---
 
-## 9. Errorbehandlung
+## 9. Error Handling
 
 ### 9.1 Fail-Fast
 
 ```makefile
-# Fehlende Variable
+# Missing variable
 ifeq ($(REQUIRED_VAR),)
   $(error [FATAL] REQUIRED_VAR is not set)
 endif
 
-# Fehlende Datei/Verzeichnis
+# Missing file/directory
 _require_dir  = $(if $(wildcard $(1)/.),,$(error [FATAL] Missing directory: "$(1)" - $(2)))
 _require_file = $(if $(wildcard $(1)),,$(error [FATAL] Missing file: "$(1)" - $(2)))
 
 $(call _require_dir,$(TOOL_PATH),Toolchain not found)
 ```
 
-### 9.2 Error in Rezepten
+### 9.2 Errors in Recipes
 
 ```makefile
-# Errorprüfung nach Befehl
+# Error check after a command
 $(OUT)/app.out: $(OBJS)
 	@"$(LD)" -o "$@" $(OBJS)
 	@[ -f "$@" ] || (echo "[FATAL] Link failed: $@"; exit 2)
 ```
 
-### 9.3 Errormeldungs-Format
+### 9.3 Error Message Format
 
 ```
-[FATAL] <Description> - <Kontext>
-[WARN]  <Description>
-[INFO]  <Description>
+[FATAL] <description> - <context>
+[WARN]  <description>
+[INFO]  <description>
 ```
 
 ---
 
-## 10. Diagnose-Targets
+## 10. Diagnostic Targets
 
-### 10.1 Check-Target Pattern
+### 10.1 Check Target Pattern
 
 ```makefile
 .PHONY: check-<aspect>
@@ -369,7 +370,7 @@ check-<aspect>:
 	@echo ""
 ```
 
-### 10.2 Meta-Target
+### 10.2 Meta Target
 
 ```makefile
 .PHONY: check-all
@@ -387,70 +388,70 @@ print-%:
 
 ---
 
-## 11. Shell-Befehle
+## 11. Shell Commands
 
-### 11.1 Unterdrücken von Echo
+### 11.1 Suppressing Echo
 
 ```makefile
-# @ unterdrückt Echo des Befehls
+# @ suppresses echoing of the command
 @echo [CC] $<
 @$(CC) $(CFLAGS) -o "$@" "$<"
 ```
 
-### 11.2 Mehrere Befehle
+### 11.2 Multiple Commands
 
 ```makefile
-# ; oder && für Verkettung
+# ; or && for chaining
 target:
 	@echo "Step 1"; echo "Step 2"
 	@cd $(DIR) && $(MAKE)
 ```
 
-### 11.3 Bedingte Ausführung
+### 11.3 Conditional Execution
 
 ```makefile
 clean:
 	@if [ -d "$(OUT_DIR)" ]; then rm -rf "$(OUT_DIR)"; fi
 ```
 
-### 11.4 Shell-Variable vs Make-Variable
+### 11.4 Shell Variable vs. Make Variable
 
 ```makefile
-# $$ für Shell-Variable
+# $$ for a shell variable
 target:
 	@for f in *.c; do echo "$$f"; done
 ```
 
 ---
 
-## 12. Portabilität
+## 12. Portability
 
-### 12.1 Pfad-Normalisierung
+### 12.1 Path Normalization
 
 ```makefile
-# \ zu / und /.. auflösen
+# Convert \ to / and resolve /..
 fwd      = $(subst \,/,$(1))
 normpath = $(strip $(call fwd,$(abspath $(call fwd,$(1)))))
 
 override PATH_VAR := $(call normpath,$(PATH_VAR))
 ```
 
-### 12.2 Shell-Configuration
+### 12.2 Shell Configuration
 
 ```makefile
-# Explizite Shell setzen für Portabilität
+# Set the shell explicitly for portability
 SHELL := /bin/sh
 .SHELLFLAGS := -c
 ```
 
-### 12.3 Tool-Pfade
+### 12.3 Tool Paths
 
 ```makefile
-# Tools über Variablen, nicht hardcoded
+# Tools via variables, not hard-coded
 MKDIR := mkdir
 RM    := rm
 
-# Oder aus Toolchain ableiten
+# Or derive from the toolchain
 MKDIR := $(CYGWIN_PATH)/mkdir
 RM    := $(CYGWIN_PATH)/rm
 ```
@@ -459,14 +460,14 @@ RM    := $(CYGWIN_PATH)/rm
 
 ## 13. See Also
 
-- [Makefile_Blueprint.md](../blueprints/Makefile_Blueprint.md) — Strukturvorlage
-- [Makefile_Build_System_Concept.md](../../../../archive/docs/en/makefile_buildsystem/concepts/Makefile_Build_System_Concept.md) — Reference-Implementation
-- [CMake_Standard.md](CMake_Standard.md) — CMake-Konventionen
+- [Makefile_Blueprint.md](../blueprints/Makefile.md) — Structure template
+- [Makefile_Build_System_Concept.md](../../../../archive/docs/en/makefile_buildsystem/concepts/Makefile_Build_System_Concept.md) — Reference implementation
+- [CMake_Standard.md](CMake_Standard.md) — CMake conventions
 
 ---
 
 ## 14. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **1.0.0** | **2025-12-19** | **Initial: Basierend auf TMS320 Build-System Best Practices** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-19** | **Initial: based on TMS320 build system best practices** |

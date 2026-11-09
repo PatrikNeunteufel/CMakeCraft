@@ -1,9 +1,10 @@
 # App Tests Targets Konzept
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Status:** Implementiert  
-> **Autor:** CMake Architecture Team
+> **Autor:** CMake Architecture Team  
+> **English:** [App_Tests_Targets_Concept.md](../../../en/konzepte/abgeschlossen/App_Tests_Targets_Concept.md)
 
 ---
 
@@ -538,6 +539,8 @@ tests/unit/UnitTests/Application_Tests.cpp
 | W401 | Leeres targets Array | App '{name}': tests.targets is empty |
 | W402 | Paralleler Serial-Typ | Test '{name}' (type '{type}') has parallel=true. This type typically runs serial for accurate results. |
 
+> **Stand Code (2026-11-09):** E306 gibt es im Code nicht. Findet ein Test-Pfad keine Quelldateien, warnt der Code mit W403 `Test '${TARGET_NAME}': No source files found` und überspringt den Test (`cmake/project/AppCreate.cmake:702`); W403 steht außerdem für `App '${_name}': tests.targets configured but no tests/ directory` (`AppCreate.cmake:577`). W401 meldet auch `App '${_name}': No include/ directory (headers will be private)` (`AppCreate.cmake:96`). Die Meldungen der Tabelle beginnen im Code mit `App '${_name}': ` (`cmake/project/AppCollect.cmake:338–435`, `AppCreate.cmake:627–635`).
+
 ### 9.1 Parallel-Warnung W402
 
 Bestimmte Test-Typen sollten nicht parallel ausgeführt werden, da dies die Ergebnisse verfälschen kann:
@@ -559,5 +562,7 @@ Das System blockiert nicht, da der Benutzer möglicherweise weiß, was er tut (z
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.1** | **2025-12-18** | **Neu: Skip-Feature (global tests.skip + per-target skip), Status auf "Implementiert" geändert** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Hinweis „Stand Code“ zu §9 (E306 entfällt, W401/W403 wie im Code belegt)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.1.1 | 2025-12-18 | Neu: Skip-Feature (global tests.skip + per-target skip), Status auf "Implementiert" geändert |
 | 0.1.0 | 2025-12-18 | Initial: Konzept für flexible Test-Targets |

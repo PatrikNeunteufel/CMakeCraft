@@ -1,10 +1,11 @@
 # Konzept: Versionierter CMakeCraft-Bezug für Konsumenten-Projekte
 
-> **Version:** 1.0.0
-> **Datum:** 2026-07-18
+> **Version:** 1.0.1
+> **Datum:** 2026-11-09
 > **Typ:** Concept
 > **Status:** Entwurf — Entscheidung ausstehend
-> **Bezug:** LumiViz-Umbauplan Phase 1; Neues_Projekt_Guide.md §5 (heutiger manueller Sync)
+> **Bezug:** LumiViz-Umbauplan Phase 1; Neues_Projekt_Guide.md §5 (heutiger manueller Sync)  
+> **English:** [Konzept_Versionierter_Bezug.md](../../en/konzepte/Konzept_Versionierter_Bezug.md)
 
 ---
 
@@ -30,7 +31,8 @@ relocatable; benötigt wird eine Variable `CMAKECRAFT_DIR` + ein Entry-Point.
 ## 3. Schritt A (Voraussetzung, optionsunabhängig): CMakeCraft relocatable machen
 
 1. **Entry-Point `CMakeCraft.cmake`** im CMakeCraft-Root:
-   - setzt `CMAKECRAFT_DIR = ${CMAKE_CURRENT_LIST_DIR}` (selbst-lokalisierend),
+   - setzt `CMAKECRAFT_ROOT = ${CMAKE_CURRENT_LIST_DIR}` und `CMAKECRAFT_DIR = ${CMAKE_CURRENT_LIST_DIR}/cmake`
+     (selbst-lokalisierend; `CMAKECRAFT_DIR` zeigt auf den Modulbaum, `CMakeCraft.cmake:132–133`),
    - übernimmt alle heutigen Includes aus der Top-Level-CMakeLists (core → Solution → project()
      → Externals/Libraries/Executables/Apps/Tests → optional buildSystemTest),
    - Konsument ruft eine Funktion/ein Include — Reihenfolge bleibt intern gekapselt.
@@ -52,6 +54,8 @@ Committet im Projekt sind nur zwei kleine Dinge:
 - `bootstrap.cmake` (~40 Zeilen, stabil): prüft `.externals/cmakecraft/<version>`; wenn fehlt →
   `git clone --depth 1 --branch <tag>` von GitHub (Fallback: lokaler Pfad, z. B.
   Geschwister-Checkout `../CMakeCraft`); dann `include(…/CMakeCraft.cmake)`.
+
+> **Stand Code (2026-11-09):** Umgesetzt ist Option B (seit v0.7.0). Die Bootstrap-Datei heißt `CMakeCraftBootstrap.cmake` (`templates/consumer/`, rund 120 Zeilen); `cmakecraft.pin` setzt `CMAKECRAFT_VERSION`, `CMAKECRAFT_GIT_URL` und `CMAKECRAFT_FALLBACK_PATHS`. Bezugsreihenfolge (`templates/consumer/CMakeCraftBootstrap.cmake:14–20`): `-DCMAKECRAFT_LOCAL_DIR=<pfad>` (Arbeitskopie direkt, ohne Klon) → Cache `.externals/cmakecraft/<version>/` → `git clone --depth 1 --branch <version>` von `CMAKECRAFT_GIT_URL` → derselbe Klon aus den Fallback-Pfaden (lokale Repos, Vorgabe `../CMakeCraft`).
 
 | Pro | Contra |
 |---|---|
@@ -86,6 +90,8 @@ menschlich möglich. Bleibt der definierte **Rollback-Zustand**.
    Guide §5 umschreiben: „Sync" = Tag-Bump im Pin (+ Notfall-Weg: Pin auf Branch/Commit).
 5. `templates/`, `clang-format/-tidy`, Presets bleiben Projektkopien (wie Guide §6).
 
+> **Stand Code (2026-11-09):** Die Dünnfassung der Vorlage (`templates/consumer/CMakeLists.txt`) hat drei Anweisungen: `cmake_minimum_required(VERSION 3.26)`, `project(<Name> LANGUAGES NONE)` (Pflicht seit v0.13.0, sonst E005) und `include("${CMAKE_CURRENT_LIST_DIR}/CMakeCraftBootstrap.cmake")`.
+
 ## 6. Verifikation (Abnahmekriterien)
 
 - CMakeCraft: `craft-selftest` grün (CLI) · Demo-Solution baut (VS).
@@ -114,3 +120,10 @@ vollständig in der Historie.
 - Bass-PreFetch-Hook (automatischer Binaries-Download von un4seen)
 - `CMakeUserPresets.json` → `.example`-Muster (aktuell committet mit lokalen Pfaden)
 - Build-System-Doku-Umzug LumiViz→CMakeCraft (Phase 2)
+
+## 10. Changelog
+
+| Version | Datum | Änderungen |
+|---------|-------|------------|
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: `CMAKECRAFT_DIR` in §3 Schritt 1 (Modulbaum `<root>/cmake`, Root ist `CMAKECRAFT_ROOT`); Hinweise „Stand Code“ zum umgesetzten Bootstrap (§4, §5)** |
+| 1.0.0 | 2026-07-18 | Erstfassung (`290b104`) |

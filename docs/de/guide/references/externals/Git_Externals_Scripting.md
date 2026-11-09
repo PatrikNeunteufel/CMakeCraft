@@ -1,12 +1,12 @@
 # Git Externals — Scripting
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Scripting.md](Git_Externals_Scripting.md)
+> **English:** [Git_Externals_Scripting.md](../../../../en/guide/references/externals/Git_Externals_Scripting.md)
 
 ---
 
@@ -18,7 +18,7 @@
 4. [chaiscript](#4-chaiscript)
 5. [Schnellreferenz](#5-schnellreferenz)
 6. [Siehe auch](#6-siehe-auch)
-7. [Changelog](#7-changelog)
+7. [Changelog](#changelog)
 
 ---
 
@@ -345,4 +345,5 @@ int main() {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Scripting (aus Git_Externals_Core ausgelagert)** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Eigene Kategorie Scripting (aus Git_Externals_Core ausgelagert) |

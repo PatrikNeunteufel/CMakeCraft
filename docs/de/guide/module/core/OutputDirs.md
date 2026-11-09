@@ -1,14 +1,14 @@
 # OutputDirs.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [OutputDirs.md](OutputDirs.md)  
-> **Modul:** [`cmake/core/OutputDirs.cmake`](../../../../cmake/core/OutputDirs.cmake)  
+> **English:** [OutputDirs.md](../../../../en/guide/module/core/OutputDirs.md)  
+> **Modul:** [`cmake/core/OutputDirs.cmake`](../../../../../cmake/core/OutputDirs.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [Output-Struktur](#5-output-struktur)
 6. [Verwendungsbeispiele](#6-verwendungsbeispiele)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -217,7 +217,8 @@ setup_output_dirs(HelperLib)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.3 | 2025-12-07 | Target-isolierte Verzeichnisse, exec/libs Trennung, automatische Typ-Erkennung |
 | 0.1.2 | 2025-12-05 | TESTING Konfiguration hinzugefügt |
 | 0.1.1 | 2025-12-04 | Debug/Release Unterverzeichnisse |

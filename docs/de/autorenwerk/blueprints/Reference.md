@@ -1,13 +1,13 @@
 # Reference — Standard für API/Schema-Referenzen
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [Reference.md](Reference.md)
+> **English:** [Reference.md](../../../en/autorenwerk/blueprints/Reference.md)
 
 ---
 
@@ -22,7 +22,7 @@
 7. [Beispiel: Vollständige Reference](#7-beispiel-vollständige-reference)
 8. [Review-Checkliste](#8-review-checkliste)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -53,7 +53,7 @@ Dieser Blueprint gilt für:
 - Glossare
 - API-Übersichten (nicht Module — dafür ModuleDoc)
 
-**Typischer Ordner:** `docs/[lang]/reference/`
+**Typischer Ordner:** `docs/[lang]/guide/references/`
 
 ---
 
@@ -70,7 +70,7 @@ Dieser Blueprint gilt für:
 > **Status:** [In Entwicklung | Stabil | Deprecated]  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Name.md](../../en/reference/Name.md)
+> **English:** [Name.md](../../../en/guide/references/Name.md)
 ```
 
 ### 3.2 Keine zusätzlichen Pflichtfelder
@@ -112,7 +112,7 @@ Referenzen verwenden diese Struktur:
 
 ### 5.1 Für Schema-Felder
 
-```markdown
+````markdown
 ### 3.1 `feldname`
 
 | Aspekt | Wert |
@@ -136,7 +136,7 @@ Was dieses Feld macht.
 
 **Hinweise:**
 - Zusätzliche Informationen
-```
+````
 
 ### 5.2 Für Error Codes
 
@@ -168,7 +168,7 @@ Das in Solution.json deklarierte Executable existiert nicht im angegebenen Pfad.
 
 ### 5.3 Für Glossar-Einträge
 
-```markdown
+````markdown
 ### Context
 
 **Definition:**  
@@ -180,8 +180,8 @@ ctx_create(EXE_MyApp)
 ctx_set(EXE_MyApp NAME "MyApp")
 ```
 
-**Siehe auch:** [Context.cmake](../modules/core/Context_cmake_v0_1_1_doc_v1.md)
-```
+**Siehe auch:** [Context.cmake](../module/core/Context.md)
+````
 
 ---
 
@@ -229,7 +229,7 @@ Am Ende des Hauptteils eine kompakte Übersicht aller Einträge.
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [ErrorCodes.md](../../guide/references/ErrorCodes.md)
+> **English:** [ErrorCodes.md](../../../en/guide/references/ErrorCodes.md)
 
 ---
 
@@ -241,7 +241,7 @@ Am Ende des Hauptteils eine kompakte Übersicht aller Einträge.
 4. [Schnellreferenz](#4-schnellreferenz)
 5. [Verwendung in Code](#5-verwendung-in-code)
 6. [Siehe auch](#6-siehe-auch)
-7. [Changelog](#7-changelog)
+7. [Changelog](#changelog)
 
 ---
 
@@ -296,7 +296,7 @@ N = Nummer (2 Ziffern)
 **Meldung:**
 ```
 [Core] ERROR E0101: Solution.json not found at: ${path}
-```
+````
 
 **Lösung:** Pfad prüfen, Datei erstellen.
 
@@ -323,7 +323,7 @@ N = Nummer (2 Ziffern)
 ## 5. Verwendung in Code
 
 ```cmake
-include(cmake/core/Errors.cmake)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
 # Fehler auslösen
 cmake_fatal(E0101 "Solution.json not found")
@@ -336,8 +336,8 @@ cmake_warn(W0201 "Deprecated option used")
 
 ## 6. Siehe auch
 
-- [Errors.cmake](../modules/core/Errors_cmake_v0_1_1_doc_v1.md)
-- [Debug.cmake](../modules/core/Debug_cmake_v0_1_1_doc_v1.md)
+- [Errors.cmake](../module/core/Errors.md)
+- [Debug.cmake](../module/core/Debug.md)
 
 ---
 
@@ -347,7 +347,7 @@ cmake_warn(W0201 "Deprecated option used")
 |---------|-------|------------|
 | **0.1.1** | **2025-12-13** | **E20xx Kategorie hinzugefügt** |
 | 0.1.0 | 2025-12-03 | Initial |
-```
+````
 
 ---
 
@@ -384,5 +384,7 @@ Zusätzlich zur Doc.md Checkliste:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Eintragsformate für Schema/ErrorCodes/Glossar, Schnellreferenz-Tabellen** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/guide/references/` (§ 2), Sprungpfad `../../../en/`, Beispiel-Verweise auf `../module/core/*.md` ohne Version im Dateinamen, Modul-Einbindung über `${CMAKECRAFT_DIR}` (`CMakeCraft.cmake`:133, :149)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Eintragsformate für Schema/ErrorCodes/Glossar, Schnellreferenz-Tabellen |
 | 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |

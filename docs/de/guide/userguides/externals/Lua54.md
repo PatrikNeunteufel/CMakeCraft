@@ -1,12 +1,12 @@
 # Lua 5.4 — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [lua54.md](Lua54.md)
+> **English:** [lua54.md](../../../../en/guide/userguides/externals/Lua54.md)
 
 ---
 
@@ -21,7 +21,7 @@
 7. [Best Practices](#7-best-practices)
 8. [Troubleshooting](#8-troubleshooting)
 9. [Weiterführende Informationen](#9-weiterführende-informationen)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -767,4 +767,5 @@ lua_pop(L, 1);
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Lua 5.4** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für Lua 5.4 |

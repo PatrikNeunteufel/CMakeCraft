@@ -1,12 +1,12 @@
 # Git Remote Repository — Guide
 
-> **Version:** 1.1.0  
-> **Datum:** 2026-03-31  
+> **Version:** 1.1.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Remote_Repository_Guide.md](Git_Remote_Repository_Guide.md)
+> **English:** [Git_Remote_Repository_Guide.md](../../../en/autorenwerk/standards/Git_Remote_Repository_Guide.md)
 
 ---
 
@@ -233,7 +233,7 @@ git remote set-url --add --push origin https://github.com/User/MyProject.git
 git remote set-url --add --push origin E:\GitUSB\MyProject
 ```
 
-> **Wichtig:** Die Reihenfolge der Befehle einhalten. `set-url` (ohne `--add`) würde vorhandene Push-URLs überschreiben.
+> **Wichtig:** Push-URLs immer mit `--add --push` eintragen. `set-url --push` ohne `--add` ersetzt die erste vorhandene Push-URL, statt eine weitere hinzuzufügen. Die Fetch-URL aus Schritt 1 berührt das nicht.
 
 **Schritt 3: Konfiguration prüfen**
 
@@ -451,8 +451,9 @@ git push
 # Lokaler Branch: main, Remote erwartet: master
 git push -u origin main:master
 
-# Oder Remote-Branch umbenennen
-git branch -m master main
+# Oder den lokalen Branch umbenennen (main → master), passend zum Remote
+git branch -m main master
+git push -u origin master
 ```
 
 ### 11.5 Remotes sind nicht synchron (USB ≠ GitHub)
@@ -480,11 +481,11 @@ git remote -v
 git remote set-url origin https://github.com/User/MyProject.git
 ```
 
-Danach Push-URLs neu eintragen (Abschnitt 6.2, Schritt 2), da `set-url` ohne `--push` alle Push-URLs zurücksetzt.
+Die Push-URLs bleiben dabei erhalten: `set-url` ohne `--push` ändert nur die Fetch-URL (`remote.origin.url`), eingetragene Push-URLs (`remote.origin.pushurl`) bleiben unberührt (`git help remote`, Abschnitt *set-url*). Mit `git remote -v` prüfen, ob beide Push-Ziele noch eingetragen sind.
 
-### 11.7 Push-URLs nach set-url verschwunden
+### 11.7 Push-URLs fehlen oder sind falsch
 
-`git remote set-url origin <url>` (ohne `--push`) überschreibt die Fetch-URL **und** löscht alle bestehenden Push-URLs. Danach müssen die Push-URLs neu gesetzt werden:
+`git remote set-url origin <url>` (ohne `--push`) ändert nur die Fetch-URL und lässt die Push-URLs stehen. Push-URLs gehen dagegen verloren, wenn der Remote entfernt und neu angelegt wird (Abschnitt 11.2); `git remote set-url --push origin <url>` ohne `--add` ersetzt die erste Push-URL, statt eine weitere hinzuzufügen. In beiden Fällen die Push-URLs neu setzen:
 
 ```bash
 git remote set-url --add --push origin https://github.com/User/MyProject.git
@@ -505,5 +506,6 @@ git remote set-url --add --push origin E:\GitUSB\MyProject
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.1.1** | **2026-11-09** | An den Code angeglichen: `git remote set-url` ohne `--push` ändert nur die Fetch-URL, Push-URLs bleiben (§6.2, §11.6, §11.7 laut `git help remote`); §11.4 `git branch -m` benennt den lokalen Branch um |
 | **1.1.0** | **2026-03-31** | Abschnitte 6 (Dual-Push), 9 (VS Code) neu; Abschnitte 4.2, 7.3, 11.5–11.7 ergänzt; Inhaltsverzeichnis aktualisiert |
 | **1.0.0** | **2025-12-19** | Initial: Konsolidiert aus How_to_create_remote_Git.docx |

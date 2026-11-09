@@ -1,11 +1,12 @@
 # phase6.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Pfad:** `cmake/buildSystemTest/phase6.cmake`  
 > **Status:** Stabil  
 > **Sprache:** Deutsch  
+> **English:** [Phase6_doc.md](../../../../en/guide/module/buildSystemTest/Phase6_doc.md)  
 
 ---
 
@@ -15,7 +16,7 @@
 2. [Tests](#2-tests)
 3. [Erfolgs-Flag](#3-erfolgs-flag)
 4. [Siehe auch](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+5. [Changelog](#changelog)
 
 ---
 
@@ -92,10 +93,10 @@ set(PHASE6_TEST_PASSED TRUE CACHE BOOL "Phase 6 Test passed" FORCE)
 
 ## 4. Siehe auch
 
-- [Fetch.md](../modules/externals/core/Fetch.md)
-- [HookLoader.md](../modules/externals/Hook/HookLoader.md)
-- [Handler.md](../modules/externals/Fetched/Handler.md)
-- [Targets.md](../modules/externals/Registry/Targets.md)
+- [Fetch.md](../externals/core/Fetch_cmake.md)
+- [HookLoader.md](../externals/hooks/HookLoader_cmake.md)
+- [Handler.md](../externals/fetched/Handler_cmake.md)
+- [Targets.md](../externals/registry/Targets_cmake.md)
 - [Git_Externals.md](../../references/externals/Git_Externals.md)
 
 ---
@@ -104,5 +105,6 @@ set(PHASE6_TEST_PASSED TRUE CACHE BOOL "Phase 6 Test passed" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 Format |
 | 0.1.0 | 2025-12-12 | Initial |

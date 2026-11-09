@@ -243,7 +243,7 @@
     {
       "name": "craft-selftest",
       "displayName": "CMakeCraft • Selftest • Ninja Clang Debug",
-      "description": "Build-System-Phasentests (RUN_BUILD_SYSTEM_TESTS=ON). In Konsumenten-Projekten nur als Smoke-Check nach einem Snapshot-Sync noetig.",
+      "description": "Build-System-Phasentests (RUN_BUILD_SYSTEM_TESTS=ON). In Konsumenten-Projekten nur als Smoke-Check nach einem Wechsel des Pins (cmakecraft.pin) noetig.",
       "inherits": [ "win-ninja-clang" ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",

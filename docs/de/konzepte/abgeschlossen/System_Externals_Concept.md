@@ -1,13 +1,13 @@
 # System Externals — Konzept
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Concept  
 > **Status:** Implementiert ✅  
 > **Phase:** 9 (abgeschlossen)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [System_Externals_Concept.md](System_Externals_Concept.md)
+> **English:** [System_Externals_Concept.md](../../../en/konzepte/abgeschlossen/System_Externals_Concept.md)
 
 ---
 
@@ -370,6 +370,8 @@ cmake/externals/
 
 ### 5.4 Package-Hook Mechanismus
 
+> **Stand Code (2026-11-09):** Der Konzeptcode in §5.4–5.6 lädt Module über `${CMAKE_SOURCE_DIR}/cmake/…` und `include(cmake/…)`. Seit v0.7.0 laufen alle Modulpfade über `${CMAKECRAFT_DIR}` (`CMakeCraft.cmake:133`), etwa `${CMAKECRAFT_DIR}/externals/system/packages/${_package}.cmake` (`cmake/externals/system/Handler.cmake:210`) und `include("${CMAKECRAFT_DIR}/externals/system/Handler.cmake")` (`cmake/externals/Orchestrator.cmake:48`).
+
 Package-Hooks sind **optional**. Sie werden automatisch geladen, wenn vorhanden:
 
 ```cmake
@@ -486,6 +488,8 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
     
 endfunction()
 ```
+
+> **Stand Code (2026-11-09):** Die Meldung zu E012 lautet heute `External '${EXT_NAME}': No valid source field (system/git/path/archive)` (`cmake/externals/Orchestrator.cmake:115`); der Orchestrator kennt zusätzlich den Typ `archive`.
 
 ### 5.6 system/Handler.cmake
 
@@ -826,6 +830,8 @@ endfunction()
 | W501 | Using backup location for system external |
 | W502 | System external version mismatch (using found version) |
 
+> **Stand Code (2026-11-09, CMakeCraft v0.14.1):** Ausgelöst werden E502 (`cmake/core/Validation.cmake:94`, `cmake/externals/system/Handler.cmake:180`), E503 (`Handler.cmake:101`, `:120`, `:128`, `:331`), E504 (`:91`), E505 (`:109`) und W501 (`:245`). `find_package()` läuft ohne `REQUIRED` (`:270`, `:273`); die Ursache eines Fehlschlags benennt `_system_external_not_found()`. E501 und W502 entfallen. Der Selbsttest prüft E503–E505 (`cmake/buildSystemTest/phase9.cmake:498–609`).
+
 ---
 
 ## 8. Migration
@@ -974,8 +980,8 @@ endfunction()
 
 ## 10. Siehe auch
 
-- [master_concept.md](master_concept.md) — Architektur-Übersicht
-- [implementation_plan.md](implementation_plan.md) — Phasen-Plan
+- [master_concept.md](Master_Concept.md) — Architektur-Übersicht
+- [implementation_plan.md](Implementation_Plan.md) — Phasen-Plan
 - [Solution_Schema.md](../../guide/references/Solution_Schema.md) — JSON-Schema
 
 ---
@@ -984,7 +990,9 @@ endfunction()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-18** | **Phase 9 abgeschlossen:** Implementierung verifiziert, Qt6 erfolgreich getestet, Debug-Messages auf dbg() umgestellt, Dokumentation finalisiert |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Hinweise „Stand Code“ zu §5.4–5.6 (`${CMAKECRAFT_DIR}`), §5.5 (Meldung E012) und §7 (ausgelöste E5xx/W5xx), nachgeführt auf CMakeCraft v0.14.1 (E502–E505 und W501 ausgelöst, E501/W502 entfallen, `find_package` ohne `REQUIRED`; Zeilenangaben)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.7.0 | 2025-12-18 | Phase 9 abgeschlossen: Implementierung verifiziert, Qt6 erfolgreich getestet, Debug-Messages auf dbg() umgestellt, Dokumentation finalisiert |
 | 0.6.0 | 2025-12-18 | Umfassende Überarbeitung: Section 5 komplett neu (Architektur Vorher/Nachher, Package-Hook Mechanismus, vollständiger Handler/PathResolver Code), Section 8 Migration erweitert (Include.cmake Deprecation, Entscheidungshilfe-Diagramm), Typ-Erkennung klargestellt (Section 3), Pflichtfelder-Logik korrigiert |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format, Error Codes E5xx/W5xx |
 | 0.1.0 | 2025-12-10 | Initial: Konzept für System Externals |

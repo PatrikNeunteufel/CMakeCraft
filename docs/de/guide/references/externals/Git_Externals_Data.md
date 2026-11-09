@@ -1,12 +1,12 @@
 # Git Externals: Data & Serialization — Referenz
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_Data.md](Git_Externals_Data.md)
+> **English:** [Git_Externals_Data.md](../../../../en/guide/references/externals/Git_Externals_Data.md)
 
 ---
 
@@ -357,4 +357,5 @@ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: Ausgelagert aus Git_Externals_Reference |

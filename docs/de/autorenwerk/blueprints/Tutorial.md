@@ -1,13 +1,13 @@
 # Tutorial — Standard für Step-by-Step Anleitungen
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [Tutorial.md](Tutorial.md)
+> **English:** [Tutorial.md](../../../en/autorenwerk/blueprints/Tutorial.md)
 
 ---
 
@@ -23,7 +23,7 @@
 8. [Beispiel-Tutorial](#8-beispiel-tutorial)
 9. [Review-Checkliste](#9-review-checkliste)
 10. [Siehe auch](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+11. [Changelog](#changelog)
 
 ---
 
@@ -91,7 +91,7 @@ Tutorials erweitern den Standard-Header um:
 > **Schwierigkeit:** Einsteiger  
 > **Ergebnis:** [Funktionierendes X]  
 > **Sprache:** Deutsch  
-> **English:** [Title_Tutorial.md](../../en/tutorials/Title_Tutorial.md)
+> **English:** [Title_Tutorial.md](../../../en/guide/userguides/Title_Tutorial.md)
 ```
 
 ### 3.3 Beispiel
@@ -104,12 +104,12 @@ Tutorials erweitern den Standard-Header um:
 > **Typ:** Tutorial  
 > **Status:** Stabil  
 > **Zielgruppe:** C++ Entwickler  
-> **Voraussetzungen:** [Adding_Externals_UserGuide.md](../guides/Adding_Externals_UserGuide.md)  
+> **Voraussetzungen:** [Adding_Externals.md](Adding_Externals.md)  
 > **Zeitaufwand:** ~45 Minuten  
 > **Schwierigkeit:** Fortgeschritten  
 > **Ergebnis:** Funktionierende Test-Executables mit GoogleTest und Catch2  
 > **Sprache:** Deutsch  
-> **English:** [GoogleTest_Catch2_Tutorial.md](../../en/tutorials/GoogleTest_Catch2_Tutorial.md)
+> **English:** [GoogleTest_Catch2_Tutorial.md](../../../en/guide/userguides/GoogleTest_Catch2_Tutorial.md)
 ```
 
 ---
@@ -208,7 +208,7 @@ Tutorials erweitern den Standard-Header um:
 
 Jeder Schritt folgt dem Muster:
 
-```markdown
+````markdown
 ## N. Schritt N: [Aktions-Titel]
 
 [1-2 Sätze: Was wird gemacht und warum]
@@ -224,7 +224,7 @@ Jeder Schritt folgt dem Muster:
 - `element2`: Beschreibung
 
 [Optional: Hinweis-Box für wichtige Infos]
-```
+````
 
 ### 5.3 Hinweis-Boxen
 
@@ -263,8 +263,8 @@ Bei längeren Tutorials optional:
 
 ### 6.2 Code-Block-Format
 
-```markdown
-**Datei:** `cmake/externals/Hooks/PreFetch/googletest.cmake`
+````markdown
+**Datei:** `cmake/externals/hooks/prefetch/googletest.cmake`
 
 ```cmake
 # GoogleTest PreFetch Hook
@@ -277,13 +277,13 @@ if(WIN32)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 endif()
 ```
-```
+````
 
 ### 6.3 Diff-Darstellung
 
 Bei Änderungen an existierenden Dateien:
 
-```markdown
+````markdown
 **Änderung in** `Solution.json`:
 
 ```diff
@@ -296,11 +296,11 @@ Bei Änderungen an existierenden Dateien:
     }
 }
 ```
-```
+````
 
 ### 6.4 Erwartete Ausgabe
 
-```markdown
+````markdown
 **Erwartete Ausgabe:**
 
 ```
@@ -310,7 +310,7 @@ Bei Änderungen an existierenden Dateien:
 [       OK ] ExampleTest.BasicAssertions (0 ms)
 [  PASSED  ] 2 tests.
 ```
-```
+````
 
 ---
 
@@ -411,7 +411,7 @@ Bevor du beginnst, stelle sicher:
 - [ ] Git installiert
 
 **Wissen:**
-- [ ] [Adding_Externals_UserGuide.md](../guides/Adding_Externals_UserGuide.md) gelesen
+- [ ] [Adding_Externals.md](Adding_Externals.md) gelesen
 - [ ] Grundkenntnisse in CMake
 
 **Dateien:**
@@ -421,7 +421,7 @@ Bevor du beginnst, stelle sicher:
 
 ### 8.2 Schritt-Abschnitt
 
-```markdown
+````markdown
 ## 3. Schritt 1: External in Solution.json hinzufügen
 
 Füge GoogleTest als External hinzu.
@@ -444,17 +444,17 @@ Füge GoogleTest als External hinzu.
 - `tag`: Stabile Version (v1.14.0 ist die aktuelle Release)
 
 > **Hinweis:** Verwende immer Tags statt Branches für reproduzierbare Builds.
-```
+````
 
 ### 8.3 Dateien-Übersicht
 
-```markdown
+````markdown
 ## Dateien-Übersicht
 
 Nach Abschluss des Tutorials hast du:
 
 ```
-cmake/externals/Hooks/PreFetch/
+cmake/externals/hooks/prefetch/
 ├── googletest.cmake        ← GoogleTest PreFetch Hook
 └── catch2.cmake            ← Catch2 PreFetch Hook
 
@@ -463,11 +463,11 @@ projects/tests/MyTests/src/
 
 Solution.json               ← External + Test konfiguriert
 ```
-```
+````
 
 ### 8.4 Troubleshooting-Abschnitt
 
-```markdown
+````markdown
 ## Troubleshooting
 
 ### Problem: Linker-Fehler auf Windows
@@ -493,8 +493,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 **Lösung:** 
 1. Prüfe ob `enable_testing()` in CMakeLists.txt
 2. Prüfe ob Test-Executable korrekt registriert
-```
-```
+````
 
 ---
 
@@ -533,7 +532,7 @@ Vor Veröffentlichung eines Tutorials prüfen:
 
 - [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
 - [Guide.md](Guide.md) — Für thematische Anleitungen
-- [GoogleTest_Catch2_Tutorial.md](../tutorials/GoogleTest_Catch2_Tutorial.md) — Beispiel-Tutorial
+- GoogleTest_Catch2_Tutorial.md — Beispiel-Tutorial
 
 ---
 
@@ -541,4 +540,6 @@ Vor Veröffentlichung eines Tutorials prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Initial: Abgrenzung zu Guide, Header-Erweiterungen, Schritt-Struktur, Code-Beispiele, Mehrteilige Tutorials** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Hook-Pfad `cmake/externals/hooks/prefetch/` (kleingeschrieben, wie im Repo), Tutorials liegen in `docs/[lang]/guide/userguides/` (Sprungpfad `../../../en/`), Voraussetzung `Adding_Externals.md`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Initial: Abgrenzung zu Guide, Header-Erweiterungen, Schritt-Struktur, Code-Beispiele, Mehrteilige Tutorials |

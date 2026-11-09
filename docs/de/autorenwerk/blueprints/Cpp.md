@@ -1,14 +1,14 @@
 # Cpp — Standard für C++/C Dateistruktur
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Datum:** 2025-12-26  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Blueprint v0.5  
 > **Zielgruppe:** C++ Entwickler, Build-System-Entwickler  
 > **Geltungsbereich:** Alle .cpp, .hpp, .tpp, .h, .c Dateien  
 > **Sprache:** Deutsch  
-> **English:** [Cpp.md](Cpp.md)
+> **English:** [Cpp.md](../../../en/autorenwerk/blueprints/Cpp.md)
 
 ---
 
@@ -27,7 +27,7 @@
 11. [Beispiele](#11-beispiele)
 12. [Review-Checkliste](#12-review-checkliste)
 13. [Siehe auch](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+14. [Changelog](#changelog)
 
 ---
 
@@ -919,4 +919,5 @@ Vor Commit einer Code-Datei prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Initial: Datei-Header, Dateistruktur (hpp/cpp/tpp), Include-Reihenfolge, Klassen-Layout, Dokumentationskommentare** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-13 | Initial: Datei-Header, Dateistruktur (hpp/cpp/tpp), Include-Reihenfolge, Klassen-Layout, Dokumentationskommentare |

@@ -1,74 +1,74 @@
-# Git Standard — Versionskontroll-Richtlinien
+# Git Standard — Version Control Guidelines
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** Standard  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
-> **Scope:** Alle Git-Repositories im Unternehmen  
-> **Durchsetzung:** Pre-Commit Hooks, Code Review  
+> **Target Audience:** All developers  
+> **Scope:** All Git repositories in the company  
+> **Enforcement:** Pre-commit hooks, code review  
 > **Language:** English  
-> **German:** [Git_Standard.md](Git_Standard.md)
+> **German:** [Git_Standard.md](../../../de/autorenwerk/standards/Git_Standard.md)
 
 ---
 
 ## Table of Contents
 
-1. [Zweck und Scope](#1-zweck-und-geltungsbereich)
-2. [Sprach-Richtlinien](#2-sprach-richtlinien)
-3. [Commit-Message-Format](#3-commit-message-format)
-4. [Branch-Strategie](#4-branch-strategie)
-5. [Tags und Releases](#5-tags-und-releases)
-6. [Release-Notes](#6-release-notes)
+1. [Purpose and Scope](#1-purpose-and-scope)
+2. [Language Guidelines](#2-language-guidelines)
+3. [Commit Message Format](#3-commit-message-format)
+4. [Branch Strategy](#4-branch-strategy)
+5. [Tags and Releases](#5-tags-and-releases)
+6. [Release Notes](#6-release-notes)
 7. [.gitignore Best Practices](#7-gitignore-best-practices)
-8. [Git-Configuration](#8-git-konfiguration)
-9. [Merge-Strategien](#9-merge-strategien)
-10. [Checkliste vor Commit](#10-checkliste-vor-commit)
-11. [Checkliste vor Release](#11-checkliste-vor-release)
-12. [See Also](#12-siehe-auch)
-13. [Changelog](#13-changelog)
+8. [Git Configuration](#8-git-configuration)
+9. [Merge Strategies](#9-merge-strategies)
+10. [Checklist Before Commit](#10-checklist-before-commit)
+11. [Checklist Before Release](#11-checklist-before-release)
+12. [See Also](#12-see-also)
+13. [Changelog](#changelog)
 
 ---
 
-## 1. Zweck und Scope
+## 1. Purpose and Scope
 
-Dieser Standard definiert **Konventionen für Git-Versionskontrolle**:
+This standard defines **conventions for Git version control**:
 
-- Commit-Message-Format
-- Branch-Strategie
-- Tag-/Release-Konventionen
-- Sprach-Richtlinien
+- Commit message format
+- Branch strategy
+- Tag/release conventions
+- Language guidelines
 
-### Zielgruppe
+### Target Audience
 
-Alle Entwickler, die mit Git-Repositories arbeiten. Dieser Standard ist verbindlich für alle Repositories im Unternehmen.
+All developers who work with Git repositories. This standard is mandatory for all repositories in the company.
 
 ---
 
-## 2. Sprach-Richtlinien
+## 2. Language Guidelines
 
 ### 2.1 Overview
 
-| Artefakt | Sprache | Begründung |
-|----------|---------|------------|
-| Commit-Messages | **Englisch** | Technischer Code-Kontext |
-| Branch-Namen | **Englisch** | Technische Identifier |
-| Tag-Namen | **Englisch** | Technische Identifier |
-| Release-Notes | **Englisch** | Für Releases/Veröffentlichung |
-| PR/MR-Titel | **Englisch** | Konsistenz mit Commits |
-| PR/MR-Description | German oder Englisch | Team-Präferenz |
+| Artifact | Language | Rationale |
+|----------|----------|-----------|
+| Commit messages | **English** | Technical code context |
+| Branch names | **English** | Technical identifiers |
+| Tag names | **English** | Technical identifiers |
+| Release notes | **English** | For releases/publication |
+| PR/MR title | **English** | Consistency with commits |
+| PR/MR description | German or English | Team preference |
 
-### 2.2 Begründung
+### 2.2 Rationale
 
-- Git-History ist technischer Kontext (wie Code-Kommentare)
-- Releases sind potenziell öffentlich → Englisch
-- Interne Diskussionen können German sein
+- Git history is technical context (like code comments)
+- Releases are potentially public → English
+- Internal discussions may be in German
 
 ---
 
-## 3. Commit-Message-Format
+## 3. Commit Message Format
 
-### 3.1 Struktur
+### 3.1 Structure
 
 ```
 <type>(<scope>): <subject>
@@ -78,58 +78,58 @@ Alle Entwickler, die mit Git-Repositories arbeiten. Dieser Standard ist verbindl
 [footer]
 ```
 
-### 3.2 Type (Required)
+### 3.2 Type (Mandatory)
 
 | Type | Description | Example |
-|------|--------------|----------|
-| `feat` | Neues Feature | `feat(audio): add volume control` |
-| `fix` | Bugfix | `fix(parser): handle empty input` |
-| `refactor` | Code-Umstrukturierung (keine Funktionsänderung) | `refactor(core): extract helper class` |
-| `perf` | Performance-Verbesserung | `perf(render): optimize draw calls` |
-| `docs` | Dokumentation | `docs(readme): update install instructions` |
-| `test` | Tests hinzufügen/ändern | `test(api): add integration tests` |
-| `build` | Build-System, Dependencies | `build(cmake): upgrade to CMake 3.24` |
-| `ci` | CI/CD-Configuration | `ci(github): add clang-tidy workflow` |
-| `style` | Formatierung (kein Code-Change) | `style: apply clang-format` |
-| `chore` | Wartung, Aufräumen | `chore: remove deprecated files` |
-| `revert` | Commit rückgängig machen | `revert: feat(audio): add volume control` |
-| `wip` | Work in Progress (nur lokale Branches) | `wip: experimental feature` |
+|------|-------------|---------|
+| `feat` | New feature | `feat(audio): add volume control` |
+| `fix` | Bug fix | `fix(parser): handle empty input` |
+| `refactor` | Code restructuring (no functional change) | `refactor(core): extract helper class` |
+| `perf` | Performance improvement | `perf(render): optimize draw calls` |
+| `docs` | Documentation | `docs(readme): update install instructions` |
+| `test` | Add/change tests | `test(api): add integration tests` |
+| `build` | Build system, dependencies | `build(cmake): upgrade to CMake 3.24` |
+| `ci` | CI/CD configuration | `ci(github): add clang-tidy workflow` |
+| `style` | Formatting (no code change) | `style: apply clang-format` |
+| `chore` | Maintenance, cleanup | `chore: remove deprecated files` |
+| `revert` | Revert a commit | `revert: feat(audio): add volume control` |
+| `wip` | Work in progress (local branches only) | `wip: experimental feature` |
 
 ### 3.3 Scope (Optional)
 
-Der Scope beschreibt den betroffenen Bereich:
+The scope describes the affected area:
 
-| Scope-Typ | Examples |
-|-----------|-----------|
-| Modul/Component | `audio`, `renderer`, `parser` |
+| Scope Type | Examples |
+|------------|----------|
+| Module/component | `audio`, `renderer`, `parser` |
 | Layer | `core`, `api`, `ui` |
-| Datei/Bereich | `cmake`, `config`, `tests` |
+| File/area | `cmake`, `config`, `tests` |
 
-### 3.4 Subject (Required)
+### 3.4 Subject (Mandatory)
 
-| Regel | Description |
-|-------|--------------|
-| Imperativ | "add feature" nicht "added feature" |
-| Kleinschreibung | Kein Großbuchstabe am Anfang |
-| Kein Punkt | Kein `.` am Ende |
-| Max. 50 Zeichen | Kurz und prägnant |
+| Rule | Description |
+|------|-------------|
+| Imperative | "add feature" not "added feature" |
+| Lowercase | No capital letter at the beginning |
+| No period | No `.` at the end |
+| Max. 50 characters | Short and concise |
 
 ### 3.5 Body (Optional)
 
-- Leerzeile nach Subject
-- Erklärt **Was** und **Warum** (nicht Wie)
-- Max. 72 Zeichen pro Zeile
-- Kann mehrere Absätze haben
+- Blank line after the subject
+- Explains **what** and **why** (not how)
+- Max. 72 characters per line
+- May have several paragraphs
 
 ### 3.6 Footer (Optional)
 
 | Footer | Usage |
-|--------|------------|
-| `Fixes #123` | Issue schließen |
-| `Closes #456` | Issue schließen |
-| `Refs #789` | Issue referenzieren |
-| `BREAKING CHANGE:` | Breaking Change dokumentieren |
-| `Co-authored-by:` | Co-Autor angeben |
+|--------|-------|
+| `Fixes #123` | Close an issue |
+| `Closes #456` | Close an issue |
+| `Refs #789` | Reference an issue |
+| `BREAKING CHANGE:` | Document a breaking change |
+| `Co-authored-by:` | Name a co-author |
 
 ### 3.7 Examples
 
@@ -138,7 +138,7 @@ Der Scope beschreibt den betroffenen Bereich:
 fix(parser): handle null pointer in parse()
 ```
 
-**Mit Body:**
+**With body:**
 ```
 feat(audio): add real-time spectrum analyzer
 
@@ -148,7 +148,7 @@ Uses FFTW library for efficient computation.
 The analyzer supports configurable bin counts and window functions.
 ```
 
-**Mit Breaking Change:**
+**With breaking change:**
 ```
 refactor(api)!: change return type of process()
 
@@ -158,7 +158,7 @@ instead of Result*. Callers must handle the optional.
 Migration: Replace nullptr checks with has_value() checks.
 ```
 
-**Bugfix mit Issue-Reference:**
+**Bug fix with issue reference:**
 ```
 fix(config): prevent crash on invalid JSON
 
@@ -170,28 +170,28 @@ Fixes #142
 
 ---
 
-## 4. Branch-Strategie
+## 4. Branch Strategy
 
-### 4.1 Branch-Typen
+### 4.1 Branch Types
 
-| Branch | Pattern | Langlebig | Description |
-|--------|---------|-----------|--------------|
-| `main` | `main` | ✅ | Stableer Release-Stand |
-| `develop` | `develop` | ✅ | Entwicklungs-Integration |
-| Feature | `feature/<name>` | ❌ | Neues Feature |
-| Bugfix | `fix/<name>` | ❌ | Bugfix |
-| Hotfix | `hotfix/<name>` | ❌ | Dringender Fix für main |
-| Release | `release/<version>` | ❌ | Release-Vorbereitung |
-| Experiment | `experiment/<name>` | ❌ | Experimente (nicht mergen) |
+| Branch | Pattern | Long-lived | Description |
+|--------|---------|------------|-------------|
+| `main` | `main` | ✅ | Stable release state |
+| `develop` | `develop` | ✅ | Development integration |
+| Feature | `feature/<name>` | ❌ | New feature |
+| Bugfix | `fix/<name>` | ❌ | Bug fix |
+| Hotfix | `hotfix/<name>` | ❌ | Urgent fix for main |
+| Release | `release/<version>` | ❌ | Release preparation |
+| Experiment | `experiment/<name>` | ❌ | Experiments (do not merge) |
 
-### 4.2 Branch-Namen
+### 4.2 Branch Names
 
-| Regel | Description |
-|-------|--------------|
-| Kleinschreibung | `feature/audio-player` nicht `Feature/Audio-Player` |
-| Kebab-Case | `fix/null-pointer` nicht `fix/null_pointer` |
-| Kurz und beschreibend | `feature/export-pdf` nicht `feature/add-the-new-pdf-export-functionality` |
-| Issue-Reference optional | `feature/123-audio-player` oder `feature/audio-player` |
+| Rule | Description |
+|------|-------------|
+| Lowercase | `feature/audio-player` not `Feature/Audio-Player` |
+| Kebab case | `fix/null-pointer` not `fix/null_pointer` |
+| Short and descriptive | `feature/export-pdf` not `feature/add-the-new-pdf-export-functionality` |
+| Issue reference optional | `feature/123-audio-player` or `feature/audio-player` |
 
 ### 4.3 Workflow
 
@@ -207,9 +207,9 @@ feature/b     ●───●───┘       │
 fix/crash         ●───────────┘
 ```
 
-### 4.4 Kleine Projekte (Vereinfacht)
+### 4.4 Small Projects (Simplified)
 
-Für kleine Projekte ohne `develop`:
+For small projects without `develop`:
 
 ```
 main ─────────────────────────────●───────────────────●───
@@ -223,9 +223,9 @@ feature/b         ●───────────┘
 
 ---
 
-## 5. Tags und Releases
+## 5. Tags and Releases
 
-### 5.1 Tag-Format
+### 5.1 Tag Format
 
 **Semantic Versioning (SemVer):**
 
@@ -233,42 +233,42 @@ feature/b         ●───────────┘
 v<MAJOR>.<MINOR>.<PATCH>[-<prerelease>]
 ```
 
-| Teil | Bedeutung | Wann inkrementieren |
-|------|-----------|---------------------|
-| MAJOR | Breaking Changes | API-Bruch, Inkompatibilität |
-| MINOR | Features | Neue Funktionalität (abwärtskompatibel) |
-| PATCH | Fixes | Bugfixes (abwärtskompatibel) |
+| Part | Meaning | When to increment |
+|------|---------|-------------------|
+| MAJOR | Breaking changes | API break, incompatibility |
+| MINOR | Features | New functionality (backward compatible) |
+| PATCH | Fixes | Bug fixes (backward compatible) |
 
-### 5.2 Prerelease-Tags
+### 5.2 Prerelease Tags
 
-| Suffix | Bedeutung | Example |
-|--------|-----------|----------|
-| `-alpha.N` | Frühe Entwicklung | `v1.0.0-alpha.1` |
-| `-beta.N` | Feature-Complete, Testing | `v1.0.0-beta.2` |
-| `-rc.N` | Release Candidate | `v1.0.0-rc.1` |
+| Suffix | Meaning | Example |
+|--------|---------|---------|
+| `-alpha.N` | Early development | `v1.0.0-alpha.1` |
+| `-beta.N` | Feature complete, testing | `v1.0.0-beta.2` |
+| `-rc.N` | Release candidate | `v1.0.0-rc.1` |
 
-### 5.3 Example-Versionsfolge
+### 5.3 Example Version Sequence
 
 ```
-v0.1.0          # Erste Pre-Release
-v0.2.0          # Neues Feature
-v0.2.1          # Bugfix
-v1.0.0-alpha.1  # Alpha für v1
+v0.1.0          # First pre-release
+v0.2.0          # New feature
+v0.2.1          # Bug fix
+v1.0.0-alpha.1  # Alpha for v1
 v1.0.0-beta.1   # Beta
-v1.0.0-rc.1     # Release Candidate
-v1.0.0          # Erstes stabiles Release
-v1.0.1          # Bugfix
-v1.1.0          # Neues Feature
-v2.0.0          # Breaking Change
+v1.0.0-rc.1     # Release candidate
+v1.0.0          # First stable release
+v1.0.1          # Bug fix
+v1.1.0          # New feature
+v2.0.0          # Breaking change
 ```
 
-### 5.4 Tag erstellen
+### 5.4 Creating a Tag
 
 ```bash
-# Annotated Tag (empfohlen)
+# Annotated tag (recommended)
 git tag -a v1.0.0 -m "Release v1.0.0"
 
-# Mit Release-Notes
+# With release notes
 git tag -a v1.0.0 -m "Release v1.0.0
 
 Features:
@@ -279,24 +279,24 @@ Fixes:
 - Fix crash on empty input (#142)
 - Handle unicode filenames (#156)"
 
-# Push Tags
+# Push tags
 git push origin v1.0.0
 ```
 
-### 5.5 Wann Tags erstellen
+### 5.5 When to Create Tags
 
-| Situation | Tag erstellen? |
-|-----------|----------------|
-| Öffentliches Release | ✅ Yes |
-| Interner Meilenstein | ✅ Optional (z.B. `v0.5.0-internal`) |
-| Jeder Merge zu main | ❌ No |
-| CI/CD Deploy | ❌ No (automatische Build-Nummern nutzen) |
+| Situation | Create a tag? |
+|-----------|---------------|
+| Public release | ✅ Yes |
+| Internal milestone | ✅ Optional (e.g. `v0.5.0-internal`) |
+| Every merge to main | ❌ No |
+| CI/CD deploy | ❌ No (use automatic build numbers) |
 
 ---
 
-## 6. Release-Notes
+## 6. Release Notes
 
-### 6.1 Struktur
+### 6.1 Structure
 
 ```markdown
 # Release v1.2.0
@@ -327,9 +327,9 @@ Brief summary of the most important changes.
 - Add FFTW library for spectrum analysis
 ```
 
-### 6.2 Changelog-Datei
+### 6.2 Changelog File
 
-`CHANGELOG.md` im Repository-Root:
+`CHANGELOG.md` in the repository root:
 
 ```markdown
 # Changelog
@@ -362,7 +362,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## 7. .gitignore Best Practices
 
-### 7.1 Required-Einträge
+### 7.1 Mandatory Entries
 
 ```gitignore
 # Build directories
@@ -392,7 +392,7 @@ CMakeFiles/
 *.lib
 *.a
 
-# Dependencies (falls lokal)
+# Dependencies (if local)
 .externals/
 vcpkg_installed/
 
@@ -400,7 +400,7 @@ vcpkg_installed/
 *.bak
 ```
 
-### 7.2 Optional (projektabhängig)
+### 7.2 Optional (Project-Dependent)
 
 ```gitignore
 # Logs
@@ -416,23 +416,23 @@ config.local.json
 
 ---
 
-## 8. Git-Configuration
+## 8. Git Configuration
 
-### 8.1 Empfohlene Einstellungen
+### 8.1 Recommended Settings
 
 ```bash
-# Globale Einstellungen
+# Global settings
 git config --global core.autocrlf input    # Linux/macOS
 git config --global core.autocrlf true     # Windows
 
-git config --global pull.rebase true       # Rebase statt Merge bei Pull
+git config --global pull.rebase true       # Rebase instead of merge on pull
 git config --global init.defaultBranch main
 
-# Optional: Commit-Template
+# Optional: commit template
 git config --global commit.template ~/.gitmessage
 ```
 
-### 8.2 Commit-Template (`~/.gitmessage`)
+### 8.2 Commit Template (`~/.gitmessage`)
 
 ```
 # <type>(<scope>): <subject>
@@ -446,62 +446,63 @@ git config --global commit.template ~/.gitmessage
 
 ---
 
-## 9. Merge-Strategien
+## 9. Merge Strategies
 
 ### 9.1 Feature → develop
 
-| Strategie | Wann |
-|-----------|------|
-| Squash Merge | Viele kleine Commits → 1 sauberer Commit |
-| Rebase + Merge | Saubere History mit linearen Commits |
-| Merge Commit | Feature-Branches nachvollziehbar halten |
+| Strategy | When |
+|----------|------|
+| Squash merge | Many small commits → 1 clean commit |
+| Rebase + merge | Clean history with linear commits |
+| Merge commit | Keep feature branches traceable |
 
 ### 9.2 develop → main
 
-| Strategie | Wann |
-|-----------|------|
-| Merge Commit | Release-Punkte nachvollziehbar |
-| Fast-Forward | Wenn develop linear zu main ist |
+| Strategy | When |
+|----------|------|
+| Merge commit | Release points traceable |
+| Fast-forward | When develop is linear to main |
 
 ---
 
-## 10. Checkliste vor Commit
+## 10. Checklist Before Commit
 
-- [ ] Commit-Message folgt Format (`type(scope): subject`)
-- [ ] Subject im Imperativ, max. 50 Zeichen
-- [ ] Code kompiliert ohne Error
-- [ ] Tests laufen durch
-- [ ] Keine Debug-Code/Prints vergessen
-- [ ] Keine sensiblen Daten (Passwörter, Keys)
-- [ ] .gitignore prüfen (keine generierten Dateien)
+- [ ] Commit message follows the format (`type(scope): subject`)
+- [ ] Subject in the imperative, max. 50 characters
+- [ ] Code compiles without errors
+- [ ] Tests pass
+- [ ] No debug code/prints left behind
+- [ ] No sensitive data (passwords, keys)
+- [ ] Check .gitignore (no generated files)
 
 ---
 
-## 11. Checkliste vor Release
+## 11. Checklist Before Release
 
-- [ ] Alle Features für Release gemerged
-- [ ] Alle Tests grün
-- [ ] CHANGELOG.md aktualisiert
-- [ ] Version in relevanten Dateien aktualisiert
-- [ ] Release-Notes auf Englisch
-- [ ] Annotated Tag erstellt (`git tag -a vX.Y.Z`)
-- [ ] Tag gepusht (`git push origin vX.Y.Z`)
+- [ ] All features for the release merged
+- [ ] All tests green
+- [ ] CHANGELOG.md updated
+- [ ] Version updated in relevant files
+- [ ] Release notes in English
+- [ ] Annotated tag created (`git tag -a vX.Y.Z`)
+- [ ] Tag pushed (`git push origin vX.Y.Z`)
 
 ---
 
 ## 12. See Also
 
-- [CMake_Standard.md](CMake_Standard.md) — Build-System
-- [Language_Standards.md](../reference/Language_Standards.md) — Sprach-Richtlinien
-- [Conventional Commits](https://www.conventionalcommits.org/) — Externe Spezifikation
-- [Semantic Versioning](https://semver.org/) — Versionierung
-- [Keep a Changelog](https://keepachangelog.com/) — Changelog-Format
+- [CMake_Standard.md](CMake_Standard.md) — Build system
+- [Language_Standards.md](Language_Standard.md) — Language guidelines
+- [Conventional Commits](https://www.conventionalcommits.org/) — External specification
+- [Semantic Versioning](https://semver.org/) — Versioning
+- [Keep a Changelog](https://keepachangelog.com/) — Changelog format
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Migration auf Blueprint v0.5: Neuer Header, Table of Contents, Encoding-Fix** |
-| 0.1.0 | 2025-12-05 | Initial: Commit-Format, Branches, Tags, Release-Notes |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-13 | Migration to Blueprint v0.5: new header, table of contents, encoding fix |
+| 0.1.0 | 2025-12-05 | Initial: commit format, branches, tags, release notes |

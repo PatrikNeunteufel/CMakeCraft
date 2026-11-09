@@ -1,14 +1,14 @@
 # Git Standard — Versionskontroll-Richtlinien
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Datum:** 2025-12-26  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Geltungsbereich:** Alle Git-Repositories im Unternehmen  
 > **Durchsetzung:** Pre-Commit Hooks, Code Review  
 > **Sprache:** Deutsch  
-> **English:** [Git_Standard.md](Git_Standard.md)
+> **English:** [Git_Standard.md](../../../en/autorenwerk/standards/Git_Standard.md)
 
 ---
 
@@ -26,7 +26,7 @@
 10. [Checkliste vor Commit](#10-checkliste-vor-commit)
 11. [Checkliste vor Release](#11-checkliste-vor-release)
 12. [Siehe auch](#12-siehe-auch)
-13. [Changelog](#13-changelog)
+13. [Changelog](#changelog)
 
 ---
 
@@ -492,7 +492,7 @@ git config --global commit.template ~/.gitmessage
 ## 12. Siehe auch
 
 - [CMake_Standard.md](CMake_Standard.md) — Build-System
-- [Language_Standards.md](../reference/Language_Standards.md) — Sprach-Richtlinien
+- [Language_Standards.md](Language_Standard.md) — Sprach-Richtlinien
 - [Conventional Commits](https://www.conventionalcommits.org/) — Externe Spezifikation
 - [Semantic Versioning](https://semver.org/) — Versionierung
 - [Keep a Changelog](https://keepachangelog.com/) — Changelog-Format
@@ -503,5 +503,6 @@ git config --global commit.template ~/.gitmessage
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-13 | Migration auf Blueprint v0.5: Neuer Header, Inhaltsverzeichnis, Encoding-Fix |
 | 0.1.0 | 2025-12-05 | Initial: Commit-Format, Branches, Tags, Release-Notes |

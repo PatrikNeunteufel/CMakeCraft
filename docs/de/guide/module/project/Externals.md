@@ -1,14 +1,14 @@
 # Externals.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Externals.md](../../en/modules/project/Externals.md)  
-> **Modul:** [`cmake/project/Externals.cmake`](../../../../cmake/project/Externals.cmake)  
+> **English:** [Externals.md](../../../../en/guide/module/project/Externals.md)  
+> **Modul:** [`cmake/project/Externals.cmake`](../../../../../cmake/project/Externals.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -161,10 +161,10 @@ CMakeLists.txt
 
 ## 6. Siehe auch
 
-- [Orchestrator.cmake](../externals/Orchestrator.md) — Typ-spezifisches Handling
+- [Orchestrator.cmake](../externals/Orchestrator_cmake.md) — Typ-spezifisches Handling
 - [Solution.cmake](Solution.md) — Liefert SOLUTION_JSON
-- [Fetch.cmake](../externals/Fetch.md) — Git-Fetching
-- [Local_Attach.cmake](../externals/Local_Attach.md) — Lokale Externals
+- [Fetch.cmake](../externals/core/Fetch_cmake.md) — Git-Fetching
+- [Local_Attach.cmake](../externals/locals/Attach_cmake.md) — Lokale Externals
 
 ---
 
@@ -172,6 +172,7 @@ CMakeLists.txt
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-20** | **Skip-Feature: Externals mit `skip: true` werden nicht geladen, SKIPPED_EXTERNALS Property** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.6.0 | 2025-12-20 | Skip-Feature: Externals mit `skip: true` werden nicht geladen, SKIPPED_EXTERNALS Property |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-08 | Initial (Clean Start): Externals-Pipeline |

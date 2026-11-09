@@ -1,12 +1,12 @@
 # Google Test — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [googletest.md](../../../en/userguides/externals/Googletest.md)
+> **English:** [googletest.md](../../../../en/guide/userguides/externals/Googletest.md)
 
 ---
 
@@ -20,7 +20,7 @@
 6. [Fortgeschrittene Techniken](#6-fortgeschrittene-techniken)
 7. [Troubleshooting](#7-troubleshooting)
 8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -548,8 +548,8 @@ testing::NiceMock<MockDatabase> db;
 
 - [Externals.md](../Externals.md) — Externals Kombinationen
 - [Git_Externals_Testing.md](../../references/externals/Git_Externals_Testing.md) — Referenz
-- [doctest.md](doctest.md) — Leichtgewichtige Alternative
-- [catch2.md](catch2.md) — BDD-Style Alternative
+- [doctest.md](Doctest.md) — Leichtgewichtige Alternative
+- [catch2.md](Catch2.md) — BDD-Style Alternative
 
 ---
 
@@ -557,4 +557,5 @@ testing::NiceMock<MockDatabase> db;
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Google Test** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für Google Test |

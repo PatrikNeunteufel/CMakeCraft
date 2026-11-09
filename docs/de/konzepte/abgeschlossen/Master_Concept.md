@@ -1,7 +1,7 @@
 # Master Concept — CMake Architecture
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-19  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Concept  
 > **Status:** Stabil (Phase 1-9 abgeschlossen)  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
@@ -263,6 +263,8 @@ Bereits auf dem System installierte Bibliotheken via `find_package()`.
 5. backup Pfad (mit W501 Warnung)
 6. Error E501/E503
 
+> **Stand Code (2026-11-09, CMakeCraft v0.14.1):** E501 entfällt. `find_package()` läuft ohne `REQUIRED` (`cmake/externals/system/Handler.cmake:270`, `:273`); wird ein Paket mit `required` (Vorgabe) nicht gefunden, benennt `_system_external_not_found()` die Ursache (`Handler.cmake:290`): E503 (`:101`, `:120`, `:128`), E504 (`:91`) oder E505 (`:109`).
+
 → Detail: [System_Externals_Concept.md](System_Externals_Concept.md)
 
 ---
@@ -321,7 +323,7 @@ project_root/
 | Option | Default | Beschreibung |
 |--------|---------|--------------|
 | `EXTERNALS_OFFLINE` | OFF | Kein Netzwerk, nur Cache |
-| `EXTERNALS_FORCE_FETCH` | ON | Cache ignorieren, neu laden |
+| `EXTERNALS_FORCE_FETCH` | OFF | Cache ignorieren, neu laden |
 
 ### Vorteile
 
@@ -391,6 +393,8 @@ cmake_assert(CONDITION "Message")    # Interne Prüfung
 | W2xx | Tools/Setup |
 | W3xx | External-Caching |
 | W4xx | App-Container Warnungen |
+
+> **Stand Code (2026-11-09):** Benutzt werden E0xx–E5xx und W0xx–W5xx; W5xx (System-Externals: W501, `cmake/externals/system/Handler.cmake:245`) fehlt in dieser Tabelle. W6xx–W9xx kommen nur im Selbsttest vor (`cmake/buildSystemTest/`). Der Kopfkommentar von `cmake/core/Errors.cmake:22–37` nennt seit Modul 1.1.0 (CMakeCraft v0.14.1) alle Bereiche E0xx–E5xx und W0xx–W9xx. Die ausgelösten Codes je Bereich: [Guidelines.md §3.3](../Guidelines.md#33-fehlercodes).
 
 ---
 
@@ -635,8 +639,8 @@ projects/apps/{AppName}/
 
 ## 17. Siehe auch
 
-- [implementation_plan.md](implementation_plan.md) — Phasen-basierter Plan
-- [guidelines.md](../standards/guidelines.md) — Konventionen
+- [implementation_plan.md](Implementation_Plan.md) — Phasen-basierter Plan
+- [guidelines.md](../Guidelines.md) — Konventionen
 - [AppContainer_Concept.md](AppContainer_Concept.md) — App-Container Detail
 - [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible App-Tests
 - [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 Detail
@@ -648,7 +652,9 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-19** | **Phase 9 abgeschlossen: System Externals (§4), system Typ vor path/git, Geplante Erweiterungen aktualisiert (§16)** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: `EXTERNALS_FORCE_FETCH` in §6 auf OFF (wie §13 und `cmake/externals/core/Fetch.cmake:50`); Hinweis „Stand Code“ zu den Fehlercode-Bereichen (§9), nachgeführt auf CMakeCraft v0.14.1; Hinweis „Stand Code“ zu E501/E503 (§4: E502–E505 ausgelöst, E501 entfällt, `find_package` ohne `REQUIRED`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.7.0 | 2025-12-19 | Phase 9 abgeschlossen: System Externals (§4), system Typ vor path/git, Geplante Erweiterungen aktualisiert (§16) |
 | 0.6.0 | 2025-12-18 | Phase 8 abgeschlossen: App-Container Section (§12) hinzugefügt, apps[] in Schema (§3), App-Pipeline in Pipelines (§10), Fehlercode-Bereiche erweitert (E4xx, W4xx) |
 | 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 (.externals/ Caching) integriert, Test-Pipeline integriert, Blueprint v0.5.0 Format, Referenzen auf Phase 8/9 |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Struktur aus v1.7 übernommen |

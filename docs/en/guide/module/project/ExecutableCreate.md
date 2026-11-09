@@ -1,55 +1,55 @@
-# ExecutableCreate.cmake — Modul-Dokumentation
+# ExecutableCreate.cmake — Module Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-10-09  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [ExecutableCreate.md](ExecutableCreate.md)  
-> **Module:** [`cmake/project/ExecutableCreate.cmake`](../../../../cmake/project/ExecutableCreate.cmake)  
+> **German:** [ExecutableCreate.md](../../../../de/guide/module/project/ExecutableCreate.md)  
+> **Module:** [`cmake/project/ExecutableCreate.cmake`](../../../../../cmake/project/ExecutableCreate.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
-4. [Verarbeitung](#4-verarbeitung)
-5. [Plattform-spezifisches Verhalten](#5-plattform-spezifisches-verhalten)
-6. [Errorbehandlung](#6-fehlerbehandlung)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
+4. [Processing](#4-processing)
+5. [Platform-Specific Behavior](#5-platform-specific-behavior)
+6. [Error Handling](#6-error-handling)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `ExecutableCreate.cmake` Modul **erstellt CMake-Targets** aus einem vorbereiteten Context. Es ist für die eigentliche Target-Erstellung mit allen Configurationen zuständig.
+The `ExecutableCreate.cmake` module **creates CMake targets** from a prepared context. It is responsible for the actual target creation with all configurations.
 
-### Kernidee
+### Core Idea
 
-Der Context enthält alle Daten — Create erstellt daraus ein vollständig konfiguriertes Target.
+The context contains all the data — Create builds a fully configured target from it.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Target-Erstellung | add_executable() mit korrektem Typ |
-| Source-Sammlung | GLOB oder Source.cmake |
-| Dependencies | Interne Libraries, Externals |
-| Optionen | Defines, Compile/Link Options |
+| Area | Description |
+|------|-------------|
+| Target creation | add_executable() with the correct type |
+| Source collection | GLOB or Source.cmake |
+| Dependencies | Internal libraries, externals |
+| Options | Defines, compile/link options |
 | Standards | Warnings, CompilerOptions, OutputDirs |
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Context.cmake | 0.5.0 | `ctx_get` |
 | Errors.cmake | 0.5.0 | `cmake_fatal`, `cmake_warn` |
 | Debug.cmake | 0.5.0 | `dbg` |
@@ -61,11 +61,11 @@ Der Context enthält alle Daten — Create erstellt daraus ein vollständig konf
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
 ### 3.1 _create_executable_target()
 
-Erstellt ein CMake-Executable-Target aus dem Context.
+Creates a CMake executable target from the context.
 
 ```cmake
 _create_executable_target(<CTX>)
@@ -73,26 +73,26 @@ _create_executable_target(<CTX>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `CTX` | String | ✓ | Context-Prefix (z.B. `EXE_0`) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `CTX` | String | ✓ | Context prefix (e.g. `EXE_0`) |
 
-**Erwartete Context-Keys:**
+**Expected context keys:**
 
 | Key | Usage |
-|-----|------------|
-| NAME | Target-Name |
-| PATH | Source-Verzeichnis |
+|-----|-------|
+| NAME | Target name |
+| PATH | Source directory |
 | TYPE | CONSOLE, GUI, CLI, etc. |
-| VERSION | Target-Version |
-| PCH_ENABLED | Precompiled Headers |
-| PCH_HEADER | PCH-Dateiname |
-| DEPENDENCIES | Interne Libraries |
-| EXTERNALS | Externe Dependencies |
-| EXTERNAL_OPTIONS | Optionen pro External |
-| DEFINES | Präprozessor-Definitionen; `{version}` is replaced by the VERSION of the target |
-| COMPILE_OPTIONS | Compiler-Flags |
-| LINK_OPTIONS | Linker-Flags |
+| VERSION | Target version |
+| PCH_ENABLED | Precompiled headers |
+| PCH_HEADER | PCH file name |
+| DEPENDENCIES | Internal libraries |
+| EXTERNALS | External dependencies |
+| EXTERNAL_OPTIONS | Options per external |
+| DEFINES | Preprocessor definitions; `{version}` is replaced by the VERSION of the target |
+| COMPILE_OPTIONS | Compiler flags |
+| LINK_OPTIONS | Linker flags |
 
 **Example:**
 
@@ -104,54 +104,54 @@ _create_executable_target(EXE_0)
 
 ---
 
-## 4. Verarbeitung
+## 4. Processing
 
-### 4.1 Ablauf
+### 4.1 Flow
 
 ```
 _create_executable_target(CTX)
     │
-    ├── 1. Context-Daten lesen
-    │   └── replace {version} in DEFINES by VERSION
+    ├── 1. Read context data
+    │   └── Replace {version} in DEFINES with VERSION
     │
-    ├── 2. Source-Verzeichnis validieren
-    │   └── E001 wenn nicht existiert
+    ├── 2. Validate source directory
+    │   └── E001 if it does not exist
     │
-    ├── 3. Target erstellen
+    ├── 3. Create target
     │   ├── GUI → WIN32/MACOSX_BUNDLE
-    │   └── Andere → Standard executable
+    │   └── Others → standard executable
     │
-    ├── 4. Sources sammeln (GLOB)
-    │   └── W101 wenn keine Sources
+    ├── 4. Collect sources (GLOB)
+    │   └── W101 if no sources
     │
-    ├── 5. Include-Directories setzen
-    │   └── + pch/ wenn vorhanden
+    ├── 5. Set include directories
+    │   └── + pch/ if present
     │
-    ├── 6. PCH aktivieren (wenn enabled)
-    │   └── W101 wenn Header nicht gefunden
+    ├── 6. Enable PCH (if enabled)
+    │   └── W101 if header not found
     │
-    ├── 7. Interne Dependencies linken
-    │   └── E101 wenn Target nicht existiert
+    ├── 7. Link internal dependencies
+    │   └── E101 if target does not exist
     │
-    ├── 8. Externals anwenden
-    │   ├── E010 wenn nicht definiert
+    ├── 8. Apply externals
+    │   ├── E010 if not defined
     │   └── apply_external_to_target()
     │
-    ├── 9. Defines/Compile/Link Options setzen
+    ├── 9. Set defines/compile/link options
     │
-    ├── 10. Standard-Module anwenden
+    ├── 10. Apply standard modules
     │   ├── apply_warnings()
     │   ├── apply_compiler_options()
     │   └── setup_output_dirs()
     │
-    └── 11. Plattform-spezifisches
+    └── 11. Platform-specific
         ├── Windows GUI: APP_WINDOWS_GUI
-        └── macOS GUI: Bundle-Properties
+        └── macOS GUI: bundle properties
 ```
 
-### 4.2 Source-Sammlung
+### 4.2 Source Collection
 
-Aktuell via GLOB:
+Currently via GLOB:
 ```cmake
 file(GLOB_RECURSE _sources
     "${_src_dir}/*.cpp"
@@ -161,11 +161,11 @@ file(GLOB_RECURSE _sources
 )
 ```
 
-**Note:** Für explizite Kontrolle kann Source.cmake verwendet werden (abhängig von SOLUTION_SOURCE_MODE).
+**Note:** For explicit control, Source.cmake can be used (depending on SOLUTION_SOURCE_MODE).
 
 ---
 
-## 5. Plattform-spezifisches Verhalten
+## 5. Platform-Specific Behavior
 
 ### 5.1 Windows GUI
 
@@ -177,7 +177,7 @@ if(WIN32 AND TYPE == "GUI")
 endif()
 ```
 
-Das Define `APP_WINDOWS_GUI` ermöglicht WinMain als Entry-Point:
+The define `APP_WINDOWS_GUI` enables WinMain as the entry point:
 
 ```cpp
 #ifdef APP_WINDOWS_GUI
@@ -205,46 +205,47 @@ endif()
 
 ### 5.3 Linux/Unix
 
-Keine speziellen Anpassungen für GUI-Typ.
+No special adjustments for the GUI type.
 
 ---
 
-## 6. Errorbehandlung
+## 6. Error Handling
 
 ### 6.1 Fatal Errors
 
-| Code | Bedingung | Lösung |
-|------|-----------|--------|
-| E001 | Source-Pfad existiert nicht | Pfad prüfen/anlegen |
-| E010 | External nicht in centraler Definition | External zu Solution.json hinzufügen |
-| E101 | Interne Dependency existiert nicht | Library vor Executable definieren |
+| Code | Condition | Solution |
+|------|-----------|----------|
+| E001 | Source path does not exist | Check/create the path |
+| E010 | External not in the central definition | Add the external to Solution.json |
+| E101 | Internal dependency does not exist | Define the library before the executable |
 
 ### 6.2 Warnings
 
-| Code | Bedingung | Empfehlung |
-|------|-----------|------------|
-| W101 | Keine Sources gefunden | Source-Dateien hinzufügen |
-| W101 | PCH-Header nicht gefunden | Header-Datei erstellen |
+| Code | Condition | Recommendation |
+|------|-----------|----------------|
+| W101 | No sources found | Add source files |
+| W101 | PCH header not found | Create the header file |
 
 ---
 
 ## 7. See Also
 
-- [Executables.cmake](Executables.md) — Ruft _create_executable_target auf
-- [ExecutableCollect.cmake](ExecutableCollect.md) — Befüllt den Context
-- [Orchestrator.cmake](../externals/Orchestrator.md) — apply_external_to_target
-- [OutputDirs.cmake](../core/OutputDirs.md) — Output-Verzeichnisse
-- [CompilerOptions.cmake](../core/CompilerOptions.md) — Compiler-Optionen
+- [Executables.cmake](Executables.md) — Calls _create_executable_target
+- [ExecutableCollect.cmake](ExecutableCollect.md) — Fills the context
+- [Orchestrator.cmake](../externals/Orchestrator_cmake.md) — apply_external_to_target
+- [OutputDirs.cmake](../core/OutputDirs.md) — Output directories
+- [CompilerOptions.cmake](../core/CompilerOptions.md) — Compiler options
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.10.0** | **2026-10-09** | **`{version}` in DEFINES stands for the version of the target** |
-| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung |
-| 0.1.2 | 2025-12-09 | APP_WINDOWS_GUI Define für Windows GUI |
-| 0.1.1 | 2025-12-07 | Externals-Integration via apply_external_to_target() |
-| 0.1.0 | 2025-12-05 | Initial (Clean Start): Target-Erstellung aus Context |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-10-09** | **CMakeCraft v0.10.0: `{version}` in DEFINES stands for the version of the target** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.1 | 2025-12-17 | collect_sources() integration, SourceCollect.cmake dependency |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
+| 0.1.2 | 2025-12-09 | APP_WINDOWS_GUI define for Windows GUI |
+| 0.1.1 | 2025-12-07 | Externals integration via apply_external_to_target() |
+| 0.1.0 | 2025-12-05 | Initial (clean start): target creation from context |

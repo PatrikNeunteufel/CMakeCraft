@@ -1,15 +1,15 @@
 # AppCreate.cmake — Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Version:** 1.0.3  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
-> **Modul:** [cmake/project/AppCreate.cmake](../../../../cmake/project/AppCreate.cmake)  
+> **Modul:** [cmake/project/AppCreate.cmake](../../../../../cmake/project/AppCreate.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
-> **English:** [AppCreate.md](AppCreate.md)
+> **English:** [AppCreate.md](../../../../en/guide/module/project/AppCreate.md)
 
 ---
 
@@ -469,8 +469,11 @@ ctest --timeout 60
 
 | Code | Bedingung |
 |------|-----------|
-| `E010` | External nicht in externals-Block definiert |
-| `E301` | Unbekanntes Test-Framework |
+| `E010` | External oder Test-Framework nicht in externals-Block definiert |
+| `E101` | Dependency eines Test-Targets existiert nicht |
+| `E301` | Kein Test-Framework angegeben (weder `tests.framework` noch `targets[].framework`) |
+| `E302` | Unbekanntes Test-Framework (gültig: `doctest`, `googletest`, `catch2`) |
+| `E305` | Pfad des Test-Targets existiert nicht |
 
 ### 8.3 Warnungen (W4xx)
 
@@ -544,8 +547,10 @@ int main() {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.8.0** | **2026-10-09** | **_create_app_test_target(): neuer Parameter COMPILE_OPTIONS — `tests.targets[].compile_options` wird als PRIVATE Compiler-Flags ans Test-Target gesetzt (CMakeCraft v0.11.0)** |
-| **0.7.4** | **2026-10-05** | **_create_app_test_target(): neuer Parameter EXTERNAL_OPTIONS — `tests.targets[].external_options` wird je External angewandt statt fest `{}`. Signatur in § 4.4 berichtigt (DEPENDENCIES, PARALLEL fehlten). § 4.3 auf tests.targets[]-Stand gebracht (altes tests.unit/tests.integration-Schema entfernt, Fehlerliste ergänzt)** |
+| **1.0.3** | **2026-11-09** | **An den Code angeglichen: § 8.2 E301 = kein Framework, E302 = unbekanntes Framework (wie § 4.3); E101 und E305 ergänzt** |
+| **1.0.2** | **2026-10-09** | **_create_app_test_target(): neuer Parameter COMPILE_OPTIONS — `tests.targets[].compile_options` wird als PRIVATE Compiler-Flags ans Test-Target gesetzt (CMakeCraft v0.11.0)** |
+| **1.0.1** | **2026-10-05** | **_create_app_test_target(): neuer Parameter EXTERNAL_OPTIONS — `tests.targets[].external_options` wird je External angewandt statt fest `{}`. Signatur in § 4.4 berichtigt (DEPENDENCIES, PARALLEL fehlten). § 4.3 auf tests.targets[]-Stand gebracht (altes tests.unit/tests.integration-Schema entfernt, Fehlerliste ergänzt)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() mit Optionen |
 | 0.5.4 | 2025-12-18 | PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr) |
 | 0.5.3 | 2025-12-18 | PCH-Include-Directory als PUBLIC hinzugefügt, APP_PCH_* Target Properties |

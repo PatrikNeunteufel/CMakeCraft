@@ -67,7 +67,7 @@ App/
 Copy this directory to your project:
 
 ```bash
-cp -r projects/templates/App projects/apps/YourAppName
+cp -r ../CMakeCraft/templates/App projects/apps/YourAppName
 ```
 
 ### 2. Configure Solution.json
@@ -345,7 +345,7 @@ Each test directory must contain a `test_main.cpp`:
 
 | Define | Condition |
 |--------|-----------|
-| `APP_GUI` | `runner.type = "GUI"` (Windows only) |
+| `APP_WINDOWS_GUI` | `runner.type = "GUI"` or `"WINDOW"` (Windows only; console runners get no define) |
 
 ## runner.type
 

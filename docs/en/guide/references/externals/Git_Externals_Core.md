@@ -4,35 +4,35 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_Core.md](Git_Externals_Core.md)
+> **German:** [Git_Externals_Core.md](../../../../de/guide/references/externals/Git_Externals_Core.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Logging & Debugging](#2-logging--debugging)
 3. [Utility / General](#3-utility--general)
-4. [Schnellreferenz](#4-schnellreferenz)
-5. [See Also](#5-siehe-auch)
+4. [Quick Reference](#4-quick-reference)
+5. [See Also](#5-see-also)
 6. [Changelog](#6-changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes grundlegende Bibliotheken für Logging und allgemeine Entwicklungsaufgaben.
+This document describes fundamental libraries for logging and general development tasks.
 
-> **Note:** Testing und Scripting sind in separate Kategorien ausgelagert:
+> **Note:** Testing and scripting are split out into separate categories:
 > - [Git_Externals_Testing.md](Git_Externals_Testing.md) — googletest, catch2, benchmark
 > - [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — sol2, pybind11, chaiscript
 
-### Kategorien
+### Categories
 
-| Kategorie | Bibliotheken |
-|-----------|--------------|
+| Category | Libraries |
+|----------|-----------|
 | Logging | spdlog, fmt |
 | Utility | abseil, magic_enum, argparse, CLI11 |
 
@@ -42,14 +42,14 @@ This document describes grundlegende Bibliotheken für Logging und allgemeine En
 
 ### 2.1 spdlog
 
-> **Zweck:** Schnelle, header-only/compiled C++ Logging-Bibliothek mit Formatierung, Rotation und Sinks.
+> **Purpose:** Fast, header-only/compiled C++ logging library with formatting, rotation and sinks.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/gabime/spdlog.git` |
-| **Aktueller Tag** | `v1.14.1` |
+| **Current Tag** | `v1.14.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Dependencies** | fmt (optional, bundled) |
 
 ```json
@@ -65,7 +65,7 @@ set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_BENCH OFF CACHE BOOL "" FORCE)
 set(SPDLOG_INSTALL OFF CACHE BOOL "" FORCE)
-# Optional: Externe fmt verwenden
+# Optional: use external fmt
 # set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "" FORCE)
 ```
 
@@ -78,7 +78,7 @@ spdlog::error("Error message: {}", error_code);
 spdlog::warn("Warning at line {}", __LINE__);
 ```
 
-**Mit verschiedenen Sinks:**
+**With different sinks:**
 ```cpp
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
@@ -94,14 +94,14 @@ auto rotating = spdlog::rotating_logger_mt("rotating", "logs/app.log", 5*1024*10
 
 ### 2.2 fmt
 
-> **Zweck:** Moderne Formatierungs-Bibliothek (Basis für C++20 std::format).
+> **Purpose:** Modern formatting library (basis for C++20 std::format).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/fmtlib/fmt.git` |
-| **Aktueller Tag** | `10.2.1` |
+| **Current Tag** | `10.2.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "fmt": {
@@ -136,14 +136,14 @@ fmt::print("Vector: {}\n", v);  // [1, 2, 3]
 
 ### 3.1 abseil-cpp
 
-> **Zweck:** Google's C++ Common Libraries (Strings, Containers, Synchronization).
+> **Purpose:** Google's C++ Common Libraries (strings, containers, synchronization).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/abseil/abseil-cpp.git` |
-| **Aktueller Tag** | `20240116.2` |
+| **Current Tag** | `20240116.2` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch erforderlich |
+| **Hook** | PreFetch required |
 
 ```json
 "abseil": {
@@ -173,12 +173,12 @@ std::vector<std::string> parts = absl::StrSplit("a,b,c", ',');
 
 ### 3.2 magic_enum
 
-> **Zweck:** Statische Enum-Reflection ohne Makros.
+> **Purpose:** Static enum reflection without macros.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/Neargye/magic_enum.git` |
-| **Aktueller Tag** | `v0.9.5` |
+| **Current Tag** | `v0.9.5` |
 | **CMake Support** | ✅ |
 | **Hook** | — |
 | **Header-only** | ✅ |
@@ -209,12 +209,12 @@ for (auto color : magic_enum::enum_values<Color>()) {
 
 ### 3.3 argparse
 
-> **Zweck:** Einfacher Argument-Parser im Python-Stil.
+> **Purpose:** Simple Python-style argument parser.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/p-ranav/argparse.git` |
-| **Aktueller Tag** | `v3.0` |
+| **Current Tag** | `v3.0` |
 | **CMake Support** | ✅ |
 | **Hook** | — |
 | **Header-only** | ✅ |
@@ -255,14 +255,14 @@ int main(int argc, char* argv[]) {
 
 ### 3.4 CLI11
 
-> **Zweck:** Feature-reicher Command-Line-Parser.
+> **Purpose:** Feature-rich command-line parser.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/CLIUtils/CLI11.git` |
-| **Aktueller Tag** | `v2.4.1` |
+| **Current Tag** | `v2.4.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -300,10 +300,10 @@ int main(int argc, char* argv[]) {
 
 ---
 
-## 4. Schnellreferenz
+## 4. Quick Reference
 
-| Bibliothek | Tag | CMake | Hook | Hauptverwendung |
-|------------|-----|-------|------|-----------------|
+| Library | Tag | CMake | Hook | Main Use |
+|---------|-----|-------|------|----------|
 | spdlog | v1.14.1 | ✅ | PreFetch | Fast logging |
 | fmt | 10.2.1 | ✅ | PreFetch | String formatting |
 | abseil | 20240116.2 | ✅ | PreFetch | Google's C++ libs |
@@ -315,8 +315,8 @@ int main(int argc, char* argv[]) {
 
 ## 5. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
-- [Git_Externals.md](Git_Externals.md) — Git Externals Overview
+- [Externals.md](../Externals.md) — Main overview of all externals
+- [Git_Externals.md](Git_Externals.md) — Git Externals overview
 - [Git_Externals_Testing.md](Git_Externals_Testing.md) — Testing (googletest, catch2)
 - [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — Scripting (sol2, pybind11)
 - [Git_Externals_GUI.md](Git_Externals_GUI.md) — GUI & Graphics
@@ -326,7 +326,8 @@ int main(int argc, char* argv[]) {
 
 ## 6. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Testing → Git_Externals_Testing.md ausgelagert; Fokus auf Logging & Utility** |
-| 0.5.0 | 2025-12-14 | Initial: Ausgelagert aus Git_Externals_Reference |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Testing → split out into Git_Externals_Testing.md; focus on logging & utility |
+| 0.5.0 | 2025-12-14 | Initial: extracted from Git_Externals_Reference |

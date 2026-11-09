@@ -1,55 +1,55 @@
 # System Externals — Concept
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Concept  
-> **Status:** Implementiert ✅  
-> **Phase:** 9 (abgeschlossen)  
-> **Target Audience:** Build System Developers, Architekten  
+> **Status:** Implemented ✅  
+> **Phase:** 9 (completed)  
+> **Target Audience:** Build System Developers, Architects  
 > **Language:** English  
-> **German:** [System_Externals_Concept.md](System_Externals_Concept.md)
+> **German:** [System_Externals_Concept.md](../../../de/konzepte/abgeschlossen/System_Externals_Concept.md)
 
 ---
 
 ## Table of Contents
 
-1. [Problemstellung](#1-problemstellung)
-2. [Lösung: System External Type](#2-lösung-system-external-type)
-3. [Typ-Erkennung](#3-typ-erkennung)
-4. [Pfad-Auflösung](#4-pfad-auflösung)
-5. [Implementation](#5-implementierung)
-6. [Examples](#6-beispiele)
+1. [Problem Statement](#1-problem-statement)
+2. [Solution: System External Type](#2-solution-system-external-type)
+3. [Type Detection](#3-type-detection)
+4. [Path Resolution](#4-path-resolution)
+5. [Implementation](#5-implementation)
+6. [Examples](#6-examples)
 7. [Error Codes](#7-error-codes)
 8. [Migration](#8-migration)
-9. [Offene Punkte](#9-offene-punkte)
-10. [See Also](#10-siehe-auch)
+9. [Open Points](#9-open-points)
+10. [See Also](#10-see-also)
 11. [Changelog](#11-changelog)
 
 ---
 
-## 1. Problemstellung
+## 1. Problem Statement
 
-### 1.1 Aktuelle External-Typen
+### 1.1 Current External Types
 
-Das Build-System unterstützt zwei External-Typen:
+The build system supports two external types:
 
-| Typ | Erkennungsfeld | Speicherort | Example |
+| Type | Detection field | Storage location | Example |
 |-----|----------------|-------------|----------|
-| **Local** | `path` | `externals/` im Repo | bass, glad, doctest |
-| **Fetched** | `git` | `.externals/` (gecached) | glfw, imgui, spdlog |
+| **Local** | `path` | `externals/` in the repo | bass, glad, doctest |
+| **Fetched** | `git` | `.externals/` (cached) | glfw, imgui, spdlog |
 
-### 1.2 Das Problem mit großen Libraries
+### 1.2 The Problem with Large Libraries
 
-Bibliotheken wie **Qt6**, **Boost**, **OpenCV**, **CUDA** passen nicht in dieses Schema:
+Libraries such as **Qt6**, **Boost**, **OpenCV**, **CUDA** do not fit into this scheme:
 
 | Problem | Description |
 |---------|--------------|
-| **Zu groß** | Qt6 > 5 GB — nicht praktikabel für `externals/` |
-| **Bereits installiert** | Oft schon auf dem System vorhanden |
-| **Verschiedene Pfade** | Jeder Entwickler hat Qt woanders installiert |
-| **Externe Laufwerke** | Manchmal auf D:/, E:/, USB, NAS |
+| **Too large** | Qt6 > 5 GB — not practicable for `externals/` |
+| **Already installed** | Often already present on the system |
+| **Different paths** | Every developer has Qt installed somewhere else |
+| **External drives** | Sometimes on D:/, E:/, USB, NAS |
 
-### 1.3 Aktueller Workaround
+### 1.3 Current Workaround
 
 ```json
 "qt6": {
@@ -60,24 +60,24 @@ Bibliotheken wie **Qt6**, **Boost**, **OpenCV**, **CUDA** passen nicht in dieses
 }
 ```
 
-**Nachteile:**
+**Disadvantages:**
 
-- ❌ `path` zeigt nicht auf echte Dateien (semantisch falsch)
-- ❌ Ordner `externals/qt6/` muss existieren (nur für Include.cmake)
-- ❌ Pfad-Suche muss manuell in Include.cmake implementiert werden
+- ❌ `path` does not point to real files (semantically wrong)
+- ❌ The folder `externals/qt6/` must exist (only for Include.cmake)
+- ❌ The path search must be implemented manually in Include.cmake
 
 ---
 
-## 2. Lösung: System External Type
+## 2. Solution: System External Type
 
-### 2.1 Neuer External-Typ
+### 2.1 New External Type
 
-Ein **System External** ist eine Bibliothek, die:
-- Bereits auf dem System installiert ist
-- Über CMake's `find_package()` gefunden wird
-- Nicht heruntergeladen oder ins Repo kopiert wird
+A **system external** is a library that:
+- Is already installed on the system
+- Is found via CMake's `find_package()`
+- Is not downloaded or copied into the repo
 
-### 2.2 JSON-Syntax
+### 2.2 JSON Syntax
 
 ```json
 "externals": {
@@ -89,50 +89,50 @@ Ein **System External** ist eine Bibliothek, die:
 }
 ```
 
-### 2.3 Alle Felder
+### 2.3 All Fields
 
-| Feld | Typ | Required | Default | Description |
+| Field | Type | Required | Default | Description |
 |------|-----|---------|---------|--------------|
-| `system` | bool | ✅ | — | Muss `true` sein |
-| `package` | string | ✅ | — | Name für `find_package()` |
-| `version` | string | — | — | Version-Constraint (z.B. `">=6.5.0"`) |
-| `components` | string[] | — | `[]` | Package-Komponenten |
-| `hints` | string[] | — | `[]` | Zusätzliche Suchpfade |
-| `backup` | string | — | — | Notfall-Pfad (mit Warning) |
-| `required` | bool | — | `true` | Error wenn nicht gefunden |
+| `system` | bool | ✅ | — | Must be `true` |
+| `package` | string | ✅ | — | Name for `find_package()` |
+| `version` | string | — | — | Version constraint (e.g. `">=6.5.0"`) |
+| `components` | string[] | — | `[]` | Package components |
+| `hints` | string[] | — | `[]` | Additional search paths |
+| `backup` | string | — | — | Emergency path (with warning) |
+| `required` | bool | — | `true` | Error if not found |
 
-**Important:** `system` und `package` sind **nur zusammen** Required. Wenn `system: true` gesetzt ist, muss auch `package` angegeben werden.
+**Important:** `system` and `package` are required **only together**. If `system: true` is set, `package` must also be specified.
 
 ---
 
-## 3. Typ-Erkennung
+## 3. Type Detection
 
-### 3.1 Die drei External-Typen
+### 3.1 The Three External Types
 
-Das Build-System erkennt den Typ anhand des **ersten vorhandenen Erkennungsfelds**:
+The build system detects the type from the **first detection field present**:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    External-Definition                          │
+│                    External definition                          │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
               ┌───────────────────────────────┐
-              │   Hat "system": true ?        │
+              │   Has "system": true ?        │
               └───────────────────────────────┘
                      │                │
                     Yes               No
                      │                │
                      ▼                ▼
             ┌─────────────┐  ┌───────────────────────────┐
-            │   SYSTEM    │  │   Hat "git" Feld?         │
+            │   SYSTEM    │  │   Has "git" field?        │
             │   External  │  └───────────────────────────┘
             └─────────────┘         │                │
                                    Yes               No
                                     │                │
                                     ▼                ▼
                            ┌─────────────┐  ┌───────────────────────────┐
-                           │   FETCHED   │  │   Hat "path" Feld?        │
+                           │   FETCHED   │  │   Has "path" field?       │
                            │   External  │  └───────────────────────────┘
                            └─────────────┘         │                │
                                                   Yes               No
@@ -144,28 +144,28 @@ Das Build-System erkennt den Typ anhand des **ersten vorhandenen Erkennungsfelds
                                           └─────────────┘  └─────────────┘
 ```
 
-### 3.2 Requiredfelder pro Typ
+### 3.2 Required Fields per Type
 
-| Typ | Requiredfelder | Example |
+| Type | Required fields | Example |
 |-----|---------------|----------|
 | **Local** | `path` | `"bass": { "path": "externals/bass" }` |
-| **Fetched** | `git` + Version* | `"glfw": { "git": "...", "tag": "3.4" }` |
+| **Fetched** | `git` + version* | `"glfw": { "git": "...", "tag": "3.4" }` |
 | **System** | `system` + `package` | `"qt6": { "system": true, "package": "Qt6" }` |
 
-*Version = `tag`, `branch` oder `commit`
+*Version = `tag`, `branch` or `commit`
 
-### 3.3 Gegenseitiger Ausschluss
+### 3.3 Mutual Exclusion
 
-Ein External kann **nur einen Typ** haben:
+An external can have **only one type**:
 
 ```json
-// ❌ FALSCH: Mehrere Typ-Felder
+// ❌ WRONG: several type fields
 "bad": {
     "system": true,
-    "path": "externals/bad"    // Konflikt!
+    "path": "externals/bad"    // Conflict!
 }
 
-// ✅ RICHTIG: Genau ein Typ
+// ✅ CORRECT: exactly one type
 "qt6": {
     "system": true,
     "package": "Qt6"
@@ -174,61 +174,61 @@ Ein External kann **nur einen Typ** haben:
 
 ---
 
-## 4. Pfad-Auflösung
+## 4. Path Resolution
 
-### 4.1 Das Problem: Wo ist Qt installiert?
+### 4.1 The Problem: Where Is Qt Installed?
 
-Verschiedene Entwickler haben Qt an verschiedenen Orten:
+Different developers have Qt in different locations:
 
-| Entwickler | Qt-Installation |
+| Developer | Qt installation |
 |------------|-----------------|
 | Alice | `C:/Qt/6.7.0/msvc2022_64` |
 | Bob | `D:/Tools/Qt/6.7.0/msvc2022_64` |
 | Charlie | `E:/Libs/Qt/6.7.0/msvc2022_64` |
-| CI-Server | `/opt/Qt/6.7.0/gcc_64` |
+| CI server | `/opt/Qt/6.7.0/gcc_64` |
 
-CMake's `find_package(Qt6)` sucht nur an Standard-Orten. Wenn Qt woanders installiert ist, findet es nichts.
+CMake's `find_package(Qt6)` only searches in standard locations. If Qt is installed somewhere else, it finds nothing.
 
-### 4.2 Lösung: Mehrstufige Suche
+### 4.2 Solution: Multi-Stage Search
 
-Das System sucht in dieser Reihenfolge:
+The system searches in this order:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ STUFE 1: Environment-Variablen (vom Entwickler gesetzt)        │
-│          $QT_ROOT, $QT_DIR, $QT_HOME                           │
-│          → Jeder Entwickler setzt seine eigene Variable        │
+│ STAGE 1: Environment variables (set by the developer)           │
+│          $QT_ROOT, $QT_DIR, $QT_HOME                            │
+│          → Every developer sets their own variable              │
 ├─────────────────────────────────────────────────────────────────┤
-│ STUFE 2: CMAKE_PREFIX_PATH                                      │
-│          → Falls in CMake-Presets oder Command-Line gesetzt    │
+│ STAGE 2: CMAKE_PREFIX_PATH                                      │
+│          → If set in CMake presets or on the command line       │
 ├─────────────────────────────────────────────────────────────────┤
-│ STUFE 3: hints[] aus Solution.json                              │
-│          → Projekt gibt bekannte Pfade vor                      │
-│          → Hilfreich für Team mit ähnlichen Setups             │
+│ STAGE 3: hints[] from Solution.json                             │
+│          → The project specifies known paths                    │
+│          → Helpful for a team with similar setups               │
 ├─────────────────────────────────────────────────────────────────┤
-│ STUFE 4: Standard-Pfade (plattformspezifisch)                   │
-│          → C:/Qt/..., /opt/Qt/..., ~/Qt/...                    │
-│          → Typische Installationsorte                          │
+│ STAGE 4: Standard paths (platform-specific)                     │
+│          → C:/Qt/..., /opt/Qt/..., ~/Qt/...                     │
+│          → Typical installation locations                       │
 ├─────────────────────────────────────────────────────────────────┤
-│ STUFE 5: backup Pfad (mit Warning)                              │
-│          → Notfall-Lösung, z.B. externes Laufwerk              │
-│          → Zeigt Warning: "Bitte richtig installieren"         │
+│ STAGE 5: backup path (with warning)                             │
+│          → Emergency solution, e.g. external drive              │
+│          → Shows warning: "Please install properly"             │
 ├─────────────────────────────────────────────────────────────────┤
-│ STUFE 6: Error                                                 │
-│          → Klare Errormeldung mit Lösungsvorschlägen          │
+│ STAGE 6: Error                                                  │
+│          → Clear error message with suggested solutions         │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.3 Wann brauche ich was?
+### 4.3 When Do I Need What?
 
-| Situation | Empfohlene Lösung |
+| Situation | Recommended solution |
 |-----------|-------------------|
-| **Ich alleine** | Environment-Variable setzen (`QT_ROOT`) |
-| **Team mit ähnlichen Setups** | `hints[]` in Solution.json |
-| **CI/CD** | Environment-Variable im CI-System |
-| **Notfall (externes Laufwerk)** | `backup` Pfad |
+| **Just me** | Set an environment variable (`QT_ROOT`) |
+| **Team with similar setups** | `hints[]` in Solution.json |
+| **CI/CD** | Environment variable in the CI system |
+| **Emergency (external drive)** | `backup` path |
 
-### 4.4 Example: Vollständige Configuration
+### 4.4 Example: Complete Configuration
 
 ```json
 "qt6": {
@@ -236,24 +236,24 @@ Das System sucht in dieser Reihenfolge:
     "package": "Qt6",
     "components": ["Core", "Widgets"],
     "hints": [
-        "${QT_ROOT}",                        // 1. Environment-Variable
-        "C:/Qt/6.7.0/msvc2022_64",          // 2. Windows Standard
+        "${QT_ROOT}",                        // 1. Environment variable
+        "C:/Qt/6.7.0/msvc2022_64",          // 2. Windows standard
         "D:/Tools/Qt/6.7.0/msvc2022_64"     // 3. Alternative
     ],
-    "backup": "E:/Backup/Qt/6.7.0/msvc2022_64"  // 4. Notfall
+    "backup": "E:/Backup/Qt/6.7.0/msvc2022_64"  // 4. Emergency
 }
 ```
 
-**Was passiert:**
+**What happens:**
 
-1. **Alice** hat `QT_ROOT=C:/Qt/6.7.0/msvc2022_64` gesetzt → Gefunden ✅
-2. **Bob** hat kein QT_ROOT, aber Qt in `D:/Tools/...` → Gefunden via hint ✅
-3. **Charlie** hat Qt nur auf E:/ → Gefunden via backup ⚠️ (mit Warning)
-4. **Dave** hat kein Qt → Klarer Error mit Hilfetext ❌
+1. **Alice** has set `QT_ROOT=C:/Qt/6.7.0/msvc2022_64` → Found ✅
+2. **Bob** has no QT_ROOT, but Qt in `D:/Tools/...` → Found via hint ✅
+3. **Charlie** has Qt only on E:/ → Found via backup ⚠️ (with warning)
+4. **Dave** has no Qt → Clear error with help text ❌
 
-### 4.5 Minimale Configuration
+### 4.5 Minimal Configuration
 
-Für einfache Fälle reicht:
+For simple cases this is enough:
 
 ```json
 "boost": {
@@ -263,15 +263,15 @@ Für einfache Fälle reicht:
 }
 ```
 
-→ Sucht nur via Environment-Variable und Standard-Pfade
+→ Searches only via environment variable and standard paths
 
 ---
 
 ## 5. Implementation
 
-### 5.1 Architecture-Overview
+### 5.1 Architecture Overview
 
-#### Vorher (Workaround mit Local External)
+#### Before (Workaround with a Local External)
 
 ```
 Solution.json                    cmake/externals/
@@ -282,23 +282,23 @@ Solution.json                    cmake/externals/
 }                                                            │
      │                                                       │
      ▼                                                       ▼
-Orchestrator.cmake              Macht ALLES:
-     │                          - Path-Auflösung (ENV, hints, backup)
+Orchestrator.cmake              Does EVERYTHING:
+     │                          - Path resolution (ENV, hints, backup)
      ▼                          - find_package(Qt6)
-local/Attach.cmake              - Standard-Pfade (C:/Qt/...)
+local/Attach.cmake              - Standard paths (C:/Qt/...)
      │                          - AUTOMOC/AUTOUIC/AUTORCC
      ▼                          - windeployqt/macdeployqt
-❌ Prüft ob externals/qt6/      - Target-Erstellung
-   existiert (sinnlos!)
+❌ Checks whether externals/qt6/ - Target creation
+   exists (pointless!)
 ```
 
-**Probleme:**
-- Leerer Ordner `externals/qt6/` muss existieren
-- Jede Include.cmake implementiert Path-Auflösung neu
-- Keine einheitliche Errorbehandlung
-- Semantisch falsch (`path` zeigt auf nichts)
+**Problems:**
+- An empty folder `externals/qt6/` must exist
+- Every Include.cmake reimplements path resolution
+- No uniform error handling
+- Semantically wrong (`path` points to nothing)
 
-#### Nachher (System External)
+#### After (System External)
 
 ```
 Solution.json                    cmake/externals/
@@ -306,78 +306,80 @@ Solution.json                    cmake/externals/
      ▼                                ▼
 "qt6": {                         system/
     "system": true,              ├── Handler.cmake ◄────────────────┐
-    "package": "Qt6",            │   (generisch)                    │
-    "components": [...]          │   - JSON parsen                  │
-}                                │   - PathResolver aufrufen        │
+    "package": "Qt6",            │   (generic)                      │
+    "components": [...]          │   - Parse JSON                   │
+}                                │   - Call PathResolver            │
      │                           │   - find_package()               │
-     ▼                           │   - Package-Hook laden           │
+     ▼                           │   - Load package hook            │
 Orchestrator.cmake               │                                  │
      │                           ├── PathResolver.cmake             │
-     ▼                           │   (generisch)                    │
-system/Handler.cmake ────────────┤   - ENV-Variablen prüfen         │
-                                 │   - hints[] durchsuchen          │
-                                 │   - Standard-Pfade               │
-                                 │   - backup mit Warning           │
+     ▼                           │   (generic)                      │
+system/Handler.cmake ────────────┤   - Check ENV variables          │
+                                 │   - Search hints[]               │
+                                 │   - Standard paths               │
+                                 │   - backup with warning          │
                                  │                                  │
                                  └── packages/                      │
                                      └── Qt6.cmake ◄────────────────┘
-                                         (Qt-spezifisch)
-                                         - Standard-Pfade für Qt
+                                         (Qt-specific)
+                                         - Standard paths for Qt
                                          - AUTOMOC/AUTOUIC/AUTORCC
                                          - windeployqt/macdeployqt
 ```
 
-**Vorteile:**
-- Kein leerer Ordner nötig
-- Path-Auflösung einmal implementiert, überall genutzt
-- Einheitliche Error-Codes (E5xx, W5xx)
-- Semantisch korrekt (`system: true`)
-- Package-spezifische Logik optional und isoliert
+**Advantages:**
+- No empty folder needed
+- Path resolution implemented once, used everywhere
+- Uniform error codes (E5xx, W5xx)
+- Semantically correct (`system: true`)
+- Package-specific logic optional and isolated
 
-### 5.2 Neue Dateien
+### 5.2 New Files
 
 ```
 cmake/externals/
 ├── system/
-│   ├── Handler.cmake       # Generischer System External Handler
-│   ├── PathResolver.cmake  # Generische Pfad-Auflösung
-│   └── packages/           # Package-spezifische Hooks (optional)
-│       ├── Qt6.cmake       # AUTOMOC, windeployqt, Qt-Pfade
-│       ├── Boost.cmake     # Boost-spezifische Logik
-│       └── OpenCV.cmake    # OpenCV-spezifische Logik
-├── includes/               # BLEIBT für Local Externals
-│   ├── bass/Include.cmake  # Unverändert
-│   ├── glad/Include.cmake  # Unverändert
-│   └── qt6/Include.cmake   # → DEPRECATED (Migration zu system)
-└── Orchestrator.cmake      # Erweitert um system Type
+│   ├── Handler.cmake       # Generic system external handler
+│   ├── PathResolver.cmake  # Generic path resolution
+│   └── packages/           # Package-specific hooks (optional)
+│       ├── Qt6.cmake       # AUTOMOC, windeployqt, Qt paths
+│       ├── Boost.cmake     # Boost-specific logic
+│       └── OpenCV.cmake    # OpenCV-specific logic
+├── includes/               # REMAINS for local externals
+│   ├── bass/Include.cmake  # Unchanged
+│   ├── glad/Include.cmake  # Unchanged
+│   └── qt6/Include.cmake   # → DEPRECATED (migration to system)
+└── Orchestrator.cmake      # Extended by the system type
 ```
 
-### 5.3 Was wird generisch vs. package-spezifisch?
+### 5.3 What Becomes Generic vs. Package-Specific?
 
-| Funktion | Generisch (Handler/PathResolver) | Package-Hook |
+| Function | Generic (Handler/PathResolver) | Package hook |
 |----------|----------------------------------|--------------|
-| JSON parsen | ✅ | — |
-| Environment-Variablen prüfen | ✅ `${PACKAGE}_ROOT` | — |
-| hints[] durchsuchen | ✅ | — |
-| Standard-Pfade | ⚠️ Basis-Liste | ✅ Erweiterte Liste |
-| backup mit Warning | ✅ | — |
-| find_package() aufrufen | ✅ | — |
-| Error-Handling (E5xx) | ✅ | — |
+| Parse JSON | ✅ | — |
+| Check environment variables | ✅ `${PACKAGE}_ROOT` | — |
+| Search hints[] | ✅ | — |
+| Standard paths | ⚠️ Base list | ✅ Extended list |
+| backup with warning | ✅ | — |
+| Call find_package() | ✅ | — |
+| Error handling (E5xx) | ✅ | — |
 | AUTOMOC/AUTOUIC/AUTORCC | — | ✅ Qt6.cmake |
 | windeployqt/macdeployqt | — | ✅ Qt6.cmake |
-| Boost-Namespace-Handling | — | ✅ Boost.cmake |
-| OpenCV CUDA Config | — | ✅ OpenCV.cmake |
+| Boost namespace handling | — | ✅ Boost.cmake |
+| OpenCV CUDA config | — | ✅ OpenCV.cmake |
 
-### 5.4 Package-Hook Mechanismus
+### 5.4 Package Hook Mechanism
 
-Package-Hooks sind **optional**. Sie werden automatisch geladen, wenn vorhanden:
+> **Code today (2026-11-09):** The concept code in §5.4–5.6 loads modules via `${CMAKE_SOURCE_DIR}/cmake/…` and `include(cmake/…)`. Since v0.7.0 all module paths go through `${CMAKECRAFT_DIR}` (`CMakeCraft.cmake:133`), e.g. `${CMAKECRAFT_DIR}/externals/system/packages/${_package}.cmake` (`cmake/externals/system/Handler.cmake:210`) and `include("${CMAKECRAFT_DIR}/externals/system/Handler.cmake")` (`cmake/externals/Orchestrator.cmake:48`).
+
+Package hooks are **optional**. They are loaded automatically if present:
 
 ```cmake
 # In Handler.cmake
 function(_handle_system_external EXT_NAME EXT_JSON)
-    # ... generische Logik ...
+    # ... generic logic ...
     
-    # Package-Hook laden (falls vorhanden)
+    # Load package hook (if present)
     set(_package_hook "${CMAKE_SOURCE_DIR}/cmake/externals/system/packages/${_package}.cmake")
     if(EXISTS "${_package_hook}")
         dbg(${DBG_RARE} "[${EXT_NAME}] Loading package hook: ${_package}.cmake" ID EXTERNALS)
@@ -386,13 +388,13 @@ function(_handle_system_external EXT_NAME EXT_JSON)
 endfunction()
 ```
 
-#### Example: Qt6.cmake Package-Hook
+#### Example: Qt6.cmake Package Hook
 
 ```cmake
 # cmake/externals/system/packages/Qt6.cmake
-# Wird nach find_package(Qt6) aufgerufen
+# Called after find_package(Qt6)
 
-# Qt-spezifische Standard-Pfade (erweitert PathResolver)
+# Qt-specific standard paths (extends PathResolver)
 function(_get_qt6_standard_paths OUT_VAR)
     set(_paths "")
     if(WIN32)
@@ -415,7 +417,7 @@ function(_get_qt6_standard_paths OUT_VAR)
     set(${OUT_VAR} "${_paths}" PARENT_SCOPE)
 endfunction()
 
-# AUTOMOC/AUTOUIC/AUTORCC für Target aktivieren
+# Enable AUTOMOC/AUTOUIC/AUTORCC for a target
 function(_qt6_configure_target TARGET_NAME)
     if(TARGET ${TARGET_NAME})
         set_target_properties(${TARGET_NAME} PROPERTIES
@@ -426,7 +428,7 @@ function(_qt6_configure_target TARGET_NAME)
     endif()
 endfunction()
 
-# Deployment konfigurieren
+# Configure deployment
 function(_qt6_configure_deployment TARGET_NAME)
     if(WIN32)
         find_program(_WINDEPLOYQT windeployqt HINTS "${Qt6_DIR}/../../../bin")
@@ -440,23 +442,23 @@ function(_qt6_configure_deployment TARGET_NAME)
 endfunction()
 ```
 
-### 5.5 Orchestrator.cmake Erweiterung
+### 5.5 Orchestrator.cmake Extension
 
 ```cmake
-# cmake/externals/Orchestrator.cmake (erweitert)
+# cmake/externals/Orchestrator.cmake (extended)
 
 include_guard(GLOBAL)
 
 include(cmake/externals/local/Attach.cmake)
 include(cmake/externals/fetched/Handler.cmake)
-include(cmake/externals/system/Handler.cmake)  # NEU
+include(cmake/externals/system/Handler.cmake)  # NEW
 
 function(_orchestrate_external EXT_NAME EXT_JSON)
     
     # Validate: Exactly one source field
     validate_external_source("${EXT_NAME}" "${EXT_JSON}")
     
-    # Detect Type (Reihenfolge: system → git → path)
+    # Detect Type (order: system → git → path)
     _json_get_bool_or_default("${EXT_JSON}" "system" FALSE _is_system)
     _json_has_key("${EXT_JSON}" "git" _is_fetched)
     _json_has_key("${EXT_JSON}" "path" _is_local)
@@ -487,6 +489,8 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
 endfunction()
 ```
 
+> **Code today (2026-11-09):** The E012 message today reads `External '${EXT_NAME}': No valid source field (system/git/path/archive)` (`cmake/externals/Orchestrator.cmake:115`); the orchestrator also knows the type `archive`.
+
 ### 5.6 system/Handler.cmake
 
 ```cmake
@@ -501,7 +505,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     dbg(${DBG_COMMON} "[${EXT_NAME}] Processing system external" ID EXTERNALS)
     
     # =========================================================================
-    # Requiredfeld: package
+    # Required field: package
     # =========================================================================
     
     _json_get_string("${EXT_JSON}" "package" _package)
@@ -510,7 +514,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     endif()
     
     # =========================================================================
-    # Optionale Felder
+    # Optional fields
     # =========================================================================
     
     _json_get_string("${EXT_JSON}" "version" _version)
@@ -520,7 +524,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     _json_get_bool_or_default("${EXT_JSON}" "required" TRUE _required)
     
     # =========================================================================
-    # Package-Hook für Standard-Pfade laden (falls vorhanden)
+    # Load package hook for standard paths (if present)
     # =========================================================================
     
     set(_package_hook "${CMAKE_SOURCE_DIR}/cmake/externals/system/packages/${_package}.cmake")
@@ -528,14 +532,14 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     
     if(EXISTS "${_package_hook}")
         include("${_package_hook}")
-        # Hook kann _get_${_package}_standard_paths() definieren
+        # The hook can define _get_${_package}_standard_paths()
         if(COMMAND _get_${_package}_standard_paths)
             cmake_language(CALL _get_${_package}_standard_paths _additional_paths)
         endif()
     endif()
     
     # =========================================================================
-    # Pfad auflösen
+    # Resolve path
     # =========================================================================
     
     _resolve_system_path(
@@ -548,7 +552,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
         _used_backup
     )
     
-    # Warning bei Backup-Usage
+    # Warning when the backup is used
     if(_used_backup)
         cmake_warn("W501" 
             "[${EXT_NAME}] Using backup location: ${_resolved_path}\n"
@@ -557,7 +561,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     endif()
     
     # =========================================================================
-    # CMAKE_PREFIX_PATH erweitern
+    # Extend CMAKE_PREFIX_PATH
     # =========================================================================
     
     if(NOT "${_resolved_path}" STREQUAL "")
@@ -566,7 +570,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     endif()
     
     # =========================================================================
-    # find_package aufrufen
+    # Call find_package
     # =========================================================================
     
     if(_required)
@@ -581,11 +585,11 @@ function(_handle_system_external EXT_NAME EXT_JSON)
         find_package(${_package} ${_version} ${_req_flag})
     endif()
     
-    # Success prüfen
+    # Check success
     if(${_package}_FOUND)
         dbg(${DBG_COMMON} "[${EXT_NAME}] Found ${_package} ${${_package}_VERSION}" ID EXTERNALS)
         
-        # Package-Hook für Post-Setup aufrufen (AUTOMOC etc.)
+        # Call the package hook for post-setup (AUTOMOC etc.)
         if(COMMAND _${_package}_post_find)
             cmake_language(CALL _${_package}_post_find)
         endif()
@@ -597,7 +601,7 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     endif()
     
     # =========================================================================
-    # Als System External registrieren
+    # Register as system external
     # =========================================================================
     
     set_property(GLOBAL PROPERTY EXTERNAL_${EXT_NAME}_TYPE "SYSTEM")
@@ -622,7 +626,7 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
     set(_is_backup FALSE)
     
     # =========================================================================
-    # Stufe 1: Environment-Variablen
+    # Stage 1: Environment variables
     # =========================================================================
     
     foreach(_var_suffix ROOT DIR HOME)
@@ -639,7 +643,7 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
     endforeach()
     
     # =========================================================================
-    # Stufe 2: hints[] aus Solution.json
+    # Stage 2: hints[] from Solution.json
     # =========================================================================
     
     if(NOT _found AND HINTS)
@@ -656,7 +660,7 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
     endif()
     
     # =========================================================================
-    # Stufe 3: Package-spezifische Standard-Pfade
+    # Stage 3: Package-specific standard paths
     # =========================================================================
     
     if(NOT _found AND ADDITIONAL_PATHS)
@@ -671,7 +675,7 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
     endif()
     
     # =========================================================================
-    # Stufe 4: Backup (mit Warning)
+    # Stage 4: Backup (with warning)
     # =========================================================================
     
     if(NOT _found AND NOT "${BACKUP}" STREQUAL "")
@@ -684,15 +688,15 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
     endif()
     
     # =========================================================================
-    # Ergebnis
+    # Result
     # =========================================================================
     
     if(_found)
         set(${OUT_PATH} "${_result_path}" PARENT_SCOPE)
         set(${OUT_IS_BACKUP} ${_is_backup} PARENT_SCOPE)
     else()
-        # Kein fataler Error hier - find_package() wird es später melden
-        # Das erlaubt find_package() eigene Suchlogik zu nutzen
+        # No fatal error here - find_package() will report it later
+        # This allows find_package() to use its own search logic
         set(${OUT_PATH} "" PARENT_SCOPE)
         set(${OUT_IS_BACKUP} FALSE PARENT_SCOPE)
         dbg(${DBG_RARE} "[${EXT_NAME}] No path found, relying on find_package()" ID EXTERNALS)
@@ -701,16 +705,16 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
 endfunction()
 ```
 
-### 5.8 Validation.cmake Erweiterung
+### 5.8 Validation.cmake Extension
 
-Die bestehende Validation muss erweitert werden:
+The existing validation must be extended:
 
 ```cmake
 # cmake/core/Validation.cmake
 
-# Source-Felder Liste erweitern
+# Extend the list of source fields
 function(validate_external_source EXT_NAME EXT_JSON)
-    # ERWEITERT: "system" hinzugefügt
+    # EXTENDED: "system" added
     set(_source_fields "path;git;system;vcpkg;conan;find_package")
     set(_found_count 0)
     set(_found_fields "")
@@ -735,7 +739,7 @@ function(validate_external_source EXT_NAME EXT_JSON)
         )
     endif()
     
-    # System External: Zusätzliche Validierung
+    # System external: additional validation
     _json_has_key("${EXT_JSON}" "system" _has_system)
     if(_has_system)
         _json_get_bool_or_default("${EXT_JSON}" "system" FALSE _is_system)
@@ -756,7 +760,7 @@ endfunction()
 
 ## 6. Examples
 
-### 6.1 Qt6 (vollständig)
+### 6.1 Qt6 (Complete)
 
 ```json
 "qt6": {
@@ -772,7 +776,7 @@ endfunction()
 }
 ```
 
-### 6.2 Boost (minimal)
+### 6.2 Boost (Minimal)
 
 ```json
 "boost": {
@@ -793,7 +797,7 @@ endfunction()
 }
 ```
 
-### 6.4 Optional (nicht required)
+### 6.4 Optional (Not Required)
 
 ```json
 "cuda": {
@@ -803,7 +807,7 @@ endfunction()
 }
 ```
 
-→ Kein Error wenn nicht gefunden, Code kann mit `if(CUDAToolkit_FOUND)` prüfen
+→ No error if not found; code can check with `if(CUDAToolkit_FOUND)`
 
 ---
 
@@ -826,35 +830,37 @@ endfunction()
 | W501 | Using backup location for system external |
 | W502 | System external version mismatch (using found version) |
 
+> **Code today (2026-11-09, CMakeCraft v0.14.1):** Raised are E502 (`cmake/core/Validation.cmake:94`, `cmake/externals/system/Handler.cmake:180`), E503 (`Handler.cmake:101`, `:120`, `:128`, `:331`), E504 (`:91`), E505 (`:109`) and W501 (`:245`). `find_package()` runs without `REQUIRED` (`:270`, `:273`); the cause of a failure is named by `_system_external_not_found()`. E501 and W502 are dropped. The self-test checks E503–E505 (`cmake/buildSystemTest/phase9.cmake:498–609`).
+
 ---
 
 ## 8. Migration
 
-### 8.1 Overview: Was passiert mit bestehenden Dateien?
+### 8.1 Overview: What Happens to Existing Files?
 
-| Datei | Status nach Phase 9 | Aktion |
+| File | Status after Phase 9 | Action |
 |-------|---------------------|--------|
-| `cmake/externals/includes/qt6/Include.cmake` | ⚠️ DEPRECATED | Migrieren zu `system` |
-| `cmake/externals/includes/bass/Include.cmake` | ✅ Unverändert | Bleibt (echtes Local External) |
-| `cmake/externals/includes/glad/Include.cmake` | ✅ Unverändert | Bleibt (echtes Local External) |
-| `externals/qt6/` (leerer Ordner) | ❌ Löschen | Nicht mehr nötig |
-| `externals/bass/` (mit Dateien) | ✅ Unverändert | Bleibt (echtes Local External) |
+| `cmake/externals/includes/qt6/Include.cmake` | ⚠️ DEPRECATED | Migrate to `system` |
+| `cmake/externals/includes/bass/Include.cmake` | ✅ Unchanged | Remains (real local external) |
+| `cmake/externals/includes/glad/Include.cmake` | ✅ Unchanged | Remains (real local external) |
+| `externals/qt6/` (empty folder) | ❌ Delete | No longer needed |
+| `externals/bass/` (with files) | ✅ Unchanged | Remains (real local external) |
 
-### 8.2 Entscheidungshilfe: Local vs. System External
+### 8.2 Decision Aid: Local vs. System External
 
 ```
-                        Ist die Library im Repository?
+                        Is the library in the repository?
                                     │
                     ┌───────────────┴───────────────┐
                     │                               │
-                   Yes                             No
+                   Yes                              No
                     │                               │
                     ▼                               ▼
-            ┌───────────────┐               Wird sie mit find_package() gefunden?
+            ┌───────────────┐               Is it found with find_package()?
             │    LOCAL      │                       │
             │   External    │           ┌───────────┴───────────────┐
             │               │           │                           │
-            │ "path": "..." │          Yes                         No
+            │ "path": "..." │          Yes                          No
             └───────────────┘           │                           │
                                         ▼                           ▼
                                 ┌───────────────┐           ┌───────────────┐
@@ -867,9 +873,9 @@ endfunction()
 
 ### 8.3 Migration: Qt6 (Workaround → System External)
 
-#### Schritt 1: Solution.json ändern
+#### Step 1: Change Solution.json
 
-**Vorher (Workaround):**
+**Before (workaround):**
 ```json
 "qt6": {
     "path": "externals/qt6",
@@ -880,7 +886,7 @@ endfunction()
 }
 ```
 
-**Nachher (System External):**
+**After (system external):**
 ```json
 "qt6": {
     "system": true,
@@ -890,58 +896,58 @@ endfunction()
 }
 ```
 
-#### Schritt 2: Leeren Ordner löschen
+#### Step 2: Delete the Empty Folder
 
 ```bash
-# Ordner war nur für Workaround nötig
+# The folder was only needed for the workaround
 rm -rf externals/qt6/
 ```
 
-#### Schritt 3: Include.cmake (optional behalten)
+#### Step 3: Include.cmake (Optionally Keep)
 
-Die alte `cmake/externals/includes/qt6/Include.cmake` wird **nicht mehr aufgerufen**.
+The old `cmake/externals/includes/qt6/Include.cmake` is **no longer called**.
 
-Stattdessen wird (falls vorhanden) der Package-Hook geladen:
+Instead, the package hook is loaded (if present):
 `cmake/externals/system/packages/Qt6.cmake`
 
-**Option A:** Include.cmake löschen, Package-Hook nutzen (empfohlen)
-**Option B:** Include.cmake zu Package-Hook umbenennen/verschieben
+**Option A:** Delete Include.cmake, use the package hook (recommended)
+**Option B:** Rename/move Include.cmake to the package hook
 
-### 8.4 Vergleich: Vorher vs. Nachher
+### 8.4 Comparison: Before vs. After
 
-| Aspekt | Workaround (path) | System External |
+| Aspect | Workaround (path) | System external |
 |--------|-------------------|-----------------|
-| **Semantik** | ❌ `path` zeigt auf leeren Ordner | ✅ `system: true` ist klar |
-| **Ordner nötig** | ❌ `externals/qt6/` (leer) | ✅ No |
-| **Path-Auflösung** | ❌ In jeder Include.cmake | ✅ Einmal in PathResolver.cmake |
-| **Error-Handling** | ❌ Individuell | ✅ Einheitlich (E5xx) |
-| **Backup-Support** | ❌ Manuell implementiert | ✅ Integriert mit W501 |
-| **Version-Check** | ❌ Manuell implementiert | ✅ Integriert |
-| **Package-Hook** | ❌ Alles in Include.cmake | ✅ Nur Qt-spezifisches |
+| **Semantics** | ❌ `path` points to an empty folder | ✅ `system: true` is clear |
+| **Folder needed** | ❌ `externals/qt6/` (empty) | ✅ No |
+| **Path resolution** | ❌ In every Include.cmake | ✅ Once in PathResolver.cmake |
+| **Error handling** | ❌ Individual | ✅ Uniform (E5xx) |
+| **Backup support** | ❌ Implemented manually | ✅ Integrated with W501 |
+| **Version check** | ❌ Implemented manually | ✅ Integrated |
+| **Package hook** | ❌ Everything in Include.cmake | ✅ Only Qt-specific things |
 
-### 8.5 Abwärtskompatibilität
+### 8.5 Backward Compatibility
 
-Die **Local External** Funktionalität bleibt vollständig erhalten:
+The **local external** functionality is fully preserved:
 
 ```json
-// Funktioniert weiterhin für echte Local Externals
+// Continues to work for real local externals
 "bass": {
     "path": "externals/bass"
 }
 ```
 
-Nur der **Workaround** (path auf leeren/nicht genutzten Ordner) wird obsolet.
+Only the **workaround** (path to an empty/unused folder) becomes obsolete.
 
-### 8.6 Deprecation-Warning (optional)
+### 8.6 Deprecation Warning (Optional)
 
-In Phase 9 könnte eine Warning hinzugefügt werden:
+In Phase 9 a warning could be added:
 
 ```cmake
 # In local/Attach.cmake
 function(_attach_local_external EXT_NAME EXT_JSON)
-    # ... bestehender Code ...
+    # ... existing code ...
     
-    # Deprecation-Warning für bekannte System-Libraries
+    # Deprecation warning for known system libraries
     set(_known_system_libs "qt6;boost;opencv;cuda")
     if("${EXT_NAME}" IN_LIST _known_system_libs)
         cmake_warn("W105" 
@@ -954,37 +960,39 @@ endfunction()
 
 ---
 
-## 9. Offene Punkte
+## 9. Open Points
 
-### 9.1 Entschieden
+### 9.1 Decided
 
-| Frage | Entscheidung |
+| Question | Decision |
 |-------|--------------|
-| Typ-Erkennung? | `system` → `git` → `path` → Error |
-| Requiredfelder? | `system: true` erfordert `package` |
-| Rückwärtskompatibel? | ✅ Yes, alte Externals funktionieren |
+| Type detection? | `system` → `git` → `path` → error |
+| Required fields? | `system: true` requires `package` |
+| Backward compatible? | ✅ Yes, old externals work |
 
-### 9.2 Nicht im Scope
+### 9.2 Not in Scope
 
-- vcpkg/Conan Integration (separates Feature)
-- Automatischer Download von System Externals
-- Hybrid-Externals (System mit Fetched-Fallback) — evtl. später
+- vcpkg/Conan integration (separate feature)
+- Automatic download of system externals
+- Hybrid externals (system with fetched fallback) — possibly later
 
 ---
 
 ## 10. See Also
 
-- [master_concept.md](master_concept.md) — Architecture-Overview
-- [implementation_plan.md](implementation_plan.md) — Phasen-Plan
-- [Solution_Schema.md](../../guide/references/Solution_Schema.md) — JSON-Schema
+- [Master_Concept.md](Master_Concept.md) — Architecture overview
+- [Implementation_Plan.md](Implementation_Plan.md) — Phase plan
+- [Solution_Schema.md](../../guide/references/Solution_Schema.md) — JSON schema
 
 ---
 
 ## 11. Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-18** | **Phase 9 abgeschlossen:** Implementation verifiziert, Qt6 erfolgreich getestet, Debug-Messages auf dbg() umgestellt, Dokumentation finalisiert |
-| 0.6.0 | 2025-12-18 | Umfassende Überarbeitung: Section 5 komplett neu (Architecture Vorher/Nachher, Package-Hook Mechanismus, vollständiger Handler/PathResolver Code), Section 8 Migration erweitert (Include.cmake Deprecation, Entscheidungshilfe-Diagramm), Typ-Erkennung klargestellt (Section 3), Requiredfelder-Logik korrigiert |
-| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format, Error Codes E5xx/W5xx |
-| 0.1.0 | 2025-12-10 | Initial: Concept für System Externals |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: "Code today" notes on §5.4–5.6 (`${CMAKECRAFT_DIR}`), §5.5 (E012 message) and §7 (E5xx/W5xx raised), updated to CMakeCraft v0.14.1 (E502–E505 and W501 raised, E501/W502 dropped, `find_package` without `REQUIRED`; line numbers)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.7.0 | 2025-12-18 | Phase 9 completed: implementation verified, Qt6 tested successfully, debug messages switched to dbg(), documentation finalized |
+| 0.6.0 | 2025-12-18 | Comprehensive revision: Section 5 completely new (architecture before/after, package hook mechanism, complete Handler/PathResolver code), Section 8 migration extended (Include.cmake deprecation, decision aid diagram), type detection clarified (Section 3), required-field logic corrected |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 format, error codes E5xx/W5xx |
+| 0.1.0 | 2025-12-10 | Initial: concept for system externals |

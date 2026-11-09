@@ -1,49 +1,49 @@
-# Executables.cmake — Modul-Dokumentation
+# Executables.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Executables.md](Executables.md)  
-> **Module:** [`cmake/project/Executables.cmake`](../../../../cmake/project/Executables.cmake)  
+> **German:** [Executables.md](../../../../de/guide/module/project/Executables.md)  
+> **Module:** [`cmake/project/Executables.cmake`](../../../../../cmake/project/Executables.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Verarbeitung](#3-verarbeitung)
-4. [Filter-Mechanismen](#4-filter-mechanismen)
-5. [Errorbehandlung](#5-fehlerbehandlung)
-6. [Debug-Ausgaben](#6-debug-ausgaben)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Processing](#3-processing)
+4. [Filter Mechanisms](#4-filter-mechanisms)
+5. [Error Handling](#5-error-handling)
+6. [Debug Output](#6-debug-output)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Executables.cmake` Modul ist der **Orchestrator der Executable-Pipeline**. Es iteriert über alle Executables in Solution.json und delegiert an ExecutableCollect und ExecutableCreate.
+The `Executables.cmake` module is the **orchestrator of the executable pipeline**. It iterates over all executables in Solution.json and delegates to ExecutableCollect and ExecutableCreate.
 
-### Kernidee
+### Core Idea
 
-Ein Modul koordiniert den gesamten Prozess — vom JSON-Parsing bis zur Target-Erstellung.
+One module coordinates the entire process — from JSON parsing to target creation.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Iteration | Über executables-Array |
-| Filter | skip, BUILD_ONLY, platforms |
-| Delegation | An Collect und Create Module |
-| Duplikat-Check | Target existiert bereits? |
+| Area | Description |
+|------|-------------|
+| Iteration | Over the executables array |
+| Filters | skip, BUILD_ONLY, platforms |
+| Delegation | To the Collect and Create modules |
+| Duplicate check | Does the target already exist? |
 
-### Lädt automatisch
+### Loads Automatically
 
 - ExecutableCollect.cmake
 - ExecutableCreate.cmake
@@ -52,19 +52,19 @@ Ein Modul koordiniert den gesamten Prozess — vom JSON-Parsing bis zur Target-E
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Errors.cmake | 0.5.0 | `cmake_fatal` |
 | Debug.cmake | 0.5.0 | `dbg`, `dbg_init`, `dbgspace`, `enddbgblock` |
 | Json.cmake | 0.5.0 | `_json_has_key`, `_json_array_length`, `_json_array_get`, `_json_get_string` |
 | Context.cmake | 0.5.0 | `ctx_create`, `ctx_get` |
-| Solution.cmake | 0.5.0 | `SOLUTION_JSON` Property |
+| Solution.cmake | 0.5.0 | `SOLUTION_JSON` property |
 
 ---
 
-## 3. Verarbeitung
+## 3. Processing
 
-### 3.1 Pipeline-Ablauf
+### 3.1 Pipeline Flow
 
 ```
 Executables.cmake
@@ -96,11 +96,11 @@ Executables.cmake
         └── 3.6 _create_executable_target() → CMake Target
 ```
 
-### 3.2 Context-Benennung
+### 3.2 Context Naming
 
-Jedes Executable bekommt einen nummerierten Context:
+Each executable gets a numbered context:
 
-| Index | Context-Prefix |
+| Index | Context prefix |
 |-------|----------------|
 | 0 | `EXE_0` |
 | 1 | `EXE_1` |
@@ -108,9 +108,9 @@ Jedes Executable bekommt einen nummerierten Context:
 
 ---
 
-## 4. Filter-Mechanismen
+## 4. Filter Mechanisms
 
-### 4.1 skip-Flag
+### 4.1 skip Flag
 
 In Solution.json:
 ```json
@@ -120,16 +120,16 @@ In Solution.json:
 }
 ```
 
-Executable wird komplett übersprungen.
+The executable is skipped entirely.
 
 ### 4.2 BUILD_ONLY
 
-CMake-Aufruf:
+CMake call:
 ```bash
 cmake -B build -DBUILD_ONLY="MyApp;OtherApp"
 ```
 
-Nur die angegebenen Executables werden gebaut. Alle anderen werden übersprungen.
+Only the specified executables are built. All others are skipped.
 
 ### 4.3 platforms
 
@@ -141,36 +141,36 @@ In Solution.json:
 }
 ```
 
-Unterstützte Werte:
+Supported values:
 
-| Wert | Bedingung |
-|------|-----------|
+| Value | Condition |
+|-------|-----------|
 | `windows` | WIN32 |
 | `linux` | CMAKE_SYSTEM_NAME == "Linux" |
 | `macos` | APPLE |
 | `unix` | UNIX |
 
-Mehrere Plattformen möglich:
+Multiple platforms are possible:
 ```json
 "platforms": ["windows", "linux"]
 ```
 
 ---
 
-## 5. Errorbehandlung
+## 5. Error Handling
 
 ### 5.1 Fatal Errors
 
-| Code | Bedingung | Lösung |
-|------|-----------|--------|
-| E001 | Executable hat kein `name`-Feld | Name hinzufügen |
-| E102 | Target existiert bereits | Namen eindeutig machen |
+| Code | Condition | Solution |
+|------|-----------|----------|
+| E001 | Executable has no `name` field | Add a name |
+| E102 | Target already exists | Make the name unique |
 
 ---
 
-## 6. Debug-Ausgaben
+## 6. Debug Output
 
-### 6.1 Standard-Output
+### 6.1 Standard Output
 
 ```
 -- [Executables] === Executable Pipeline Start ===
@@ -190,17 +190,18 @@ Mehrere Plattformen möglich:
 
 ## 7. See Also
 
-- [ExecutableCollect.cmake](ExecutableCollect.md) — JSON zu Context
-- [ExecutableCreate.cmake](ExecutableCreate.md) — Context zu Target
-- [Solution.cmake](Solution.md) — Liefert SOLUTION_JSON
-- [Context.cmake](../core/Context.md) — Context-System
+- [ExecutableCollect.cmake](ExecutableCollect.md) — JSON to context
+- [ExecutableCreate.cmake](ExecutableCreate.md) — Context to target
+- [Solution.cmake](Solution.md) — Provides SOLUTION_JSON
+- [Context.cmake](../core/Context.md) — Context system
 - [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E102
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung** |
-| 0.1.0 | 2025-12-05 | Initial (Clean Start): Pipeline-Orchestration, Filter (skip, BUILD_ONLY, platforms) |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
+| 0.1.0 | 2025-12-05 | Initial (clean start): pipeline orchestration, filters (skip, BUILD_ONLY, platforms) |

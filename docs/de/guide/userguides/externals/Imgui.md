@@ -1,12 +1,12 @@
 # Dear ImGui — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [imgui.md](../../../en/userguides/externals/Imgui.md)
+> **English:** [imgui.md](../../../../en/guide/userguides/externals/Imgui.md)
 
 ---
 
@@ -21,7 +21,7 @@
 7. [Fortgeschrittene Techniken](#7-fortgeschrittene-techniken)
 8. [Troubleshooting](#8-troubleshooting)
 9. [Weiterführende Informationen](#9-weiterführende-informationen)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -696,8 +696,8 @@ io.Fonts->AddFontFromFileTTF("font.ttf", 16.0f);
 
 - [Externals.md](../Externals.md) — Externals Kombinationen
 - [Git_Externals_GUI.md](../../references/externals/Git_Externals_GUI.md) — Referenz
-- [glad.md](glad.md) — OpenGL Loader
-- [glfw.md](glfw.md) — Window & Input
+- [glad.md](Glad.md) — OpenGL Loader
+- [glfw.md](Glfw.md) — Window & Input
 
 ---
 
@@ -705,4 +705,5 @@ io.Fonts->AddFontFromFileTTF("font.ttf", 16.0f);
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Dear ImGui** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für Dear ImGui |

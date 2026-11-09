@@ -1,27 +1,27 @@
-# Structure — Standard für Dokumentations-Organisation
+# Structure — Standard for Documentation Organization
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Blueprint v0.5  
-> **Target Audience:** Documentation Authors, Projekt-Maintainer  
+> **Target Audience:** Documentation Authors, Project Maintainers  
 > **Language:** English  
-> **German:** [Structure.md](Structure.md)
+> **German:** [Structure.md](../../../de/autorenwerk/blueprints/Structure.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Haupt-Ordnerstruktur](#3-haupt-ordnerstruktur)
-4. [Usage vs. Erstellung](#4-verwendung-vs-erstellung)
-5. [Ordner-Definitionen](#5-ordner-definitionen)
-6. [Projekt-Unterordner](#6-projekt-unterordner)
-7. [Entscheidungsbaum](#7-entscheidungsbaum)
-8. [Examples](#8-beispiele)
-9. [See Also](#9-siehe-auch)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Main Folder Structure](#3-main-folder-structure)
+4. [Usage vs. Development](#4-usage-vs-development)
+5. [Folder Definitions](#5-folder-definitions)
+6. [Concepts and Reports](#6-concepts-and-reports)
+7. [Decision Tree](#7-decision-tree)
+8. [Examples](#8-examples)
+9. [See Also](#9-see-also)
 
 
 
@@ -29,364 +29,389 @@
 
 ## 1. Overview
 
-This blueprint defines **wo Dokumentationen abgelegt werden**. Er ergänzt [Doc.md](Doc.md), welcher definiert *wie* Dokumentationen geschrieben werden.
+This blueprint defines **where documentation is stored**. It complements [Doc.md](Doc.md), which defines *how* documentation is written.
 
-### Zielgruppe
+### Target Audience
 
-- **Documentation Authors:** Wo lege ich mein Dokument ab?
-- **Projekt-Maintainer:** Wie organisiere ich die Dokumentation?
-- **Neue Team-Mitglieder:** Wo finde ich welche Information?
+- **Documentation authors:** Where do I put my document?
+- **Project maintainers:** How do I organize the documentation?
+- **New team members:** Where do I find which information?
 
-### Kernprinzip
+### Core Principle
 
-Die Struktur trennt zwei Perspektiven:
+The structure separates three areas by **reader role** (entry point: [INDEX.md](../../../INDEX.md)):
 
-| Perspektive | Frage | Zielgruppe |
-|-------------|-------|------------|
-| **Usage** | "Wie nutze ich das Build-System?" | Build-System-Benutzer |
-| **Erstellung** | "Wie entwickle ich das Build-System weiter?" | Build System Developers |
+| Area | Question | Target audience |
+|------|----------|-----------------|
+| **Usage** (`guide/`) | "How do I use the build system?" | Build system users |
+| **Development** (`konzepte/`) | "How do I develop the build system further?" | Build system developers |
+| **Author's toolkit** (`autorenwerk/`) | "How do I write code or docs — in any project?" | Authors of code and docs |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für:
+This blueprint applies to:
 
-- Organisation der `docs/` Ordnerstruktur
-- Zuordnung von Dokumentationstypen zu Ordnern
-- Projektspezifische Dokumentation
+- Organization of the `docs/` folder structure
+- Assignment of documentation types to folders
+- Project-specific documentation
 
-**Nicht abgedeckt:**
+**Not covered:**
 
-- Dokumentations-Inhalt → siehe [Doc.md](Doc.md)
-- Datei- und Ordnernamen-Konventionen → siehe [Doc.md](Doc.md)
+- Documentation content → see [Doc.md](Doc.md)
+- File and folder naming conventions → see [Doc.md](Doc.md)
 
-> **Note:** Ordnernamen werden immer kleingeschrieben.  
-> Details siehe [Doc.md § 8.8](Doc.md#88-ordnernamen-konvention)
+> **Note:** Folder names are always lowercase.  
+> For details see [Doc.md § 8.8](Doc.md#88-folder-name-convention)
 
 ---
 
-## 3. Haupt-Ordnerstruktur
+## 3. Main Folder Structure
 
 ```
 docs/
-├── de/                              # Germane Dokumentation
-│   ├── blueprints/                  # Meta-Standards
-│   ├── standards/                   # Allgemeine Coding Standards
-│   │
-│   │   ─────────────────────────────────────────────────
-│   │   VERWENDUNG - Für Benutzer des Build-Systems
-│   │   ─────────────────────────────────────────────────
-│   │
-│   ├── modules/                     # CMake-Modul API-Dokumentation
-│   ├── reference/                   # Nachschlagewerke
-│   ├── guides/                      # How-To Anleitungen
-│   ├── tutorials/                   # Step-by-Step für Einsteiger
-│   │
-│   │   ─────────────────────────────────────────────────
-│   │   ERSTELLUNG - Für Entwickler des Build-Systems
-│   │   ─────────────────────────────────────────────────
-│   │
-│   └── projects/
-│       └── buildsystem/             # Projektspezifische Dokumentation
-│           ├── concepts/
-│           ├── standards/
-│           └── reports/
+├── INDEX.md                         # Entry point and map
+├── README.md
+├── report/                          # Session reports, findings lists (no language tree)
 │
-└── en/                              # Englische Dokumentation
-    └── [gleiche Struktur]
+├── de/                              # German documentation (leading language)
+│   ├── README.md
+│   │
+│   │   ─────────────────────────────────────────────────
+│   │   USAGE - for users of the build system
+│   │   ─────────────────────────────────────────────────
+│   │
+│   ├── guide/
+│   │   ├── userguides/              # How-to guides, getting started (Getting_Started.md)
+│   │   ├── references/              # Reference works (schema, error codes, glossary)
+│   │   ├── cheatsheets/             # Quick references
+│   │   └── module/                  # Documentation of the cmake/ modules
+│   │
+│   │   ─────────────────────────────────────────────────
+│   │   DEVELOPMENT - for developers of the build system
+│   │   ─────────────────────────────────────────────────
+│   │
+│   ├── konzepte/                    # Guidelines, active concepts
+│   │   └── abgeschlossen/           # Implemented concepts (documents of their time)
+│   │
+│   │   ─────────────────────────────────────────────────
+│   │   AUTHOR'S TOOLKIT - for authors, across projects
+│   │   ─────────────────────────────────────────────────
+│   │
+│   └── autorenwerk/
+│       ├── blueprints/              # Meta standards (templates)
+│       └── standards/               # General coding standards
+│
+└── en/                              # English documentation
+    └── [same structure, same file names]
 ```
-> **Konvention:** Alle Ordnernamen sind kleingeschrieben.  
-> Siehe [Doc.md § 8.8](Doc.md#88-ordnernamen-konvention)
+> **Convention:** All folder names are lowercase.  
+> See [Doc.md § 8.8](Doc.md#88-folder-name-convention)
 ---
 
-## 4. Usage vs. Erstellung
+## 4. Usage vs. Development
 
-### 4.1 Unterscheidung
+### 4.1 Distinction
 
-| Aspekt | Usage | Erstellung |
+| Aspect | Usage | Development |
 |--------|------------|------------|
-| **Zielgruppe** | C++ Developers, die das Build-System nutzen | Build System Developers |
-| **Frage** | "Wie füge ich ein External hinzu?" | "Wie implementiere ich Phase 8?" |
-| **Stableität** | Stable, öffentliche API | Kann sich ändern, intern |
-| **Ordner** | `modules/`, `reference/`, `guides/` | `projects/buildsystem/` |
+| **Target audience** | C++ developers who use the build system | Build system developers |
+| **Question** | "How do I add an external?" | "How do I implement phase 8?" |
+| **Stability** | Stable, public API | May change, internal |
+| **Folders** | `guide/` (`userguides/`, `references/`, `cheatsheets/`, `module/`) | `konzepte/` |
 
-### 4.2 Szenarien
+`autorenwerk/` sits across both: blueprints and coding standards apply across projects and belong
+neither to the usage nor to the development of the build system.
 
-**Usages-Szenarien:**
+### 4.2 Scenarios
 
-```
-"Wie konfiguriere ich Qt6?"
-→ guides/Qt6_Integration_UserGuide.md
-
-"Was bedeutet Error E0501?"
-→ reference/ErrorCodes.md
-
-"Welche Felder hat Solution.json?"
-→ reference/Solution_Schema.md
-
-"Wie funktioniert Fetch.cmake?"
-→ modules/externals/Fetch.md
-```
-
-**Erstellungs-Szenarien:**
+**Usage scenarios:**
 
 ```
-"Wie ist das Build-System architektonisch aufgebaut?"
-→ projects/buildsystem/concepts/master_concept.md
+"How do I configure Qt6?"
+→ guide/userguides/Qt6_Integration.md
 
-"Was sind die Konventionen für CMake-Module?"
-→ projects/buildsystem/standards/guidelines.md
+"What does error E0501 mean?"
+→ guide/references/ErrorCodes.md
 
-"Was haben wir bei Phase 6 gelernt?"
-→ projects/buildsystem/reports/development_journal.md
+"Which fields does Solution.json have?"
+→ guide/references/Solution_Schema.md
+
+"How does Fetch.cmake work?"
+→ guide/module/externals/core/Fetch_cmake.md
+```
+
+**Development scenarios:**
+
+```
+"How is the build system structured architecturally?"
+→ konzepte/abgeschlossen/Master_Concept.md
+
+"What are the conventions for CMake modules?"
+→ konzepte/Guidelines.md
+
+"What did we learn in the last session?"
+→ docs/report/SESSION_REPORT_YYYY-MM-DD.md
 ```
 
 ---
 
-## 5. Ordner-Definitionen
+## 5. Folder Definitions
 
-### 5.1 blueprints/
+### 5.1 autorenwerk/blueprints/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Meta-Standards für Dokumentationstypen |
-| **Zielgruppe** | Documentation Authors |
+| **Content** | Meta standards for documentation types |
+| **Target audience** | Documentation authors |
 | **Examples** | Doc.md, CMake.md, Concept.md |
 
-### 5.2 standards/
+### 5.2 autorenwerk/standards/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Allgemeine Coding/Project Standards |
-| **Zielgruppe** | Alle Entwickler |
-| **Examples** | Cpp_Coding_Standard.md, Git_Standard.md |
+| **Content** | General coding/project standards |
+| **Target audience** | All developers |
+| **Examples** | Cpp_Coding_Standard.md, Git_Standard.md, Doku_Standard.md |
 
-**Important:** Hier liegen nur *allgemeine* Standards, die projektübergreifend gelten. Projektspezifische Standards gehören nach `projects/[projekt]/standards/`.
+**Important:** Only *general* standards that apply across projects live here. The conventions of the build system itself are in `konzepte/Guidelines.md`.
 
-### 5.3 modules/
+### 5.3 guide/module/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | API-Dokumentation der CMake-Module |
-| **Zielgruppe** | Build-System-Benutzer und -Entwickler |
-| **Typ** | ModuleDoc |
+| **Content** | API documentation of the CMake modules |
+| **Target audience** | Build system users and developers |
+| **Type** | ModuleDoc |
 
-**Unterstruktur:**
+**Substructure** (mirrors `cmake/`):
 
 ```
-modules/
-├── core/                    # Kern-Module
+guide/module/
+├── core/                    # Core modules
 │   ├── Errors.md
 │   ├── Debug.md
 │   ├── Context.md
 │   └── ...
-├── project/                 # Projekt-Module
+├── project/                 # Project modules
 │   ├── Solution.md
 │   ├── Executables.md
 │   └── Libraries.md
-└── externals/               # External-Module
-    ├── Orchestrator.md
-    ├── Fetch.md
-    ├── hooks/               # Hook-Dokumentation
-    └── local/               # Lokale Externals
+├── externals/               # External modules
+│   ├── Orchestrator_cmake.md
+│   ├── core/Fetch_cmake.md
+│   ├── hooks/               # Hook documentation (prefetch/, postfetch/)
+│   └── locals/              # Local externals
+└── buildSystemTest/         # Phase tests
 ```
 
-### 5.4 reference/
+### 5.4 guide/references/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Nachschlagewerke, Schemas, Listen |
-| **Zielgruppe** | Alle Entwickler |
-| **Typ** | Reference |
+| **Content** | Reference works, schemas, lists |
+| **Target audience** | All developers |
+| **Type** | Reference |
 | **Examples** | Solution_Schema.md, ErrorCodes.md, Glossar.md, Externals.md |
 
-### 5.5 guides/
+### 5.5 guide/userguides/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | How-To Anleitungen für konkrete Aufgaben |
-| **Zielgruppe** | Build-System-Benutzer |
-| **Typ** | Guide |
-| **Examples** | Adding_Externals_UserGuide.md, Testing_UserGuide.md |
+| **Content** | How-to guides for concrete tasks, getting started for new users |
+| **Target audience** | Build system users, beginners |
+| **Type** | Guide, Tutorial |
+| **Examples** | Adding_Externals.md, Testing.md, Getting_Started.md |
 
-### 5.6 tutorials/
+Tutorials have no folder of their own; they live with the guides.
 
-| Eigenschaft | Wert |
+### 5.6 guide/cheatsheets/
+
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Step-by-Step Anleitungen für Einsteiger |
-| **Zielgruppe** | Neue Benutzer, Einsteiger |
-| **Typ** | Tutorial |
-| **Examples** | Getting_Started.md, First_Executable.md |
+| **Content** | One-page quick references |
+| **Target audience** | Build system users |
+| **Type** | Cheatsheet |
+| **Examples** | Solution_Cheatsheet.md |
 
 ---
 
-## 6. Projekt-Unterordner
+## 6. Concepts and Reports
 
-### 6.1 Struktur
+### 6.1 Structure
 
 ```
-projects/
-└── buildsystem/                 # Projektname
-    ├── README.md                # Projekt-Overview
-    ├── concepts/                # Architecture-Concepte
-    │   ├── master_concept.md
-    │   ├── implementation_plan.md
-    │   ├── AppContainer.md
-    │   ├── System_Externals.md
-    │   └── future_enhancements.md
-    ├── standards/               # Projekt-spezifische Standards
-    │   └── guidelines.md
-    └── reports/                 # Berichte, Journal
-        ├── development_journal.md
-        └── reviews/
+docs/
+├── de/konzepte/                 # Development of the build system
+│   ├── Guidelines.md            # Conventions for build system code
+│   ├── Future_Enhancements.md   # Collection of planned features
+│   ├── Konzept_Versionierter_Bezug.md
+│   └── abgeschlossen/           # Implemented concepts
+│       ├── Master_Concept.md
+│       ├── Implementation_Plan.md
+│       ├── AppContainer_Concept.md
+│       └── System_Externals_Concept.md
+└── report/                      # Reports (no language tree)
+    └── SESSION_REPORT_YYYY-MM-DD.md
 ```
 
-### 6.2 concepts/
+### 6.2 konzepte/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Architecture-Entscheidungen, Design-Concepte |
-| **Zielgruppe** | Build System Developers |
-| **Typ** | Concept |
-| **Lebenszyklus** | Entwurf → Review → Implementation |
+| **Content** | Architecture decisions, design concepts |
+| **Target audience** | Build system developers |
+| **Type** | Concept |
+| **Lifecycle** | Draft → review → implementation → `abgeschlossen/` |
 
-**Besondere Dokumente:**
+**Special documents:**
 
-| Dokument | Description |
+| Document | Description |
 |----------|--------------|
-| `master_concept.md` | Gesamtarchitektur, alle Phasen |
-| `implementation_plan.md` | Detaillierter Umsetzungsplan |
-| `future_enhancements.md` | Sammlung geplanter Features |
+| `abgeschlossen/Master_Concept.md` | Overall architecture, all phases |
+| `abgeschlossen/Implementation_Plan.md` | Detailed implementation plan |
+| `Future_Enhancements.md` | Collection of planned features |
 
-### 6.3 standards/
+Completed concepts are documents of their time: they are not rewritten, but given a note on the
+current state where needed.
 
-| Eigenschaft | Wert |
+### 6.3 konzepte/Guidelines.md
+
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Projektspezifische Konventionen |
-| **Zielgruppe** | Build System Developers |
-| **Typ** | Standard |
+| **Content** | Project-specific conventions |
+| **Target audience** | Build system developers |
+| **Type** | Standard |
 
-**Abgrenzung zu `docs/de/standards/`:**
+**Delimitation from `autorenwerk/standards/`:**
 
-| Ordner | Inhalt | Example |
-|--------|--------|----------|
-| `docs/de/standards/` | Allgemeine Standards | "Wie schreibt man C++?" |
-| `projects/buildsystem/standards/` | Projektspezifisch | "Namenskonventionen für CMake-Module im Build-System" |
+| Location | Content | Example |
+|----------|---------|---------|
+| `docs/de/autorenwerk/standards/` | General standards | "How do you write C++?" |
+| `docs/de/konzepte/Guidelines.md` | Project-specific | "Naming conventions for CMake modules in the build system" |
 
-### 6.4 reports/
+### 6.4 report/
 
-| Eigenschaft | Wert |
+| Property | Value |
 |-------------|------|
-| **Inhalt** | Berichte, Lessons Learned, Reviews |
-| **Zielgruppe** | Build System Developers |
-| **Typ** | Report |
+| **Content** | Session reports, findings lists, reviews |
+| **Target audience** | Build system developers |
+| **Type** | Report |
 
-**Typische Inhalte:**
+**Typical content:**
 
-- `development_journal.md` — Entwicklungstagebuch
-- `phase_X_review.md` — Review nach Phasenabschluss
-- `test_reports/` — Testergebnisse
+- `SESSION_REPORT_YYYY-MM-DD.md` — report of a working session
+- `Doku_Befunde_YYYY-MM-DD.md` — findings list of a documentation review
+
+`report/` sits next to `de/` and `en/` and is not translated.
 
 ---
 
-## 7. Entscheidungsbaum
+## 7. Decision Tree
 
-### 7.1 Wo gehört mein Dokument hin?
+### 7.1 Where Does My Document Belong?
 
 ```
-START: Was dokumentiere ich?
+START: What am I documenting?
 │
-├─► "Wie schreibt man Dokumentation?"
-│   └─► blueprints/
+├─► "How do you write documentation?"
+│   └─► autorenwerk/blueprints/
 │
-├─► "Wie schreibt man generell C++/CMake/Git?"
-│   └─► standards/
+├─► "How do you write C++/CMake/Git in general?"
+│   └─► autorenwerk/standards/
 │
-├─► "Wie funktioniert ein CMake-Modul?"
-│   └─► modules/
+├─► "How does a CMake module work?"
+│   └─► guide/module/
 │
-├─► "Was bedeutet X? Schema/Liste/API?"
-│   └─► reference/
+├─► "What does X mean? Schema/list/API?"
+│   └─► guide/references/
 │
-├─► "Wie mache ich X mit dem Build-System?"
-│   └─► guides/
+├─► "How do I do X with the build system?"
+│   └─► guide/userguides/
 │
-├─► "Erste Schritte für Einsteiger?"
-│   └─► tutorials/
+├─► "First steps for beginners?"
+│   └─► guide/userguides/
 │
-└─► "Entwicklung des Build-Systems selbst?"
+├─► "One-page quick reference?"
+│   └─► guide/cheatsheets/
+│
+└─► "Development of the build system itself?"
     │
-    ├─► "Architecture/Design-Entscheidung?"
-    │   └─► projects/buildsystem/concepts/
+    ├─► "Architecture/design decision?"
+    │   └─► konzepte/
     │
-    ├─► "Projektspezifische Konvention?"
-    │   └─► projects/buildsystem/standards/
+    ├─► "Project-specific convention?"
+    │   └─► konzepte/Guidelines.md
     │
-    └─► "Lessons Learned/Review/Journal?"
-        └─► projects/buildsystem/reports/
+    └─► "Session report/review/findings?"
+        └─► docs/report/
 ```
 
-### 7.2 Kurzreferenz
+### 7.2 Quick Reference
 
-| Ich dokumentiere... | Ordner |
+| I am documenting... | Folder |
 |---------------------|--------|
-| Meta-Standard für Doku-Typen | `blueprints/` |
-| Allgemeiner Coding Standard | `standards/` |
-| CMake-Modul API | `modules/` |
-| Schema, Errorcodes, Glossar | `reference/` |
-| How-To für Benutzer | `guides/` |
-| Einsteiger-Tutorial | `tutorials/` |
-| Architecture-Concept | `projects/buildsystem/concepts/` |
-| Build-System Konventionen | `projects/buildsystem/standards/` |
-| Entwicklungs-Journal | `projects/buildsystem/reports/` |
+| Meta standard for documentation types | `autorenwerk/blueprints/` |
+| General coding standard | `autorenwerk/standards/` |
+| CMake module API | `guide/module/` |
+| Schema, error codes, glossary | `guide/references/` |
+| How-to for users | `guide/userguides/` |
+| Beginner tutorial | `guide/userguides/` |
+| Quick reference | `guide/cheatsheets/` |
+| Architecture concept | `konzepte/` |
+| Build system conventions | `konzepte/Guidelines.md` |
+| Session report | `docs/report/` |
 
 ---
 
 ## 8. Examples
 
-### 8.1 Example: Neue External-Integration dokumentieren
+### 8.1 Example: Documenting a New External Integration
 
-**Frage:** "Ich habe GLFW integriert. Wo dokumentiere ich das?"
+**Question:** "I have integrated GLFW. Where do I document it?"
 
-| Aspekt | Ordner | Dokument |
+| Aspect | Folder | Document |
 |--------|--------|----------|
-| Wie nutzt man GLFW? | `guides/` | `Adding_GLFW_UserGuide.md` |
-| GLFW in Externals-Liste | `reference/` | `Externals.md` (erweitern) |
-| Hook-Dokumentation | `modules/externals/hooks/` | `glfw.md` |
+| How do you use GLFW? | `guide/userguides/externals/` | `Glfw.md` |
+| GLFW in the externals list | `guide/references/` | `Externals.md` (extend) |
+| Hook documentation | `guide/module/externals/hooks/prefetch/` | `Glfw.md` |
 
-### 8.2 Example: Neue Phase implementieren
+### 8.2 Example: Implementing a New Phase
 
-**Frage:** "Ich plane Phase 8 (AppContainer). Wo dokumentiere ich das?"
+**Question:** "I am planning phase 8 (AppContainer). Where do I document it?"
 
-| Aspekt | Ordner | Dokument |
+| Aspect | Folder | Document |
 |--------|--------|----------|
-| Concept/Design | `projects/buildsystem/concepts/` | `AppContainer.md` |
-| Im Master Concept verlinken | `projects/buildsystem/concepts/` | `master_concept.md` (erweitern) |
-| Nach Implementation | `modules/project/` | `Apps.md` |
-| Benutzer-Anleitung | `guides/` | `AppContainer_UserGuide.md` |
+| Concept/design | `konzepte/` | `AppContainer_Concept.md` |
+| Link in the master concept | `konzepte/abgeschlossen/` | `Master_Concept.md` (extend) |
+| After implementation | `guide/module/project/` | `Apps.md` |
+| User guide | `guide/userguides/` | `App_Creation_Guide.md` |
 
-### 8.3 Example: Errorcode hinzufügen
+### 8.3 Example: Adding an Error Code
 
-**Frage:** "Ich habe neue Errorcodes E250-E259 definiert. Wo dokumentiere ich das?"
+**Question:** "I have defined new error codes E250-E259. Where do I document them?"
 
-| Aspekt | Ordner | Dokument |
+| Aspect | Folder | Document |
 |--------|--------|----------|
-| Errorcodes-Liste | `reference/` | `ErrorCodes.md` (erweitern) |
+| Error code list | `guide/references/` | `ErrorCodes.md` (extend) |
 
 ---
 
 ## 9. See Also
 
-- [Doc.md](Doc.md) — Wie schreibt man Dokumentationen?
-- [Blueprint.md](Blueprint.md) — Meta-Blueprint
-- [Concept.md](Concept.md) — Standard für Architecture-Concepte
+- [Doc.md](Doc.md) — How do you write documentation?
+- [Blueprint.md](Blueprint.md) — Meta blueprint
+- [Concept.md](Concept.md) — Standard for architecture concepts
+- [Doku_Standard.md](../standards/Doku_Standard.md) — Languages, versioning, filing rules
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-15** | **Verweis auf Ordnernamen-Konvention (Doc.md § 8.8)** |
-| **0.5.0** | **2025-12-13** | **Initial: Ordnerstruktur, Usage vs. Erstellung, Entscheidungsbaum** |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: folder tree, scenarios, decision tree and examples switched to today's structure `guide/{userguides,references,cheatsheets,module}`, `konzepte/`, `autorenwerk/{blueprints,standards}`, `docs/report/`; §6 is now "Concepts and Reports"** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.1** | **2025-12-15** | **Reference to the folder name convention (Doc.md § 8.8)** |
+| **0.5.0** | **2025-12-13** | **Initial: folder structure, usage vs. development, decision tree** |

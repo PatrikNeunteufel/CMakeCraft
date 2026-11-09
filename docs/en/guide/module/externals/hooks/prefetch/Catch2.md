@@ -3,51 +3,51 @@
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [catch2_PreFetch.md](../../en/modules/externals/hooks/prefetch/catch2_PreFetch.md)  
-> **Hook:** [cmake/externals/Hooks/PreFetch/catch2.cmake](../../../../../cmake/externals/Hooks/PreFetch/catch2.cmake)  
+> **German:** [Catch2.md](../../../../../../de/guide/module/externals/hooks/prefetch/Catch2.md)  
+> **Hook:** [cmake/externals/Hooks/PreFetch/catch2.cmake](../../../../../../../cmake/externals/hooks/prefetch/catch2.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Warum ein PreFetch Hook?](#2-warum-ein-prefetch-hook)
+1. [Overview](#1-overview)
+2. [Why a PreFetch Hook?](#2-why-a-prefetch-hook)
 3. [Target Mapping](#3-target-mapping)
-4. [Gesetzte Optionen](#4-gesetzte-optionen)
-5. [Solution.json Configuration](#5-solutionjson-konfiguration)
-6. [Erstellte Targets](#6-erstellte-targets)
-7. [Usage in Tests](#7-verwendung-in-tests)
-8. [See Also](#8-siehe-auch)
+4. [Options Set](#4-options-set)
+5. [Solution.json Configuration](#5-solutionjson-configuration)
+6. [Created Targets](#6-created-targets)
+7. [Usage in Tests](#7-usage-in-tests)
+8. [See Also](#8-see-also)
 9. [Changelog](#9-changelog)
 
 ---
 
 ## 1. Overview
 
-Der `catch2.cmake` PreFetch Hook konfiguriert Catch2 v3 vor dem Build. Er definiert Target-Mappings für die Auto-Registrierung und deaktiviert unnötige Komponenten.
+The `catch2.cmake` PreFetch hook configures Catch2 v3 before the build. It defines target mappings for auto-registration and disables unneeded components.
 
-**Important:** Catch2 v3 ist **nicht mehr header-only**! Es muss als Library gelinkt werden.
+**Important:** Catch2 v3 is **no longer header-only**! It must be linked as a library.
 
 ---
 
-## 2. Warum ein PreFetch Hook?
+## 2. Why a PreFetch Hook?
 
-**Problem 1 — Target-Namen:**  
-Catch2 erstellt Targets mit anderen Namen als der External-Name (`Catch2`, `Catch2WithMain` statt `catch2`).
+**Problem 1 — Target names:**  
+Catch2 creates targets with names other than the external name (`Catch2`, `Catch2WithMain` instead of `catch2`).
 
-**Problem 2 — Unnötige Targets:**  
-Ohne Hook werden Tests, Examples und Extras mit gebaut.
+**Problem 2 — Unneeded targets:**  
+Without the hook, tests, examples and extras are built as well.
 
 ---
 
 ## 3. Target Mapping
 
-Der Hook registriert die Catch2-Targets über Global Properties:
+The hook registers the Catch2 targets via global properties:
 
 ```cmake
 set_property(GLOBAL PROPERTY HOOK_KNOWN_TARGETS_${HOOK_EXTERNAL_NAME}
@@ -58,22 +58,22 @@ set_property(GLOBAL PROPERTY HOOK_PRIMARY_TARGET_${HOOK_EXTERNAL_NAME}
 )
 ```
 
-| Property | Wert | Description |
-|----------|------|--------------|
-| `HOOK_KNOWN_TARGETS` | `Catch2;Catch2WithMain` | Alle verfügbaren Targets |
-| `HOOK_PRIMARY_TARGET` | `Catch2WithMain` | Standard-Target zum Linken |
+| Property | Value | Description |
+|----------|-------|-------------|
+| `HOOK_KNOWN_TARGETS` | `Catch2;Catch2WithMain` | All available targets |
+| `HOOK_PRIMARY_TARGET` | `Catch2WithMain` | Default target for linking |
 
 ---
 
-## 4. Gesetzte Optionen
+## 4. Options Set
 
-| Option | Wert | Description |
-|--------|------|--------------|
-| `CATCH_BUILD_TESTING` | `OFF` | Keine eigenen Tests bauen |
-| `CATCH_BUILD_EXAMPLES` | `OFF` | Keine Examples bauen |
-| `CATCH_INSTALL_DOCS` | `OFF` | Keine Docs installieren |
-| `CATCH_INSTALL_EXTRAS` | `OFF` | Keine CMake-Extras |
-| `BUILD_SHARED_LIBS` | `OFF` | Als Static Library bauen |
+| Option | Value | Description |
+|--------|-------|-------------|
+| `CATCH_BUILD_TESTING` | `OFF` | Do not build its own tests |
+| `CATCH_BUILD_EXAMPLES` | `OFF` | Do not build examples |
+| `CATCH_INSTALL_DOCS` | `OFF` | Do not install docs |
+| `CATCH_INSTALL_EXTRAS` | `OFF` | No CMake extras |
+| `BUILD_SHARED_LIBS` | `OFF` | Build as a static library |
 
 ---
 
@@ -90,7 +90,7 @@ set_property(GLOBAL PROPERTY HOOK_PRIMARY_TARGET_${HOOK_EXTERNAL_NAME}
 }
 ```
 
-### In Tests verwenden
+### Using It in Tests
 
 ```json
 {
@@ -102,24 +102,24 @@ set_property(GLOBAL PROPERTY HOOK_PRIMARY_TARGET_${HOOK_EXTERNAL_NAME}
 }
 ```
 
-**Note:** Das Test-System fügt `catch2` automatisch zu den Externals hinzu, wenn `"framework": "catch2"` gesetzt ist.
+**Note:** The test system automatically adds `catch2` to the externals when `"framework": "catch2"` is set.
 
 ---
 
-## 6. Erstellte Targets
+## 6. Created Targets
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `Catch2` | STATIC | Catch2 ohne main() |
-| `Catch2WithMain` | STATIC | Catch2 mit main() (empfohlen) |
+| Target | Type | Description |
+|--------|------|-------------|
+| `Catch2` | STATIC | Catch2 without main() |
+| `Catch2WithMain` | STATIC | Catch2 with main() (recommended) |
 
-**Empfehlung:** Für die meisten Tests `Catch2WithMain` verwenden (PRIMARY Target).
+**Recommendation:** Use `Catch2WithMain` for most tests (PRIMARY target).
 
 ---
 
 ## 7. Usage in Tests
 
-### Einfacher Test mit Catch2WithMain
+### Simple Test with Catch2WithMain
 
 ```cpp
 #include <catch2/catch_test_macros.hpp>
@@ -129,9 +129,9 @@ TEST_CASE("Example test", "[example]") {
 }
 ```
 
-Kein eigenes `main()` nötig — wird von `Catch2WithMain` bereitgestellt.
+No own `main()` needed — it is provided by `Catch2WithMain`.
 
-### Test mit eigenem Main
+### Test with Its Own Main
 
 ```cpp
 #define CATCH_CONFIG_RUNNER
@@ -143,21 +143,22 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-Hierfür `Catch2` statt `Catch2WithMain` linken.
+For this, link `Catch2` instead of `Catch2WithMain`.
 
 ---
 
 ## 8. See Also
 
-- [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook-System
-- [Targets_cmake.md](../../registry/Targets_cmake.md) — Target-Registrierung
-- [googletest_PreFetch.md](googletest_PreFetch.md) — GoogleTest Alternative
-- [Tests_cmake.md](../../../project/Tests_cmake.md) — Test-Pipeline
+- [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook system
+- [Targets_cmake.md](../../registry/Targets_cmake.md) — Target registration
+- [Googletest.md](Googletest.md) — GoogleTest alternative
+- [Tests.md](../../../project/Tests.md) — Test pipeline
 
 ---
 
 ## 9. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-16** | **Initiale Dokumentation im Blueprint v0.5.0 Format** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-16 | Initial documentation in Blueprint v0.5.0 format |

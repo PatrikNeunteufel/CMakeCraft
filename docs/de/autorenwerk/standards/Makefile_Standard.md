@@ -8,6 +8,7 @@
 > **Geltungsbereich:** Alle Makefile-basierten Build-Systeme  
 > **Durchsetzung:** Code Review  
 > **Sprache:** Deutsch
+> **English:** [Makefile_Standard.md](../../../en/autorenwerk/standards/Makefile_Standard.md)
 
 ---
 
@@ -459,7 +460,7 @@ RM    := $(CYGWIN_PATH)/rm
 
 ## 13. Siehe auch
 
-- [Makefile_Blueprint.md](../blueprints/Makefile_Blueprint.md) — Strukturvorlage
+- [Makefile_Blueprint.md](../blueprints/Makefile.md) — Strukturvorlage
 - [Makefile_Build_System_Concept.md](../../../../archive/docs/de/makefile_buildsystem/concepts/Makefile_Build_System_Concept.md) — Referenz-Implementierung
 - [CMake_Standard.md](CMake_Standard.md) — CMake-Konventionen
 

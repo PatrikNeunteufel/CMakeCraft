@@ -4,7 +4,7 @@
 > **Letzte Aktualisierung:** 2025-12-18  
 > **Für:** CMake Architecture  
 > **Sprache:** Deutsch  
-> **English:** [Solution_Cheatsheet.md](Solution_Cheatsheet.md)
+> **English:** [Solution_Cheatsheet.md](../../../en/guide/cheatsheets/Solution_Cheatsheet.md)
 
 ---
 
@@ -12,7 +12,7 @@
 
 ```json
 {
-    "schemaVersion": "0.6",
+    "schemaVersion": "1.0",
     "solution": { "name": "MyProject", "version": "1.0.0" },
     "externals": { "doctest": { "path": "externals/doctest" } },
     "libraries": [{ "name": "CoreLib" }],
@@ -26,7 +26,7 @@
 
 | Block | Pflicht | Beschreibung |
 |-------|---------|--------------|
-| `schemaVersion` | ✅ | `"0.6"` |
+| `schemaVersion` | ✅ | `"1.0"` |
 | `solution` | ✅ | Name, Version, Beschreibung |
 | `settings` | — | C++ Standard, Defaults |
 | `externals` | — | Externe Abhängigkeiten |

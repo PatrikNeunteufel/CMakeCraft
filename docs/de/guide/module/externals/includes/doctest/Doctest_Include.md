@@ -1,14 +1,14 @@
 # doctest/Include.cmake — doctest Testing Framework Integration
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler, C++ Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [doctest_Include.md](doctest_Include.md)  
-> **Modul:** [cmake/externals/includes/doctest/Include.cmake](../../../../cmake/externals/includes/doctest/Include.cmake)  
+> **English:** [doctest_Include.md](../../../../../../en/guide/module/externals/includes/doctest/Doctest_Include.md)  
+> **Modul:** [cmake/externals/includes/doctest/Include.cmake](../../../../../../../cmake/externals/includes/doctest/Include.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -24,7 +24,7 @@
 7. [Verzeichnisstruktur](#7-verzeichnisstruktur)
 8. [Fehlerbehandlung](#8-fehlerbehandlung)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -41,9 +41,9 @@ Die `doctest/Include.cmake` integriert das **doctest Testing Framework** als lok
 | Lightweight | Minimaler Overhead |
 | BDD-Style | Subcases für verschachtelte Tests |
 
-### Target-Erstellung
+### Einbindung
 
-Erstellt ein `INTERFACE` Target `doctest` das nur Include-Directories bereitstellt.
+Legt **kein eigenes Target** an. Das Modul setzt am Target `EXECUTABLE_NAME` den Include-Pfad `externals/doctest/` (dort liegt `doctest.h` direkt) und je nach Options Compile-Defines und Warnungs-Schalter.
 
 ---
 
@@ -54,9 +54,9 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 | Variable | Beschreibung |
 |----------|--------------|
 | `EXTERNAL_NAME` | `"doctest"` |
-| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/doctest` |
-| `EXTERNAL_JSON` | JSON-Element aus Solution.json |
+| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/doctest` (`path` aus Solution.json) |
 | `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
+| `EXECUTABLE_NAME` | Target, an das doctest angehängt wird |
 
 ---
 
@@ -64,21 +64,30 @@ Diese Variablen werden vom Orchestrator bereitgestellt:
 
 | Target | Typ | Beschreibung |
 |--------|-----|--------------|
-| `doctest` | INTERFACE | Header-only Include-Directory |
+| — | — | Kein eigenes Target; alles wird `PRIVATE` an `EXECUTABLE_NAME` gehängt |
 
 ### Include-Directories
 
 ```cmake
-target_include_directories(doctest INTERFACE
-    "${EXTERNAL_ROOT}/include"
-)
+# doctest.h is in the root directory
+target_include_directories(${EXECUTABLE_NAME} PRIVATE "${_doctest_root}")
 ```
+
+`_doctest_root` ist `EXTERNAL_ROOT`. Im Code heißt es deshalb `#include <doctest.h>`.
+
+Dazu: MSVC `/wd4251 /wd4275`, GCC/Clang `-Wno-unknown-pragmas`.
 
 ---
 
 ## 4. Options
 
-doctest ist Header-only und benötigt keine spezifischen CMake-Options.
+Über `external_options` in Solution.json (je Target):
+
+| Option | Typ | Default | Wirkung |
+|--------|-----|---------|---------|
+| `DOCTEST_NO_SHORT_MACRO_NAMES` | bool | `false` | Define `DOCTEST_CONFIG_NO_SHORT_MACRO_NAMES` |
+| `DOCTEST_CONFIG_SUPER_FAST_ASSERTS` | bool | `false` | Define `DOCTEST_CONFIG_SUPER_FAST_ASSERTS` |
+| `DOCTEST_CONFIG_DISABLE` | bool | `false` | Define `DOCTEST_CONFIG_DISABLE` |
 
 ### Compile-Time Konfiguration
 
@@ -118,7 +127,7 @@ Diese Defines können in C++ vor `#include <doctest.h>` gesetzt werden:
 
 ```cpp
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 TEST_CASE("Math operations") {
     CHECK(1 + 1 == 2);
@@ -130,7 +139,7 @@ TEST_CASE("Math operations") {
 ### 5.2 Subcases (BDD-Style)
 
 ```cpp
-#include <doctest/doctest.h>
+#include <doctest.h>
 #include <string>
 
 TEST_CASE("String operations") {
@@ -155,7 +164,7 @@ TEST_CASE("String operations") {
 ### 5.3 Test mit Fixtures
 
 ```cpp
-#include <doctest/doctest.h>
+#include <doctest.h>
 #include <vector>
 
 TEST_CASE("Vector tests") {
@@ -185,7 +194,7 @@ TEST_CASE("Vector tests") {
 
 ```cpp
 #define DOCTEST_CONFIG_IMPLEMENT
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 int main(int argc, char** argv) {
     doctest::Context context;
@@ -217,7 +226,7 @@ int main(int argc, char** argv) {
     #define DOCTEST_CONFIG_DISABLE
 #endif
 
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 // Diese Tests existieren nur in Debug-Builds
 TEST_CASE("Debug-only test") {
@@ -277,9 +286,7 @@ TEST_CASE_TEMPLATE("Type traits", T, int, float, double) {
 
 ```
 externals/doctest/
-└── include/
-    └── doctest/
-        └── doctest.h
+└── doctest.h
 ```
 
 > **Hinweis:** doctest besteht nur aus einem einzigen Header!
@@ -297,25 +304,25 @@ externals/doctest/
 
 **"doctest.h not found":**
 ```cpp
-// Falsch:
-#include <doctest.h>
+// Falsch (das lokale External liefert keinen Unterordner doctest/):
+#include <doctest/doctest.h>
 
 // Richtig:
-#include <doctest/doctest.h>
+#include <doctest.h>
 ```
 
 **"Undefined reference to main":**
 ```cpp
 // Fehlt:
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest/doctest.h>
+#include <doctest.h>
 ```
 
 ---
 
 ## 9. Siehe auch
 
-- [Testing_UserGuide.md](../../../guides/Testing_UserGuide.md) — Test-Anleitung
+- [Testing_UserGuide.md](../../../../userguides/Testing.md) — Test-Anleitung
 - [Solution_Schema.md](../../../../references/Solution_Schema.md) — tests Array
 - [Attach_cmake.md](../../locals/Attach_cmake.md) — Local External Handler
 - [doctest GitHub](https://github.com/doctest/doctest) — Offizielle Dokumentation
@@ -326,5 +333,7 @@ externals/doctest/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/doctest/`** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: kein INTERFACE-Target, sondern Include-Pfad `externals/doctest/` am Target `EXECUTABLE_NAME`; `#include <doctest.h>` durchgehend (Widerspruch § 4/§ 8 aufgelöst, wie in den Demo-Projekten); Options aus `external_options`; Variablen und Verzeichnisstruktur wie im Code** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/doctest/` |
 | 0.1.0 | 2025-12-05 | Initial: Header-only INTERFACE Target |

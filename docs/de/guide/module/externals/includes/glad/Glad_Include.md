@@ -1,14 +1,14 @@
 # glad/Include.cmake — GLAD OpenGL Loader Integration
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler, C++ Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [glad_Include.md](glad_Include.md)  
-> **Modul:** [cmake/externals/includes/glad/Include.cmake](../../../../cmake/externals/includes/glad/Include.cmake)  
+> **English:** [glad_Include.md](../../../../../../en/guide/module/externals/includes/glad/Glad_Include.md)  
+> **Modul:** [cmake/externals/includes/glad/Include.cmake](../../../../../../../cmake/externals/includes/glad/Include.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -26,7 +26,7 @@
 9. [Integration mit anderen Externals](#9-integration-mit-anderen-externals)
 10. [Fehlerbehandlung](#10-fehlerbehandlung)
 11. [Siehe auch](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+12. [Changelog](#changelog)
 
 ---
 
@@ -581,10 +581,10 @@ sudo pacman -S mesa
 
 ## 11. Siehe auch
 
-- [Externals_Reference.md](../../../reference/Externals_Reference.md) — Alle Externals
-- [Externals_UserGuide.md](../../../guides/Externals_UserGuide.md) — GUI-App Anleitung
-- [imgui_PostFetch.md](../hooks/postfetch/imgui_PostFetch.md) — ImGui-Integration
-- [glfw_PreFetch.md](../hooks/prefetch/glfw_PreFetch.md) — GLFW-Konfiguration
+- [Externals_Reference.md](../../../../references/Externals.md) — Alle Externals
+- [Externals_UserGuide.md](../../../../userguides/Externals.md) — GUI-App Anleitung
+- [imgui_PostFetch.md](../../hooks/postfetch/Imgui.md) — ImGui-Integration
+- [glfw_PreFetch.md](../../hooks/prefetch/Glfw.md) — GLFW-Konfiguration
 - [GLAD Web Generator](https://glad.dav1d.de/) — Offizieller Konfigurator
 - [GLAD GitHub](https://github.com/Dav1dde/glad) — Source Code
 
@@ -594,4 +594,5 @@ sudo pacman -S mesa
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Neues Dokument: Blueprint v0.5.0, Konfigurator-Anleitung, Extensions, OpenGL ES/Vulkan Varianten** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Neues Dokument: Blueprint v0.5.0, Konfigurator-Anleitung, Extensions, OpenGL ES/Vulkan Varianten |

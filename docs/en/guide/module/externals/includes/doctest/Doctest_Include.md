@@ -1,101 +1,110 @@
 # doctest/Include.cmake — doctest Testing Framework Integration
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers, C++ Developers  
 > **Language:** English  
-> **German:** [doctest_Include.md](../../../../../../de/guide/module/externals/includes/doctest/doctest_Include.md)  
-> **Module:** [cmake/externals/includes/doctest/Include.cmake](../../../../cmake/externals/includes/doctest/Include.cmake)  
+> **German:** [Doctest_Include.md](../../../../../../de/guide/module/externals/includes/doctest/Doctest_Include.md)  
+> **Module:** [cmake/externals/includes/doctest/Include.cmake](../../../../../../../cmake/externals/includes/doctest/Include.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Verfügbare Variablen](#2-verfügbare-variablen)
-3. [Erstellte Targets](#3-erstellte-targets)
+1. [Overview](#1-overview)
+2. [Available Variables](#2-available-variables)
+3. [Created Targets](#3-created-targets)
 4. [Options](#4-options)
-5. [Usagesbeispiele](#5-verwendungsbeispiele)
-6. [Test-Patterns](#6-test-patterns)
-7. [Verzeichnisstruktur](#7-verzeichnisstruktur)
-8. [Errorbehandlung](#8-fehlerbehandlung)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+5. [Usage Examples](#5-usage-examples)
+6. [Test Patterns](#6-test-patterns)
+7. [Directory Structure](#7-directory-structure)
+8. [Error Handling](#8-error-handling)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Die `doctest/Include.cmake` integriert das **doctest Testing Framework** als lokales External in das Build-System.
+`doctest/Include.cmake` integrates the **doctest testing framework** into the build system as a local external.
 
-### Kernfunktionen
+### Core Functions
 
-| Funktion | Description |
-|----------|--------------|
-| Header-Only | Nur ein Header, keine Library nötig |
-| Schnell | Extrem schnelle Kompilierung |
-| Lightweight | Minimaler Overhead |
-| BDD-Style | Subcases für verschachtelte Tests |
+| Function | Description |
+|----------|-------------|
+| Header-only | Only one header, no library needed |
+| Fast | Extremely fast compilation |
+| Lightweight | Minimal overhead |
+| BDD style | Subcases for nested tests |
 
-### Target-Erstellung
+### Integration
 
-Erstellt ein `INTERFACE` Target `doctest` das nur Include-Directories bereitstellt.
+Creates **no target of its own**. The module sets the include path `externals/doctest/` (where `doctest.h` lies directly) on the target `EXECUTABLE_NAME`, plus compile defines and warning switches depending on the options.
 
 ---
 
-## 2. Verfügbare Variablen
+## 2. Available Variables
 
-Diese Variablen werden vom Orchestrator bereitgestellt:
+These variables are provided by the orchestrator:
 
 | Variable | Description |
-|----------|--------------|
+|----------|-------------|
 | `EXTERNAL_NAME` | `"doctest"` |
-| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/doctest` |
-| `EXTERNAL_JSON` | JSON-Element aus Solution.json |
-| `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
+| `EXTERNAL_ROOT` | Absolute path to `externals/doctest` (`path` from Solution.json) |
+| `EXTERNAL_OPTIONS` | Target-specific options (JSON) |
+| `EXECUTABLE_NAME` | Target that doctest is attached to |
 
 ---
 
-## 3. Erstellte Targets
+## 3. Created Targets
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `doctest` | INTERFACE | Header-only Include-Directory |
+| Target | Type | Description |
+|--------|------|-------------|
+| — | — | No target of its own; everything is attached `PRIVATE` to `EXECUTABLE_NAME` |
 
-### Include-Directories
+### Include Directories
 
 ```cmake
-target_include_directories(doctest INTERFACE
-    "${EXTERNAL_ROOT}/include"
-)
+# doctest.h is in the root directory
+target_include_directories(${EXECUTABLE_NAME} PRIVATE "${_doctest_root}")
 ```
+
+`_doctest_root` is `EXTERNAL_ROOT`. In code this means `#include <doctest.h>`.
+
+In addition: MSVC `/wd4251 /wd4275`, GCC/Clang `-Wno-unknown-pragmas`.
 
 ---
 
 ## 4. Options
 
-doctest ist Header-only und benötigt keine spezifischen CMake-Options.
+Via `external_options` in Solution.json (per target):
+
+| Option | Type | Default | Effect |
+|--------|------|---------|--------|
+| `DOCTEST_NO_SHORT_MACRO_NAMES` | bool | `false` | define `DOCTEST_CONFIG_NO_SHORT_MACRO_NAMES` |
+| `DOCTEST_CONFIG_SUPER_FAST_ASSERTS` | bool | `false` | define `DOCTEST_CONFIG_SUPER_FAST_ASSERTS` |
+| `DOCTEST_CONFIG_DISABLE` | bool | `false` | define `DOCTEST_CONFIG_DISABLE` |
 
 ### Compile-Time Configuration
 
-Diese Defines können in C++ vor `#include <doctest.h>` gesetzt werden:
+These defines can be set in C++ before `#include <doctest.h>`:
 
 | Define | Description |
-|--------|--------------|
-| `DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN` | main() automatisch generieren |
-| `DOCTEST_CONFIG_IMPLEMENT` | Nur Implementation, kein main() |
-| `DOCTEST_CONFIG_DISABLE` | Tests komplett deaktivieren |
-| `DOCTEST_CONFIG_NO_SHORT_MACRO_NAMES` | Nur `DOCTEST_*` Makros |
+|--------|-------------|
+| `DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN` | Generate main() automatically |
+| `DOCTEST_CONFIG_IMPLEMENT` | Implementation only, no main() |
+| `DOCTEST_CONFIG_DISABLE` | Disable tests completely |
+| `DOCTEST_CONFIG_NO_SHORT_MACRO_NAMES` | Only `DOCTEST_*` macros |
 
 ---
 
-## 5. Usagesbeispiele
+## 5. Usage Examples
 
-### 5.1 Einfacher Unit Test
+### 5.1 Simple Unit Test
 
 **Solution.json:**
 
@@ -118,7 +127,7 @@ Diese Defines können in C++ vor `#include <doctest.h>` gesetzt werden:
 
 ```cpp
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 TEST_CASE("Math operations") {
     CHECK(1 + 1 == 2);
@@ -127,10 +136,10 @@ TEST_CASE("Math operations") {
 }
 ```
 
-### 5.2 Subcases (BDD-Style)
+### 5.2 Subcases (BDD Style)
 
 ```cpp
-#include <doctest/doctest.h>
+#include <doctest.h>
 #include <string>
 
 TEST_CASE("String operations") {
@@ -152,10 +161,10 @@ TEST_CASE("String operations") {
 }
 ```
 
-### 5.3 Test mit Fixtures
+### 5.3 Test with Fixtures
 
 ```cpp
-#include <doctest/doctest.h>
+#include <doctest.h>
 #include <vector>
 
 TEST_CASE("Vector tests") {
@@ -176,16 +185,16 @@ TEST_CASE("Vector tests") {
         vec.reserve(100);
         
         CHECK(vec.capacity() >= 100);
-        CHECK(vec.empty());  // Size ist noch 0
+        CHECK(vec.empty());  // Size is still 0
     }
 }
 ```
 
-### 5.4 Eigene main() Funktion
+### 5.4 Own main() Function
 
 ```cpp
 #define DOCTEST_CONFIG_IMPLEMENT
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 int main(int argc, char** argv) {
     doctest::Context context;
@@ -194,7 +203,7 @@ int main(int argc, char** argv) {
     context.setOption("abort-after", 5);
     context.setOption("order-by", "name");
     
-    // Kommandozeilen-Argumente
+    // Command-line arguments
     context.applyCommandLine(argc, argv);
     
     int result = context.run();
@@ -203,23 +212,23 @@ int main(int argc, char** argv) {
         return result;
     }
     
-    // Eigene Logik hier...
+    // Own logic here...
     
     return result;
 }
 ```
 
-### 5.5 Tests in Produktionscode deaktivieren
+### 5.5 Disabling Tests in Production Code
 
 ```cpp
-// In Release-Builds: Tests komplett entfernen
+// In release builds: remove tests completely
 #ifdef NDEBUG
     #define DOCTEST_CONFIG_DISABLE
 #endif
 
-#include <doctest/doctest.h>
+#include <doctest.h>
 
-// Diese Tests existieren nur in Debug-Builds
+// These tests exist only in debug builds
 TEST_CASE("Debug-only test") {
     CHECK(1 == 1);
 }
@@ -227,22 +236,22 @@ TEST_CASE("Debug-only test") {
 
 ---
 
-## 6. Test-Patterns
+## 6. Test Patterns
 
 ### 6.1 Assertions
 
 | Assertion | Description |
-|-----------|--------------|
-| `CHECK(expr)` | Prüft, fährt bei Error fort |
-| `REQUIRE(expr)` | Prüft, bricht bei Error ab |
-| `CHECK_EQ(a, b)` | Gleichheit mit Details |
-| `CHECK_NE(a, b)` | Ungleichheit |
-| `CHECK_LT(a, b)` | Kleiner als |
-| `CHECK_GT(a, b)` | Größer als |
-| `CHECK_THROWS(expr)` | Exception erwartet |
-| `CHECK_NOTHROW(expr)` | Keine Exception erwartet |
+|-----------|-------------|
+| `CHECK(expr)` | Checks, continues on failure |
+| `REQUIRE(expr)` | Checks, aborts on failure |
+| `CHECK_EQ(a, b)` | Equality with details |
+| `CHECK_NE(a, b)` | Inequality |
+| `CHECK_LT(a, b)` | Less than |
+| `CHECK_GT(a, b)` | Greater than |
+| `CHECK_THROWS(expr)` | Exception expected |
+| `CHECK_NOTHROW(expr)` | No exception expected |
 
-### 6.2 Test-Organisation
+### 6.2 Test Organization
 
 ```cpp
 TEST_SUITE("Math") {
@@ -262,7 +271,7 @@ TEST_SUITE("Strings") {
 }
 ```
 
-### 6.3 Parametrisierte Tests
+### 6.3 Parameterized Tests
 
 ```cpp
 TEST_CASE_TEMPLATE("Type traits", T, int, float, double) {
@@ -273,58 +282,58 @@ TEST_CASE_TEMPLATE("Type traits", T, int, float, double) {
 
 ---
 
-## 7. Verzeichnisstruktur
+## 7. Directory Structure
 
 ```
 externals/doctest/
-└── include/
-    └── doctest/
-        └── doctest.h
+└── doctest.h
 ```
 
-> **Note:** doctest besteht nur aus einem einzigen Header!
+> **Note:** doctest consists of a single header only!
 
 ---
 
-## 8. Errorbehandlung
+## 8. Error Handling
 
 | Code | Description |
-|------|--------------|
-| E213 | Include.cmake nicht gefunden |
-| E214 | External-Pfad existiert nicht |
+|------|-------------|
+| E213 | Include.cmake not found |
+| E214 | External path does not exist |
 
-### Häufige Error
+### Common Errors
 
 **"doctest.h not found":**
 ```cpp
-// Falsch:
-#include <doctest.h>
-
-// Richtig:
+// Wrong (the local external provides no doctest/ subfolder):
 #include <doctest/doctest.h>
+
+// Correct:
+#include <doctest.h>
 ```
 
 **"Undefined reference to main":**
 ```cpp
-// Fehlt:
+// Missing:
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest/doctest.h>
+#include <doctest.h>
 ```
 
 ---
 
 ## 9. See Also
 
-- [Testing_UserGuide.md](../../../guides/Testing_UserGuide.md) — Test-Anleitung
-- [Solution_Schema.md](../../../../references/Solution_Schema.md) — tests Array
-- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local External Handler
-- [doctest GitHub](https://github.com/doctest/doctest) — Offizielle Dokumentation
+- [Testing.md](../../../../userguides/Testing.md) — Testing guide
+- [Solution_Schema.md](../../../../references/Solution_Schema.md) — tests array
+- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local external handler
+- [doctest GitHub](https://github.com/doctest/doctest) — Official documentation
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/doctest/`** |
-| 0.1.0 | 2025-12-05 | Initial: Header-only INTERFACE Target |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: no INTERFACE target, but the include path `externals/doctest/` on the target `EXECUTABLE_NAME`; `#include <doctest.h>` throughout (contradiction § 4/§ 8 resolved, as in the demo projects); options from `external_options`; variables and directory structure as in the code** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0, convention path `cmake/externals/includes/doctest/` |
+| 0.1.0 | 2025-12-05 | Initial: header-only INTERFACE target |

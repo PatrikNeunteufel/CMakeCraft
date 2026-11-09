@@ -5,10 +5,10 @@
 > **Type:** ModuleDoc  
 > **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
-> **Audience:** Build System Developers  
+> **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [Qt-Ads_PreFetch.md](../../../../de/modules/externals/hooks/prefetch/Qt-Ads.md)  
-> **Hook:** [cmake/externals/hooks/prefetch/qt-ads.cmake](../../../../../../cmake/externals/hooks/prefetch/qt-ads.cmake)  
+> **German:** [Qt-Ads_PreFetch.md](../../../../../../de/guide/module/externals/hooks/prefetch/Qt-Ads_PreFetch.md)  
+> **Hook:** [cmake/externals/hooks/prefetch/qt-ads.cmake](../../../../../../../cmake/externals/hooks/prefetch/qt-ads.cmake)  
 > **Module Version:** 2.1.0
 
 ---
@@ -18,7 +18,7 @@
 1. [Overview](#1-overview)
 2. [Why a PreFetch Hook?](#2-why-a-prefetch-hook)
 3. [Supported Versions](#3-supported-versions)
-4. [Set Options](#4-set-options)
+4. [Options Set](#4-options-set)
 5. [Qt6::GuiPrivate (v2.1.0)](#5-qt6guiprivate-v210)
 6. [The DLL Problem and Its Solution](#6-the-dll-problem-and-its-solution)
 7. [Solution.json Configuration](#7-solutionjson-configuration)
@@ -31,10 +31,10 @@
 
 ## 1. Overview
 
-The `qt-ads.cmake` PreFetch Hook configures the Qt Advanced Docking System before the build. The main functions are:
+The `qt-ads.cmake` PreFetch hook configures the Qt Advanced Docking System before the build. Its most important functions are:
 
-1. **BUILD_STATIC=ON** — Builds qt-ads as a static library (eliminates DLL deployment issues)
-2. **Load Qt6::GuiPrivate** — Required for Qt-ADS 4.4.x (Breaking Change!)
+1. **BUILD_STATIC=ON** — Builds qt-ads as a static library (eliminates DLL deployment problems)
+2. **Load Qt6::GuiPrivate** — Required for Qt-ADS 4.4.x (breaking change!)
 3. **BUILD_EXAMPLES=OFF** — No example targets
 4. **ADS_INSTALL=OFF** — No installation (FetchContent)
 
@@ -42,40 +42,40 @@ The `qt-ads.cmake` PreFetch Hook configures the Qt Advanced Docking System befor
 
 ## 2. Why a PreFetch Hook?
 
-**Without Hook:**
+**Without the hook:**
 - Examples and demo targets are built (10+ additional targets)
-- **Shared Library (DLL)** is created → windeployqt errors!
-- Qt-ADS 4.4.x fails due to missing Qt6::GuiPrivate
+- A **shared library (DLL)** is produced → windeployqt error!
+- Qt-ADS 4.4.x fails because Qt6::GuiPrivate is missing
 
-**With Hook:**
-- Only `qt6advanceddocking` or `qtadvanceddocking-qt6` target
-- **Static Library** (no DLL deployment needed)
-- Qt6::GuiPrivate is automatically loaded
+**With the hook:**
+- Only the `qt6advanceddocking` or `qtadvanceddocking-qt6` target
+- **Static library** (no DLL deployment needed)
+- Qt6::GuiPrivate is loaded automatically
 - windeployqt runs without errors
 
 ---
 
 ## 3. Supported Versions
 
-| Qt-ADS Version | Target Name | Notes |
-|----------------|-------------|-------|
+| Qt-ADS Version | Target Name | Particulars |
+|----------------|-------------|-------------|
 | **4.3.x** | `qt6advanceddocking` | Original configuration |
-| **4.4.x** | `qtadvanceddocking-qt6` | **Breaking Change:** Requires Qt6::GuiPrivate! |
+| **4.4.x** | `qtadvanceddocking-qt6` | **Breaking change:** requires Qt6::GuiPrivate! |
 
 ### Breaking Change in 4.4.x
 
-Qt-ADS 4.4.x uses Qt Private APIs and therefore has:
-- Different target name: `qtadvanceddocking-qt6` instead of `qt6advanceddocking`
-- New dependency: `Qt6::GuiPrivate`
-- Namespace alias: `ads::qtadvanceddocking-qt6`
+Qt-ADS 4.4.x uses Qt private APIs and therefore has:
+- A different target name: `qtadvanceddocking-qt6` instead of `qt6advanceddocking`
+- A new dependency: `Qt6::GuiPrivate`
+- A namespace alias: `ads::qtadvanceddocking-qt6`
 
 ---
 
-## 4. Set Options
+## 4. Options Set
 
 | Option | Value | Description |
 |--------|-------|-------------|
-| `BUILD_STATIC` | `ON` | **Static Library** instead of Shared (DLL) |
+| `BUILD_STATIC` | `ON` | **Static library** instead of shared (DLL) |
 | `BUILD_EXAMPLES` | `OFF` | No example programs |
 | `ADS_INSTALL` | `OFF` | No installation (FetchContent) |
 
@@ -97,13 +97,13 @@ See: [Qt-ADS CMakeLists.txt](https://github.com/githubuser0xFFFF/Qt-Advanced-Doc
 
 ## 5. Qt6::GuiPrivate (v2.1.0)
 
-### 5.1 Why Required?
+### 5.1 Why Is It Needed?
 
-Qt-ADS 4.4.x uses Qt Private APIs for extended docking features. These APIs are contained in `Qt6::GuiPrivate` and must be loaded **before** `FetchContent_MakeAvailable()`.
+Qt-ADS 4.4.x uses Qt private APIs for advanced docking features. These APIs are contained in `Qt6::GuiPrivate` and must be loaded **before** `FetchContent_MakeAvailable()`.
 
 ### 5.2 Automatic Loading
 
-The PreFetch Hook loads Qt6::GuiPrivate automatically:
+The PreFetch hook loads Qt6::GuiPrivate automatically:
 
 ```cmake
 find_package(Qt6 QUIET COMPONENTS GuiPrivate)
@@ -127,7 +127,7 @@ If Qt6::GuiPrivate is not available:
 ```
 
 **Solutions:**
-1. Install Qt6 Private Headers (Qt Installer → Additional Libraries)
+1. Install the Qt6 private headers (Qt Installer → Additional Libraries)
 2. Downgrade to Qt-ADS 4.3.1 (tag: `4.3.1` in Solution.json)
 
 ---
@@ -136,29 +136,29 @@ If Qt6::GuiPrivate is not available:
 
 ### 6.1 The Problem
 
-When qt-ads is built as a **Shared Library (DLL)**, the following error occurs:
+When qt-ads is built as a **shared library (DLL)**, the following error occurs:
 
 ```
 Unable to find dependent libraries of C:\Qt\6.10.1\msvc2022_64\bin\qt6advanceddockingd.dll
-Cannot open 'C:/Qt/6.10.1/msvc2022_64/bin/qt6advanceddockingd.dll': The system cannot find the file specified.
+Cannot open 'C:/Qt/6.10.1/msvc2022_64/bin/qt6advanceddockingd.dll': Das System kann die angegebene Datei nicht finden.
 ```
 
 ### 6.2 Cause
 
 1. **windeployqt** scans the executable for DLL dependencies
 2. It finds the dependency `qt6advanceddockingd.dll`
-3. windeployqt searches for this DLL in the **Qt bin directory** (`C:\Qt\...\bin\`)
+3. windeployqt looks for this DLL in the **Qt bin directory** (`C:\Qt\...\bin\`)
 4. The DLL is not there (it was built via FetchContent)
-5. **windeployqt aborts** — Qt DLLs are also not copied!
+5. **windeployqt aborts** — the Qt DLLs are not copied either!
 
-### 6.3 Attempted Solutions (that DO NOT work)
+### 6.3 Attempted Solutions (That Do NOT Work)
 
 | Approach | Problem |
 |----------|---------|
-| Copy DLL before windeployqt | windeployqt still searches in Qt directory |
+| Copy the DLL before windeployqt | windeployqt still searches the Qt directory |
 | Extend PATH | windeployqt ignores PATH for dependency analysis |
 | `--ignore-library-errors` flag | Not available in all Qt versions |
-| Ignore windeployqt errors | Qt DLLs are still not copied |
+| Ignore windeployqt errors | The Qt DLLs are still not copied |
 
 ### 6.4 The Solution: Static Library
 
@@ -167,11 +167,11 @@ With `BUILD_STATIC=ON`, qt-ads is built as a **static library** (`.lib`):
 | Aspect | Shared (DLL) | Static (LIB) |
 |--------|--------------|--------------|
 | Output | `qt6advanceddockingd.dll` | `qt6advanceddockingd.lib` |
-| Deployment | DLL must be copied | Linked into executable |
+| Deployment | DLL must be copied | Linked into the executable |
 | windeployqt | ❌ Error | ✅ No problem |
 | EXE file size | Smaller | Larger (~2-3 MB) |
 
-**Advantages of static library:**
+**Advantages of the static library:**
 - ✅ No DLL copying needed
 - ✅ windeployqt runs without errors
 - ✅ Simpler deployment (everything in one EXE)
@@ -219,13 +219,13 @@ With `BUILD_STATIC=ON`, qt-ads is built as a **static library** (`.lib`):
 }
 ```
 
-**Important:** `GuiPrivate` must be included in the Qt6 components, as Qt-ADS 4.4.x uses Qt Private APIs.
+**Important:** `GuiPrivate` must be included in the Qt6 components, since Qt-ADS 4.4.x uses Qt private APIs.
 
 ### 7.3 Important: Order
 
-Qt6 must be processed **before** qt-ads. This is ensured by alphabetical sorting:
+Qt6 must be processed **before** qt-ads. This is ensured by the alphabetical sort order:
 - `Qt6` (Q=81 ASCII) → processed first
-- `qt-ads` (q=113 ASCII) → processed afterward
+- `qt-ads` (q=113 ASCII) → processed afterwards
 
 ---
 
@@ -233,21 +233,21 @@ Qt6 must be processed **before** qt-ads. This is ensured by alphabetical sorting
 
 | External | Type | Description |
 |----------|------|-------------|
-| `Qt6` | System | Qt6 Core, Widgets, Gui must be loaded first |
-| `Qt6::GuiPrivate` | System (optional) | Only required for Qt-ADS 4.4.x |
+| `Qt6` | System | Qt6 Core, Widgets, Gui must be loaded beforehand |
+| `Qt6::GuiPrivate` | System (optional) | Required only for Qt-ADS 4.4.x |
 
 ---
 
 ## 9. Error Handling
 
-### 9.1 qt-ads is still built as DLL
+### 9.1 qt-ads Is Still Built as a DLL
 
 **Symptom:**
 ```
 [27/45] Linking CXX shared library x64\bin\qt6advanceddockingd.dll
 ```
 
-**Cause:** CMake cache still contains old values.
+**Cause:** The CMake cache still contains old values.
 
 **Solution:**
 ```cmd
@@ -257,7 +257,7 @@ rd /s /q out\build\<preset-name>
 
 Then reconfigure CMake.
 
-### 9.2 Qt-ADS 4.4.x does not configure
+### 9.2 Qt-ADS 4.4.x Does Not Configure
 
 **Symptom:**
 ```
@@ -265,16 +265,16 @@ CMake Error: Could not find a package configuration file provided by "Qt6" with 
   Qt6GuiPrivate.cmake
 ```
 
-**Cause:** Qt6::GuiPrivate not installed.
+**Cause:** Qt6::GuiPrivate is not installed.
 
 **Solution:**
-1. Open Qt Installer
-2. Enable Private Headers under "Additional Libraries"
-3. OR: Use Qt-ADS 4.3.1 (no GuiPrivate needed)
+1. Open the Qt Installer
+2. Enable the private headers under "Additional Libraries"
+3. OR: use Qt-ADS 4.3.1 (no GuiPrivate needed)
 
-### 9.3 Check in CMake Output
+### 9.3 Checking the CMake Output
 
-With correct configuration:
+With a correct configuration:
 
 ```
 -- [qt-ads] PreFetch: Configuring build options
@@ -289,9 +289,9 @@ With correct configuration:
 
 ## 10. See Also
 
-- [Qt-Ads_PostFetch.md](../postfetch/Qt-Ads.md) — PostFetch Hook (Target registration)
+- [Qt-Ads_PostFetch.md](../postfetch/Qt-Ads_PostFetch.md) — PostFetch hook (target registration)
 - [HookLoader.md](../../hooks/HookLoader_cmake.md) — Hook system
-- [Qt6.md](../../../../userguides/externals/Qt6.md) — Qt6 System External
+- [Qt6.md](../../../../userguides/externals/Qt6.md) — Qt6 system external
 
 ---
 
@@ -301,7 +301,7 @@ With correct configuration:
 |---------|------|---------|
 | **2.1.0** | **2025-12-30** | **New: Qt6::GuiPrivate support for Qt-ADS 4.4.x** |
 | | | **New: ADS_INSTALL=OFF option** |
-| | | **New: Documentation for 4.3.x vs 4.4.x breaking changes** |
+| | | **New: documentation of the 4.3.x vs 4.4.x breaking changes** |
 | 1.1.0 | 2025-12-27 | Fix: `BUILD_STATIC` instead of `ADS_BUILD_STATIC` |
-| | | New: Detailed documentation of the DLL problem |
-| 1.0.0 | 2025-12-21 | Initial: PreFetch Hook for Qt-ADS |
+| | | New: detailed documentation of the DLL problem |
+| 1.0.0 | 2025-12-21 | Initial: PreFetch hook for Qt-ADS |

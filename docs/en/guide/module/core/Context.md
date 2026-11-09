@@ -1,52 +1,52 @@
-# Context.cmake — Modul-Dokumentation
+# Context.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** In Development (Pre-Release)  
+> **Status:** In development (pre-release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Context.md](Context.md)  
-> **Module:** [`cmake/core/Context.cmake`](../../../../cmake/core/Context.cmake)  
+> **German:** [Context.md](../../../../de/guide/module/core/Context.md)  
+> **Module:** [`cmake/core/Context.cmake`](../../../../../cmake/core/Context.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [API-Reference](#4-api-referenz)
-5. [Usagesbeispiele](#5-verwendungsbeispiele)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [API Reference](#4-api-reference)
+5. [Usage Examples](#5-usage-examples)
 6. [Standard Context Keys](#6-standard-context-keys)
-7. [Errorbehandlung](#7-fehlerbehandlung)
+7. [Error Handling](#7-error-handling)
 8. [Best Practices](#8-best-practices)
 9. [Debugging](#9-debugging)
-10. [Bekannte Einschränkungen](#10-bekannte-einschränkungen)
-11. [See Also](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+10. [Known Limitations](#10-known-limitations)
+11. [See Also](#11-see-also)
+12. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Context.cmake` Modul implementiert ein **Context-Objekt-Pattern** für isolierte Namensräume. Es ermöglicht die saubere Verwaltung von Target-Daten während der CMake-Configuration ohne globale Variablen.
+The `Context.cmake` module implements a **context object pattern** for isolated namespaces. It allows clean management of target data during the CMake configuration without global variables.
 
-### Kernidee
+### Core Idea
 
-Statt globaler Variablen nutzt jede Executable/Library einen eigenen Namensraum mit eindeutigem Präfix.
+Instead of global variables, each executable/library uses its own namespace with a unique prefix.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Namensräume | Isolierte Daten pro Target |
-| Propagation | Werte über alle Funktionsebenen verfügbar |
-| Debugging | `ctx_dump()` für Diagnose |
+| Area | Description |
+|------|-------------|
+| Namespaces | Isolated data per target |
+| Propagation | Values available across all function levels |
+| Debugging | `ctx_dump()` for diagnosis |
 
-### Usage durch
+### Used By
 
 - ExecutableCollect.cmake
 - LibraryCollect.cmake
@@ -56,32 +56,32 @@ Statt globaler Variablen nutzt jede Executable/Library einen eigenen Namensraum 
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
-| — | — | Keine (Basis-Modul) |
+| Module | Version | Usage |
+|--------|---------|-------|
+| — | — | None (base module) |
 
-**Design-Entscheidung:** Context.cmake ist bewusst ohne Dependencies zu Debug.cmake oder Errors.cmake implementiert. Als fundamentales Basis-Modul, das von anderen Modulen (inkl. Debug.cmake indirekt) verwendet wird, vermeidet dies zirkuläre Dependencies. Errorhafte Usage führt zu leeren Return Valuesn statt Exceptions.
+**Design decision:** Context.cmake is deliberately implemented without dependencies on Debug.cmake or Errors.cmake. As a fundamental base module used by other modules (incl. Debug.cmake indirectly), this avoids circular dependencies. Incorrect use leads to empty return values instead of exceptions.
 
-→ Siehe [Offene Abklärungen](../../../konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md) für Details zu dieser Entscheidung.
+→ See [Open clarifications](../../../konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md) for details on this decision.
 
 ---
 
 ## 3. Concept
 
-### 3.1 Warum Context-Objekte?
+### 3.1 Why Context Objects?
 
-**Problem mit globalen Variablen:**
+**Problem with global variables:**
 ```cmake
-# Schlecht: Globale Variablen
+# Bad: global variables
 set(EXE_NAME "App1")
 set(EXE_PATH "src/app1")
-# ... später überschrieben ...
-set(EXE_NAME "App2")  # App1-Daten verloren!
+# ... overwritten later ...
+set(EXE_NAME "App2")  # App1 data lost!
 ```
 
-**Lösung mit Context:**
+**Solution with context:**
 ```cmake
-# Gut: Isolierte Namensräume
+# Good: isolated namespaces
 ctx_create(EXE_0)
 ctx_set(EXE_0 NAME "App1")
 ctx_set(EXE_0 PATH "src/app1")
@@ -90,34 +90,34 @@ ctx_create(EXE_1)
 ctx_set(EXE_1 NAME "App2")
 ctx_set(EXE_1 PATH "src/app2")
 
-# Beide existieren parallel
+# Both exist in parallel
 ctx_get(EXE_0 NAME _name)  # "App1"
 ctx_get(EXE_1 NAME _name)  # "App2"
 ```
 
 ### 3.2 GLOBAL PROPERTY Implementation
 
-Der Context verwendet **GLOBAL PROPERTY** für die Speicherung, nicht `PARENT_SCOPE`. Dies hat wichtige Vorteile:
+The context uses **GLOBAL PROPERTY** for storage, not `PARENT_SCOPE`. This has important advantages:
 
-| Methode | Scope-Propagierung | Problem |
-|---------|-------------------|---------|
-| `PARENT_SCOPE` | Eine Ebene nach oben | Verschachtelte Functions verlieren Werte |
-| `GLOBAL PROPERTY` | Überall verfügbar | ✅ Funktioniert über alle Scopes |
+| Method | Scope propagation | Problem |
+|--------|-------------------|---------|
+| `PARENT_SCOPE` | One level up | Nested functions lose values |
+| `GLOBAL PROPERTY` | Available everywhere | ✅ Works across all scopes |
 
-**Example des Problems mit PARENT_SCOPE:**
+**Example of the problem with PARENT_SCOPE:**
 ```cmake
 function(outer)
     function(inner)
-        set(VAR "value" PARENT_SCOPE)  # Geht nur zu outer()
+        set(VAR "value" PARENT_SCOPE)  # Only reaches outer()
     endfunction()
     inner()
-    # VAR ist hier gesetzt
+    # VAR is set here
 endfunction()
 outer()
-# VAR ist hier NICHT gesetzt!
+# VAR is NOT set here!
 ```
 
-**Mit GLOBAL PROPERTY:**
+**With GLOBAL PROPERTY:**
 ```cmake
 function(outer)
     function(inner)
@@ -129,21 +129,21 @@ outer()
 get_property(_val GLOBAL PROPERTY MY_VAR)  # "value" ✅
 ```
 
-### 3.3 Context-Prefixe Konvention
+### 3.3 Context Prefix Convention
 
 | Prefix | Usage |
-|--------|------------|
+|--------|-------|
 | `EXE_` | Executables (`EXE_0`, `EXE_1`, `EXE_MyApp`) |
 | `LIB_` | Libraries (`LIB_0`, `LIB_CoreLib`) |
 | `TEST_` | Tests (`TEST_0`, `TEST_UnitTests`) |
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 ctx_create()
 
-Erstellt einen neuen Context mit dem gegebenen Prefix.
+Creates a new context with the given prefix.
 
 ```cmake
 ctx_create(<PREFIX>)
@@ -151,11 +151,11 @@ ctx_create(<PREFIX>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `PREFIX` | String | ✓ | Eindeutiger Namensraum-Identifier |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `PREFIX` | String | ✓ | Unique namespace identifier |
 
-**Rückgabe:** Keine (initialisiert GLOBAL PROPERTY `${PREFIX}_KEYS`)
+**Returns:** Nothing (initializes the GLOBAL PROPERTY `${PREFIX}_KEYS`)
 
 **Example:**
 
@@ -169,7 +169,7 @@ ctx_create(TEST_UnitTests)
 
 ### 4.2 ctx_set()
 
-Setzt einen Wert im Context.
+Sets a value in the context.
 
 ```cmake
 ctx_set(<PREFIX> <KEY> <VALUE>)
@@ -177,13 +177,13 @@ ctx_set(<PREFIX> <KEY> <VALUE>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `PREFIX` | String | ✓ | Context-Prefix |
-| `KEY` | String | ✓ | Schlüssel (UPPER_SNAKE_CASE empfohlen) |
-| `VALUE` | String/List | ✓ | Zu speichernder Wert |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `PREFIX` | String | ✓ | Context prefix |
+| `KEY` | String | ✓ | Key (UPPER_SNAKE_CASE recommended) |
+| `VALUE` | String/List | ✓ | Value to store |
 
-**Rückgabe:** Keine (speichert als GLOBAL PROPERTY `${PREFIX}_${KEY}`)
+**Returns:** Nothing (stores as GLOBAL PROPERTY `${PREFIX}_${KEY}`)
 
 **Example:**
 
@@ -197,7 +197,7 @@ ctx_set(EXE_MyApp EXTERNALS "bass;imgui;glfw")
 
 ### 4.3 ctx_get()
 
-Liest einen Wert aus dem Context.
+Reads a value from the context.
 
 ```cmake
 ctx_get(<PREFIX> <KEY> <OUT_VAR>)
@@ -205,13 +205,13 @@ ctx_get(<PREFIX> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `PREFIX` | String | ✓ | Context-Prefix |
-| `KEY` | String | ✓ | Schlüssel |
-| `OUT_VAR` | Variable | ✓ | Variable für den Return Value |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `PREFIX` | String | ✓ | Context prefix |
+| `KEY` | String | ✓ | Key |
+| `OUT_VAR` | Variable | ✓ | Variable for the return value |
 
-**Rückgabe:** Wert in `OUT_VAR` (leerer String wenn Key nicht existiert)
+**Returns:** Value in `OUT_VAR` (empty string if the key does not exist)
 
 **Example:**
 
@@ -232,7 +232,7 @@ endforeach()
 
 ### 4.4 ctx_dump()
 
-Debug-Ausgabe aller Keys im Context. Nur aktiv wenn `DEBUG_CONTEXT=ON`.
+Debug output of all keys in the context. Only active if `DEBUG_CONTEXT=ON`.
 
 ```cmake
 ctx_dump(<PREFIX>)
@@ -240,13 +240,13 @@ ctx_dump(<PREFIX>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `PREFIX` | String | ✓ | Context-Prefix |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `PREFIX` | String | ✓ | Context prefix |
 
-**Rückgabe:** Keine (gibt auf stdout aus wenn `DEBUG_CONTEXT=ON`)
+**Returns:** Nothing (prints to stdout if `DEBUG_CONTEXT=ON`)
 
-**Aktivierung:**
+**Activation:**
 
 ```bash
 cmake -B build -DDEBUG_CONTEXT=ON
@@ -258,7 +258,7 @@ cmake -B build -DDEBUG_CONTEXT=ON
 ctx_dump(EXE_MyApp)
 ```
 
-**Ausgabe:**
+**Output:**
 
 ```
 -- === Context Dump: EXE_MyApp ===
@@ -271,19 +271,19 @@ ctx_dump(EXE_MyApp)
 
 ---
 
-## 5. Usagesbeispiele
+## 5. Usage Examples
 
-### 5.1 Executable-Pipeline
+### 5.1 Executable Pipeline
 
 ```cmake
 # In ExecutableCollect.cmake
 function(_collect_executable EXE_JSON CTX)
-    # JSON-Daten extrahieren
+    # Extract JSON data
     _json_get_string("${EXE_JSON}" "name" _name)
     _json_get_string("${EXE_JSON}" "path" _path)
     _json_get_bool_from_key("${EXE_JSON}" "skip" _skip)
     
-    # In Context speichern
+    # Store in the context
     ctx_set(${CTX} NAME "${_name}")
     ctx_set(${CTX} PATH "${_path}")
     ctx_set(${CTX} SKIP "${_skip}")
@@ -294,7 +294,7 @@ foreach(_idx RANGE 0 ${_exe_count})
     ctx_create(EXE_${_idx})
     _collect_executable("${_exe_json}" EXE_${_idx})
     
-    # Werte sind sofort verfügbar (dank GLOBAL PROPERTY)
+    # Values are available immediately (thanks to GLOBAL PROPERTY)
     ctx_get(EXE_${_idx} NAME _name)
     ctx_get(EXE_${_idx} SKIP _skip)
     
@@ -306,10 +306,10 @@ foreach(_idx RANGE 0 ${_exe_count})
 endforeach()
 ```
 
-### 5.2 Mehrere Contexts parallel
+### 5.2 Several Contexts in Parallel
 
 ```cmake
-# Beide Contexts existieren unabhängig
+# Both contexts exist independently
 ctx_create(EXE_Editor)
 ctx_set(EXE_Editor NAME "Editor")
 ctx_set(EXE_Editor TYPE "GUI")
@@ -318,7 +318,7 @@ ctx_create(EXE_CLI)
 ctx_set(EXE_CLI NAME "CLI")
 ctx_set(EXE_CLI TYPE "CONSOLE")
 
-# Werte überschreiben sich nicht
+# Values do not overwrite each other
 ctx_get(EXE_Editor TYPE _type1)  # "GUI"
 ctx_get(EXE_CLI TYPE _type2)     # "CONSOLE"
 ```
@@ -327,55 +327,55 @@ ctx_get(EXE_CLI TYPE _type2)     # "CONSOLE"
 
 ## 6. Standard Context Keys
 
-### 6.1 Für Executables
+### 6.1 For Executables
 
-| Key | Typ | Description |
-|-----|-----|--------------|
-| `NAME` | String | Target-Name |
-| `DISPLAY_NAME` | String | Anzeigename |
+| Key | Type | Description |
+|-----|------|-------------|
+| `NAME` | String | Target name |
+| `DISPLAY_NAME` | String | Display name |
 | `DESCRIPTION` | String | Description |
 | `VERSION` | String | Version (SemVer) |
-| `PATH` | String | Source-Verzeichnis (relativ) |
+| `PATH` | String | Source directory (relative) |
 | `TYPE` | String | GUI, CONSOLE, CLI, HEADLESS, WORKER |
-| `SKIP` | Boolean | true = überspringen |
-| `PCH_ENABLED` | Boolean | Precompiled Header aktiviert |
-| `PCH_HEADER` | String | PCH Header-Datei |
-| `DEPENDENCIES` | List | Interne Dependencies |
-| `EXTERNALS` | List | Externe Dependencies |
-| `DEFINES` | List | Preprocessor-Definitionen |
-| `COMPILE_OPTIONS` | List | Compiler-Optionen |
-| `LINK_OPTIONS` | List | Linker-Optionen |
-| `PLATFORMS` | List | Zielplattformen |
+| `SKIP` | Boolean | true = skip |
+| `PCH_ENABLED` | Boolean | Precompiled header enabled |
+| `PCH_HEADER` | String | PCH header file |
+| `DEPENDENCIES` | List | Internal dependencies |
+| `EXTERNALS` | List | External dependencies |
+| `DEFINES` | List | Preprocessor definitions |
+| `COMPILE_OPTIONS` | List | Compiler options |
+| `LINK_OPTIONS` | List | Linker options |
+| `PLATFORMS` | List | Target platforms |
 
-### 6.2 Für Libraries
+### 6.2 For Libraries
 
-| Key | Typ | Description |
-|-----|-----|--------------|
-| `NAME` | String | Target-Name |
+| Key | Type | Description |
+|-----|------|-------------|
+| `NAME` | String | Target name |
 | `TYPE` | String | STATIC, SHARED, INTERFACE, OBJECT |
-| `PUBLIC_HEADERS` | List | Öffentliche Header |
-| `PRIVATE_HEADERS` | List | Private Header |
-| `ALIAS` | String | Namespace-Alias (z.B. `MyProject::Core`) |
-| ... | ... | (wie Executable) |
+| `PUBLIC_HEADERS` | List | Public headers |
+| `PRIVATE_HEADERS` | List | Private headers |
+| `ALIAS` | String | Namespace alias (e.g. `MyProject::Core`) |
+| ... | ... | (as for executables) |
 
 ---
 
-## 7. Errorbehandlung
+## 7. Error Handling
 
-Das Context-Modul selbst wirft keine spezifischen Error Codes. Errorhafte Usage führt zu:
+The context module itself raises no specific error codes. Incorrect use leads to:
 
-| Situation | Verhalten |
-|-----------|-----------|
-| `ctx_get` ohne `ctx_create` | Leerer String |
-| Key existiert nicht | Leerer String |
-| Falscher PREFIX | Leerer String (stille Error) |
+| Situation | Behavior |
+|-----------|----------|
+| `ctx_get` without `ctx_create` | Empty string |
+| Key does not exist | Empty string |
+| Wrong PREFIX | Empty string (silent errors) |
 
-**Empfehlung:** Bei kritischen Keys explizit prüfen:
+**Recommendation:** Check critical keys explicitly:
 
 ```cmake
 ctx_get(${CTX} NAME _name)
 if("${_name}" STREQUAL "")
-    cmake_fatal("E001" "Context ${CTX}: NAME fehlt")
+    cmake_fatal("E001" "Context ${CTX}: NAME missing")
 endif()
 ```
 
@@ -385,38 +385,38 @@ endif()
 
 | Do | Don't |
 |----|-------|
-| `ctx_create()` vor erstem `ctx_set()` | Ohne Create direkt setzen |
-| UPPER_SNAKE_CASE für Keys | lowercase-keys |
-| Eindeutige Prefixes (EXE_, LIB_, TEST_) | Generische Prefixes |
-| Listen als Semikolon-getrennt | Leerzeichen-getrennte Listen |
-| `DEBUG_CONTEXT` für Errorsuche | Manuelle Property-Abfragen |
+| `ctx_create()` before the first `ctx_set()` | Set directly without create |
+| UPPER_SNAKE_CASE for keys | lowercase-keys |
+| Unique prefixes (EXE_, LIB_, TEST_) | Generic prefixes |
+| Lists separated by semicolons | Space-separated lists |
+| `DEBUG_CONTEXT` for troubleshooting | Manual property queries |
 
-### Design-Entscheidung: Minimale API
+### Design Decision: Minimal API
 
-| Funktion | Status | Begründung |
-|----------|--------|------------|
-| `ctx_create` | ✅ | Grundfunktion |
-| `ctx_set` | ✅ | Grundfunktion |
-| `ctx_get` | ✅ | Grundfunktion |
-| `ctx_dump` | ✅ | Debug-only, sehr nützlich |
-| `ctx_has` | ❌ | `ctx_get` + `if(DEFINED)` reicht |
-| `ctx_append` | ❌ | `ctx_get` + `list(APPEND)` + `ctx_set` explizit |
+| Function | Status | Reason |
+|----------|--------|--------|
+| `ctx_create` | ✅ | Basic function |
+| `ctx_set` | ✅ | Basic function |
+| `ctx_get` | ✅ | Basic function |
+| `ctx_dump` | ✅ | Debug only, very useful |
+| `ctx_has` | ❌ | `ctx_get` + `if(DEFINED)` is enough |
+| `ctx_append` | ❌ | `ctx_get` + `list(APPEND)` + `ctx_set` explicitly |
 
 ---
 
 ## 9. Debugging
 
-### 9.1 Wert ist leer
+### 9.1 Value Is Empty
 
-**Problem:** `ctx_get()` gibt leeren String zurück.
+**Problem:** `ctx_get()` returns an empty string.
 
-**Mögliche Ursachen:**
+**Possible causes:**
 
-1. `ctx_set()` wurde nie aufgerufen
-2. Falscher PREFIX oder KEY
-3. Tipfehler in Key-Name
+1. `ctx_set()` was never called
+2. Wrong PREFIX or KEY
+3. Typo in the key name
 
-**Lösung:**
+**Solution:**
 
 ```bash
 cmake -B build -DDEBUG_CONTEXT=ON
@@ -426,40 +426,41 @@ cmake -B build -DDEBUG_CONTEXT=ON
 ctx_dump(EXE_MyApp)
 ```
 
-### 9.2 Werte werden nicht propagiert
+### 9.2 Values Are Not Propagated
 
-**Problem:** Werte sind in aufrufender Funktion nicht verfügbar.
+**Problem:** Values are not available in the calling function.
 
-**Ursache:** Altes Modul mit PARENT_SCOPE statt GLOBAL PROPERTY.
+**Cause:** Old module with PARENT_SCOPE instead of GLOBAL PROPERTY.
 
-**Lösung:** Modul auf v0.1.0+ aktualisieren.
+**Solution:** Update the module to v0.1.0+.
 
 ---
 
-## 10. Bekannte Einschränkungen
+## 10. Known Limitations
 
-| Einschränkung | Description |
-|---------------|--------------|
-| Keine Typisierung | Alle Werte sind Strings |
-| Kein Löschen | Keys können nicht entfernt werden (nicht nötig) |
-| Globaler Namespace | Prefixe müssen eindeutig sein |
+| Limitation | Description |
+|------------|-------------|
+| No typing | All values are strings |
+| No deletion | Keys cannot be removed (not needed) |
+| Global namespace | Prefixes must be unique |
 
 ---
 
 ## 11. See Also
 
-- [Errors.cmake](Errors.md) — Errorbehandlung
-- [Debug.cmake](Debug.md) — Debug-System
-- [ExecutableCollect.cmake](../project/ExecutableCollect.md) — Verwendet Context
-- [LibraryCollect.cmake](../project/LibraryCollect.md) — Verwendet Context
-- [guidelines](../../../concepts/guidelines.md) — Coding-Konventionen
+- [Errors.cmake](Errors.md) — error handling
+- [Debug.cmake](Debug.md) — debug system
+- [ExecutableCollect.cmake](../project/ExecutableCollect.md) — uses Context
+- [LibraryCollect.cmake](../project/LibraryCollect.md) — uses Context
+- [guidelines](../../../konzepte/Guidelines.md) — coding conventions
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung, Standard Context Keys Abschnitt** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering, section Standard Context Keys |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): GLOBAL PROPERTY statt PARENT_SCOPE, ctx_create/set/get/dump API |
+| 0.1.0 | 2025-12-03 | Initial (clean start): GLOBAL PROPERTY instead of PARENT_SCOPE, ctx_create/set/get/dump API |

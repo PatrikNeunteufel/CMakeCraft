@@ -64,13 +64,15 @@ function(_resolve_system_path EXT_NAME PACKAGE HINTS ADDITIONAL_PATHS BACKUP OUT
     # =========================================================================
     
     # Check common environment variable patterns
-    # For Qt6: QT_ROOT, QT6_ROOT, Qt6_ROOT, QT_DIR, Qt6_DIR, etc.
+    # For Qt6: Qt6ROOT, Qt6_ROOT, Qt6_DIR, Qt_ROOT, Qt_DIR, ... Windows
+    # environment names are case-insensitive (QT_ROOT matches Qt_ROOT);
+    # Linux/macOS are case-sensitive - there use Qt6_ROOT or a hint "${QT_ROOT}".
     set(_env_suffixes "ROOT" "DIR" "HOME")
     
     # Build list of prefixes to check
     set(_env_prefixes "${PACKAGE}" "${PACKAGE}_")
     
-    # Also check without version number (QT_ROOT for Qt6)
+    # Also check without version number (Qt_ROOT for Qt6)
     string(REGEX REPLACE "[0-9]+$" "" _package_base "${PACKAGE}")
     if(NOT "${_package_base}" STREQUAL "${PACKAGE}")
         list(APPEND _env_prefixes "${_package_base}" "${_package_base}_")

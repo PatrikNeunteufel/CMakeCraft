@@ -3,12 +3,12 @@
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [PathResolver_cmake.md](PathResolver_cmake.md)  
-> **Module:** [cmake/externals/system/PathResolver.cmake](../../../../../cmake/externals/system/PathResolver.cmake)  
+> **German:** [PathResolver_cmake.md](../../../../../de/guide/module/externals/system/PathResolver_cmake.md)  
+> **Module:** [cmake/externals/system/PathResolver.cmake](../../../../../../cmake/externals/system/PathResolver.cmake)  
 > **Module Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
@@ -16,30 +16,30 @@
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
-4. [Suchpriorität](#4-suchpriorität)
-5. [Umgebungsvariablen](#5-umgebungsvariablen)
-6. [Usagesbeispiele](#6-verwendungsbeispiele)
-7. [Debug-Ausgaben](#7-debug-ausgaben)
-8. [See Also](#8-siehe-auch)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
+4. [Search Priority](#4-search-priority)
+5. [Environment Variables](#5-environment-variables)
+6. [Usage Examples](#6-usage-examples)
+7. [Debug Output](#7-debug-output)
+8. [See Also](#8-see-also)
 9. [Changelog](#9-changelog)
 
 ---
 
 ## 1. Overview
 
-`PathResolver.cmake` ist für die **mehrstufige Pfadauflösung** bei System Externals zuständig. Es durchsucht verschiedene Quellen nach Installationspfaden, bevor `find_package()` aufgerufen wird.
+`PathResolver.cmake` is responsible for the **multi-stage path resolution** of system externals. It searches various sources for installation paths before `find_package()` is called.
 
-### Kernfunktionen
+### Core Functions
 
-- **ENV-Variablen** — Sucht nach `{PACKAGE}_ROOT`, `{PACKAGE}_DIR`, etc.
-- **hints[]** — Verwendet Pfade aus Solution.json
-- **Standard-Pfade** — Paket-spezifische Installationsorte
-- **Backup** — Fallback-Pfad mit Warning
+- **ENV variables** — Looks for `{PACKAGE}_ROOT`, `{PACKAGE}_DIR`, etc.
+- **hints[]** — Uses paths from Solution.json
+- **Standard paths** — Package-specific installation locations
+- **Backup** — Fallback path with warning
 
-### Architecture-Position
+### Architecture Position
 
 ```
 system/Handler.cmake
@@ -47,12 +47,12 @@ system/Handler.cmake
        ├── _resolve_system_path()
        ▼
 ┌─────────────────────┐
-│    PathResolver     │  ← Dieses Modul
+│    PathResolver     │  ← This module
 └─────────────────────┘
        │
-       ├── 1. ENV-Variablen
+       ├── 1. ENV variables
        ├── 2. hints[]
-       ├── 3. Package-Hook Pfade
+       ├── 3. Package hook paths
        └── 4. backup
 ```
 
@@ -60,17 +60,17 @@ system/Handler.cmake
 
 ## 2. Dependencies
 
-| Modul | Zweck |
-|-------|-------|
-| `Debug.cmake` | `dbg` für Debug-Ausgaben |
+| Module | Purpose |
+|--------|---------|
+| `Debug.cmake` | `dbg` for debug output |
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
 ### 3.1 _resolve_system_path()
 
-Mehrstufige Pfadauflösung für System-Pakete.
+Multi-stage path resolution for system packages.
 
 ```cmake
 _resolve_system_path(
@@ -86,70 +86,70 @@ _resolve_system_path(
 
 **Parameters:**
 
-| Parameters | Typ | Description |
-|-----------|-----|--------------|
-| `EXT_NAME` | String | Name des Externals (für Debug) |
-| `PACKAGE` | String | Paketname (z.B. "Qt6", "Boost") |
-| `HINTS` | List | Hint-Pfade aus Solution.json |
-| `ADDITIONAL_PATHS` | List | Pfade vom Package-Hook |
-| `BACKUP` | String | Backup-Pfad (optional) |
-| `OUT_PATH` | Var | Ausgabe: Aufgelöster Pfad |
-| `OUT_IS_BACKUP` | Var | Ausgabe: TRUE wenn Backup verwendet |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `EXT_NAME` | String | Name of the external (for debug) |
+| `PACKAGE` | String | Package name (e.g. "Qt6", "Boost") |
+| `HINTS` | List | Hint paths from Solution.json |
+| `ADDITIONAL_PATHS` | List | Paths from the package hook |
+| `BACKUP` | String | Backup path (optional) |
+| `OUT_PATH` | Var | Output: resolved path |
+| `OUT_IS_BACKUP` | Var | Output: TRUE if the backup was used |
 
-**Rückgabe:**
-- `OUT_PATH` — Aufgelöster Pfad oder leer
-- `OUT_IS_BACKUP` — TRUE wenn Backup-Pfad verwendet wurde
+**Returns:**
+- `OUT_PATH` — Resolved path or empty
+- `OUT_IS_BACKUP` — TRUE if the backup path was used
 
 ---
 
-## 4. Suchpriorität
+## 4. Search Priority
 
-Die Suche erfolgt in fester Reihenfolge — der erste existierende Pfad gewinnt:
+The search runs in a fixed order — the first existing path wins:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Suchpriorität                             │
+│                    Search priority                           │
 ├─────────────────────────────────────────────────────────────┤
-│  1. ENV-Variablen                                           │
-│     ├── ${PACKAGE}_ROOT    (z.B. Qt6_ROOT)                  │
-│     ├── ${PACKAGE}_DIR     (z.B. Qt6_DIR)                   │
-│     ├── ${PACKAGE}_HOME    (z.B. Qt6_HOME)                  │
-│     └── ${BASE}_ROOT       (z.B. QT_ROOT für Qt6)           │
+│  1. ENV variables                                           │
+│     ├── ${PACKAGE}_ROOT    (e.g. Qt6_ROOT)                  │
+│     ├── ${PACKAGE}_DIR     (e.g. Qt6_DIR)                   │
+│     ├── ${PACKAGE}_HOME    (e.g. Qt6_HOME)                  │
+│     └── ${BASE}_ROOT       (e.g. QT_ROOT for Qt6)           │
 │                                                             │
-│  2. hints[] aus Solution.json                               │
-│     └── Mit ${VAR} Expansion                                │
+│  2. hints[] from Solution.json                              │
+│     └── With ${VAR} expansion                               │
 │                                                             │
-│  3. Standard-Pfade vom Package-Hook                         │
+│  3. Standard paths from the package hook                    │
 │     └── _get_{Package}_standard_paths()                     │
 │                                                             │
-│  4. backup aus Solution.json                                │
-│     └── Löst W501 Warning aus                               │
+│  4. backup from Solution.json                               │
+│     └── Triggers W501 warning                               │
 │                                                             │
-│  5. Leer (find_package() Defaults)                          │
+│  5. Empty (find_package() defaults)                         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 5. Umgebungsvariablen
+## 5. Environment Variables
 
-### Unterstützte Muster
+### Supported Patterns
 
-Für ein Paket `Qt6` werden folgende ENV-Variablen geprüft:
+For a package `Qt6` the following ENV variables are checked:
 
 | Variable | Example |
-|----------|----------|
+|----------|---------|
 | `Qt6_ROOT` | `C:/Qt/6.8.0/msvc2022_64` |
 | `Qt6_DIR` | `C:/Qt/6.8.0/msvc2022_64` |
 | `Qt6_HOME` | `C:/Qt/6.8.0/msvc2022_64` |
-| `QT_ROOT` | (ohne Versionsnummer) |
-| `QT_DIR` | (ohne Versionsnummer) |
-| `QT_HOME` | (ohne Versionsnummer) |
+| `QT_ROOT` | (without version number) |
+| `QT_DIR` | (without version number) |
+| `QT_HOME` | (without version number) |
 
 ### Example: Qt6
 
 ```bash
-# Eines davon setzen:
+# Set one of these:
 export QT_ROOT="C:/Qt/6.8.0/msvc2022_64"
 export Qt6_ROOT="C:/Qt/6.8.0/msvc2022_64"
 ```
@@ -163,19 +163,19 @@ export Boost_ROOT="C:/local/boost_1_84_0"
 
 ---
 
-## 6. Usagesbeispiele
+## 6. Usage Examples
 
-### In Handler.cmake (automatisch)
+### In Handler.cmake (automatic)
 
 ```cmake
 _resolve_system_path(
     "${EXT_NAME}"           # "qt6"
     "${_package}"           # "Qt6"
-    "${_hints}"             # aus Solution.json
-    "${_additional_paths}"  # vom Package-Hook
-    "${_backup}"            # Fallback
-    _resolved_path          # Ausgabe
-    _used_backup            # Ausgabe
+    "${_hints}"             # from Solution.json
+    "${_additional_paths}"  # from the package hook
+    "${_backup}"            # fallback
+    _resolved_path          # output
+    _used_backup            # output
 )
 
 if(_used_backup)
@@ -183,7 +183,7 @@ if(_used_backup)
 endif()
 ```
 
-### hints[] mit Variablen-Expansion
+### hints[] with Variable Expansion
 
 ```json
 {
@@ -198,9 +198,9 @@ endif()
 }
 ```
 
-Die `${VAR}` Syntax wird zu `$ENV{VAR}` expandiert.
+The `${VAR}` syntax is expanded to `$ENV{VAR}`.
 
-### backup für Entwickler-Maschinen
+### backup for Developer Machines
 
 ```json
 {
@@ -213,16 +213,16 @@ Die `${VAR}` Syntax wird zu `$ENV{VAR}` expandiert.
 }
 ```
 
-**Important:** `backup` löst immer W501 aus — für CI/CD sollte die ENV-Variable gesetzt werden.
+**Important:** `backup` always triggers W501 — for CI/CD the ENV variable should be set.
 
 ---
 
-## 7. Debug-Ausgaben
+## 7. Debug Output
 
-### Debug-ID: `EXTERNALS`
+### Debug ID: `EXTERNALS`
 
-| Level | Ausgabe |
-|-------|---------|
+| Level | Output |
+|-------|--------|
 | `DBG_RARE` | Found via ENV {VAR}: {path} |
 | `DBG_RARE` | Found via hint: {path} |
 | `DBG_RARE` | Found at standard path: {path} |
@@ -231,7 +231,7 @@ Die `${VAR}` Syntax wird zu `$ENV{VAR}` expandiert.
 | `DBG_ULTRA_RARE` | ENV {VAR} set but doesn't exist |
 | `DBG_ULTRA_RARE` | Hint references undefined ENV |
 
-### Aktivierung
+### Activation
 
 ```bash
 cmake -DDEBUG_CATEGORIES="EXTERNALS" -DDEBUG_LEVEL=3 ..
@@ -241,15 +241,16 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" -DDEBUG_LEVEL=3 ..
 
 ## 8. See Also
 
-- [Handler_cmake.md](Handler_cmake.md) — Verwendet PathResolver
-- [packages/Qt6_cmake.md](packages/Qt6_cmake.md) — Qt6 Standard-Pfade
-- [packages/Boost_cmake.md](packages/Boost_cmake.md) — Boost Standard-Pfade
-- [Solution_Schema.md](../../../references/Solution_Schema.md) — hints/backup Syntax
+- [Handler_cmake.md](Handler_cmake.md) — Uses PathResolver
+- [packages/Qt6_cmake.md](packages/Qt6_cmake.md) — Qt6 standard paths
+- [packages/Boost_cmake.md](packages/Boost_cmake.md) — Boost standard paths
+- [Solution_Schema.md](../../../references/Solution_Schema.md) — hints/backup syntax
 
 ---
 
 ## 9. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Initial: Mehrstufige Pfadauflösung, ENV-Expansion, ${VAR} Syntax in hints** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.6.0 | 2025-12-18 | Initial: multi-stage path resolution, ENV expansion, ${VAR} syntax in hints |

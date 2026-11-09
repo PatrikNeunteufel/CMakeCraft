@@ -1,147 +1,147 @@
-# Doc — Standard für alle Dokumentationen
+# Doc — Standard for All Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Blueprint v0.5  
-> **Target Audience:** Documentation Authors  
+> **Target Audience:** Documentation authors  
 > **Language:** English  
-> **German:** [Doc.md](Doc.md)
+> **German:** [Doc.md](../../../de/autorenwerk/blueprints/Doc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Dokumentations-Typen](#3-dokumentations-typen)
-4. [Header-Struktur](#4-header-struktur)
-5. [Table of Contents](#5-inhaltsverzeichnis)
-6. [Kapitel-Nummerierung](#6-kapitel-nummerierung)
-7. [Anker-Konventionen](#7-anker-konventionen)
-8. [Dateinamen-Konventionen](#8-dateinamen-konventionen)
-9. [Sprache und Übersetzung](#9-sprache-und-übersetzung)
-10. [Formatierungs-Regeln](#10-formatierungs-regeln)
-11. [Changelog-Format](#11-changelog-format)
-12. [Review Checklist](#12-review-checkliste)
-13. [See Also](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Documentation Types](#3-documentation-types)
+4. [Header Structure](#4-header-structure)
+5. [Table of Contents](#5-table-of-contents)
+6. [Chapter Numbering](#6-chapter-numbering)
+7. [Anchor Conventions](#7-anchor-conventions)
+8. [File Name Conventions](#8-file-name-conventions)
+9. [Language and Translation](#9-language-and-translation)
+10. [Formatting Rules](#10-formatting-rules)
+11. [Changelog Format](#11-changelog-format)
+12. [Review Checklist](#12-review-checklist)
+13. [See Also](#13-see-also)
+14. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines **verbindliche Regeln für alle Dokumentationen** im CMake Architecture Projekt. Er dient als Basis für spezialisierte Blueprints (ModuleDoc, Guide, Reference, etc.).
+This blueprint defines **binding rules for all documentation** in the CMake Architecture project. It serves as the basis for specialized blueprints (ModuleDoc, Guide, Reference, etc.).
 
-### Zielgruppe
+### Target Audience
 
-- Alle Personen, die Dokumentation erstellen oder pflegen
-- Spezialisierte Blueprints, die von diesem erben
+- Everyone who creates or maintains documentation
+- Specialized blueprints that inherit from this one
 
-### Was dieser Blueprint regelt
+### What This Blueprint Governs
 
-| Bereich | Regeln |
+| Area | Rules |
 |---------|--------|
-| Header | Requiredfelder, Format, Reihenfolge |
-| TOC | Nummerierung, Anker, Platzierung |
-| Sprache | German/Englisch, Ordnerstruktur |
-| Format | Überschriften, Tabellen, Code-Blöcke |
+| Header | Required fields, format, order |
+| TOC | Numbering, anchors, placement |
+| Language | German/English, folder structure |
+| Format | Headings, tables, code blocks |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für **alle** Markdown-Dokumentationen:
+This blueprint applies to **all** Markdown documentation:
 
-| Typ | Examples | Spezialisierter Blueprint |
+| Type | Examples | Specialized blueprint |
 |-----|-----------|---------------------------|
-| CMake-Module | Context.cmake Doku | ModuleDoc.md |
-| Benutzerhandbücher | Qt6 Integration | Guide.md |
-| Referenceen | Solution_Schema | Reference.md |
-| Concepte | AppContainer | Concept.md |
+| CMake modules | Context.cmake docs | ModuleDoc.md |
+| User guides | Qt6 integration | Guide.md |
+| References | Solution_Schema | Reference.md |
+| Concepts | AppContainer | Concept.md |
 | Standards | Cpp_Coding_Standard | Standard.md |
 | Tutorials | CreateFirstApp | Tutorial.md |
 
 ---
 
-## 3. Dokumentations-Typen
+## 3. Documentation Types
 
 ### 3.1 Overview
 
-| Typ | Zielgruppe | Fokus |
+| Type | Target audience | Focus |
 |-----|------------|-------|
-| **ModuleDoc** | Build System Developers | Wie funktioniert das Modul? |
-| **Guide** | C++ Developers (End Users) | Wie nutze ich das System? |
-| **Reference** | Alle Entwickler | Nachschlagewerk, API |
-| **Concept** | Build System Developers | Architecture, Design |
-| **Standard** | Alle Entwickler | Coding-Konventionen |
-| **Tutorial** | Einsteiger | Schritt-für-Schritt Anleitung |
+| **ModuleDoc** | Build system developers | How does the module work? |
+| **Guide** | C++ developers (end users) | How do I use the system? |
+| **Reference** | All developers | Lookup, API |
+| **Concept** | Build system developers | Architecture, design |
+| **Standard** | All developers | Coding conventions |
+| **Tutorial** | Beginners | Step-by-step instructions |
 
-### 3.2 Wann welcher Typ?
+### 3.2 Which Type When?
 
 ```
-"Wie konfiguriere ich Qt6?"          → Guide
-"Was bedeutet Error E0501?"          → Reference
-"Wie funktioniert Context.cmake?"    → ModuleDoc
-"Warum nutzen wir GLOBAL PROPERTY?"  → Concept
-"Wie benenne ich Variablen?"         → Standard
-"Erstelle dein erstes Executable"    → Tutorial
+"How do I configure Qt6?"            → Guide
+"What does error E0501 mean?"        → Reference
+"How does Context.cmake work?"       → ModuleDoc
+"Why do we use GLOBAL PROPERTY?"     → Concept
+"How do I name variables?"           → Standard
+"Create your first executable"       → Tutorial
 ```
 
 ---
 
-## 4. Header-Struktur
+## 4. Header Structure
 
-### 4.1 Basis-Header (alle Dokumentationen)
+### 4.1 Base Header (All Documentation)
 
-Jede Dokumentation **MUSS** mit diesem Header beginnen:
+Every document **MUST** start with this header:
 
 ```markdown
-# [Titel]
+# [Title]
 
 > **Version:** X.Y.Z  
 > **Date:** YYYY-MM-DD  
 > **Type:** [ModuleDoc | Guide | Reference | Concept | Standard | Tutorial]  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** [Wer soll dieses Dokument lesen?]  
+> **Target Audience:** [Who should read this document?]  
 > **Language:** English  
-> **German:** [Dateiname.md](../../en/[ordner]/Dateiname.md)
+> **German:** [FileName.md](../../../de/[area]/[folder]/FileName.md)
 ```
 
-### 4.2 Header-Felder
+### 4.2 Header Fields
 
-| Feld | Required | Format | Example |
+| Field | Required | Format | Example |
 |------|---------|--------|----------|
 | **Version** | ✓ | SemVer | `1.2.3` |
-| **Datum** | ✓ | ISO 8601 | `2025-12-13` |
-| **Typ** | ✓ | Vordefiniert | `Guide` |
-| **Status** | ✓ | Vordefiniert | `Stable` |
-| **Zielgruppe** | ✓ | Kurzbeschreibung | `C++ Developers` |
-| **Sprache** | ✓ | Vordefiniert | `German` |
-| **English** | ✓ | Relativer Pfad | `[...](.../.../en/...)` |
-| **Basiert auf** | Optional | Name + Version | `Doc v0.5` |
+| **Date** | ✓ | ISO 8601 | `2025-12-13` |
+| **Type** | ✓ | Predefined | `Guide` |
+| **Status** | ✓ | Predefined | `Stable` |
+| **Target Audience** | ✓ | Short description | `C++ developers` |
+| **Language** | ✓ | Predefined | `English` |
+| **German** (in German documents: **English**) | ✓ | Relative path | `../../../de/<area>/<folder>/<FileName>.md` (depth see § 4.5) |
+| **Based on** | Optional | Name + version | `Doc v0.5` |
 
-### 4.3 Zielgruppe — Werte und Erläuterung
+### 4.3 Target Audience — Values and Explanation
 
-Die Zielgruppe im Header ist eine **Kurzform**. Im ersten Abschnitt (Overview) kann sie detaillierter beschrieben werden.
+The target audience in the header is a **short form**. It can be described in more detail in the first section (Overview).
 
-**Typische Zielgruppen:**
+**Typical target audiences:**
 
-| Kurzform | Description |
+| Short form | Description |
 |----------|--------------|
-| `Build System Developers` | Entwickelt/erweitert das CMake-System selbst |
-| `C++ Developers` | Nutzt das Build-System für eigene Projekte |
-| `Alle Entwickler` | Sowohl Build-System- als auch C++-Entwickler |
-| `Documentation Authors` | Schreibt/pflegt Dokumentation |
-| `Neue Team-Mitglieder` | Onboarding, Einstieg ins Projekt |
-| `Architekten` | Technische Entscheidungsträger |
+| `Build system developers` | Develops/extends the CMake system itself |
+| `C++ developers` | Uses the build system for their own projects |
+| `All developers` | Both build system and C++ developers |
+| `Documentation authors` | Writes/maintains documentation |
+| `New team members` | Onboarding, getting started with the project |
+| `Architects` | Technical decision makers |
 
-### 4.3 Erweiterte Header-Felder
+### 4.4 Extended Header Fields
 
-Spezialisierte Blueprints definieren zusätzliche Felder:
+Specialized blueprints define additional fields:
 
-| Blueprint | Zusätzliche Felder |
+| Blueprint | Additional fields |
 |-----------|-------------------|
 | ModuleDoc | `Module:`, `Module Version:` |
 | Guide | `Module:` (optional) |
@@ -149,33 +149,36 @@ Spezialisierte Blueprints definieren zusätzliche Felder:
 | Concept | — |
 | Standard | `Scope:` |
 
-### 4.4 English-Link Format
+### 4.5 English Link Format
 
-Der Link zur englischen Version folgt dem Muster:
+In German documents, the link to the English version follows the pattern:
 
 ```markdown
-> **German:** [Dateiname.md](../../en/[ordner]/Dateiname.md)
+> **English:** [FileName.md](../../../en/[area]/[folder]/FileName.md)
 ```
 
-| Ordner im deutschen | Ordner im englischen |
-|---------------------|---------------------|
-| `de/modules/core/` | `en/modules/core/` |
-| `de/guides/` | `en/guides/` |
-| `de/blueprints/` | `en/blueprints/` |
+The path leads back via `docs/`: one `../` per folder level below `de/`, plus one for `de/` itself.
 
-**Important:** Dateinamen sind **immer auf Englisch** (auch im deutschen Ordner).
+| Folder in German | Folder in English | Jump path |
+|---------------------|---------------------|-----------|
+| `de/konzepte/` | `en/konzepte/` | `../../en/` |
+| `de/guide/userguides/` | `en/guide/userguides/` | `../../../en/` |
+| `de/autorenwerk/blueprints/` | `en/autorenwerk/blueprints/` | `../../../en/` |
+| `de/guide/module/core/` | `en/guide/module/core/` | `../../../../en/` |
+
+**Important:** A file has the **same name** in both language folders; the name may be German (see [Language_Standard.md](../standards/Language_Standard.md) §4.3).
 
 ---
 
 ## 5. Table of Contents
 
-### 5.1 Required
+### 5.1 Requirement
 
-**Jede Dokumentation MUSS ein Table of Contents haben.**
+**Every document MUST have a table of contents.**
 
-### 5.2 Platzierung
+### 5.2 Placement
 
-Das Table of Contents steht **direkt nach dem Header**, getrennt durch horizontalen Trenner:
+The table of contents comes **directly after the header**, separated by a horizontal rule:
 
 ```markdown
 > **German:** [...]
@@ -184,7 +187,7 @@ Das Table of Contents steht **direkt nach dem Header**, getrennt durch horizonta
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Installation](#2-installation)
 ...
 
@@ -195,31 +198,31 @@ Das Table of Contents steht **direkt nach dem Header**, getrennt durch horizonta
 
 ### 5.3 Format
 
-- Nummerierte Liste (1., 2., 3., ...)
-- Jeder Eintrag ist ein Link zum Anker
-- Überschrift ist immer `## Table of Contents` (nicht nummeriert)
+- Numbered list (1., 2., 3., ...)
+- Each entry is a link to the anchor
+- The heading is always `## Table of Contents` (not numbered)
 
 ### 5.4 Example
 
 ```markdown
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Installation](#2-installation)
    - [Windows](#21-windows)
    - [Linux](#22-linux)
-3. [Configuration](#3-konfiguration)
+3. [Configuration](#3-configuration)
 4. [Troubleshooting](#4-troubleshooting)
-5. [Changelog](#5-changelog)
+5. [Changelog](#changelog)
 ```
 
 ---
 
-## 6. Kapitel-Nummerierung
+## 6. Chapter Numbering
 
-### 6.1 Schema
+### 6.1 Scheme
 
-Alle H2-Überschriften (`##`) werden nummeriert:
+All H2 headings (`##`) are numbered:
 
 ```markdown
 ## 1. Overview
@@ -227,9 +230,9 @@ Alle H2-Überschriften (`##`) werden nummeriert:
 ## 3. Configuration
 ```
 
-### 6.2 Unterabschnitte
+### 6.2 Subsections
 
-H3-Überschriften (`###`) erhalten verschachtelte Nummerierung:
+H3 headings (`###`) get nested numbering:
 
 ```markdown
 ## 2. Installation
@@ -241,274 +244,267 @@ H3-Überschriften (`###`) erhalten verschachtelte Nummerierung:
 #### 2.2.1 Ubuntu
 ```
 
-### 6.3 Ausnahmen
+### 6.3 Exceptions
 
-**Nicht nummeriert** werden:
+**Not numbered** are:
 - `## Table of Contents`
 - `## Changelog`
 - `## See Also`
 
 ---
 
-## 7. Anker-Konventionen
+## 7. Anchor Conventions
 
-### 7.1 Automatische Anker
+### 7.1 Automatic Anchors
 
-GitHub/GitLab generieren Anker automatisch:
+GitHub/GitLab generate anchors automatically:
 
-| Überschrift | Generierter Anker |
+| Heading | Generated anchor |
 |-------------|-------------------|
-| `## 1. Overview` | `#1-übersicht` |
+| `## 1. Overview` | `#1-overview` |
 | `### 2.1 Windows` | `#21-windows` |
 | `## Troubleshooting` | `#troubleshooting` |
 
-### 7.2 Regeln
+### 7.2 Rules
 
-1. **Lowercase:** Alles kleingeschrieben
-2. **Bindestriche:** Leerzeichen werden zu `-`
-3. **Umlaute:** Bleiben erhalten (ü, ä, ö)
-4. **Sonderzeichen:** Punkte, Doppelpunkte werden entfernt
-5. **Zahlen:** Bleiben erhalten
+1. **Lowercase:** Everything in lowercase
+2. **Hyphens:** Spaces become `-`
+3. **Umlauts:** Are preserved (ü, ä, ö)
+4. **Special characters:** Periods and colons are removed
+5. **Numbers:** Are preserved
 
 ### 7.3 Examples
 
-| Überschrift | Anker |
+| Heading | Anchor |
 |-------------|-------|
-| `## 1. Overview` | `#1-übersicht` |
+| `## 1. Overview` | `#1-overview` |
 | `### 2.1 Windows-Installation` | `#21-windows-installation` |
-| `## Was ist Solution.json?` | `#was-ist-solutionjson` |
-| `## API-Reference` | `#api-referenz` |
+| `## What is Solution.json?` | `#what-is-solutionjson` |
+| `## API-Reference` | `#api-reference` |
 
-### 7.4 Testen
+### 7.4 Testing
 
-Anker vor Commit testen:
-1. Markdown lokal rendern (VS Code Preview)
-2. Auf Links im Table of Contents klicken
-3. Alle Links müssen funktionieren
+Test anchors before committing:
+1. Render the Markdown locally (VS Code Preview)
+2. Click the links in the table of contents
+3. All links must work
 
 ---
 
-## 8. Dateinamen-Konventionen
+## 8. File Name Conventions
 
-### 8.1 Grundprinzip: Version im Header, nicht im Dateinamen
+### 8.1 Basic Principle: Version in the Header, Not in the File Name
 
-> **Important:** Aktuelle Dokumente haben **keine Version im Dateinamen**.  
-> Die Version steht nur im Header. Dadurch müssen Links bei Version-Updates nicht angepasst werden.
+> **Important:** Current documents have **no version in the file name**.  
+> The version is only in the header. This way, links do not have to be adjusted on version updates.
 
-| Datei-Art | Dateiname | Version |
+| File kind | File name | Version |
 |-----------|-----------|---------|
-| **Aktuell** | `Doc.md` | Im Header: `> **Version:** 1.0.0` |
-| **Archiviert** | `Doc_v0_4_0.md` | Im Dateinamen + Header |
+| **Current** | `Doc.md` | In the header: `> **Version:** 1.0.0` |
+| **Earlier version** | — (no copy) | In the Git history |
 
-### 8.2 Allgemeine Regeln
+### 8.2 General Rules
 
-| Regel | Richtig | Falsch |
+| Rule | Correct | Wrong |
 |-------|---------|--------|
-| Englisch | `Getting_Started.md` | `Erste_Schritte.md` |
-| Keine Version (aktuell) | `Doc.md` | `Doc_v0_5_0.md` |
-| Underscores als Trenner | `Error_Codes.md` | `ErrorCodes.md` |
-| Keine Leerzeichen | `Error_Codes.md` | `Error Codes.md` |
-| **Großbuchstabe am Anfang** | `Context.md` | `context.md` |
-| **CamelCase bei Komposita** | `Solution_Schema.md` | `solution_schema.md` |
-| **Wörter mit Underscore trennen** | `Getting_Started.md` | `GettingStarted.md` |
+| Same name in all language folders | `de/…/Getting_Started.md` and `en/…/Getting_Started.md` | `de/…/Erste_Schritte.md` next to `en/…/Getting_Started.md` |
+| No version (current) | `Doc.md` | `Doc_v0_5_0.md` |
+| A compound term is written together, several terms are separated by an underscore | `ErrorCodes.md`, `Getting_Started.md` | `Error Codes.md` |
+| No spaces | `ErrorCodes.md` | `Error Codes.md` |
+| **Capital letter at the start** | `Context.md` | `context.md` |
+| **CamelCase for compounds** | `Solution_Schema.md` | `solution_schema.md` |
+| **Separate words with underscore** | `Getting_Started.md` | `GettingStarted.md` |
 
-**Summary Dateinamen:**
+**File name summary:**
 
-- Erster Buchstabe **großgeschrieben**
-- Wörter mit **Underscore** (`_`) getrennt
-- Jedes Wort beginnt mit **Großbuchstaben** (Title_Case)
-- Endung `.md` kleingeschrieben
+- First letter **capitalized**
+- Words separated by **underscore** (`_`)
+- Each word starts with a **capital letter** (Title_Case)
+- Extension `.md` in lowercase
 
 **Examples:**
 
-| Typ | Example |
+| Type | Example |
 |-----|----------|
 | Blueprint | `Doc.md`, `CMake.md` |
-| ModuleDoc | `Context_cmake.md`, `Errors_cmake.md` |
-| Guide | `Qt6_Integration_UserGuide.md` |
+| ModuleDoc | `Context.md`, `Errors.md` |
+| Guide | `Qt6_Integration.md`, `Getting_Started.md` |
 | Reference | `Solution_Schema.md`, `ErrorCodes.md` |
 | Concept | `AppContainer_Concept.md` |
 
-### 8.3 Aktuelle Dateien (ohne Version)
+### 8.3 Current Files (Without Version)
 
-| Typ | Muster | Example |
+| Type | Pattern | Example |
 |-----|--------|----------|
 | Blueprint | `[Name].md` | `Doc.md`, `CMake.md` |
-| ModuleDoc | `[Modul].md` | `Context.md`, `Errors.md` |
-| Guide | `[Name]_UserGuide.md` | `Qt6_Integration_UserGuide.md` |
+| ModuleDoc | `[Module].md` | `Context.md`, `Errors.md` |
+| Guide | `[Name].md` | `Qt6_Integration.md`, `Testing.md` |
 | Reference | `[Name].md` | `Solution_Schema.md`, `ErrorCodes.md` |
 | Concept | `[Name]_Concept.md` | `AppContainer_Concept.md` |
 | Standard | `[Name]_Standard.md` | `Cpp_Coding_Standard.md` |
 
-### 8.4 Archivierte Dateien (mit Version)
+### 8.4 Earlier Versions (No Copies)
 
-Bei Major- oder Minor-Updates wird die alte Version archiviert:
+There are **no version copies** of a file — **Git is the history** (see [Doku_Standard.md § 5](../standards/Doku_Standard.md#5-filing-rules-short-form)). An earlier version is retrieved from Git:
 
-| Typ | Muster | Example |
-|-----|--------|----------|
-| Blueprint | `[Name]_v[X]_[Y]_[Z].md` | `Doc_v0_4_0.md` |
-| ModuleDoc | `[Modul]_v[X]_[Y]_[Z].md` | `Context_v0_1_0.md` |
-| Guide | `[Name]_UserGuide_v[X]_[Y]_[Z].md` | `Qt6_Integration_UserGuide_v0_1_0.md` |
+```bash
+git log --oneline -- docs/de/autorenwerk/blueprints/Doc.md   # find versions
+git show <commit>:docs/de/autorenwerk/blueprints/Doc.md        # show a version
+```
 
-### 8.5 Versionierung im Dateinamen (nur Archiv)
+### 8.5 No Version in the File Name
 
-| Regel | Richtig | Falsch |
+| Rule | Correct | Wrong |
 |-------|---------|--------|
-| Lowercase `v` | `_v0_5_0` | `_V0_5_0` |
-| Underscores | `_v0_5_0` | `_v0.5.0` |
-| Am Ende vor `.md` | `Doc_v0_5_0.md` | `v0_5_0_Doc.md` |
+| No version number | `Doc.md` | `Doc_v0_5_0.md` |
+| No version number | `Context.md` | `Context_doc_v1.md` |
+| No copy with a short tag | `Doc.md` | `Doc050.md` |
 
-### 8.6 Archivierungs-Workflow
+### 8.6 Workflow on Updates
 
-1. **Vor Major/Minor-Update:**
-   - Aktuelle Datei kopieren: `Doc.md` → `Doc_v0_4_0.md`
-   - In Archiv-Ordner verschieben (optional)
+1. Change the file in place, adjust **version + date** in the header, add a changelog entry.
+2. Links remain unchanged, because the file name does not change.
+3. The en version adopts the same version (see [Doku_Standard.md](../standards/Doku_Standard.md)).
 
-2. **Nach Update:**
-   - `Doc.md` enthält neue Version
-   - Links bleiben unverändert
+### 8.7 Advantages
 
-3. **Wann archivieren?**
-   - Bei Breaking Changes (MAJOR)
-   - Bei signifikanten Changes (MINOR)
-   - PATCH-Updates: Keine Archivierung nötig
-
-### 8.7 Vorteile
-
-| Vorteil | Description |
+| Advantage | Description |
 |---------|--------------|
-| **Stablee Links** | URLs ändern sich nicht bei Updates |
-| **Einfachere Wartung** | Keine Link-Updates in anderen Dokumenten |
-| **Klare Aktualität** | Datei ohne Version = aktuelle Version |
-| **Historische Versionen** | Bei Bedarf im Archiv verfügbar |
+| **Stable links** | URLs do not change on updates |
+| **Easier maintenance** | No link updates in other documents |
+| **Clear currency** | There is only one file — the current one |
+| **Historical versions** | Available in the Git history when needed |
 
-### 8.8 Ordnernamen-Konvention
+### 8.8 Folder Name Convention
 
-Ordnernamen werden **immer kleingeschrieben**.
+Folder names are **always lowercase**.
 
-| Regel | Richtig | Falsch |
+| Rule | Correct | Wrong |
 |-------|---------|--------|
-| Kleingeschrieben | `modules/` | `Modules/` |
-| Kleingeschrieben | `blueprints/` | `Blueprints/` |
-| Kleingeschrieben | `hooks/prefetch/` | `Hooks/PreFetch/` |
-| snake_case bei Bedarf | `user_guides/` | `UserGuides/` |
+| Lowercase | `module/` | `Module/` |
+| Lowercase | `blueprints/` | `Blueprints/` |
+| Lowercase | `hooks/prefetch/` | `Hooks/PreFetch/` |
+| snake_case if needed | `user_guides/` | `UserGuides/` |
 
-**Begründung:**
+**Rationale:**
 
-| Grund | Description |
+| Reason | Description |
 |-------|--------------|
-| **Cross-Platform** | Linux ist case-sensitive, Windows nicht — Kleinschreibung vermeidet Probleme |
-| **Konsistenz** | Einheitlich einfacher zu merken |
-| **URLs** | Web-URLs sind typisch kleingeschrieben |
-| **Git** | Keine Case-Konflikte bei Renames |
+| **Cross-platform** | Linux is case-sensitive, Windows is not — lowercase avoids problems |
+| **Consistency** | Uniform is easier to remember |
+| **URLs** | Web URLs are typically lowercase |
+| **Git** | No case conflicts on renames |
 
 **Examples:**
 
 ```markdown
 docs/
 ├── de/
-│   ├── blueprints/        ✓ (nicht: Blueprints/)
-│   ├── modules/
-│   │   ├── core/          ✓ (nicht: Core/)
-│   │   └── externals/
-│   └── reference/
+│   ├── autorenwerk/
+│   │   └── blueprints/    ✓ (not: Blueprints/)
+│   └── guide/
+│       ├── module/
+│       │   ├── core/      ✓ (not: Core/)
+│       │   └── externals/
+│       └── references/
 cmake/
 └── externals/
-├── includes/          ✓ (nicht: Includes/)
-└── hooks/
-├── prefetch/      ✓ (nicht: PreFetch/)
-└── postfetch/     ✓ (nicht: PostFetch/)
+    ├── includes/          ✓ (not: Includes/)
+    └── hooks/
+        ├── prefetch/      ✓ (not: PreFetch/)
+        └── postfetch/     ✓ (not: PostFetch/)
 ```
 
-### 8.9 Ausnahme: Projekt-Ordner
+### 8.9 Exception: Project Folders
 
-**Projekt-Ordner** folgen dem **Target-Namen**, nicht der Kleinschreibung:
+**Project folders** follow the **target name**, not lowercase:
 
-| Regel | Example | Begründung |
+| Rule | Example | Rationale |
 |-------|----------|------------|
-| Ordnername = Target-Name | `projects/apps/DemoPlayer/` | Konsistenz zwischen Ordner und CMake-Target |
-| Ordnername = Target-Name | `projects/exec/MinimalConsole/` | IDE-Navigation, Zuordnung |
-| Ordnername = Target-Name | `projects/libs/BasicLogger/` | Klare 1:1-Beziehung |
+| Folder name = target name | `projects/apps/DemoPlayer/` | Consistency between folder and CMake target |
+| Folder name = target name | `projects/demos/exec/MinimalConsole/` | IDE navigation, mapping |
+| Folder name = target name | `projects/demos/libs/BasicLogger/` | Clear 1:1 relationship |
 
-**Betroffene Pfade:**
+**Affected paths:**
 ```
 projects/
 ├── apps/
 │   └── DemoPlayer/        ← Target: DemoPlayer, DemoPlayer.Core
-├── exec/
-│   └── MinimalConsole/    ← Target: MinimalConsole
-├── libs/
-│   └── BasicLogger/       ← Target: BasicLogger
+├── demos/
+│   ├── exec/
+│   │   └── MinimalConsole/    ← Target: MinimalConsole
+│   └── libs/
+│       └── BasicLogger/       ← Target: BasicLogger
 └── tests/
     └── unit/
-        └── CoreLib_Tests/ ← Target: CoreLib_Tests
+        └── BasicLogger_Tests/ ← Target: BasicLogger_Tests
 ```
 
-**Nicht betroffen** (weiterhin lowercase):
+**Not affected** (still lowercase):
 
-- `projects/` selbst
-- Typ-Unterordner: `apps/`, `exec/`, `libs/`, `tests/`
-- Alle System-Ordner: `cmake/`, `docs/`, `externals/`
+- `projects/` itself
+- Type subfolders: `apps/`, `demos/`, `exec/`, `libs/`, `tests/`
+- All system folders: `cmake/`, `docs/`, `externals/`
 
 ---
 
-## 9. Sprache und Übersetzung
+## 9. Language and Translation
 
-### 9.1 Ordnerstruktur
+### 9.1 Folder Structure
 
 ```
 docs/
-├── de/                    ← Germane Dokumentation
-│   ├── blueprints/
-│   ├── modules/
-│   └── guides/
+├── de/                    ← German documentation
+│   ├── guide/
+│   ├── konzepte/
+│   └── autorenwerk/
 │
-└── en/                    ← Englische Dokumentation
-    ├── blueprints/
-    ├── modules/
-    └── guides/
+└── en/                    ← English documentation
+    ├── guide/
+    ├── konzepte/
+    └── autorenwerk/
 ```
 
-### 9.2 Primärsprache
+### 9.2 Primary Language
 
-- **German** ist Primärsprache (Entwickler sind deutschsprachig)
-- Englische Versionen sind Übersetzungen
+- **German** is the primary language (the developers are German-speaking)
+- English versions are translations
 
-### 9.3 Dateinamen
+### 9.3 File Names
 
-Dateinamen sind **immer auf Englisch**, auch im deutschen Ordner:
+A file has the **same name** in both language folders. The name may be German (`Neues_Projekt_Guide.md`, `Glossar.md`); the English tree keeps it unchanged:
 
 ```
-de/guides/Qt6_Integration_UserGuide.md   ← Inhalt auf German
-en/guides/Qt6_Integration_UserGuide.md   ← Inhalt auf Englisch
+de/guide/userguides/Qt6_Integration.md   ← content in German
+en/guide/userguides/Qt6_Integration.md   ← content in English
 ```
 
-**Note:** Keine Version im Dateinamen (siehe Abschnitt 8).
+**Note:** No version in the file name (see section 8).
 
-### 9.4 Querverweise
+### 9.4 Cross-References
 
-- Innerhalb derselben Language: Relativer Pfad
-- Zur anderen Language: Via `../../en/` oder `../../de/`
+- Within the same language: relative path
+- To the other language: back up to `docs/`, then `en/` or `de/` — for `de/guide/userguides/` that is `../../../en/` (depth see § 4.5)
 
 ---
 
-## 10. Formatierungs-Regeln
+## 10. Formatting Rules
 
-### 10.1 Überschriften
+### 10.1 Headings
 
 ```markdown
-# Haupttitel (H1) — nur einmal pro Dokument
+# Main title (H1) — only once per document
 
-## Nummerierter Abschnitt (H2)
+## Numbered section (H2)
 
-### Unterabschnitt (H3)
+### Subsection (H3)
 
-#### Detail (H4) — sparsam verwenden
+#### Detail (H4) — use sparingly
 ```
 
-### 10.2 Horizontale Trenner
+### 10.2 Horizontal Rules
 
-**Vor jedem H2-Abschnitt** (`##`):
+**Before every H2 section** (`##`):
 
 ```markdown
 ---
@@ -516,19 +512,19 @@ en/guides/Qt6_Integration_UserGuide.md   ← Inhalt auf Englisch
 ## 2. Installation
 ```
 
-### 10.3 Tabellen
+### 10.3 Tables
 
-Mit Header-Zeile und Ausrichtung:
+With header row and alignment:
 
 ```markdown
-| Spalte 1 | Spalte 2 | Description |
+| Column 1 | Column 2 | Description |
 |----------|----------|--------------|
-| Wert 1   | Wert 2   | Text         |
+| Value 1  | Value 2  | Text         |
 ```
 
-### 10.4 Code-Blöcke
+### 10.4 Code Blocks
 
-Mit Sprach-Annotation:
+With language annotation:
 
 ````markdown
 ```cmake
@@ -541,35 +537,35 @@ endfunction()
 ```
 ````
 
-### 10.5 Hervorhebungen
+### 10.5 Emphasis
 
 | Element | Usage |
 |---------|------------|
-| **Fett** | Importante Begriffe |
-| `Code` | Variablen, Functions, Pfade |
-| *Kursiv* | Zitate, Fachbegriffe (selten) |
-| ~~Durchgestrichen~~ | Deprecated |
-| > Blockquote | Notee, Warningen |
+| **Bold** | Important terms |
+| `Code` | Variables, functions, paths |
+| *Italic* | Quotations, technical terms (rarely) |
+| ~~Strikethrough~~ | Deprecated |
+| > Blockquote | Notes, warnings |
 
-### 10.6 Notee
+### 10.6 Notes
 
 ```markdown
-> **Note:** Allgemeine Information
+> **Note:** General information
 
-> **Important:** Kritische Information  
+> **Important:** Critical information  
 
-> **Warning:** Potenzielle Probleme
+> **Warning:** Potential problems
 
-> **DEPRECATED seit vX.Y:** Mit Migrationshinweis
+> **DEPRECATED since vX.Y:** With migration note
 ```
 
 ---
 
-## 11. Changelog-Format
+## 11. Changelog Format
 
 ### 11.1 Position
 
-Der Changelog steht **immer am Ende** des Dokuments.
+The changelog is **always at the end** of the document.
 
 ### 11.2 Format
 
@@ -578,70 +574,75 @@ Der Changelog steht **immer am Ende** des Dokuments.
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **X.Y.Z** | **YYYY-MM-DD** | **Aktuelle Änderung (fett)** |
-| X.Y.Z-1 | YYYY-MM-DD | Vorherige Änderung |
+| **X.Y.Z** | **YYYY-MM-DD** | **Current change (bold)** |
+| X.Y.Z-1 | YYYY-MM-DD | Previous change |
 | 0.1.0 | YYYY-MM-DD | Initial |
 ```
 
-### 11.3 Regeln
+### 11.3 Rules
 
-- Neueste Version zuerst
-- Aktuelle Version **fett**
-- Kurze, prägnante Descriptionen
-- Breaking Changes mit ⚠️ kennzeichnen
+- Newest version first
+- Current version in **bold**
+- Short, concise descriptions
+- Mark breaking changes with ⚠️
+- Every change is a new entry with a higher number; `Version` and `Date` in the header are those of the newest
+  entry. If the change comes with a CMakeCraft version, the entry names it (`CMakeCraft v0.14.1: …`). The
+  CMakeCraft version is not in the header. Rules: [Doku_Standard.md](../standards/Doku_Standard.md) §2
 
 ---
 
 ## 12. Review Checklist
 
-Vor Fertigstellung einer Dokumentation prüfen:
+Check before finishing a document:
 
 **Header:**
-- [ ] Alle Requiredfelder vorhanden
-- [ ] Version und Datum aktuell
-- [ ] Typ korrekt
-- [ ] Zielgruppe angegeben
-- [ ] English-Link vorhanden und korrekt
+- [ ] All required fields present
+- [ ] Version and date current
+- [ ] Type correct
+- [ ] Target audience given
+- [ ] Language link present and correct
 
-**Table of Contents:**
-- [ ] Vorhanden und vollständig
-- [ ] Nummerierung korrekt
-- [ ] Alle Anker funktionieren
+**Table of contents:**
+- [ ] Present and complete
+- [ ] Numbering correct
+- [ ] All anchors work
 
-**Struktur:**
-- [ ] Kapitel nummeriert (außer TOC, Changelog, See Also)
-- [ ] Horizontale Trenner vor H2
-- [ ] Changelog am Ende
+**Structure:**
+- [ ] Chapters numbered (except TOC, Changelog, See Also)
+- [ ] Horizontal rules before H2
+- [ ] Changelog at the end
 
-**Inhalt:**
-- [ ] Zielgruppe in Overview detailliert (falls nötig)
-- [ ] Code-Examples getestet
-- [ ] Keine TODO/FIXME übrig
-- [ ] Konsistente Terminologie
-- [ ] Querverweise mit Versionen
+**Content:**
+- [ ] Target audience detailed in the overview (if needed)
+- [ ] Code examples tested
+- [ ] No TODO/FIXME left
+- [ ] Consistent terminology
+- [ ] Cross-references with versions
 
-**Datei:**
-- [ ] Dateiname folgt Konvention
-- [ ] Im richtigen Ordner
+**File:**
+- [ ] File name follows the convention
+- [ ] In the right folder
 
 ---
 
 ## 13. See Also
 
-- [Blueprint.md](Blueprint.md) — Meta-Blueprint
-- [ModuleDoc.md](ModuleDoc.md) — CMake-Modul-Dokumentation
-- [Guide.md](Guide.md) — Benutzerhandbücher
-- [Reference.md](Reference.md) — API/Schema-Referenceen
+- [Blueprint.md](Blueprint.md) — Meta-blueprint
+- [ModuleDoc.md](ModuleDoc.md) — CMake module documentation
+- [Guide.md](Guide.md) — User guides
+- [Reference.md](Reference.md) — API/schema references
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-17** | **Zusatzartikel zu Ordnernamen für Projekte unter § 8.9** |
-| 0.5.1 | 2025-12-15 | Explizite Dateinamen-Konvention (§ 8.2): Title_Case. Neue Ordnernamen-Konvention (§ 8.8): immer kleingeschrieben |
-| 0.5.0 | 2025-12-13 | Neu: Required-Table of Contents mit Ankern, Zielgruppe-Requiredfeld im Header, English-Link im Header, Kapitel-Nummerierung, Anker-Konventionen |
-| 0.1.0 | 2025-12-03 | Initial (als Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: jump path to the other language per today's depth (`../../../en/` for `de/<area>/<folder>/`, § 4.1, § 4.5, § 9.4); duplicate section 4.3 resolved (Extended Header Fields → 4.4, English Link Format → 4.5); no version copies anymore, Git is the history (§ 8.1, § 8.4–8.7); folder and file examples switched to `guide/`, `konzepte/`, `autorenwerk/` and `projects/demos/` (§ 8.2, § 8.3, § 8.8, § 8.9, § 9.1, § 9.3); same file names in both language folders, German names allowed (decision S1 a, § 4.5, § 8.2, § 9.3); rule for compound terms instead of "underscores as separators" (decision N1 a, § 8.2); § 11.3 version rules (decisions K1/K2 a)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.2 | 2025-12-17 | Additional article on folder names for projects under § 8.9 |
+| 0.5.1 | 2025-12-15 | Explicit file name convention (§ 8.2): Title_Case. New folder name convention (§ 8.8): always lowercase |
+| 0.5.0 | 2025-12-13 | New: mandatory table of contents with anchors, target audience required field in the header, English link in the header, chapter numbering, anchor conventions |
+| 0.1.0 | 2025-12-03 | Initial (as Documentation_Blueprint) |

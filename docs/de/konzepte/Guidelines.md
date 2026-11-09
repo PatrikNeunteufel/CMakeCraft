@@ -1,14 +1,14 @@
 # Guidelines — CMake Build-System
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Geltungsbereich:** Alle CMake-Module in `cmake/`  
 > **Durchsetzung:** Code Review, Build-System-Tests  
 > **Sprache:** Deutsch  
-> **English:** [guidelines.md](Guidelines.md)
+> **English:** [guidelines.md](../../en/konzepte/Guidelines.md)
 
 Dieses Dokument enthält Coding-Konventionen, Stil-Entscheidungen und Best Practices für die Implementierung des CMake Build-Systems.
 
@@ -118,18 +118,21 @@ include_guard(GLOBAL)
 
 | Bereich | Prefix | Beschreibung |
 |---------|--------|--------------|
-| JSON/Parsing | `E0xx` | E001, E002, E010, E012 |
-| Target-Erstellung | `E1xx` | E101, E102, E103, E104 |
-| Externals | `E2xx` | E201, E213-E218 |
-| Tests | `E3xx` | E301, E302 |
-| AppContainer | `E4xx` | E401-E407 |
-| System-Externals | `E5xx` | E501-E505 |
-| Deprecation | `W0xx` | W001, W002 |
-| Konfiguration | `W1xx` | W101-W110 |
+| JSON/Parsing | `E0xx` | E001-E005, E010, E012, E013 |
+| Target-Erstellung | `E1xx` | E101, E102, E104-E106 |
+| Externals | `E2xx` | E201-E203, E213-E216, E218-E220 |
+| Tests | `E3xx` | E301-E305 |
+| AppContainer | `E4xx` | E400-E407 |
+| System-Externals | `E5xx` | E502-E505 |
+| Deprecation | `W0xx` | — |
+| Konfiguration | `W1xx` | W101-W104, W109-W112 |
 | Tools/Setup | `W2xx` | W201 |
-| External-Caching | `W3xx` | W301, W302 |
+| Externals | `W3xx` | W302-W304 |
 | AppContainer | `W4xx` | W401-W403 |
-| System-Externals | `W5xx` | W501, W502 |
+| System-Externals | `W5xx` | W501 |
+| Selbsttest | `W6xx`-`W9xx` | W601, W602, W701, W801-W803, W901, W902, W999 — nur in `cmake/buildSystemTest/` |
+
+Die Tabelle nennt die Codes, die der Code mit `cmake_fatal`/`cmake_warn` auslöst (`cmake/`, `CMakeCraft.cmake`; Stand 2026-11-09). `cmake/core/Errors.cmake` beschreibt zusätzlich E103, E217, W001, W002, W105-W108 und W301, die nirgends ausgelöst werden, und kennzeichnet sie dort so (W001 steht nur in `validate_solution_schema()`, das niemand aufruft). E504 und E505 löst der System-Handler seit CMakeCraft v0.14.1 aus (`cmake/externals/system/Handler.cmake:91`, `:109`); E501 und W502 entfallen damit. Die abgeschlossenen Konzepte nennen außerdem E306, E501 und W502.
 
 ---
 
@@ -475,8 +478,8 @@ Vor Code Review prüfen:
 
 ## 14. Siehe auch
 
-- [master_concept.md](abgeschlossen/master_concept.md) — Architektur
-- [implementation_plan.md](../concepts/implementation_plan.md) — Phasen-Plan
+- [master_concept.md](abgeschlossen/Master_Concept.md) — Architektur
+- [implementation_plan.md](abgeschlossen/Implementation_Plan.md) — Phasen-Plan
 - [CMake_Standard.md](../autorenwerk/standards/CMake_Standard.md) — Allgemeiner CMake-Stil
 - [ErrorCodes](../guide/references/ErrorCodes.md) — Fehlercodes-Referenz
 
@@ -486,5 +489,7 @@ Vor Code Review prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 (Standard), Fehlercodes erweitert (E3xx-E5xx, W3xx-W5xx), Externals-Caching Variablen, App-Container-Pipeline, Checkliste hinzugefügt** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: §3.3 nennt die tatsächlich ausgelösten Fehlercodes (E0xx–E5xx, W0xx–W5xx, Selbsttest W6xx–W9xx); CMakeCraft v0.14.1: E5xx mit E502–E505, W001 als nicht ausgelöst (W0xx leer), E501/W502 entfallen** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 (Standard), Fehlercodes erweitert (E3xx-E5xx, W3xx-W5xx), Externals-Caching Variablen, App-Container-Pipeline, Checkliste hinzugefügt |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Inhalte aus v1.7 übernommen |

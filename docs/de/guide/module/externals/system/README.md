@@ -4,7 +4,8 @@
 > **Datum:** 2025-12-20  
 > **Typ:** README  
 > **Status:** Aktiv  
-> **Phase:** 9 (System Externals)
+> **Phase:** 9 (System Externals)  
+> **English:** [README.md](../../../../../en/guide/module/externals/system/README.md)
 
 ---
 
@@ -128,6 +129,8 @@ endfunction()
 |------|--------------|
 | E502 | `package` Feld fehlt |
 | E503 | `find_package()` fehlgeschlagen |
+| E504 | Paket gefunden, aber nicht alle Komponenten |
+| E505 | Keine Version passend zu `version` |
 | W501 | Backup-Pfad verwendet |
 
 ---

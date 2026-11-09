@@ -1,14 +1,14 @@
 # Fetched/Handler.cmake — Git External Pipeline
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Handler_cmake.md](../../en/modules/externals/Handler_cmake.md)  
-> **Modul:** [cmake/externals/Fetched/Handler.cmake](../../../cmake/externals/Fetched/Handler.cmake)  
+> **English:** [Handler_cmake.md](../../../../../en/guide/module/externals/fetched/Handler_cmake.md)  
+> **Modul:** [cmake/externals/Fetched/Handler.cmake](../../../../../../cmake/externals/fetched/Handler.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -174,4 +174,5 @@ Prüft ob ein External vollständig verarbeitet wurde.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

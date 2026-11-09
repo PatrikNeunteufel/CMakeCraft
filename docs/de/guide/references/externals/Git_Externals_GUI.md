@@ -1,12 +1,12 @@
 # Git Externals: GUI & Graphics — Referenz
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_GUI.md](Git_Externals_GUI.md)
+> **English:** [Git_Externals_GUI.md](../../../../en/guide/references/externals/Git_Externals_GUI.md)
 
 ---
 
@@ -160,7 +160,7 @@ set(SDL2_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 }
 ```
 
-**PostFetch Hook:** Siehe `cmake/externals/Hooks/PostFetch/imgui.cmake`
+**PostFetch Hook:** Siehe `cmake/externals/hooks/postfetch/imgui.cmake`
 
 Der Hook erstellt ein `imgui` Target mit:
 - Core ImGui files
@@ -367,4 +367,6 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Hook-Pfad kleingeschrieben (`cmake/externals/hooks/postfetch/`, `cmake/externals/hooks/HookLoader.cmake:40`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-14 | Initial: Ausgelagert aus Git_Externals_Reference |

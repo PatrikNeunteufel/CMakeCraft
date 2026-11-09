@@ -4,41 +4,41 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Local_Externals_Media.md](Local_Externals_Media.md)
+> **German:** [Local_Externals_Media.md](../../../../de/guide/references/externals/Local_Externals_Media.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [BASS Audio Library](#2-bass-audio-library)
-3. [See Also](#3-siehe-auch)
-4. [Changelog](#4-changelog)
+3. [See Also](#3-see-also)
+4. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes lokale Media-Externals für das CMake Architecture Build-System: Audio, Bild, Video.
+This document describes local media externals for the CMake Architecture build system: audio, image, video.
 
-| Library | Description | Lizenz |
-|---------|--------------|--------|
-| **BASS** | Professionelle Audio-Library mit Plugins | Kommerziell / Free for non-commercial |
+| Library | Description | License |
+|---------|-------------|---------|
+| **BASS** | Professional audio library with plugins | Commercial / Free for non-commercial |
 
 ---
 
 ## 2. BASS Audio Library
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | 📦 Vorkompiliert |
-| **Pfad** | `externals/bass` |
+| Aspect | Value |
+|--------|-------|
+| **Type** | 📦 Precompiled |
+| **Path** | `externals/bass` |
 | **Include.cmake** | `cmake/externals/includes/bass/Include.cmake` |
-| **Plattformen** | Windows, Linux, macOS |
+| **Platforms** | Windows, Linux, macOS |
 | **Website** | [un4seen.com](https://www.un4seen.com/bass.html) |
 
 ### Solution.json
@@ -53,7 +53,7 @@ This document describes lokale Media-Externals für das CMake Architecture Build
 }
 ```
 
-### Verzeichnisstruktur
+### Directory Structure
 
 ```
 externals/bass/
@@ -73,9 +73,9 @@ externals/bass/
         └── ...
 ```
 
-### Plugin-System
+### Plugin System
 
-BASS unterstützt Plugins via `external_options`:
+BASS supports plugins via `external_options`:
 
 ```json
 {
@@ -95,64 +95,64 @@ BASS unterstützt Plugins via `external_options`:
 }
 ```
 
-### Verfügbare Options
+### Available Options
 
-#### Decoder
+#### Decoders
 
 | Option | Plugin | Description |
-|--------|--------|--------------|
-| `BASS_FLAC` | bassflac | FLAC Audio Decoder |
-| `BASS_OPUS` | bassopus | Opus Audio Decoder |
+|--------|--------|-------------|
+| `BASS_FLAC` | bassflac | FLAC audio decoder |
+| `BASS_OPUS` | bassopus | Opus audio decoder |
 | `BASS_DSD` | bassdsd | DSD (Direct Stream Digital) |
-| `BASS_WV` | basswv | WavPack Decoder |
+| `BASS_WV` | basswv | WavPack decoder |
 | `BASS_APE` | bassape | Monkey's Audio |
-| `BASS_MPC` | bass_mpc | Musepack Decoder |
+| `BASS_MPC` | bass_mpc | Musepack decoder |
 | `BASS_ALAC` | bassalac | Apple Lossless |
 | `BASS_TTA` | bass_tta | True Audio |
-| `BASS_CD` | basscd | CD Audio Ripper |
-| `BASS_WEBM` | basswebm | WebM Container |
+| `BASS_CD` | basscd | CD audio ripper |
+| `BASS_WEBM` | basswebm | WebM container |
 
-#### Encoder
-
-| Option | Plugin | Description |
-|--------|--------|--------------|
-| `BASS_ENC` | bassenc | Encoding-Basis (Auto bei Encoder) |
-| `BASS_ENC_MP3` | bassenc_mp3 | MP3 Encoder |
-| `BASS_ENC_OGG` | bassenc_ogg | OGG Vorbis Encoder |
-| `BASS_ENC_FLAC` | bassenc_flac | FLAC Encoder |
-
-#### Effekte & Mixing
+#### Encoders
 
 | Option | Plugin | Description |
-|--------|--------|--------------|
-| `BASS_FX` | bass_fx | DSP Effekte (Tempo, Pitch, Reverb) |
-| `BASS_MIX` | bassmix | Multi-Channel Mixing |
-| `BASS_LOUD` | bassloud | Loudness Messung (EBU R128) |
-| `BASS_MIDI` | bassmidi | MIDI Playback |
+|--------|--------|-------------|
+| `BASS_ENC` | bassenc | Encoding base (automatic with any encoder) |
+| `BASS_ENC_MP3` | bassenc_mp3 | MP3 encoder |
+| `BASS_ENC_OGG` | bassenc_ogg | OGG Vorbis encoder |
+| `BASS_ENC_FLAC` | bassenc_flac | FLAC encoder |
 
-### Usagesbeispiel
+#### Effects & Mixing
+
+| Option | Plugin | Description |
+|--------|--------|-------------|
+| `BASS_FX` | bass_fx | DSP effects (tempo, pitch, reverb) |
+| `BASS_MIX` | bassmix | Multi-channel mixing |
+| `BASS_LOUD` | bassloud | Loudness measurement (EBU R128) |
+| `BASS_MIDI` | bassmidi | MIDI playback |
+
+### Usage Example
 
 ```cpp
 #include <bass.h>
 
 int main() {
-    // Initialisieren
+    // Initialize
     BASS_Init(-1, 44100, 0, nullptr, nullptr);
     
-    // Stream laden
+    // Load stream
     HSTREAM stream = BASS_StreamCreateFile(
         FALSE, "music.mp3", 0, 0, 0
     );
     
-    // Abspielen
+    // Play
     BASS_ChannelPlay(stream, FALSE);
     
-    // Warten
+    // Wait
     while (BASS_ChannelIsActive(stream) == BASS_ACTIVE_PLAYING) {
         Sleep(100);
     }
     
-    // Aufräumen
+    // Clean up
     BASS_StreamFree(stream);
     BASS_Free();
     
@@ -160,7 +160,7 @@ int main() {
 }
 ```
 
-### Mit Plugins (FLAC + Effekte)
+### With Plugins (FLAC + Effects)
 
 ```cpp
 #include <bass.h>
@@ -170,18 +170,18 @@ int main() {
 int main() {
     BASS_Init(-1, 44100, 0, nullptr, nullptr);
     
-    // FLAC laden (Plugin wird automatisch erkannt)
+    // Load FLAC (plugin is detected automatically)
     HSTREAM original = BASS_StreamCreateFile(
         FALSE, "music.flac", 0, 0, BASS_STREAM_DECODE
     );
     
-    // Tempo-Stream für Effekte
+    // Tempo stream for effects
     HSTREAM tempo = BASS_FX_TempoCreate(original, BASS_FX_FREESOURCE);
     
-    // Tempo anpassen: -20% langsamer
+    // Adjust tempo: 20% slower
     BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO, -20.0f);
     
-    // Pitch: 3 Halbtöne höher
+    // Pitch: 3 semitones higher
     BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO_PITCH, 3.0f);
     
     BASS_ChannelPlay(tempo, FALSE);
@@ -192,28 +192,28 @@ int main() {
 }
 ```
 
-### Vergleich mit Git-Alternativen
+### Comparison with Git Alternatives
 
 | Feature | BASS (Local) | miniaudio (Git) | openal-soft (Git) |
 |---------|--------------|-----------------|-------------------|
-| **Typ** | Vorkompiliert | Header-Only | CMake |
-| **Lizenz** | Kommerziell | Public Domain | LGPL |
+| **Type** | Precompiled | Header-only | CMake |
+| **License** | Commercial | Public Domain | LGPL |
 | **Plugins** | ✅ 20+ | ❌ | ❌ |
-| **Effekte** | ✅ | ❌ | ❌ |
+| **Effects** | ✅ | ❌ | ❌ |
 | **3D Audio** | ✅ | ✅ | ✅ |
 | **Streaming** | ✅ | ✅ | ❌ |
 | **Recording** | ✅ | ✅ | ✅ |
 
-### Empfehlung
+### Recommendation
 
-| Anwendungsfall | Empfehlung |
-|----------------|------------|
-| Musik-Player mit Formaten | **BASS** |
-| Einfache Sounds | miniaudio |
-| 3D-Spiele Audio | openal-soft |
-| Professionelle Effekte | **BASS** |
+| Use Case | Recommendation |
+|----------|----------------|
+| Music player with formats | **BASS** |
+| Simple sounds | miniaudio |
+| 3D game audio | openal-soft |
+| Professional effects | **BASS** |
 
-### Detail-Dokumentation
+### Detail Documentation
 
 → [bass_Include.md](../../module/externals/includes/bass/Bass_Include.md)
 
@@ -221,14 +221,15 @@ int main() {
 
 ## 3. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
-- [Local_Externals.md](Local_Externals.md) — Local Externals Overview
-- [Git_Externals_Media.md](Git_Externals_Media.md) — Git Media-Externals (miniaudio, openal-soft, stb)
+- [Externals.md](../Externals.md) — Main overview of all externals
+- [Local_Externals.md](Local_Externals.md) — Local Externals overview
+- [Git_Externals_Media.md](Git_Externals_Media.md) — Git media externals (miniaudio, openal-soft, stb)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Media (parallel zu Git)** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Own category Media (parallel to Git) |

@@ -1,14 +1,14 @@
 # Libraries.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Libraries.md](Libraries.md)  
-> **Modul:** [`cmake/project/Libraries.cmake`](../../../../cmake/project/Libraries.cmake)  
+> **English:** [Libraries.md](../../../../en/guide/module/project/Libraries.md)  
+> **Modul:** [`cmake/project/Libraries.cmake`](../../../../../cmake/project/Libraries.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [Fehlerbehandlung](#5-fehlerbehandlung)
 6. [Debug-Ausgaben](#6-debug-ausgaben)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -176,5 +176,6 @@ cmake -B build -DBUILD_ONLY="CoreLib;UtilLib"
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.0 | 2025-12-07 | Initial (Clean Start): Pipeline-Orchestration |

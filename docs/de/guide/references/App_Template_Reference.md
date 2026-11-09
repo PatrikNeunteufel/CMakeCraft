@@ -1,11 +1,12 @@
 # App Template Reference
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Reference  
 > **Status:** Entwurf  
 > **Zielgruppe:** Entwickler  
 > **Sprache:** Deutsch
+> **English:** [App_Template_Reference.md](../../../en/guide/references/App_Template_Reference.md)
 
 ---
 
@@ -31,7 +32,7 @@ Das App-Template definiert die Standardstruktur für App-Container im CMake Arch
 ### Pfad
 
 ```
-projects/templates/App/
+templates/App/
 ```
 
 ---
@@ -40,7 +41,8 @@ projects/templates/App/
 
 ```
 App/
-├── README.md                      # Kurzanleitung
+├── README.md                      # Kurzanleitung (englisch)
+├── README_de.md                   # Kurzanleitung (deutsch)
 ├── include/                       # Header
 │   ├── Source.cmake
 │   └── Application.hpp
@@ -52,9 +54,19 @@ App/
 │   └── main.cpp                   # Generisch, nicht ändern
 ├── pch/                           # Precompiled Header
 │   └── pch.h
-└── tests/
-    └── unit/                      # Unit Tests
-        └── Application_Tests.cpp
+└── tests/                         # Tests: tests/<type>/<Name>/
+    ├── unit/UnitTests/            # Unit Tests
+    │   ├── Source.cmake
+    │   ├── test_main.cpp
+    │   └── Application_Tests.cpp
+    ├── integration/IntegrationTests/   # Integrationstests
+    │   ├── Source.cmake
+    │   ├── test_main.cpp
+    │   └── Application_Integration_Tests.cpp
+    └── performance/PerformanceTests/   # Performance-Tests
+        ├── Source.cmake
+        ├── test_main.cpp
+        └── Application_Performance_Tests.cpp
 ```
 
 ### Komponenten
@@ -65,7 +77,7 @@ App/
 | `src/` | Implementation (.cpp) | ✅ |
 | `main/` | Entry Point (main.cpp) | ❌ |
 | `pch/` | Precompiled Header | — |
-| `tests/unit/` | Unit Tests | — |
+| `tests/<type>/<Name>/` | Je Test-Target ein Ordner mit `Source.cmake`, `test_main.cpp` und den Tests. Vorgabe für `apps[].tests.targets[].path` ist `tests/{type}/{name}` (`AppCollect.cmake:373`) | — |
 
 ---
 
@@ -103,7 +115,7 @@ int commonMain(int argc, char* argv[]) {
 
 } // namespace
 
-#if defined(_WIN32) && defined(APP_GUI)
+#if defined(_WIN32) && defined(APP_WINDOWS_GUI)
 
 int WINAPI WinMain(
     [[maybe_unused]] HINSTANCE hInstance,
@@ -290,14 +302,15 @@ Das Build-System setzt automatisch:
 
 | Define | Bedingung | Beschreibung |
 |--------|-----------|--------------|
-| `APP_GUI` | `runner.type = "GUI"` | Windows: WinMain |
-| `APP_CONSOLE` | `runner.type = "CONSOLE"` | Standard main |
+| `APP_WINDOWS_GUI` | Windows und `runner.type = "GUI"` oder `"WINDOW"` | `main.cpp` nimmt `WinMain` (`AppCreate.cmake:385`) |
+
+Für `CONSOLE` setzt das Build-System kein Define; `main.cpp` nimmt dann `main`.
 
 ### Plattform-Verhalten
 
 | runner.type | Windows | Linux | macOS |
 |-------------|---------|-------|-------|
-| `GUI` | `WinMain` (kein Console) | `main` | `main` |
+| `GUI`/`WINDOW` | `WinMain` (kein Console, `add_executable(... WIN32 ...)`) | `main` | `main` (`MACOSX_BUNDLE`) |
 | `CONSOLE` | `main` (mit Console) | `main` | `main` |
 
 ---
@@ -306,40 +319,23 @@ Das Build-System setzt automatisch:
 
 ### Generierte Targets
 
-Für eine App `MyApp`:
+Für eine App `MyApp` entstehen (`cmake/project/AppCreate.cmake`):
+
+| Target | Art | Inhalt |
+|--------|-----|--------|
+| `MyApp.Core` | `STATIC`-Library | `include/` (PUBLIC), `src/`, PCH aus `pch/` (Include-Pfad PUBLIC), Dependencies PUBLIC, `core.externals` |
+| `MyApp` | Executable | `main/`, linkt `MyApp.Core` (PRIVATE), `runner.externals`; ohne PCH |
+| `MyApp.<TestName>` | Executable je Test-Target | Quellen aus `tests/<type>/<Name>/`, linkt `MyApp.Core` |
 
 ```cmake
-# Executable
-add_executable(MyApp WIN32  # Bei GUI
-    # Sources aus Source.cmake aggregiert
-)
+# Vereinfacht
+add_library(MyApp.Core STATIC)
+target_include_directories(MyApp.Core PUBLIC include pch)
+target_precompile_headers(MyApp.Core PRIVATE pch/pch.h)
 
-# Include Directories
-target_include_directories(MyApp PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/pch
-)
-
-# Externals
-target_link_libraries(MyApp PRIVATE Qt6::Widgets bass::bass)
-
-# Define
-target_compile_definitions(MyApp PRIVATE APP_GUI)
-
-# PCH
-target_precompile_headers(MyApp PRIVATE pch/pch.h)
-```
-
-### WIN32 Flag
-
-Bei `runner.type = "GUI"` wird unter Windows das `WIN32` Flag gesetzt:
-
-```cmake
-if(WIN32 AND runner_type STREQUAL "GUI")
-    add_executable(${APP_NAME} WIN32 ...)
-else()
-    add_executable(${APP_NAME} ...)
-endif()
+add_executable(MyApp WIN32 ...)        # WIN32 nur unter Windows bei GUI/WINDOW
+target_compile_definitions(MyApp PRIVATE APP_WINDOWS_GUI)   # dito
+target_link_libraries(MyApp PRIVATE MyApp.Core)
 ```
 
 ---
@@ -356,5 +352,7 @@ endif()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.1** | **2025-12-18** | **PCH Suchpfad-Priorität dokumentiert** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Vorlage unter `templates/App/`; Testlayout `tests/<type>/<Name>/` wie in der Vorlage; Define `APP_WINDOWS_GUI` statt `APP_GUI`/`APP_CONSOLE` (`AppCreate.cmake:385`); §8 mit den Targets `MyApp.Core`, `MyApp`, `MyApp.<TestName>`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.1.1 | 2025-12-18 | PCH Suchpfad-Priorität dokumentiert |
 | 0.1.0 | 2025-12-17 | Initial mit korrekter Struktur (include/, src/, main/, pch/) |

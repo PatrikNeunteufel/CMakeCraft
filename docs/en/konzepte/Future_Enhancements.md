@@ -1,69 +1,69 @@
-# Future Enhancements — Geplante Erweiterungen
+# Future Enhancements — Planned Extensions
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** Concept  
-> **Status:** Sammlung  
-> **Target Audience:** Build System Developers, Architekten  
+> **Status:** Collection  
+> **Target Audience:** Build System Developers, Architects  
 > **Language:** English  
-> **German:** [Future_Enhancements.md](Future_Enhancements.md)
+> **German:** [Future_Enhancements.md](../../de/konzepte/Future_Enhancements.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [App-Container Erweiterungen](#2-app-container-erweiterungen)
-3. [Externals-Erweiterungen](#3-externals-erweiterungen)
-4. [Settings-Erweiterungen](#4-settings-erweiterungen)
-5. [Executable-Erweiterungen](#5-executable-erweiterungen)
-6. [Test-Erweiterungen](#6-test-erweiterungen)
-7. [Build-System](#7-build-system)
+1. [Overview](#1-overview)
+2. [App Container Extensions](#2-app-container-extensions)
+3. [Externals Extensions](#3-externals-extensions)
+4. [Settings Extensions](#4-settings-extensions)
+5. [Executable Extensions](#5-executable-extensions)
+6. [Test Extensions](#6-test-extensions)
+7. [Build System](#7-build-system)
 8. [Tooling](#8-tooling)
-9. [Projekt-Struktur](#9-projekt-struktur)
+9. [Project Structure](#9-project-structure)
 10. [CI/CD](#10-cicd)
-11. [Offene Entscheidungen](#11-offene-entscheidungen)
-12. [See Also](#12-siehe-auch)
+11. [Open Decisions](#11-open-decisions)
+12. [See Also](#12-see-also)
 13. [Changelog](#13-changelog)
 
 ---
 
 ## 1. Overview
 
-Dieses Dokument sammelt mögliche **zukünftige Erweiterungen** für das CMake Architecture Build-System. Die Einträge sind nach Bereich gruppiert und mit Priorität/Komplexität bewertet.
+This document collects possible **future extensions** for the CMake Architecture build system. The entries are grouped by area and rated by priority/complexity.
 
-> **Note:** Bereits beschlossene Features mit eigenem Concept-Dokument sind hier nicht aufgeführt. Siehe [Abschnitt 12 (See Also)](#12-siehe-auch) für fertige Concepte.
+> **Note:** Features already decided on with their own concept document are not listed here. See [Section 12 (See Also)](#12-see-also) for finished concepts.
 
-### 1.1 Legende
+### 1.1 Legend
 
-| Priorität | Bedeutung |
+| Priority | Meaning |
 |-----------|-----------|
-| 🔴 Hoch | Important für Produktivität/Usability |
-| 🟡 Mittel | Nice-to-have, geplant |
-| 🟢 Niedrig | Langfristig, bei Bedarf |
+| 🔴 High | Important for productivity/usability |
+| 🟡 Medium | Nice-to-have, planned |
+| 🟢 Low | Long-term, as needed |
 
-| Komplexität | Bedeutung |
+| Complexity | Meaning |
 |-------------|-----------|
-| ⚪ Einfach | < 1 Tag Aufwand |
-| 🔵 Mittel | 1-3 Tage Aufwand |
-| 🟣 Komplex | > 3 Tage Aufwand |
+| ⚪ Simple | < 1 day of effort |
+| 🔵 Medium | 1-3 days of effort |
+| 🟣 Complex | > 3 days of effort |
 
 ---
 
-## 2. App-Container Erweiterungen
+## 2. App Container Extensions
 
-> **Basis-Concept:** Siehe [AppContainer_Concept.md](abgeschlossen/AppContainer_Concept.md)
+> **Base concept:** See [AppContainer_Concept.md](abgeschlossen/AppContainer_Concept.md)
 
-### 2.1 Mehrere Runner pro App
+### 2.1 Multiple Runners per App
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel  
-> **Wann relevant:** CLI + GUI für dieselbe App
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium  
+> **When relevant:** CLI + GUI for the same app
 
 **Description:**  
-Ein App-Container mit mehreren Entry Points (z.B. GUI und CLI).
+An app container with multiple entry points (e.g. GUI and CLI).
 
-**Mögliche Struktur:**
+**Possible structure:**
 ```
 projects/apps/AudioPlayer/
 ├── core/...
@@ -76,29 +76,29 @@ projects/apps/AudioPlayer/
 
 ### 2.2 Shared Core Library Option
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel  
-> **Wann relevant:** Plugin-Architectureen, DLL-basierte Apps
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium  
+> **When relevant:** Plugin architectures, DLL-based apps
 
 **Description:**  
-Option für `core.type: "SHARED"` statt nur STATIC.
+Option for `core.type: "SHARED"` instead of only STATIC.
 
 ---
 
-## 3. Externals-Erweiterungen
+## 3. Externals Extensions
 
-> **Basis-Concept:** Siehe [System_Externals_Concept.md](abgeschlossen/System_Externals_Concept.md) für System-Pakete
+> **Base concept:** See [System_Externals_Concept.md](abgeschlossen/System_Externals_Concept.md) for system packages
 
-### 3.1 externalsPolicy (JSON-Configuration)
+### 3.1 externalsPolicy (JSON Configuration)
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel  
-> **Wann relevant:** Verschiedene Projekte mit unterschiedlichen Fetch-Strategien
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium  
+> **When relevant:** Different projects with different fetch strategies
 
 **Description:**  
-Optionale Configuration in Solution.json für explizite Kontrolle über das Fetch-Verhalten.
+Optional configuration in Solution.json for explicit control over the fetch behavior.
 
-**Mögliche Felder:**
+**Possible fields:**
 ```json
 {
     "externalsPolicy": {
@@ -109,32 +109,32 @@ Optionale Configuration in Solution.json für explizite Kontrolle über das Fetc
 }
 ```
 
-| Feld | Default | Optionen |
+| Field | Default | Options |
 |------|---------|----------|
-| `fetchRoot` | `.externals` | Beliebiger Pfad |
+| `fetchRoot` | `.externals` | Any path |
 | `updatePolicy` | `checkout` | `checkout`, `always`, `never`, `update`, `locked` |
 | `lockfile` | `false` | `true`, `false` |
 
-**updatePolicy Optionen:**
+**updatePolicy options:**
 
-| Policy | Verhalten |
+| Policy | Behavior |
 |--------|-----------|
-| `checkout` | Fetch nur wenn nicht vorhanden (aktuelles Verhalten) |
-| `always` | Immer neu fetchen |
-| `never` | Nie fetchen, nur existierende nutzen |
-| `update` | Fetch + git pull bei jedem Configure |
-| `locked` | Exakte Commits aus Lockfile verwenden |
+| `checkout` | Fetch only if not present (current behavior) |
+| `always` | Always fetch anew |
+| `never` | Never fetch, only use existing ones |
+| `update` | Fetch + git pull on every configure |
+| `locked` | Use exact commits from the lockfile |
 
 ---
 
-### 3.2 Lockfile-System
+### 3.2 Lockfile System
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🟣 Komplex  
-> **Wann relevant:** Reproduzierbare Builds, Team-Entwicklung, CI/CD
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🟣 Complex  
+> **When relevant:** Reproducible builds, team development, CI/CD
 
 **Description:**  
-Automatisches Tracking welche Versionen (Commit-Hashes) tatsächlich verwendet werden.
+Automatic tracking of which versions (commit hashes) are actually used.
 
 **Format (externals.lock.json):**
 ```json
@@ -152,31 +152,31 @@ Automatisches Tracking welche Versionen (Commit-Hashes) tatsächlich verwendet w
 }
 ```
 
-**Geplante CLI-Befehle:**
+**Planned CLI commands:**
 ```bash
-cmake --lockfile-update     # Lockfile aktualisieren
-cmake --lockfile-verify     # Lockfile gegen Solution.json prüfen
-cmake --lockfile-freeze     # Alle auf resolved_commit fixieren
+cmake --lockfile-update     # Update the lockfile
+cmake --lockfile-verify     # Check the lockfile against Solution.json
+cmake --lockfile-freeze     # Pin all to resolved_commit
 ```
 
-**Vorteile:**
-- Exakte Reproduzierbarkeit
-- Audit-Trail für Dependency-Updates
-- Erkennung von unbeabsichtigten Changes
-- CI/CD kann identische Builds garantieren
+**Advantages:**
+- Exact reproducibility
+- Audit trail for dependency updates
+- Detection of unintended changes
+- CI/CD can guarantee identical builds
 
 ---
 
 ### 3.3 vcpkg Integration
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🟣 Komplex  
-> **Wann relevant:** Nutzung von vcpkg-Paketen
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🟣 Complex  
+> **When relevant:** Use of vcpkg packages
 
 **Description:**  
-Unterstützung für vcpkg als Alternative zu Git-Externals.
+Support for vcpkg as an alternative to Git externals.
 
-**Mögliche Syntax:**
+**Possible syntax:**
 ```json
 {
     "externals": {
@@ -196,14 +196,14 @@ Unterstützung für vcpkg als Alternative zu Git-Externals.
 
 ### 3.4 Conan Integration
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🟣 Komplex  
-> **Wann relevant:** Conan als Package Manager bevorzugt
+> **Priority:** 🟢 Low  
+> **Complexity:** 🟣 Complex  
+> **When relevant:** Conan preferred as package manager
 
 **Description:**  
-Ähnlich wie vcpkg, aber für Conan Package Manager.
+Similar to vcpkg, but for the Conan package manager.
 
-**Mögliche Syntax:**
+**Possible syntax:**
 ```json
 {
     "externals": {
@@ -216,16 +216,16 @@ Unterstützung für vcpkg als Alternative zu Git-Externals.
 
 ---
 
-### 3.5 Submodule-Support
+### 3.5 Submodule Support
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** ⚪ Einfach  
-> **Wann relevant:** Projekt verwendet Git Submodules
+> **Priority:** 🟢 Low  
+> **Complexity:** ⚪ Simple  
+> **When relevant:** Project uses Git submodules
 
 **Description:**  
-Automatische Erkennung/Initialisierung von Git Submodules.
+Automatic detection/initialization of Git submodules.
 
-**Mögliche Syntax:**
+**Possible syntax:**
 ```json
 {
     "externals": {
@@ -238,15 +238,15 @@ Automatische Erkennung/Initialisierung von Git Submodules.
 
 ---
 
-## 4. Settings-Erweiterungen
+## 4. Settings Extensions
 
-### 4.1 Output-Configuration
+### 4.1 Output Configuration
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Zentrale Configuration der Output-Verzeichnisse.
+Central configuration of the output directories.
 
 ```json
 {
@@ -262,13 +262,13 @@ Zentrale Configuration der Output-Verzeichnisse.
 
 ---
 
-### 4.2 Quality-Einstellungen
+### 4.2 Quality Settings
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Zentrale Code-Qualitäts-Steuerung.
+Central code quality control.
 
 ```json
 {
@@ -285,13 +285,13 @@ Zentrale Code-Qualitäts-Steuerung.
 
 ---
 
-### 4.3 Packaging-Metadaten
+### 4.3 Packaging Metadata
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** ⚪ Einfach
+> **Priority:** 🟢 Low  
+> **Complexity:** ⚪ Simple
 
 **Description:**  
-CPack-Metadaten für Installer-Generierung.
+CPack metadata for installer generation.
 
 ```json
 {
@@ -308,13 +308,13 @@ CPack-Metadaten für Installer-Generierung.
 
 ---
 
-### 4.4 Platform-Requirements
+### 4.4 Platform Requirements
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🟣 Komplex
+> **Priority:** 🟢 Low  
+> **Complexity:** 🟣 Complex
 
 **Description:**  
-Minimum-Plattformversionen definieren.
+Define minimum platform versions.
 
 ```json
 {
@@ -330,29 +330,29 @@ Minimum-Plattformversionen definieren.
 
 ---
 
-## 5. Executable-Erweiterungen
+## 5. Executable Extensions
 
-### 5.1 Zusätzliche Executable-Types
+### 5.1 Additional Executable Types
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵-🟣 Variiert
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵-🟣 Varies
 
-| Type | Description | Komplexität |
+| Type | Description | Complexity |
 |------|--------------|-------------|
-| `TRAY` | System Tray App | 🔵 Mittel |
-| `SERVICE` | OS Service/Daemon | 🟣 Komplex |
-| `BENCHMARK` | Benchmark Runner | 🔵 Mittel |
-| `BUNDLE` | macOS App Bundle | 🔵 Mittel |
+| `TRAY` | System tray app | 🔵 Medium |
+| `SERVICE` | OS service/daemon | 🟣 Complex |
+| `BENCHMARK` | Benchmark runner | 🔵 Medium |
+| `BUNDLE` | macOS app bundle | 🔵 Medium |
 
 ---
 
 ### 5.2 Custom Entry Point
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** ⚪ Einfach
+> **Priority:** 🟢 Low  
+> **Complexity:** ⚪ Simple
 
 **Description:**  
-Custom Entry-Point Funktion (WinMain, DllMain).
+Custom entry point function (WinMain, DllMain).
 
 ```json
 {
@@ -367,11 +367,11 @@ Custom Entry-Point Funktion (WinMain, DllMain).
 
 ### 5.3 Resources
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Win32 .rc Dateien, macOS .icns/Info.plist Integration.
+Win32 .rc files, macOS .icns/Info.plist integration.
 
 ```json
 {
@@ -392,11 +392,11 @@ Win32 .rc Dateien, macOS .icns/Info.plist Integration.
 
 ### 5.4 Visibility & Install
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🟣 Komplex
+> **Priority:** 🟢 Low  
+> **Complexity:** 🟣 Complex
 
 **Description:**  
-Packaging/Export Steuerung für Targets.
+Packaging/export control for targets.
 
 ```json
 {
@@ -413,15 +413,15 @@ Packaging/Export Steuerung für Targets.
 
 ---
 
-## 6. Test-Erweiterungen
+## 6. Test Extensions
 
 ### 6.1 Test Fixtures
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🟣 Komplex
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🟣 Complex
 
 **Description:**  
-CTest Fixtures für Setup/Cleanup/Requires.
+CTest fixtures for setup/cleanup/requires.
 
 ```json
 {
@@ -438,13 +438,13 @@ CTest Fixtures für Setup/Cleanup/Requires.
 
 ---
 
-### 6.2 Parametersized Tests
+### 6.2 Parameterized Tests
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Tests mit verschiedenen Parametersn ausführen.
+Run tests with different parameters.
 
 ```json
 {
@@ -459,16 +459,16 @@ Tests mit verschiedenen Parametersn ausführen.
 
 ---
 
-## 7. Build-System
+## 7. Build System
 
 ### 7.1 Unity Builds
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel  
-> **Wann relevant:** Extreme Compile-Zeit-Optimierung
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium  
+> **When relevant:** Extreme compile time optimization
 
 **Description:**  
-CMake UNITY_BUILD Support für schnellere Builds.
+CMake UNITY_BUILD support for faster builds.
 
 ```json
 {
@@ -485,23 +485,23 @@ CMake UNITY_BUILD Support für schnellere Builds.
 
 ### 7.2 C++20 Modules
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🟣 Komplex  
-> **Wann relevant:** C++20 Module-Adoption
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🟣 Complex  
+> **When relevant:** C++20 module adoption
 
 **Description:**  
-Native Unterstützung für C++20 Modules (.ixx, .cppm).
+Native support for C++20 modules (.ixx, .cppm).
 
 ---
 
 ### 7.3 Cross-Compilation Presets
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel  
-> **Wann relevant:** Embedded, Mobile, WebAssembly
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium  
+> **When relevant:** Embedded, mobile, WebAssembly
 
 **Description:**  
-Vordefinierte Presets für Cross-Compilation.
+Predefined presets for cross-compilation.
 
 ---
 
@@ -509,12 +509,12 @@ Vordefinierte Presets für Cross-Compilation.
 
 ### 8.1 clang-format Auto-Fix
 
-> **Priorität:** 🔴 Hoch  
-> **Komplexität:** ⚪ Einfach  
-> **Wann relevant:** Automatische Code-Formatierung
+> **Priority:** 🔴 High  
+> **Complexity:** ⚪ Simple  
+> **When relevant:** Automatic code formatting
 
 **Description:**  
-Build-Target für automatische Formatierung (nicht nur Check).
+Build target for automatic formatting (not just checking).
 
 ```bash
 cmake --build . --target format-fix
@@ -524,11 +524,11 @@ cmake --build . --target format-fix
 
 ### 8.2 clang-tidy Auto-Fix
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** ⚪ Einfach
+> **Priority:** 🟡 Medium  
+> **Complexity:** ⚪ Simple
 
 **Description:**  
-Build-Target für automatische clang-tidy Fixes.
+Build target for automatic clang-tidy fixes.
 
 ```bash
 cmake --build . --target tidy-fix
@@ -538,11 +538,11 @@ cmake --build . --target tidy-fix
 
 ### 8.3 Documentation Generation (Doxygen)
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Automatische Doxygen-Configuration und Build-Target.
+Automatic Doxygen configuration and build target.
 
 ```json
 {
@@ -560,11 +560,11 @@ Automatische Doxygen-Configuration und Build-Target.
 
 ### 8.4 Code Coverage
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Automatische Coverage-Instrumentierung und Report-Generierung.
+Automatic coverage instrumentation and report generation.
 
 ```bash
 cmake --build . --target coverage
@@ -572,26 +572,26 @@ cmake --build . --target coverage
 
 ---
 
-## 9. Projekt-Struktur
+## 9. Project Structure
 
 ### 9.1 Multi-Solution Support
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🟣 Komplex  
-> **Wann relevant:** Monorepo mit mehreren unabhängigen Projekten
+> **Priority:** 🟢 Low  
+> **Complexity:** 🟣 Complex  
+> **When relevant:** Monorepo with several independent projects
 
 **Description:**  
-Unterstützung für mehrere Solution.json in einem Repository.
+Support for multiple Solution.json files in one repository.
 
 ---
 
 ### 9.2 Solution Templates
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Vordefinierte Templates für verschiedene Projekt-Typen.
+Predefined templates for different project types.
 
 ```bash
 cmake --init-solution --template console-app
@@ -601,13 +601,13 @@ cmake --init-solution --template library
 
 ---
 
-### 9.3 Workspace-Support
+### 9.3 Workspace Support
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🟣 Komplex
+> **Priority:** 🟢 Low  
+> **Complexity:** 🟣 Complex
 
 **Description:**  
-Übergeordnete Workspace-Datei die mehrere Solutions orchestriert.
+A higher-level workspace file that orchestrates several solutions.
 
 ---
 
@@ -615,11 +615,11 @@ cmake --init-solution --template library
 
 ### 10.1 GitHub Actions Generator
 
-> **Priorität:** 🟡 Mittel  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟡 Medium  
+> **Complexity:** 🔵 Medium
 
 **Description:**  
-Automatische Generierung von GitHub Actions Workflows basierend auf Presets.
+Automatic generation of GitHub Actions workflows based on presets.
 
 ```bash
 cmake --generate-ci github
@@ -629,44 +629,45 @@ cmake --generate-ci github
 
 ### 10.2 GitLab CI Generator
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium
 
 ---
 
 ### 10.3 Azure DevOps Generator
 
-> **Priorität:** 🟢 Niedrig  
-> **Komplexität:** 🔵 Mittel
+> **Priority:** 🟢 Low  
+> **Complexity:** 🔵 Medium
 
 ---
 
-## 11. Offene Entscheidungen
+## 11. Open Decisions
 
-| Thema | Status | Optionen | Tendenz |
+| Topic | Status | Options | Tendency |
 |-------|--------|----------|---------|
-| Git-Strategie für Lockfile | Offen | Committen vs. .gitignore | Committen |
-| Default Test Framework | Offen | doctest vs googletest | doctest |
+| Git strategy for the lockfile | Open | Commit vs. .gitignore | Commit |
+| Default test framework | Open | doctest vs googletest | doctest |
 
 ---
 
 ## 12. See Also
 
-**Fertige Concepte (nicht in diesem Dokument):**
-- [AppContainer_Concept.md](abgeschlossen/AppContainer_Concept.md) — Phase 8: Testbare App-Architecture
-- [System_Externals_Concept.md](abgeschlossen/System_Externals_Concept.md) — Phase 9: System-Pakete (Qt6, Boost, etc.)
+**Finished concepts (not in this document):**
+- [AppContainer_Concept.md](abgeschlossen/AppContainer_Concept.md) — Phase 8: Testable app architecture
+- [System_Externals_Concept.md](abgeschlossen/System_Externals_Concept.md) — Phase 9: System packages (Qt6, Boost, etc.)
 
 
 **Architecture:**
-- [master_concept.md](../../de/konzepte/abgeschlossen/master_concept.md) — Architecture-Overview
-- [implementation_plan.md](implementation_plan.md) — Phasen 1-7
+- [Master_Concept.md](abgeschlossen/Master_Concept.md) — Architecture overview
+- [Implementation_Plan.md](abgeschlossen/Implementation_Plan.md) — Phases 1-7
 
 ---
 
 ## 13. Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 (Concept), bereits beschlossene Concepte entfernt (App-Container Basis, System-Externals Basis), Verweis auf separate Concept-Dokumente** |
-| 0.2.0 | 2025-12-12 | App-Container (Phase 8), Lockfile-Details, Settings-Erweiterungen |
-| 0.1.0 | 2025-12-10 | Initial: externalsPolicy, Lockfile, vcpkg, Conan, Tooling |
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 (Concept), concepts already decided on removed (app container base, system externals base), reference to separate concept documents |
+| 0.2.0 | 2025-12-12 | App container (Phase 8), lockfile details, settings extensions |
+| 0.1.0 | 2025-12-10 | Initial: externalsPolicy, lockfile, vcpkg, Conan, tooling |

@@ -1,14 +1,14 @@
 # Validation.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.2  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Validation.md](Validation.md)  
-> **Modul:** [`cmake/core/Validation.cmake`](../../../../cmake/core/Validation.cmake)  
+> **English:** [Validation.md](../../../../en/guide/module/core/Validation.md)  
+> **Modul:** [`cmake/core/Validation.cmake`](../../../../../cmake/core/Validation.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -21,7 +21,7 @@
 4. [Fehlerbehandlung](#4-fehlerbehandlung)
 5. [Verwendungsbeispiele](#5-verwendungsbeispiele)
 6. [Siehe auch](#6-siehe-auch)
-7. [Changelog](#7-changelog)
+7. [Changelog](#changelog)
 
 ---
 
@@ -75,14 +75,14 @@ validate_external_source(<EXT_NAME> <EXT_JSON>)
 | `EXT_NAME` | String | ✓ | Name des Externals |
 | `EXT_JSON` | String | ✓ | JSON-String des External-Objekts |
 
-**Erlaubte Source-Felder:**
+**Erlaubte Source-Felder** (`Validation.cmake:58`):
 
+- `system` — System External (`"system": true`, Phase 9; verlangt zusätzlich `package`)
 - `path` — Lokales External
 - `git` — Fetched via Git
 - `archive` — Archive External (vorgebautes Paket, festgelegte Version)
-- `vcpkg` — Via vcpkg (geplant)
-- `conan` — Via Conan (geplant)
-- `find_package` — System External (Phase 9)
+- `vcpkg`, `conan`, `find_package` — reserviert: Die Prüfung lässt sie durch, der Orchestrator kennt sie aber
+  nicht und bricht mit E012 ab (`No valid source field (system/git/path/archive)`, `Orchestrator.cmake:115`)
 
 **Fehler:**
 
@@ -90,6 +90,7 @@ validate_external_source(<EXT_NAME> <EXT_JSON>)
 |------|-----------|
 | E012 | Kein Source-Feld vorhanden |
 | E012 | Mehrere Source-Felder vorhanden |
+| E502 | `system: true`, aber Feld `package` fehlt |
 
 **Beispiel:**
 
@@ -203,6 +204,10 @@ validate_local_external("bass" "${_ext_json}")
 
 Prüft die Schema-Version der Solution.json.
 
+> Derzeit nicht aufgerufen (Stand 2026-11-09): kein Modul ruft `validate_solution_schema()` auf,
+> W001 wird deshalb nie ausgelöst. Die Schema-Version prüft `cmake/project/Solution.cmake` selbst
+> (E002 `:82`, `:94`; E003 `:102`; W101 `:107`; W102 `:109`).
+
 ```cmake
 validate_solution_schema(<SOLUTION_JSON>)
 ```
@@ -267,6 +272,7 @@ validate_local_external_include("${_include_path}" "imgui")
 |------|----------|--------------|
 | E001 | validate_required_fields | Pflichtfeld fehlt |
 | E012 | validate_external_source | Kein/mehrere Source-Felder |
+| E502 | validate_external_source | `system: true` ohne `package` |
 | E213 | validate_local_external | Include.cmake nicht gefunden |
 | E215 | validate_fetched_external | Kein tag/branch/commit |
 
@@ -274,7 +280,7 @@ validate_local_external_include("${_include_path}" "imgui")
 
 | Code | Funktion | Beschreibung |
 |------|----------|--------------|
-| W001 | validate_solution_schema | Schema-Version fehlt/veraltet |
+| W001 | validate_solution_schema | Schema-Version fehlt/veraltet (derzeit nicht ausgelöst, §3.5) |
 | W103 | validate_local_external_include | add_executable() gefunden |
 | W104 | validate_local_external_include | Example-Verzeichnisse eingebunden |
 
@@ -283,6 +289,10 @@ validate_local_external_include("${_include_path}" "imgui")
 ## 5. Verwendungsbeispiele
 
 ### 5.1 In Solution.cmake
+
+> Vorlage, nicht der heutige Code: `cmake/project/Solution.cmake` ruft weder
+> `validate_solution_schema()` noch `validate_required_fields()` auf (Stand 2026-11-09); die
+> Schema-Version prüft es selbst (§3.5).
 
 ```cmake
 file(READ "${CMAKE_SOURCE_DIR}/Solution.json" _json)
@@ -336,8 +346,8 @@ endfunction()
 - [Errors.cmake](Errors.md) — cmake_fatal, cmake_warn
 - [Json.cmake](Json.md) — JSON-Hilfsfunktionen
 - [Solution.cmake](../project/Solution.md) — Verwendet Validation
-- [Orchestrator.cmake](../externals/Orchestrator.md) — Verwendet Validation
-- [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E012, E213, E215, W001, W103, W104
+- [Orchestrator.cmake](../externals/Orchestrator_cmake.md) — Verwendet Validation
+- [ErrorCodes.md](../../references/ErrorCodes.md) — E001, E012, E213, E215, E502, W001, W103, W104
 
 ---
 
@@ -345,7 +355,9 @@ endfunction()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.10.0** | **2026-10-09** | **validate_external_source: `archive` als Source-Feld; E012-Meldung nennt `archive`** |
+| **1.0.2** | **2026-11-09** | **An den Code angeglichen: erlaubte Source-Felder in §3.1 mit `system`; `vcpkg`/`conan`/`find_package` als reserviert (Orchestrator: E012); E502 in den Fehlertabellen §3.1 und §4.1 (`Validation.cmake:58`, `:94`); `validate_solution_schema()` als nicht aufgerufen vermerkt (§3.5, §4.2, §5.1), W001 damit nie ausgelöst** |
+| 1.0.1 | 2026-10-09 | CMakeCraft v0.10.0: validate_external_source: `archive` als Source-Feld; E012-Meldung nennt `archive` |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): validate_external_source, validate_required_fields, validate_fetched_external, validate_local_external, validate_solution_schema, validate_local_external_include |

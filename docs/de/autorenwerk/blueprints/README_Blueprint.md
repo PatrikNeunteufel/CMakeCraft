@@ -1,13 +1,13 @@
 # README — Standard für Ordner-Navigations-Dokumente
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5.1, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [README_Blueprint.md](README_Blueprint.md)
+> **English:** [README_Blueprint.md](../../../en/autorenwerk/blueprints/README_Blueprint.md)
 
 ---
 
@@ -23,7 +23,7 @@
 8. [Beispiele](#8-beispiele)
 9. [Review-Checkliste](#9-review-checkliste)
 10. [Siehe auch](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+11. [Changelog](#changelog)
 
 ---
 
@@ -65,8 +65,8 @@ Jeder Ordner mit Dokumentation oder Code **SOLLTE** eine README.md enthalten:
 |------------|---------------------|
 | `docs/` | ✓ Pflicht |
 | `docs/de/`, `docs/en/` | ✓ Pflicht |
-| `docs/de/blueprints/` | ✓ Pflicht |
-| `docs/de/modules/core/` | ✓ Pflicht |
+| `docs/de/autorenwerk/blueprints/` | ✓ Pflicht |
+| `docs/de/guide/module/core/` | ✓ Pflicht |
 | `cmake/` | ✓ Empfohlen |
 | Projekt-Root | ✓ Pflicht (GitHub-Standard) |
 
@@ -106,14 +106,14 @@ project/
     │
     ├── de/
     │   ├── README.md            ← Deutsch (im /de/ Ordner)
-    │   ├── blueprints/
+    │   ├── autorenwerk/blueprints/
     │   │   └── README.md        ← Deutsch (erbt von /de/)
-    │   └── modules/
+    │   └── guide/module/
     │       └── README.md        ← Deutsch (erbt von /de/)
     │
     └── en/
         ├── README.md            ← Englisch (im /en/ Ordner)
-        └── blueprints/
+        └── autorenwerk/blueprints/
             └── README.md        ← Englisch (erbt von /en/)
 ```
 
@@ -123,8 +123,8 @@ READMEs in Unterordnern von `/de/` oder `/en/` erben die Sprache:
 
 | Pfad | Sprache | Begründung |
 |------|---------|------------|
-| `docs/de/blueprints/README.md` | Deutsch | Unterordner von `/de/` |
-| `docs/en/modules/README.md` | Englisch | Unterordner von `/en/` |
+| `docs/de/autorenwerk/blueprints/README.md` | Deutsch | Unterordner von `/de/` |
+| `docs/en/guide/module/README.md` | Englisch | Unterordner von `/en/` |
 | `cmake/README.md` | Englisch | Kein Sprach-Verzeichnis |
 | `cmake/README_de.md` | Deutsch | Expliziter Suffix |
 
@@ -159,13 +159,13 @@ READMEs verwenden einen **vereinfachten Header** ohne Typ/Status/Zielgruppe:
 **Für nicht-englische READMEs** (außerhalb von `/en/`):
 
 ```markdown
-> **English:** [README.md](../../en/ordner/README.md)
+> **English:** [README.md](../../../en/[bereich]/[ordner]/README.md)
 ```
 
 **Für englische READMEs** (außerhalb von Sprach-Verzeichnissen):
 
 ```markdown
-> **Deutsch:** [README_de.md](../../../../templates/App/README_de.md)
+> **Deutsch:** [README_de.md](README_de.md)
 ```
 
 ---
@@ -256,16 +256,16 @@ Quick-Start sollte **verschiedene Zielgruppen** ansprechen:
 ## Quick-Start
 
 **Neu im Projekt?**
-1. [Getting_Started.md](../../guide/userguides/Getting_Started.md) — Erste Schritte
-2. [Glossar.md](../../guide/references/Glossar.md) — Begriffe klären
+1. [Getting_Started.md](guide/userguides/Getting_Started.md) — Erste Schritte
+2. [Glossar.md](guide/references/Glossar.md) — Begriffe klären
 
 **Build-System entwickeln?**
-1. [Master_Concept.md](../../../en/konzepte/abgeschlossen/Master_Concept.md) — Architektur verstehen
-2. [Errors.md](../../guide/module/core/Errors.md) — Fehlerbehandlung
+1. [Master_Concept.md](konzepte/abgeschlossen/Master_Concept.md) — Architektur verstehen
+2. [Errors.md](guide/module/core/Errors.md) — Fehlerbehandlung
 
 **Externe Library einbinden?**
-1. [Externals.md](Externals.md) — Übersicht
-2. [Adding_Externals.md](../../guide/userguides/Adding_Externals.md) — Schritt-für-Schritt
+1. [Externals.md](guide/references/Externals.md) — Übersicht
+2. [Adding_Externals.md](guide/userguides/Adding_Externals.md) — Schritt-für-Schritt
 ```
 
 ### 6.3 Regeln
@@ -285,9 +285,9 @@ Quick-Start darf und sollte auch Dokumente aus **anderen Ordnern** verlinken, we
 ## Quick-Start
 
 **Testing Framework nutzen?**
-1. [Doctest.md](../../guide/userguides/externals/Doctest.md) — Dieses Verzeichnis
-2. [../references/externals/Git_Externals_Testing.md](../../guide/references/externals/Git_Externals_Testing.md) — Alle Test-Frameworks
-3. [../../userguides/Testing.md](../../guide/userguides/Testing.md) — Tests schreiben
+1. [Doctest.md](Doctest.md) — Dieses Verzeichnis
+2. [../../references/externals/Git_Externals_Testing.md](../../references/externals/Git_Externals_Testing.md) — Alle Test-Frameworks
+3. [../Testing.md](../Testing.md) — Tests schreiben
 ```
 
 ---
@@ -326,7 +326,7 @@ Bei Unterordnern mit nur **einer Datei** kann diese direkt vom übergeordneten R
 
 | Ordner | Inhalt |
 |--------|--------|
-| [core/](core/README.md) | [Fetch_cmake.md](../../guide/module/externals/core/Fetch_cmake.md) — Git FetchContent |
+| [core/](core/README.md) | [Fetch_cmake.md](core/Fetch_cmake.md) — Git FetchContent |
 | [fetched/](fetched/README.md) | [Handler_cmake.md](fetched/Handler_cmake.md) — Post-Fetch Handler |
 ```
 
@@ -338,7 +338,7 @@ Oder als erweiterte Tabelle:
 ### core/
 | Datei | Beschreibung |
 |-------|--------------|
-| [Fetch_cmake.md](../../guide/module/externals/core/Fetch_cmake.md) | Git FetchContent Wrapper |
+| [Fetch_cmake.md](core/Fetch_cmake.md) | Git FetchContent Wrapper |
 
 ### fetched/
 | Datei | Beschreibung |
@@ -374,7 +374,7 @@ Bei > 10 Dateien sollten diese thematisch gruppiert werden:
 
 ## 8. Beispiele
 
-### 8.1 Vollständiges Beispiel: modules/externals/README.md
+### 8.1 Vollständiges Beispiel: guide/module/externals/README.md
 
 ```markdown
 # Externals — External-Management-System
@@ -382,22 +382,22 @@ Bei > 10 Dateien sollten diese thematisch gruppiert werden:
 > **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../../en/modules/externals/README.md)
+> **English:** [README.md](../../../../en/guide/module/externals/README.md)
 
 ---
 
 ## Quick-Start
 
 **Externe Libraries einbinden?**
-1. [Orchestrator_cmake.md](../../guide/module/externals/Orchestrator_cmake.md) — Haupt-Entry verstehen
+1. [Orchestrator_cmake.md](Orchestrator_cmake.md) — Haupt-Entry verstehen
 2. [../../userguides/Externals.md](../../userguides/Externals.md) — Praktische Anleitung
 
 **Git-basierte Library fetchen?**
-1. [core/Fetch_cmake.md](../../guide/module/externals/core/Fetch_cmake.md) — FetchContent-Wrapper
-2. [hooks/HookLoader_cmake.md](../../guide/module/externals/hooks/HookLoader_cmake.md) — Pre/Post-Fetch Hooks
+1. [core/Fetch_cmake.md](core/Fetch_cmake.md) — FetchContent-Wrapper
+2. [hooks/HookLoader_cmake.md](hooks/HookLoader_cmake.md) — Pre/Post-Fetch Hooks
 
 **Lokale Library einbinden?**
-1. [locals/Attach_cmake.md](../../guide/module/externals/locals/Attach_cmake.md) — Local-Attach-System
+1. [locals/Attach_cmake.md](locals/Attach_cmake.md) — Local-Attach-System
 2. [includes/](includes/README.md) — Include-Definitionen
 
 ---
@@ -412,7 +412,7 @@ Das External-Management-System handhabt alle externen Dependencies.
 
 | Datei | Beschreibung |
 |-------|--------------|
-| [Orchestrator_cmake.md](../../guide/module/externals/Orchestrator_cmake.md) | Haupt-Orchestrierung des External-Systems |
+| [Orchestrator_cmake.md](Orchestrator_cmake.md) | Haupt-Orchestrierung des External-Systems |
 
 ---
 
@@ -420,12 +420,12 @@ Das External-Management-System handhabt alle externen Dependencies.
 
 | Ordner | Dateien | Beschreibung |
 |--------|---------|--------------|
-| [core/](core/README.md) | 1 | [Fetch_cmake.md](../../guide/module/externals/core/Fetch_cmake.md) — Git FetchContent |
+| [core/](core/README.md) | 1 | [Fetch_cmake.md](core/Fetch_cmake.md) — Git FetchContent |
 | [fetched/](fetched/README.md) | 1 | [Handler_cmake.md](fetched/Handler_cmake.md) — Post-Fetch Handler |
 | [hooks/](hooks/README.md) | 3+ | Hook-System (Pre/Post-Fetch) |
 | [includes/](includes/README.md) | 4+ | Library-spezifische Includes |
-| [locals/](locals/README.md) | 1 | [Attach_cmake.md](../../guide/module/externals/locals/Attach_cmake.md) — Local Libraries |
-| [registry/](registry/README.md) | 1 | [Targets_cmake.md](../../guide/module/externals/registry/Targets_cmake.md) — Target-Registry |
+| [locals/](locals/README.md) | 1 | [Attach_cmake.md](locals/Attach_cmake.md) — Local Libraries |
+| [registry/](registry/README.md) | 1 | [Targets_cmake.md](registry/Targets_cmake.md) — Target-Registry |
 ```
 
 ---
@@ -472,4 +472,6 @@ Vor Fertigstellung einer README prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-15** | **Initial: Dateinamen-Konventionen, Quick-Start mit mehreren Pfaden, vollständige Dateilisten, Unterordner-Integration** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ordner `autorenwerk/blueprints/`, `guide/module/` statt `blueprints/`, `modules/` (§ 2.1, § 3.2, § 3.3, § 8.1); Sprachlinks nach heutiger Tiefe (§ 4.3, § 8.1); Beispiel-Verweise relativ zum Ort der Beispiel-README (§ 6.2: `docs/de/`, § 6.4: `guide/userguides/externals/`, § 7.2 und § 8.1: `guide/module/externals/`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.1.0 | 2025-12-15 | Initial: Dateinamen-Konventionen, Quick-Start mit mehreren Pfaden, vollständige Dateilisten, Unterordner-Integration |

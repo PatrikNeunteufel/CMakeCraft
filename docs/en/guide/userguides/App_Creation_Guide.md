@@ -1,84 +1,89 @@
 # App Creation Guide
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Guide  
-> **Status:** Entwurf  
-> **Target Audience:** Entwickler  
-> **Language:** English
+> **Status:** Draft  
+> **Target Audience:** Developers  
+> **Language:** English  
+> **German:** [App_Creation_Guide.md](../../../de/guide/userguides/App_Creation_Guide.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Prerequisites](#2-voraussetzungen)
-3. [Neue App erstellen](#3-neue-app-erstellen)
-4. [Solution.json konfigurieren](#4-solutionjson-konfigurieren)
-5. [Application-Klasse anpassen](#5-application-klasse-anpassen)
-6. [Source.cmake pflegen](#6-sourcecmake-pflegen)
+1. [Overview](#1-overview)
+2. [Prerequisites](#2-prerequisites)
+3. [Creating a New App](#3-creating-a-new-app)
+4. [Configuring Solution.json](#4-configuring-solutionjson)
+5. [Adapting the Application Class](#5-adapting-the-application-class)
+6. [Maintaining Source.cmake](#6-maintaining-sourcecmake)
 7. [Precompiled Header](#7-precompiled-header)
-8. [GUI-Anwendung mit Qt](#8-gui-anwendung-mit-qt)
-9. [Console-Anwendung](#9-console-anwendung)
-10. [Tests schreiben](#10-tests-schreiben)
+8. [GUI Application with Qt](#8-gui-application-with-qt)
+9. [Console Application](#9-console-application)
+10. [Writing Tests](#10-writing-tests)
 11. [Best Practices](#11-best-practices)
 12. [Troubleshooting](#12-troubleshooting)
-13. [See Also](#13-siehe-auch)
+13. [See Also](#13-see-also)
 14. [Changelog](#14-changelog)
 
 ---
 
 ## 1. Overview
 
-This guide describes, wie eine neue Anwendung mit dem App-Container-Concept des CMake Architecture Build-Systems erstellt wird.
+This guide describes how to create a new application with the app container concept of the CMake Architecture build system.
 
-### App-Container-Architecture
+### App Container Architecture
 
 ```
 MeineApp/
-├── include/        # Header (.hpp)
+├── include/        # Headers (.hpp)
 ├── src/            # Implementation (.cpp)
-├── main/           # Entry Point (main.cpp)
-├── pch/            # Precompiled Header
-└── tests/unit/     # Unit Tests
+├── main/           # Entry point (main.cpp)
+├── pch/            # Precompiled header
+└── tests/          # Tests, one folder per test: tests/<type>/<Name>/
 ```
 
-| Ordner | Verantwortung | Externals | Testbar |
-|--------|---------------|-----------|---------|
-| `include/` + `src/` | Gesamte Logik, UI, Services | Qt, BASS, etc. | ✅ Yes |
-| `main/` | Nur Entry Point | — | ❌ No |
-| `pch/` | Precompiled Header | — | — |
-| `tests/unit/` | Unit Tests | doctest | — |
+| Folder | Responsibility | Externals | Testable |
+|--------|----------------|-----------|----------|
+| `include/` + `src/` | All logic, UI, services | Qt, BASS, etc. | ✅ Yes |
+| `main/` | Entry point only | — | ❌ No |
+| `pch/` | Precompiled header | — | — |
+| `tests/<type>/<Name>/` | Tests (unit, integration, performance, …) | doctest | — |
 
-### Warum diese Trennung?
+### Why This Separation?
 
-Die Trennung ermöglicht vollständige Testbarkeit der Anwendungslogik ohne die Anwendung starten zu müssen. Der main/-Ordner enthält nur den plattformspezifischen Entry Point.
+The separation makes the application logic fully testable without having to start the application. The main/ folder contains only the platform-specific entry point.
 
 ---
 
 ## 2. Prerequisites
 
-- CMake Architecture Build-System eingerichtet
-- Solution.json vorhanden
-- Benötigte Externals im `externals` Block definiert
+- CMake Architecture build system set up
+- Solution.json present
+- Required externals defined in the `externals` block
 
 ---
 
-## 3. Neue App erstellen
+## 3. Creating a New App
 
-### 3.1 Template kopieren
+### 3.1 Copy the Template
 
 ```bash
-cp -r projects/templates/App projects/apps/MeineApp
+cp -r ../CMakeCraft/templates/App projects/apps/MeineApp
 ```
 
-### 3.2 Verzeichnisstruktur
+The template is in CMakeCraft under [`templates/App/`](../../../../templates/App/), copied here from a
+working copy next to the project.
 
-Nach dem Kopieren:
+### 3.2 Directory Structure
+
+After copying:
 
 ```
 projects/apps/MeineApp/
 ├── README.md
+├── README_de.md
 ├── include/
 │   ├── Source.cmake
 │   └── Application.hpp
@@ -87,21 +92,30 @@ projects/apps/MeineApp/
 │   └── Application.cpp
 ├── main/
 │   ├── Source.cmake
-│   └── main.cpp              # Nicht ändern!
+│   └── main.cpp              # Do not change!
 ├── pch/
 │   └── pch.h
 └── tests/
-    └── unit/
-        └── Application_Tests.cpp
+    ├── unit/
+    │   └── UnitTests/
+    │       ├── Source.cmake
+    │       ├── test_main.cpp
+    │       └── Application_Tests.cpp
+    ├── integration/
+    │   └── IntegrationTests/
+    │       └── …                 # like UnitTests
+    └── performance/
+        └── PerformanceTests/
+            └── …
 ```
 
-> **Important:** Die `main.cpp` sollte nicht geändert werden. Sie ist generisch und funktioniert für alle App-Typen.
+> **Important:** `main.cpp` should not be changed. It is generic and works for all app types.
 
 ---
 
-## 4. Solution.json konfigurieren
+## 4. Configuring Solution.json
 
-### 4.1 App-Eintrag hinzufügen
+### 4.1 Add an App Entry
 
 ```json
 "apps": [
@@ -109,7 +123,7 @@ projects/apps/MeineApp/
         "name": "MeineApp",
         "displayName": "Meine Anwendung",
         "version": "0.1.0",
-        "description": "Description der Anwendung",
+        "description": "Beschreibung der Anwendung",
         
         "core": {
             "dependencies": [],
@@ -123,10 +137,15 @@ projects/apps/MeineApp/
         
         "tests": {
             "framework": "doctest",
-            "unit": {
-                "timeout": 30,
-                "labels": ["unit", "app", "fast"]
-            }
+            "targets": [
+                {
+                    "name": "UnitTests",
+                    "type": "unit",
+                    "path": "tests/unit/UnitTests",
+                    "timeout": 30,
+                    "labels": ["unit", "app", "fast"]
+                }
+            ]
         },
         
         "platforms": ["windows", "linux", "macos"]
@@ -134,33 +153,34 @@ projects/apps/MeineApp/
 ]
 ```
 
-### 4.2 Felder erklärt
+### 4.2 Fields Explained
 
-| Feld | Description |
-|------|--------------|
-| `name` | Technischer Name (Target-Name) |
-| `displayName` | Anzeigename |
-| `version` | Semantische Version |
-| `core.dependencies` | Interne Libraries |
-| `core.externals` | Externe Libraries (Qt, BASS, etc.) |
-| `runner.type` | `GUI` oder `CONSOLE` |
-| `runner.externals` | Externals nur für runner (selten benötigt) |
-| `tests.framework` | Test-Framework (doctest, googletest, catch2) |
+| Field | Description |
+|-------|-------------|
+| `name` | Technical name (target name) |
+| `displayName` | Display name |
+| `version` | Semantic version |
+| `core.dependencies` | Internal libraries |
+| `core.externals` | External libraries (Qt, BASS, etc.) |
+| `runner.type` | `GUI` or `CONSOLE` |
+| `runner.externals` | Externals for the runner only (rarely needed) |
+| `tests.framework` | Test framework (doctest, googletest, catch2) |
+| `tests.targets[]` | One entry per test executable: `name`, `type` (required), `path` (default `tests/<type>/<name>`), `timeout`, `labels`, … — target name `<App>.<name>`, e.g. `MeineApp.UnitTests` |
 
 ### 4.3 runner.type
 
-| Typ | Windows | Linux/macOS | Usage |
-|-----|---------|-------------|------------|
-| `GUI` | `WinMain` | `main` | Qt, OpenGL, Fenster-Apps |
-| `CONSOLE` | `main` | `main` | CLI-Tools, Server |
+| Type | Windows | Linux/macOS | Usage |
+|------|---------|-------------|-------|
+| `GUI` | `WinMain` | `main` | Qt, OpenGL, window apps |
+| `CONSOLE` | `main` | `main` | CLI tools, servers |
 
-Bei `GUI` unter Windows wird kein Console-Fenster geöffnet.
+With `GUI` on Windows, no console window is opened.
 
 ---
 
-## 5. Application-Klasse anpassen
+## 5. Adapting the Application Class
 
-### 5.1 Header erweitern
+### 5.1 Extend the Header
 
 `include/Application.hpp`:
 
@@ -202,40 +222,40 @@ private:
 
 ---
 
-## 6. Source.cmake pflegen
+## 6. Maintaining Source.cmake
 
-Jeder Ordner mit Quellcode enthält eine `Source.cmake`. Bei neuen Dateien muss diese aktualisiert werden:
+Every folder with source code contains a `Source.cmake`. It has to be updated when new files are added:
 
-### 6.1 Neue Header hinzufügen
+### 6.1 Add New Headers
 
 `include/Source.cmake`:
 
 ```cmake
 set(_local_headers
     "${CMAKE_CURRENT_LIST_DIR}/Application.hpp"
-    "${CMAKE_CURRENT_LIST_DIR}/MainWindow.hpp"      # NEU
-    "${CMAKE_CURRENT_LIST_DIR}/AudioEngine.hpp"     # NEU
+    "${CMAKE_CURRENT_LIST_DIR}/MainWindow.hpp"      # NEW
+    "${CMAKE_CURRENT_LIST_DIR}/AudioEngine.hpp"     # NEW
 )
 ```
 
-### 6.2 Neue Sources hinzufügen
+### 6.2 Add New Sources
 
 `src/Source.cmake`:
 
 ```cmake
 set(_local_sources
     "${CMAKE_CURRENT_LIST_DIR}/Application.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/MainWindow.cpp"      # NEU
-    "${CMAKE_CURRENT_LIST_DIR}/AudioEngine.cpp"     # NEU
+    "${CMAKE_CURRENT_LIST_DIR}/MainWindow.cpp"      # NEW
+    "${CMAKE_CURRENT_LIST_DIR}/AudioEngine.cpp"     # NEW
 )
 ```
 
-### 6.3 Unterordner einbinden
+### 6.3 Include Subfolders
 
-Bei Unterordnern am Ende der `Source.cmake`:
+For subfolders, at the end of `Source.cmake`:
 
 ```cmake
-# Subfolder rekursiv einbinden
+# Include subfolders recursively
 include("${CMAKE_CURRENT_LIST_DIR}/audio/Source.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/ui/Source.cmake")
 ```
@@ -244,13 +264,13 @@ include("${CMAKE_CURRENT_LIST_DIR}/ui/Source.cmake")
 
 ## 7. Precompiled Header
 
-### 7.1 Zweck
+### 7.1 Purpose
 
-`pch/pch.h` enthält häufig verwendete, stabile Includes um Build-Zeiten zu reduzieren.
+`pch/pch.h` contains frequently used, stable includes to reduce build times.
 
-### 7.2 PCH in Solution.json aktivieren
+### 7.2 Enable PCH in Solution.json
 
-PCH muss explizit aktiviert werden:
+PCH must be enabled explicitly:
 
 ```json
 "apps": [{
@@ -261,34 +281,34 @@ PCH muss explizit aktiviert werden:
 }]
 ```
 
-**Implizite Aktivierung:** PCH wird auch aktiviert wenn nur `header` oder `path` angegeben ist (und `enabled` nicht `false`):
+**Implicit activation:** PCH is also enabled if only `header` or `path` is given (and `enabled` is not `false`):
 
 ```json
-// Implizit aktiviert durch header
+// Implicitly enabled by header
 "pch": { "header": "stdafx.h" }
 
-// Implizit aktiviert durch path
+// Implicitly enabled by path
 "pch": { "path": "common/pch" }
 ```
 
-### 7.3 Suchpfad-Priorität
+### 7.3 Search Path Priority
 
-Wenn kein custom `path` angegeben ist, sucht das Build-System in dieser Reihenfolge:
+If no custom `path` is given, the build system searches in this order:
 
-| Priorität | Pfad | Example |
-|-----------|------|----------|
+| Priority | Path | Example |
+|----------|------|---------|
 | 1 | `{app}/pch/{header}` | `projects/apps/MeineApp/pch/pch.h` |
 | 2 | `{app}/src/{header}` | `projects/apps/MeineApp/src/pch.h` |
 | 3 | `{app}/{header}` | `projects/apps/MeineApp/pch.h` |
 
-Mit custom `path` (relativ zu `projects/`):
+With a custom `path` (relative to `projects/`):
 
 ```json
 "pch": { "path": "common/pch", "header": "shared.h" }
 // → projects/common/pch/shared.h
 ```
 
-### 7.4 Inhalt anpassen
+### 7.4 Adapt the Contents
 
 ```cpp
 #pragma once
@@ -298,24 +318,24 @@ Mit custom `path` (relativ zu `projects/`):
 #include <string>
 #include <vector>
 
-// Qt (bei GUI-Apps)
+// Qt (for GUI apps)
 #include <QApplication>
 #include <QMainWindow>
 #include <QString>
 
-// Audio (bei Audio-Apps)
+// Audio (for audio apps)
 #include <bass.h>
 ```
 
-### 7.5 Note zur Extension
+### 7.5 Note on the Extension
 
-Die `.h` Extension ist Standard für PCH, auch bei C++. Einige Compiler und Tools verarbeiten `.hpp` nicht korrekt als PCH.
+The `.h` extension is the standard for PCH, even in C++. Some compilers and tools do not process `.hpp` correctly as a PCH.
 
 ---
 
-## 8. GUI-Anwendung mit Qt
+## 8. GUI Application with Qt
 
-### 8.1 Application.cpp für Qt
+### 8.1 Application.cpp for Qt
 
 ```cpp
 #include "Application.hpp"
@@ -355,15 +375,15 @@ void Application::shutdown() {
 }
 ```
 
-### 8.2 MainWindow mit Docking
+### 8.2 MainWindow with Docking
 
-Siehe [App Template Reference](../references/App_Template_Reference.md) für Details zu QDockWidget.
+See [App Template Reference](../references/App_Template_Reference.md) for details on QDockWidget.
 
 ---
 
-## 9. Console-Anwendung
+## 9. Console Application
 
-### 9.1 Application.cpp für Console
+### 9.1 Application.cpp for Console
 
 ```cpp
 #include "Application.hpp"
@@ -376,7 +396,7 @@ struct Application::Impl {
 };
 
 bool Application::init(int argc, char* argv[]) {
-    // Configuration laden, Services starten
+    // Load configuration, start services
     m_initialized = true;
     return true;
 }
@@ -384,7 +404,7 @@ bool Application::init(int argc, char* argv[]) {
 int Application::run() {
     m_running = true;
     while (m_impl->shouldRun) {
-        // Hauptlogik
+        // Main logic
     }
     return 0;
 }
@@ -397,14 +417,15 @@ void Application::shutdown() {
 
 ---
 
-## 10. Tests schreiben
+## 10. Writing Tests
 
-### 10.1 Test-Datei
+### 10.1 Test File
 
-Tests liegen direkt in `tests/unit/`:
+Each test lives in its own folder `tests/<type>/<Name>/` with `Source.cmake`, `test_main.cpp`
+(doctest implementation and `main()`, exactly once per test executable) and the test files:
 
 ```cpp
-// tests/unit/Application_Tests.cpp
+// tests/unit/UnitTests/Application_Tests.cpp
 
 #include <doctest.h>
 #include "Application.hpp"
@@ -422,9 +443,9 @@ TEST_SUITE("Application") {
 }
 ```
 
-### 10.2 Qt-Widgets testen
+### 10.2 Testing Qt Widgets
 
-Qt-Widgets können ohne `QApplication::exec()` getestet werden:
+Qt widgets can be tested without `QApplication::exec()`:
 
 ```cpp
 #include <doctest.h>
@@ -445,38 +466,38 @@ TEST_CASE("MainWindow Creation") {
 
 ## 11. Best Practices
 
-### 11.1 Trennung von Concerns
+### 11.1 Separation of Concerns
 
-- `include/` + `src/` enthalten alle UI-Klassen, Services und Logik
-- `main/` enthält nur die generische main.cpp
-- Keine Geschäftslogik in main.cpp
+- `include/` + `src/` contain all UI classes, services and logic
+- `main/` contains only the generic main.cpp
+- No business logic in main.cpp
 
-### 11.2 Source.cmake aktuell halten
+### 11.2 Keep Source.cmake Up to Date
 
-Bei jeder neuen Datei die entsprechende `Source.cmake` aktualisieren.
+Update the corresponding `Source.cmake` for every new file.
 
-### 11.3 PCH sinnvoll nutzen
+### 11.3 Use PCH Sensibly
 
-Nur stabile, häufig verwendete Header in `pch.h`:
-- ✅ Standard Library
-- ✅ Qt Core Headers
-- ❌ Eigene Header (ändern sich oft)
+Only stable, frequently used headers in `pch.h`:
+- ✅ Standard library
+- ✅ Qt Core headers
+- ❌ Your own headers (change often)
 
 ---
 
 ## 12. Troubleshooting
 
-### Problem: Console-Fenster bei GUI-App (Windows)
+### Problem: Console Window with a GUI App (Windows)
 
-**Lösung:** `runner.type` auf `"GUI"` setzen.
+**Solution:** Set `runner.type` to `"GUI"`.
 
-### Problem: Neue Dateien werden nicht kompiliert
+### Problem: New Files Are Not Compiled
 
-**Lösung:** `Source.cmake` im entsprechenden Ordner aktualisieren.
+**Solution:** Update `Source.cmake` in the corresponding folder.
 
-### Problem: PCH wird nicht verwendet
+### Problem: PCH Is Not Used
 
-**Lösung:** Prüfen ob `pch/pch.h` existiert und in CMake konfiguriert ist.
+**Solution:** Check whether `pch/pch.h` exists and is configured in CMake.
 
 ---
 
@@ -490,7 +511,9 @@ Nur stabile, häufig verwendete Header in `pch.h`:
 
 ## 14. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.1.1** | **2025-12-18** | **PCH-Aktivierung via Solution.json dokumentiert, Suchpfad-Priorität, implizite Aktivierung** |
-| 0.1.0 | 2025-12-17 | Initial mit korrekter Struktur (include/, src/, main/, pch/) |
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | 2026-11-09 | Aligned with the code: template under `templates/App/` (CMakeCraft), test layout `tests/<type>/<Name>/` as in the template, `tests.targets[]` instead of `tests.unit` (`AppCollect.cmake`) |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.1.1** | **2025-12-18** | **PCH activation via Solution.json documented, search path priority, implicit activation** |
+| 0.1.0 | 2025-12-17 | Initial with correct structure (include/, src/, main/, pch/) |

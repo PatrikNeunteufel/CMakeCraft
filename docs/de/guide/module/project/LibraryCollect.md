@@ -1,14 +1,14 @@
 # LibraryCollect.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Version:** 1.0.2  
+> **Datum:** 2026-11-07  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [LibraryCollect.md](LibraryCollect.md)  
-> **Modul:** [`cmake/project/LibraryCollect.cmake`](../../../../cmake/project/LibraryCollect.cmake)  
+> **English:** [LibraryCollect.md](../../../../en/guide/module/project/LibraryCollect.md)  
+> **Modul:** [`cmake/project/LibraryCollect.cmake`](../../../../../cmake/project/LibraryCollect.cmake)  
 > **Modul-Version:** 1.1.0
 
 ---
@@ -165,8 +165,9 @@ _collect_library(<LIB_JSON> <CTX>)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.14.0** | **2026-11-07** | **COMPILE_OPTIONS hinzugefügt (JSON: `compile_options`); Modul-Version 1.1.0** |
-| 0.10.0 | 2026-10-09 | OUTPUT_NAME und DEFINES hinzugefügt (JSON: `output_name`, `defines`) |
+| **1.0.2** | **2026-11-07** | **CMakeCraft v0.14.0: COMPILE_OPTIONS hinzugefügt (JSON: `compile_options`); Modul-Version 1.1.0** |
+| 1.0.1 | 2026-10-09 | CMakeCraft v0.10.0: OUTPUT_NAME und DEFINES hinzugefügt (JSON: `output_name`, `defines`) |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.6.0 | 2025-12-20 | EXTERNAL_OPTIONS hinzugefügt: Per-External Optionen analog zu ExecutableCollect |
 | 0.5.1 | 2025-12-18 | PCH-Support hinzugefügt: PCH_ENABLED, PCH_HEADER, PCH_PATH |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |

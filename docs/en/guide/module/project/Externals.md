@@ -1,47 +1,47 @@
-# Externals.cmake — Modul-Dokumentation
+# Externals.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Externals.md](../../en/modules/project/Externals.md)  
-> **Module:** [`cmake/project/Externals.cmake`](../../../../cmake/project/Externals.cmake)  
+> **German:** [Externals.md](../../../../de/guide/module/project/Externals.md)  
+> **Module:** [`cmake/project/Externals.cmake`](../../../../../cmake/project/Externals.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Verarbeitung](#3-verarbeitung)
-4. [Ladereihenfolge](#4-ladereihenfolge)
-5. [Debug-Ausgaben](#5-debug-ausgaben)
-6. [See Also](#6-siehe-auch)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Processing](#3-processing)
+4. [Load Order](#4-load-order)
+5. [Debug Output](#5-debug-output)
+6. [See Also](#6-see-also)
 7. [Changelog](#7-changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Externals.cmake` Modul ist der **Einstiegspunkt für externe Dependencies**. Es verarbeitet alle Externals aus Solution.json und dispatcht an den Orchestrator.
+The `Externals.cmake` module is the **entry point for external dependencies**. It processes all externals from Solution.json and dispatches them to the orchestrator.
 
-### Kernidee
+### Core Idea
 
-Zentrale Verarbeitung aller Externals VOR Libraries und Executables, damit alle Targets verfügbar sind.
+Central processing of all externals BEFORE libraries and executables, so that all targets are available.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Iteration | Über externals-Objekt (Key-Value) |
-| Dispatch | An Orchestrator für Typ-spezifische Verarbeitung |
-| Timing | Läuft VOR Libraries/Executables |
+| Area | Description |
+|------|-------------|
+| Iteration | Over the externals object (key-value) |
+| Dispatch | To the orchestrator for type-specific processing |
+| Timing | Runs BEFORE libraries/executables |
 
-### Lädt automatisch
+### Loads Automatically
 
 - cmake/externals/Orchestrator.cmake
 
@@ -49,18 +49,18 @@ Zentrale Verarbeitung aller Externals VOR Libraries und Executables, damit alle 
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
-| Errors.cmake | 0.5.0 | (indirekt via Orchestrator) |
+| Module | Version | Usage |
+|--------|---------|-------|
+| Errors.cmake | 0.5.0 | (indirectly via the orchestrator) |
 | Debug.cmake | 0.5.0 | `dbg`, `dbg_init`, `dbgspace`, `enddbgblock` |
 | Json.cmake | 0.5.0 | `_json_has_key`, `_json_get_object` |
-| Solution.cmake | 0.5.0 | `SOLUTION_JSON` Property |
+| Solution.cmake | 0.5.0 | `SOLUTION_JSON` property |
 
 ---
 
-## 3. Verarbeitung
+## 3. Processing
 
-### 3.1 Pipeline-Ablauf
+### 3.1 Pipeline Flow
 
 ```
 Externals.cmake
@@ -85,9 +85,9 @@ Externals.cmake
         └── 4.4 _orchestrate_external(name, definition)
 ```
 
-### 3.2 Skip-Feature
+### 3.2 Skip Feature
 
-Mit `skip: true` können Externals vorbereitet, aber noch nicht geladen werden:
+With `skip: true`, externals can be prepared but not yet loaded:
 
 ```json
 {
@@ -102,12 +102,12 @@ Mit `skip: true` können Externals vorbereitet, aber noch nicht geladen werden:
 }
 ```
 
-**Verhalten:**
-- Geskippte Externals werden in `SKIPPED_EXTERNALS` Property gespeichert
-- `apply_external_to_target()` prüft diese Liste → **E013 FATAL** bei Usage
-- Funktioniert für Local, Fetched und System Externals
+**Behavior:**
+- Skipped externals are stored in the `SKIPPED_EXTERNALS` property
+- `apply_external_to_target()` checks this list → **E013 FATAL** when used
+- Works for local, fetched and system externals
 
-### 3.3 Externals-Struktur
+### 3.3 Externals Structure
 
 ```json
 {
@@ -119,32 +119,32 @@ Mit `skip: true` können Externals vorbereitet, aber noch nicht geladen werden:
 }
 ```
 
-Jeder Key wird einzeln an den Orchestrator übergeben.
+Each key is passed to the orchestrator individually.
 
 ---
 
-## 4. Ladereihenfolge
+## 4. Load Order
 
 ```
 CMakeLists.txt
     │
-    ├── Core-Module laden
+    ├── Load core modules
     │
-    ├── Solution.cmake           ← JSON laden
+    ├── Solution.cmake           ← Load JSON
     │
-    ├── Externals.cmake          ← HIER (vor Libraries!)
-    │   └── _orchestrate_external() für jedes External
+    ├── Externals.cmake          ← HERE (before Libraries!)
+    │   └── _orchestrate_external() for each external
     │
-    ├── Libraries.cmake          ← Kann Externals verwenden
+    ├── Libraries.cmake          ← Can use externals
     │
-    └── Executables.cmake        ← Kann Externals verwenden
+    └── Executables.cmake        ← Can use externals
 ```
 
-**Important:** Externals muss VOR Libraries und Executables geladen werden!
+**Important:** Externals must be loaded BEFORE Libraries and Executables!
 
 ---
 
-## 5. Debug-Ausgaben
+## 5. Debug Output
 
 ```
 -- [Externals] === Externals Pipeline Start ===
@@ -161,17 +161,18 @@ CMakeLists.txt
 
 ## 6. See Also
 
-- [Orchestrator.cmake](../externals/Orchestrator.md) — Typ-spezifisches Handling
-- [Solution.cmake](Solution.md) — Liefert SOLUTION_JSON
-- [Fetch.cmake](../externals/Fetch.md) — Git-Fetching
-- [Local_Attach.cmake](../externals/Local_Attach.md) — Lokale Externals
+- [Orchestrator.cmake](../externals/Orchestrator_cmake.md) — Type-specific handling
+- [Solution.cmake](Solution.md) — Provides SOLUTION_JSON
+- [Fetch.cmake](../externals/core/Fetch_cmake.md) — Git fetching
+- [Local_Attach.cmake](../externals/locals/Attach_cmake.md) — Local externals
 
 ---
 
 ## 7. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.6.0** | **2025-12-20** | **Skip-Feature: Externals mit `skip: true` werden nicht geladen, SKIPPED_EXTERNALS Property** |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
-| 0.1.0 | 2025-12-08 | Initial (Clean Start): Externals-Pipeline |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.6.0 | 2025-12-20 | Skip feature: externals with `skip: true` are not loaded, SKIPPED_EXTERNALS property |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0 |
+| 0.1.0 | 2025-12-08 | Initial (clean start): externals pipeline |

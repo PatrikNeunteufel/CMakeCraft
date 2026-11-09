@@ -1,18 +1,18 @@
 # Blueprint — Meta-Standard für Blueprints
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [Blueprint.md](Blueprint.md)
+> **English:** [Blueprint.md](../../../en/autorenwerk/blueprints/Blueprint.md)
 
 ---
 
 ## Inhaltsverzeichnis
 
-1. [Übersicht](#1-uebersicht)
+1. [Übersicht](#1-übersicht)
 2. [Blueprint-Hierarchie](#2-blueprint-hierarchie)
 3. [Kernprinzipien](#3-kernprinzipien)
 4. [Blueprint-Struktur](#4-blueprint-struktur)
@@ -114,7 +114,7 @@ Jeder Blueprint **MUSS** diese Elemente enthalten:
 > **Status:** [In Entwicklung | Stabil | Deprecated]  
 > **Zielgruppe:** [Wer soll diesen Blueprint lesen?]  
 > **Sprache:** Deutsch  
-> **English:** [Dateiname.md](../../en/blueprints/Dateiname.md)
+> **English:** [Dateiname.md](../../../en/autorenwerk/blueprints/Dateiname.md)
 ```
 
 ### 4.2 Inhaltsverzeichnis (Pflicht)
@@ -215,13 +215,15 @@ Während v0.x.x:
 ### 6.3 Dateinamenskonvention
 
 ```
-[Name]_v[MAJOR]_[MINOR]_[PATCH].md
+[Name].md            ← Version steht nur im Header
 
 Beispiele:
-  Blueprint_v0_5_0.md
-  Doc_v0_5_0.md
-  ModuleDoc_v0_5_0.md
+  Blueprint.md
+  Doc.md
+  ModuleDoc.md
 ```
+
+Keine Versionsnummer im Dateinamen, keine Versionskopien — **Git ist die Historie** (siehe [Doc.md § 8](Doc.md#8-dateinamen-konventionen)).
 
 ---
 
@@ -249,7 +251,7 @@ Beispiele:
 > **Basiert auf:** [Parent] vX.Y  
 > **Zielgruppe:** [Wer soll diesen Blueprint lesen?]  
 > **Sprache:** Deutsch  
-> **English:** [Name.md](../../en/blueprints/Name.md)
+> **English:** [Name.md](../../../en/autorenwerk/blueprints/Name.md)
 
 ---
 
@@ -262,7 +264,7 @@ Beispiele:
 5. [Beispiele](#5-beispiele)
 6. [Review-Checkliste](#6-review-checkliste)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -356,5 +358,7 @@ Vor Freigabe eines Blueprints prüfen:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Vererbungshierarchie, Pflicht-Inhaltsverzeichnis mit Ankern, Zielgruppe-Pflichtfeld, English-Link im Header, Template für neue Blueprints** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Dateinamen ohne Version (§ 6.3), Sprungpfad zur englischen Fassung `../../../en/autorenwerk/blueprints/` (§ 4.1, § 7.2)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Vererbungshierarchie, Pflicht-Inhaltsverzeichnis mit Ankern, Zielgruppe-Pflichtfeld, English-Link im Header, Template für neue Blueprints |
 | 0.1.0 | 2025-12-03 | Initial (als Documentation_Blueprint) |

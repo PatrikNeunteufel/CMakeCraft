@@ -81,7 +81,8 @@ function(_orchestrate_external EXT_NAME EXT_JSON)
     validate_external_source("${EXT_NAME}" "${EXT_JSON}")
     
     # ==========================================================================
-    # Detect Type (priority: system → git → path)
+    # Detect Type (system / git / path / archive - exactly one field,
+    # enforced by validate_external_source)
     # ==========================================================================
     
     _json_get_bool_or_default("${EXT_JSON}" "system" FALSE _is_system)
@@ -214,7 +215,7 @@ function(apply_external_to_target TARGET_NAME EXT_NAME EXT_OPTIONS)
     
     _json_get_object("${_externals_json}" "${EXT_NAME}" _ext_json)
     
-    # Check type (priority: system → git → path)
+    # Check type (system / path / git / archive - exactly one is set)
     _json_get_bool_or_default("${_ext_json}" "system" FALSE _is_system)
     _json_has_key("${_ext_json}" "git" _is_fetched)
     _json_has_key("${_ext_json}" "path" _is_local)

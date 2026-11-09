@@ -1,4 +1,4 @@
-# phase3.cmake — Modul-Dokumentation
+# phase3.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
@@ -6,51 +6,52 @@
 > **Path:** `cmake/buildSystemTest/phase3.cmake`  
 > **Status:** Stable  
 > **Language:** English  
+> **German:** [Phase3_doc.md](../../../../de/guide/module/buildSystemTest/Phase3_doc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Tests](#2-tests)
-3. [Successs-Flag](#3-erfolgs-flag)
-4. [See Also](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+3. [Success Flag](#3-success-flag)
+4. [See Also](#4-see-also)
+5. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Phase 3** testet die **Executable Pipeline** — das Erstellen von Executable-Targets.
+**Phase 3** tests the **executable pipeline** — the creation of executable targets.
 
-| Aspekt | Description |
-|--------|--------------|
-| **Zweck** | Executable Pipeline Validation |
-| **Debug-ID** | `PHASE3_TEST` |
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Executable pipeline validation |
+| **Debug ID** | `PHASE3_TEST` |
 | **Dependencies** | Phase 1-2, Executables.cmake |
 
 ---
 
 ## 2. Tests
 
-### 2.1 Pipeline-Module geladen
+### 2.1 Pipeline Modules Loaded
 
-| Funktion | Prüft |
-|----------|-------|
-| `_collect_executable` | ExecutableCollect.cmake geladen |
-| `_create_executable_target` | ExecutableCreate.cmake geladen |
+| Function | Checks |
+|----------|--------|
+| `_collect_executable` | ExecutableCollect.cmake loaded |
+| `_create_executable_target` | ExecutableCreate.cmake loaded |
 
-### 2.2 Executables aus Solution.json
+### 2.2 Executables from Solution.json
 
-| Prüfung | Description |
-|---------|--------------|
-| `executables` Array | Vorhanden in Solution.json |
-| Anzahl | Wird gezählt und ausgegeben |
-| Active vs Skipped | Skip-Flag wird geprüft |
+| Check | Description |
+|-------|-------------|
+| `executables` array | Present in Solution.json |
+| Count | Is counted and printed |
+| Active vs. skipped | The skip flag is checked |
 
-### 2.3 Context mit Test-Daten
+### 2.3 Context with Test Data
 
-Testet `_collect_executable` mit synthetischem JSON:
+Tests `_collect_executable` with synthetic JSON:
 
 ```cmake
 set(_test_exe_json "{
@@ -64,8 +65,8 @@ set(_test_exe_json "{
 }")
 ```
 
-| Feld | Erwartet |
-|------|----------|
+| Field | Expected |
+|-------|----------|
 | `NAME` | TestExe |
 | `DISPLAY_NAME` | Test Executable |
 | `VERSION` | 1.0.0 |
@@ -73,18 +74,18 @@ set(_test_exe_json "{
 | `SKIP` | FALSE |
 | `PCH_ENABLED` | TRUE |
 
-### 2.4 Default-Werte
+### 2.4 Default Values
 
-Testet minimales JSON `{"name": "MinimalExe"}`:
+Tests the minimal JSON `{"name": "MinimalExe"}`:
 
-| Feld | Default |
-|------|---------|
+| Field | Default |
+|-------|---------|
 | `PATH` | `projects/exec/MinimalExe/src` |
-| `TYPE` | `SOLUTION_DEFAULT_EXECUTABLE_TYPE` oder CONSOLE |
+| `TYPE` | `SOLUTION_DEFAULT_EXECUTABLE_TYPE` or CONSOLE |
 
-### 2.5 Targets erstellt
+### 2.5 Targets Created
 
-Prüft, dass für jedes aktive Executable ein CMake-Target existiert:
+Checks that a CMake target exists for every active executable:
 
 ```cmake
 if(TARGET ${_exe_name})
@@ -94,7 +95,7 @@ endif()
 
 ---
 
-## 3. Successs-Flag
+## 3. Success Flag
 
 ```cmake
 set(PHASE3_TEST_PASSED TRUE CACHE BOOL "Phase 3 Test passed" FORCE)
@@ -112,7 +113,8 @@ set(PHASE3_TEST_PASSED TRUE CACHE BOOL "Phase 3 Test passed" FORCE)
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 format |
 | 0.1.0 | 2025-12-05 | Initial |

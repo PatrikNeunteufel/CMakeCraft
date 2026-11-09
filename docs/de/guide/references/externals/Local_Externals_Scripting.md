@@ -1,12 +1,12 @@
 # Local Externals — Scripting
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals_Scripting.md](Local_Externals_Scripting.md)
+> **English:** [Local_Externals_Scripting.md](../../../../en/guide/references/externals/Local_Externals_Scripting.md)
 
 ---
 
@@ -15,7 +15,7 @@
 1. [Übersicht](#1-übersicht)
 2. [Lua 5.4 Scripting Engine](#2-lua-54-scripting-engine)
 3. [Siehe auch](#3-siehe-auch)
-4. [Changelog](#4-changelog)
+4. [Changelog](#changelog)
 
 ---
 
@@ -240,4 +240,5 @@ int main() {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Scripting (parallel zu Git)** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Eigene Kategorie Scripting (parallel zu Git) |

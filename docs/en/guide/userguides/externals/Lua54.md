@@ -4,55 +4,55 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [lua54.md](Lua54.md)
+> **German:** [Lua54.md](../../../../de/guide/userguides/externals/Lua54.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Installation](#2-installation)
-3. [Solution.json Configuration](#3-solutionjson-konfiguration)
-4. [C++ Usage](#4-c-verwendung)
-5. [Fortgeschrittene Techniken](#5-fortgeschrittene-techniken)
-6. [Kombination mit sol2](#6-kombination-mit-sol2)
+3. [Solution.json Configuration](#3-solutionjson-configuration)
+4. [C++ Usage](#4-c-usage)
+5. [Advanced Techniques](#5-advanced-techniques)
+6. [Combination with sol2](#6-combination-with-sol2)
 7. [Best Practices](#7-best-practices)
 8. [Troubleshooting](#8-troubleshooting)
-9. [Weiterführende Informationen](#9-weiterführende-informationen)
-10. [Changelog](#10-changelog)
+9. [Further Information](#9-further-information)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Lua 5.4** ist eine leichtgewichtige, einbettbare Scripting-Engine.
+**Lua 5.4** is a lightweight, embeddable scripting engine.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Local External (Source-basiert) |
-| **Pfad** | `externals/lua54` |
-| **Lizenz** | MIT |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Local External (source-based) |
+| **Path** | `externals/lua54` |
+| **License** | MIT |
 | **Website** | [lua.org](https://www.lua.org/) |
 
-### Warum Lua?
+### Why Lua?
 
-| Vorteil | Description |
-|---------|--------------|
-| 🪶 **Lightweight** | ~300KB Footprint |
-| 🔌 **Embeddable** | Einfache C-API |
-| ⚡ **Schnell** | Performante VM |
-| 📝 **Flexibel** | Configuration, Modding, Scripting |
+| Advantage | Description |
+|-----------|-------------|
+| 🪶 **Lightweight** | ~300KB footprint |
+| 🔌 **Embeddable** | Simple C API |
+| ⚡ **Fast** | Performant VM |
+| 📝 **Flexible** | Configuration, modding, scripting |
 
-### Anwendungsfälle
+### Use Cases
 
-| Anwendung | Description |
-|-----------|--------------|
-| **Configuration** | Lua-Dateien statt JSON/XML |
-| **Modding** | Spieler können Spiele erweitern |
-| **Scripting** | Gameplay-Logik auslagern |
-| **Automation** | Build-Skripte, Tools |
+| Use | Description |
+|-----|-------------|
+| **Configuration** | Lua files instead of JSON/XML |
+| **Modding** | Players can extend games |
+| **Scripting** | Moving gameplay logic out of the engine |
+| **Automation** | Build scripts, tools |
 
 ---
 
@@ -61,24 +61,24 @@
 ### 2.1 Download
 
 ```bash
-# Von lua.org
+# From lua.org
 curl -R -O https://www.lua.org/ftp/lua-5.4.6.tar.gz
 tar zxf lua-5.4.6.tar.gz
 mv lua-5.4.6/src externals/lua54/src
 ```
 
-### 2.2 Verzeichnisstruktur
+### 2.2 Directory Structure
 
 ```
 externals/lua54/
 └── src/
-    ├── lua.h           # Main Header
+    ├── lua.h           # Main header
     ├── luaconf.h       # Configuration
-    ├── lualib.h        # Standard Libraries
-    ├── lauxlib.h       # Auxiliary Library
+    ├── lualib.h        # Standard libraries
+    ├── lauxlib.h       # Auxiliary library
     ├── lapi.c
     ├── lcode.c
-    └── ... (weitere .c Dateien)
+    └── ... (more .c files)
 ```
 
 ---
@@ -103,7 +103,7 @@ externals/lua54/
 }
 ```
 
-### 3.2 Mit Options
+### 3.2 With Options
 
 ```json
 {
@@ -129,17 +129,17 @@ externals/lua54/
 
 ### 3.3 Options
 
-| Option | Typ | Default | Description |
-|--------|-----|---------|--------------|
-| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; on Windows `true` needs a static `lua54.lib` — with an import library the target links but cannot start without `lua54.dll` |
-| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile definition `LUA_32BITS`) |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; under Windows `true` needs a static `lua54.lib` — with an import library the target links but does not start without `lua54.dll` |
+| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile define `LUA_32BITS`) |
 | `LUA_USE_READLINE` | bool | `false` | Readline support (Linux only; links `readline`) |
 
 ---
 
 ## 4. C++ Usage
 
-### 4.1 Grundlagen
+### 4.1 Basics
 
 ```cpp
 #include <lua.h>
@@ -147,22 +147,22 @@ externals/lua54/
 #include <lauxlib.h>
 
 int main() {
-    // Lua-State erstellen
+    // Create Lua state
     lua_State* L = luaL_newstate();
     
-    // Standard-Libraries öffnen
+    // Open standard libraries
     luaL_openlibs(L);
     
-    // Lua-Code ausführen
+    // Run Lua code
     luaL_dostring(L, "print('Hello from Lua!')");
     
-    // Aufräumen
+    // Clean up
     lua_close(L);
     return 0;
 }
 ```
 
-### 4.2 Lua-Datei ausführen
+### 4.2 Running a Lua File
 
 **script.lua:**
 ```lua
@@ -184,16 +184,16 @@ int main() {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
     
-    // Datei laden und ausführen
+    // Load and run file
     if (luaL_dofile(L, "script.lua") != LUA_OK) {
         std::cerr << "Error: " << lua_tostring(L, -1) << std::endl;
         lua_close(L);
         return 1;
     }
     
-    // Funktion aufrufen
-    lua_getglobal(L, "greet");      // Funktion auf Stack
-    lua_pushstring(L, "World");     // Argument auf Stack
+    // Call function
+    lua_getglobal(L, "greet");      // Function onto stack
+    lua_pushstring(L, "World");     // Argument onto stack
     
     if (lua_pcall(L, 1, 1, 0) != LUA_OK) {
         std::cerr << "Error: " << lua_tostring(L, -1) << std::endl;
@@ -207,7 +207,7 @@ int main() {
 }
 ```
 
-### 4.3 Configurationsdatei laden
+### 4.3 Loading a Configuration File
 
 **config.lua:**
 ```lua
@@ -295,40 +295,40 @@ Config loadConfig(const char* filename) {
 }
 ```
 
-### 4.4 C-Funktion nach Lua exportieren
+### 4.4 Exporting a C Function to Lua
 
 ```cpp
-// C-Funktion, die von Lua aufgerufen werden kann
+// C function that can be called from Lua
 int lua_add(lua_State* L) {
-    // Argumente vom Stack holen
+    // Get arguments from the stack
     double a = luaL_checknumber(L, 1);
     double b = luaL_checknumber(L, 2);
     
-    // Ergebnis auf Stack pushen
+    // Push result onto the stack
     lua_pushnumber(L, a + b);
     
-    // Anzahl Return Values
+    // Number of return values
     return 1;
 }
 
 int lua_print_message(lua_State* L) {
     const char* msg = luaL_checkstring(L, 1);
     std::cout << "[C++] " << msg << std::endl;
-    return 0;  // Kein Return Value
+    return 0;  // No return value
 }
 
 int main() {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
     
-    // Functions registrieren
+    // Register functions
     lua_pushcfunction(L, lua_add);
     lua_setglobal(L, "add");
     
     lua_pushcfunction(L, lua_print_message);
     lua_setglobal(L, "print_message");
     
-    // In Lua verwenden
+    // Use in Lua
     luaL_dostring(L, R"(
         local result = add(10, 20)
         print("10 + 20 = " .. result)
@@ -340,7 +340,7 @@ int main() {
 }
 ```
 
-### 4.5 Variablen zwischen C++ und Lua
+### 4.5 Variables Between C++ and Lua
 
 ```cpp
 // C++ → Lua
@@ -369,12 +369,12 @@ lua_pop(L, 1);
 
 ---
 
-## 5. Fortgeschrittene Techniken
+## 5. Advanced Techniques
 
-### 5.1 Tabellen erstellen
+### 5.1 Creating Tables
 
 ```cpp
-// Tabelle erstellen: { name = "Player", health = 100, x = 0, y = 0 }
+// Create table: { name = "Player", health = 100, x = 0, y = 0 }
 lua_newtable(L);
 
 lua_pushstring(L, "Player");
@@ -392,25 +392,25 @@ lua_setfield(L, -2, "y");
 lua_setglobal(L, "player");
 ```
 
-### 5.2 Arrays erstellen
+### 5.2 Creating Arrays
 
 ```cpp
-// Array erstellen: { "apple", "banana", "cherry" }
+// Create array: { "apple", "banana", "cherry" }
 lua_newtable(L);
 
 const char* fruits[] = {"apple", "banana", "cherry"};
 for (int i = 0; i < 3; i++) {
     lua_pushstring(L, fruits[i]);
-    lua_rawseti(L, -2, i + 1);  // Lua-Arrays starten bei 1
+    lua_rawseti(L, -2, i + 1);  // Lua arrays start at 1
 }
 
 lua_setglobal(L, "fruits");
 ```
 
-### 5.3 Metatables (Objektorientierung)
+### 5.3 Metatables (Object Orientation)
 
 ```cpp
-// Userdata mit Metatable
+// Userdata with metatable
 struct Vector2 {
     float x, y;
 };
@@ -489,7 +489,7 @@ int safeCall(lua_State* L, const char* code) {
     return 0;
 }
 
-// Mit Traceback
+// With traceback
 int traceback(lua_State* L) {
     const char* msg = lua_tostring(L, 1);
     luaL_traceback(L, L, msg, 1);
@@ -521,9 +521,9 @@ int safeCallWithTraceback(lua_State* L, const char* code) {
 
 ---
 
-## 6. Kombination mit sol2
+## 6. Combination with sol2
 
-Für komfortablere C++ Bindings empfiehlt sich **sol2**:
+For more convenient C++ bindings, **sol2** is recommended:
 
 ### 6.1 Solution.json
 
@@ -536,7 +536,7 @@ Für komfortablere C++ Bindings empfiehlt sich **sol2**:
 }
 ```
 
-### 6.2 Einfache Usage
+### 6.2 Simple Usage
 
 ```cpp
 #include <sol/sol.hpp>
@@ -545,15 +545,15 @@ int main() {
     sol::state lua;
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
     
-    // Variablen
+    // Variables
     lua["x"] = 42;
     int x = lua["x"];
     
-    // Functions (Lambda)
+    // Functions (lambda)
     lua["add"] = [](int a, int b) { return a + b; };
     int result = lua["add"](2, 3);
     
-    // Script ausführen
+    // Run script
     lua.script(R"(
         print("x = " .. x)
         print("2 + 3 = " .. add(2, 3))
@@ -563,7 +563,7 @@ int main() {
 }
 ```
 
-### 6.3 Klassen exportieren
+### 6.3 Exporting Classes
 
 ```cpp
 #include <sol/sol.hpp>
@@ -625,24 +625,24 @@ int main() {
 
 ## 7. Best Practices
 
-### 7.1 Stack-Management
+### 7.1 Stack Management
 
 ```cpp
-// IMMER Stack aufräumen!
+// ALWAYS clean up the stack!
 void badExample(lua_State* L) {
     lua_getglobal(L, "value");  // Stack: +1
     int value = lua_tointeger(L, -1);
-    // FEHLER: Stack nicht aufgeräumt!
+    // ERROR: stack not cleaned up!
 }
 
 void goodExample(lua_State* L) {
     lua_getglobal(L, "value");  // Stack: +1
     int value = lua_tointeger(L, -1);
-    lua_pop(L, 1);              // Stack: -1 (ausgeglichen)
+    lua_pop(L, 1);              // Stack: -1 (balanced)
 }
 ```
 
-### 7.2 RAII für lua_State
+### 7.2 RAII for lua_State
 
 ```cpp
 class LuaState {
@@ -669,10 +669,10 @@ private:
 void example() {
     LuaState lua;
     luaL_dostring(lua, "print('Hello')");
-}  // Automatisch cleanup
+}  // Automatic cleanup
 ```
 
-### 7.3 Skripte Hot-Reloading
+### 7.3 Hot-Reloading Scripts
 
 ```cpp
 class ScriptManager {
@@ -707,27 +707,27 @@ private:
 
 ### 8.1 "lua.h not found"
 
-**Problem:** Header nicht gefunden
+**Problem:** Header not found
 
-**Lösung:** Pfad prüfen — Include.cmake erwartet `externals/lua54/src/lua.h`
+**Solution:** Check the path — Include.cmake expects `externals/lua54/src/lua.h`
 
 ### 8.2 Stack Overflow/Underflow
 
-**Problem:** Lua crashes oder verhält sich seltsam
+**Problem:** Lua crashes or behaves strangely
 
-**Lösung:** Stack-Balance prüfen mit:
+**Solution:** Check the stack balance with:
 ```cpp
 int top_before = lua_gettop(L);
 // ... operations ...
 int top_after = lua_gettop(L);
-assert(top_before == top_after);  // Sollte gleich sein
+assert(top_before == top_after);  // Should be equal
 ```
 
 ### 8.3 "attempt to call a nil value"
 
-**Problem:** Funktion existiert nicht
+**Problem:** Function does not exist
 
-**Lösung:** Prüfen ob Funktion registriert wurde:
+**Solution:** Check whether the function was registered:
 ```cpp
 lua_getglobal(L, "myFunction");
 if (lua_isnil(L, -1)) {
@@ -738,18 +738,18 @@ lua_pop(L, 1);
 
 ### 8.4 Memory Leaks
 
-**Problem:** Speicher wächst kontinuierlich
+**Problem:** Memory grows continuously
 
-**Lösung:** `lua_close()` aufrufen, oder sol2 verwenden (RAII).
+**Solution:** Call `lua_close()`, or use sol2 (RAII).
 
 ---
 
-## 9. Weiterführende Informationen
+## 9. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **Website** | [lua.org](https://www.lua.org/) |
 | **Reference Manual** | [lua.org/manual/5.4](https://www.lua.org/manual/5.4/) |
 | **Programming in Lua** | [lua.org/pil](https://www.lua.org/pil/) |
@@ -757,7 +757,7 @@ lua_pop(L, 1);
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Local_Externals_Scripting.md](../../references/externals/Local_Externals_Scripting.md) — Reference
 - [Git_Externals_Scripting.md](../../references/externals/Git_Externals_Scripting.md) — sol2, pybind11
 
@@ -765,6 +765,7 @@ lua_pop(L, 1);
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Lua 5.4** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for Lua 5.4 |

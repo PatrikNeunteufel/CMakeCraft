@@ -1,171 +1,171 @@
-# Guide — Standard für Benutzerhandbücher
+# Guide — Standard for User Guides
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5, Blueprint v0.5  
-> **Target Audience:** Documentation Authors  
+> **Target Audience:** Documentation authors  
 > **Language:** English  
-> **German:** [Guide.md](Guide.md)
+> **German:** [Guide.md](../../../de/autorenwerk/blueprints/Guide.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Header-Erweiterungen](#3-header-erweiterungen)
-4. [Requiredabschnitte](#4-pflichtabschnitte)
-5. [Schreibstil](#5-schreibstil)
-6. [Example: Vollständiger Guide](#6-beispiel-vollständiger-guide)
-7. [Review Checklist](#7-review-checkliste)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Header Extensions](#3-header-extensions)
+4. [Required Sections](#4-required-sections)
+5. [Writing Style](#5-writing-style)
+6. [Example: Complete Guide](#6-example-complete-guide)
+7. [Review Checklist](#7-review-checklist)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines die **Struktur für Benutzerhandbücher** (User Guides). Guides sind aufgabenorientierte Dokumentationen, die erklären, **wie** etwas gemacht wird.
+This blueprint defines the **structure for user guides**. Guides are task-oriented documentation that explains **how** something is done.
 
-### Zielgruppe
+### Target Audience
 
-- C++ Developers, die das Build-System **nutzen** (nicht entwickeln)
-- Fokus auf praktische Anwendung, nicht interne Details
+- C++ developers who **use** the build system (not develop it)
+- Focus on practical application, not internal details
 
-### Abgrenzung
+### Delimitation
 
-| Dokumentations-Typ | Fragestellung | Example |
+| Documentation type | Question | Example |
 |-------------------|---------------|----------|
-| **Guide** | "Wie konfiguriere ich X?" | Qt6 Integration |
-| **Tutorial** | "Zeig mir Schritt für Schritt" | Erstes Projekt erstellen |
-| **Reference** | "Was bedeutet Y?" | Solution_Schema |
-| **ModuleDoc** | "Wie funktioniert Z intern?" | Context.cmake |
+| **Guide** | "How do I configure X?" | Qt6 integration |
+| **Tutorial** | "Show me step by step" | Creating a first project |
+| **Reference** | "What does Y mean?" | Solution_Schema |
+| **ModuleDoc** | "How does Z work internally?" | Context.cmake |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für alle Dokumentationen, die:
-- Praktische Anleitungen für End Users sind
-- Im Ordner `docs/[lang]/guides/` liegen
-- "How-To"-Charakter haben
+This blueprint applies to all documentation that:
+- Is practical instructions for end users
+- Lives in the folder `docs/[lang]/guide/userguides/`
+- Has a "how-to" character
 
 **Examples:**
-- `Qt6_Integration_UserGuide_v0_2_0.md`
-- `Testing_UserGuide_v0_1_0.md`
-- `Adding_Externals_UserGuide_v0_1_0.md`
+- `Qt6_Integration.md`
+- `Testing.md`
+- `Adding_Externals.md`
 
 ---
 
-## 3. Header-Erweiterungen
+## 3. Header Extensions
 
-### 3.1 Optionale Zusatzfelder
+### 3.1 Optional Additional Fields
 
-| Feld | Required | Description |
+| Field | Required | Description |
 |------|---------|--------------|
-| `Module:` | Optional | Wenn Guide ein spezifisches Modul betrifft |
+| `Module:` | Optional | If the guide concerns a specific module |
 
-### 3.2 Vollständiger Header
+### 3.2 Complete Header
 
 ```markdown
-# [Thema] — Benutzerhandbuch
+# [Topic] — User Guide
 
 > **Version:** X.Y.Z  
 > **Date:** YYYY-MM-DD  
 > **Type:** Guide  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** C++ Developers  
+> **Target Audience:** C++ developers  
 > **Module:** externals/qt6/Include.cmake v0.6.0 (optional)  
 > **Language:** English  
-> **German:** [Thema_UserGuide.md](../../en/guides/Thema_UserGuide.md)
+> **German:** [Topic.md](../../../de/guide/userguides/Topic.md)
 ```
 
 ---
 
-## 4. Requiredabschnitte
+## 4. Required Sections
 
-Guides verwenden diese Struktur:
+Guides use this structure:
 
 ```
 ## Table of Contents
 
-## 1. Überblick
+## 1. Overview
 ## 2. Prerequisites
-## 3. Schnellstart
-## 4. [Aufgabenorientierte Abschnitte]
-## 5. Stolpersteine und Lösungen
+## 3. Quick Start
+## 4. [Task-Oriented Sections]
+## 5. Pitfalls and Solutions
 ## 6. Troubleshooting
 ## 7. See Also
 ## Changelog
 ```
 
-### 4.1 Abschnitts-Details
+### 4.1 Section Details
 
-| # | Abschnitt | Inhalt |
+| # | Section | Content |
 |---|-----------|--------|
-| 1 | Überblick | Was ermöglicht dieser Guide? Features-Liste |
-| 2 | Prerequisites | Was muss installiert/konfiguriert sein? |
-| 3 | Schnellstart | Minimales, funktionierendes Example |
-| 4 | Aufgaben | "Wie füge ich X hinzu?", "Wie konfiguriere ich Y?" |
-| 5 | Stolpersteine | Häufige Error mit Erklärung und Lösung |
-| 6 | Troubleshooting | Checkliste, häufige Error-Tabelle |
-| 7 | See Also | Verwandte Guides, Referenceen |
+| 1 | Overview | What does this guide enable? Feature list |
+| 2 | Prerequisites | What must be installed/configured? |
+| 3 | Quick Start | Minimal working example |
+| 4 | Tasks | "How do I add X?", "How do I configure Y?" |
+| 5 | Pitfalls | Common errors with explanation and solution |
+| 6 | Troubleshooting | Checklist, table of common errors |
+| 7 | See Also | Related guides, references |
 
-### 4.2 Aufgabenorientierte Abschnitte
+### 4.2 Task-Oriented Sections
 
-Der Hauptteil besteht aus aufgabenorientierten Abschnitten:
+The main part consists of task-oriented sections:
 
 ```markdown
 ## 4. Configuration
 
-### 4.1 Minimale Configuration
+### 4.1 Minimal Configuration
 
-[Wie macht man das Minimum?]
+[How do you do the minimum?]
 
-### 4.2 Mit erweiterten Optionen
+### 4.2 With Extended Options
 
-[Wie aktiviert man Feature X?]
+[How do you enable feature X?]
 
-### 4.3 Plattform-spezifisch
+### 4.3 Platform-Specific
 
-[Unterschiede Windows/Linux/macOS]
+[Differences Windows/Linux/macOS]
 ```
 
 ---
 
-## 5. Schreibstil
+## 5. Writing Style
 
-### 5.1 Aktiv und direkt
+### 5.1 Active and Direct
 
-| ❌ Passiv | ✅ Aktiv |
+| ❌ Passive | ✅ Active |
 |----------|---------|
-| "Es wird empfohlen..." | "Wir empfehlen..." |
-| "Die Datei sollte erstellt werden" | "Erstelle die Datei" |
-| "Es kann konfiguriert werden" | "Konfiguriere X so:" |
+| "It is recommended..." | "We recommend..." |
+| "The file should be created" | "Create the file" |
+| "It can be configured" | "Configure X like this:" |
 
-### 5.2 Aufgabenorientiert
+### 5.2 Task-Oriented
 
-Überschriften als Fragen oder Aufgaben:
+Headings as questions or tasks:
 
-| ❌ Abstrakt | ✅ Aufgabenorientiert |
+| ❌ Abstract | ✅ Task-oriented |
 |------------|----------------------|
-| "Configuration" | "Wie konfiguriere ich Qt6?" |
-| "Externe Dependencies" | "Wie füge ich ein External hinzu?" |
-| "Build-Prozess" | "Wie baue ich das Projekt?" |
+| "Configuration" | "How do I configure Qt6?" |
+| "External dependencies" | "How do I add an external?" |
+| "Build process" | "How do I build the project?" |
 
-### 5.3 Konkret mit Examplesn
+### 5.3 Concrete with Examples
 
-Jede Anleitung enthält:
-1. **Was:** Kurze Erklärung
-2. **Wie:** Code-Example oder Befehl
-3. **Warum:** Optionale Erklärung bei nicht-offensichtlichen Schritten
+Every instruction contains:
+1. **What:** Short explanation
+2. **How:** Code example or command
+3. **Why:** Optional explanation for non-obvious steps
 
-```markdown
-### 4.2 Mit Pfad-Hint
+````markdown
+### 4.2 With Path Hint
 
-Wenn `QT_ROOT` nicht gesetzt ist, gib den Pfad direkt an:
+If `QT_ROOT` is not set, specify the path directly:
 
 ```json
 "qt6": {
@@ -176,69 +176,69 @@ Wenn `QT_ROOT` nicht gesetzt ist, gib den Pfad direkt an:
 }
 ```
 
-Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
-```
+The `hint` is only used if no environment variable was found.
+````
 
-### 5.4 Visuelle Strukturierung
+### 5.4 Visual Structuring
 
-- **Checklisten** für Prerequisites und Troubleshooting
-- **Tabellen** für Vergleiche und Optionen
-- **Code-Blöcke** für alle Befehle und Configurationen
-- **Note-Boxen** für Warningen und Tips
+- **Checklists** for prerequisites and troubleshooting
+- **Tables** for comparisons and options
+- **Code blocks** for all commands and configurations
+- **Note boxes** for warnings and tips
 
 ---
 
-## 6. Example: Vollständiger Guide
+## 6. Example: Complete Guide
 
-```markdown
-# Qt6 Integration — Benutzerhandbuch
+````markdown
+# Qt6 Integration — User Guide
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-13  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** C++ Developers  
+> **Target Audience:** C++ developers  
 > **Module:** externals/qt6/Include.cmake v0.6.0  
 > **Language:** English  
-> **German:** [Qt6_Integration_UserGuide.md](../../en/guides/Qt6_Integration_UserGuide.md)
+> **German:** [Qt6_Integration.md](../../../de/guide/userguides/Qt6_Integration.md)
 
 ---
 
 ## Table of Contents
 
-1. [Überblick](#1-überblick)
-2. [Prerequisites](#2-voraussetzungen)
-3. [Schnellstart](#3-schnellstart)
-4. [Configuration](#4-konfiguration)
-5. [Stolpersteine und Lösungen](#5-stolpersteine-und-lösungen)
+1. [Overview](#1-overview)
+2. [Prerequisites](#2-prerequisites)
+3. [Quick Start](#3-quick-start)
+4. [Configuration](#4-configuration)
+5. [Pitfalls and Solutions](#5-pitfalls-and-solutions)
 6. [Troubleshooting](#6-troubleshooting)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
-## 1. Überblick
+## 1. Overview
 
-Die Qt6-Integration ermöglicht die Usage von Qt6 in CMake Architecture Projekten.
+The Qt6 integration enables the use of Qt6 in CMake Architecture projects.
 
 ### Features
 
-- Flexible Pfad-Erkennung
-- Automatisches DLL-Deployment (Windows)
-- RPATH-Configuration (Linux/macOS)
-- Komponentenauswahl
+- Flexible path detection
+- Automatic DLL deployment (Windows)
+- RPATH configuration (Linux/macOS)
+- Component selection
 
 ---
 
 ## 2. Prerequisites
 
-- [ ] Qt6 installiert (6.5+)
+- [ ] Qt6 installed (6.5+)
 - [ ] CMake 3.24+
 - [ ] Compiler: MSVC 2022 / GCC / Clang
 
 ---
 
-## 3. Schnellstart
+## 3. Quick Start
 
 **1. Solution.json:**
 ```json
@@ -260,95 +260,97 @@ cmake --build out/build/windows-ninja-debug
 
 ## 4. Configuration
 
-### 4.1 Minimale Configuration
+### 4.1 Minimal Configuration
 
 [...]
 
-### 4.2 Mit Komponenten
+### 4.2 With Components
 
 [...]
 
 ---
 
-## 5. Stolpersteine und Lösungen
+## 5. Pitfalls and Solutions
 
-### 5.1 Qt-Header werden nicht gefunden
+### 5.1 Qt Headers Are Not Found
 
 **Problem:** `fatal error: 'QApplication' file not found`
 
-**Ursache:** Include.cmake Version < 0.3.0
+**Cause:** Include.cmake version < 0.3.0
 
-**Lösung:** Include.cmake aktualisieren.
+**Solution:** Update Include.cmake.
 
 ---
 
 ## 6. Troubleshooting
 
-### Checkliste
+### Checklist
 
-- [ ] Qt installiert?
-- [ ] Umgebungsvariable gesetzt?
-- [ ] CMake-Cache gelöscht?
+- [ ] Qt installed?
+- [ ] Environment variable set?
+- [ ] CMake cache deleted?
 
-### Häufige Error
+### Common Errors
 
-| Error | Lösung |
+| Error | Solution |
 |--------|--------|
-| `Qt6 not found` | Umgebungsvariable prüfen |
-| DLLs fehlen | Include.cmake v0.5.0+ |
+| `Qt6 not found` | Check the environment variable |
+| DLLs missing | Include.cmake v0.5.0+ |
 
 ---
 
 ## 7. See Also
 
-- [Solution_Schema](../reference/Solution_Schema_v0_1_4.md)
-- [Adding_Externals](Adding_Externals_UserGuide_v0_1_0.md)
+- [Solution_Schema](../references/Solution_Schema.md)
+- [Adding_Externals](Adding_Externals.md)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.2.0** | **2025-12-13** | **Stolpersteine, Troubleshooting erweitert** |
+| **0.2.0** | **2025-12-13** | **Pitfalls, troubleshooting extended** |
 | 0.1.0 | 2025-12-10 | Initial |
-```
+````
 
 ---
 
 ## 7. Review Checklist
 
-Zusätzlich zur Doc.md Checkliste:
+In addition to the Doc.md checklist:
 
-**Struktur:**
-- [ ] Schnellstart vorhanden (minimal funktionierendes Example)
-- [ ] Prerequisites als Checkliste
-- [ ] Troubleshooting-Abschnitt vorhanden
+**Structure:**
+- [ ] Quick start present (minimal working example)
+- [ ] Prerequisites as a checklist
+- [ ] Troubleshooting section present
 
-**Inhalt:**
-- [ ] Aufgabenorientierte Überschriften
-- [ ] Jede Anleitung hat Code-Example
-- [ ] Stolpersteine dokumentiert
-- [ ] Alle Plattformen berücksichtigt (wenn relevant)
+**Content:**
+- [ ] Task-oriented headings
+- [ ] Every instruction has a code example
+- [ ] Pitfalls documented
+- [ ] All platforms considered (if relevant)
 
-**Stil:**
-- [ ] Aktiver Schreibstil
-- [ ] Direkte Anweisungen
-- [ ] Keine unnötigen Interna
+**Style:**
+- [ ] Active writing style
+- [ ] Direct instructions
+- [ ] No unnecessary internals
 
 ---
 
 ## 8. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [Tutorial.md](Tutorial.md) — Für Schritt-für-Schritt Anleitungen
-- [Reference.md](Reference.md) — Für Nachschlagewerke
+- [Doc.md](Doc.md) — General documentation rules
+- [Tutorial.md](Tutorial.md) — For step-by-step instructions
+- [Reference.md](Reference.md) — For reference works
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Schreibstil-Regeln, aufgabenorientierte Struktur, vollständiges Example** |
-| 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: location `docs/[lang]/guide/userguides/` (§ 2), file names without `_UserGuide` and without version (§ 2, § 3.2, example), jump path `../../../de/`** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: writing style rules, task-oriented structure, complete example |
+| 0.1.0 | 2025-12-03 | Initial (part of Documentation_Blueprint) |

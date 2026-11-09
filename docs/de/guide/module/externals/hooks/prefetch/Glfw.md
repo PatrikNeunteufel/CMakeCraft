@@ -1,14 +1,14 @@
 # PreFetch/glfw.cmake — GLFW PreFetch Hook
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [glfw_PreFetch.md](../../en/modules/externals/glfw_PreFetch.md)  
-> **Hook:** [cmake/externals/hooks/prefetch/glfw.cmake](../../../cmake/externals/hooks/prefetch/glfw.cmake)  
+> **English:** [glfw_PreFetch.md](../../../../../../en/guide/module/externals/hooks/prefetch/Glfw.md)  
+> **Hook:** [cmake/externals/hooks/prefetch/glfw.cmake](../../../../../../../cmake/externals/hooks/prefetch/glfw.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -74,7 +74,7 @@ Der `glfw.cmake` PreFetch Hook konfiguriert GLFW vor dem Build, um unnötige Kom
 ## 6. Siehe auch
 
 - [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook-System
-- [imgui_PostFetch.md](imgui_PostFetch.md) — ImGui Hook (verwendet glfw)
+- [imgui_PostFetch.md](../postfetch/Imgui.md) — ImGui Hook (verwendet glfw)
 
 ---
 
@@ -82,4 +82,5 @@ Der `glfw.cmake` PreFetch Hook konfiguriert GLFW vor dem Build, um unnötige Kom
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

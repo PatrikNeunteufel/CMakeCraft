@@ -2,10 +2,16 @@
 # =====================================
 # System External Handler - finds system-installed packages via find_package
 #
-# Version: 1.0.0
-# Date:    2025-12-26
+# Version: 1.1.0
+# Date:    2026-11-09
 # Status:  Release
 # Author:  CMake Architecture Team
+#
+# Changes v1.1.0 (CMakeCraft v0.14.1):
+#   - find_package() without REQUIRED; a failure of a required external is
+#     named by _system_external_not_found(): E503 (not found), E504 (component
+#     missing), E505 (version). Before, REQUIRED aborted with CMake's own
+#     message and E503 was unreachable.
 #
 # Dependencies:
 #   - cmake/core/Errors.cmake
@@ -14,6 +20,7 @@
 #   - cmake/externals/system/PathResolver.cmake
 #
 # Provides:
+#   - _system_external_not_found(EXT_NAME PACKAGE VERSION COMPONENTS)
 #   - _handle_system_external(EXT_NAME EXT_JSON)
 #   - _apply_system_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 #
@@ -23,6 +30,107 @@
 include_guard(GLOBAL)
 
 include("${CMAKECRAFT_DIR}/externals/system/PathResolver.cmake")
+
+# ==============================================================================
+# _system_external_not_found - Name the cause of a failed find_package()
+# ==============================================================================
+#[[
+    _system_external_not_found(EXT_NAME PACKAGE VERSION COMPONENTS)
+
+    Called after find_package(<PACKAGE> ...) without REQUIRED left
+    <PACKAGE>_FOUND false for a required system external. Reads the variables
+    find_package() leaves behind (inherited from the caller's scope):
+
+        <PACKAGE>_DIR set (config accepted)     -> E504 (components missing) or
+                                                   E503 with the package's reason
+        <PACKAGE>_CONSIDERED_CONFIGS non-empty  -> E505 (version requested) or
+          (no config accepted)                     E503 listing the configs
+        nothing considered                      -> E503 (package not found)
+
+    CMake's own diagnostics (warnings) are printed by find_package() before.
+]]
+function(_system_external_not_found EXT_NAME PACKAGE VERSION COMPONENTS)
+    set(_dir "${${PACKAGE}_DIR}")
+    set(_configs "${${PACKAGE}_CONSIDERED_CONFIGS}")
+    set(_versions "${${PACKAGE}_CONSIDERED_VERSIONS}")
+    set(_reason "${${PACKAGE}_NOT_FOUND_MESSAGE}")
+
+    set(_considered "")
+    list(LENGTH _configs _n)
+    if(_n GREATER 0)
+        math(EXPR _last "${_n} - 1")
+        foreach(_i RANGE ${_last})
+            list(GET _configs ${_i} _cfg)
+            set(_ver "?")
+            list(LENGTH _versions _nv)
+            if(_i LESS _nv)
+                list(GET _versions ${_i} _ver)
+            endif()
+            string(APPEND _considered "    ${_cfg} (version ${_ver})\n")
+        endforeach()
+    endif()
+
+    set(_solutions
+        "  Possible solutions:\n"
+        "    1. Set ${PACKAGE}_ROOT environment variable\n"
+        "    2. Add 'hints' in Solution.json\n"
+        "    3. Install ${PACKAGE} to a standard location\n"
+        "  \n"
+        "  Example Solution.json:\n"
+        "    \"${EXT_NAME}\": {\n"
+        "      \"system\": true,\n"
+        "      \"package\": \"${PACKAGE}\",\n"
+        "      \"hints\": [\"C:/Path/To/${PACKAGE}\"]\n"
+        "    }"
+    )
+    string(JOIN "" _solutions_text ${_solutions})
+
+    if(NOT "${_dir}" STREQUAL "" AND NOT "${_dir}" MATCHES "-NOTFOUND$")
+        if(NOT "${COMPONENTS}" STREQUAL "")
+            string(REPLACE ";" ", " _comp_text "${COMPONENTS}")
+            cmake_fatal("E504"
+                "System external '${EXT_NAME}': ${PACKAGE} was found (${_dir}), "
+                "but not with all requested components: ${_comp_text}\n"
+                "  Reason given by the package: ${_reason}\n"
+                "  \n"
+                "  Possible solutions:\n"
+                "    1. Install the missing component(s) for this ${PACKAGE} installation\n"
+                "    2. Remove components the project does not use from 'components' in Solution.json"
+            )
+        endif()
+        cmake_fatal("E503"
+            "System external '${EXT_NAME}': find_package(${PACKAGE}) failed.\n"
+            "  Reason given by the package: ${_reason}\n"
+            "  \n"
+            "${_solutions_text}"
+        )
+    elseif(NOT "${_considered}" STREQUAL "")
+        if(NOT "${VERSION}" STREQUAL "")
+            cmake_fatal("E505"
+                "System external '${EXT_NAME}': no ${PACKAGE} with a version compatible to the requested "
+                "'${VERSION}' was found.\n"
+                "  Considered:\n"
+                "${_considered}"
+                "  \n"
+                "  Possible solutions:\n"
+                "    1. Install a compatible ${PACKAGE} version and point ${PACKAGE}_ROOT or 'hints' to it\n"
+                "    2. Adjust 'version' in Solution.json"
+            )
+        endif()
+        cmake_fatal("E503"
+            "System external '${EXT_NAME}': find_package(${PACKAGE}) failed - no configuration file was accepted.\n"
+            "  Considered:\n"
+            "${_considered}"
+            "  \n"
+            "${_solutions_text}"
+        )
+    endif()
+    cmake_fatal("E503"
+        "System external '${EXT_NAME}': find_package(${PACKAGE}) failed.\n"
+        "  \n"
+        "${_solutions_text}"
+    )
+endfunction()
 
 # ==============================================================================
 # _handle_system_external - Process a System External Definition
@@ -41,7 +149,8 @@ include("${CMAKECRAFT_DIR}/externals/system/PathResolver.cmake")
         package - Name for find_package() (e.g. "Qt6", "Boost")
     
     Optional JSON fields:
-        version    - Version constraint (e.g. ">=6.5.0")
+        version    - Minimum version passed to find_package() (e.g. "6.5";
+                     find_package syntax, no ">=" operators)
         components - Array of package components
         hints      - Array of additional search paths
         backup     - Fallback path (triggers W501 warning)
@@ -49,7 +158,9 @@ include("${CMAKECRAFT_DIR}/externals/system/PathResolver.cmake")
     
     Errors:
         E502 - 'package' field missing
-        E503 - find_package() failed
+        E503 - find_package() failed (package not found / no config accepted)
+        E504 - package found, but not all requested components
+        E505 - no package with a compatible version (only if 'version' set)
     
     Warnings:
         W501 - Using backup location
@@ -149,52 +260,34 @@ function(_handle_system_external EXT_NAME EXT_JSON)
     endif()
     
     # =========================================================================
-    # Call find_package
+    # Call find_package - never with REQUIRED: CMake would abort with its own
+    # message before CMakeCraft can name the cause (E503/E504/E505). Without
+    # REQUIRED CMake still prints its diagnostics as warnings.
     # =========================================================================
-    
-    if(_required)
-        set(_req_flag REQUIRED)
-    else()
-        set(_req_flag "")
-    endif()
-    
+
     if(_components)
-        dbg(${DBG_RARE} "  Calling: find_package(${_package} ${_version} ${_req_flag} COMPONENTS ${_components})" ID EXTERNALS)
-        find_package(${_package} ${_version} ${_req_flag} COMPONENTS ${_components})
+        dbg(${DBG_RARE} "  Calling: find_package(${_package} ${_version} COMPONENTS ${_components})" ID EXTERNALS)
+        find_package(${_package} ${_version} COMPONENTS ${_components})
     else()
-        dbg(${DBG_RARE} "  Calling: find_package(${_package} ${_version} ${_req_flag})" ID EXTERNALS)
-        find_package(${_package} ${_version} ${_req_flag})
+        dbg(${DBG_RARE} "  Calling: find_package(${_package} ${_version})" ID EXTERNALS)
+        find_package(${_package} ${_version})
     endif()
-    
+
     # =========================================================================
     # Check result
     # =========================================================================
-    
+
     if(${_package}_FOUND)
         message(STATUS "[Externals] [${EXT_NAME}] Found ${_package} ${${_package}_VERSION}")
-        
+
         # Call post-find hook if defined
         if(COMMAND _${_package}_post_find)
             dbg(${DBG_RARE} "  Calling post-find hook: _${_package}_post_find()" ID EXTERNALS)
             cmake_language(CALL _${_package}_post_find)
         endif()
-        
+
     elseif(_required)
-        cmake_fatal("E503" 
-            "System external '${EXT_NAME}': find_package(${_package}) failed.\n"
-            "  \n"
-            "  Possible solutions:\n"
-            "    1. Set ${_package}_ROOT environment variable\n"
-            "    2. Add 'hints' in Solution.json\n"
-            "    3. Install ${_package} to a standard location\n"
-            "  \n"
-            "  Example Solution.json:\n"
-            "    \"${EXT_NAME}\": {\n"
-            "      \"system\": true,\n"
-            "      \"package\": \"${_package}\",\n"
-            "      \"hints\": [\"C:/Path/To/${_package}\"]\n"
-            "    }"
-        )
+        _system_external_not_found("${EXT_NAME}" "${_package}" "${_version}" "${_components}")
     else()
         dbg(${DBG_COMMON} "[${EXT_NAME}] ${_package} not found (optional)" ID EXTERNALS)
         message(STATUS "[${EXT_NAME}] ${_package} not found (optional)")

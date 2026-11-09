@@ -1,14 +1,14 @@
 # TestCreate.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [TestCreate.md](TestCreate.md)  
-> **Modul:** [`cmake/project/TestCreate.cmake`](../../../../cmake/project/TestCreate.cmake)  
+> **English:** [TestCreate.md](../../../../en/guide/module/project/TestCreate.md)  
+> **Modul:** [`cmake/project/TestCreate.cmake`](../../../../../cmake/project/TestCreate.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -23,7 +23,7 @@
 6. [CTest-Registrierung](#6-ctest-registrierung)
 7. [Fehlerbehandlung](#7-fehlerbehandlung)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -222,7 +222,7 @@ ctest --output-on-failure           # Output bei Fehlern
 - [Tests.cmake](Tests.md) — Ruft _create_test_target auf
 - [TestCollect.cmake](TestCollect.md) — Befüllt den Context
 - [ExecutableCreate.cmake](ExecutableCreate.md) — Analoges Modul
-- [Testing_UserGuide.md](../../../guides/Testing_UserGuide.md) — Benutzerhandbuch
+- [Testing_UserGuide.md](../../userguides/Testing.md) — Benutzerhandbuch
 
 ---
 
@@ -230,6 +230,7 @@ ctest --output-on-failure           # Output bei Fehlern
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-11 | Initial (Clean Start): Test-Target-Erstellung mit CTest |

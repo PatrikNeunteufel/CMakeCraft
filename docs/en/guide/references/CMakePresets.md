@@ -1,57 +1,57 @@
 # CMakePresets — Reference
 
-> **Version:** 1.1.1  
-> **Date:** 2026-10-24  
+> **Version:** 1.1.2  
+> **Date:** 2026-11-09  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [CMakePresets_Reference.md](../../en/references/CMakePresets_Reference.md)
+> **German:** [CMakePresets.md](../../../de/guide/references/CMakePresets.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
 3. [Configure Presets](#3-configure-presets)
 4. [Build Presets](#4-build-presets)
 5. [Test Presets](#5-test-presets)
 6. [Package Presets](#6-package-presets)
 7. [Workflow Presets](#7-workflow-presets)
 8. [Hidden Building Blocks](#8-hidden-building-blocks)
-9. [Cache-Variablen](#9-cache-variablen)
-10. [Schnellreferenz](#10-schnellreferenz)
-11. [Usage](#11-verwendung)
-12. [See Also](#12-siehe-auch)
+9. [Cache Variables](#9-cache-variables)
+10. [Quick Reference](#10-quick-reference)
+11. [Usage](#11-usage)
+12. [See Also](#12-see-also)
 13. [Changelog](#13-changelog)
 
 ---
 
 ## 1. Overview
 
-This reference documents alle verfügbaren Team-Presets in `CMakePresets.json` für das CMake Architecture Build-System.
+This reference documents all available team presets in `CMakePresets.json` for the CMake Architecture build system.
 
-### Preset-Kategorien
+### Preset Categories
 
-| Kategorie | Anzahl | Description |
-|-----------|--------|--------------|
-| Configure Presets | 35+ | Build-Umgebung konfigurieren |
-| Build Presets | 20+ | Kompilieren |
-| Test Presets | 12 | CTest ausführen |
-| Package Presets | 3 | Installer erstellen |
-| Workflow Presets | 5 | Komplette Pipelines |
+| Category | Count | Description |
+|----------|-------|-------------|
+| Configure Presets | 27 (plus 25 hidden building blocks) | Configure the build environment |
+| Build Presets | 24 | Compile |
+| Test Presets | 11 | Run CTest |
+| Package Presets | 3 | Create installers |
+| Workflow Presets | 5 | Complete pipelines |
 
-### Vendor-Metadaten
+### Vendor Metadata
 
 ```json
 {
     "version": 6,
     "vendor": {
         "cmake-architecture-v2": {
-            "version": "0.5.0",
-            "date": "2025-12-14",
-            "description": "Team-weite Presets für CMake Architecture"
+            "version": "0.1.0",
+            "date": "2025-12-03",
+            "description": "Team-weite Presets für CMake Architecture V2"
         }
     }
 }
@@ -59,26 +59,26 @@ This reference documents alle verfügbaren Team-Presets in `CMakePresets.json` f
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### Namensschema
+### Naming Scheme
 
 ```
-[plattform]-[generator]-[arch]-[config]_[variante]
+[platform]-[generator]-[arch]-[config]_[variant]
 
-plattform: windows, linux, macos
+platform:  windows, linux, macos
 generator: vs, ninja, xcode
 arch:      x64, ARM64, x86_64, arm64
 config:    debug, release, testing
-variante:  dynamic, static, asan, quality
+variant:   dynamic, static, asan, quality
 ```
 
-### Symbole
+### Symbols
 
-| Symbol | Bedeutung |
-|--------|-----------|
-| ✓ | Aktiviert/Vorhanden |
-| – | Standard/Nicht gesetzt |
+| Symbol | Meaning |
+|--------|---------|
+| ✓ | Enabled/present |
+| – | Default/not set |
 
 ---
 
@@ -86,54 +86,61 @@ variante:  dynamic, static, asan, quality
 
 ### 3.1 Windows • Visual Studio
 
-| Preset | Arch | Config | CRT | Besonderheit |
-|--------|------|--------|-----|--------------|
-| `windows-vs-x64-debug_dynamic` | x64 | Debug | /MDd | Standard-Entwicklung |
-| `windows-vs-x64-release_dynamic` | x64 | Release | /MD | Release-Builds |
-| `windows-vs-x64-testing_dynamic` | x64 | Testing | /MD | Tests aktiviert |
-| `windows-vs-ARM64-release_dynamic` | ARM64 | Release | /MD | ARM64-Builds |
+| Preset | Arch | Config | CRT | Special Feature |
+|--------|------|--------|-----|-----------------|
+| `windows-vs-x64-debug_dynamic` | x64 | Debug | /MDd | Standard development |
+| `windows-vs-x64-release_dynamic` | x64 | Release | /MD | Release builds |
+| `windows-vs-x64-testing_dynamic` | x64 | Testing | /MD | Tests enabled |
+| `windows-vs-ARM64-release_dynamic` | ARM64 | Release | /MD | ARM64 builds |
 | `windows-vs-x64-debug_clangcl_asan` | x64 | Debug | – | Clang-CL + ASan |
-| `windows-vs-x64-debug_quality` | x64 | Debug | /MDd | Clang-Tidy aktiviert |
+| `windows-vs-x64-debug_quality` | x64 | Debug | /MDd | Clang-Tidy enabled |
 | `windows-vs-x64-debug_apps-only` | x64 | Debug | /MDd | BUILD_TESTS=OFF |
 
 **Configuration `Testing`** (since CMakeCraft v0.13.0): optimized, with asserts and debug info —
 RelWithDebInfo without `NDEBUG`. MSVC/clang-cl `/O2 /Ob1 /Zi`, linker `/DEBUG /INCREMENTAL:NO`;
 GCC/Clang `-O2 -g`. The flags are set by `cmake/core/Configurations.cmake`, only when
-`CMAKE_<LANG>_FLAGS_TESTING` is empty (a value of your own via `-D` is kept). The CRT comes from
-`CMAKE_MSVC_RUNTIME_LIBRARY` as for every configuration. Use `Debug` for stepping through code.
+`CMAKE_<LANG>_FLAGS_TESTING` is empty (a value of your own via `-D` is kept). As with all
+configurations, the CRT comes from `CMAKE_MSVC_RUNTIME_LIBRARY`. For stepping through code, use
+`Debug`.
 
-Under MSVC every target CMakeCraft creates gets `/bigobj` in every configuration (since
-v0.13.1): `/O2` together with `/Zi` otherwise breaks the limit of 2^16 sections per object file
-in large files (C1128). `/bigobj` per file or in `compile_options` is no longer needed.
+Under MSVC, every target CMakeCraft creates gets `/bigobj` in every configuration (since
+v0.13.1): otherwise `/O2` and `/Zi` together break the limit of 2^16 sections per object file in
+large files (C1128). `/bigobj` per file or in `compile_options` is therefore unnecessary.
 
 ### 3.2 Windows • Ninja (Single-Config)
 
-| Preset | Compiler | Config | Besonderheit |
-|--------|----------|--------|--------------|
+| Preset | Compiler | Config | Special Feature |
+|--------|----------|--------|-----------------|
 | `windows-ninja-debug-msvc` | MSVC | Debug | – |
 | `windows-ninja-release-msvc` | MSVC | Release | – |
-| `windows-ninja-testing-msvc` | MSVC | Testing | Tests aktiviert |
+| `windows-ninja-testing-msvc` | MSVC | Testing | Tests enabled |
 | `windows-ninja-debug-clang` | Clang | Debug | – |
 | `windows-ninja-release-clang` | Clang | Release | – |
-| `windows-ninja-testing-clang` | Clang | Testing | Tests aktiviert |
+| `windows-ninja-testing-clang` | Clang | Testing | Tests enabled |
+| `craft-selftest` | Clang | Debug | Phase tests of the build system (`RUN_BUILD_SYSTEM_TESTS=ON`) |
+
+**`craft-selftest`** inherits from `win-ninja-clang` (Ninja, `clang`/`clang++`) and sets
+`CMAKE_BUILD_TYPE=Debug` and `RUN_BUILD_SYSTEM_TESTS=ON`: the configure run executes the phase tests
+under `cmake/buildSystemTest/`; "green" means configure without errors. A single phase with an additional
+`-DTEST_PHASE=<n>`. In consumer projects only needed as a smoke check after a snapshot sync.
 
 ### 3.3 Windows • Ninja (Multi-Config)
 
-| Preset | Configs | Besonderheit |
-|--------|---------|--------------|
+| Preset | Configs | Special Feature |
+|--------|---------|-----------------|
 | `windows-ninja-multi` | Debug, Release, Testing | Standard |
 | `windows-ninja-multi-tests` | Debug, Release, Testing | ENABLE_TESTING_CONFIG=ON |
 
 ### 3.4 Linux • Ninja
 
-| Preset | Compiler | Config | Besonderheit |
-|--------|----------|--------|--------------|
+| Preset | Compiler | Config | Special Feature |
+|--------|----------|--------|-----------------|
 | `linux-gcc-debug` | GCC | Debug | – |
 | `linux-gcc-release` | GCC | Release | – |
-| `linux-gcc-testing` | GCC | Testing | Tests aktiviert |
+| `linux-gcc-testing` | GCC | Testing | Tests enabled |
 | `linux-clang-debug` | Clang | Debug | – |
 | `linux-clang-release` | Clang | Release | – |
-| `linux-clang-testing` | Clang | Testing | Tests aktiviert |
+| `linux-clang-testing` | Clang | Testing | Tests enabled |
 | `linux-clang-debug-asan` | Clang | Debug | AddressSanitizer |
 
 ### 3.5 macOS
@@ -207,6 +214,7 @@ in large files (C1128). `/bigobj` per file or in `compile_options` is no longer 
 | Preset | Configure Preset | Config |
 |--------|------------------|--------|
 | `ctest-vs-x64-Debug` | windows-vs-x64-debug_dynamic | Debug |
+| `ctest-vs-x64-Release` | windows-vs-x64-release_dynamic | Release |
 | `ctest-vs-x64-Testing` | windows-vs-x64-testing_dynamic | Testing |
 | `ctest-ninja-multi-Debug` | windows-ninja-multi | Debug |
 | `ctest-ninja-multi-Testing` | windows-ninja-multi-tests | Testing |
@@ -231,8 +239,8 @@ in large files (C1128). `/bigobj` per file or in `compile_options` is no longer 
 
 ## 6. Package Presets
 
-| Preset | Generator | Plattform | Config |
-|--------|-----------|-----------|--------|
+| Preset | Generator | Platform | Config |
+|--------|-----------|----------|--------|
 | `package-windows-inno-Release` | INNOSETUP | Windows | Release |
 | `package-macos-dmg-Release` | External | macOS | Release |
 | `package-linux-tgz-Release` | TGZ | Linux | Release |
@@ -241,42 +249,42 @@ in large files (C1128). `/bigobj` per file or in `compile_options` is no longer 
 
 ## 7. Workflow Presets
 
-| Preset | Schritte | Description |
-|--------|----------|--------------|
-| `wf-vs-x64-release-inno` | Configure → Build → Test → Package | Windows Release mit Inno Setup |
-| `wf-linux-gcc-release-tgz` | Configure → Build → Test → Package | Linux Release als TGZ |
-| `wf-macos-xcode-release-dmg` | Configure → Build → Test → Package | macOS Release als DMG |
+| Preset | Steps | Description |
+|--------|-------|-------------|
+| `wf-vs-x64-release-inno` | Configure → Build → Test → Package | Windows release with Inno Setup |
+| `wf-linux-gcc-release-tgz` | Configure → Build → Test → Package | Linux release as TGZ |
+| `wf-macos-xcode-release-dmg` | Configure → Build → Test → Package | macOS release as DMG |
 | `wf-ninja-multi-testing` | Configure → Build → Test | Ninja Multi-Config Testing |
-| `wf-linux-clang-debug-asan` | Configure → Build → Test | Linux mit AddressSanitizer |
+| `wf-linux-clang-debug-asan` | Configure → Build → Test | Linux with AddressSanitizer |
 
 ---
 
 ## 8. Hidden Building Blocks
 
-Diese Presets werden nur zur Vererbung verwendet (`hidden: true`).
+These presets are only used for inheritance (`hidden: true`).
 
-### 8.1 CRT-Bausteine (Windows)
+### 8.1 CRT Building Blocks (Windows)
 
 | Preset | CRT |
 |--------|-----|
-| `MultiThreaded_Static` | /MT bzw. /MTd |
-| `MultiThreaded_Static_force_debug` | /MTd (immer) |
-| `MultiThreaded_Dynamic` | /MD bzw. /MDd |
-| `MultiThreaded_Dynamic_force_debug` | /MDd (immer) |
+| `MultiThreaded_Static` | /MT or /MTd |
+| `MultiThreaded_Static_force_debug` | /MTd (always) |
+| `MultiThreaded_Dynamic` | /MD or /MDd |
+| `MultiThreaded_Dynamic_force_debug` | /MDd (always) |
 
-### 8.2 Plattform-Basen
+### 8.2 Platform Bases
 
 | Preset | Description |
-|--------|--------------|
-| `windows-vs-base` | VS Generator, C++20, Architecture Variables |
+|--------|-------------|
+| `windows-vs-base` | VS generator, C++20, variables |
 | `windows-ninja-base` | Ninja, compile_commands.json |
 | `linux-base` | Ninja, C++20 |
 | `macos-base` | C++20, PIC |
 
-### 8.3 Architecture-Basen
+### 8.3 Architecture Bases
 
 | Preset | Architecture |
-|--------|-------------|
+|--------|--------------|
 | `vs-Win32-base` | x86 |
 | `vs-x64-base` | x64 |
 | `vs-ARM-base` | ARM |
@@ -284,26 +292,26 @@ Diese Presets werden nur zur Vererbung verwendet (`hidden: true`).
 
 ---
 
-## 9. Cache-Variablen
+## 9. Cache Variables
 
-Alle Configure Presets setzen diese Variablen:
+All configure presets set these variables:
 
 | Variable | Default | Description |
-|----------|---------|--------------|
-| `BUILD_TESTS` | ON | Tests aktivieren |
-| `BUILD_ONLY` | "" | Selektive Targets |
-| `ENABLE_CLANG_TIDY` | OFF | Code-Qualität |
-| `ENABLE_CLANG_FORMAT_CHECK` | OFF | Format-Prüfung |
-| `ACTIVE_CONFIGURE_PRESET` | ${presetName} | Aktuelles Preset |
+|----------|---------|-------------|
+| `BUILD_TESTS` | ON | Enable tests |
+| `BUILD_ONLY` | "" | Selective targets |
+| `ENABLE_CLANG_TIDY` | OFF | Code quality |
+| `ENABLE_CLANG_FORMAT_CHECK` | OFF | Format check |
+| `ACTIVE_CONFIGURE_PRESET` | ${presetName} | Current preset |
 
 ---
 
-## 10. Schnellreferenz
+## 10. Quick Reference
 
-### 10.1 Häufigste Configure Presets
+### 10.1 Most Common Configure Presets
 
-| Anwendungsfall | Preset |
-|----------------|--------|
+| Use Case | Preset |
+|----------|--------|
 | Windows Debug (IDE) | `windows-vs-x64-debug_dynamic` |
 | Windows Release | `windows-vs-x64-release_dynamic` |
 | Windows Tests | `windows-vs-x64-testing_dynamic` |
@@ -311,15 +319,15 @@ Alle Configure Presets setzen diese Variablen:
 | Linux Tests | `linux-gcc-testing` |
 | macOS Debug | `macos-ninja-debug` |
 | Sanitizer | `linux-clang-debug-asan` |
-| Code-Qualität | `windows-vs-x64-debug_quality` |
+| Code quality | `windows-vs-x64-debug_quality` |
 
-### 10.2 Häufigste Workflows
+### 10.2 Most Common Workflows
 
-| Anwendungsfall | Preset |
-|----------------|--------|
-| Windows Release + Installer | `wf-vs-x64-release-inno` |
-| Linux Release + TGZ | `wf-linux-gcc-release-tgz` |
-| Sanitizer-Tests | `wf-linux-clang-debug-asan` |
+| Use Case | Preset |
+|----------|--------|
+| Windows release + installer | `wf-vs-x64-release-inno` |
+| Linux release + TGZ | `wf-linux-gcc-release-tgz` |
+| Sanitizer tests | `wf-linux-clang-debug-asan` |
 
 ---
 
@@ -349,7 +357,7 @@ ctest --preset ctest-vs-x64-Debug
 cmake --workflow --preset wf-vs-x64-release-inno
 ```
 
-### 11.5 Presets auflisten
+### 11.5 List Presets
 
 ```bash
 cmake --list-presets
@@ -361,17 +369,18 @@ cmake --list-presets=test
 
 ## 12. See Also
 
-- [CMakePresets_Manual.md](CMakePresets_Manual.md) — Concepte und Best Practices
-- [CMakeUserPresets_Reference.md](CMakeUserPresets_Reference.md) — User-Presets
+- CMakePresets_Manual.md — Concepts and best practices
+- [CMakeUserPresets.md](CMakeUserPresets.md) — User presets
 - [CMakeUserPresets_Example.md](../userguides/CMakeUserPresets.md) — Template
 
 ---
 
 ## 13. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **1.1.1** | **2026-10-24** | **`/bigobj` under MSVC (CMakeCraft v0.13.1)** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.1.2** | **2026-11-09** | **Aligned with the code: presets `craft-selftest` (§3.2) and `ctest-vs-x64-Release` (§5.1, a step of `wf-vs-x64-release-inno`) added; counts and vendor metadata as in `CMakePresets.json`** |
+| 1.1.1 | 2026-10-24 | `/bigobj` under MSVC (CMakeCraft v0.13.1) |
 | 1.1.0 | 2026-10-24 | Configuration `Testing` described (optimized, asserts, debug info; CMakeCraft v0.13.0) |
-| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, Schnellreferenz, Usage |
-| 0.1.0 | 2025-12-03 | Initial: Alle Team-Presets dokumentiert, Hidden Building Blocks, Variablen |
+| 0.5.0 | 2025-12-14 | Blueprint v0.5.0 format: numbered TOC, reference header, quick reference, usage |
+| 0.1.0 | 2025-12-03 | Initial: all team presets documented, hidden building blocks, variables |

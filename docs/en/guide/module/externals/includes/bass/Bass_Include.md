@@ -1,141 +1,141 @@
 # bass/Include.cmake — BASS Audio Library Integration
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers, C++ Developers  
 > **Language:** English  
-> **German:** [bass_Include.md](../../../../../../de/guide/module/externals/includes/bass/bass_Include.md)  
-> **Module:** [cmake/externals/includes/bass/Include.cmake](../../../../../../cmake/externals/includes/bass/Include.cmake)  
+> **German:** [Bass_Include.md](../../../../../../de/guide/module/externals/includes/bass/Bass_Include.md)  
+> **Module:** [cmake/externals/includes/bass/Include.cmake](../../../../../../../cmake/externals/includes/bass/Include.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Verfügbare Variablen](#2-verfügbare-variablen)
-3. [Erstellte Targets](#3-erstellte-targets)
+1. [Overview](#1-overview)
+2. [Available Variables](#2-available-variables)
+3. [Created Targets](#3-created-targets)
 4. [Options](#4-options)
-5. [Plattform-Unterstützung](#5-plattform-unterstützung)
-6. [Usagesbeispiele](#6-verwendungsbeispiele)
-7. [Verzeichnisstruktur](#7-verzeichnisstruktur)
-8. [Errorbehandlung](#8-fehlerbehandlung)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+5. [Platform Support](#5-platform-support)
+6. [Usage Examples](#6-usage-examples)
+7. [Directory Structure](#7-directory-structure)
+8. [Error Handling](#8-error-handling)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Die `bass/Include.cmake` integriert die **BASS Audio Library** von un4seen als lokales External in das Build-System.
+`bass/Include.cmake` integrates the **BASS Audio Library** by un4seen into the build system as a local external.
 
-### Kernfunktionen
+### Core Functions
 
-| Funktion | Description |
-|----------|--------------|
-| Audio-Playback | MP3, WAV, OGG, FLAC (mit Plugin) |
-| Streaming | Internet-Streams, Shoutcast |
-| Recording | Audio-Aufnahme |
-| Plugins | Decoder, Encoder, Effekte |
+| Function | Description |
+|----------|-------------|
+| Audio playback | MP3, WAV, OGG, FLAC (with plugin) |
+| Streaming | Internet streams, Shoutcast |
+| Recording | Audio recording |
+| Plugins | Decoders, encoders, effects |
 
-### Target-Erstellung
+### Target Creation
 
-Erstellt ein `SHARED IMPORTED` Target `bass` mit plattformspezifischen Library-Pfaden.
+Creates a `SHARED IMPORTED` target `bass` with platform-specific library paths.
 
 ---
 
-## 2. Verfügbare Variablen
+## 2. Available Variables
 
-Diese Variablen werden vom Orchestrator bereitgestellt:
+These variables are provided by the orchestrator:
 
 | Variable | Description |
-|----------|--------------|
+|----------|-------------|
 | `EXTERNAL_NAME` | `"bass"` |
-| `EXTERNAL_ROOT` | Absoluter Pfad zu `externals/bass` |
-| `EXTERNAL_JSON` | JSON-Element aus Solution.json |
-| `EXTERNAL_OPTIONS` | Target-spezifische Options (JSON) |
+| `EXTERNAL_ROOT` | Absolute path to `externals/bass` |
+| `EXTERNAL_JSON` | JSON element from Solution.json |
+| `EXTERNAL_OPTIONS` | Target-specific options (JSON) |
 
 ---
 
-## 3. Erstellte Targets
+## 3. Created Targets
 
-### 3.1 Primäres Target
+### 3.1 Primary Target
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `bass` | SHARED IMPORTED | BASS Core Library |
+| Target | Type | Description |
+|--------|------|-------------|
+| `bass` | SHARED IMPORTED | BASS core library |
 
-### 3.2 Plugin-Targets (Optional)
+### 3.2 Plugin Targets (Optional)
 
-Werden nur erstellt wenn die entsprechende Option aktiviert ist:
+Created only if the corresponding option is enabled:
 
 | Target | Option | Description |
-|--------|--------|--------------|
-| `bass::flac` | `BASS_FLAC` | FLAC Decoder |
-| `bass::opus` | `BASS_OPUS` | Opus Decoder |
-| `bass::fx` | `BASS_FX` | DSP Effekte |
-| `bass::mix` | `BASS_MIX` | Multi-Channel Mixing |
-| `bass::enc` | `BASS_ENC` | Encoding-Basis |
-| `bass::enc_mp3` | `BASS_ENC_MP3` | MP3 Encoder |
-| `bass::enc_ogg` | `BASS_ENC_OGG` | OGG Encoder |
-| `bass::enc_flac` | `BASS_ENC_FLAC` | FLAC Encoder |
-| `bass::midi` | `BASS_MIDI` | MIDI Playback |
+|--------|--------|-------------|
+| `bass::flac` | `BASS_FLAC` | FLAC decoder |
+| `bass::opus` | `BASS_OPUS` | Opus decoder |
+| `bass::fx` | `BASS_FX` | DSP effects |
+| `bass::mix` | `BASS_MIX` | Multi-channel mixing |
+| `bass::enc` | `BASS_ENC` | Encoding base |
+| `bass::enc_mp3` | `BASS_ENC_MP3` | MP3 encoder |
+| `bass::enc_ogg` | `BASS_ENC_OGG` | OGG encoder |
+| `bass::enc_flac` | `BASS_ENC_FLAC` | FLAC encoder |
+| `bass::midi` | `BASS_MIDI` | MIDI playback |
 | `bass::loud` | `BASS_LOUD` | Loudness (EBU R128) |
 
 ---
 
 ## 4. Options
 
-### 4.1 Decoder
+### 4.1 Decoders
 
 | Option | Plugin | Header | Description |
-|--------|--------|--------|--------------|
-| `BASS_FLAC` | bassflac | `bassflac.h` | FLAC Audio Decoder |
-| `BASS_OPUS` | bassopus | `bassopus.h` | Opus Audio Decoder |
+|--------|--------|--------|-------------|
+| `BASS_FLAC` | bassflac | `bassflac.h` | FLAC audio decoder |
+| `BASS_OPUS` | bassopus | `bassopus.h` | Opus audio decoder |
 | `BASS_DSD` | bassdsd | `bassdsd.h` | DSD (Direct Stream Digital) |
-| `BASS_WV` | basswv | `basswv.h` | WavPack Decoder |
+| `BASS_WV` | basswv | `basswv.h` | WavPack decoder |
 | `BASS_APE` | bassape | `bass_ape.h` | Monkey's Audio |
-| `BASS_MPC` | bass_mpc | `bass_mpc.h` | Musepack Decoder |
+| `BASS_MPC` | bass_mpc | `bass_mpc.h` | Musepack decoder |
 | `BASS_ALAC` | bassalac | `bassalac.h` | Apple Lossless |
 | `BASS_TTA` | bass_tta | `bass_tta.h` | True Audio |
-| `BASS_CD` | basscd | `basscd.h` | CD Audio Ripper |
-| `BASS_WEBM` | basswebm | `basswebm.h` | WebM Container |
+| `BASS_CD` | basscd | `basscd.h` | CD audio ripper |
+| `BASS_WEBM` | basswebm | `basswebm.h` | WebM container |
 
-### 4.2 Encoder
+### 4.2 Encoders
 
 | Option | Plugin | Header | Description |
-|--------|--------|--------|--------------|
-| `BASS_ENC` | bassenc | `bassenc.h` | Encoding-Basis (Auto bei Encoder) |
-| `BASS_ENC_MP3` | bassenc_mp3 | `bassenc_mp3.h` | MP3 Encoder |
-| `BASS_ENC_OGG` | bassenc_ogg | `bassenc_ogg.h` | OGG Vorbis Encoder |
-| `BASS_ENC_FLAC` | bassenc_flac | `bassenc_flac.h` | FLAC Encoder |
+|--------|--------|--------|-------------|
+| `BASS_ENC` | bassenc | `bassenc.h` | Encoding base (automatic with an encoder) |
+| `BASS_ENC_MP3` | bassenc_mp3 | `bassenc_mp3.h` | MP3 encoder |
+| `BASS_ENC_OGG` | bassenc_ogg | `bassenc_ogg.h` | OGG Vorbis encoder |
+| `BASS_ENC_FLAC` | bassenc_flac | `bassenc_flac.h` | FLAC encoder |
 
 ### 4.3 Plugins
 
 | Option | Plugin | Header | Description |
-|--------|--------|--------|--------------|
-| `BASS_FX` | bass_fx | `bass_fx.h` | DSP Effekte (Tempo, Pitch, Reverb) |
-| `BASS_MIX` | bassmix | `bassmix.h` | Multi-Channel Mixing |
-| `BASS_LOUD` | bassloud | `bassloud.h` | Loudness Messung (EBU R128) |
-| `BASS_MIDI` | bassmidi | `bassmidi.h` | MIDI Playback |
+|--------|--------|--------|-------------|
+| `BASS_FX` | bass_fx | `bass_fx.h` | DSP effects (tempo, pitch, reverb) |
+| `BASS_MIX` | bassmix | `bassmix.h` | Multi-channel mixing |
+| `BASS_LOUD` | bassloud | `bassloud.h` | Loudness measurement (EBU R128) |
+| `BASS_MIDI` | bassmidi | `bassmidi.h` | MIDI playback |
 
 ---
 
-## 5. Plattform-Unterstützung
+## 5. Platform Support
 
-### 5.1 Library-Pfade
+### 5.1 Library Paths
 
-| Plattform | DLL/SO | Import-Lib |
-|-----------|--------|------------|
+| Platform | DLL/SO | Import Lib |
+|----------|--------|------------|
 | Windows x64 | `lib/x64/bass.dll` | `lib/x64/bass.lib` |
 | Windows x86 | `lib/x86/bass.dll` | `lib/x86/bass.lib` |
 | Linux | `lib/libbass.so` | — |
 | macOS | `lib/libbass.dylib` | — |
 
-### 5.2 Architecture-Erkennung
+### 5.2 Architecture Detection
 
 ```cmake
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -147,9 +147,9 @@ endif()
 
 ---
 
-## 6. Usagesbeispiele
+## 6. Usage Examples
 
-### 6.1 Basis-Usage
+### 6.1 Basic Usage
 
 **Solution.json:**
 
@@ -178,7 +178,7 @@ int main() {
     HSTREAM stream = BASS_StreamCreateFile(FALSE, "music.mp3", 0, 0, 0);
     BASS_ChannelPlay(stream, FALSE);
     
-    // Warten bis fertig
+    // Wait until finished
     while (BASS_ChannelIsActive(stream) == BASS_ACTIVE_PLAYING) {
         Sleep(100);
     }
@@ -189,7 +189,7 @@ int main() {
 }
 ```
 
-### 6.2 Mit Plugins
+### 6.2 With Plugins
 
 **Solution.json:**
 
@@ -217,17 +217,17 @@ int main() {
 #include <bassflac.h>
 #include <bass_fx.h>
 
-// FLAC wird automatisch erkannt
+// FLAC is detected automatically
 HSTREAM stream = BASS_StreamCreateFile(FALSE, "music.flac", 0, 0, BASS_STREAM_DECODE);
 
-// Tempo-Stream für Pitch/Speed-Änderung
+// Tempo stream for pitch/speed changes
 HSTREAM tempo = BASS_FX_TempoCreate(stream, BASS_FX_FREESOURCE);
-BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO, -20.0f);  // 20% langsamer
+BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO, -20.0f);  // 20% slower
 ```
 
 ---
 
-## 7. Verzeichnisstruktur
+## 7. Directory Structure
 
 ```
 externals/bass/
@@ -249,29 +249,36 @@ externals/bass/
 
 ---
 
-## 8. Errorbehandlung
+## 8. Error Handling
 
 | Code | Description |
-|------|--------------|
-| E213 | Include.cmake nicht gefunden |
-| E214 | External-Pfad existiert nicht |
-| W105 | Plugin-DLL nicht gefunden (Option aktiviert aber Datei fehlt) |
+|------|-------------|
+| E213 | Include.cmake not found |
+| E214 | External path does not exist |
+| W105 | Plugin DLL not found (option enabled but file missing) |
+
+> Currently not raised (as of 2026-11-09). The case is not reported:
+> `cmake/externals/includes/bass/Include.cmake` knows no W105, its only warning is
+> `[<name>] Unsupported platform` (`:91`). W105 stands in `cmake/core/Errors.cmake:179` for
+> "Version not SemVer compliant" and is never raised either.
 
 ---
 
 ## 9. See Also
 
-- [Externals_Reference.md](../../../../references/Externals.md) — Alle Options im Detail
-- [Externals_UserGuide.md](../../../../userguides/Externals.md) — Usagesanleitung
-- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local External Handler
+- [Externals_Reference.md](../../../../references/Externals.md) — All options in detail
+- [Externals_UserGuide.md](../../../../userguides/Externals.md) — Usage guide
+- [Attach_cmake.md](../../locals/Attach_cmake.md) — Local external handler
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.1** | **2025-12-16** | **SYSTEM-Includes für Compiler-Warningsunterdrückung** |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/bass/` |
-| 0.1.1 | 2025-12-09 | Plugin-System mit Options, Encoder-Targets |
-| 0.1.0 | 2025-12-05 | Initial: BASS Core Target |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **W105 in §8 marked as currently not raised** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.1** | **2025-12-16** | **SYSTEM includes to suppress compiler warnings** |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0, convention path `cmake/externals/includes/bass/` |
+| 0.1.1 | 2025-12-09 | Plugin system with options, encoder targets |
+| 0.1.0 | 2025-12-05 | Initial: BASS core target |

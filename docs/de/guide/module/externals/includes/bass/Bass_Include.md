@@ -1,14 +1,14 @@
 # bass/Include.cmake — BASS Audio Library Integration
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler, C++ Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [bass_Include.md](bass_Include.md)  
-> **Modul:** [cmake/externals/includes/bass/Include.cmake](../../../../../../cmake/externals/includes/bass/Include.cmake)  
+> **English:** [bass_Include.md](../../../../../../en/guide/module/externals/includes/bass/Bass_Include.md)  
+> **Modul:** [cmake/externals/includes/bass/Include.cmake](../../../../../../../cmake/externals/includes/bass/Include.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -24,7 +24,7 @@
 7. [Verzeichnisstruktur](#7-verzeichnisstruktur)
 8. [Fehlerbehandlung](#8-fehlerbehandlung)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -257,6 +257,11 @@ externals/bass/
 | E214 | External-Pfad existiert nicht |
 | W105 | Plugin-DLL nicht gefunden (Option aktiviert aber Datei fehlt) |
 
+> Derzeit nicht ausgelöst (Stand 2026-11-09). Der Fall wird nicht gemeldet:
+> `cmake/externals/includes/bass/Include.cmake` kennt kein W105, seine einzige Warnung ist
+> `[<name>] Unsupported platform` (`:91`). W105 steht in `cmake/core/Errors.cmake:179` für
+> „Version not SemVer compliant“ und wird ebenfalls nie ausgelöst.
+
 ---
 
 ## 9. Siehe auch
@@ -271,6 +276,8 @@ externals/bass/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.1** | **2026-11-09** | **W105 in §8 als derzeit nicht ausgelöst gekennzeichnet** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.1** | **2025-12-16** | **SYSTEM-Includes für Compiler-Warnungsunterdrückung** |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0, Convention-Pfad `cmake/externals/includes/bass/` |
 | 0.1.1 | 2025-12-09 | Plugin-System mit Options, Encoder-Targets |

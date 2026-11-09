@@ -1,12 +1,12 @@
 # Git Externals: AI & GPU Computing — Referenz
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Git_Externals_AI.md](Git_Externals_AI.md)
+> **English:** [Git_Externals_AI.md](../../../../en/guide/references/externals/Git_Externals_AI.md)
 
 ---
 
@@ -371,4 +371,5 @@ Für onnxruntime und komplexe CUDA-Projekte:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: Ausgelagert aus Git_Externals_Reference |

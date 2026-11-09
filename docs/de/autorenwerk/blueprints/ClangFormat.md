@@ -1,12 +1,13 @@
 # ClangFormat Blueprint – Code-Formatierung
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-05  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle `.clang-format`-Konfigurationen  
 > **Bezug:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1  
 > **Sprache:** Deutsch  
+> **English:** [ClangFormat.md](../../../en/autorenwerk/blueprints/ClangFormat.md)  
 
 ---
 
@@ -185,7 +186,7 @@ Jede `.clang-format`-Datei enthält:
 ```yaml
 # C/C++ Formatting Standard
 # Version: 0.1.0
-# Blueprint: Documentations/Blueprints/ClangFormat_Blueprint_v0_1_0.md
+# Blueprint: docs/de/autorenwerk/blueprints/ClangFormat.md
 # Datum: 2025-12-05
 ```
 
@@ -200,9 +201,9 @@ Jede `.clang-format`-Datei enthält:
 
 ## 9. Siehe auch
 
-- [Cpp_Coding_Standard](Cpp_Coding_Standard_v0_1_0.md) – C++ Stil-Richtlinien
-- [C_Coding_Standard](C_Coding_Standard_v0_1_0.md) – C Stil-Richtlinien (Embedded)
-- [ClangTidy_Blueprint](ClangTidy_Blueprint_v0_1_0.md) – Statische Analyse
+- [Cpp_Coding_Standard](../standards/Cpp_Coding_Standard.md) – C++ Stil-Richtlinien
+- [C_Coding_Standard](../standards/C_Coding_Standard.md) – C Stil-Richtlinien (Embedded)
+- [ClangTidy_Blueprint](ClangTidy.md) – Statische Analyse
 
 ---
 
@@ -210,4 +211,6 @@ Jede `.clang-format`-Datei enthält:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-05** | **Initial: Struktur, Philosophie, Änderungsprozess** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Kopfmuster § 8.1 verweist auf den heutigen Pfad `docs/de/autorenwerk/blueprints/ClangFormat.md`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.1.0 | 2025-12-05 | Initial: Struktur, Philosophie, Änderungsprozess |

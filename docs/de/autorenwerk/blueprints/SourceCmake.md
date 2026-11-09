@@ -7,7 +7,7 @@
 > **Basiert auf:** CMake Architecture  
 > **Zielgruppe:** Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [SourceCmake.md](SourceCmake.md)
+> **English:** [SourceCmake.md](../../../en/autorenwerk/blueprints/SourceCmake.md)
 
 ---
 

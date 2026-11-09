@@ -1,14 +1,14 @@
 # TestCollect.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [TestCollect.md](TestCollect.md)  
-> **Modul:** [`cmake/project/TestCollect.cmake`](../../../../cmake/project/TestCollect.cmake)  
+> **English:** [TestCollect.md](../../../../en/guide/module/project/TestCollect.md)  
+> **Modul:** [`cmake/project/TestCollect.cmake`](../../../../../cmake/project/TestCollect.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [Default-Werte](#5-default-werte)
 6. [JSON-Mapping](#6-json-mapping)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -154,5 +154,6 @@ _collect_test(<TEST_JSON> <CTX>)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-11 | Initial (Clean Start): Test-Datensammlung |

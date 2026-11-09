@@ -1,12 +1,12 @@
 # Externe Bibliotheken hinzufügen – Benutzerhandbuch
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Build-System-Entwickler, C++ Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Adding_Externals_UserGuide.md](Adding_Externals.md)
+> **English:** [Adding_Externals_UserGuide.md](../../../en/guide/userguides/Adding_Externals.md)
 
 ---
 
@@ -227,12 +227,12 @@ Ein PreFetch Hook ist sinnvoll wenn das External:
 
 ### 6.2 Hook-Datei erstellen
 
-**Pfad:** `cmake/externals/Hooks/PreFetch/{name}.cmake`
+**Pfad:** `cmake/externals/hooks/prefetch/{name}.cmake` (im CMakeCraft-Repo; `{name}` = External-Key in Solution.json oder Wert des Felds `hook`)
 
 **Template:**
 ```cmake
 # ==============================================================================
-# PreFetch/{name}.cmake – {Name} PreFetch Hook
+# prefetch/{name}.cmake – {Name} PreFetch Hook
 # ==============================================================================
 #
 # Hook:         {name}.cmake
@@ -305,12 +305,12 @@ Ein PostFetch Hook ist **erforderlich** wenn:
 
 ### 7.2 Hook-Datei erstellen
 
-**Pfad:** `cmake/externals/Hooks/PostFetch/{name}.cmake`
+**Pfad:** `cmake/externals/hooks/postfetch/{name}.cmake` (im CMakeCraft-Repo; `{name}` = External-Key in Solution.json oder Wert des Felds `hook`)
 
 **Template (für Library ohne CMake):**
 ```cmake
 # ==============================================================================
-# PostFetch/{name}.cmake – {Name} PostFetch Hook
+# postfetch/{name}.cmake – {Name} PostFetch Hook
 # ==============================================================================
 #
 # Hook:         {name}.cmake
@@ -374,7 +374,7 @@ message(STATUS "[${HOOK_EXTERNAL_NAME}] PostFetch complete")
 **Template (für Header-only Library):**
 ```cmake
 # ==============================================================================
-# PostFetch/{name}.cmake – {Name} PostFetch Hook (Header-only)
+# postfetch/{name}.cmake – {Name} PostFetch Hook (Header-only)
 # ==============================================================================
 
 message(STATUS "[${HOOK_EXTERNAL_NAME}] Creating INTERFACE target")
@@ -543,9 +543,11 @@ set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 **Ursache:** Falscher Dateiname oder Pfad.
 
 **Lösung:**
-1. Dateiname muss exakt `{external_name}.cmake` sein
-2. Pfad: `cmake/externals/Hooks/PreFetch/` oder `PostFetch/`
-3. Groß-/Kleinschreibung beachten
+1. Dateiname muss exakt `{external_name}.cmake` sein (External-Key) bzw. dem Wert des Felds `hook` entsprechen
+2. Pfad: `cmake/externals/hooks/prefetch/` oder `cmake/externals/hooks/postfetch/` im CMakeCraft-Repo
+   — oder ausdrücklich `"hooks": { "preFetch": "<Pfad>", "postFetch": "<Pfad>" }` (relativ zum
+   Projekt-Root; fehlt die Datei, E216)
+3. Groß-/Kleinschreibung beachten (alles klein)
 
 ---
 
@@ -581,8 +583,10 @@ set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 # Verbose CMake-Output
 cmake --preset ... --debug-output
 
-# Hook-Ausführung prüfen
-cmake --preset ... -DHOOKS_DEBUG=ON
+# Hook-Ausführung prüfen: jeder geladene Hook meldet sich in der Configure-Ausgabe, z. B.
+#   [Externals]     PreFetch hook (convention): glfw.cmake
+#   [Externals]     PostFetch hook (explicit): <Pfad>
+# Fehlt die Zeile, wurde für das External kein Hook geladen.
 
 # FetchContent Details
 cmake --preset ... --log-level=DEBUG
@@ -603,5 +607,7 @@ cmake --preset ... --log-level=DEBUG
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An den Code angeglichen: Hook-Pfade `cmake/externals/hooks/prefetch/` und `…/postfetch/` klein, Dateiname = External-Key oder `hook`, ausdrückliche `hooks`-Pfade (E216); `-DHOOKS_DEBUG=ON` (gibt es nicht) durch die Configure-Meldungen des HookLoaders ersetzt |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Konformität: Nummerierte TOC, Voraussetzungen, Stolpersteine/Troubleshooting getrennt, Siehe auch** |
 | 0.1.0 | 2025-12-10 | Initial: Komplette Anleitung mit Templates |

@@ -1,12 +1,12 @@
 # Local Externals — Übersicht
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Local_Externals.md](Local_Externals.md)
+> **English:** [Local_Externals.md](../../../../en/guide/references/externals/Local_Externals.md)
 
 ---
 
@@ -19,7 +19,7 @@
 5. [Include.cmake System](#5-includecmake-system)
 6. [Verwendung](#6-verwendung)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -325,7 +325,7 @@ _register_external_target("bass" "bass" PRIMARY)
 
 ## 7. Siehe auch
 
-- [Externals.md](Externals.md) — Hauptübersicht (Local + Git)
+- [Externals.md](../Externals.md) — Hauptübersicht (Local + Git)
 - [Git_Externals.md](Git_Externals.md) — Git Externals Übersicht
 - [Solution_Schema.md](../Solution_Schema.md) — External-Konfiguration
 - [Attach_cmake.md](../../module/externals/locals/Attach_cmake.md) — Local External Handler
@@ -339,10 +339,10 @@ _register_external_target("bass" "bass" PRIMARY)
 
 ### Detail-Dokumentationen (Include.cmake)
 
-- [doctest_Include.md](../../module/externals/includes/doctest/doctest_Include.md)
-- [lua54_Include.md](../../module/externals/includes/lua54/lua54_Include.md)
-- [glad_Include.md](../../module/externals/includes/glad/glad_Include.md)
-- [bass_Include.md](../../module/externals/includes/bass/bass_Include.md)
+- [doctest_Include.md](../../module/externals/includes/doctest/Doctest_Include.md)
+- [lua54_Include.md](../../module/externals/includes/lua54/Lua54_Include.md)
+- [glad_Include.md](../../module/externals/includes/glad/Glad_Include.md)
+- [bass_Include.md](../../module/externals/includes/bass/Bass_Include.md)
 
 ---
 
@@ -350,5 +350,6 @@ _register_external_target("bass" "bass" PRIMARY)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **4 Kategorien parallel zu Git: Testing, Scripting, GUI, Media** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | 4 Kategorien parallel zu Git: Testing, Scripting, GUI, Media |
 | 0.5.0 | 2025-12-15 | Initial: Übersicht für Local Externals |

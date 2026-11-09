@@ -4,42 +4,42 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals.md](Git_Externals.md)
+> **German:** [Git_Externals.md](../../../../de/guide/references/externals/Git_Externals.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
-3. [Kategorien](#3-kategorien)
-4. [Schnellreferenz](#4-schnellreferenz)
-5. [Hook-Anforderungen](#5-hook-anforderungen)
-6. [Usage](#6-verwendung)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
+3. [Categories](#3-categories)
+4. [Quick Reference](#4-quick-reference)
+5. [Hook Requirements](#5-hook-requirements)
+6. [Usage](#6-usage)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Diese Reference listet externe Bibliotheken, die via Git gefetcht werden können. Für jede Bibliothek sind CMake-Support, Hook-Anforderungen und Examplekonfiguration dokumentiert.
+This reference lists external libraries that can be fetched via Git. For each library, CMake support, hook requirements and an example configuration are documented.
 
-### Umfang
+### Scope
 
-- **50+ Bibliotheken** in 8 Kategorien
-- Vollständige Configurationsbeispiele
-- PreFetch/PostFetch Hook-Vorlagen
-- Kompatibilitätshinweise
+- **50+ libraries** in 8 categories
+- Complete configuration examples
+- PreFetch/PostFetch hook templates
+- Compatibility notes
 
-### Dokumentstruktur
+### Document Structure
 
-Die Bibliotheken sind nach Kategorien in separate Dokumente aufgeteilt — **parallel zu den Local-Kategorien**:
+The libraries are split by category into separate documents — **parallel to the Local categories**:
 
-| Dokument | Kategorie | Bibliotheken | Local-Pendant |
-|----------|-----------|--------------|---------------|
+| Document | Category | Libraries | Local Counterpart |
+|----------|----------|-----------|-------------------|
 | [Git_Externals_Testing.md](Git_Externals_Testing.md) | Testing | googletest, catch2, benchmark | Local_Externals_Testing.md |
 | [Git_Externals_Scripting.md](Git_Externals_Scripting.md) | Scripting | sol2, pybind11, chaiscript | Local_Externals_Scripting.md |
 | [Git_Externals_GUI.md](Git_Externals_GUI.md) | GUI | glfw, imgui, SDL2, raylib | Local_Externals_GUI.md |
@@ -51,42 +51,42 @@ Die Bibliotheken sind nach Kategorien in separate Dokumente aufgeteilt — **par
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### 2.1 Symbole
+### 2.1 Symbols
 
-| Symbol | Bedeutung |
-|--------|-----------|
-| ✅ | Yes / Vorhanden / Empfohlen |
-| ❌ | No / Nicht vorhanden |
-| ⚠️ | Eingeschränkt / Komplex |
-| 🔧 | Hook erforderlich |
+| Symbol | Meaning |
+|--------|---------|
+| ✅ | Yes / Available / Recommended |
+| ❌ | No / Not available |
+| ⚠️ | Limited / Complex |
+| 🔧 | Hook required |
 
-### 2.2 Hook-Typen
+### 2.2 Hook Types
 
-| Hook | Wann benötigt |
-|------|---------------|
-| **PreFetch** | Options setzen (Examples/Tests deaktivieren) |
-| **PostFetch** | Target manuell erstellen (kein CMakeLists.txt) |
+| Hook | When needed |
+|------|-------------|
+| **PreFetch** | Set options (disable examples/tests) |
+| **PostFetch** | Create target manually (no CMakeLists.txt) |
 
-### 2.3 Komplexitätsstufen
+### 2.3 Complexity Levels
 
-| Level | Symbol | Bedeutung |
-|-------|--------|-----------|
-| Einfach | 🟢 | Kein Hook nötig, direktes FetchContent |
-| Mittel | 🟡 | PreFetch Hook empfohlen |
-| Komplex | 🔴 | PostFetch Hook oder komplexe Configuration |
+| Level | Symbol | Meaning |
+|-------|--------|---------|
+| Simple | 🟢 | No hook needed, direct FetchContent |
+| Medium | 🟡 | PreFetch hook recommended |
+| Complex | 🔴 | PostFetch hook or complex configuration |
 
 ---
 
-## 3. Kategorien
+## 3. Categories
 
 ### 3.1 Testing
 
-Unit Testing, Mocking und Benchmarking.
+Unit testing, mocking and benchmarking.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **googletest** | Google Test + GMock | ✅ | PreFetch |
 | **catch2** | BDD-style testing | ✅ | PreFetch |
 | **benchmark** | Micro-benchmarking | ✅ | PreFetch |
@@ -95,10 +95,10 @@ Unit Testing, Mocking und Benchmarking.
 
 ### 3.2 Scripting
 
-C++ Bindings für Scripting-Sprachen.
+C++ bindings for scripting languages.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **sol2** | C++ Lua Bindings | ✅ | — |
 | **pybind11** | Python Bindings | ✅ | — |
 | **chaiscript** | Embedded Scripting | ✅ | — |
@@ -107,10 +107,10 @@ C++ Bindings für Scripting-Sprachen.
 
 ### 3.3 GUI & Graphics
 
-Bibliotheken für grafische Benutzeroberflächen und Rendering.
+Libraries for graphical user interfaces and rendering.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **glfw** | Window & input handling | ✅ | PreFetch |
 | **imgui** | Immediate mode GUI | ❌ | PostFetch 🔧 |
 | **SDL2/SDL3** | Cross-platform multimedia | ✅ | PreFetch |
@@ -121,10 +121,10 @@ Bibliotheken für grafische Benutzeroberflächen und Rendering.
 
 ### 3.4 Media & Math
 
-Audio, Bild-Verarbeitung und Mathematik.
+Audio, image processing and mathematics.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **miniaudio** | Single-file audio | ❌ | PostFetch 🔧 |
 | **openal-soft** | 3D audio API | ✅ | PreFetch |
 | **stb** | Single-file image libs | ❌ | PostFetch 🔧 |
@@ -136,10 +136,10 @@ Audio, Bild-Verarbeitung und Mathematik.
 
 ### 3.5 Core & Utility
 
-Logging, Formatierung und allgemeine Entwicklung.
+Logging, formatting and general development.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **spdlog** | Fast C++ logging library | ✅ | PreFetch |
 | **fmt** | Modern formatting library | ✅ | PreFetch |
 | **abseil** | Google's C++ common libraries | ✅ | PreFetch |
@@ -151,10 +151,10 @@ Logging, Formatierung und allgemeine Entwicklung.
 
 ### 3.6 Data & Serialization
 
-JSON, YAML, Datenbanken und Kompression.
+JSON, YAML, databases and compression.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **nlohmann_json** | JSON for Modern C++ | ✅ | PreFetch |
 | **rapidjson** | Fast JSON parser | ✅ | PreFetch |
 | **simdjson** | SIMD-accelerated JSON | ✅ | PreFetch |
@@ -168,10 +168,10 @@ JSON, YAML, Datenbanken und Kompression.
 
 ### 3.7 Networking & Threading
 
-HTTP, WebSocket, Async-IO und Threading.
+HTTP, WebSocket, async I/O and threading.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **cpp-httplib** | Header-only HTTP/HTTPS | ✅ | — |
 | **cpr** | C++ Requests (curl wrapper) | ✅ | PreFetch |
 | **asio** | Async I/O | ⚠️ | PostFetch 🔧 |
@@ -184,10 +184,10 @@ HTTP, WebSocket, Async-IO und Threading.
 
 ### 3.8 AI & GPU Computing
 
-Machine Learning, LLM Inference und CUDA.
+Machine learning, LLM inference and CUDA.
 
-| Bibliothek | Zweck | CMake | Hook |
-|------------|-------|-------|------|
+| Library | Purpose | CMake | Hook |
+|---------|---------|-------|------|
 | **llama.cpp** | LLM inference | ✅ | PreFetch |
 | **whisper.cpp** | Speech recognition | ✅ | PreFetch |
 | **ggml** | Tensor library | ✅ | PreFetch |
@@ -201,11 +201,11 @@ Machine Learning, LLM Inference und CUDA.
 
 ---
 
-## 4. Schnellreferenz
+## 4. Quick Reference
 
-### 4.1 Kein Hook nötig (🟢 Einfach)
+### 4.1 No Hook Needed (🟢 Simple)
 
-Header-only oder gut konfigurierte Libraries:
+Header-only or well-configured libraries:
 
 ```
 entt, magic_enum, argparse, tomlplusplus
@@ -213,9 +213,9 @@ thread-pool, concurrentqueue, cpp-httplib
 sol2, pybind11, chaiscript
 ```
 
-### 4.2 PreFetch Hook empfohlen (🟡 Mittel)
+### 4.2 PreFetch Hook Recommended (🟡 Medium)
 
-Tests/Examples deaktivieren:
+Disable tests/examples:
 
 ```
 spdlog, fmt, glfw, sdl2, raylib
@@ -229,12 +229,12 @@ llama_cpp, whisper_cpp, ggml, ncnn
 thrust, cub, cutlass
 ```
 
-### 4.3 PostFetch Hook erforderlich (🔴 Komplex)
+### 4.3 PostFetch Hook Required (🔴 Complex)
 
-Kein CMakeLists.txt oder spezielle Configuration:
+No CMakeLists.txt or special configuration:
 
 ```
-imgui (+ Varianten)
+imgui (+ variants)
 sokol
 asio (standalone)
 miniaudio
@@ -243,14 +243,14 @@ stb
 
 ---
 
-## 5. Hook-Anforderungen
+## 5. Hook Requirements
 
 ### 5.1 PreFetch Hook Template
 
 ```cmake
 # cmake/externals/hooks/prefetch/${name}.cmake
 
-# Tests/Examples deaktivieren
+# Disable tests/examples
 set(${NAME}_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(${NAME}_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(${NAME}_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -299,7 +299,7 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 }
 ```
 
-### 6.2 External ohne CMake-Support
+### 6.2 External Without CMake Support
 
 ```json
 "externals": {
@@ -311,7 +311,7 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 }
 ```
 
-### 6.3 Hook-Wiederverwendung
+### 6.3 Hook Reuse
 
 ```json
 "externals": {
@@ -333,12 +333,12 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## 7. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht (Local + Git)
-- [Local_Externals.md](Local_Externals.md) — Local Externals Overview
-- [Solution_Schema.md](../Solution_Schema.md) — External-Configuration
-- [HookLoader_cmake.md](../../module/externals/hooks/HookLoader_cmake.md) — Hook-System
+- [Externals.md](../Externals.md) — Main overview (Local + Git)
+- [Local_Externals.md](Local_Externals.md) — Local Externals overview
+- [Solution_Schema.md](../Solution_Schema.md) — External configuration
+- [HookLoader_cmake.md](../../module/externals/hooks/HookLoader_cmake.md) — Hook system
 
-### Kategorie-Dokumente
+### Category Documents
 
 - [Git_Externals_Testing.md](Git_Externals_Testing.md) — googletest, catch2, benchmark
 - [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — sol2, pybind11, chaiscript
@@ -353,8 +353,9 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **8 Kategorien: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel zu Local** |
-| 0.5.0 | 2025-12-14 | Aufteilung in Kategorie-Dokumente |
-| 0.1.0 | 2025-12-10 | Initial: 50+ Externals in 15 Kategorien |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | 8 categories: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel to Local |
+| 0.5.0 | 2025-12-14 | Split into category documents |
+| 0.1.0 | 2025-12-10 | Initial: 50+ externals in 15 categories |

@@ -6,7 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** C++ Entwickler  
 > **Sprache:** Deutsch  
-> **English:** — (Übersetzung ausstehend)
+> **English:** [Compiler_Speicherprobleme_Troubleshooting.md](../../../en/guide/userguides/Compiler_Speicherprobleme_Troubleshooting.md)  
 
 ---
 

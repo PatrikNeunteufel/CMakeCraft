@@ -1,13 +1,13 @@
 # Concept — Standard für Architektur-Konzepte
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [Concept.md](Concept.md)
+> **English:** [Concept.md](../../../en/autorenwerk/blueprints/Concept.md)
 
 ---
 
@@ -22,7 +22,7 @@
 7. [Beispiel: Vollständiges Konzept](#7-beispiel-vollständiges-konzept)
 8. [Review-Checkliste](#8-review-checkliste)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -55,12 +55,12 @@ Dieser Blueprint gilt für:
 - System-Konzepte
 - Pipeline-Beschreibungen
 
-**Typischer Ordner:** `docs/[lang]/concepts/`
+**Typischer Ordner:** `docs/[lang]/konzepte/` (umgesetzte Konzepte: `konzepte/abgeschlossen/`)
 
 **Beispiele:**
-- `master_concept_v0_1_0.md`
-- `AppContainer_Concept_v0_2_0.md`
-- `Fetch_v0_2_1_Konzept.md`
+- `abgeschlossen/Master_Concept.md`
+- `abgeschlossen/AppContainer_Concept.md`
+- `Konzept_Versionierter_Bezug.md`
 
 ---
 
@@ -77,7 +77,7 @@ Dieser Blueprint gilt für:
 > **Status:** [In Entwicklung | Stabil | Deprecated]  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
 > **Sprache:** Deutsch  
-> **English:** [Name_Concept.md](../../en/concepts/Name_Concept.md)
+> **English:** [Name_Concept.md](../../en/konzepte/Name_Concept.md)
 ```
 
 ### 3.2 Optionale Felder
@@ -231,7 +231,7 @@ JSON mit CMake 3.19+ `file(READ)` und `string(JSON)`.
 
 ## 7. Beispiel: Vollständiges Konzept
 
-```markdown
+````markdown
 # Context Pattern — Konzept
 
 > **Version:** 1.0.0  
@@ -241,7 +241,7 @@ JSON mit CMake 3.19+ `file(READ)` und `string(JSON)`.
 > **Zielgruppe:** Build-System-Entwickler  
 > **Bezug:** cmake/core/Context.cmake  
 > **Sprache:** Deutsch  
-> **English:** [Context_Pattern_Concept.md](../../en/concepts/Context_Pattern_Concept.md)
+> **English:** [Context_Pattern_Concept.md](../../en/konzepte/Context_Pattern_Concept.md)
 
 ---
 
@@ -255,7 +255,7 @@ JSON mit CMake 3.19+ `file(READ)` und `string(JSON)`.
 6. [Verworfene Alternativen](#6-verworfene-alternativen)
 7. [Offene Punkte](#7-offene-punkte)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -308,7 +308,7 @@ get_property(_name GLOBAL PROPERTY EXE_MyApp_NAME)
 
 ## 4. Architektur
 
-```
+````
 ctx_create(EXE_MyApp)
         │
         ▼
@@ -405,5 +405,7 @@ Zusätzlich zur Doc.md Checkliste:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Diagramm-Formate, ADR-Light, Entscheidungsdokumentation** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/konzepte/` mit `abgeschlossen/` (§ 2), Beispiel-Dateinamen ohne Version, Sprungpfad `../../en/konzepte/`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Diagramm-Formate, ADR-Light, Entscheidungsdokumentation |
 | 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |

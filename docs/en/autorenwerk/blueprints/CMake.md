@@ -1,89 +1,89 @@
-# CMake — Standard für CMake-Scripts
+# CMake — Standard for CMake Scripts
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Blueprint v0.5  
-> **Target Audience:** Build System Developers  
-> **Scope:** Alle .cmake Dateien  
+> **Target Audience:** Build system developers  
+> **Scope:** All .cmake files  
 > **Language:** English  
-> **German:** [CMake.md](CMake.md)
+> **German:** [CMake.md](../../../de/autorenwerk/blueprints/CMake.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Modul-Kategorien](#2-modul-kategorien)
-3. [Datei-Header](#3-datei-header)
-4. [Namenskonventionen](#4-namenskonventionen)
-5. [Funktions-Dokumentation](#5-funktions-dokumentation)
-6. [Code-Struktur](#6-code-struktur)
-7. [Error-Handling](#7-error-handling)
-8. [Versionierung](#8-versionierung)
+1. [Overview](#1-overview)
+2. [Module Categories](#2-module-categories)
+3. [File Header](#3-file-header)
+4. [Naming Conventions](#4-naming-conventions)
+5. [Function Documentation](#5-function-documentation)
+6. [Code Structure](#6-code-structure)
+7. [Error Handling](#7-error-handling)
+8. [Versioning](#8-versioning)
 9. [Best Practices](#9-best-practices)
-10. [Review Checklist](#10-review-checkliste)
-11. [See Also](#11-siehe-auch)
-12. [Changelog](#12-changelog)
+10. [Review Checklist](#10-review-checklist)
+11. [See Also](#11-see-also)
+12. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines die **verbindliche Struktur** für alle CMake-Module (.cmake Dateien) im CMake Architecture Projekt.
+This blueprint defines the **binding structure** for all CMake modules (.cmake files) in the CMake Architecture project.
 
-### Ziele
+### Goals
 
-- Einheitliche Modul-Struktur
-- Konsistente Dokumentation im Code
-- Klare Namenskonventionen
-- Standardisiertes Error-Handling
+- Uniform module structure
+- Consistent in-code documentation
+- Clear naming conventions
+- Standardized error handling
 
-### Abgrenzung
+### Delimitation
 
-| Dokument | Fokus |
+| Document | Focus |
 |----------|-------|
-| **CMake Blueprint** | Struktur von .cmake Dateien |
-| **CMake Standard** | Allgemeine CMake-Konventionen |
-| **ModuleDoc Blueprint** | Struktur der Modul-Dokumentation |
+| **CMake Blueprint** | Structure of .cmake files |
+| **CMake Standard** | General CMake conventions |
+| **ModuleDoc Blueprint** | Structure of the module documentation |
 
 ---
 
-## 2. Modul-Kategorien
+## 2. Module Categories
 
-### 2.1 Kategorien und Pfade
+### 2.1 Categories and Paths
 
-| Kategorie | Pfad | Description |
+| Category | Path | Description |
 |-----------|------|--------------|
-| **Core** | `cmake/core/` | Grundbausteine (Errors, Debug, Context, ...) |
+| **Core** | `cmake/core/` | Basic building blocks (Errors, Debug, Context, ...) |
 | **Project** | `cmake/project/` | Pipelines (Executables, Libraries, Tests) |
-| **Externals** | `cmake/externals/` | External-Handling (Orchestrator, Fetch, ...) |
-| **BuildSystemTest** | `cmake/buildSystemTest/` | Interne Build-System-Tests |
+| **Externals** | `cmake/externals/` | External handling (Orchestrator, Fetch, ...) |
+| **BuildSystemTest** | `cmake/buildSystemTest/` | Internal build system tests |
 
-### 2.2 Modul-Typen
+### 2.2 Module Types
 
-| Typ | Description | Examples |
+| Type | Description | Examples |
 |-----|--------------|-----------|
-| **Utility** | Wiederverwendbare Hilfsfunktionen | Errors.cmake, Json.cmake |
-| **Pipeline** | Verarbeitet Solution.json | Executables.cmake |
-| **Orchestrator** | Koordiniert andere Module | Orchestrator.cmake |
-| **Config** | Konfiguriert Targets | Warnings.cmake |
-| **Hook** | Anpassung für Externals | PreFetch/*.cmake |
-| **Include** | Setup für lokale Externals | externals/*/Include.cmake |
+| **Utility** | Reusable helper functions | Errors.cmake, Json.cmake |
+| **Pipeline** | Processes Solution.json | Executables.cmake |
+| **Orchestrator** | Coordinates other modules | Orchestrator.cmake |
+| **Config** | Configures targets | Warnings.cmake |
+| **Hook** | Customization for externals | PreFetch/*.cmake |
+| **Include** | Setup for local externals | externals/*/Include.cmake |
 
 ---
 
-## 3. Datei-Header
+## 3. File Header
 
-### 3.1 Required-Header
+### 3.1 Required Header
 
-Jede .cmake Datei beginnt mit diesem Header:
+Every .cmake file starts with this header:
 
 ```cmake
-# cmake/[pfad]/[ModulName].cmake
+# cmake/[path]/[ModuleName].cmake
 # ==============================
-# [Kurzbeschreibung des Moduls]
+# [Short description of the module]
 #
 # Version: X.Y.Z
 # Date:    YYYY-MM-DD
@@ -91,8 +91,8 @@ Jede .cmake Datei beginnt mit diesem Header:
 # Author:  CMake Architecture Team
 #
 # Dependencies:
-#   - [Abhängigkeit 1]
-#   - [Abhängigkeit 2]
+#   - [Dependency 1]
+#   - [Dependency 2]
 #   - None (base module)
 #
 # Provides:
@@ -101,27 +101,27 @@ Jede .cmake Datei beginnt mit diesem Header:
 #   - MACRO_NAME
 #
 # Used by:
-#   - [Modul das dieses verwendet]
-#   - [Weiteres Modul]
+#   - [Module that uses this one]
+#   - [Another module]
 ```
 
-### 3.2 Header-Felder
+### 3.2 Header Fields
 
-| Feld | Required | Description |
+| Field | Required | Description |
 |------|---------|--------------|
-| Pfad-Kommentar | ✓ | Vollständiger Pfad zum Modul |
-| Kurzbeschreibung | ✓ | Eine Zeile, was das Modul macht |
-| Version | ✓ | SemVer Format |
+| Path comment | ✓ | Full path to the module |
+| Short description | ✓ | One line on what the module does |
+| Version | ✓ | SemVer format |
 | Date | ✓ | ISO 8601 |
 | Status | ✓ | Development / Stable / Deprecated |
-| Author | ✓ | Team oder Person |
-| Dependencies | ✓ | Liste oder "None" |
-| Provides | ✓ | Öffentliche API |
-| Used by | Optional | Wo wird dieses Modul verwendet? |
+| Author | ✓ | Team or person |
+| Dependencies | ✓ | List or "None" |
+| Provides | ✓ | Public API |
+| Used by | Optional | Where is this module used? |
 
 ### 3.3 Include Guard
 
-Nach dem Header immer:
+Always after the header:
 
 ```cmake
 include_guard(GLOBAL)
@@ -129,11 +129,11 @@ include_guard(GLOBAL)
 
 ---
 
-## 4. Namenskonventionen
+## 4. Naming Conventions
 
-### 4.1 Dateinamen
+### 4.1 File Names
 
-| Kategorie | Muster | Example |
+| Category | Pattern | Example |
 |-----------|--------|----------|
 | Core | `[Name].cmake` | `Context.cmake` |
 | Project | `[Name].cmake` | `Executables.cmake` |
@@ -141,54 +141,54 @@ include_guard(GLOBAL)
 | Hook | `[external].cmake` | `imgui.cmake` |
 | Include | `Include.cmake` | `externals/bass/Include.cmake` |
 
-### 4.2 Funktionsnamen
+### 4.2 Function Names
 
-| Typ | Muster | Example |
+| Type | Pattern | Example |
 |-----|--------|----------|
 | Public | `modul_action()` | `ctx_create()`, `cmake_fatal()` |
 | Internal | `_modul_action()` | `_json_parse_object()` |
 | Pipeline | `pipeline_action()` | `executables_process()` |
 
-### 4.3 Variablen
+### 4.3 Variables
 
-| Scope | Muster | Example |
+| Scope | Pattern | Example |
 |-------|--------|----------|
 | Local | `_snake_case` | `_result`, `_temp_list` |
 | Cache | `UPPER_SNAKE_CASE` | `DEBUG_CONTEXT` |
 | Global Property | `${PREFIX}_${KEY}` | `EXE_MyApp_NAME` |
-| Output | `OUT_VAR` (Parameters) | `ctx_get(... OUT_VAR)` |
+| Output | `OUT_VAR` (parameter) | `ctx_get(... OUT_VAR)` |
 
 ---
 
-## 5. Funktions-Dokumentation
+## 5. Function Documentation
 
-### 5.1 Dokumentationsblock-Format
+### 5.1 Documentation Block Format
 
-Jede öffentliche Funktion erhält einen Dokumentationsblock:
+Every public function gets a documentation block:
 
 ```cmake
 # ============================================================================
-# function_name - Kurzbeschreibung
+# function_name - Short description
 # ============================================================================
 #[[
     function_name(PARAM1 PARAM2 [OPTIONAL])
     
-    Ausführliche Description, was die Funktion macht.
+    Detailed description of what the function does.
     
-    Parameterss:
+    Parameters:
         PARAM1   - Mandatory: Description
         PARAM2   - Mandatory: Description
-        OPTIONAL - Optional: Description (Default: wert)
+        OPTIONAL - Optional: Description (Default: value)
     
     Returns:
-        Was die Funktion zurückgibt (Variable, Property, etc.)
+        What the function returns (variable, property, etc.)
     
     Example:
-        function_name("wert1" "wert2")
-        function_name("wert1" "wert2" "optional")
+        function_name("value1" "value2")
+        function_name("value1" "value2" "optional")
     
     Errors:
-        E0xxx - Wenn Bedingung nicht erfüllt
+        E0xxx - If condition is not met
     
     Since: v0.1.0
 ]]
@@ -197,9 +197,9 @@ function(function_name PARAM1 PARAM2)
 endfunction()
 ```
 
-### 5.2 Trennlinien
+### 5.2 Separator Lines
 
-Zwischen Functions immer eine visuelle Trennung:
+Always a visual separation between functions:
 
 ```cmake
 # ============================================================================
@@ -217,38 +217,38 @@ endfunction()
 
 ---
 
-## 6. Code-Struktur
+## 6. Code Structure
 
-### 6.1 Modul-Aufbau
+### 6.1 Module Layout
 
 ```cmake
-# 1. Header (Required)
+# 1. Header (required)
 # cmake/core/Example.cmake
 # ========================
 # ...
 
-# 2. Include Guard (Required)
+# 2. Include Guard (required)
 include_guard(GLOBAL)
 
-# 3. Cache-Variablen (Optional)
+# 3. Cache variables (optional)
 set(EXAMPLE_DEBUG OFF CACHE BOOL "Enable debug output")
 
-# 4. Dependencies (Optional)
-include(cmake/core/Errors.cmake)
+# 4. Dependencies (optional)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
-# 5. Private Helpers (Optional)
+# 5. Private Helpers (optional)
 function(_example_helper)
 endfunction()
 
-# 6. Public API (Required)
+# 6. Public API (required)
 function(example_main)
 endfunction()
 ```
 
-### 6.2 Einrückung
+### 6.2 Indentation
 
-- **4 Spaces**, keine Tabs
-- Verschachtelte Blöcke einrücken
+- **4 spaces**, no tabs
+- Indent nested blocks
 
 ```cmake
 function(example)
@@ -262,25 +262,25 @@ endfunction()
 
 ---
 
-## 7. Error-Handling
+## 7. Error Handling
 
-### 7.1 Error-Functions verwenden
+### 7.1 Using the Error Functions
 
-Immer das Errors-Modul verwenden:
+Always use the Errors module:
 
 ```cmake
-include(cmake/core/Errors.cmake)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
-# Fataler Error (bricht ab)
+# Fatal error (aborts)
 cmake_fatal(E0501 "Executable '${name}' not found")
 
-# Warning (läuft weiter)
+# Warning (continues)
 cmake_warn(W0201 "Deprecated option '${opt}' used")
 ```
 
-### 7.2 Error-Code-Kategorien
+### 7.2 Error Code Categories
 
-| Präfix | Kategorie |
+| Prefix | Category |
 |--------|-----------|
 | E01xx | Core |
 | E02xx | Validation |
@@ -293,24 +293,31 @@ cmake_warn(W0201 "Deprecated option '${opt}' used")
 
 ---
 
-## 8. Versionierung
+## 8. Versioning
 
 ### 8.1 Semantic Versioning
 
-Module verwenden SemVer:
+Modules use SemVer:
 
-| Teil | Bedeutung | Wann erhöhen? |
+| Part | Meaning | When to increment? |
 |------|-----------|---------------|
-| MAJOR | Breaking Changes | API-Änderung, Parameters-Änderung |
-| MINOR | Neue Features | Neue Funktion, neuer Parameters |
-| PATCH | Bugfixes | Errorkorrektur, Optimierung |
+| MAJOR | Breaking changes | API change, parameter change |
+| MINOR | New features | New function, new parameter |
+| PATCH | Bug fixes | Bug fix, optimization |
 
-### 8.2 Version im Header aktuell halten
+### 8.2 Keep the Version in the Header Up to Date
 
-Bei jeder Änderung:
-1. Version im Header erhöhen
-2. Date aktualisieren
-3. Dokumentation anpassen (falls nötig)
+On every change:
+1. Increment the version in the header
+2. Update the date
+3. Adjust the documentation (if necessary)
+
+### 8.3 Shared Major Number from CMakeCraft v2.0.0
+
+A module's version is independent of the CMakeCraft version (many modules are already at 1.x). The first major
+release of CMakeCraft is **v2.0.0** (not v1.0.0); with it, all `.cmake` files and all documents go to 2.0.0. From
+then on product, modules and docs share the major number; minor and patch count per file. Rule:
+[Doku_Standard.md](../standards/Doku_Standard.md) §2.
 
 ---
 
@@ -318,60 +325,62 @@ Bei jeder Änderung:
 
 ### 9.1 Do's ✓
 
-| Regel | Example |
+| Rule | Example |
 |-------|----------|
-| GLOBAL PROPERTY für Context | `set_property(GLOBAL PROPERTY ...)` |
-| Errorbehandlung mit Errors.cmake | `cmake_fatal(E0501 "...")` |
-| Dokumentation für jede public Funktion | Siehe Abschnitt 5 |
-| Früh validieren | Required-Parameters am Anfang prüfen |
-| Aussagekräftige Variablennamen | `_executable_name` statt `_n` |
+| GLOBAL PROPERTY for context | `set_property(GLOBAL PROPERTY ...)` |
+| Error handling with Errors.cmake | `cmake_fatal(E0501 "...")` |
+| Documentation for every public function | See section 5 |
+| Validate early | Check required parameters at the start |
+| Meaningful variable names | `_executable_name` instead of `_n` |
 
 ### 9.2 Don'ts ✗
 
-| Vermeiden | Grund | Stattdessen |
+| Avoid | Reason | Instead |
 |-----------|-------|-------------|
-| `PARENT_SCOPE` für Context | Funktioniert nicht bei >2 Ebenen | GLOBAL PROPERTY |
-| Hardcodierte Pfade | Nicht portabel | `CMAKE_CURRENT_*` |
-| `message(FATAL_ERROR)` direkt | Inkonsistente Meldungen | `cmake_fatal()` |
-| Globale Variablen | Seiteneffekte | Context-Pattern |
-| Undokumentierte Functions | Unwartbar | Dokumentationsblock |
+| `PARENT_SCOPE` for context | Does not work across >2 levels | GLOBAL PROPERTY |
+| Hard-coded paths | Not portable | `CMAKE_CURRENT_*` |
+| `message(FATAL_ERROR)` directly | Inconsistent messages | `cmake_fatal()` |
+| Global variables | Side effects | Context pattern |
+| Undocumented functions | Unmaintainable | Documentation block |
 
 ---
 
 ## 10. Review Checklist
 
-Vor Merge eines CMake-Moduls prüfen:
+Check before merging a CMake module:
 
 **Header:**
-- [ ] Required-Header vollständig
-- [ ] Version aktuell
-- [ ] Dependencies korrekt
+- [ ] Required header complete
+- [ ] Version up to date
+- [ ] Dependencies correct
 
 **Code:**
-- [ ] `include_guard(GLOBAL)` vorhanden
-- [ ] Namenskonventionen eingehalten
-- [ ] Alle public Functions dokumentiert
-- [ ] Error-Handling via Errors.cmake
+- [ ] `include_guard(GLOBAL)` present
+- [ ] Naming conventions followed
+- [ ] All public functions documented
+- [ ] Error handling via Errors.cmake
 
-**Qualität:**
-- [ ] Keine hardcodierten Pfade
-- [ ] Keine PARENT_SCOPE für Context-Daten
-- [ ] Tests vorhanden (falls möglich)
+**Quality:**
+- [ ] No hard-coded paths
+- [ ] No PARENT_SCOPE for context data
+- [ ] Tests present (if possible)
 
 ---
 
 ## 11. See Also
 
-- [Cpp.md](Cpp.md) — C++/C Dateistruktur
-- [ModuleDoc.md](ModuleDoc.md) — Dokumentation für Module
-- [CMake.md](../standards/CMake_Standard.md) — CMake Coding-Standard
-- [ErrorCodes.md](../../guide/references/ErrorCodes.md) — Alle Errorcodes
+- [Cpp.md](Cpp.md) — C++/C file structure
+- [ModuleDoc.md](ModuleDoc.md) — Documentation for modules
+- [CMake.md](../standards/CMake_Standard.md) — CMake coding standard
+- [ErrorCodes.md](../../guide/references/ErrorCodes.md) — All error codes
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Table of Contents mit Ankern, Error-Handling-Kategorien, Best Practices erweitert** |
-| 0.1.0 | 2025-12-03 | Initial (als CMake_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: modules are included via `${CMAKECRAFT_DIR}`, never via relative `cmake/…` paths (§ 6.1, § 7.1; `CMakeCraft.cmake`:133, :149, `cmake/project/Apps.cmake`:36); § 8.3 shared major number from CMakeCraft v2.0.0 (decision V2 a)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: table of contents with anchors, error handling categories, extended best practices |
+| 0.1.0 | 2025-12-03 | Initial (as CMake_Blueprint) |

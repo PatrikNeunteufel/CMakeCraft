@@ -7,8 +7,8 @@
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Qt-Ads_PreFetch.md](../../../../en/modules/externals/hooks/prefetch/Qt-Ads.md)  
-> **Hook:** [cmake/externals/hooks/prefetch/qt-ads.cmake](../../../../../../cmake/externals/hooks/prefetch/qt-ads.cmake)  
+> **English:** [Qt-Ads_PreFetch.md](../../../../../../en/guide/module/externals/hooks/prefetch/Qt-Ads_PreFetch.md)  
+> **Hook:** [cmake/externals/hooks/prefetch/qt-ads.cmake](../../../../../../../cmake/externals/hooks/prefetch/qt-ads.cmake)  
 > **Modul-Version:** 2.1.0
 
 ---
@@ -289,7 +289,7 @@ Bei korrekter Konfiguration:
 
 ## 10. Siehe auch
 
-- [Qt-Ads_PostFetch.md](../postfetch/Qt-Ads.md) — PostFetch Hook (Target-Registrierung)
+- [Qt-Ads_PostFetch.md](../postfetch/Qt-Ads_PostFetch.md) — PostFetch Hook (Target-Registrierung)
 - [HookLoader.md](../../hooks/HookLoader_cmake.md) — Hook-System
 - [Qt6.md](../../../../userguides/externals/Qt6.md) — Qt6 System External
 

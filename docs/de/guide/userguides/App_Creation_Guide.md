@@ -1,11 +1,12 @@
 # App Creation Guide
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Guide  
 > **Status:** Entwurf  
 > **Zielgruppe:** Entwickler  
 > **Sprache:** Deutsch
+> **English:** [App_Creation_Guide.md](../../../en/guide/userguides/App_Creation_Guide.md)
 
 ---
 
@@ -40,7 +41,7 @@ MeineApp/
 ├── src/            # Implementation (.cpp)
 ├── main/           # Entry Point (main.cpp)
 ├── pch/            # Precompiled Header
-└── tests/unit/     # Unit Tests
+└── tests/          # Tests, je Test ein Ordner tests/<typ>/<Name>/
 ```
 
 | Ordner | Verantwortung | Externals | Testbar |
@@ -48,7 +49,7 @@ MeineApp/
 | `include/` + `src/` | Gesamte Logik, UI, Services | Qt, BASS, etc. | ✅ Ja |
 | `main/` | Nur Entry Point | — | ❌ Nein |
 | `pch/` | Precompiled Header | — | — |
-| `tests/unit/` | Unit Tests | doctest | — |
+| `tests/<typ>/<Name>/` | Tests (unit, integration, performance, …) | doctest | — |
 
 ### Warum diese Trennung?
 
@@ -69,8 +70,11 @@ Die Trennung ermöglicht vollständige Testbarkeit der Anwendungslogik ohne die 
 ### 3.1 Template kopieren
 
 ```bash
-cp -r projects/templates/App projects/apps/MeineApp
+cp -r ../CMakeCraft/templates/App projects/apps/MeineApp
 ```
+
+Die Vorlage liegt in CMakeCraft unter [`templates/App/`](../../../../templates/App/), hier aus einer
+Arbeitskopie neben dem Projekt kopiert.
 
 ### 3.2 Verzeichnisstruktur
 
@@ -79,6 +83,7 @@ Nach dem Kopieren:
 ```
 projects/apps/MeineApp/
 ├── README.md
+├── README_de.md
 ├── include/
 │   ├── Source.cmake
 │   └── Application.hpp
@@ -91,8 +96,17 @@ projects/apps/MeineApp/
 ├── pch/
 │   └── pch.h
 └── tests/
-    └── unit/
-        └── Application_Tests.cpp
+    ├── unit/
+    │   └── UnitTests/
+    │       ├── Source.cmake
+    │       ├── test_main.cpp
+    │       └── Application_Tests.cpp
+    ├── integration/
+    │   └── IntegrationTests/
+    │       └── …                 # wie UnitTests
+    └── performance/
+        └── PerformanceTests/
+            └── …
 ```
 
 > **Wichtig:** Die `main.cpp` sollte nicht geändert werden. Sie ist generisch und funktioniert für alle App-Typen.
@@ -123,10 +137,15 @@ projects/apps/MeineApp/
         
         "tests": {
             "framework": "doctest",
-            "unit": {
-                "timeout": 30,
-                "labels": ["unit", "app", "fast"]
-            }
+            "targets": [
+                {
+                    "name": "UnitTests",
+                    "type": "unit",
+                    "path": "tests/unit/UnitTests",
+                    "timeout": 30,
+                    "labels": ["unit", "app", "fast"]
+                }
+            ]
         },
         
         "platforms": ["windows", "linux", "macos"]
@@ -146,6 +165,7 @@ projects/apps/MeineApp/
 | `runner.type` | `GUI` oder `CONSOLE` |
 | `runner.externals` | Externals nur für runner (selten benötigt) |
 | `tests.framework` | Test-Framework (doctest, googletest, catch2) |
+| `tests.targets[]` | Ein Eintrag je Test-Executable: `name`, `type` (Pflicht), `path` (Vorgabe `tests/<type>/<name>`), `timeout`, `labels`, … — Ziel-Name `<App>.<name>`, z. B. `MeineApp.UnitTests` |
 
 ### 4.3 runner.type
 
@@ -401,10 +421,11 @@ void Application::shutdown() {
 
 ### 10.1 Test-Datei
 
-Tests liegen direkt in `tests/unit/`:
+Jeder Test liegt in einem eigenen Ordner `tests/<typ>/<Name>/` mit `Source.cmake`, `test_main.cpp`
+(doctest-Implementierung und `main()`, genau einmal je Test-Executable) und den Testdateien:
 
 ```cpp
-// tests/unit/Application_Tests.cpp
+// tests/unit/UnitTests/Application_Tests.cpp
 
 #include <doctest.h>
 #include "Application.hpp"
@@ -492,5 +513,7 @@ Nur stabile, häufig verwendete Header in `pch.h`:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An den Code angeglichen: Vorlage unter `templates/App/` (CMakeCraft), Testlayout `tests/<typ>/<Name>/` wie in der Vorlage, `tests.targets[]` statt `tests.unit` (`AppCollect.cmake`) |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.1.1** | **2025-12-18** | **PCH-Aktivierung via Solution.json dokumentiert, Suchpfad-Priorität, implizite Aktivierung** |
 | 0.1.0 | 2025-12-17 | Initial mit korrekter Struktur (include/, src/, main/, pch/) |

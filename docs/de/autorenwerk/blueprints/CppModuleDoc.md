@@ -1,13 +1,13 @@
 # CppModuleDoc — Standard für C++ Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-23  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CppModuleDoc.md](CppModuleDoc.md)
+> **English:** [CppModuleDoc.md](../../../en/autorenwerk/blueprints/CppModuleDoc.md)
 
 ---
 
@@ -66,14 +66,14 @@ Dieser Blueprint gilt für Dokumentationen von:
 **Dateinamen-Konvention:**
 
 ```
-docs/[lang]/modules/[Namespace]/[Klassenname].md
+docs/[lang]/guide/module/[Namespace]/[Klassenname].md
 ```
 
 **Beispiele:**
 
-- `docs/de/modules/gpu/ShaderManager.md`
-- `docs/de/modules/gpu/IShader.md`
-- `docs/de/modules/visuals/NullVisualizer.md`
+- `docs/de/guide/module/gpu/ShaderManager.md`
+- `docs/de/guide/module/gpu/IShader.md`
+- `docs/de/guide/module/visuals/NullVisualizer.md`
 
 ---
 
@@ -191,7 +191,7 @@ docs/[lang]/modules/[Namespace]/[Klassenname].md
 
 Für komplexe Methoden zusätzlich:
 
-```markdown
+````markdown
 #### `bool load(const std::string& path)`
 
 Lädt eine Ressource aus dem angegebenen Pfad.
@@ -213,7 +213,7 @@ if (!manager.load("shaders/basic.vert"))
     std::cerr << manager.getErrorLog();
 }
 ```
-```
+````
 
 ### 5.3 Signale/Slots (Qt)
 
@@ -282,7 +282,7 @@ Fokus auf **konkrete Logik**:
 
 ## 7. Beispiel: Vollständige Moduldokumentation
 
-```markdown
+````markdown
 # ShaderManager — Shader-Verwaltung und Caching
 
 > **Version:** 1.0.0  
@@ -407,7 +407,7 @@ if (basic)
 | Version | Datum | Änderungen |
 |---------|-------|------------|
 | 1.0.0 | 2025-12-23 | Initial |
-```
+````
 
 ---
 
@@ -454,4 +454,6 @@ if (basic)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-23** | **Initial: Struktur für C++ Modul-Dokumentation** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/guide/module/` statt `modules/` (§ 2)** |
+| 1.0.0 | 2025-12-23 | Kopf seit der Anlage auf 1.0.0 (`cb2f6e5`) |
+| 0.1.0 | 2025-12-23 | Initial: Struktur für C++ Modul-Dokumentation |

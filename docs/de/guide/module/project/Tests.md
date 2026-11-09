@@ -1,14 +1,14 @@
 # Tests.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Tests.md](Tests.md)  
-> **Modul:** [`cmake/project/Tests.cmake`](../../../../cmake/project/Tests.cmake)  
+> **English:** [Tests.md](../../../../en/guide/module/project/Tests.md)  
+> **Modul:** [`cmake/project/Tests.cmake`](../../../../../cmake/project/Tests.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [CTest-Integration](#5-ctest-integration)
 6. [Debug-Ausgaben](#6-debug-ausgaben)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -181,7 +181,7 @@ ctest -R ".*Core.*"
 - [TestCollect.cmake](TestCollect.md) — JSON zu Context
 - [TestCreate.cmake](TestCreate.md) — Context zu Target
 - [Executables.cmake](Executables.md) — Analoges Modul
-- [Testing_UserGuide.md](../../../guides/Testing_UserGuide.md) — Benutzerhandbuch
+- [Testing_UserGuide.md](../../userguides/Testing.md) — Benutzerhandbuch
 
 ---
 
@@ -189,5 +189,6 @@ ctest -R ".*Core.*"
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
 | 0.1.0 | 2025-12-11 | Initial (Clean Start): Test-Pipeline mit CTest |

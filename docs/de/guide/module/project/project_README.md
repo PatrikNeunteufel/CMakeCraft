@@ -3,7 +3,7 @@
 > **Version:** 1.0.0  
 > **Datum:** 2025-12-17  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../../en/modules/project/README.md)
+> **English:** [README.md](../../../../en/guide/module/project/project_README.md)
 
 ---
 
@@ -158,6 +158,6 @@ Alle Pipelines folgen dem gleichen Collect/Create-Pattern:
 ## Siehe auch
 
 - [../README.md](../README.md) — Modul-Übersicht
-- [../core/README.md](../core/README.md) — Core-Module
+- [../core/README.md](../core/core_README.md) — Core-Module
 - [../../references/Solution_Schema.md](../../references/Solution_Schema.md) — JSON-Schema
 - [../../projects/buildsystem/concepts/AppContainer_Concept.md](../../../konzepte/abgeschlossen/AppContainer_Concept.md) — App-Container-Konzept

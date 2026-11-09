@@ -1,12 +1,12 @@
 # Externals — Referenz
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Externals.md](../../en/references/Externals.md)
+> **English:** [Externals.md](../../../en/guide/references/Externals.md)
 
 ---
 
@@ -24,7 +24,7 @@
 10. [AI](#10-ai)
 11. [Schnellreferenz](#11-schnellreferenz)
 12. [Siehe auch](#12-siehe-auch)
-13. [Changelog](#13-changelog)
+13. [Changelog](#changelog)
 
 ---
 
@@ -322,5 +322,6 @@ Die Kategorien sind für **Local und Git parallel** strukturiert:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **8 Kategorien: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel für Local + Git** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | 8 Kategorien: Testing, Scripting, GUI, Media, Core, Data, Network, AI — parallel für Local + Git |
 | 0.5.0 | 2025-12-15 | Kategorisierte Übersicht für Local + Git Externals |

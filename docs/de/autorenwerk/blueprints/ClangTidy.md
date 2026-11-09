@@ -1,12 +1,13 @@
 # ClangTidy Blueprint – Statische Analyse
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-05  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Geltungsbereich:** Alle `.clang-tidy`-Konfigurationen  
 > **Bezug:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1, ClangFormat_Blueprint v0.1  
 > **Sprache:** Deutsch  
+> **English:** [ClangTidy.md](../../../en/autorenwerk/blueprints/ClangTidy.md)  
 
 ---
 
@@ -191,7 +192,7 @@ Dies entspricht modernen C++-Guidelines und vermeidet unnötige Indirektion.
 ```yaml
 # C/C++ clang-tidy Konfiguration
 # Version: 0.1.0
-# Blueprint: Documentations/Blueprints/ClangTidy_Blueprint_v0_1_0.md
+# Blueprint: docs/de/autorenwerk/blueprints/ClangTidy.md
 # Profil: Dev-Gentle
 # Datum: 2025-12-05
 ```
@@ -251,4 +252,6 @@ set_target_properties(ThirdPartyLib PROPERTIES
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-05** | **Initial: Profile, Check-Kategorien, Namenskonventionen** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Kopfmuster verweist auf den heutigen Pfad `docs/de/autorenwerk/blueprints/ClangTidy.md`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.1.0 | 2025-12-05 | Initial: Profile, Check-Kategorien, Namenskonventionen |

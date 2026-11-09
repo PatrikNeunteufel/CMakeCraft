@@ -4,94 +4,94 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [glad.md](Glad.md)
+> **German:** [Glad.md](../../../../de/guide/userguides/externals/Glad.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [GLAD generieren](#2-glad-generieren)
-3. [Solution.json Configuration](#3-solutionjson-konfiguration)
-4. [C++ Usage](#4-c-verwendung)
-5. [Mit GLFW kombinieren](#5-mit-glfw-kombinieren)
-6. [Mit ImGui kombinieren](#6-mit-imgui-kombinieren)
+1. [Overview](#1-overview)
+2. [Generating GLAD](#2-generating-glad)
+3. [Solution.json Configuration](#3-solutionjson-configuration)
+4. [C++ Usage](#4-c-usage)
+5. [Combining with GLFW](#5-combining-with-glfw)
+6. [Combining with ImGui](#6-combining-with-imgui)
 7. [Troubleshooting](#7-troubleshooting)
-8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+8. [Further Information](#8-further-information)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**GLAD** ist ein OpenGL Loading Library Generator. OpenGL-Functions sind zur Laufzeit nicht direkt verfügbar — sie müssen dynamisch geladen werden. GLAD generiert den Code dafür.
+**GLAD** is an OpenGL loading library generator. OpenGL functions are not directly available at runtime — they have to be loaded dynamically. GLAD generates the code for this.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Local External (Generiert) |
-| **Pfad** | `externals/glad` |
-| **Lizenz** | MIT / Public Domain |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Local External (generated) |
+| **Path** | `externals/glad` |
+| **License** | MIT / Public Domain |
 | **Generator** | [glad.dav1d.de](https://glad.dav1d.de/) |
 
-### Warum GLAD?
+### Why GLAD?
 
-| Vorteil | Description |
-|---------|--------------|
-| 🎯 **Konfigurierbar** | Nur benötigte OpenGL-Version |
-| 🔧 **Generiert** | Kein Build-System nötig |
-| 📦 **Standalone** | Keine Dependencies |
-| ✅ **Modern** | Unterstützt Core Profile |
+| Advantage | Description |
+|-----------|-------------|
+| 🎯 **Configurable** | Only the required OpenGL version |
+| 🔧 **Generated** | No build system needed |
+| 📦 **Standalone** | No dependencies |
+| ✅ **Modern** | Supports Core Profile |
 
 ---
 
-## 2. GLAD generieren
+## 2. Generating GLAD
 
-### 2.1 Web-Konfigurator
+### 2.1 Web Configurator
 
-1. Öffne **https://glad.dav1d.de/**
+1. Open **https://glad.dav1d.de/**
 
-2. Wähle Einstellungen:
+2. Choose settings:
 
-| Einstellung | Empfehlung | Description |
-|-------------|------------|--------------|
-| **Language** | C/C++ | Standard für CMake |
-| **Specification** | OpenGL | Desktop-OpenGL |
-| **API gl** | 3.3 oder höher | Minimum für Core Profile |
-| **Profile** | Core | Ohne deprecated Functions |
-| **Generate a loader** | ✅ | Loader-Code generieren |
+| Setting | Recommendation | Description |
+|---------|----------------|-------------|
+| **Language** | C/C++ | Standard for CMake |
+| **Specification** | OpenGL | Desktop OpenGL |
+| **API gl** | 3.3 or higher | Minimum for Core Profile |
+| **Profile** | Core | Without deprecated functions |
+| **Generate a loader** | ✅ | Generate loader code |
 
-3. Klicke **GENERATE**
+3. Click **GENERATE**
 
-4. Lade ZIP herunter
+4. Download the ZIP
 
-5. Entpacke nach `externals/glad/`
+5. Extract to `externals/glad/`
 
-### 2.2 Standard-Configurationen
+### 2.2 Standard Configurations
 
-| Configuration | API | Profile | Anwendungsfall |
-|---------------|-----|---------|----------------|
-| **Standard** | gl 3.3 | Core | Desktop-Apps, ImGui |
-| **Modern** | gl 4.5 | Core | Compute Shaders, DSA |
-| **Compat** | gl 3.3 | Compatibility | Legacy-Code |
+| Configuration | API | Profile | Use Case |
+|---------------|-----|---------|----------|
+| **Standard** | gl 3.3 | Core | Desktop apps, ImGui |
+| **Modern** | gl 4.5 | Core | Compute shaders, DSA |
+| **Compat** | gl 3.3 | Compatibility | Legacy code |
 | **Mobile** | gles2 3.0 | — | Android, iOS, WebGL |
-| **Vulkan** | vulkan 1.3 | — | Vulkan statt OpenGL |
+| **Vulkan** | vulkan 1.3 | — | Vulkan instead of OpenGL |
 
-### 2.3 Optionale Extensions
+### 2.3 Optional Extensions
 
-Im Konfigurator können Extensions aktiviert werden:
+Extensions can be enabled in the configurator:
 
 | Extension | Description |
-|-----------|--------------|
-| `GL_ARB_debug_output` | Debug-Callbacks |
-| `GL_ARB_direct_state_access` | DSA Functions (4.5) |
-| `GL_ARB_texture_filter_anisotropic` | Anisotrope Filterung |
-| `GL_ARB_compute_shader` | Compute Shaders |
+|-----------|-------------|
+| `GL_ARB_debug_output` | Debug callbacks |
+| `GL_ARB_direct_state_access` | DSA functions (4.5) |
+| `GL_ARB_texture_filter_anisotropic` | Anisotropic filtering |
+| `GL_ARB_compute_shader` | Compute shaders |
 
-### 2.4 Verzeichnisstruktur
+### 2.4 Directory Structure
 
-Nach dem Entpacken:
+After extracting:
 
 ```
 externals/glad/
@@ -127,7 +127,7 @@ externals/glad/
 }
 ```
 
-### 3.2 Mit GLFW
+### 3.2 With GLFW
 
 ```json
 {
@@ -145,7 +145,7 @@ externals/glad/
 }
 ```
 
-### 3.3 Vollständige GUI-Anwendung
+### 3.3 Complete GUI Application
 
 ```json
 {
@@ -168,17 +168,17 @@ externals/glad/
 
 ## 4. C++ Usage
 
-### 4.1 Grundlagen (nur GLAD)
+### 4.1 Basics (GLAD Only)
 
 ```cpp
 #include <glad/glad.h>
 #include <iostream>
 
-// Note: Ohne GLFW funktioniert GLAD nicht alleine!
-// Ein OpenGL-Kontext muss existieren, bevor gladLoadGL() aufgerufen wird.
+// Note: GLAD does not work on its own without GLFW!
+// An OpenGL context must exist before gladLoadGL() is called.
 ```
 
-### 4.2 Minimales Example mit GLFW
+### 4.2 Minimal Example with GLFW
 
 ```cpp
 #include <glad/glad.h>
@@ -186,13 +186,13 @@ externals/glad/
 #include <iostream>
 
 int main() {
-    // 1. GLFW initialisieren
+    // 1. Initialize GLFW
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
     }
     
-    // 2. OpenGL Version setzen
+    // 2. Set OpenGL version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -201,7 +201,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
     
-    // 3. Fenster erstellen
+    // 3. Create window
     GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr);
     if (!window) {
         std::cerr << "Failed to create window" << std::endl;
@@ -209,25 +209,25 @@ int main() {
         return -1;
     }
     
-    // 4. Kontext aktivieren
+    // 4. Activate context
     glfwMakeContextCurrent(window);
     
-    // 5. GLAD laden - MUSS NACH glfwMakeContextCurrent!
+    // 5. Load GLAD - MUST come AFTER glfwMakeContextCurrent!
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
     
-    // 6. OpenGL Info ausgeben
+    // 6. Print OpenGL info
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     
-    // 7. Viewport setzen
+    // 7. Set viewport
     glViewport(0, 0, 800, 600);
     
-    // 8. Main Loop
+    // 8. Main loop
     while (!glfwWindowShouldClose(window)) {
         // Clear
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -244,7 +244,7 @@ int main() {
 }
 ```
 
-### 4.3 Dreiecks rendern
+### 4.3 Rendering a Triangle
 
 ```cpp
 #include <glad/glad.h>
@@ -276,7 +276,7 @@ int main() {
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     
-    // Shader kompilieren
+    // Compile shaders
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
@@ -293,7 +293,7 @@ int main() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     
-    // Vertex Data
+    // Vertex data
     float vertices[] = {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
@@ -311,7 +311,7 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
-    // Main Loop
+    // Main loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -335,21 +335,21 @@ int main() {
 
 ---
 
-## 5. Mit GLFW kombinieren
+## 5. Combining with GLFW
 
-### 5.1 Reihenfolge
+### 5.1 Order
 
 ```
 1. glfwInit()
 2. glfwCreateWindow()
-3. glfwMakeContextCurrent()    ← OpenGL-Kontext erstellt
-4. gladLoadGLLoader()          ← GLAD lädt OpenGL-Functions
-5. OpenGL-Code verwenden
+3. glfwMakeContextCurrent()    ← OpenGL context created
+4. gladLoadGLLoader()          ← GLAD loads OpenGL functions
+5. Use OpenGL code
 ```
 
-> **WICHTIG:** `gladLoadGLLoader()` MUSS nach `glfwMakeContextCurrent()` aufgerufen werden!
+> **IMPORTANT:** `gladLoadGLLoader()` MUST be called after `glfwMakeContextCurrent()`!
 
-### 5.2 Callback für Resize
+### 5.2 Resize Callback
 
 ```cpp
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -357,31 +357,31 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 int main() {
-    // ... window erstellen ...
+    // ... create window ...
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     
-    // Callback registrieren
+    // Register callback
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     
     // ...
 }
 ```
 
-Siehe [glfw.md](glfw.md) für mehr Details zu GLFW.
+See [glfw.md](Glfw.md) for more details on GLFW.
 
 ---
 
-## 6. Mit ImGui kombinieren
+## 6. Combining with ImGui
 
-### 6.1 Reihenfolge
+### 6.1 Order
 
 ```
 1. glfwInit()
 2. glfwCreateWindow()
 3. glfwMakeContextCurrent()
-4. gladLoadGLLoader()          ← GLAD zuerst
-5. ImGui::CreateContext()      ← ImGui danach
+4. gladLoadGLLoader()          ← GLAD first
+5. ImGui::CreateContext()      ← ImGui afterwards
 6. ImGui_ImplGlfw_InitForOpenGL()
 7. ImGui_ImplOpenGL3_Init()
 ```
@@ -405,10 +405,10 @@ int main() {
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);  // VSync
     
-    // GLAD laden
+    // Load GLAD
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     
-    // ImGui Setup
+    // ImGui setup
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -422,12 +422,12 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         
-        // ImGui Frame starten
+        // Start ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
-        // ImGui Widgets
+        // ImGui widgets
         ImGui::Begin("Hello");
         ImGui::Text("Hello, World!");
         if (ImGui::Button("Click me")) {
@@ -459,7 +459,7 @@ int main() {
 }
 ```
 
-Siehe [imgui.md](imgui.md) für mehr Details zu ImGui.
+See [imgui.md](Imgui.md) for more details on ImGui.
 
 ---
 
@@ -467,65 +467,65 @@ Siehe [imgui.md](imgui.md) für mehr Details zu ImGui.
 
 ### 7.1 "undefined reference to gl..."
 
-**Problem:** OpenGL-Functions nicht gefunden
+**Problem:** OpenGL functions not found
 
-**Ursachen & Lösungen:**
+**Causes & solutions:**
 
-1. **GLAD nicht geladen:**
+1. **GLAD not loaded:**
    ```cpp
-   // FALSCH
+   // WRONG
    glClear(GL_COLOR_BUFFER_BIT);  // Crash!
    
-   // RICHTIG
+   // RIGHT
    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
    glClear(GL_COLOR_BUFFER_BIT);  // OK
    ```
 
-2. **Kein OpenGL-Kontext:**
+2. **No OpenGL context:**
    ```cpp
-   // FALSCH
-   gladLoadGLLoader(...);  // Kein Kontext!
+   // WRONG
+   gladLoadGLLoader(...);  // No context!
    
-   // RICHTIG
+   // RIGHT
    glfwMakeContextCurrent(window);
    gladLoadGLLoader(...);
    ```
 
 ### 7.2 "glad.h not found"
 
-**Problem:** Header nicht gefunden
+**Problem:** Header not found
 
-**Lösung:** Verzeichnisstruktur prüfen:
+**Solution:** Check the directory structure:
 ```
-externals/glad/include/glad/glad.h  ← Muss existieren
+externals/glad/include/glad/glad.h  ← Must exist
 ```
 
-### 7.3 GLAD gibt false zurück
+### 7.3 GLAD Returns false
 
-**Problem:** `gladLoadGLLoader()` gibt 0 zurück
+**Problem:** `gladLoadGLLoader()` returns 0
 
-**Lösungen:**
-1. OpenGL-Kontext existiert nicht
-2. Treiber unterstützt angefragte Version nicht
-3. Bei macOS: Forward Compat aktivieren:
+**Solutions:**
+1. OpenGL context does not exist
+2. Driver does not support the requested version
+3. On macOS: enable forward compat:
    ```cpp
    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
    ```
 
-### 7.4 Functions fehlen
+### 7.4 Functions Missing
 
-**Problem:** Bestimmte OpenGL-Functions nicht verfügbar
+**Problem:** Certain OpenGL functions not available
 
-**Lösung:** GLAD mit höherer Version neu generieren oder Extensions aktivieren.
+**Solution:** Regenerate GLAD with a higher version or enable extensions.
 
 ---
 
-## 8. Weiterführende Informationen
+## 8. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **GLAD Generator** | [glad.dav1d.de](https://glad.dav1d.de/) |
 | **GitHub** | [github.com/Dav1dde/glad](https://github.com/Dav1dde/glad) |
 | **OpenGL Registry** | [khronos.org/registry/OpenGL](https://www.khronos.org/registry/OpenGL/) |
@@ -533,15 +533,16 @@ externals/glad/include/glad/glad.h  ← Muss existieren
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Local_Externals_GUI.md](../../references/externals/Local_Externals_GUI.md) — Reference
-- [glfw.md](glfw.md) — Window & Input
-- [imgui.md](imgui.md) — Immediate Mode GUI
+- [glfw.md](Glfw.md) — Window & Input
+- [imgui.md](Imgui.md) — Immediate Mode GUI
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für GLAD** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for GLAD |

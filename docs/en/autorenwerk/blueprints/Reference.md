@@ -1,65 +1,65 @@
-# Reference — Standard für API/Schema-Referenceen
+# Reference — Standard for API/Schema References
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5, Blueprint v0.5  
-> **Target Audience:** Documentation Authors  
+> **Target Audience:** Documentation authors  
 > **Language:** English  
-> **German:** [Reference.md](Reference.md)
+> **German:** [Reference.md](../../../de/autorenwerk/blueprints/Reference.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Header-Struktur](#3-header-struktur)
-4. [Requiredabschnitte](#4-pflichtabschnitte)
-5. [Eintragsformat](#5-eintragsformat)
-6. [Schnellreferenz-Tabellen](#6-schnellreferenz-tabellen)
-7. [Example: Vollständige Reference](#7-beispiel-vollständige-reference)
-8. [Review Checklist](#8-review-checkliste)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Header Structure](#3-header-structure)
+4. [Required Sections](#4-required-sections)
+5. [Entry Format](#5-entry-format)
+6. [Quick Reference Tables](#6-quick-reference-tables)
+7. [Example: Complete Reference](#7-example-complete-reference)
+8. [Review Checklist](#8-review-checklist)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines die **Struktur für Reference-Dokumentationen**. Referenceen sind Nachschlagewerke, die vollständige, strukturierte Informationen zu einem Thema liefern.
+This blueprint defines the **structure for reference documentation**. References are lookup works that provide complete, structured information on a topic.
 
-### Zielgruppe
+### Target Audience
 
-- Alle Entwickler, die schnell etwas nachschlagen wollen
-- Fokus auf Vollständigkeit und schnelles Finden
+- All developers who want to look something up quickly
+- Focus on completeness and quick retrieval
 
-### Abgrenzung
+### Delimitation
 
-| Dokumentations-Typ | Fragestellung |
+| Documentation type | Question |
 |-------------------|---------------|
-| **Reference** | "Was bedeutet X?" "Welche Optionen gibt es?" |
-| **Guide** | "Wie mache ich X?" |
-| **ModuleDoc** | "Wie funktioniert Modul X intern?" |
+| **Reference** | "What does X mean?" "Which options are there?" |
+| **Guide** | "How do I do X?" |
+| **ModuleDoc** | "How does module X work internally?" |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für:
-- Schema-Dokumentationen (`Solution_Schema`, `CMakePresets`)
-- Error-Code-Referenceen
-- Glossare
-- API-Overviewen (nicht Module — dafür ModuleDoc)
+This blueprint applies to:
+- Schema documentation (`Solution_Schema`, `CMakePresets`)
+- Error code references
+- Glossaries
+- API overviews (not modules — use ModuleDoc for those)
 
-**Typischer Ordner:** `docs/[lang]/reference/`
+**Typical folder:** `docs/[lang]/guide/references/`
 
 ---
 
-## 3. Header-Struktur
+## 3. Header Structure
 
-### 3.1 Standard-Header
+### 3.1 Standard Header
 
 ```markdown
 # [Name] — Reference
@@ -68,111 +68,111 @@ Dieser Blueprint gilt für:
 > **Date:** YYYY-MM-DD  
 > **Type:** Reference  
 > **Status:** [In Development | Stable | Deprecated]  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Name.md](../../en/reference/Name.md)
+> **German:** [Name.md](../../../de/guide/references/Name.md)
 ```
 
-### 3.2 Keine zusätzlichen Requiredfelder
+### 3.2 No Additional Required Fields
 
-Reference verwendet den Standard-Header aus Doc.md.
+Reference uses the standard header from Doc.md.
 
 ---
 
-## 4. Requiredabschnitte
+## 4. Required Sections
 
-Referenceen verwenden diese Struktur:
+References use this structure:
 
 ```
 ## Table of Contents
 
 ## 1. Overview
-## 2. Konventionen
-## 3. [Kategorisierte Einträge]
-## 4. Schnellreferenz
+## 2. Conventions
+## 3. [Categorized Entries]
+## 4. Quick Reference
 ## 5. Usage in Code
 ## 6. See Also
 ## Changelog
 ```
 
-### 4.1 Abschnitts-Details
+### 4.1 Section Details
 
-| # | Abschnitt | Inhalt |
+| # | Section | Content |
 |---|-----------|--------|
-| 1 | Overview | Was wird dokumentiert? Zweck |
-| 2 | Konventionen | Notation, Legende, Abkürzungen |
-| 3 | Einträge | Kategorisierte, vollständige Auflistung |
-| 4 | Schnellreferenz | Kompakte Tabelle aller Einträge |
-| 5 | Usage | Code-Examples für typische Anwendung |
-| 6 | See Also | Verwandte Dokumente |
+| 1 | Overview | What is documented? Purpose |
+| 2 | Conventions | Notation, legend, abbreviations |
+| 3 | Entries | Categorized, complete listing |
+| 4 | Quick reference | Compact table of all entries |
+| 5 | Usage | Code examples for typical use |
+| 6 | See also | Related documents |
 
 ---
 
-## 5. Eintragsformat
+## 5. Entry Format
 
-### 5.1 Für Schema-Felder
+### 5.1 For Schema Fields
 
-```markdown
-### 3.1 `feldname`
+````markdown
+### 3.1 `fieldname`
 
-| Aspekt | Wert |
+| Aspect | Value |
 |--------|------|
-| **Typ** | `string` / `number` / `boolean` / `object` / `array` |
+| **Type** | `string` / `number` / `boolean` / `object` / `array` |
 | **Required** | ✓ / — |
-| **Default** | `"wert"` / — |
-| **Seit** | v0.1.0 |
+| **Default** | `"value"` / — |
+| **Since** | v0.1.0 |
 
 **Description:**  
-Was dieses Feld macht.
+What this field does.
 
-**Gültige Werte:**
+**Valid values:**
 - `"option1"` — Description
 - `"option2"` — Description
 
 **Example:**
 ```json
-"feldname": "option1"
+"fieldname": "option1"
 ```
 
-**Notee:**
-- Zusätzliche Informationen
-```
+**Notes:**
+- Additional information
+````
 
-### 5.2 Für Error Codes
+### 5.2 For Error Codes
 
 ```markdown
-### E0501 — Executable nicht gefunden
+### E0501 — Executable not found
 
-| Aspekt | Wert |
+| Aspect | Value |
 |--------|------|
-| **Kategorie** | Executable Pipeline |
-| **Schweregrad** | FATAL_ERROR |
-| **Seit** | v0.1.0 |
+| **Category** | Executable Pipeline |
+| **Severity** | FATAL_ERROR |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Message:**
 ```
 [Executables] ERROR E0501: Executable 'MyApp' not found
 ```
 
-**Ursache:**  
-Das in Solution.json deklarierte Executable existiert nicht im angegebenen Pfad.
+**Cause:**  
+The executable declared in Solution.json does not exist at the given path.
 
-**Lösung:**
-1. Pfad in Solution.json prüfen
-2. Dateistruktur prüfen
-3. `path`-Feld ggf. anpassen
+**Solution:**
+1. Check the path in Solution.json
+2. Check the file structure
+3. Adjust the `path` field if necessary
 
-**Verwandte Error:**
-- [E0502](#e0502) — Executable-Typ ungültig
+**Related errors:**
+- [E0502](#e0502) — Executable type invalid
 ```
 
-### 5.3 Für Glossar-Einträge
+### 5.3 For Glossary Entries
 
-```markdown
+````markdown
 ### Context
 
 **Definition:**  
-Ein isolierter Namespace zum Sammeln von Daten während der CMake-Verarbeitung.
+An isolated namespace for collecting data during CMake processing.
 
 **Usage:**
 ```cmake
@@ -180,155 +180,155 @@ ctx_create(EXE_MyApp)
 ctx_set(EXE_MyApp NAME "MyApp")
 ```
 
-**See Also:** [Context.cmake](../modules/core/Context_cmake_v0_1_1_doc_v1.md)
-```
+**See also:** [Context.cmake](../module/core/Context.md)
+````
 
 ---
 
-## 6. Schnellreferenz-Tabellen
+## 6. Quick Reference Tables
 
-### 6.1 Zweck
+### 6.1 Purpose
 
-Am Ende des Hauptteils eine kompakte Overview aller Einträge.
+At the end of the main part, a compact overview of all entries.
 
-### 6.2 Format für Schema
+### 6.2 Format for Schema
 
 ```markdown
-## 4. Schnellreferenz
+## 4. Quick Reference
 
-| Feld | Typ | Required | Default | Description |
+| Field | Type | Required | Default | Description |
 |------|-----|---------|---------|--------------|
-| `name` | string | ✓ | — | Eindeutiger Name |
-| `version` | string | — | `"0.1.0"` | SemVer-Version |
+| `name` | string | ✓ | — | Unique name |
+| `version` | string | — | `"0.1.0"` | SemVer version |
 | `type` | string | — | `"CONSOLE"` | CONSOLE / GUI |
 ```
 
-### 6.3 Format für Error Codes
+### 6.3 Format for Error Codes
 
 ```markdown
-## 4. Schnellreferenz
+## 4. Quick Reference
 
-| Code | Kategorie | Description |
+| Code | Category | Description |
 |------|-----------|--------------|
-| E0101 | Core | Json-Datei nicht gefunden |
-| E0102 | Core | Json-Parse-Error |
-| E0501 | Executable | Executable nicht gefunden |
-| E0502 | Executable | Ungültiger Typ |
+| E0101 | Core | JSON file not found |
+| E0102 | Core | JSON parse error |
+| E0501 | Executable | Executable not found |
+| E0502 | Executable | Invalid type |
 ```
 
 ---
 
-## 7. Example: Vollständige Reference
+## 7. Example: Complete Reference
 
 ```markdown
 # ErrorCodes — Reference
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-13  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [ErrorCodes.md](../../guide/references/ErrorCodes.md)
+> **German:** [ErrorCodes.md](../../../de/guide/references/ErrorCodes.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Konventionen](#2-konventionen)
-3. [Error Codes nach Kategorie](#3-error-codes-nach-kategorie)
-4. [Schnellreferenz](#4-schnellreferenz)
-5. [Usage in Code](#5-verwendung-in-code)
-6. [See Also](#6-siehe-auch)
-7. [Changelog](#7-changelog)
+1. [Overview](#1-overview)
+2. [Conventions](#2-conventions)
+3. [Error Codes by Category](#3-error-codes-by-category)
+4. [Quick Reference](#4-quick-reference)
+5. [Usage in Code](#5-usage-in-code)
+6. [See Also](#6-see-also)
+7. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This reference documents alle Error Codes des CMake Architecture 
-Build-Systems.
+This reference documents all error codes of the CMake Architecture 
+build system.
 
-### Error-Code-Format
+### Error Code Format
 
 ```
 E[KK][NN]
 
-K = Kategorie (2 Ziffern)
-N = Nummer (2 Ziffern)
+K = category (2 digits)
+N = number (2 digits)
 ```
 
 ---
 
-## 2. Konventionen
+## 2. Conventions
 
-### Kategorien
+### Categories
 
-| Präfix | Kategorie | Description |
+| Prefix | Category | Description |
 |--------|-----------|--------------|
-| E01xx | Core | Grundlegende Error |
-| E05xx | Executable | Executable-Pipeline |
-| E06xx | Library | Library-Pipeline |
-| E20xx | External | Externals-Verarbeitung |
+| E01xx | Core | Basic errors |
+| E05xx | Executable | Executable pipeline |
+| E06xx | Library | Library pipeline |
+| E20xx | External | Externals processing |
 
-### Schweregrade
+### Severities
 
-| Symbol | Bedeutung |
+| Symbol | Meaning |
 |--------|-----------|
-| ⛔ FATAL | Build bricht ab |
-| ⚠️ WARNING | Build läuft weiter |
-| ℹ️ INFO | Nur Information |
+| ⛔ FATAL | Build aborts |
+| ⚠️ WARNING | Build continues |
+| ℹ️ INFO | Information only |
 
 ---
 
-## 3. Error Codes nach Kategorie
+## 3. Error Codes by Category
 
 ### 3.1 Core (E01xx)
 
-#### E0101 — JSON-Datei nicht gefunden
+#### E0101 — JSON file not found
 
-| Aspekt | Wert |
+| Aspect | Value |
 |--------|------|
-| **Schweregrad** | ⛔ FATAL |
-| **Seit** | v0.1.0 |
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.1.0 |
 
-**Meldung:**
+**Message:**
 ```
 [Core] ERROR E0101: Solution.json not found at: ${path}
-```
+````
 
-**Lösung:** Pfad prüfen, Datei erstellen.
+**Solution:** Check the path, create the file.
 
 ---
 
 ### 3.2 Executable (E05xx)
 
-#### E0501 — Executable nicht gefunden
+#### E0501 — Executable not found
 
 [...]
 
 ---
 
-## 4. Schnellreferenz
+## 4. Quick Reference
 
-| Code | Schwere | Kategorie | Description |
+| Code | Severity | Category | Description |
 |------|---------|-----------|--------------|
-| E0101 | ⛔ | Core | JSON nicht gefunden |
-| E0102 | ⛔ | Core | JSON-Parse-Error |
-| E0501 | ⛔ | Executable | Executable nicht gefunden |
+| E0101 | ⛔ | Core | JSON not found |
+| E0102 | ⛔ | Core | JSON parse error |
+| E0501 | ⛔ | Executable | Executable not found |
 
 ---
 
 ## 5. Usage in Code
 
 ```cmake
-include(cmake/core/Errors.cmake)
+include("${CMAKECRAFT_DIR}/core/Errors.cmake")
 
-# Error auslösen
+# Raise an error
 cmake_fatal(E0101 "Solution.json not found")
 
-# Warning auslösen  
+# Raise a warning  
 cmake_warn(W0201 "Deprecated option used")
 ```
 
@@ -336,53 +336,55 @@ cmake_warn(W0201 "Deprecated option used")
 
 ## 6. See Also
 
-- [Errors.cmake](../modules/core/Errors_cmake_v0_1_1_doc_v1.md)
-- [Debug.cmake](../modules/core/Debug_cmake_v0_1_1_doc_v1.md)
+- [Errors.cmake](../module/core/Errors.md)
+- [Debug.cmake](../module/core/Debug.md)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.1.1** | **2025-12-13** | **E20xx Kategorie hinzugefügt** |
+| **0.1.1** | **2025-12-13** | **E20xx category added** |
 | 0.1.0 | 2025-12-03 | Initial |
-```
+````
 
 ---
 
 ## 8. Review Checklist
 
-Zusätzlich zur Doc.md Checkliste:
+In addition to the Doc.md checklist:
 
-**Vollständigkeit:**
-- [ ] Alle Einträge dokumentiert
-- [ ] Keine fehlenden Kategorien
-- [ ] Schnellreferenz vollständig
+**Completeness:**
+- [ ] All entries documented
+- [ ] No missing categories
+- [ ] Quick reference complete
 
 **Format:**
-- [ ] Einheitliches Eintragsformat
-- [ ] Konventionen/Legende vorhanden
-- [ ] Usagesbeispiele
+- [ ] Uniform entry format
+- [ ] Conventions/legend present
+- [ ] Usage examples
 
 **Navigation:**
-- [ ] Kategorisierung sinnvoll
-- [ ] Schnellreferenz-Tabelle vorhanden
-- [ ] Querverweise funktionieren
+- [ ] Sensible categorization
+- [ ] Quick reference table present
+- [ ] Cross-references work
 
 ---
 
 ## 9. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [ModuleDoc.md](ModuleDoc.md) — Für Modul-Dokumentation
-- [Guide.md](Guide.md) — Für Anleitungen
+- [Doc.md](Doc.md) — General documentation rules
+- [ModuleDoc.md](ModuleDoc.md) — For module documentation
+- [Guide.md](Guide.md) — For guides
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Eintragsformate für Schema/ErrorCodes/Glossar, Schnellreferenz-Tabellen** |
-| 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: location `docs/[lang]/guide/references/` (§ 2), jump path `../../../de/`, example references to `../module/core/*.md` without version in the file name, module inclusion via `${CMAKECRAFT_DIR}` (`CMakeCraft.cmake`:133, :149)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: entry formats for schema/error codes/glossary, quick reference tables |
+| 0.1.0 | 2025-12-03 | Initial (part of Documentation_Blueprint) |

@@ -1,14 +1,14 @@
 # CompilerOptions.cmake — Modul-Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-07  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CompilerOptions.md](CompilerOptions.md)  
-> **Modul:** [`cmake/core/CompilerOptions.cmake`](../../../../cmake/core/CompilerOptions.cmake)  
+> **English:** [CompilerOptions.md](../../../../en/guide/module/core/CompilerOptions.md)  
+> **Modul:** [`cmake/core/CompilerOptions.cmake`](../../../../../cmake/core/CompilerOptions.cmake)  
 > **Modul-Version:** 1.3.0
 
 ---
@@ -25,7 +25,7 @@
 8. [Best Practices](#8-best-practices)
 9. [Performance-Impact](#9-performance-impact)
 10. [Siehe auch](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+11. [Changelog](#changelog)
 
 ---
 
@@ -287,8 +287,8 @@ apply_compiler_options(SpecialApp
 - [Warnings.cmake](Warnings.md) — Warning-Level
 - [Debug.cmake](Debug.md) — Debug-System
 - [Errors.cmake](Errors.md) — Fehlerbehandlung
-- [guidelines](../../../concepts/guidelines.md) — Konventionen
-- [CMakePresets_Reference](../../../reference/CMakePresets_Reference.md) — Presets
+- [guidelines](../../../konzepte/Guidelines.md) — Konventionen
+- [CMakePresets_Reference](../../references/CMakePresets.md) — Presets
 
 ---
 
@@ -296,7 +296,8 @@ apply_compiler_options(SpecialApp
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.14.0** | **2026-11-07** | **`craft_language_rules()`: Sprachregel-Schalter aller Compiler-Familien an einer Stelle, von `apply_compiler_options()` und Quellpaketen genutzt; Modul-Version 1.3.0** |
+| **1.0.1** | **2026-11-07** | **CMakeCraft v0.14.0: `craft_language_rules()`: Sprachregel-Schalter aller Compiler-Familien an einer Stelle, von `apply_compiler_options()` und Quellpaketen genutzt; Modul-Version 1.3.0** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.5.0 | 2025-12-15 | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung, korrigierte Abhängigkeiten** |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
 | 0.1.0 | 2025-12-03 | Initial (Clean Start): Inhalte aus v2.0 übernommen, Blueprint-Format, Per-Target Overrides |

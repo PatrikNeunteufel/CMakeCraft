@@ -1,14 +1,14 @@
 # C++ Coding Standard — Stil-Richtlinien
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-19  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle C++ Entwickler  
 > **Geltungsbereich:** Alle C++-Projekte (PC-Applikationen, Tools, Treiber)  
 > **Durchsetzung:** clang-format, clang-tidy, Code Review  
 > **Sprache:** Deutsch  
-> **English:** [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md)
+> **English:** [Cpp_Coding_Standard.md](../../../en/autorenwerk/standards/Cpp_Coding_Standard.md)
 
 ---
 
@@ -536,7 +536,7 @@ union ControlRegister
 ```cpp
 // [[nodiscard]] für wichtige Rückgabewerte
 [[nodiscard]] bool validate();
-[[nodiscard]] std::optional<r> process();
+[[nodiscard]] std::optional<Result> process();
 
 // explicit für Ein-Parameter-Konstruktoren
 class Value
@@ -921,8 +921,8 @@ Dieser Standard orientiert sich an:
 - [C_Coding_Standard.md](C_Coding_Standard.md) — Embedded C
 - [CMake_Standard.md](CMake_Standard.md) — Build-System
 - [Git_Standard.md](Git_Standard.md) — Versionskontrolle
-- [ClangFormat_Blueprint.md](../blueprints/ClangFormat_Blueprint.md) — Formatierung
-- [ClangTidy_Blueprint.md](../blueprints/ClangTidy_Blueprint.md) — Statische Analyse
+- [ClangFormat_Blueprint.md](../blueprints/ClangFormat.md) — Formatierung
+- [ClangTidy_Blueprint.md](../blueprints/ClangTidy.md) — Statische Analyse
 
 ---
 
@@ -930,8 +930,10 @@ Dieser Standard orientiert sich an:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.9.0** | **2025-12-19** | **Neu: §8 erweitert (Struct, Union, Bitfields), §9 Raw Pointer Regeln, §12 Hardware-Zugriff, §15 Dokumentation; §2↔§3 getauscht** |
-| 0.8.0 | 2025-12-19 | Neu: TODO-Marker (2.1), Multiple Conditions in Klammern (10.4), Division durch 0 prüfen (10.5) |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: §8.6 Beispiel `std::optional<Result>` (war verstümmelt `std::optional<r>`); Changelog 0.8.0: TODO-Marker heute in §15.1** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.9.0 | 2025-12-19 | Neu: §8 erweitert (Struct, Union, Bitfields), §9 Raw Pointer Regeln, §12 Hardware-Zugriff, §15 Dokumentation; §2↔§3 getauscht |
+| 0.8.0 | 2025-12-19 | Neu: TODO-Marker (2.1, seit 0.9.0 in §15.1), Multiple Conditions in Klammern (10.4), Division durch 0 prüfen (10.5) |
 | 0.7.0 | 2025-12-19 | Vereinheitlichung: Präfix-Tabelle klargestellt (p für alle Pointer) |
 | 0.6.0 | 2025-12-19 | Konsolidierung: Neuer Abschnitt 8 Klassen-Struktur, erweiterte Präfix-Tabelle (7.3), Dateinamen-Konventionen (5.1), Interface-Präfix I, Include-Reihenfolge (5.5), nodiscard/explicit Best Practices (8.3) |
 | 0.5.1 | 2025-12-18 | Neuer Abschnitt 4: Datei-Header mit Doxygen-Format, Pflichtfelder, Sprachregelung |

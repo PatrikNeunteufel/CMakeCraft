@@ -4,48 +4,48 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [catch2.md](../../../en/userguides/externals/Catch2.md)
+> **German:** [Catch2.md](../../../../de/guide/userguides/externals/Catch2.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Solution.json Configuration](#2-solutionjson-konfiguration)
-3. [C++ Usage](#3-c-verwendung)
+1. [Overview](#1-overview)
+2. [Solution.json Configuration](#2-solutionjson-configuration)
+3. [C++ Usage](#3-c-usage)
 4. [BDD-Style Testing](#4-bdd-style-testing)
 5. [Matchers](#5-matchers)
-6. [Fortgeschrittene Techniken](#6-fortgeschrittene-techniken)
+6. [Advanced Techniques](#6-advanced-techniques)
 7. [Troubleshooting](#7-troubleshooting)
-8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+8. [Further Information](#8-further-information)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Catch2** ist ein modernes C++ Testing Framework mit BDD-Style Syntax und Sections.
+**Catch2** is a modern C++ testing framework with BDD-style syntax and sections.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Git External |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Git External |
 | **Repository** | https://github.com/catchorg/Catch2 |
-| **Empfohlener Tag** | v3.5.2 |
-| **Lizenz** | BSL-1.0 |
+| **Recommended Tag** | v3.5.2 |
+| **License** | BSL-1.0 |
 | **Website** | [github.com/catchorg/Catch2](https://github.com/catchorg/Catch2) |
 
-### Warum Catch2?
+### Why Catch2?
 
-| Vorteil | Description |
-|---------|--------------|
-| 📝 **BDD-Style** | GIVEN/WHEN/THEN Syntax |
-| 🔀 **Sections** | Verschachtelte Tests |
-| 🏷️ **Tags** | Flexible Test-Filterung |
-| 📊 **Benchmarks** | Integriertes Benchmarking |
+| Advantage | Description |
+|-----------|-------------|
+| 📝 **BDD-Style** | GIVEN/WHEN/THEN syntax |
+| 🔀 **Sections** | Nested tests |
+| 🏷️ **Tags** | Flexible test filtering |
+| 📊 **Benchmarks** | Built-in benchmarking |
 
-### Vergleich
+### Comparison
 
 | Feature | Catch2 | googletest | doctest |
 |---------|--------|------------|---------|
@@ -78,7 +78,7 @@
 }
 ```
 
-### 2.2 Mit Library-Tests
+### 2.2 With Library Tests
 
 ```json
 {
@@ -118,15 +118,15 @@ set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
 ### 2.4 Targets
 
 | Target | Description |
-|--------|--------------|
-| `Catch2::Catch2` | Header-Only Interface |
-| `Catch2::Catch2WithMain` | Mit main() |
+|--------|-------------|
+| `Catch2::Catch2` | Header-only interface |
+| `Catch2::Catch2WithMain` | With main() |
 
 ---
 
 ## 3. C++ Usage
 
-### 3.1 Einfacher Test
+### 3.1 Simple Test
 
 ```cpp
 #include <catch2/catch_test_macros.hpp>
@@ -138,25 +138,25 @@ TEST_CASE("Math operations", "[math]") {
 }
 ```
 
-### 3.2 Mit eigenem main()
+### 3.2 With Your Own main()
 
 ```cpp
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 
-// Tests hier...
+// Tests here...
 ```
 
 ### 3.3 Sections
 
-Sections ermöglichen verschachtelte Tests mit gemeinsamem Setup:
+Sections enable nested tests with shared setup:
 
 ```cpp
 #include <catch2/catch_test_macros.hpp>
 #include <vector>
 
 TEST_CASE("Vector operations", "[vector]") {
-    std::vector<int> v;  // Gemeinsames Setup
+    std::vector<int> v;  // Shared setup
     
     REQUIRE(v.empty());
     
@@ -182,7 +182,7 @@ TEST_CASE("Vector operations", "[vector]") {
 }
 ```
 
-**Ausführungsreihenfolge:**
+**Execution order:**
 ```
 Vector operations → pushing elements → pushing more
 Vector operations → pushing elements → popping
@@ -196,20 +196,20 @@ TEST_CASE("Fast test", "[fast]") { /* ... */ }
 TEST_CASE("Slow test", "[slow][integration]") { /* ... */ }
 TEST_CASE("Math test", "[math][fast]") { /* ... */ }
 
-// Ausführen:
-// ./tests [fast]           - Nur [fast] Tests
-// ./tests ~[slow]          - Ohne [slow] Tests
-// ./tests [math][fast]     - Mit [math] UND [fast]
+// Run:
+// ./tests [fast]           - Only [fast] tests
+// ./tests ~[slow]          - Without [slow] tests
+// ./tests [math][fast]     - With [math] AND [fast]
 ```
 
 ### 3.5 Assertions
 
-| Assertion | Description | Bei Error |
-|-----------|--------------|------------|
-| `REQUIRE(expr)` | Prüft Expression | Abbruch |
-| `CHECK(expr)` | Prüft Expression | Weiter |
-| `REQUIRE_FALSE(expr)` | Prüft auf false | Abbruch |
-| `CHECK_FALSE(expr)` | Prüft auf false | Weiter |
+| Assertion | Description | On Failure |
+|-----------|-------------|------------|
+| `REQUIRE(expr)` | Checks expression | Abort |
+| `CHECK(expr)` | Checks expression | Continue |
+| `REQUIRE_FALSE(expr)` | Checks for false | Abort |
+| `CHECK_FALSE(expr)` | Checks for false | Continue |
 
 ```cpp
 TEST_CASE("Assertions") {
@@ -219,7 +219,7 @@ TEST_CASE("Assertions") {
     CHECK(x > 0);
     REQUIRE_FALSE(x < 0);
     
-    // Mit Nachricht
+    // With message
     INFO("Testing value: " << x);
     REQUIRE(x == 5);
 }
@@ -325,7 +325,7 @@ TEST_CASE("Float matchers") {
     double result = calculate();
     
     REQUIRE_THAT(result, WithinAbs(3.14159, 0.0001));
-    REQUIRE_THAT(result, WithinRel(3.14159, 0.01));  // 1% Toleranz
+    REQUIRE_THAT(result, WithinRel(3.14159, 0.01));  // 1% tolerance
 }
 ```
 
@@ -389,7 +389,7 @@ TEST_CASE("Custom matcher") {
 
 ---
 
-## 6. Fortgeschrittene Techniken
+## 6. Advanced Techniques
 
 ### 6.1 Generators
 
@@ -504,24 +504,24 @@ CATCH_REGISTER_LISTENER(MyListener)
 ### 6.5 Command Line
 
 ```bash
-# Tests ausführen
+# Run tests
 ./tests
 
-# Mit Tags
+# With tags
 ./tests [fast]
 ./tests ~[slow]
 
-# Test-Filter
+# Test filter
 ./tests "Vector*"
 ./tests -c "Vector operations"
 
 # Verbose
 ./tests -s
 
-# XML Output
+# XML output
 ./tests -r xml -o results.xml
 
-# Liste aller Tests
+# List all tests
 ./tests --list-tests
 ./tests --list-tags
 ```
@@ -532,64 +532,65 @@ CATCH_REGISTER_LISTENER(MyListener)
 
 ### 7.1 "catch2/catch_test_macros.hpp not found"
 
-**Problem:** Header nicht gefunden
+**Problem:** Header not found
 
-**Lösung:** Catch2 v3 verwendet neue Header-Struktur:
+**Solution:** Catch2 v3 uses a new header structure:
 ```cpp
-// v2 (alt)
+// v2 (old)
 #include <catch2/catch.hpp>
 
-// v3 (neu)
+// v3 (new)
 #include <catch2/catch_test_macros.hpp>
 ```
 
-### 7.2 Link-Error
+### 7.2 Link Errors
 
-**Problem:** Undefined reference zu Catch2-Symbolen
+**Problem:** Undefined reference to Catch2 symbols
 
-**Lösung:** Gegen `Catch2::Catch2WithMain` linken.
+**Solution:** Link against `Catch2::Catch2WithMain`.
 
-### 7.3 Tests werden nicht gefunden
+### 7.3 Tests Are Not Found
 
-**Problem:** Keine Tests ausgeführt
+**Problem:** No tests executed
 
-**Lösung:** 
-- Header `catch_test_macros.hpp` inkludieren
-- Gegen `Catch2WithMain` linken (oder eigenes main)
+**Solution:** 
+- Include the header `catch_test_macros.hpp`
+- Link against `Catch2WithMain` (or your own main)
 
 ### 7.4 Slow Compilation
 
-**Problem:** Lange Kompilierzeit
+**Problem:** Long compile time
 
-**Lösung:** 
-- Precompiled Headers verwenden
-- Tests auf mehrere Dateien verteilen
+**Solution:** 
+- Use precompiled headers
+- Spread tests across multiple files
 
 ---
 
-## 8. Weiterführende Informationen
+## 8. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **GitHub** | [github.com/catchorg/Catch2](https://github.com/catchorg/Catch2) |
-| **Dokumentation** | [github.com/catchorg/Catch2/blob/devel/docs/Readme.md](https://github.com/catchorg/Catch2/blob/devel/docs/Readme.md) |
+| **Documentation** | [github.com/catchorg/Catch2/blob/devel/docs/Readme.md](https://github.com/catchorg/Catch2/blob/devel/docs/Readme.md) |
 | **Tutorial** | [github.com/catchorg/Catch2/blob/devel/docs/tutorial.md](https://github.com/catchorg/Catch2/blob/devel/docs/tutorial.md) |
 | **Reference** | [github.com/catchorg/Catch2/blob/devel/docs/assertions.md](https://github.com/catchorg/Catch2/blob/devel/docs/assertions.md) |
 | **Migration v2→v3** | [github.com/catchorg/Catch2/blob/devel/docs/migrate-v2-to-v3.md](https://github.com/catchorg/Catch2/blob/devel/docs/migrate-v2-to-v3.md) |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Git_Externals_Testing.md](../../references/externals/Git_Externals_Testing.md) — Reference
-- [doctest.md](doctest.md) — Leichtgewichtige Alternative
-- [googletest.md](googletest.md) — Alternative mit GMock
+- [doctest.md](Doctest.md) — Lightweight alternative
+- [googletest.md](Googletest.md) — Alternative with GMock
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Catch2** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for Catch2 |

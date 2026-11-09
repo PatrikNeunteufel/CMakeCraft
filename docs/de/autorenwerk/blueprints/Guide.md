@@ -1,13 +1,13 @@
 # Guide — Standard für Benutzerhandbücher
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [Guide.md](Guide.md)
+> **English:** [Guide.md](../../../en/autorenwerk/blueprints/Guide.md)
 
 ---
 
@@ -21,7 +21,7 @@
 6. [Beispiel: Vollständiger Guide](#6-beispiel-vollständiger-guide)
 7. [Review-Checkliste](#7-review-checkliste)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -49,13 +49,13 @@ Dieser Blueprint definiert die **Struktur für Benutzerhandbücher** (User Guide
 
 Dieser Blueprint gilt für alle Dokumentationen, die:
 - Praktische Anleitungen für Endnutzer sind
-- Im Ordner `docs/[lang]/guides/` liegen
+- Im Ordner `docs/[lang]/guide/userguides/` liegen
 - "How-To"-Charakter haben
 
 **Beispiele:**
-- `Qt6_Integration_UserGuide_v0_2_0.md`
-- `Testing_UserGuide_v0_1_0.md`
-- `Adding_Externals_UserGuide_v0_1_0.md`
+- `Qt6_Integration.md`
+- `Testing.md`
+- `Adding_Externals.md`
 
 ---
 
@@ -79,7 +79,7 @@ Dieser Blueprint gilt für alle Dokumentationen, die:
 > **Zielgruppe:** C++ Entwickler  
 > **Modul:** externals/qt6/Include.cmake v0.6.0 (optional)  
 > **Sprache:** Deutsch  
-> **English:** [Thema_UserGuide.md](../../en/guides/Thema_UserGuide.md)
+> **English:** [Thema.md](../../../en/guide/userguides/Thema.md)
 ```
 
 ---
@@ -162,7 +162,7 @@ Jede Anleitung enthält:
 2. **Wie:** Code-Beispiel oder Befehl
 3. **Warum:** Optionale Erklärung bei nicht-offensichtlichen Schritten
 
-```markdown
+````markdown
 ### 4.2 Mit Pfad-Hint
 
 Wenn `QT_ROOT` nicht gesetzt ist, gib den Pfad direkt an:
@@ -177,7 +177,7 @@ Wenn `QT_ROOT` nicht gesetzt ist, gib den Pfad direkt an:
 ```
 
 Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
-```
+````
 
 ### 5.4 Visuelle Strukturierung
 
@@ -190,7 +190,7 @@ Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
 
 ## 6. Beispiel: Vollständiger Guide
 
-```markdown
+````markdown
 # Qt6 Integration — Benutzerhandbuch
 
 > **Version:** 1.0.0  
@@ -200,7 +200,7 @@ Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
 > **Zielgruppe:** C++ Entwickler  
 > **Modul:** externals/qt6/Include.cmake v0.6.0  
 > **Sprache:** Deutsch  
-> **English:** [Qt6_Integration_UserGuide.md](../../en/guides/Qt6_Integration_UserGuide.md)
+> **English:** [Qt6_Integration.md](../../../en/guide/userguides/Qt6_Integration.md)
 
 ---
 
@@ -213,7 +213,7 @@ Der `hint` wird nur verwendet, wenn keine Umgebungsvariable gefunden wurde.
 5. [Stolpersteine und Lösungen](#5-stolpersteine-und-lösungen)
 6. [Troubleshooting](#6-troubleshooting)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -301,8 +301,8 @@ cmake --build out/build/windows-ninja-debug
 
 ## 7. Siehe auch
 
-- [Solution_Schema](../reference/Solution_Schema_v0_1_4.md)
-- [Adding_Externals](Adding_Externals_UserGuide_v0_1_0.md)
+- [Solution_Schema](../references/Solution_Schema.md)
+- [Adding_Externals](Adding_Externals.md)
 
 ---
 
@@ -312,7 +312,7 @@ cmake --build out/build/windows-ninja-debug
 |---------|-------|------------|
 | **0.2.0** | **2025-12-13** | **Stolpersteine, Troubleshooting erweitert** |
 | 0.1.0 | 2025-12-10 | Initial |
-```
+````
 
 ---
 
@@ -350,5 +350,7 @@ Zusätzlich zur Doc.md Checkliste:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Schreibstil-Regeln, aufgabenorientierte Struktur, vollständiges Beispiel** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/guide/userguides/` (§ 2), Dateinamen ohne `_UserGuide` und ohne Version (§ 2, § 3.2, Beispiel), Sprungpfad `../../../en/`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Schreibstil-Regeln, aufgabenorientierte Struktur, vollständiges Beispiel |
 | 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |

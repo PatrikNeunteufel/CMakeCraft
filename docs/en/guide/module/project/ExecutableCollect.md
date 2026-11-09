@@ -1,64 +1,64 @@
-# ExecutableCollect.cmake — Modul-Dokumentation
+# ExecutableCollect.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [ExecutableCollect.md](ExecutableCollect.md)  
-> **Module:** [`cmake/project/ExecutableCollect.cmake`](../../../../cmake/project/ExecutableCollect.cmake)  
+> **German:** [ExecutableCollect.md](../../../../de/guide/module/project/ExecutableCollect.md)  
+> **Module:** [`cmake/project/ExecutableCollect.cmake`](../../../../../cmake/project/ExecutableCollect.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
-4. [Context-Keys](#4-context-keys)
-5. [JSON-Mapping](#5-json-mapping)
-6. [Errorbehandlung](#6-fehlerbehandlung)
-7. [See Also](#7-siehe-auch)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
+4. [Context Keys](#4-context-keys)
+5. [JSON Mapping](#5-json-mapping)
+6. [Error Handling](#6-error-handling)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-Das `ExecutableCollect.cmake` Modul **sammelt Daten** aus dem JSON einer Executable und speichert sie in einem Context. Es ist für das Parsing und die Normalisierung der Executable-Definitionen zuständig.
+The `ExecutableCollect.cmake` module **collects data** from the JSON of an executable and stores it in a context. It is responsible for parsing and normalizing the executable definitions.
 
-### Kernidee
+### Core Idea
 
-Trennung von Concerns: Collect sammelt und normalisiert Daten, Create verwendet sie.
+Separation of concerns: Collect gathers and normalizes data, Create uses it.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| JSON-Parsing | Alle Felder extrahieren |
-| Normalisierung | Defaults setzen, Typen vereinheitlichen |
-| Context-Befüllung | Alle Werte als Context-Keys speichern |
+| Area | Description |
+|------|-------------|
+| JSON parsing | Extract all fields |
+| Normalization | Set defaults, unify types |
+| Filling the context | Store all values as context keys |
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
-| Json.cmake | 0.5.0 | Alle `_json_*` Functions |
+| Module | Version | Usage |
+|--------|---------|-------|
+| Json.cmake | 0.5.0 | All `_json_*` functions |
 | Context.cmake | 0.5.0 | `ctx_set` |
 | Debug.cmake | 0.5.0 | `dbg` |
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
 ### 3.1 _collect_executable()
 
-Sammelt alle Felder einer Executable aus JSON in einen Context.
+Collects all fields of an executable from JSON into a context.
 
 ```cmake
 _collect_executable(<EXE_JSON> <CTX>)
@@ -66,12 +66,12 @@ _collect_executable(<EXE_JSON> <CTX>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `EXE_JSON` | String | ✓ | JSON-String der Executable |
-| `CTX` | String | ✓ | Context-Prefix (z.B. `EXE_0`) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `EXE_JSON` | String | ✓ | JSON string of the executable |
+| `CTX` | String | ✓ | Context prefix (e.g. `EXE_0`) |
 
-**Rückgabe:** Keine (befüllt Context)
+**Return value:** None (fills the context)
 
 **Example:**
 
@@ -80,49 +80,49 @@ _json_array_get("${_solution_json}" "executables" 0 _exe_json)
 ctx_create(EXE_0)
 _collect_executable("${_exe_json}" EXE_0)
 
-# Danach verfügbar:
+# Available afterwards:
 ctx_get(EXE_0 NAME _name)
 ctx_get(EXE_0 PATH _path)
 ```
 
 ---
 
-## 4. Context-Keys
+## 4. Context Keys
 
-### 4.1 Requiredfelder
+### 4.1 Required Fields
 
-| Key | Typ | Description |
-|-----|-----|--------------|
-| `NAME` | String | Target-Name (Required in JSON) |
+| Key | Type | Description |
+|-----|------|-------------|
+| `NAME` | String | Target name (required in JSON) |
 
-### 4.2 Optionale Felder
+### 4.2 Optional Fields
 
-| Key | Typ | Default | Description |
-|-----|-----|---------|--------------|
-| `DISPLAY_NAME` | String | NAME | Anzeigename |
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `DISPLAY_NAME` | String | NAME | Display name |
 | `DESCRIPTION` | String | "" | Description |
-| `VERSION` | String | Solution-Version | Version |
-| `PATH` | Path | `projects/exec/{name}/src` | Source-Pfad |
-| `TYPE` | Enum | Aus settings | CONSOLE, GUI, CLI, HEADLESS, WORKER |
-| `SKIP` | Bool | FALSE | Überspringen |
-| `PCH_ENABLED` | Bool | FALSE | PCH aktiviert |
-| `PCH_HEADER` | String | `pch.h` | PCH Header-Datei |
-| `PCH_PATH` | String | "" | Custom PCH-Pfad (relativ zu projects/) |
-| `DEPENDENCIES` | List | "" | Interne Dependencies |
-| `EXTERNALS` | List | "" | Externe Dependencies |
-| `EXTERNAL_OPTIONS` | JSON | "{}" | Externe-spezifische Optionen |
-| `PLATFORMS` | List | "" (= alle) | Unterstützte Plattformen |
-| `DEFINES` | List | "" | Präprozessor-Definitionen |
-| `COMPILE_OPTIONS` | List | "" | Zusätzliche Compiler-Optionen |
-| `LINK_OPTIONS` | List | "" | Zusätzliche Linker-Optionen |
+| `VERSION` | String | Solution version | Version |
+| `PATH` | Path | `projects/exec/{name}/src` | Source path |
+| `TYPE` | Enum | From settings | CONSOLE, GUI, CLI, HEADLESS, WORKER |
+| `SKIP` | Bool | FALSE | Skip |
+| `PCH_ENABLED` | Bool | FALSE | PCH enabled |
+| `PCH_HEADER` | String | `pch.h` | PCH header file |
+| `PCH_PATH` | String | "" | Custom PCH path (relative to projects/) |
+| `DEPENDENCIES` | List | "" | Internal dependencies |
+| `EXTERNALS` | List | "" | External dependencies |
+| `EXTERNAL_OPTIONS` | JSON | "{}" | External-specific options |
+| `PLATFORMS` | List | "" (= all) | Supported platforms |
+| `DEFINES` | List | "" | Preprocessor definitions |
+| `COMPILE_OPTIONS` | List | "" | Additional compiler options |
+| `LINK_OPTIONS` | List | "" | Additional linker options |
 
-**Note:** PCH wird implizit aktiviert wenn `pch.header` oder `pch.path` angegeben ist und `pch.enabled` nicht explizit `false` ist.
+**Note:** PCH is enabled implicitly if `pch.header` or `pch.path` is specified and `pch.enabled` is not explicitly `false`.
 
 ---
 
-## 5. JSON-Mapping
+## 5. JSON Mapping
 
-### 5.1 Minimale JSON
+### 5.1 Minimal JSON
 
 ```json
 {
@@ -130,13 +130,13 @@ ctx_get(EXE_0 PATH _path)
 }
 ```
 
-Ergebnis:
+Result:
 - NAME = "MyApp"
-- PATH = "projects/exec/MyApp/src" (Convention)
+- PATH = "projects/exec/MyApp/src" (convention)
 - TYPE = SOLUTION_DEFAULT_EXECUTABLE_TYPE
 - VERSION = SOLUTION_VERSION
 
-### 5.2 Vollständige JSON
+### 5.2 Complete JSON
 
 ```json
 {
@@ -163,9 +163,9 @@ Ergebnis:
 }
 ```
 
-### 5.3 Type-Konvertierung
+### 5.3 Type Conversion
 
-Der `type`-Wert wird automatisch in Großbuchstaben konvertiert:
+The `type` value is automatically converted to uppercase:
 
 | JSON | Context |
 |------|---------|
@@ -175,33 +175,34 @@ Der `type`-Wert wird automatisch in Großbuchstaben konvertiert:
 
 ---
 
-## 6. Errorbehandlung
+## 6. Error Handling
 
 ### 6.1 Fatal Errors
 
-| Code | Bedingung | Lösung |
-|------|-----------|--------|
-| E001 | `name`-Feld fehlt | Name hinzufügen |
+| Code | Condition | Solution |
+|------|-----------|----------|
+| E001 | `name` field missing | Add a name |
 
-### 6.2 Implizite Defaults
+### 6.2 Implicit Defaults
 
-Fehlende optionale Felder führen nicht zu Errorn, sondern werden mit sinnvollen Defaults befüllt.
+Missing optional fields do not cause errors; they are filled with sensible defaults.
 
 ---
 
 ## 7. See Also
 
-- [Executables.cmake](Executables.md) — Ruft _collect_executable auf
-- [ExecutableCreate.cmake](ExecutableCreate.md) — Verwendet den befüllten Context
-- [Context.cmake](../core/Context.md) — Context-System
-- [Json.cmake](../core/Json.md) — JSON-Parsing
+- [Executables.cmake](Executables.md) — Calls _collect_executable
+- [ExecutableCreate.cmake](ExecutableCreate.md) — Uses the filled context
+- [Context.cmake](../core/Context.md) — Context system
+- [Json.cmake](../core/Json.md) — JSON parsing
 
 ---
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.1** | **2025-12-18** | **PCH_PATH hinzugefügt, implizite PCH-Aktivierung dokumentiert** |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung |
-| 0.1.0 | 2025-12-05 | Initial (Clean Start): JSON zu Context Mapping |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.1 | 2025-12-18 | PCH_PATH added, implicit PCH activation documented |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
+| 0.1.0 | 2025-12-05 | Initial (clean start): JSON to context mapping |

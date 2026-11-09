@@ -1,7 +1,7 @@
 # CMakeCraftPackage.cmake — Fetch and Deploy Prebuilt Packages
 
-> **Version:** 1.1.1  
-> **Date:** 2026-10-11  
+> **Version:** 1.1.2  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
 > **Status:** Active  
 > **Based on:** ModuleDoc v0.5  
@@ -55,8 +55,9 @@ On include the file sets:
 | Effect | Description |
 |--------|-------------|
 | `include_guard(GLOBAL)` | Including it more than once is harmless |
-| `CMAKECRAFT_PACKAGE_VERSION` | Variable holding the version of this file (`1.0.0`) |
+| `CMAKECRAFT_PACKAGE_VERSION` | Variable holding the version of this file (`1.1.1`) |
 | Policy `CMP0174` → `NEW` | Only if the policy exists; an empty `ROOT` is then a regular argument of `craft_package_deploy()` |
+| Policy `CMP0112` → `NEW` | Always; `$<TARGET_FILE_DIR:...>` in the deploy target creates no dependency on the executable (see §4.2) |
 
 ---
 
@@ -242,7 +243,7 @@ craft_package_deploy(
     TARGET        MyApp
     ROOT          "${_toolkit_root}"
     INCLUDE_DIRS  include
-    DEFINE        TOOLKIT_AVAILABLE
+    DEFINE        TOOLKIT_VORHANDEN
     RUNTIME_FILES bin/toolkit.dll
     RUNTIME_DIRS  tools
 )
@@ -265,7 +266,7 @@ cmake -B build -DTOOLKIT_LOCAL_DIR=../Toolkit/out/package/toolkit-v0.2.0
 ### 6.3 Package Absent
 
 ```cmake
-craft_package_deploy(TARGET MyApp ROOT "" INCLUDE_DIRS include DEFINE TOOLKIT_AVAILABLE)
+craft_package_deploy(TARGET MyApp ROOT "" INCLUDE_DIRS include DEFINE TOOLKIT_VORHANDEN)
 # Neither include path nor define nor copies - the code checks the define itself.
 ```
 
@@ -279,9 +280,9 @@ The file uses no error codes of the CMakeCraft core.
 
 | Condition | Message |
 |-----------|---------|
-| CMake older than 3.26 | `[CraftPackage] CMake 3.26 or newer is required` |
-| `craft_package_fetch` without `NAME`, `PIN_FILE` or `OUT_ROOT` | `NAME, PIN_FILE and OUT_ROOT are mandatory` |
-| `craft_package_deploy` with an empty or unknown `TARGET` | `TARGET '<name>' does not exist` |
+| CMake older than 3.26 | `[CraftPackage] CMake 3.26 or newer is required (found <version>).` |
+| `craft_package_fetch` without `NAME`, `PIN_FILE` or `OUT_ROOT` | `[CraftPackage] craft_package_fetch: NAME, PIN_FILE and OUT_ROOT are mandatory.` |
+| `craft_package_deploy` with an empty or unknown `TARGET` | `[CraftPackage] craft_package_deploy: TARGET '<name>' does not exist.` |
 
 ### Warnings (the build goes on without the package)
 
@@ -307,6 +308,7 @@ The file uses no error codes of the CMakeCraft core.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **1.1.1** | **2026-10-11** | **CMakeCraft v0.11.1: the deploy target writes no deploy recipe file under the Visual Studio generators — no more MSBuild warning in projects that redirect `IntDir` through `Directory.Build.targets`** |
+| **1.1.2** | **2026-11-09** | **Aligned with the code: `CMAKECRAFT_PACKAGE_VERSION` is `1.1.1` (`CMakeCraftPackage.cmake:65`); policy CMP0112 in §2 (`:79`); fatal messages in §7 verbatim (`:68`, `:177`, `:342`)** |
+| 1.1.1 | 2026-10-11 | CMakeCraft v0.11.1: the deploy target writes no deploy recipe file under the Visual Studio generators — no more MSBuild warning in projects that redirect `IntDir` through `Directory.Build.targets`** |
 | 1.1.0 | 2026-10-09 | CMakeCraft v0.11.0: craft_package_deploy copies through a target of its own, `<target>_deploy_<name>`, instead of `POST_BUILD` — the copy runs on every build, also without linking again. New argument `NAME` |
 | 1.0.0 | 2026-10-09 | Initial (CMakeCraft v0.10.0): craft_package_fetch, craft_package_deploy |

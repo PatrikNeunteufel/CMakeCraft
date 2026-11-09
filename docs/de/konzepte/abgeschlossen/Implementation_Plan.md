@@ -1,13 +1,13 @@
 # Implementation Plan — CMake Architecture
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-19  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Concept  
 > **Status:** Phase 1-9 abgeschlossen  
 > **Basiert auf:** master_concept v0.7, Solution_Schema v0.7, ErrorCodes v0.1  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [implementation_plan.md](../../en/projects/buildsystem/concepts/Implementation_Plan.md)
+> **English:** [implementation_plan.md](../../../en/konzepte/abgeschlossen/Implementation_Plan.md)
 
 Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
 
@@ -546,6 +546,8 @@ ctest --test-dir build -L MyApp
 5. backup Pfad (mit W501 Warnung)
 6. Error E501/E503
 
+> **Stand Code (2026-11-09, CMakeCraft v0.14.1):** E501 entfällt. `find_package()` läuft ohne `REQUIRED` (`cmake/externals/system/Handler.cmake:270`, `:273`); wird ein Paket mit `required` (Vorgabe) nicht gefunden, benennt `_system_external_not_found()` die Ursache (`Handler.cmake:290`): E503 (`:101`, `:120`, `:128`), E504 (`:91`) oder E505 (`:109`).
+
 ### Error-Code-Bereich
 
 | Bereich | Kategorie |
@@ -644,7 +646,7 @@ cmake -B build
 **Core/Runner Separation:**
 - ✅ STATIC Library für Core (include/ + src/)
 - ✅ Executable für Runner (main/)
-- ✅ Core linkt gegen Runner
+- ✅ Runner linkt gegen Core
 - ✅ PCH für Core (optional)
 
 **Flexible Test-Targets:**
@@ -724,6 +726,8 @@ cmake -B build
 - ✅ W501: Using backup location
 - ✅ W502: Version mismatch
 
+> **Stand Code (2026-11-09, CMakeCraft v0.14.1):** Ausgelöst werden E502 (`cmake/core/Validation.cmake:94`, `cmake/externals/system/Handler.cmake:180`), E503 (`Handler.cmake:101`, `:120`, `:128`, `:331`), E504 (`:91`), E505 (`:109`) und W501 (`:245`). `find_package()` läuft ohne `REQUIRED` (`:270`, `:273`); die Ursache eines Fehlschlags benennt `_system_external_not_found()`. E501 und W502 entfallen. Der Selbsttest prüft E503–E505 (`cmake/buildSystemTest/phase9.cmake:498–609`).
+
 **Tests:**
 - ✅ Phase9.cmake Build-System-Test
 - ✅ Qt6 System External getestet
@@ -742,8 +746,8 @@ cmake -B build
 
 ## 12. Siehe auch
 
-- [master_concept.md](master_concept.md) — Architektur
-- [guidelines.md](../standards/guidelines.md) — Konventionen
+- [master_concept.md](Master_Concept.md) — Architektur
+- [guidelines.md](../Guidelines.md) — Konventionen
 - [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8 Detail
 - [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible App-Tests
 - [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 Detail
@@ -756,7 +760,9 @@ cmake -B build
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-19** | **Phase 9 abgeschlossen: System Externals (find_package), Typ-Priorität system→git→path, PathResolver, Error Codes E5xx/W5xx, Phase9.cmake Tests, Hybrid-Support bewusst entfernt** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Checkliste Phase 8 „Runner linkt gegen Core“; Hinweise „Stand Code“ zu E501–E505/W502 (§10, §11), nachgeführt auf CMakeCraft v0.14.1 (E502–E505 und W501 ausgelöst, E501/W502 entfallen, `find_package` ohne `REQUIRED`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.7.0 | 2025-12-19 | Phase 9 abgeschlossen: System Externals (find_package), Typ-Priorität system→git→path, PathResolver, Error Codes E5xx/W5xx, Phase9.cmake Tests, Hybrid-Support bewusst entfernt |
 | 0.6.0 | 2025-12-18 | Phase 8 abgeschlossen: Vollständige Checkliste mit allen Features (Core/Runner, flexible tests.targets[], Skip-Feature, Type-Defaults, Json.cmake v0.6.0), Dokumentation komplett |
 | 0.5.1 | 2025-12-17 | Phase 8 in Arbeit: Apps.cmake, AppCollect.cmake, AppCreate.cmake implementiert, DemoPlayer Test-App, Core/Runner/Tests Trennung |
 | 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 Details integriert, Test-Pipeline Details integriert, Phase 8/9 als geplant referenziert, Blueprint v0.5.0 Format |

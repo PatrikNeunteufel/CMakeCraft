@@ -1,12 +1,12 @@
 # Externals — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Externals.md](../../en/userguides/Externals.md)
+> **English:** [Externals.md](../../../en/guide/userguides/Externals.md)
 
 ---
 
@@ -20,7 +20,7 @@
 6. [Troubleshooting](#6-troubleshooting)
 7. [Detail-Guides](#7-detail-guides)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -478,20 +478,20 @@ Für detaillierte Informationen zu einzelnen Externals:
 
 | External | Guide | Beschreibung |
 |----------|-------|--------------|
-| doctest | [externals/doctest.md](externals/doctest.md) | Header-Only Testing |
-| lua54 | [externals/lua54.md](externals/lua54.md) | Lua 5.4 Scripting |
-| glad | [externals/glad.md](externals/glad.md) | OpenGL Loader |
-| BASS | [externals/bass.md](externals/bass.md) | Audio mit Plugins |
+| doctest | [externals/doctest.md](externals/Doctest.md) | Header-Only Testing |
+| lua54 | [externals/lua54.md](externals/Lua54.md) | Lua 5.4 Scripting |
+| glad | [externals/glad.md](externals/Glad.md) | OpenGL Loader |
+| BASS | [externals/bass.md](externals/Bass.md) | Audio mit Plugins |
 
 ### Git Externals
 
 | External | Guide | Beschreibung |
 |----------|-------|--------------|
-| glfw | [externals/glfw.md](externals/glfw.md) | Window & Input |
-| imgui | [externals/imgui.md](externals/imgui.md) | Immediate Mode GUI |
-| googletest | [externals/googletest.md](externals/googletest.md) | Testing + GMock |
-| catch2 | [externals/catch2.md](externals/catch2.md) | BDD-Style Testing |
-| Qt6 | [externals/qt6.md](externals/qt6.md) | Desktop GUI Framework |
+| glfw | [externals/glfw.md](externals/Glfw.md) | Window & Input |
+| imgui | [externals/imgui.md](externals/Imgui.md) | Immediate Mode GUI |
+| googletest | [externals/googletest.md](externals/Googletest.md) | Testing + GMock |
+| catch2 | [externals/catch2.md](externals/Catch2.md) | BDD-Style Testing |
+| Qt6 | [externals/qt6.md](externals/Qt6.md) | Desktop GUI Framework |
 
 ---
 
@@ -508,5 +508,6 @@ Für detaillierte Informationen zu einzelnen Externals:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Fokus auf Kombinationen; Detail-Guides ausgelagert** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Fokus auf Kombinationen; Detail-Guides ausgelagert |
 | 0.5.0 | 2025-12-14 | Initial |

@@ -4,51 +4,51 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Local_Externals_Testing.md](Local_Externals_Testing.md)
+> **German:** [Local_Externals_Testing.md](../../../../de/guide/references/externals/Local_Externals_Testing.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [doctest Testing Framework](#2-doctest-testing-framework)
-3. [See Also](#3-siehe-auch)
-4. [Changelog](#4-changelog)
+3. [See Also](#3-see-also)
+4. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes lokale Testing-Externals für das CMake Architecture Build-System.
+This document describes local testing externals for the CMake Architecture build system.
 
-| Library | Description | Lizenz |
-|---------|--------------|--------|
-| **doctest** | Schnelles Header-Only Testing Framework | MIT |
+| Library | Description | License |
+|---------|-------------|---------|
+| **doctest** | Fast header-only testing framework | MIT |
 
 ---
 
 ## 2. doctest Testing Framework
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | 📄 Header-Only |
-| **Pfad** | `externals/doctest` |
+| Aspect | Value |
+|--------|-------|
+| **Type** | 📄 Header-Only |
+| **Path** | `externals/doctest` |
 | **Include.cmake** | `cmake/externals/includes/doctest/Include.cmake` |
-| **Plattformen** | Alle |
+| **Platforms** | All |
 | **GitHub** | [doctest/doctest](https://github.com/doctest/doctest) |
 
-### Warum doctest?
+### Why doctest?
 
-| Vorteil | Description |
-|---------|--------------|
-| **Schnell** | Extrem schnelle Kompilierung |
-| **Header-Only** | Nur ein Header, keine Library |
-| **Lightweight** | Minimaler Overhead |
-| **BDD-Style** | Subcases für verschachtelte Tests |
+| Advantage | Description |
+|-----------|-------------|
+| **Fast** | Extremely fast compilation |
+| **Header-Only** | Just one header, no library |
+| **Lightweight** | Minimal overhead |
+| **BDD-Style** | Subcases for nested tests |
 
 ### Solution.json
 
@@ -69,7 +69,7 @@ This document describes lokale Testing-Externals für das CMake Architecture Bui
 }
 ```
 
-### Verzeichnisstruktur
+### Directory Structure
 
 ```
 externals/doctest/
@@ -78,9 +78,9 @@ externals/doctest/
         └── doctest.h
 ```
 
-> **Note:** doctest besteht nur aus einem einzigen Header!
+> **Note:** doctest consists of a single header only!
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
@@ -93,7 +93,7 @@ TEST_CASE("Math operations") {
 }
 ```
 
-### Subcases (BDD-Style)
+### Subcases (BDD Style)
 
 ```cpp
 #include <doctest/doctest.h>
@@ -121,15 +121,15 @@ TEST_CASE("String operations") {
 ### Assertions
 
 | Assertion | Description |
-|-----------|--------------|
-| `CHECK(expr)` | Prüft, fährt bei Error fort |
-| `REQUIRE(expr)` | Prüft, bricht bei Error ab |
-| `CHECK_EQ(a, b)` | Gleichheit mit Details |
-| `CHECK_NE(a, b)` | Ungleichheit |
-| `CHECK_THROWS(expr)` | Exception erwartet |
-| `CHECK_NOTHROW(expr)` | Keine Exception erwartet |
+|-----------|-------------|
+| `CHECK(expr)` | Checks, continues on failure |
+| `REQUIRE(expr)` | Checks, aborts on failure |
+| `CHECK_EQ(a, b)` | Equality with details |
+| `CHECK_NE(a, b)` | Inequality |
+| `CHECK_THROWS(expr)` | Exception expected |
+| `CHECK_NOTHROW(expr)` | No exception expected |
 
-### Test-Suites
+### Test Suites
 
 ```cpp
 TEST_SUITE("Math") {
@@ -146,22 +146,22 @@ TEST_SUITE("Math") {
 ### Compile-Time Configuration
 
 | Define | Description |
-|--------|--------------|
-| `DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN` | main() automatisch generieren |
-| `DOCTEST_CONFIG_IMPLEMENT` | Nur Implementation, kein main() |
-| `DOCTEST_CONFIG_DISABLE` | Tests komplett deaktivieren |
+|--------|-------------|
+| `DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN` | Generate main() automatically |
+| `DOCTEST_CONFIG_IMPLEMENT` | Implementation only, no main() |
+| `DOCTEST_CONFIG_DISABLE` | Disable tests completely |
 
-### Vergleich mit Git-Alternativen
+### Comparison with Git Alternatives
 
 | Feature | doctest (Local) | googletest (Git) | catch2 (Git) |
 |---------|-----------------|------------------|--------------|
 | **Header-Only** | ✅ | ❌ | ✅ |
-| **Kompilierzeit** | ⚡ Sehr schnell | 🐢 Langsam | 🐌 Langsamer |
+| **Compile time** | ⚡ Very fast | 🐢 Slow | 🐌 Slower |
 | **Mocking** | ❌ | ✅ GMock | ❌ |
 | **BDD Subcases** | ✅ | ❌ | ✅ |
-| **Footprint** | Minimal | Groß | Mittel |
+| **Footprint** | Minimal | Large | Medium |
 
-### Detail-Dokumentation
+### Detail Documentation
 
 → [doctest_Include.md](../../module/externals/includes/doctest/Doctest_Include.md)
 
@@ -169,15 +169,16 @@ TEST_SUITE("Math") {
 
 ## 3. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
-- [Local_Externals.md](Local_Externals.md) — Local Externals Overview
-- [Git_Externals_Testing.md](Git_Externals_Testing.md) — Git Testing-Externals (googletest, catch2)
-- [Testing_UserGuide.md](../../userguides/Testing.md) — Test-Anleitung
+- [Externals.md](../Externals.md) — Main overview of all externals
+- [Local_Externals.md](Local_Externals.md) — Local Externals overview
+- [Git_Externals_Testing.md](Git_Externals_Testing.md) — Git testing externals (googletest, catch2)
+- [Testing_UserGuide.md](../../userguides/Testing.md) — Testing guide
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Testing (parallel zu Git)** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Own category Testing (parallel to Git) |

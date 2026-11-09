@@ -1,8 +1,9 @@
 # Standards v0.7.0 — Übersicht
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-19  
-> **Status:** Stabil
+> **Datum:** 2025-12-26  
+> **Status:** Stabil  
+> **English:** [README.md](../../../en/autorenwerk/standards/README.md)
 
 ---
 
@@ -114,7 +115,7 @@ ClangTidy_Blueprint   ─────────────► .clang-tidy (To
 ## 5. Siehe auch
 
 - [blueprints/Standard.md](../blueprints/Standard.md) — Blueprint für Standards
-- [blueprints/README.md](../blueprints/README.md) — Blueprint-Übersicht
+- [blueprints/README.md](../blueprints/Blueprint.md) — Blueprint-Übersicht
 - [ClangFormat_Blueprint.md](../blueprints/ClangFormat.md) — Formatierung
 - [ClangTidy_Blueprint.md](../blueprints/ClangTidy.md) — Statische Analyse
 
@@ -124,6 +125,7 @@ ClangTidy_Blueprint   ─────────────► .clang-tidy (To
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-19** | **Vereinheitlichung C/C++: Dateinamen PascalCase für beide, Präfix p für alle Pointer** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.7.0 | 2025-12-19 | Vereinheitlichung C/C++: Dateinamen PascalCase für beide, Präfix p für alle Pointer |
 | 0.6.0 | 2025-12-19 | Konsolidierung: Cpp_Coding_Standard und C_Coding_Standard erweitert um Klassen-/Struct-Layout, Dateinamen-Konventionen, erweiterte Präfixe, Include-Reihenfolge |
 | 0.5.0 | 2025-12-13 | Initial: Migration aller Standards auf v0.5.0 Format |

@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.14.0
-# Date:         2026-11-07
+# Version:      0.14.1
+# Date:         2026-11-09
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -29,6 +29,12 @@
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.14.1 (2026-11-09): Explicit entry point /ENTRY:WinMainCRTStartup for
+#                        Windows GUI executables that link Qt6 (MSVC and
+#                        clang, MSVC ABI; Qt6.cmake 1.1.0). Qt6EntryPoint.lib
+#                        defines WinMain and wWinMain; lld-link warned on
+#                        every link, link.exe chose the same silently.
+#                        Phase 9 test 11.
 #   v0.14.0 (2026-11-07): "compile_options" for libraries[] (PRIVATE, after
 #                        apply_compiler_options; E105 on INTERFACE). Source
 #                        package of a STATIC library: packages[] entry with

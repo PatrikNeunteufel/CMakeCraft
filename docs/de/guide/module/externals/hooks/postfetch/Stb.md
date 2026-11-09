@@ -1,13 +1,14 @@
 # stb.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-23  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Stabil  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.1  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **Modul:** [`cmake/externals/hooks/postfetch/stb.cmake`](../../../../cmake/externals/hooks/postfetch/stb.cmake)  
+> **English:** [Stb.md](../../../../../../en/guide/module/externals/hooks/postfetch/Stb.md)  
+> **Modul:** [`cmake/externals/hooks/postfetch/stb.cmake`](../../../../../../../cmake/externals/hooks/postfetch/stb.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -237,9 +238,9 @@ Vollständige Liste: https://github.com/nothings/stb
 
 | Dokument | Beschreibung |
 |----------|--------------|
-| [HookLoader.cmake](../HookLoader.md) | Hook-System Dokumentation |
-| [Handler.cmake](../../fetched/Handler.md) | Fetched External Handler |
-| [OpenGLTexture.cpp](../../../../projects/apps/MyVisualizer/src/gpu/OpenGLTexture.cpp) | Verwendungsbeispiel |
+| [HookLoader.cmake](../HookLoader_cmake.md) | Hook-System Dokumentation |
+| [Handler.cmake](../../fetched/Handler_cmake.md) | Fetched External Handler |
+| OpenGLTexture.cpp | Verwendungsbeispiel |
 
 ### Externe Ressourcen
 
@@ -252,6 +253,7 @@ Vollständige Liste: https://github.com/nothings/stb
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.1.0 | 2025-12-23 | Initiale Version für MyVisualizer Phase 2 |
 
 ---

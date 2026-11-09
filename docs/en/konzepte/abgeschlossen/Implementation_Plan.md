@@ -1,56 +1,56 @@
 # Implementation Plan — CMake Architecture
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Concept  
-> **Status:** Phase 1-9 abgeschlossen  
+> **Status:** Phases 1-9 completed  
 > **Based on:** master_concept v0.7, Solution_Schema v0.7, ErrorCodes v0.1  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [implementation_plan.md](../../en/projects/buildsystem/concepts/Implementation_Plan.md)
+> **German:** [Implementation_Plan.md](../../../de/konzepte/abgeschlossen/Implementation_Plan.md)
 
-Dieser Plan beschreibt die schrittweise Umsetzung des CMake Build-Systems.
+This plan describes the step-by-step implementation of the CMake build system.
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Phase 1: Foundation](#2-phase-1-foundation)
 3. [Phase 2: Solution & Validation](#3-phase-2-solution--validation)
 4. [Phase 3: Executable Pipeline](#4-phase-3-executable-pipeline)
 5. [Phase 4: Library Pipeline](#5-phase-4-library-pipeline)
-6. [Phase 5: Lokale Externals](#6-phase-5-lokale-externals)
+6. [Phase 5: Local Externals](#6-phase-5-local-externals)
 7. [Phase 6: Fetched Externals + Hooks](#7-phase-6-fetched-externals--hooks)
-8. [Phase 7: Test-Pipeline](#8-phase-7-test-pipeline)
-9. [Phase 8: App-Container](#9-phase-8-app-container)
-10. [Phase 9: System-Externals](#10-phase-9-system-externals)
-11. [Checkliste](#11-checkliste)
-12. [See Also](#12-siehe-auch)
+8. [Phase 7: Test Pipeline](#8-phase-7-test-pipeline)
+9. [Phase 8: App Container](#9-phase-8-app-container)
+10. [Phase 9: System Externals](#10-phase-9-system-externals)
+11. [Checklist](#11-checklist)
+12. [See Also](#12-see-also)
 13. [Changelog](#13-changelog)
 
 ---
 
 ## 1. Overview
 
-### Phasen-Status
+### Phase Status
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Foundation | ✅ Abgeschlossen |
-| 2 | Solution & Validation | ✅ Abgeschlossen |
-| 3 | Executable Pipeline | ✅ Abgeschlossen |
-| 4 | Library Pipeline | ✅ Abgeschlossen |
-| 5 | Lokale Externals | ✅ Abgeschlossen |
-| 6 | Fetched Externals + Hooks | ✅ Abgeschlossen |
-| 7 | Test-Pipeline | ✅ Abgeschlossen |
-| 8 | App-Container | ✅ Abgeschlossen |
-| 9 | System-Externals | ✅ Abgeschlossen |
+| 1 | Foundation | ✅ Completed |
+| 2 | Solution & Validation | ✅ Completed |
+| 3 | Executable Pipeline | ✅ Completed |
+| 4 | Library Pipeline | ✅ Completed |
+| 5 | Local Externals | ✅ Completed |
+| 6 | Fetched Externals + Hooks | ✅ Completed |
+| 7 | Test Pipeline | ✅ Completed |
+| 8 | App Container | ✅ Completed |
+| 9 | System Externals | ✅ Completed |
 
-### Phasen-Flow
+### Phase Flow
 
 ```
-Phase 1: Foundation (Core-Module)
+Phase 1: Foundation (core modules)
     ↓
 Phase 2: Solution & Validation
     ↓
@@ -58,116 +58,116 @@ Phase 3: Executable Pipeline
     ↓
 Phase 4: Library Pipeline
     ↓
-Phase 5: Lokale Externals
+Phase 5: Local Externals
     ↓
-Phase 6: Fetched Externals + Hooks (.externals/ Caching)
+Phase 6: Fetched Externals + Hooks (.externals/ caching)
     ↓
-Phase 7: Test-Pipeline (doctest, googletest, catch2)
+Phase 7: Test Pipeline (doctest, googletest, catch2)
     ↓
-Phase 8: App-Container (Core/Runner/Tests)
+Phase 8: App Container (Core/Runner/Tests)
     ↓
-Phase 9: System-Externals (find_package) ← AKTUELL ABGESCHLOSSEN
+Phase 9: System Externals (find_package) ← CURRENTLY COMPLETED
 ```
 
 ---
 
 ## 2. Phase 1: Foundation
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Grundlegende Infrastruktur für alle weiteren Module.
+**Goal:** Basic infrastructure for all further modules.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
 | `Errors.cmake` | `cmake_fatal()`, `cmake_warn()`, `cmake_assert()` |
-| `Debug.cmake` | Debug-System mit Leveln |
-| `Context.cmake` | Context-Objekt-Pattern |
-| `Json.cmake` | JSON-Hilfsfunktionen |
-| `Validation.cmake` | Schema-Validierung |
-| `SourceCollect.cmake` | Source-Datei-Management |
-| `OutputDirs.cmake` | Zielverzeichnisse |
-| `Warnings.cmake` | Warning-Level |
-| `CompilerOptions.cmake` | Compiler-Configuration |
+| `Debug.cmake` | Debug system with levels |
+| `Context.cmake` | Context object pattern |
+| `Json.cmake` | JSON helper functions |
+| `Validation.cmake` | Schema validation |
+| `SourceCollect.cmake` | Source file management |
+| `OutputDirs.cmake` | Target directories |
+| `Warnings.cmake` | Warning level |
+| `CompilerOptions.cmake` | Compiler configuration |
 
-### Successskriterium
+### Success Criterion
 
 ```bash
 cmake -B build -DRUN_BUILD_SYSTEM_TESTS=ON
-# Phase 1 Tests bestehen
+# Phase 1 tests pass
 ```
 
 ---
 
 ## 3. Phase 2: Solution & Validation
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Solution.json einlesen und validieren.
+**Goal:** Read and validate Solution.json.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
-| `Solution.cmake` | JSON laden, GLOBAL Properties setzen |
+| `Solution.cmake` | Load JSON, set GLOBAL properties |
 
 ### Functions
 
 ```cmake
-# Solution.json laden
+# Load Solution.json
 _load_solution_json()
 
-# Requiredfelder validieren
+# Validate required fields
 validate_solution_structure()
 
-# Settings mit Defaults mergen
+# Merge settings with defaults
 _apply_settings_defaults()
 ```
 
-### Successskriterium
+### Success Criterion
 
 ```cmake
-# Nach include(Solution.cmake):
-# - SOLUTION_JSON ist gesetzt
-# - SOLUTION_NAME ist verfügbar
-# - SOLUTION_VERSION ist verfügbar
-# - SOLUTION_SETTINGS_JSON ist verfügbar
+# After include(Solution.cmake):
+# - SOLUTION_JSON is set
+# - SOLUTION_NAME is available
+# - SOLUTION_VERSION is available
+# - SOLUTION_SETTINGS_JSON is available
 ```
 
 ---
 
 ## 4. Phase 3: Executable Pipeline
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Executables aus Solution.json erstellen.
+**Goal:** Create executables from Solution.json.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
-| `Executables.cmake` | Hauptschleife über Executables |
-| `ExecutableCollect.cmake` | JSON → Context |
-| `ExecutableCreate.cmake` | Target erstellen |
+| `Executables.cmake` | Main loop over executables |
+| `ExecutableCollect.cmake` | JSON → context |
+| `ExecutableCreate.cmake` | Create target |
 
 ### Pipeline
 
 ```
-1. JSON parsen
-2. Context erstellen (ctx_create)
-3. Felder extrahieren (ctx_set)
-4. BUILD_ONLY prüfen
-5. skip prüfen
-6. Source.cmake laden oder GLOB
+1. Parse JSON
+2. Create context (ctx_create)
+3. Extract fields (ctx_set)
+4. Check BUILD_ONLY
+5. Check skip
+6. Load Source.cmake or GLOB
 7. add_executable()
-8. PCH konfigurieren
-9. CompilerOptions anwenden
-10. Warnings setzen
-11. OutputDirs setzen
+8. Configure PCH
+9. Apply CompilerOptions
+10. Set warnings
+11. Set OutputDirs
 ```
 
-### Successskriterium
+### Success Criterion
 
 ```bash
 cmake -B build
@@ -179,147 +179,147 @@ cmake --build build
 
 ## 5. Phase 4: Library Pipeline
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Libraries aus Solution.json erstellen.
+**Goal:** Create libraries from Solution.json.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
-| `Libraries.cmake` | Hauptschleife |
-| `LibraryCollect.cmake` | JSON → Context |
-| `LibraryCreate.cmake` | Target erstellen |
-| `Dependencies.cmake` | Interne Dependencies |
+| `Libraries.cmake` | Main loop |
+| `LibraryCollect.cmake` | JSON → context |
+| `LibraryCreate.cmake` | Create target |
+| `Dependencies.cmake` | Internal dependencies |
 
-### Library-Typen
+### Library Types
 
-| Typ | CMake |
+| Type | CMake |
 |-----|-------|
 | STATIC | `add_library(X STATIC)` |
 | SHARED | `add_library(X SHARED)` |
 | INTERFACE | `add_library(X INTERFACE)` |
 
-### Successskriterium
+### Success Criterion
 
 ```cmake
-# Library wird erstellt
-# Executable kann gegen Library linken
+# Library is created
+# Executable can link against the library
 target_link_libraries(MyApp PRIVATE CoreLib)
 ```
 
 ---
 
-## 6. Phase 5: Lokale Externals
+## 6. Phase 5: Local Externals
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Lokale Externals einbinden.
+**Goal:** Integrate local externals.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
-| `Orchestrator.cmake` | Dispatch nach External-Typ |
-| `Local/Attach.cmake` | Include.cmake aufrufen |
+| `Orchestrator.cmake` | Dispatch by external type |
+| `Local/Attach.cmake` | Call Include.cmake |
 
-### Ablauf
+### Flow
 
 ```
-1. External-Typ erkennen (path → local)
-2. Include.cmake Pfad bestimmen
-3. Variablen setzen (EXECUTABLE_NAME, EXTERNAL_ELEMENT_OPTIONS)
-4. Include.cmake laden
-5. Warnings prüfen (W103, W104)
+1. Detect external type (path → local)
+2. Determine Include.cmake path
+3. Set variables (EXECUTABLE_NAME, EXTERNAL_ELEMENT_OPTIONS)
+4. Load Include.cmake
+5. Check warnings (W103, W104)
 ```
 
-### Successskriterium
+### Success Criterion
 
 ```cmake
-# BASS lädt korrekt
-# target_link_libraries funktioniert
-# DLLs werden kopiert
+# BASS loads correctly
+# target_link_libraries works
+# DLLs are copied
 ```
 
 ---
 
 ## 7. Phase 6: Fetched Externals + Hooks
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Git-Externals fetchen mit .externals/ Caching, Hook-System.
+**Goal:** Fetch Git externals with .externals/ caching, hook system.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
-| `Core/Fetch.cmake` | FetchContent-Wrapper mit Caching |
-| `Core/Hash.cmake` | Config-Hashing |
-| `Core/Policies.cmake` | Update-Strategie |
-| `Hooks/HookLoader.cmake` | Hook-System |
-| `Registry/Targets.cmake` | Target-Registry |
+| `Core/Fetch.cmake` | FetchContent wrapper with caching |
+| `Core/Hash.cmake` | Config hashing |
+| `Core/Policies.cmake` | Update strategy |
+| `Hooks/HookLoader.cmake` | Hook system |
+| `Registry/Targets.cmake` | Target registry |
 
 ### .externals/ Caching (Fetch v0.2.0)
 
 ```
 project_root/
-├── .externals/                 ← Gefetchte Externals (gitignored)
+├── .externals/                 ← Fetched externals (gitignored)
 │   ├── glfw/
 │   ├── imgui/
 │   └── .lockfile.json
-├── externals/                  ← Lokale Externals (committed)
+├── externals/                  ← Local externals (committed)
 │   └── bass/
-└── build/                      ← Alle Presets teilen .externals/
+└── build/                      ← All presets share .externals/
 ```
 
-**Vorteile:**
-- Download nur einmal (nicht pro Preset)
-- Offline-Modus möglich (`EXTERNALS_OFFLINE=ON`)
+**Advantages:**
+- Download only once (not per preset)
+- Offline mode possible (`EXTERNALS_OFFLINE=ON`)
 - Force re-fetch (`EXTERNALS_FORCE_FETCH=ON`)
 
-### Hook-Ablauf
+### Hook Flow
 
 ```
-1. Convention-Pfad prüfen
-2. Expliziten Pfad prüfen (E216 wenn fehlt)
-3. PreFetch Hook laden (wenn vorhanden)
+1. Check convention path
+2. Check explicit path (E216 if missing)
+3. Load PreFetch hook (if present)
 4. FetchContent_Declare/MakeAvailable
-5. PostFetch Hook laden (wenn vorhanden)
-6. Target in Registry eintragen
+5. Load PostFetch hook (if present)
+6. Enter target in the registry
 ```
 
-### Neue Error/Warning Codes
+### New Error/Warning Codes
 
-| Code | Typ | Description |
+| Code | Type | Description |
 |------|-----|--------------|
-| E218 | Error | External nicht gecached und Offline-Modus aktiv |
-| W302 | Warning | Version-Mismatch aber Offline-Modus - nutze Cache |
+| E218 | Error | External not cached and offline mode active |
+| W302 | Warning | Version mismatch but offline mode - use cache |
 
-### Successskriterium
+### Success Criterion
 
 ```cmake
-# spdlog wird gefetcht nach .externals/spdlog/
-# ImGui PostFetch Hook erstellt Target
-# E216 bei fehlendem expliziten Hook
-# Preset-Wechsel nutzt Cache
+# spdlog is fetched into .externals/spdlog/
+# ImGui PostFetch hook creates the target
+# E216 for a missing explicit hook
+# Preset switch uses the cache
 ```
 
 ---
 
-## 8. Phase 7: Test-Pipeline
+## 8. Phase 7: Test Pipeline
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Test-Targets mit Framework-Integration und CTest.
+**Goal:** Test targets with framework integration and CTest.
 
-### Module
+### Modules
 
-| Modul | Description |
+| Module | Description |
 |-------|--------------|
-| `Tests.cmake` | Hauptschleife über tests Array |
-| `TestCollect.cmake` | JSON → Context |
-| `TestCreate.cmake` | Test-Target erstellen |
-| `TestFrameworks.cmake` | Framework-spezifische Configuration |
+| `Tests.cmake` | Main loop over the tests array |
+| `TestCollect.cmake` | JSON → context |
+| `TestCreate.cmake` | Create test target |
+| `TestFrameworks.cmake` | Framework-specific configuration |
 
 ### Solution.json Schema
 
@@ -340,96 +340,96 @@ project_root/
 }
 ```
 
-### Unterstützte Frameworks
+### Supported Frameworks
 
-| Framework | Description | Empfohlen für |
+| Framework | Description | Recommended for |
 |-----------|--------------|---------------|
-| `doctest` | Schnell, Header-only | Unit Tests, CI |
-| `googletest` | Feature-reich, Mocking | Große Projekte |
-| `catch2` | BDD-Style, Sections | Lesbare Tests |
+| `doctest` | Fast, header-only | Unit tests, CI |
+| `googletest` | Feature-rich, mocking | Large projects |
+| `catch2` | BDD style, sections | Readable tests |
 
-### Test-Typen
+### Test Types
 
-| Typ | Description | Typische Labels |
+| Type | Description | Typical labels |
 |-----|--------------|-----------------|
-| `unit` | Einzelne Functions/Klassen | `fast`, `isolated` |
-| `integration` | Komponenten-Zusammenspiel | `slow`, `database` |
-| `system` | Gesamtsystem | `e2e`, `slow` |
+| `unit` | Individual functions/classes | `fast`, `isolated` |
+| `integration` | Component interplay | `slow`, `database` |
+| `system` | Overall system | `e2e`, `slow` |
 | `performance` | Benchmarks | `benchmark`, `slow` |
-| `smoke` | Schnelle Basis-Tests | `fast`, `critical` |
+| `smoke` | Quick basic tests | `fast`, `critical` |
 
-### CTest-Integration
+### CTest Integration
 
 ```bash
-# Alle Tests
+# All tests
 ctest --test-dir build
 
-# Nur Unit Tests
+# Unit tests only
 ctest -L unit
 
 # Parallel
 ctest -j8
 
-# Verbose bei Errorn
+# Verbose on failures
 ctest --output-on-failure
 ```
 
-### Successskriterium
+### Success Criterion
 
 ```bash
 cmake -B build -DBUILD_TESTS=ON
 cmake --build build
 ctest --test-dir build
-# Alle Tests bestehen
+# All tests pass
 ```
 
 ---
 
-## 9. Phase 8: App-Container
+## 9. Phase 8: App Container
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** Testbare App-Architecture mit Core/Runner-Trennung und flexiblen Test-Targets.
+**Goal:** Testable app architecture with core/runner separation and flexible test targets.
 
-→ **Detail-Concept:** [AppContainer_Concept.md](AppContainer_Concept.md)  
-→ **Test-Concept:** [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md)
+→ **Detailed concept:** [AppContainer_Concept.md](AppContainer_Concept.md)  
+→ **Test concept:** [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md)
 
-### Module
+### Modules
 
-| Modul | Version | Description |
+| Module | Version | Description |
 |-------|---------|--------------|
-| `Apps.cmake` | v0.5.x | Pipeline-Orchestrator, Filter (skip, platform, BUILD_ONLY) |
-| `AppCollect.cmake` | v0.6.1 | JSON → Context, Tests-Parsing mit targets[] |
-| `AppCreate.cmake` | v0.6.1 | Target-Erstellung (Core, Runner, Tests), Skip-Handling |
-| `Json.cmake` | v0.6.0 | Neue Helper: `_json_get_bool_or_default`, `_json_get_array_as_list` |
+| `Apps.cmake` | v0.5.x | Pipeline orchestrator, filter (skip, platform, BUILD_ONLY) |
+| `AppCollect.cmake` | v0.6.1 | JSON → context, tests parsing with targets[] |
+| `AppCreate.cmake` | v0.6.1 | Target creation (core, runner, tests), skip handling |
+| `Json.cmake` | v0.6.0 | New helpers: `_json_get_bool_or_default`, `_json_get_array_as_list` |
 
-### Generierte Targets
+### Generated Targets
 
-Pro App werden folgende Targets erstellt:
+The following targets are created per app:
 
-| Target | Typ | Description |
+| Target | Type | Description |
 |--------|-----|--------------|
-| `{AppName}.Core` | STATIC Library | Business-Logik (testbar) |
-| `{AppName}` | Executable | Entry Point (main/) |
-| `{AppName}.{TestName}` | Executable | Tests (für jedes Target in tests.targets[]) |
+| `{AppName}.Core` | STATIC Library | Business logic (testable) |
+| `{AppName}` | Executable | Entry point (main/) |
+| `{AppName}.{TestName}` | Executable | Tests (for each target in tests.targets[]) |
 
-### Verzeichnisstruktur
+### Directory Structure
 
 ```
 projects/apps/{AppName}/
-├── include/    → PUBLIC Headers (Core)
-├── src/        → Implementation (Core)
-├── main/       → Entry Point (Runner)
-├── pch/        → Precompiled Headers (optional)
+├── include/    → PUBLIC headers (core)
+├── src/        → Implementation (core)
+├── main/       → Entry point (runner)
+├── pch/        → Precompiled headers (optional)
 └── tests/
     └── {type}/
-        └── {TestName}/   → Jedes Test-Target
+        └── {TestName}/   → Each test target
             ├── Source.cmake
             ├── test_main.cpp
             └── test_*.cpp
 ```
 
-### Flexible Test-Configuration
+### Flexible Test Configuration
 
 ```json
 "tests": {
@@ -449,9 +449,9 @@ projects/apps/{AppName}/
 }
 ```
 
-### Test-Typ Defaults
+### Test Type Defaults
 
-| Typ | Timeout | Parallel | Labels |
+| Type | Timeout | Parallel | Labels |
 |-----|---------|----------|--------|
 | `unit` | 30s | true | `["unit", "fast"]` |
 | `integration` | 120s | true | `["integration"]` |
@@ -463,58 +463,58 @@ projects/apps/{AppName}/
 | `ui` | 180s | false | `["ui", "slow"]` |
 | `api` | 60s | true | `["api", "integration"]` |
 
-### Skip-Feature
+### Skip Feature
 
-| Ebene | Feld | Wirkung |
+| Level | Field | Effect |
 |-------|------|---------|
-| App | `apps[].skip` | Gesamte App überspringen |
-| Alle Tests | `apps[].tests.skip` | Alle Tests der App überspringen |
-| Einzelner Test | `apps[].tests.targets[].skip` | Nur diesen Test überspringen |
+| App | `apps[].skip` | Skip the entire app |
+| All tests | `apps[].tests.skip` | Skip all tests of the app |
+| Individual test | `apps[].tests.targets[].skip` | Skip only this test |
 
-**Skip-Logik:** Global Skip hat Vorrang über Per-Target Skip.
+**Skip logic:** Global skip takes precedence over per-target skip.
 
-### Error-Code-Bereich
+### Error Code Range
 
-| Bereich | Codes | Kategorie |
+| Range | Codes | Category |
 |---------|-------|-----------|
-| E4xx | E401-E407 | App-Container-Error |
-| W4xx | W401-W403 | App-Container-Warningen |
-| E3xx | E301-E306 | App-Tests-Error |
-| W402 | — | Parallel-Warning für serielle Test-Typen |
+| E4xx | E401-E407 | App container errors |
+| W4xx | W401-W403 | App container warnings |
+| E3xx | E301-E306 | App tests errors |
+| W402 | — | Parallel warning for serial test types |
 
-### Successskriterium
+### Success Criterion
 
 ```bash
 cmake -B build -DBUILD_TESTS=ON
 cmake --build build
-# App-Targets erstellt:
+# App targets created:
 # - MyApp.Core (STATIC Library)
 # - MyApp (Executable)
 # - MyApp.UnitTests (Test)
 # - MyApp.IntegrationTests (Test)
 ctest --test-dir build -L MyApp
-# Tests bestehen
+# Tests pass
 ```
 
 ---
 
-## 10. Phase 9: System-Externals
+## 10. Phase 9: System Externals
 
-**Status:** ✅ Abgeschlossen
+**Status:** ✅ Completed
 
-**Ziel:** System-Bibliotheken via `find_package()` integrieren.
+**Goal:** Integrate system libraries via `find_package()`.
 
-→ **Detail-Concept:** [System_Externals_Concept.md](System_Externals_Concept.md)
+→ **Detailed concept:** [System_Externals_Concept.md](System_Externals_Concept.md)
 
-### Module
+### Modules
 
-| Modul | Version | Description |
+| Module | Version | Description |
 |-------|---------|--------------|
-| `System/Handler.cmake` | v0.1.0 | System-External Handler (find_package) |
-| `System/PathResolver.cmake` | v0.1.0 | Mehrstufige Pfad-Auflösung |
+| `System/Handler.cmake` | v0.1.0 | System external handler (find_package) |
+| `System/PathResolver.cmake` | v0.1.0 | Multi-stage path resolution |
 | `Orchestrator.cmake` | v0.3.0 | Dispatch: system → git → path |
 
-### System External JSON-Syntax
+### System External JSON Syntax
 
 ```json
 "qt6": {
@@ -528,43 +528,45 @@ ctest --test-dir build -L MyApp
 }
 ```
 
-### Typ-Erkennung (Priorität)
+### Type Detection (Priority)
 
-| Reihenfolge | Feld | Typ |
+| Order | Field | Type |
 |-------------|------|-----|
-| 1 | `system: true` | System External |
-| 2 | `git` | Fetched External |
-| 3 | `path` | Local External |
-| — | keines | Error E012 |
+| 1 | `system: true` | System external |
+| 2 | `git` | Fetched external |
+| 3 | `path` | Local external |
+| — | none | Error E012 |
 
-### Pfad-Auflösung (Stufen)
+### Path Resolution (Stages)
 
-1. Environment-Variablen ($QT_ROOT, $QT_DIR)
+1. Environment variables ($QT_ROOT, $QT_DIR)
 2. CMAKE_PREFIX_PATH
-3. hints[] aus Solution.json
-4. Standard-Pfade (C:/Qt/..., /opt/Qt/...)
-5. backup Pfad (mit W501 Warning)
+3. hints[] from Solution.json
+4. Standard paths (C:/Qt/..., /opt/Qt/...)
+5. backup path (with W501 warning)
 6. Error E501/E503
 
-### Error-Code-Bereich
+> **Code today (2026-11-09, CMakeCraft v0.14.1):** E501 is dropped. `find_package()` runs without `REQUIRED` (`cmake/externals/system/Handler.cmake:270`, `:273`); if a package with `required` (default) is not found, `_system_external_not_found()` names the cause (`Handler.cmake:290`): E503 (`:101`, `:120`, `:128`), E504 (`:91`) or E505 (`:109`).
 
-| Bereich | Kategorie |
+### Error Code Range
+
+| Range | Category |
 |---------|-----------|
-| E5xx | System-External-spezifische Error |
-| W5xx | System-External-Warningen |
+| E5xx | System-external-specific errors |
+| W5xx | System external warnings |
 
-### Successskriterium
+### Success Criterion
 
 ```bash
 cmake -B build
-# Qt6 wird via find_package() gefunden
-# System External targets verfügbar (Qt6::Core, etc.)
-# Phase 9 Tests bestehen
+# Qt6 is found via find_package()
+# System external targets available (Qt6::Core, etc.)
+# Phase 9 tests pass
 ```
 
 ---
 
-## 11. Checkliste
+## 11. Checklist
 
 ### Phase 1 ✅
 
@@ -577,20 +579,20 @@ cmake -B build
 - ✅ OutputDirs.cmake
 - ✅ Warnings.cmake
 - ✅ CompilerOptions.cmake
-- ✅ Phase 1 Tests bestehen
+- ✅ Phase 1 tests pass
 
 ### Phase 2 ✅
 
 - ✅ Solution.cmake
-- ✅ SOLUTION_* Properties gesetzt
-- ✅ Schema-Validierung funktioniert
+- ✅ SOLUTION_* properties set
+- ✅ Schema validation works
 
 ### Phase 3 ✅
 
 - ✅ Executables.cmake
 - ✅ ExecutableCollect.cmake
 - ✅ ExecutableCreate.cmake
-- ✅ MinimalConsole baut und läuft
+- ✅ MinimalConsole builds and runs
 
 ### Phase 4 ✅
 
@@ -598,24 +600,24 @@ cmake -B build
 - ✅ LibraryCollect.cmake
 - ✅ LibraryCreate.cmake
 - ✅ Dependencies.cmake
-- ✅ Executable linkt gegen Library
+- ✅ Executable links against library
 
 ### Phase 5 ✅
 
 - ✅ Orchestrator.cmake
 - ✅ Local/Attach.cmake
-- ✅ BASS lädt korrekt
-- ✅ W103/W104 Prüfung
+- ✅ BASS loads correctly
+- ✅ W103/W104 check
 
 ### Phase 6 ✅
 
-- ✅ Core/Fetch.cmake (v0.2.0 mit .externals/)
+- ✅ Core/Fetch.cmake (v0.2.0 with .externals/)
 - ✅ Hooks/HookLoader.cmake
 - ✅ Registry/Targets.cmake
-- ✅ Git-External wird gefetcht
-- ✅ Hook-System funktioniert
-- ✅ E216 bei fehlendem Hook
-- ✅ Offline-Modus (E218, W302)
+- ✅ Git external is fetched
+- ✅ Hook system works
+- ✅ E216 for a missing hook
+- ✅ Offline mode (E218, W302)
 
 ### Phase 7 ✅
 
@@ -623,99 +625,99 @@ cmake -B build
 - ✅ TestCollect.cmake
 - ✅ TestCreate.cmake
 - ✅ TestFrameworks.cmake
-- ✅ CTest-Integration
-- ✅ doctest Support
-- ✅ googletest Support
-- ✅ catch2 Support
-- ✅ Labels und Timeout
-- ✅ Skip-Feature für standalone tests
+- ✅ CTest integration
+- ✅ doctest support
+- ✅ googletest support
+- ✅ catch2 support
+- ✅ Labels and timeout
+- ✅ Skip feature for standalone tests
 
 ### Phase 8 ✅
 
-**Core-Module:**
-- ✅ Apps.cmake (Pipeline-Orchestrator)
-- ✅ AppCollect.cmake v0.6.1 (JSON → Context)
-- ✅ AppCreate.cmake v0.6.1 (Core/Runner/Tests erstellen)
+**Core modules:**
+- ✅ Apps.cmake (pipeline orchestrator)
+- ✅ AppCollect.cmake v0.6.1 (JSON → context)
+- ✅ AppCreate.cmake v0.6.1 (create core/runner/tests)
 
-**JSON Helper (Json.cmake v0.6.0):**
-- ✅ `_json_get_bool_or_default()` - Boolean mit Default
-- ✅ `_json_get_array_as_list()` - Array → CMake-Liste
+**JSON helpers (Json.cmake v0.6.0):**
+- ✅ `_json_get_bool_or_default()` - boolean with default
+- ✅ `_json_get_array_as_list()` - array → CMake list
 
-**Core/Runner Separation:**
-- ✅ STATIC Library für Core (include/ + src/)
-- ✅ Executable für Runner (main/)
-- ✅ Core linkt gegen Runner
-- ✅ PCH für Core (optional)
+**Core/runner separation:**
+- ✅ STATIC library for core (include/ + src/)
+- ✅ Executable for runner (main/)
+- ✅ Runner links against core
+- ✅ PCH for core (optional)
 
-**Flexible Test-Targets:**
-- ✅ tests.targets[] Array-Struktur
-- ✅ Beliebig viele Tests pro App
-- ✅ Beliebige Test-Typen (nicht nur unit/integration/performance)
-- ✅ Type-based Defaults (Timeout, Parallel, Labels)
-- ✅ Framework Override pro Test
-- ✅ Path Override pro Test
-- ✅ Externals pro Test
-- ✅ Labels pro Test
-- ✅ Parallel Control pro Test
+**Flexible test targets:**
+- ✅ tests.targets[] array structure
+- ✅ Any number of tests per app
+- ✅ Arbitrary test types (not only unit/integration/performance)
+- ✅ Type-based defaults (timeout, parallel, labels)
+- ✅ Framework override per test
+- ✅ Path override per test
+- ✅ Externals per test
+- ✅ Labels per test
+- ✅ Parallel control per test
 
-**Skip-Feature:**
-- ✅ Global tests.skip (alle Tests einer App)
-- ✅ Per-Target skip (einzelner Test)
-- ✅ Skip-Logik (Global hat Vorrang)
-- ✅ CMake-Ausgabe für Skip
+**Skip feature:**
+- ✅ Global tests.skip (all tests of an app)
+- ✅ Per-target skip (individual test)
+- ✅ Skip logic (global takes precedence)
+- ✅ CMake output for skip
 
-**Warningen:**
-- ✅ W402 für parallel=true bei seriellen Test-Typen
+**Warnings:**
+- ✅ W402 for parallel=true with serial test types
 
-**Filter:**
-- ✅ Platform-Filter
-- ✅ BUILD_ONLY Filter
+**Filters:**
+- ✅ Platform filter
+- ✅ BUILD_ONLY filter
 - ✅ App-level skip
 
-**Test-Apps:**
-- ✅ MyVisualizer Demo-App
-- ✅ DemoPlayer Test-App
+**Test apps:**
+- ✅ MyVisualizer demo app
+- ✅ DemoPlayer test app
 
-**Dokumentation:**
+**Documentation:**
 - ✅ AppContainer_Concept.md v0.6.0
 - ✅ App_Tests_Targets_Concept.md v0.1.1
-- ✅ Solution_Schema.md v0.6.0 (apps[] Section)
+- ✅ Solution_Schema.md v0.6.0 (apps[] section)
 - ✅ Template README.md v0.2.1
 - ✅ Template README_de.md v0.2.1
 - ✅ Json.md v0.6.0
 
-**Offen (nice-to-have):**
-- [ ] UserGuide für App-Container (separates Dokument)
-- [ ] Englische Dokumentation synchronisieren
+**Open (nice-to-have):**
+- [ ] User guide for app containers (separate document)
+- [ ] Synchronize English documentation
 
 ### Phase 9 ✅
 
-**Core-Module:**
-- ✅ System/Handler.cmake (find_package Integration)
-- ✅ System/PathResolver.cmake (mehrstufige Suche)
-- ✅ Orchestrator.cmake v0.3.0 (system Typ-Dispatch)
+**Core modules:**
+- ✅ System/Handler.cmake (find_package integration)
+- ✅ System/PathResolver.cmake (multi-stage search)
+- ✅ Orchestrator.cmake v0.3.0 (system type dispatch)
 
-**JSON-Schema:**
-- ✅ system: true Typ-Erkennung
-- ✅ package Feld (Required für System)
-- ✅ version Feld (optional)
-- ✅ components[] Array (optional)
-- ✅ hints[] Array (optional)
-- ✅ backup Feld (optional)
-- ✅ required Feld (optional, default: true)
+**JSON schema:**
+- ✅ system: true type detection
+- ✅ package field (required for system)
+- ✅ version field (optional)
+- ✅ components[] array (optional)
+- ✅ hints[] array (optional)
+- ✅ backup field (optional)
+- ✅ required field (optional, default: true)
 
-**Typ-Priorität:**
+**Type priority:**
 - ✅ system → git → path → E012
-- ✅ Gegenseitiger Ausschluss validiert
+- ✅ Mutual exclusion validated
 
-**Pfad-Auflösung:**
-- ✅ Environment-Variablen
+**Path resolution:**
+- ✅ Environment variables
 - ✅ CMAKE_PREFIX_PATH
-- ✅ hints[] aus JSON
-- ✅ Standard-Pfade (plattformspezifisch)
-- ✅ backup mit W501 Warning
+- ✅ hints[] from JSON
+- ✅ Standard paths (platform-specific)
+- ✅ backup with W501 warning
 
-**Error/Warning Codes:**
+**Error/warning codes:**
 - ✅ E501: System external not found
 - ✅ E502: package field required
 - ✅ E503: find_package() failed
@@ -724,40 +726,44 @@ cmake -B build
 - ✅ W501: Using backup location
 - ✅ W502: Version mismatch
 
-**Tests:**
-- ✅ Phase9.cmake Build-System-Test
-- ✅ Qt6 System External getestet
+> **Code today (2026-11-09, CMakeCraft v0.14.1):** Raised are E502 (`cmake/core/Validation.cmake:94`, `cmake/externals/system/Handler.cmake:180`), E503 (`Handler.cmake:101`, `:120`, `:128`, `:331`), E504 (`:91`), E505 (`:109`) and W501 (`:245`). `find_package()` runs without `REQUIRED` (`:270`, `:273`); the cause of a failure is named by `_system_external_not_found()`. E501 and W502 are dropped. The self-test checks E503–E505 (`cmake/buildSystemTest/phase9.cmake:498–609`).
 
-**Dokumentation:**
+**Tests:**
+- ✅ Phase9.cmake build system test
+- ✅ Qt6 system external tested
+
+**Documentation:**
 - ✅ System_Externals_Concept.md v0.7.0
 - ✅ Solution_Schema.md v0.7.0 (system fields)
 - ✅ Implementation_Plan.md v0.7.0
 - ✅ Master_Concept.md v0.7.0
 
-**Nicht im Scope (bewusst entfernt):**
-- ❌ Hybrid-External-Support (System mit Fetched-Fallback)
-- ❌ vcpkg/Conan Integration (separates Feature)
+**Not in scope (deliberately removed):**
+- ❌ Hybrid external support (system with fetched fallback)
+- ❌ vcpkg/Conan integration (separate feature)
 
 ---
 
 ## 12. See Also
 
-- [master_concept.md](master_concept.md) — Architecture
-- [guidelines.md](../standards/guidelines.md) — Konventionen
-- [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8 Detail
-- [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible App-Tests
-- [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 Detail
-- [Solution_Schema](../../guide/references/Solution_Schema.md) — JSON-Schema
-- [ErrorCodes](../../guide/references/ErrorCodes.md) — Errorcodes
+- [Master_Concept.md](Master_Concept.md) — Architecture
+- [Guidelines.md](../Guidelines.md) — Conventions
+- [AppContainer_Concept.md](AppContainer_Concept.md) — Phase 8 detail
+- [App_Tests_Targets_Concept.md](App_Tests_Targets_Concept.md) — Flexible app tests
+- [System_Externals_Concept.md](System_Externals_Concept.md) — Phase 9 detail
+- [Solution_Schema](../../guide/references/Solution_Schema.md) — JSON schema
+- [ErrorCodes](../../guide/references/ErrorCodes.md) — Error codes
 
 ---
 
 ## 13. Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.7.0** | **2025-12-19** | **Phase 9 abgeschlossen: System Externals (find_package), Typ-Priorität system→git→path, PathResolver, Error Codes E5xx/W5xx, Phase9.cmake Tests, Hybrid-Support bewusst entfernt** |
-| 0.6.0 | 2025-12-18 | Phase 8 abgeschlossen: Vollständige Checkliste mit allen Features (Core/Runner, flexible tests.targets[], Skip-Feature, Type-Defaults, Json.cmake v0.6.0), Dokumentation komplett |
-| 0.5.1 | 2025-12-17 | Phase 8 in Arbeit: Apps.cmake, AppCollect.cmake, AppCreate.cmake implementiert, DemoPlayer Test-App, Core/Runner/Tests Trennung |
-| 0.5.0 | 2025-12-14 | Phase 1-7 abgeschlossen, Fetch v0.2 Details integriert, Test-Pipeline Details integriert, Phase 8/9 als geplant referenziert, Blueprint v0.5.0 Format |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): Phasen aus v1.5 übernommen |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: Phase 8 checklist "Runner links against core"; "Code today" notes on E501–E505/W502 (§10, §11), updated to CMakeCraft v0.14.1 (E502–E505 and W501 raised, E501/W502 dropped, `find_package` without `REQUIRED`)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.7.0 | 2025-12-19 | Phase 9 completed: system externals (find_package), type priority system→git→path, PathResolver, error codes E5xx/W5xx, Phase9.cmake tests, hybrid support deliberately removed |
+| 0.6.0 | 2025-12-18 | Phase 8 completed: complete checklist with all features (core/runner, flexible tests.targets[], skip feature, type defaults, Json.cmake v0.6.0), documentation complete |
+| 0.5.1 | 2025-12-17 | Phase 8 in progress: Apps.cmake, AppCollect.cmake, AppCreate.cmake implemented, DemoPlayer test app, core/runner/tests separation |
+| 0.5.0 | 2025-12-14 | Phases 1-7 completed, Fetch v0.2 details integrated, test pipeline details integrated, Phase 8/9 referenced as planned, Blueprint v0.5.0 format |
+| 0.1.0 | 2025-12-03 | Initial (clean start): phases taken over from v1.5 |

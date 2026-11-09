@@ -4,33 +4,33 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_Network.md](Git_Externals_Network.md)
+> **German:** [Git_Externals_Network.md](../../../../de/guide/references/externals/Git_Externals_Network.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [HTTP / REST](#2-http--rest)
 3. [Async I/O](#3-async-io)
 4. [WebSocket](#4-websocket)
 5. [Threading / Parallelism](#5-threading--parallelism)
-6. [Schnellreferenz](#6-schnellreferenz)
-7. [See Also](#7-siehe-auch)
+6. [Quick Reference](#6-quick-reference)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Bibliotheken für Netzwerk-Kommunikation, asynchrone I/O und Threading.
+This document describes libraries for network communication, asynchronous I/O and threading.
 
-### Kategorien
+### Categories
 
-| Kategorie | Bibliotheken |
-|-----------|--------------|
+| Category | Libraries |
+|----------|-----------|
 | HTTP / REST | cpp-httplib, cpr |
 | Async I/O | asio |
 | WebSocket | ixwebsocket |
@@ -42,12 +42,12 @@ This document describes Bibliotheken für Netzwerk-Kommunikation, asynchrone I/O
 
 ### 2.1 cpp-httplib
 
-> **Zweck:** Single-header HTTP/HTTPS Client und Server.
+> **Purpose:** Single-header HTTP/HTTPS client and server.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/yhirose/cpp-httplib.git` |
-| **Aktueller Tag** | `v0.15.3` |
+| **Current Tag** | `v0.15.3` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 | **Header-only** | ✅ |
@@ -60,7 +60,7 @@ This document describes Bibliotheken für Netzwerk-Kommunikation, asynchrone I/O
 }
 ```
 
-**Usage (Client):**
+**Usage (client):**
 ```cpp
 #include <httplib.h>
 
@@ -71,7 +71,7 @@ if (res && res->status == 200) {
 }
 ```
 
-**Usage (Server):**
+**Usage (server):**
 ```cpp
 httplib::Server svr;
 svr.Get("/hello", [](const auto& req, auto& res) {
@@ -84,15 +84,15 @@ svr.listen("0.0.0.0", 8080);
 
 ### 2.2 cpr (C++ Requests)
 
-> **Zweck:** Moderner HTTP Client inspiriert von Python Requests.
+> **Purpose:** Modern HTTP client inspired by Python Requests.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/libcpr/cpr.git` |
-| **Aktueller Tag** | `1.10.5` |
+| **Current Tag** | `1.10.5` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
-| **Dependencies** | libcurl (bundled oder system) |
+| **Hook** | PreFetch recommended |
+| **Dependencies** | libcurl (bundled or system) |
 
 ```json
 "cpr": {
@@ -118,7 +118,7 @@ cpr::Response r = cpr::Get(
 );
 std::cout << r.status_code << ": " << r.text << std::endl;
 
-// POST mit JSON
+// POST with JSON
 auto r2 = cpr::Post(
     cpr::Url{"https://api.example.com/submit"},
     cpr::Body{R"({"key": "value"})"},
@@ -132,14 +132,14 @@ auto r2 = cpr::Post(
 
 ### 3.1 asio (Standalone)
 
-> **Zweck:** Cross-platform asynchrone I/O Bibliothek (Basis für Boost.Asio).
+> **Purpose:** Cross-platform asynchronous I/O library (basis for Boost.Asio).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/chriskohlhoff/asio.git` |
-| **Aktueller Tag** | `asio-1-29-0` |
-| **CMake Support** | ⚠️ (Header-only, kein native CMake) |
-| **Hook** | PostFetch erforderlich 🔧 |
+| **Current Tag** | `asio-1-29-0` |
+| **CMake Support** | ⚠️ (header-only, no native CMake) |
+| **Hook** | PostFetch required 🔧 |
 
 ```json
 "asio": {
@@ -179,14 +179,14 @@ io.run();
 
 ### 4.1 ixwebsocket
 
-> **Zweck:** WebSocket Client und Server mit TLS-Support.
+> **Purpose:** WebSocket client and server with TLS support.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/machinezone/IXWebSocket.git` |
-| **Aktueller Tag** | `v11.4.4` |
+| **Current Tag** | `v11.4.4` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "ixwebsocket": {
@@ -201,7 +201,7 @@ set(USE_TLS ON CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 ```
 
-**Usage (Client):**
+**Usage (client):**
 ```cpp
 #include <ixwebsocket/IXWebSocket.h>
 
@@ -222,14 +222,14 @@ ws.send("Hello WebSocket!");
 
 ### 5.1 taskflow
 
-> **Zweck:** Parallele und heterogene Task-Programmierung mit DAG-basiertem Scheduling.
+> **Purpose:** Parallel and heterogeneous task programming with DAG-based scheduling.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/taskflow/taskflow.git` |
-| **Aktueller Tag** | `v3.6.0` |
+| **Current Tag** | `v3.6.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -270,12 +270,12 @@ executor.run(taskflow).wait();
 
 ### 5.2 thread-pool
 
-> **Zweck:** Einfacher, schneller Thread Pool.
+> **Purpose:** Simple, fast thread pool.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/bshoshany/thread-pool.git` |
-| **Aktueller Tag** | `v4.1.0` |
+| **Current Tag** | `v4.1.0` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 | **Header-only** | ✅ |
@@ -304,12 +304,12 @@ int result = future.get();
 
 ### 5.3 concurrentqueue
 
-> **Zweck:** Lock-free, high-performance Concurrent Queue.
+> **Purpose:** Lock-free, high-performance concurrent queue.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/cameron314/concurrentqueue.git` |
-| **Aktueller Tag** | `v1.0.4` |
+| **Current Tag** | `v1.0.4` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 | **Header-only** | ✅ |
@@ -339,10 +339,10 @@ if (q.try_dequeue(item)) {
 
 ---
 
-## 6. Schnellreferenz
+## 6. Quick Reference
 
-| Bibliothek | Tag | CMake | Hook | Hauptverwendung |
-|------------|-----|-------|------|-----------------|
+| Library | Tag | CMake | Hook | Main Use |
+|---------|-----|-------|------|----------|
 | cpp-httplib | v0.15.3 | ✅ | – | Simple HTTP client/server |
 | cpr | 1.10.5 | ✅ | PreFetch | Modern HTTP client |
 | asio | asio-1-29-0 | ⚠️ | PostFetch 🔧 | Async I/O |
@@ -355,7 +355,7 @@ if (q.try_dequeue(item)) {
 
 ## 7. See Also
 
-- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Main overview
 - [Git_Externals_Core.md](Git_Externals_Core.md) — Logging & Testing
 - [Git_Externals_Data.md](Git_Externals_Data.md) — JSON & Database
 
@@ -363,6 +363,7 @@ if (q.try_dequeue(item)) {
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: extracted from Git_Externals_Reference |

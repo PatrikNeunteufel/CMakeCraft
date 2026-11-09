@@ -1,49 +1,49 @@
-# Json.cmake — Modul-Dokumentation
+# Json.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** In Development (Pre-Release)  
+> **Status:** In development (pre-release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Json.md](Json.md)  
-> **Module:** [`cmake/core/Json.cmake`](../../../../cmake/core/Json.cmake)  
+> **German:** [Json.md](../../../../de/guide/module/core/Json.md)  
+> **Module:** [`cmake/core/Json.cmake`](../../../../../cmake/core/Json.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
-4. [Usagesbeispiele](#4-verwendungsbeispiele)
-5. [Return Values und Errorbehandlung](#5-rückgabewerte-und-fehlerbehandlung)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
+4. [Usage Examples](#4-usage-examples)
+5. [Return Values and Error Handling](#5-return-values-and-error-handling)
 6. [Best Practices](#6-best-practices)
-7. [See Also](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+7. [See Also](#7-see-also)
+8. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Json.cmake` Modul stellt **JSON-Hilfsfunktionen** für das CMake Build-System bereit. Es kapselt die CMake 3.19+ `string(JSON ...)` Befehle in benutzerfreundliche Functions.
+The `Json.cmake` module provides **JSON helper functions** for the CMake build system. It wraps the CMake 3.19+ `string(JSON ...)` commands in user-friendly functions.
 
-### Kernidee
+### Core Idea
 
-Einheitliche, fehlertolerante JSON-Operationen für das gesamte Build-System.
+Uniform, fault-tolerant JSON operations for the entire build system.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Lesen | Strings, Numbers, Booleans, Objekte, Arrays |
-| Prüfen | Key-Existenz, Typ-Erkennung |
-| Fallbacks | Default-Werte bei fehlenden Keys |
-| Konvertierung | Arrays zu CMake-Listen |
+| Area | Description |
+|------|-------------|
+| Reading | Strings, numbers, booleans, objects, arrays |
+| Checking | Key existence, type detection |
+| Fallbacks | Default values for missing keys |
+| Conversion | Arrays to CMake lists |
 
-### Usage durch
+### Used By
 
 - Solution.cmake
 - ExecutableCollect.cmake
@@ -54,47 +54,47 @@ Einheitliche, fehlertolerante JSON-Operationen für das gesamte Build-System.
 
 ### Note
 
-Alle Functions sind mit `_`-Prefix markiert (private), da sie nur für interne Build-System-Usage gedacht sind.
+All functions are marked with the `_` prefix (private), since they are intended only for internal build system use.
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
-| CMake | 3.19+ | `string(JSON ...)` Befehl |
+| Module | Version | Usage |
+|--------|---------|-------|
+| CMake | 3.19+ | `string(JSON ...)` command |
 
-**Design-Entscheidung:** Json.cmake ist ein Basis-Modul ohne Dependencies zu anderen CMake-Modulen. Es verwendet keine Debug- oder Error-Functions — Error werden durch leere Return Values signalisiert und von aufrufenden Modulen behandelt.
+**Design decision:** Json.cmake is a base module without dependencies on other CMake modules. It uses no debug or error functions — errors are signaled by empty return values and handled by the calling modules.
 
-→ Siehe [Offene Abklärungen](../../../konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md) für Details zu dieser Entscheidung.
+→ See [Open clarifications](../../../konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md) for details on this decision.
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
-### Funktionsübersicht
+### Function Overview
 
-| # | Funktion | Description |
-|---|----------|--------------|
-| 3.1 | `_json_has_key` | Prüft Key-Existenz |
-| 3.2 | `_json_get_string` | Liest String |
-| 3.3 | `_json_get_string_or_default` | String mit Default |
-| 3.4 | `_json_get_bool_from_key` | Liest Boolean |
-| 3.5 | `_json_get_bool_or_default` | Boolean mit Default |
-| 3.6 | `_json_array_length` | Array-Länge |
-| 3.7 | `_json_array_get` | Array-Element |
-| 3.8 | `_json_get_array_as_list` | Array als CMake-Liste |
-| 3.9 | `_json_get_object` | Extrahiert Objekt |
-| 3.10 | `_json_get_object_or_empty` | Objekt mit Fallback |
-| 3.11 | `_json_get_type` | Typ eines Keys |
-| 3.12 | `_json_get_number` | Liest Zahl |
-| 3.13 | `_json_get_number_or_default` | Zahl mit Default |
+| # | Function | Description |
+|---|----------|-------------|
+| 3.1 | `_json_has_key` | Checks key existence |
+| 3.2 | `_json_get_string` | Reads a string |
+| 3.3 | `_json_get_string_or_default` | String with default |
+| 3.4 | `_json_get_bool_from_key` | Reads a boolean |
+| 3.5 | `_json_get_bool_or_default` | Boolean with default |
+| 3.6 | `_json_array_length` | Array length |
+| 3.7 | `_json_array_get` | Array element |
+| 3.8 | `_json_get_array_as_list` | Array as CMake list |
+| 3.9 | `_json_get_object` | Extracts an object |
+| 3.10 | `_json_get_object_or_empty` | Object with fallback |
+| 3.11 | `_json_get_type` | Type of a key |
+| 3.12 | `_json_get_number` | Reads a number |
+| 3.13 | `_json_get_number_or_default` | Number with default |
 
 ---
 
 ### 3.1 _json_has_key()
 
-Prüft ob ein Key im JSON-Objekt existiert.
+Checks whether a key exists in the JSON object.
 
 ```cmake
 _json_has_key(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -102,20 +102,20 @@ _json_has_key(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Zu prüfender Key |
-| `OUT_VAR` | Variable | ✓ | Output: TRUE oder FALSE |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
+| `KEY` | String | ✓ | Key to check |
+| `OUT_VAR` | Variable | ✓ | Output: TRUE or FALSE |
 
-**Rückgabe:** TRUE wenn Key existiert, FALSE sonst
+**Returns:** TRUE if the key exists, FALSE otherwise
 
 **Example:**
 
 ```cmake
 _json_has_key("${_json}" "name" _has_name)
 if(_has_name)
-    # Key existiert
+    # Key exists
 endif()
 ```
 
@@ -123,7 +123,7 @@ endif()
 
 ### 3.2 _json_get_string()
 
-Liest einen String-Wert aus JSON.
+Reads a string value from JSON.
 
 ```cmake
 _json_get_string(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -131,13 +131,13 @@ _json_get_string(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `OUT_VAR` | Variable | ✓ | Output: String-Wert oder "" |
+| `OUT_VAR` | Variable | ✓ | Output: string value or "" |
 
-**Rückgabe:** String-Wert bei Success, leerer String wenn Key fehlt
+**Returns:** String value on success, empty string if the key is missing
 
 **Example:**
 
@@ -149,7 +149,7 @@ _json_get_string("${_json}" "name" _name)
 
 ### 3.3 _json_get_string_or_default()
 
-Liest String-Wert mit Fallback zu Default.
+Reads a string value with fallback to a default.
 
 ```cmake
 _json_get_string_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
@@ -157,27 +157,27 @@ _json_get_string_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `DEFAULT` | String | ✓ | Fallback-Wert |
-| `OUT_VAR` | Variable | ✓ | Output: String-Wert oder DEFAULT |
+| `DEFAULT` | String | ✓ | Fallback value |
+| `OUT_VAR` | Variable | ✓ | Output: string value or DEFAULT |
 
-**Rückgabe:** String-Wert oder DEFAULT wenn Key fehlt/leer
+**Returns:** String value, or DEFAULT if the key is missing/empty
 
 **Example:**
 
 ```cmake
 _json_get_string_or_default("${_json}" "type" "CONSOLE" _type)
-# _type ist "CONSOLE" wenn "type" fehlt
+# _type is "CONSOLE" if "type" is missing
 ```
 
 ---
 
 ### 3.4 _json_get_bool_from_key()
 
-Liest einen Boolean-Wert mit robuster Erkennung.
+Reads a boolean value with robust detection.
 
 ```cmake
 _json_get_bool_from_key(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -185,26 +185,26 @@ _json_get_bool_from_key(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `OUT_VAR` | Variable | ✓ | Output: TRUE oder FALSE |
+| `OUT_VAR` | Variable | ✓ | Output: TRUE or FALSE |
 
-**Erkannte Werte:**
+**Recognized values:**
 
 | TRUE | FALSE |
 |------|-------|
-| true, TRUE, 1, ON, YES | false, FALSE, 0, OFF, NO, leer, Key fehlt |
+| true, TRUE, 1, ON, YES | false, FALSE, 0, OFF, NO, empty, key missing |
 
-**Note:** CMakes `string(JSON GET)` gibt für JSON `true`/`false` die Strings "true"/"false" (lowercase) zurück. Diese Funktion erkennt alle gängigen Varianten.
+**Note:** CMake's `string(JSON GET)` returns the strings "true"/"false" (lowercase) for JSON `true`/`false`. This function recognizes all common variants.
 
 **Example:**
 
 ```cmake
 _json_get_bool_from_key("${_json}" "skip" _skip)
 if(_skip)
-    return()  # Überspringe
+    return()  # Skip
 endif()
 ```
 
@@ -212,7 +212,7 @@ endif()
 
 ### 3.5 _json_get_bool_or_default()
 
-Liest Boolean-Wert mit Fallback-Default wenn Key fehlt.
+Reads a boolean value with a fallback default if the key is missing.
 
 ```cmake
 _json_get_bool_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
@@ -220,39 +220,39 @@ _json_get_bool_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `DEFAULT` | Bool | ✓ | Fallback-Wert wenn Key fehlt (TRUE/FALSE) |
-| `OUT_VAR` | Variable | ✓ | Output: TRUE oder FALSE |
+| `DEFAULT` | Bool | ✓ | Fallback value if the key is missing (TRUE/FALSE) |
+| `OUT_VAR` | Variable | ✓ | Output: TRUE or FALSE |
 
-**Erkannte Werte:**
+**Recognized values:**
 
 | TRUE | FALSE |
 |------|-------|
 | true, TRUE, 1, ON, YES | false, FALSE, 0, OFF, NO |
 
-**Unterschied zu `_json_get_bool_from_key`:**
+**Difference to `_json_get_bool_from_key`:**
 
-| Funktion | Wenn Key fehlt |
-|----------|----------------|
-| `_json_get_bool_from_key` | Gibt FALSE zurück |
-| `_json_get_bool_or_default` | Gibt übergebenen DEFAULT zurück |
+| Function | If the key is missing |
+|----------|-----------------------|
+| `_json_get_bool_from_key` | Returns FALSE |
+| `_json_get_bool_or_default` | Returns the given DEFAULT |
 
 **Example:**
 
 ```cmake
-# Mit Default TRUE wenn "enabled" fehlt
+# With default TRUE if "enabled" is missing
 _json_get_bool_or_default("${_json}" "enabled" TRUE _enabled)
 
-# Mit Default FALSE wenn "skip" fehlt  
+# With default FALSE if "skip" is missing  
 _json_get_bool_or_default("${_json}" "skip" FALSE _skip)
 if(_skip)
-    message(STATUS "Übersprungen")
+    message(STATUS "Skipped")
 endif()
 
-# Parallele Ausführung: Default TRUE für unit-Tests
+# Parallel execution: default TRUE for unit tests
 _json_get_bool_or_default("${_test_json}" "parallel" TRUE _parallel)
 ```
 
@@ -260,7 +260,7 @@ _json_get_bool_or_default("${_test_json}" "parallel" TRUE _parallel)
 
 ### 3.6 _json_array_length()
 
-Ermittelt die Länge eines JSON-Arrays.
+Determines the length of a JSON array.
 
 ```cmake
 _json_array_length(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -268,20 +268,20 @@ _json_array_length(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key des Arrays |
-| `OUT_VAR` | Variable | ✓ | Output: Array-Länge (0 wenn fehlt) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
+| `KEY` | String | ✓ | Key of the array |
+| `OUT_VAR` | Variable | ✓ | Output: array length (0 if missing) |
 
-**Rückgabe:** Array-Länge oder 0 wenn Key fehlt/kein Array
+**Returns:** Array length, or 0 if the key is missing / not an array
 
 **Example:**
 
 ```cmake
 _json_array_length("${_json}" "externals" _count)
 if(_count GREATER 0)
-    # Array verarbeiten
+    # Process the array
 endif()
 ```
 
@@ -289,7 +289,7 @@ endif()
 
 ### 3.7 _json_array_get()
 
-Liest ein Element aus einem JSON-Array.
+Reads an element from a JSON array.
 
 ```cmake
 _json_array_get(<JSON_STRING> <KEY> <INDEX> <OUT_VAR>)
@@ -297,14 +297,14 @@ _json_array_get(<JSON_STRING> <KEY> <INDEX> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key des Arrays |
-| `INDEX` | Int | ✓ | 0-basierter Index |
-| `OUT_VAR` | Variable | ✓ | Output: Element-Wert oder "" |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
+| `KEY` | String | ✓ | Key of the array |
+| `INDEX` | Int | ✓ | 0-based index |
+| `OUT_VAR` | Variable | ✓ | Output: element value or "" |
 
-**Rückgabe:** Element-Wert oder leerer String bei Error
+**Returns:** Element value, or empty string on error
 
 **Example:**
 
@@ -321,7 +321,7 @@ endforeach()
 
 ### 3.8 _json_get_array_as_list()
 
-Liest JSON-Array und gibt es als CMake-Liste zurück.
+Reads a JSON array and returns it as a CMake list.
 
 ```cmake
 _json_get_array_as_list(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -329,13 +329,13 @@ _json_get_array_as_list(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key des Arrays |
-| `OUT_VAR` | Variable | ✓ | Output: CMake-Liste (semicolon-separated) oder "" |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
+| `KEY` | String | ✓ | Key of the array |
+| `OUT_VAR` | Variable | ✓ | Output: CMake list (semicolon-separated) or "" |
 
-**Rückgabe:** CMake-Liste oder leerer String wenn Key fehlt oder Array leer
+**Returns:** CMake list, or empty string if the key is missing or the array is empty
 
 **Example:**
 
@@ -349,10 +349,10 @@ foreach(_dep IN LISTS _deps)
 endforeach()
 ```
 
-**Vergleich zu manueller Iteration:**
+**Comparison with manual iteration:**
 
 ```cmake
-# Alt (manuell):
+# Old (manual):
 _json_array_length("${_json}" "items" _count)
 set(_items "")
 if(_count GREATER 0)
@@ -363,7 +363,7 @@ if(_count GREATER 0)
     endforeach()
 endif()
 
-# Neu (mit _json_get_array_as_list):
+# New (with _json_get_array_as_list):
 _json_get_array_as_list("${_json}" "items" _items)
 ```
 
@@ -371,7 +371,7 @@ _json_get_array_as_list("${_json}" "items" _items)
 
 ### 3.9 _json_get_object()
 
-Extrahiert ein verschachteltes JSON-Objekt als String.
+Extracts a nested JSON object as a string.
 
 ```cmake
 _json_get_object(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -379,13 +379,13 @@ _json_get_object(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key des Objekts |
-| `OUT_VAR` | Variable | ✓ | Output: JSON-String des Objekts oder "" |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
+| `KEY` | String | ✓ | Key of the object |
+| `OUT_VAR` | Variable | ✓ | Output: JSON string of the object or "" |
 
-**Rückgabe:** JSON-String des verschachtelten Objekts oder leerer String
+**Returns:** JSON string of the nested object, or empty string
 
 **Example:**
 
@@ -398,7 +398,7 @@ _json_get_string("${_settings}" "cxx_standard" _std)
 
 ### 3.10 _json_get_object_or_empty()
 
-Wie `_json_get_object`, aber gibt "{}" zurück wenn Key fehlt.
+Like `_json_get_object`, but returns "{}" if the key is missing.
 
 ```cmake
 _json_get_object_or_empty(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -406,19 +406,19 @@ _json_get_object_or_empty(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
-| `KEY` | String | ✓ | Key des Objekts |
-| `OUT_VAR` | Variable | ✓ | Output: JSON-String oder "{}" |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
+| `KEY` | String | ✓ | Key of the object |
+| `OUT_VAR` | Variable | ✓ | Output: JSON string or "{}" |
 
-**Rückgabe:** JSON-String oder "{}" — ermöglicht sichere Weiterverarbeitung
+**Returns:** JSON string or "{}" — allows safe further processing
 
 **Example:**
 
 ```cmake
 _json_get_object_or_empty("${_json}" "options" _options)
-# _options ist mindestens "{}", nie leer
+# _options is at least "{}", never empty
 _json_get_string_or_default("${_options}" "key" "default" _val)
 ```
 
@@ -426,7 +426,7 @@ _json_get_string_or_default("${_options}" "key" "default" _val)
 
 ### 3.11 _json_get_type()
 
-Ermittelt den JSON-Typ eines Werts.
+Determines the JSON type of a value.
 
 ```cmake
 _json_get_type(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -434,23 +434,23 @@ _json_get_type(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `OUT_VAR` | Variable | ✓ | Output: Typ-String |
+| `OUT_VAR` | Variable | ✓ | Output: type string |
 
-**Mögliche Return Values:**
+**Possible return values:**
 
-| Wert | Bedeutung |
-|------|-----------|
+| Value | Meaning |
+|-------|---------|
 | `NULL` | null |
 | `BOOLEAN` | true/false |
-| `NUMBER` | Numerisch |
+| `NUMBER` | Numeric |
 | `STRING` | String |
 | `ARRAY` | Array [...] |
-| `OBJECT` | Objekt {...} |
-| `""` | Key existiert nicht |
+| `OBJECT` | Object {...} |
+| `""` | Key does not exist |
 
 **Example:**
 
@@ -467,7 +467,7 @@ endif()
 
 ### 3.12 _json_get_number()
 
-Liest einen numerischen Wert.
+Reads a numeric value.
 
 ```cmake
 _json_get_number(<JSON_STRING> <KEY> <OUT_VAR>)
@@ -475,11 +475,11 @@ _json_get_number(<JSON_STRING> <KEY> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `OUT_VAR` | Variable | ✓ | Output: Numerischer Wert oder "" |
+| `OUT_VAR` | Variable | ✓ | Output: numeric value or "" |
 
 **Example:**
 
@@ -494,7 +494,7 @@ endif()
 
 ### 3.13 _json_get_number_or_default()
 
-Liest einen numerischen Wert mit Fallback.
+Reads a numeric value with fallback.
 
 ```cmake
 _json_get_number_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
@@ -502,41 +502,41 @@ _json_get_number_or_default(<JSON_STRING> <KEY> <DEFAULT> <OUT_VAR>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `JSON_STRING` | String | ✓ | JSON-Objekt als String |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `JSON_STRING` | String | ✓ | JSON object as string |
 | `KEY` | String | ✓ | Key |
-| `DEFAULT` | Number | ✓ | Fallback-Wert |
-| `OUT_VAR` | Variable | ✓ | Output: Numerischer Wert oder Default |
+| `DEFAULT` | Number | ✓ | Fallback value |
+| `OUT_VAR` | Variable | ✓ | Output: numeric value or default |
 
 **Example:**
 
 ```cmake
-# Test-Timeout mit Default 30 Sekunden
+# Test timeout with default 30 seconds
 _json_get_number_or_default("${_json}" "timeout" 30 _timeout)
 message("Timeout: ${_timeout}s")
 ```
 
 ---
 
-## 4. Usagesbeispiele
+## 4. Usage Examples
 
-### 4.1 Solution.json parsen
+### 4.1 Parsing Solution.json
 
 ```cmake
-# JSON laden
+# Load the JSON
 file(READ "${CMAKE_SOURCE_DIR}/Solution.json" _json)
 
-# Requiredfelder lesen
+# Read required fields
 _json_get_string("${_json}" "schemaVersion" _schema)
 _json_get_object("${_json}" "solution" _solution)
 _json_get_string("${_solution}" "name" _name)
 
-# Optionale Felder mit Defaults
+# Optional fields with defaults
 _json_get_string_or_default("${_solution}" "version" "0.0.0" _version)
 ```
 
-### 4.2 Executables-Array iterieren
+### 4.2 Iterating the Executables Array
 
 ```cmake
 _json_get_object("${_json}" "solution" _solution)
@@ -550,41 +550,41 @@ if(_exe_count GREATER 0)
         _json_get_bool_from_key("${_exe_json}" "skip" _skip)
         
         if(NOT _skip)
-            # Executable verarbeiten
+            # Process the executable
         endif()
     endforeach()
 endif()
 ```
 
-### 4.3 Test-Configuration mit Defaults
+### 4.3 Test Configuration with Defaults
 
 ```cmake
-# Test-JSON: { "name": "UnitTests", "type": "unit", "timeout": 60 }
+# Test JSON: { "name": "UnitTests", "type": "unit", "timeout": 60 }
 _json_get_string("${_test_json}" "name" _name)
 _json_get_string("${_test_json}" "type" _type)
 
-# Optional mit Default
+# Optional with default
 _json_get_number_or_default("${_test_json}" "timeout" 30 _timeout)
 _json_get_bool_or_default("${_test_json}" "skip" FALSE _skip)
 _json_get_bool_or_default("${_test_json}" "parallel" TRUE _parallel)
 
-# Labels als Liste
+# Labels as a list
 _json_get_array_as_list("${_test_json}" "labels" _labels)
 if("${_labels}" STREQUAL "")
-    set(_labels "${_type}")  # Default: Typ als Label
+    set(_labels "${_type}")  # Default: type as label
 endif()
 ```
 
 ---
 
-## 5. Return Values und Errorbehandlung
+## 5. Return Values and Error Handling
 
-### 5.1 Errortolerantes Design
+### 5.1 Fault-Tolerant Design
 
-Alle Functions geben bei Errorn sinnvolle Defaults zurück:
+All functions return sensible defaults on errors:
 
-| Funktion | Bei Error |
-|----------|------------|
+| Function | On error |
+|----------|----------|
 | `_json_has_key` | FALSE |
 | `_json_get_string` | "" |
 | `_json_get_string_or_default` | DEFAULT |
@@ -599,64 +599,64 @@ Alle Functions geben bei Errorn sinnvolle Defaults zurück:
 | `_json_get_object_or_empty` | "{}" |
 | `_json_get_type` | "" |
 
-### 5.2 Keine Exceptions
+### 5.2 No Exceptions
 
-Das Modul wirft keine Error. Die Validierung von Requiredfeldern erfolgt durch die aufrufenden Module (z.B. Validation.cmake mit cmake_fatal).
+The module raises no errors. Required fields are validated by the calling modules (e.g. Validation.cmake with cmake_fatal).
 
 ---
 
 ## 6. Best Practices
 
-### 6.1 Immer Key-Existenz prüfen bei kritischen Feldern
+### 6.1 Always Check Key Existence for Critical Fields
 
 ```cmake
-# ✅ Gut - explizite Prüfung
+# ✅ Good - explicit check
 _json_has_key("${_json}" "name" _has_name)
 if(NOT _has_name)
-    cmake_fatal("E001" "Requiredfeld 'name' fehlt")
+    cmake_fatal("E001" "Required field 'name' missing")
 endif()
 _json_get_string("${_json}" "name" _name)
 
-# ❌ Schlecht - keine Prüfung
+# ❌ Bad - no check
 _json_get_string("${_json}" "name" _name)
-# _name könnte leer sein!
+# _name could be empty!
 ```
 
-### 6.2 _or_default für optionale Felder
+### 6.2 _or_default for Optional Fields
 
 ```cmake
-# ✅ Gut - Default-Wert
+# ✅ Good - default value
 _json_get_string_or_default("${_json}" "type" "CONSOLE" _type)
 _json_get_bool_or_default("${_json}" "skip" FALSE _skip)
 
-# ❌ Schlecht - manuelle Prüfung
+# ❌ Bad - manual check
 _json_get_string("${_json}" "type" _type)
 if("${_type}" STREQUAL "")
     set(_type "CONSOLE")
 endif()
 ```
 
-### 6.3 Typ prüfen bei polymorphen Feldern
+### 6.3 Check the Type for Polymorphic Fields
 
 ```cmake
 _json_get_type("${_json}" "version" _type)
 if("${_type}" STREQUAL "STRING")
-    # Einfache Version: "1.0.0"
+    # Simple version: "1.0.0"
 elseif("${_type}" STREQUAL "OBJECT")
-    # Komplexe Version: { "major": 1, "minor": 0 }
+    # Complex version: { "major": 1, "minor": 0 }
 endif()
 ```
 
-### 6.4 _json_get_array_as_list für Listen
+### 6.4 _json_get_array_as_list for Lists
 
 ```cmake
-# ✅ Gut - kompakt mit _json_get_array_as_list
+# ✅ Good - compact with _json_get_array_as_list
 _json_get_array_as_list("${_json}" "dependencies" _deps)
 foreach(_dep IN LISTS _deps)
     target_link_libraries(${_target} PRIVATE ${_dep})
 endforeach()
 
-# ❌ Umständlich - manuelle Iteration
+# ❌ Cumbersome - manual iteration
 _json_array_length("${_json}" "dependencies" _count)
 if(_count GREATER 0)
     math(EXPR _last "${_count} - 1")
@@ -671,19 +671,20 @@ endif()
 
 ## 7. See Also
 
-- [Validation.cmake](Validation.md) — Schema-Validierung mit Json.cmake
-- [Solution.cmake](../project/Solution.md) — Hauptnutzer von Json.cmake
-- [TestCollect.cmake](../project/TestCollect.md) — Verwendet _json_get_bool_or_default, _json_get_array_as_list
-- [CMake string(JSON)](https://cmake.org/cmake/help/latest/command/string.html#json) — CMake-Dokumentation
+- [Validation.cmake](Validation.md) — schema validation with Json.cmake
+- [Solution.cmake](../project/Solution.md) — main user of Json.cmake
+- [TestCollect.cmake](../project/TestCollect.md) — uses _json_get_bool_or_default, _json_get_array_as_list
+- [CMake string(JSON)](https://cmake.org/cmake/help/latest/command/string.html#json) — CMake documentation
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Neu: _json_get_bool_or_default() für Boolean mit Default, _json_get_array_as_list() für Array→Liste Konvertierung. Zentralisierung aller JSON-Helper (zuvor teilweise in TestCollect.cmake dupliziert)** |
-| 0.5.1 | 2025-12-17 | Neu: _json_get_number(), _json_get_number_or_default() für numerische Werte |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.6.0 | 2025-12-18 | New: _json_get_bool_or_default() for booleans with default, _json_get_array_as_list() for array→list conversion. Centralization of all JSON helpers (previously partly duplicated in TestCollect.cmake) |
+| 0.5.1 | 2025-12-17 | New: _json_get_number(), _json_get_number_or_default() for numeric values |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): _json_has_key, _json_get_string, _json_get_string_or_default, _json_get_bool_from_key, _json_array_length, _json_array_get, _json_get_object, _json_get_object_or_empty, _json_get_type |
+| 0.1.0 | 2025-12-03 | Initial (clean start): _json_has_key, _json_get_string, _json_get_string_or_default, _json_get_bool_from_key, _json_array_length, _json_array_get, _json_get_object, _json_get_object_or_empty, _json_get_type |

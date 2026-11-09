@@ -1,13 +1,13 @@
 # Solution Schema — Referenz
 
-> **Version:** 1.0.0  
+> **Version:** 1.0.7  
 > **Solution Schema Version:** 1.0  
-> **Datum:** 2025-12-20  
+> **Datum:** 2026-11-09  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Solution_Schema.md](Solution_Schema.md)
+> **English:** [Solution_Schema.md](../../../en/guide/references/Solution_Schema.md)
 
 ---
 
@@ -285,7 +285,7 @@ Für große, extern installierte Bibliotheken wie Qt6, Boost, OpenCV.
 | `components` | – | string[] | find_package() COMPONENTS |
 | `hints` | – | string[] | Zusätzliche Suchpfade |
 | `backup` | – | string | Fallback-Pfad (löst W501 aus) |
-| `required` | – | boolean | find_package() REQUIRED (Default: true) |
+| `required` | – | boolean | Paket muss gefunden werden, sonst E503/E504/E505 (Default: true); `find_package()` läuft immer ohne `REQUIRED` |
 
 #### Pfad-Auflösung (Reihenfolge)
 
@@ -1075,7 +1075,7 @@ projects/apps/{AppName}/
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "1.0",
     "solution": {
         "name": "MyProject",
         "version": "1.0.0",
@@ -1162,11 +1162,13 @@ projects/apps/{AppName}/
 | E213 | Include.cmake für lokales External nicht gefunden |
 | E214 | Local external path existiert nicht |
 | E216 | Explizit angegebener Hook nicht gefunden |
-| E217 | PostFetch Hook erforderlich (cmakeSupport: false) |
+| E217 | PostFetch Hook erforderlich (cmakeSupport: false) — derzeit nicht ausgelöst, gemeldet als E201 |
 | E218 | Nicht im Cache und Offline-Modus aktiv |
 | E220 | Archive external: `pin` Feld fehlt |
 | **E502** | **System external: `package` Feld fehlt** |
 | **E503** | **System external: find_package() fehlgeschlagen** |
+| **E504** | **System external: Paket gefunden, aber nicht alle Komponenten aus `components`** |
+| **E505** | **System external: keine Version passend zu `version` gefunden** |
 
 ### 12.2 Test-bezogene Fehler (standalone tests[])
 
@@ -1233,12 +1235,14 @@ projects/apps/{AppName}/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.11.0** | **2026-11-07** | **CMakeCraft v0.14.0: `compile_options` für libraries[] (§7, E105 bei INTERFACE); Quellpaket einer Library im Block `packages` (`library` statt `contents`, [Packages.md](Packages.md) §2.5, E106)** |
-| **0.10.0** | **2026-10-23** | **CMakeCraft v0.12.0: Block `settings.msvc` mit `parallel_compile` (§4.4, Vorgabe 8), E004** |
-| **0.9.0** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` für apps[].tests.targets[] (§9.8); Laufzeitdateien eines Archive Externals kopiert ein eigenes Ziel bei jedem Bau (§5.8)** |
-| **0.8.0** | **2026-10-09** | **CMakeCraft v0.10.0: Block `packages`, Archive Externals (§5.8), `output_name` und `defines` für libraries[], `{version}` in `defines`. Berichtigt: Hook-Pfade heißen `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` eines System Externals ist eine Mindestversion ohne Operator (§5.4), Fehlertabelle §12.1 (E216–E220) und W302 an den Code angeglichen** |
-| **0.7.4** | **2026-10-05** | **Fix: `external_options` für apps[].tests.targets[] (§9.8) wird angewandt — bisher bekam das Test-Target jedes External mit leeren Optionen. Vorhandene Einträge werden damit erstmals wirksam. Das Test-Framework bleibt ohne Optionen** |
-| 0.7.3 | 2026-07-20 | Neu: `dependencies` für apps[].tests.targets[] (§9.8) — interne Libraries werden direkt ans Test-Target gelinkt (E101 bei unbekannter Dependency). Vorher wurde der Key ignoriert |
+| **1.0.7** | **2026-11-09** | **An den Code angeglichen: `schemaVersion` im vollständigen Beispiel §11 ist `"1.0"` (`cmake/project/Solution.cmake:50`); CMakeCraft v0.14.1: `required` ohne `find_package(… REQUIRED)`, E504/E505 in §12.1, E217 als nicht ausgelöst** |
+| **1.0.6** | **2026-11-07** | **CMakeCraft v0.14.0: `compile_options` für libraries[] (§7, E105 bei INTERFACE); Quellpaket einer Library im Block `packages` (`library` statt `contents`, [Packages.md](Packages.md) §2.5, E106)** |
+| **1.0.5** | **2026-10-23** | **CMakeCraft v0.12.0: Block `settings.msvc` mit `parallel_compile` (§4.4, Vorgabe 8), E004** |
+| **1.0.4** | **2026-10-09** | **CMakeCraft v0.11.0: `compile_options` für apps[].tests.targets[] (§9.8); Laufzeitdateien eines Archive Externals kopiert ein eigenes Ziel bei jedem Bau (§5.8)** |
+| **1.0.3** | **2026-10-09** | **CMakeCraft v0.10.0: Block `packages`, Archive Externals (§5.8), `output_name` und `defines` für libraries[], `{version}` in `defines`. Berichtigt: Hook-Pfade heißen `hooks.preFetch`/`hooks.postFetch` (§5.3), `version` eines System Externals ist eine Mindestversion ohne Operator (§5.4), Fehlertabelle §12.1 (E216–E220) und W302 an den Code angeglichen** |
+| **1.0.2** | **2026-10-05** | **Fix: `external_options` für apps[].tests.targets[] (§9.8) wird angewandt — bisher bekam das Test-Target jedes External mit leeren Optionen. Vorhandene Einträge werden damit erstmals wirksam. Das Test-Framework bleibt ohne Optionen** |
+| 1.0.1 | 2026-07-20 | Neu: `dependencies` für apps[].tests.targets[] (§9.8) — interne Libraries werden direkt ans Test-Target gelinkt (E101 bei unbekannter Dependency). Vorher wurde der Key ignoriert |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.7.2 | 2025-12-20 | Neu: `skip` für externals (§5.7) - Externals vorbereiten ohne zu laden. E013 bei Verwendung geskippter Externals |
 | 0.7.1 | 2025-12-20 | Konsistente external_options: Für libraries[], apps.core, apps.runner hinzugefügt (fehlte bisher). Nun einheitlich wie executables[] und tests[] |
 | 0.7.0 | 2025-12-18 | Phase 9: System Externals mit `system: true` Syntax, find_package() Integration, Package-Hooks (Qt6, Boost), Error-Codes E502/E503/W501, Pfad-Auflösung mit ENV-Variablen |

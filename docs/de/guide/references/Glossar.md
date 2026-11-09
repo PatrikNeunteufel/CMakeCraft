@@ -1,12 +1,12 @@
 # Glossar — Referenz
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-24  
+> **Datum:** 2025-12-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Glossar.md](Glossar.md)
+> **English:** [Glossar.md](../../../en/guide/references/Glossar.md)
 
 ---
 
@@ -393,6 +393,7 @@ Konsistente Übersetzungen zwischen Deutsch und Englisch:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-24** | **Neue Abschnitte: 7. Architektur-Patterns (Service/Agent-Architektur, EventBus, CommandBus, Publish/Subscribe, Dependency Injection, Design-Prinzipien), 8. C++-Idiome (RAII, PIMPL, CRTP, Type-Erasure, StrongId, Rule of Zero/Five). Neue Abkürzungen: DI, EMA, FFT, FPS, LOC, RAII, TDD. Neue Datei-Extensions: .vert, .frag, .glsl** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.6.0 | 2025-12-24 | Neue Abschnitte: 7. Architektur-Patterns (Service/Agent-Architektur, EventBus, CommandBus, Publish/Subscribe, Dependency Injection, Design-Prinzipien), 8. C++-Idiome (RAII, PIMPL, CRTP, Type-Erasure, StrongId, Rule of Zero/Five). Neue Abkürzungen: DI, EMA, FFT, FPS, LOC, RAII, TDD. Neue Datei-Extensions: .vert, .frag, .glsl |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 Format: Nummeriertes TOC, Reference-Header, vollständige Fehlercode-Bereiche |
 | 0.1.0 | 2025-12-05 | Initial: Begriffe aus allen Dokumentationen gesammelt |

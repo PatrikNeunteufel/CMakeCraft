@@ -1,14 +1,14 @@
 # PreFetch/googletest.cmake — GoogleTest PreFetch Hook
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-16  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [googletest_PreFetch.md](../../en/modules/externals/hooks/prefetch/googletest_PreFetch.md)  
-> **Hook:** [cmake/externals/Hooks/PreFetch/googletest.cmake](../../../../../cmake/externals/Hooks/PreFetch/googletest.cmake)  
+> **English:** [googletest_PreFetch.md](../../../../../../en/guide/module/externals/hooks/prefetch/Googletest.md)  
+> **Hook:** [cmake/externals/Hooks/PreFetch/googletest.cmake](../../../../../../../cmake/externals/hooks/prefetch/googletest.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -193,8 +193,8 @@ Hierfür `gtest` statt `gtest_main` linken.
 
 - [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook-System
 - [Targets_cmake.md](../../registry/Targets_cmake.md) — Target-Registrierung
-- [catch2_PreFetch.md](catch2_PreFetch.md) — Catch2 Alternative
-- [Tests_cmake.md](../../../project/Tests_cmake.md) — Test-Pipeline
+- [catch2_PreFetch.md](Catch2.md) — Catch2 Alternative
+- [Tests_cmake.md](../../../project/Tests.md) — Test-Pipeline
 
 ---
 
@@ -202,4 +202,5 @@ Hierfür `gtest` statt `gtest_main` linken.
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-16** | **Initiale Dokumentation im Blueprint v0.5.0 Format** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-16 | Initiale Dokumentation im Blueprint v0.5.0 Format |

@@ -1,14 +1,14 @@
 # Json.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Json.md](Json.md)  
-> **Modul:** [`cmake/core/Json.cmake`](../../../../cmake/core/Json.cmake)  
+> **English:** [Json.md](../../../../en/guide/module/core/Json.md)  
+> **Modul:** [`cmake/core/Json.cmake`](../../../../../cmake/core/Json.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -22,7 +22,7 @@
 5. [Rückgabewerte und Fehlerbehandlung](#5-rückgabewerte-und-fehlerbehandlung)
 6. [Best Practices](#6-best-practices)
 7. [Siehe auch](#7-siehe-auch)
-8. [Changelog](#8-changelog)
+8. [Changelog](#changelog)
 
 ---
 
@@ -682,7 +682,8 @@ endif()
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Neu: _json_get_bool_or_default() für Boolean mit Default, _json_get_array_as_list() für Array→Liste Konvertierung. Zentralisierung aller JSON-Helper (zuvor teilweise in TestCollect.cmake dupliziert)** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.6.0 | 2025-12-18 | Neu: _json_get_bool_or_default() für Boolean mit Default, _json_get_array_as_list() für Array→Liste Konvertierung. Zentralisierung aller JSON-Helper (zuvor teilweise in TestCollect.cmake dupliziert) |
 | 0.5.1 | 2025-12-17 | Neu: _json_get_number(), _json_get_number_or_default() für numerische Werte |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |

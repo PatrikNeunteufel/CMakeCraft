@@ -3,7 +3,7 @@
 > **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../en/userguides/README.md)
+> **English:** [README.md](../../../en/guide/userguides/README.md)
 
 ---
 
@@ -100,6 +100,6 @@ User Guides sind praktische Anleitungen für konkrete Aufgaben. Sie folgen dem [
 
 ## Siehe auch
 
-- [../README.md](../README.md) — Deutsche Dokumentation Übersicht
+- [../README.md](../../README.md) — Deutsche Dokumentation Übersicht
 - [../blueprints/Guide.md](../../autorenwerk/blueprints/Guide.md) — Guide Blueprint
 - [../references/](../references/README.md) — Nachschlagewerke

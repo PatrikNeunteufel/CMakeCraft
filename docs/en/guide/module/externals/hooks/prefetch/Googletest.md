@@ -3,56 +3,56 @@
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [googletest_PreFetch.md](../../en/modules/externals/hooks/prefetch/googletest_PreFetch.md)  
-> **Hook:** [cmake/externals/Hooks/PreFetch/googletest.cmake](../../../../../cmake/externals/Hooks/PreFetch/googletest.cmake)  
+> **German:** [Googletest.md](../../../../../../de/guide/module/externals/hooks/prefetch/Googletest.md)  
+> **Hook:** [cmake/externals/Hooks/PreFetch/googletest.cmake](../../../../../../../cmake/externals/hooks/prefetch/googletest.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Warum ein PreFetch Hook?](#2-warum-ein-prefetch-hook)
+1. [Overview](#1-overview)
+2. [Why a PreFetch Hook?](#2-why-a-prefetch-hook)
 3. [Target Mapping](#3-target-mapping)
-4. [Gesetzte Optionen](#4-gesetzte-optionen)
+4. [Options Set](#4-options-set)
 5. [Windows CRT Fix](#5-windows-crt-fix)
-6. [Solution.json Configuration](#6-solutionjson-konfiguration)
-7. [Erstellte Targets](#7-erstellte-targets)
-8. [Usage in Tests](#8-verwendung-in-tests)
-9. [See Also](#9-siehe-auch)
+6. [Solution.json Configuration](#6-solutionjson-configuration)
+7. [Created Targets](#7-created-targets)
+8. [Usage in Tests](#8-usage-in-tests)
+9. [See Also](#9-see-also)
 10. [Changelog](#10-changelog)
 
 ---
 
 ## 1. Overview
 
-Der `googletest.cmake` PreFetch Hook konfiguriert Google Test und Google Mock vor dem Build. Er definiert Target-Mappings und behebt den häufigen Windows CRT-Linking-Error.
+The `googletest.cmake` PreFetch hook configures Google Test and Google Mock before the build. It defines target mappings and fixes the common Windows CRT linking error.
 
 ---
 
-## 2. Warum ein PreFetch Hook?
+## 2. Why a PreFetch Hook?
 
-**Problem 1 — Target-Namen:**  
-GoogleTest erstellt Targets mit anderen Namen als der External-Name (`gtest`, `gmock` statt `googletest`).
+**Problem 1 — Target names:**  
+GoogleTest creates targets with names other than the external name (`gtest`, `gmock` instead of `googletest`).
 
 **Problem 2 — Windows CRT:**  
-Ohne `gtest_force_shared_crt=ON` gibt es auf Windows Linker-Error:
+Without `gtest_force_shared_crt=ON` there are linker errors on Windows:
 ```
 LNK2038: mismatch detected for 'RuntimeLibrary'
 ```
 
-**Problem 3 — Unnötige Installation:**  
-Ohne Hook wird ein Install-Target erstellt, das bei FetchContent nicht benötigt wird.
+**Problem 3 — Unneeded installation:**  
+Without the hook, an install target is created that is not needed with FetchContent.
 
 ---
 
 ## 3. Target Mapping
 
-Der Hook registriert die GoogleTest-Targets über Global Properties:
+The hook registers the GoogleTest targets via global properties:
 
 ```cmake
 set_property(GLOBAL PROPERTY HOOK_KNOWN_TARGETS_${HOOK_EXTERNAL_NAME}
@@ -63,26 +63,26 @@ set_property(GLOBAL PROPERTY HOOK_PRIMARY_TARGET_${HOOK_EXTERNAL_NAME}
 )
 ```
 
-| Property | Wert | Description |
-|----------|------|--------------|
-| `HOOK_KNOWN_TARGETS` | `gtest;gtest_main;gmock;gmock_main` | Alle verfügbaren Targets |
-| `HOOK_PRIMARY_TARGET` | `gmock_main` | Standard-Target (enthält gtest + gmock) |
+| Property | Value | Description |
+|----------|-------|-------------|
+| `HOOK_KNOWN_TARGETS` | `gtest;gtest_main;gmock;gmock_main` | All available targets |
+| `HOOK_PRIMARY_TARGET` | `gmock_main` | Default target (contains gtest + gmock) |
 
 ---
 
-## 4. Gesetzte Optionen
+## 4. Options Set
 
-| Option | Wert | Description |
-|--------|------|--------------|
-| `BUILD_GMOCK` | `ON` | Google Mock mit bauen |
-| `INSTALL_GTEST` | `OFF` | Kein Install-Target |
-| `gtest_hide_internal_symbols` | `ON` | Interne Symbole verstecken |
+| Option | Value | Description |
+|--------|-------|-------------|
+| `BUILD_GMOCK` | `ON` | Build Google Mock as well |
+| `INSTALL_GTEST` | `OFF` | No install target |
+| `gtest_hide_internal_symbols` | `ON` | Hide internal symbols |
 
 ---
 
 ## 5. Windows CRT Fix
 
-Auf Windows wird automatisch gesetzt:
+On Windows the following is set automatically:
 
 ```cmake
 set(gtest_force_shared_crt ON CACHE BOOL 
@@ -91,11 +91,11 @@ set(gtest_force_shared_crt ON CACHE BOOL
 )
 ```
 
-### Hintergrund
+### Background
 
-GoogleTest kompiliert standardmäßig mit **statischer CRT** (`/MT`), aber die meisten Projekte verwenden **dynamische CRT** (`/MD`). Dies führt zu Linker-Errorn.
+By default GoogleTest compiles with the **static CRT** (`/MT`), but most projects use the **dynamic CRT** (`/MD`). This leads to linker errors.
 
-Die Option `gtest_force_shared_crt=ON` sorgt dafür, dass GoogleTest die gleiche CRT wie das Hauptprojekt verwendet.
+The option `gtest_force_shared_crt=ON` makes GoogleTest use the same CRT as the main project.
 
 ---
 
@@ -112,7 +112,7 @@ Die Option `gtest_force_shared_crt=ON` sorgt dafür, dass GoogleTest die gleiche
 }
 ```
 
-### In Tests verwenden
+### Using It in Tests
 
 ```json
 {
@@ -124,26 +124,26 @@ Die Option `gtest_force_shared_crt=ON` sorgt dafür, dass GoogleTest die gleiche
 }
 ```
 
-**Note:** Das Test-System fügt `googletest` automatisch zu den Externals hinzu, wenn `"framework": "googletest"` gesetzt ist.
+**Note:** The test system automatically adds `googletest` to the externals when `"framework": "googletest"` is set.
 
 ---
 
-## 7. Erstellte Targets
+## 7. Created Targets
 
-| Target | Typ | Description |
-|--------|-----|--------------|
-| `gtest` | STATIC | Google Test ohne main() |
-| `gtest_main` | STATIC | Google Test mit main() |
-| `gmock` | STATIC | Google Mock ohne main() |
-| `gmock_main` | STATIC | Google Mock mit main() (empfohlen) |
+| Target | Type | Description |
+|--------|------|-------------|
+| `gtest` | STATIC | Google Test without main() |
+| `gtest_main` | STATIC | Google Test with main() |
+| `gmock` | STATIC | Google Mock without main() |
+| `gmock_main` | STATIC | Google Mock with main() (recommended) |
 
-**Empfehlung:** Für die meisten Tests `gmock_main` verwenden (PRIMARY Target) — enthält sowohl Google Test als auch Google Mock.
+**Recommendation:** Use `gmock_main` for most tests (PRIMARY target) — it contains both Google Test and Google Mock.
 
 ---
 
 ## 8. Usage in Tests
 
-### Einfacher Test mit gmock_main
+### Simple Test with gmock_main
 
 ```cpp
 #include <gtest/gtest.h>
@@ -153,9 +153,9 @@ TEST(ExampleTest, BasicAssertion) {
 }
 ```
 
-Kein eigenes `main()` nötig — wird von `gmock_main` bereitgestellt.
+No own `main()` needed — it is provided by `gmock_main`.
 
-### Test mit Mocking
+### Test with Mocking
 
 ```cpp
 #include <gtest/gtest.h>
@@ -173,7 +173,7 @@ TEST(MockTest, Example) {
 }
 ```
 
-### Test mit eigenem Main
+### Test with Its Own Main
 
 ```cpp
 #include <gtest/gtest.h>
@@ -185,21 +185,22 @@ int main(int argc, char** argv) {
 }
 ```
 
-Hierfür `gtest` statt `gtest_main` linken.
+For this, link `gtest` instead of `gtest_main`.
 
 ---
 
 ## 9. See Also
 
-- [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook-System
-- [Targets_cmake.md](../../registry/Targets_cmake.md) — Target-Registrierung
-- [catch2_PreFetch.md](catch2_PreFetch.md) — Catch2 Alternative
-- [Tests_cmake.md](../../../project/Tests_cmake.md) — Test-Pipeline
+- [HookLoader_cmake.md](../HookLoader_cmake.md) — Hook system
+- [Targets_cmake.md](../../registry/Targets_cmake.md) — Target registration
+- [Catch2.md](Catch2.md) — Catch2 alternative
+- [Tests.md](../../../project/Tests.md) — Test pipeline
 
 ---
 
 ## 10. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-16** | **Initiale Dokumentation im Blueprint v0.5.0 Format** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-16 | Initial documentation in Blueprint v0.5.0 format |

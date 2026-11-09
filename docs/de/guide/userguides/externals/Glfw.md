@@ -1,12 +1,12 @@
 # GLFW — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [glfw.md](../../../en/userguides/externals/Glfw.md)
+> **English:** [glfw.md](../../../../en/guide/userguides/externals/Glfw.md)
 
 ---
 
@@ -20,7 +20,7 @@
 6. [Mit GLAD und ImGui](#6-mit-glad-und-imgui)
 7. [Troubleshooting](#7-troubleshooting)
 8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -507,7 +507,7 @@ int main() {
 }
 ```
 
-Siehe [glad.md](glad.md) und [imgui.md](imgui.md) für mehr Details.
+Siehe [glad.md](Glad.md) und [imgui.md](Imgui.md) für mehr Details.
 
 ---
 
@@ -564,8 +564,8 @@ glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 - [Externals.md](../Externals.md) — Externals Kombinationen
 - [Git_Externals_GUI.md](../../references/externals/Git_Externals_GUI.md) — Referenz
-- [glad.md](glad.md) — OpenGL Loader
-- [imgui.md](imgui.md) — GUI Framework
+- [glad.md](Glad.md) — OpenGL Loader
+- [imgui.md](Imgui.md) — GUI Framework
 
 ---
 
@@ -573,4 +573,5 @@ glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für GLFW** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für GLFW |

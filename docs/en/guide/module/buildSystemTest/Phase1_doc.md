@@ -1,4 +1,4 @@
-# phase1.cmake — Modul-Dokumentation
+# phase1.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
@@ -6,28 +6,29 @@
 > **Path:** `cmake/buildSystemTest/phase1.cmake`  
 > **Status:** Stable  
 > **Language:** English  
+> **German:** [Phase1_doc.md](../../../../de/guide/module/buildSystemTest/Phase1_doc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Tests](#2-tests)
-3. [Successs-Flag](#3-erfolgs-flag)
-4. [See Also](#4-siehe-auch)
-5. [Changelog](#5-changelog)
+3. [Success Flag](#3-success-flag)
+4. [See Also](#4-see-also)
+5. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Phase 1** testet die **Core-Module** — die fundamentalen Bausteine des Build-Systems.
+**Phase 1** tests the **core modules** — the fundamental building blocks of the build system.
 
-| Aspekt | Description |
-|--------|--------------|
-| **Zweck** | Core Module Validation |
-| **Debug-ID** | `PHASE1_TEST` |
-| **Dependencies** | Alle Core-Module müssen geladen sein |
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Core module validation |
+| **Debug ID** | `PHASE1_TEST` |
+| **Dependencies** | All core modules must be loaded |
 
 ---
 
@@ -41,40 +42,40 @@ ctx_set(TEST_CTX NAME "TestTarget")
 ctx_get(TEST_CTX NAME _test_name)
 ```
 
-| Test | Prüft |
-|------|-------|
-| `ctx_create` | Context erstellen |
-| `ctx_set` | Werte setzen |
-| `ctx_get` | Werte lesen |
+| Test | Checks |
+|------|--------|
+| `ctx_create` | Create a context |
+| `ctx_set` | Set values |
+| `ctx_get` | Read values |
 
 ### 2.2 JSON Helpers
 
-| Funktion | Prüft |
-|----------|-------|
-| `_json_has_key` | Key-Existenz |
-| `_json_get_string` | String-Werte |
-| `_json_get_string_or_default` | Default-Werte |
-| `_json_get_bool_from_key` | Boolean-Werte |
-| `_json_get_type` | Typ-Erkennung |
+| Function | Checks |
+|----------|--------|
+| `_json_has_key` | Key existence |
+| `_json_get_string` | String values |
+| `_json_get_string_or_default` | Default values |
+| `_json_get_bool_from_key` | Boolean values |
+| `_json_get_type` | Type detection |
 
 ### 2.3 Debug System
 
-| Funktion | Prüft |
-|----------|-------|
-| `dbg_init` | Debug-Initialisierung |
-| `dbg` | Debug-Ausgaben (alle Level) |
-| `dbgspace` | Leerzeilen |
-| `enddbgblock` | Block-Ende |
+| Function | Checks |
+|----------|--------|
+| `dbg_init` | Debug initialization |
+| `dbg` | Debug output (all levels) |
+| `dbgspace` | Blank lines |
+| `enddbgblock` | Block end |
 
 ### 2.4 Warning System
 
-| Funktion | Prüft |
-|----------|-------|
-| `cmake_warn` | Nicht-fatale Warningen |
+| Function | Checks |
+|----------|--------|
+| `cmake_warn` | Non-fatal warnings |
 
 ---
 
-## 3. Successs-Flag
+## 3. Success Flag
 
 ```cmake
 set(PHASE1_TEST_PASSED TRUE CACHE BOOL "Phase 1 Test passed" FORCE)
@@ -94,7 +95,8 @@ set(PHASE1_TEST_PASSED TRUE CACHE BOOL "Phase 1 Test passed" FORCE)
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Blueprint v0.5.0 Format** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Blueprint v0.5.0 format |
 | 0.1.0 | 2025-12-05 | Initial |

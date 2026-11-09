@@ -18,8 +18,8 @@
 // All application logic resides in Application (src/).
 //
 // Build system automatically sets:
-//   - APP_GUI    : For runner.type = "GUI" (Windows: WinMain)
-//   - APP_CONSOLE: For runner.type = "CONSOLE"
+//   - APP_WINDOWS_GUI: for runner.type = "GUI"/"WINDOW" on Windows
+//   (runner.type = "CONSOLE": no define)
 //
 // NOTE: If PCH is disabled in Solution.json, remove the #include "pch.h" line.
 //

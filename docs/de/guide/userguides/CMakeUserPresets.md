@@ -1,12 +1,12 @@
 # CMake User Presets – Benutzerhandbuch
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-14  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** C++ Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [CMakeUserPresets_UserGuide.md](../../en/userguides/CMakeUserPresets.md)
+> **English:** [CMakeUserPresets_UserGuide.md](../../../en/guide/userguides/CMakeUserPresets.md)
 
 ---
 
@@ -98,7 +98,7 @@ Erstelle `CMakeUserPresets.json` im Projekt-Root:
         {
             "name": "my-debug",
             "displayName": "Mein Debug Build",
-            "inherits": "windows-ninja-debug",
+            "inherits": "windows-ninja-debug-msvc",
             "cacheVariables": {
                 "BUILD_TESTS": "ON"
             }
@@ -173,7 +173,7 @@ cmake --build out/build/my-debug
 ```json
 {
     "name": "my-preset",
-    "inherits": ["windows-ninja-debug", "with-vcpkg"],
+    "inherits": ["windows-ninja-debug-msvc", "with-vcpkg"],
     "cacheVariables": {
         "MY_OPTION": "ON"
     }
@@ -213,7 +213,7 @@ cmake --build out/build/my-debug
             "name": "my-config",
             "displayName": "Meine Konfiguration",
             "description": "Debug mit meinen Einstellungen",
-            "inherits": "windows-ninja-debug",
+            "inherits": "windows-ninja-debug-msvc",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "cacheVariables": {
@@ -453,12 +453,12 @@ cmake --workflow --preset full-cycle
         {
             "name": "my-qt-debug",
             "displayName": "Debug mit Qt6",
-            "inherits": ["windows-ninja-debug", "qt-env"]
+            "inherits": ["windows-ninja-debug-msvc", "qt-env"]
         },
         {
             "name": "my-qt-release",
             "displayName": "Release mit Qt6",
-            "inherits": ["windows-ninja-release", "qt-env"]
+            "inherits": ["windows-ninja-release-msvc", "qt-env"]
         }
     ]
 }
@@ -481,7 +481,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "my-debug-vcpkg",
             "displayName": "Debug + vcpkg",
-            "inherits": ["windows-ninja-debug", "with-vcpkg"]
+            "inherits": ["windows-ninja-debug-msvc", "with-vcpkg"]
         }
     ]
 }
@@ -496,7 +496,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "dev-fast",
             "displayName": "Schnelle Entwicklung",
-            "inherits": "windows-ninja-debug",
+            "inherits": "windows-ninja-debug-msvc",
             "cacheVariables": {
                 "BUILD_TESTS": "OFF",
                 "BUILD_ONLY": "MyApp"
@@ -522,7 +522,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "with-asan",
             "displayName": "AddressSanitizer",
-            "inherits": "linux-ninja-debug",
+            "inherits": "linux-gcc-debug",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-fsanitize=address -fno-omit-frame-pointer",
                 "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address"
@@ -531,7 +531,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "with-ubsan",
             "displayName": "UndefinedBehaviorSanitizer",
-            "inherits": "linux-ninja-debug",
+            "inherits": "linux-gcc-debug",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-fsanitize=undefined",
                 "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=undefined"
@@ -574,7 +574,7 @@ cmake --workflow --preset full-cycle
             "name": "my-dev",
             "displayName": "Meine Entwicklungsumgebung",
             "description": "Debug mit Qt und vcpkg",
-            "inherits": ["windows-ninja-debug", "qt-env", "vcpkg-env"],
+            "inherits": ["windows-ninja-debug-msvc", "qt-env", "vcpkg-env"],
             "cacheVariables": {
                 "BUILD_TESTS": "ON"
             }
@@ -582,7 +582,7 @@ cmake --workflow --preset full-cycle
         {
             "name": "my-release",
             "displayName": "Mein Release Build",
-            "inherits": ["windows-ninja-release", "qt-env", "vcpkg-env"]
+            "inherits": ["windows-ninja-release-msvc", "qt-env", "vcpkg-env"]
         }
     ],
 
@@ -679,16 +679,23 @@ cat CMakeUserPresets.json | python -m json.tool
 
 **Problem:** Einstellungen vom Parent werden nicht übernommen.
 
-**Ursache:** `inherits` als String statt Array.
+**Ursache:** Meist die Reihenfolge: Liefern mehrere Eltern dasselbe Feld, gilt der Wert des
+**ersten** Eintrags in `inherits`; ein Feld im Preset selbst überschreibt alle Eltern. Die Form ist
+dagegen kein Fehler — `inherits` darf ein String (ein Elternteil) oder ein Array sein
+(CMake-Doku `cmake-presets(7)`, Feld `inherits`).
 
 **Lösung:**
 ```json
-// ❌ Falsch
-"inherits": "windows-ninja-debug"
+// Beides gültig und gleichwertig
+"inherits": "windows-ninja-debug-msvc"
+"inherits": ["windows-ninja-debug-msvc"]
 
-// ✅ Richtig
-"inherits": ["windows-ninja-debug"]
+// Bei gleichen Feldern gewinnt das frühere Elternteil: hier qt-env vor with-vcpkg
+"inherits": ["windows-ninja-debug-msvc", "qt-env", "with-vcpkg"]
 ```
+
+Wirkt ein Wert nicht, das Elternteil, das ihn setzen soll, weiter nach vorn stellen oder das Feld
+im Preset selbst setzen.
 
 ### 11.3 Umgebungsvariable nicht gesetzt
 
@@ -707,7 +714,7 @@ cat CMakeUserPresets.json | python -m json.tool
 },
 {
     "name": "my-debug",
-    "inherits": ["windows-ninja-debug", "with-qt"]
+    "inherits": ["windows-ninja-debug-msvc", "with-qt"]
     // Jetzt ist QT_ROOT verfügbar
 }
 ```
@@ -753,7 +760,7 @@ cat CMakeUserPresets.json | python -m json.tool
 
 1. ☐ JSON-Syntax korrekt? (`python -m json.tool`)
 2. ☐ Preset-Name eindeutig?
-3. ☐ `inherits` als Array?
+3. ☐ `inherits`-Reihenfolge richtig (erstes Elternteil gewinnt)?
 4. ☐ Parent-Preset existiert?
 5. ☐ CMake-Version ausreichend?
 6. ☐ Pfade korrekt (Forward Slashes)?
@@ -800,5 +807,7 @@ cmake -LAH out/build/my-debug
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| 1.0.1 | 2026-11-09 | An den Code angeglichen: §11.2 — `inherits` als String ist gültig (CMake-Doku `cmake-presets(7)`); Ursache ist die Reihenfolge der Eltern; Checkliste §12 entsprechend; Basis-Presets auf vorhandene Namen umgestellt (`windows-ninja-debug-msvc`, `windows-ninja-release-msvc`, `linux-gcc-debug`) |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | **0.5.0** | **2025-12-14** | **Blueprint v0.5.0 Konformität: Erweitert mit Workflow Presets, Praxis-Szenarien, Stolpersteine/Troubleshooting** |
 | 0.1.0 | 2025-12-03 | Initial: Templates, Beispiel-Szenarien, Best Practices |

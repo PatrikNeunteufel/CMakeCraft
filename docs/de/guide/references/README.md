@@ -3,7 +3,7 @@
 > **Version:** 1.0.0  
 > **Datum:** 2025-12-15  
 > **Sprache:** Deutsch  
-> **English:** [README.md](../../en/references/README.md)
+> **English:** [README.md](../../../en/guide/references/README.md)
 
 ---
 
@@ -52,7 +52,7 @@ Referenzdokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentier
 
 | Ordner | Dateien | Beschreibung |
 |--------|---------|--------------|
-| [externals/](externals/README.md) | 14 | Externals-Definitionen (Git + Local) |
+| [externals/](Externals.md) | 14 | Externals-Definitionen (Git + Local) |
 
 ---
 
@@ -86,6 +86,6 @@ Referenzdokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentier
 
 ## Siehe auch
 
-- [../README.md](../README.md) — Deutsche Dokumentation Übersicht
+- [../../README.md](../../README.md) — Deutsche Dokumentation Übersicht
 - [../blueprints/Reference.md](../../autorenwerk/blueprints/Reference.md) — Reference Blueprint
 - [../userguides/](../userguides/README.md) — Praktische Anleitungen

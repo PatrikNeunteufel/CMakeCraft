@@ -7,8 +7,8 @@
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Qt-Ads_PostFetch.md](../../../../en/modules/externals/hooks/postfetch/Qt-Ads.md)  
-> **Hook:** [cmake/externals/hooks/postfetch/qt-ads.cmake](../../../../../../cmake/externals/hooks/postfetch/qt-ads.cmake)  
+> **English:** [Qt-Ads_PostFetch.md](../../../../../../en/guide/module/externals/hooks/postfetch/Qt-Ads_PostFetch.md)  
+> **Hook:** [cmake/externals/hooks/postfetch/qt-ads.cmake](../../../../../../../cmake/externals/hooks/postfetch/qt-ads.cmake)  
 > **Modul-Version:** 2.0.0
 
 ---
@@ -300,7 +300,7 @@ oder für 4.3.x:
 
 ## 11. Siehe auch
 
-- [Qt-Ads_PreFetch.md](../prefetch/Qt-Ads.md) — PreFetch Hook (Build-Optionen, Qt6::GuiPrivate, **DLL-Problem-Lösung**)
+- [Qt-Ads_PreFetch.md](../prefetch/Qt-Ads_PreFetch.md) — PreFetch Hook (Build-Optionen, Qt6::GuiPrivate, **DLL-Problem-Lösung**)
 - [HookLoader.md](../../hooks/HookLoader_cmake.md) — Hook-System
 - [Targets.md](../../registry/Targets_cmake.md) — Target-Registrierung
 - [Qt6.md](../../../../userguides/externals/Qt6.md) — Qt6 System External

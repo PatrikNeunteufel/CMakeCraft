@@ -7,8 +7,8 @@
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Fetch_cmake.md](Fetch_cmake.md)  
-> **Modul:** [cmake/externals/Core/Fetch.cmake](../../../cmake/externals/Core/Fetch.cmake)  
+> **English:** [Fetch_cmake.md](../../../../../en/guide/module/externals/core/Fetch_cmake.md)  
+> **Modul:** [cmake/externals/Core/Fetch.cmake](../../../../../../cmake/externals/core/Fetch.cmake)  
 > **Modul-Version:** 1.1.0
 
 ---
@@ -311,7 +311,7 @@ cmake -B build-ci -DEXTERNALS_OFFLINE=ON
 
 ## 9. Siehe auch
 
-- [Handler_cmake.md](Handler_cmake.md) — Fetched External Pipeline
+- [Handler_cmake.md](../fetched/Handler_cmake.md) — Fetched External Pipeline
 - [HookLoader_cmake.md](../hooks/HookLoader_cmake.md) — Pre/PostFetch Hooks
 - [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Type Dispatcher
 

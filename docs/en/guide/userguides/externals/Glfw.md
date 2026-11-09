@@ -4,46 +4,46 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [glfw.md](../../../en/userguides/externals/Glfw.md)
+> **German:** [Glfw.md](../../../../de/guide/userguides/externals/Glfw.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Solution.json Configuration](#2-solutionjson-konfiguration)
-3. [C++ Usage](#3-c-verwendung)
+1. [Overview](#1-overview)
+2. [Solution.json Configuration](#2-solutionjson-configuration)
+3. [C++ Usage](#3-c-usage)
 4. [Input Handling](#4-input-handling)
-5. [Fortgeschrittene Techniken](#5-fortgeschrittene-techniken)
-6. [Mit GLAD und ImGui](#6-mit-glad-und-imgui)
+5. [Advanced Techniques](#5-advanced-techniques)
+6. [With GLAD and ImGui](#6-with-glad-and-imgui)
 7. [Troubleshooting](#7-troubleshooting)
-8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+8. [Further Information](#8-further-information)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**GLFW** ist eine plattformübergreifende Library für Window-Erstellung, OpenGL-Kontexte und Input-Handling.
+**GLFW** is a cross-platform library for window creation, OpenGL contexts and input handling.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Git External |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Git External |
 | **Repository** | https://github.com/glfw/glfw |
-| **Empfohlener Tag** | 3.4 |
-| **Lizenz** | zlib/libpng |
+| **Recommended Tag** | 3.4 |
+| **License** | zlib/libpng |
 | **Website** | [glfw.org](https://www.glfw.org/) |
 
-### Warum GLFW?
+### Why GLFW?
 
-| Vorteil | Description |
-|---------|--------------|
+| Advantage | Description |
+|-----------|-------------|
 | 🪟 **Cross-Platform** | Windows, Linux, macOS |
-| 🎮 **Input** | Keyboard, Mouse, Gamepad |
-| 🖥️ **Multi-Monitor** | Fullscreen & Windowed |
-| ⚡ **Lightweight** | Minimaler Overhead |
+| 🎮 **Input** | Keyboard, mouse, gamepad |
+| 🖥️ **Multi-Monitor** | Fullscreen & windowed |
+| ⚡ **Lightweight** | Minimal overhead |
 
 ---
 
@@ -69,7 +69,7 @@
 }
 ```
 
-### 2.2 Mit GLAD
+### 2.2 With GLAD
 
 ```json
 {
@@ -101,20 +101,20 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 
 ## 3. C++ Usage
 
-### 3.1 Fenster erstellen
+### 3.1 Creating a Window
 
 ```cpp
 #include <GLFW/glfw3.h>
 #include <iostream>
 
 int main() {
-    // GLFW initialisieren
+    // Initialize GLFW
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
     }
     
-    // Fenster erstellen
+    // Create window
     GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW Window", nullptr, nullptr);
     if (!window) {
         std::cerr << "Failed to create window" << std::endl;
@@ -122,26 +122,26 @@ int main() {
         return -1;
     }
     
-    // OpenGL-Kontext aktivieren
+    // Activate OpenGL context
     glfwMakeContextCurrent(window);
     
-    // Main Loop
+    // Main loop
     while (!glfwWindowShouldClose(window)) {
-        // Events verarbeiten
+        // Process events
         glfwPollEvents();
         
-        // Buffer tauschen
+        // Swap buffers
         glfwSwapBuffers(window);
     }
     
-    // Aufräumen
+    // Clean up
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
 ```
 
-### 3.2 OpenGL-Version setzen
+### 3.2 Setting the OpenGL Version
 
 ```cpp
 glfwInit();
@@ -151,7 +151,7 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-// Für macOS erforderlich
+// Required for macOS
 #ifdef __APPLE__
 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
@@ -162,15 +162,15 @@ GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL 3.3", nullptr, nullptr);
 ### 3.3 Window Hints
 
 | Hint | Description | Default |
-|------|--------------|---------|
-| `GLFW_RESIZABLE` | Größe änderbar | `GLFW_TRUE` |
-| `GLFW_VISIBLE` | Sichtbar | `GLFW_TRUE` |
-| `GLFW_DECORATED` | Titelleiste | `GLFW_TRUE` |
-| `GLFW_FOCUSED` | Fokussiert | `GLFW_TRUE` |
-| `GLFW_MAXIMIZED` | Maximiert | `GLFW_FALSE` |
-| `GLFW_FLOATING` | Immer oben | `GLFW_FALSE` |
+|------|-------------|---------|
+| `GLFW_RESIZABLE` | Resizable | `GLFW_TRUE` |
+| `GLFW_VISIBLE` | Visible | `GLFW_TRUE` |
+| `GLFW_DECORATED` | Title bar | `GLFW_TRUE` |
+| `GLFW_FOCUSED` | Focused | `GLFW_TRUE` |
+| `GLFW_MAXIMIZED` | Maximized | `GLFW_FALSE` |
+| `GLFW_FLOATING` | Always on top | `GLFW_FALSE` |
 | `GLFW_TRANSPARENT_FRAMEBUFFER` | Transparent | `GLFW_FALSE` |
-| `GLFW_SAMPLES` | MSAA Samples | 0 |
+| `GLFW_SAMPLES` | MSAA samples | 0 |
 
 ```cpp
 glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -181,24 +181,24 @@ glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 ### 3.4 Fullscreen
 
 ```cpp
-// Primärer Monitor
+// Primary monitor
 GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-// Fullscreen-Fenster
+// Fullscreen window
 GLFWwindow* window = glfwCreateWindow(
     mode->width, mode->height, 
     "Fullscreen", 
-    monitor,        // Monitor für Fullscreen
+    monitor,        // Monitor for fullscreen
     nullptr
 );
 
-// Borderless Fullscreen (Windowed Fullscreen)
+// Borderless fullscreen (windowed fullscreen)
 glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 GLFWwindow* window = glfwCreateWindow(
     mode->width, mode->height,
     "Borderless",
-    nullptr,        // Kein Monitor = Windowed
+    nullptr,        // No monitor = windowed
     nullptr
 );
 glfwSetWindowPos(window, 0, 0);
@@ -209,7 +209,7 @@ glfwSetWindowPos(window, 0, 0);
 ```cpp
 glfwMakeContextCurrent(window);
 
-// VSync aktivieren (1 = ON, 0 = OFF)
+// Enable VSync (1 = ON, 0 = OFF)
 glfwSwapInterval(1);
 ```
 
@@ -227,7 +227,7 @@ while (!glfwWindowShouldClose(window)) {
     }
     
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        // W gedrückt
+        // W pressed
     }
     
     glfwPollEvents();
@@ -240,10 +240,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
     
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-        // Toggle Fullscreen
+        // Toggle fullscreen
     }
     
-    // Modifier prüfen
+    // Check modifiers
     if (mods & GLFW_MOD_CONTROL) {
         if (key == GLFW_KEY_S && action == GLFW_PRESS) {
             // Ctrl+S
@@ -263,22 +263,22 @@ glfwGetCursorPos(window, &xpos, &ypos);
 
 // Buttons
 if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-    // Linke Maustaste
+    // Left mouse button
 }
 
 // Callbacks
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-    // Maus bewegt
+    // Mouse moved
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
-        // Rechtsklick
+        // Right click
     }
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    // Scroll: yoffset > 0 = nach oben
+    // Scroll: yoffset > 0 = up
 }
 
 glfwSetCursorPosCallback(window, cursor_position_callback);
@@ -286,19 +286,19 @@ glfwSetMouseButtonCallback(window, mouse_button_callback);
 glfwSetScrollCallback(window, scroll_callback);
 ```
 
-### 4.3 Cursor-Modi
+### 4.3 Cursor Modes
 
 ```cpp
 // Normal
 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-// Versteckt
+// Hidden
 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-// Gefangen (für FPS-Spiele)
+// Captured (for FPS games)
 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-// Raw Mouse Input (wenn unterstützt)
+// Raw mouse input (if supported)
 if (glfwRawMouseMotionSupported()) {
     glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 }
@@ -307,25 +307,25 @@ if (glfwRawMouseMotionSupported()) {
 ### 4.4 Gamepad
 
 ```cpp
-// Gamepad verbunden?
+// Gamepad connected?
 if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
     // Name
     const char* name = glfwGetJoystickName(GLFW_JOYSTICK_1);
     
-    // Als Gamepad?
+    // As gamepad?
     if (glfwJoystickIsGamepad(GLFW_JOYSTICK_1)) {
         GLFWgamepadstate state;
         if (glfwGetGamepadState(GLFW_JOYSTICK_1, &state)) {
             // Buttons
             if (state.buttons[GLFW_GAMEPAD_BUTTON_A]) {
-                // A gedrückt
+                // A pressed
             }
             
-            // Analog Sticks (-1.0 bis 1.0)
+            // Analog sticks (-1.0 to 1.0)
             float leftX = state.axes[GLFW_GAMEPAD_AXIS_LEFT_X];
             float leftY = state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y];
             
-            // Trigger (0.0 bis 1.0)
+            // Triggers (0.0 to 1.0)
             float leftTrigger = state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER];
         }
     }
@@ -334,27 +334,27 @@ if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
 
 ---
 
-## 5. Fortgeschrittene Techniken
+## 5. Advanced Techniques
 
 ### 5.1 Callbacks
 
 ```cpp
-// Fenster-Größe geändert
+// Window size changed
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-// Fenster geschlossen
+// Window closed
 void window_close_callback(GLFWwindow* window) {
-    // Speichern?
+    // Save?
 }
 
-// Error Callback
+// Error callback
 void error_callback(int error, const char* description) {
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
 }
 
-// Registrieren
+// Register
 glfwSetErrorCallback(error_callback);
 glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 glfwSetWindowCloseCallback(window, window_close_callback);
@@ -372,7 +372,7 @@ struct AppState {
 AppState state;
 glfwSetWindowUserPointer(window, &state);
 
-// In Callback
+// In a callback
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     AppState* state = static_cast<AppState*>(glfwGetWindowUserPointer(window));
     
@@ -385,7 +385,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 ### 5.3 Multi-Monitor
 
 ```cpp
-// Alle Monitore
+// All monitors
 int count;
 GLFWmonitor** monitors = glfwGetMonitors(&count);
 
@@ -397,17 +397,17 @@ for (int i = 0; i < count; i++) {
               << " (" << mode->width << "x" << mode->height << ")" << std::endl;
 }
 
-// Fenster auf zweitem Monitor
+// Window on the second monitor
 GLFWwindow* window = glfwCreateWindow(800, 600, "Second Monitor", monitors[1], nullptr);
 ```
 
 ### 5.4 Clipboard
 
 ```cpp
-// Text in Clipboard
+// Text to clipboard
 glfwSetClipboardString(window, "Hello, Clipboard!");
 
-// Text aus Clipboard
+// Text from clipboard
 const char* text = glfwGetClipboardString(window);
 if (text) {
     std::cout << "Clipboard: " << text << std::endl;
@@ -424,7 +424,7 @@ while (!glfwWindowShouldClose(window)) {
     double deltaTime = currentTime - lastTime;
     lastTime = currentTime;
     
-    // FPS berechnen
+    // Compute FPS
     static double fpsTime = 0;
     static int frames = 0;
     frames++;
@@ -435,7 +435,7 @@ while (!glfwWindowShouldClose(window)) {
         fpsTime = 0;
     }
     
-    // Bewegung mit deltaTime
+    // Movement with deltaTime
     float speed = 5.0f;
     position += velocity * speed * (float)deltaTime;
     
@@ -446,9 +446,9 @@ while (!glfwWindowShouldClose(window)) {
 
 ---
 
-## 6. Mit GLAD und ImGui
+## 6. With GLAD and ImGui
 
-### 6.1 Vollständiges Example
+### 6.1 Complete Example
 
 ```cpp
 #include <glad/glad.h>
@@ -458,7 +458,7 @@ while (!glfwWindowShouldClose(window)) {
 #include <imgui_impl_opengl3.h>
 
 int main() {
-    // GLFW Setup
+    // GLFW setup
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -468,10 +468,10 @@ int main() {
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
     
-    // GLAD Setup
+    // GLAD setup
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     
-    // ImGui Setup
+    // ImGui setup
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -507,7 +507,7 @@ int main() {
 }
 ```
 
-Siehe [glad.md](glad.md) und [imgui.md](imgui.md) für mehr Details.
+See [glad.md](Glad.md) and [imgui.md](Imgui.md) for more details.
 
 ---
 
@@ -515,62 +515,63 @@ Siehe [glad.md](glad.md) und [imgui.md](imgui.md) für mehr Details.
 
 ### 7.1 "Failed to create window"
 
-**Problem:** `glfwCreateWindow` gibt nullptr zurück
+**Problem:** `glfwCreateWindow` returns nullptr
 
-**Lösungen:**
-1. `glfwInit()` aufrufen
-2. OpenGL-Version prüfen (nicht zu hoch für Treiber)
-3. `glfwSetErrorCallback` für Details
+**Solutions:**
+1. Call `glfwInit()`
+2. Check the OpenGL version (not too high for the driver)
+3. `glfwSetErrorCallback` for details
 
-### 7.2 Keine OpenGL-Functions
+### 7.2 No OpenGL Functions
 
-**Problem:** `glClear` etc. crashen
+**Problem:** `glClear` etc. crash
 
-**Lösung:** GLAD nach `glfwMakeContextCurrent` laden:
+**Solution:** Load GLAD after `glfwMakeContextCurrent`:
 ```cpp
 glfwMakeContextCurrent(window);
-gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);  // Hier!
+gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);  // Here!
 ```
 
-### 7.3 macOS schwarzes Fenster
+### 7.3 macOS Black Window
 
-**Problem:** Fenster bleibt schwarz
+**Problem:** Window stays black
 
-**Lösung:** Forward Compat aktivieren:
+**Solution:** Enable forward compat:
 ```cpp
 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 ```
 
-### 7.4 Input funktioniert nicht
+### 7.4 Input Does Not Work
 
-**Problem:** Keyboard/Mouse reagiert nicht
+**Problem:** Keyboard/mouse does not respond
 
-**Lösung:** `glfwPollEvents()` aufrufen!
+**Solution:** Call `glfwPollEvents()`!
 
 ---
 
-## 8. Weiterführende Informationen
+## 8. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **Website** | [glfw.org](https://www.glfw.org/) |
 | **GitHub** | [github.com/glfw/glfw](https://github.com/glfw/glfw) |
-| **Dokumentation** | [glfw.org/documentation](https://www.glfw.org/documentation.html) |
+| **Documentation** | [glfw.org/documentation](https://www.glfw.org/documentation.html) |
 | **Input Guide** | [glfw.org/docs/latest/input_guide.html](https://www.glfw.org/docs/latest/input_guide.html) |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Git_Externals_GUI.md](../../references/externals/Git_Externals_GUI.md) — Reference
-- [glad.md](glad.md) — OpenGL Loader
-- [imgui.md](imgui.md) — GUI Framework
+- [glad.md](Glad.md) — OpenGL loader
+- [imgui.md](Imgui.md) — GUI framework
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für GLFW** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for GLFW |

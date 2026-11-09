@@ -4,55 +4,55 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [googletest.md](../../../en/userguides/externals/Googletest.md)
+> **German:** [Googletest.md](../../../../de/guide/userguides/externals/Googletest.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Solution.json Configuration](#2-solutionjson-konfiguration)
-3. [C++ Usage](#3-c-verwendung)
+1. [Overview](#1-overview)
+2. [Solution.json Configuration](#2-solutionjson-configuration)
+3. [C++ Usage](#3-c-usage)
 4. [Assertions](#4-assertions)
 5. [GMock (Mocking)](#5-gmock-mocking)
-6. [Fortgeschrittene Techniken](#6-fortgeschrittene-techniken)
+6. [Advanced Techniques](#6-advanced-techniques)
 7. [Troubleshooting](#7-troubleshooting)
-8. [Weiterführende Informationen](#8-weiterführende-informationen)
-9. [Changelog](#9-changelog)
+8. [Further Information](#8-further-information)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Google Test** ist das C++ Testing Framework von Google, inklusive GMock für Mocking.
+**Google Test** is Google's C++ testing framework, including GMock for mocking.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Git External |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Git External |
 | **Repository** | https://github.com/google/googletest |
-| **Empfohlener Tag** | v1.14.0 |
-| **Lizenz** | BSD-3-Clause |
+| **Recommended Tag** | v1.14.0 |
+| **License** | BSD-3-Clause |
 | **Website** | [google.github.io/googletest](https://google.github.io/googletest/) |
 
-### Warum Google Test?
+### Why Google Test?
 
-| Vorteil | Description |
-|---------|--------------|
-| 🎭 **GMock** | Integriertes Mocking Framework |
-| 🏢 **Industrie-Standard** | Weit verbreitet |
-| 📊 **XML Reports** | CI/CD Integration |
-| 🔧 **Feature-reich** | Fixtures, Parametrisierung |
+| Advantage | Description |
+|-----------|-------------|
+| 🎭 **GMock** | Integrated mocking framework |
+| 🏢 **Industry standard** | Widely used |
+| 📊 **XML Reports** | CI/CD integration |
+| 🔧 **Feature-rich** | Fixtures, parameterization |
 
-### Vergleich mit doctest
+### Comparison with doctest
 
 | Feature | googletest | doctest |
 |---------|------------|---------|
 | **Mocking** | ✅ GMock | ❌ |
-| **Kompilierzeit** | 🐢 Langsam | ⚡ Schnell |
+| **Compile time** | 🐢 Slow | ⚡ Fast |
 | **Header-Only** | ❌ | ✅ |
-| **Footprint** | Groß | Klein |
+| **Footprint** | Large | Small |
 
 ---
 
@@ -78,7 +78,7 @@
 }
 ```
 
-### 2.2 Mit Library-Tests
+### 2.2 With Library Tests
 
 ```json
 {
@@ -119,17 +119,17 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 ### 2.4 Targets
 
 | Target | Description |
-|--------|--------------|
-| `gtest` | Google Test Core |
-| `gtest_main` | Mit main() |
-| `gmock` | Google Mock Core |
-| `gmock_main` | Mock mit main() |
+|--------|-------------|
+| `gtest` | Google Test core |
+| `gtest_main` | With main() |
+| `gmock` | Google Mock core |
+| `gmock_main` | Mock with main() |
 
 ---
 
 ## 3. C++ Usage
 
-### 3.1 Einfacher Test
+### 3.1 Simple Test
 
 ```cpp
 #include <gtest/gtest.h>
@@ -150,10 +150,10 @@ int main(int argc, char** argv) {
 }
 ```
 
-### 3.2 Mit gtest_main
+### 3.2 With gtest_main
 
 ```cpp
-// Kein main() nötig - von gtest_main bereitgestellt
+// No main() needed - provided by gtest_main
 #include <gtest/gtest.h>
 
 TEST(MyTest, Works) {
@@ -170,14 +170,14 @@ TEST(MyTest, Works) {
 class VectorTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        // Wird vor jedem TEST_F aufgerufen
+        // Called before each TEST_F
         vec.push_back(1);
         vec.push_back(2);
         vec.push_back(3);
     }
     
     void TearDown() override {
-        // Wird nach jedem TEST_F aufgerufen
+        // Called after each TEST_F
         vec.clear();
     }
     
@@ -203,7 +203,7 @@ TEST_F(VectorTest, PopBack) {
 ### 3.4 Test Suites
 
 ```cpp
-// Alle Tests mit gleichem Prefix gehören zur gleichen Suite
+// All tests with the same prefix belong to the same suite
 TEST(StringTest, Empty) {
     std::string s;
     EXPECT_TRUE(s.empty());
@@ -221,10 +221,10 @@ TEST(StringTest, Length) {
 
 ### 4.1 EXPECT vs ASSERT
 
-| Typ | Bei Error | Usage |
-|-----|------------|------------|
-| `EXPECT_*` | Test läuft weiter | Standard |
-| `ASSERT_*` | Test bricht ab | Wenn Fortsetzung sinnlos |
+| Type | On Failure | Use |
+|------|------------|-----|
+| `EXPECT_*` | Test continues | Default |
+| `ASSERT_*` | Test aborts | When continuing makes no sense |
 
 ### 4.2 Boolean Assertions
 
@@ -232,11 +232,11 @@ TEST(StringTest, Length) {
 EXPECT_TRUE(condition);
 EXPECT_FALSE(condition);
 
-// Mit Nachricht
+// With message
 EXPECT_TRUE(result) << "Expected result to be true";
 ```
 
-### 4.3 Vergleiche
+### 4.3 Comparisons
 
 ```cpp
 EXPECT_EQ(a, b);   // a == b
@@ -250,18 +250,18 @@ EXPECT_GE(a, b);   // a >= b
 ### 4.4 String Assertions
 
 ```cpp
-EXPECT_STREQ(str1, str2);     // C-Strings gleich
-EXPECT_STRNE(str1, str2);     // C-Strings ungleich
-EXPECT_STRCASEEQ(str1, str2); // Case-insensitive gleich
-EXPECT_STRCASENE(str1, str2); // Case-insensitive ungleich
+EXPECT_STREQ(str1, str2);     // C strings equal
+EXPECT_STRNE(str1, str2);     // C strings not equal
+EXPECT_STRCASEEQ(str1, str2); // Case-insensitive equal
+EXPECT_STRCASENE(str1, str2); // Case-insensitive not equal
 ```
 
 ### 4.5 Floating-Point
 
 ```cpp
-EXPECT_FLOAT_EQ(a, b);     // float mit ULP-Toleranz
-EXPECT_DOUBLE_EQ(a, b);    // double mit ULP-Toleranz
-EXPECT_NEAR(a, b, 0.001);  // Absolute Toleranz
+EXPECT_FLOAT_EQ(a, b);     // float with ULP tolerance
+EXPECT_DOUBLE_EQ(a, b);    // double with ULP tolerance
+EXPECT_NEAR(a, b, 0.001);  // Absolute tolerance
 ```
 
 ### 4.6 Exception Assertions
@@ -279,7 +279,7 @@ EXPECT_NO_THROW(vec.at(0));
 ### 4.7 Death Tests
 
 ```cpp
-// Testet ob Programm terminiert
+// Tests whether the program terminates
 EXPECT_DEATH(abort(), "");
 EXPECT_EXIT(exit(1), testing::ExitedWithCode(1), "");
 ```
@@ -288,7 +288,7 @@ EXPECT_EXIT(exit(1), testing::ExitedWithCode(1), "");
 
 ## 5. GMock (Mocking)
 
-### 5.1 Mock-Klasse erstellen
+### 5.1 Creating a Mock Class
 
 ```cpp
 #include <gmock/gmock.h>
@@ -317,12 +317,12 @@ public:
 TEST(DatabaseTest, ConnectCalled) {
     MockDatabase db;
     
-    // Erwartung: connect wird mit "localhost" aufgerufen
+    // Expectation: connect is called with "localhost"
     EXPECT_CALL(db, connect("localhost"))
         .Times(1)
         .WillOnce(testing::Return(true));
     
-    // Code der getestet wird
+    // Code under test
     bool result = db.connect("localhost");
     
     EXPECT_TRUE(result);
@@ -339,9 +339,9 @@ using ::testing::DoAll;
 using ::testing::SetArgReferee;
 
 EXPECT_CALL(mock, method())
-    .WillOnce(Return(42))              // Wert zurückgeben
+    .WillOnce(Return(42))              // Return a value
     .WillOnce(Throw(std::runtime_error("error")))  // Exception
-    .WillRepeatedly(Return(0));        // Für alle weiteren Aufrufe
+    .WillRepeatedly(Return(0));        // For all further calls
 ```
 
 ### 5.4 Matchers
@@ -354,13 +354,13 @@ using ::testing::Lt;
 using ::testing::HasSubstr;
 using ::testing::StartsWith;
 
-EXPECT_CALL(mock, method(_))           // Beliebiger Parameters
-    .With(Eq(5))                       // Gleich 5
-    .With(HasSubstr("test"))           // Enthält "test"
-    .With(StartsWith("hello"));        // Beginnt mit "hello"
+EXPECT_CALL(mock, method(_))           // Any parameter
+    .With(Eq(5))                       // Equal to 5
+    .With(HasSubstr("test"))           // Contains "test"
+    .With(StartsWith("hello"));        // Starts with "hello"
 ```
 
-### 5.5 Vollständiges Example
+### 5.5 Complete Example
 
 ```cpp
 #include <gtest/gtest.h>
@@ -416,9 +416,9 @@ TEST(UserServiceTest, LoginConnectionFailed) {
 
 ---
 
-## 6. Fortgeschrittene Techniken
+## 6. Advanced Techniques
 
-### 6.1 Parametrisierte Tests
+### 6.1 Parameterized Tests
 
 ```cpp
 class FibonacciTest : public ::testing::TestWithParam<std::pair<int, int>> {};
@@ -441,7 +441,7 @@ INSTANTIATE_TEST_SUITE_P(
 );
 ```
 
-### 6.2 Type-Parametrisierte Tests
+### 6.2 Type-Parameterized Tests
 
 ```cpp
 template <typename T>
@@ -459,12 +459,12 @@ TYPED_TEST(TypedTest, DefaultIsZero) {
 ### 6.3 Test Filters
 
 ```bash
-# Nur bestimmte Tests ausführen
+# Run only certain tests
 ./tests --gtest_filter=MathTest.*
 ./tests --gtest_filter=*Addition*
-./tests --gtest_filter=-*Slow*  # Ausschließen
+./tests --gtest_filter=-*Slow*  # Exclude
 
-# Wiederholen
+# Repeat
 ./tests --gtest_repeat=10
 
 # Shuffle
@@ -483,12 +483,12 @@ TYPED_TEST(TypedTest, DefaultIsZero) {
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);
     
-    // Eigene Initialisierung
+    // Your own initialization
     MyApp::init();
     
     int result = RUN_ALL_TESTS();
     
-    // Eigenes Cleanup
+    // Your own cleanup
     MyApp::shutdown();
     
     return result;
@@ -499,62 +499,63 @@ int main(int argc, char** argv) {
 
 ## 7. Troubleshooting
 
-### 7.1 Link-Error unter Windows
+### 7.1 Link Errors on Windows
 
 **Problem:** `LNK2038: mismatch detected for 'RuntimeLibrary'`
 
-**Lösung:** PreFetch Hook setzen:
+**Solution:** Set the PreFetch hook:
 ```cmake
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 ```
 
 ### 7.2 "undefined reference to testing::..."
 
-**Problem:** Google Test nicht gelinkt
+**Problem:** Google Test not linked
 
-**Lösung:** Target gegen `gtest` oder `gtest_main` linken.
+**Solution:** Link the target against `gtest` or `gtest_main`.
 
-### 7.3 Tests werden nicht gefunden
+### 7.3 Tests Are Not Found
 
-**Problem:** Keine Tests ausgeführt
+**Problem:** No tests executed
 
-**Lösung:** 
-- `RUN_ALL_TESTS()` aufrufen
-- Gegen `gtest_main` linken (statt eigenem main)
+**Solution:** 
+- Call `RUN_ALL_TESTS()`
+- Link against `gtest_main` (instead of your own main)
 
 ### 7.4 GMock Warnings
 
 **Problem:** "Uninteresting mock function call"
 
-**Lösung:** `NiceMock` verwenden:
+**Solution:** Use `NiceMock`:
 ```cpp
 testing::NiceMock<MockDatabase> db;
 ```
 
 ---
 
-## 8. Weiterführende Informationen
+## 8. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **GitHub** | [github.com/google/googletest](https://github.com/google/googletest) |
-| **Dokumentation** | [google.github.io/googletest](https://google.github.io/googletest/) |
+| **Documentation** | [google.github.io/googletest](https://google.github.io/googletest/) |
 | **Primer** | [google.github.io/googletest/primer.html](https://google.github.io/googletest/primer.html) |
 | **GMock** | [google.github.io/googletest/gmock_cook_book.html](https://google.github.io/googletest/gmock_cook_book.html) |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Git_Externals_Testing.md](../../references/externals/Git_Externals_Testing.md) — Reference
-- [doctest.md](doctest.md) — Leichtgewichtige Alternative
-- [catch2.md](catch2.md) — BDD-Style Alternative
+- [doctest.md](Doctest.md) — Lightweight alternative
+- [catch2.md](Catch2.md) — BDD-style alternative
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Google Test** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for Google Test |

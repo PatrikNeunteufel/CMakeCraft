@@ -1,11 +1,12 @@
 # Offene Abklärungen — Build-System Module
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Abklärung  
 > **Status:** In Bearbeitung  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
+> **English:** [Offene_Abklaerungen_Core_Module.md](../../../en/konzepte/abgeschlossen/Offene_Abklaerungen_Core_Module.md)  
 
 ---
 
@@ -364,5 +365,6 @@ dbg(${DBG_OFTEN} "=== Test Pipeline Start ===" ID TESTS)
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Erweitert auf alle Module (Core + Project), Dokumentations-Status-Tracking, Fortschrittsanzeige, aktualisierte Entscheidungsmatrix** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Erweitert auf alle Module (Core + Project), Dokumentations-Status-Tracking, Fortschrittsanzeige, aktualisierte Entscheidungsmatrix |
 | 0.1.0 | 2025-12-15 | Initial: Analyse der Core-Module auf Debug/Error-Konsistenz |

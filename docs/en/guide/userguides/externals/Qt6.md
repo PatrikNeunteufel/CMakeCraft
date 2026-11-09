@@ -1,62 +1,62 @@
 # Qt6 — UserGuide
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [qt6.md](Qt6.md)
+> **German:** [Qt6.md](../../../../de/guide/userguides/externals/Qt6.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Installation](#2-installation)
-3. [Solution.json Configuration](#3-solutionjson-konfiguration)
-4. [C++ Usage](#4-c-verwendung)
+3. [Solution.json Configuration](#3-solutionjson-configuration)
+4. [C++ Usage](#4-c-usage)
 5. [Qt Widgets](#5-qt-widgets)
 6. [Signals & Slots](#6-signals--slots)
 7. [Qt Quick / QML](#7-qt-quick--qml)
-8. [Fortgeschrittene Techniken](#8-fortgeschrittene-techniken)
+8. [Advanced Techniques](#8-advanced-techniques)
 9. [Troubleshooting](#9-troubleshooting)
-10. [Weiterführende Informationen](#10-weiterführende-informationen)
-11. [Changelog](#11-changelog)
+10. [Further Information](#10-further-information)
+11. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**Qt6** ist ein umfassendes C++ Framework für Desktop-, Mobile- und Embedded-Anwendungen.
+**Qt6** is a comprehensive C++ framework for desktop, mobile and embedded applications.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | System External |
-| **Version** | 6.x (empfohlen: 6.6+) |
-| **Lizenz** | LGPL / Commercial |
+| Aspect | Value |
+|--------|-------|
+| **Type** | System External |
+| **Version** | 6.x (recommended: 6.6+) |
+| **License** | LGPL / Commercial |
 | **Website** | [qt.io](https://www.qt.io/) |
 
-### Warum Qt6?
+### Why Qt6?
 
-| Vorteil | Description |
-|---------|--------------|
-| 🖥️ **Cross-Platform** | Windows, Linux, macOS, Mobile |
-| 🎨 **Widgets & QML** | Classic und Modern UI |
+| Advantage | Description |
+|-----------|-------------|
+| 🖥️ **Cross-Platform** | Windows, Linux, macOS, mobile |
+| 🎨 **Widgets & QML** | Classic and modern UI |
 | 📡 **Networking** | HTTP, WebSocket, Bluetooth |
-| 💾 **Datenbanken** | SQL, SQLite, PostgreSQL |
+| 💾 **Databases** | SQL, SQLite, PostgreSQL |
 
-### Qt6 Module
+### Qt6 Modules
 
-| Modul | Description |
-|-------|--------------|
-| **Core** | Basis-Funktionalität |
-| **Gui** | GUI-Grundlagen |
-| **Widgets** | Desktop-Widgets |
-| **Quick** | QML/YesvaScript UI |
-| **Network** | Netzwerk-Functions |
-| **Sql** | Datenbank-Zugriff |
-| **Multimedia** | Audio/Video |
+| Module | Description |
+|--------|-------------|
+| **Core** | Base functionality |
+| **Gui** | GUI fundamentals |
+| **Widgets** | Desktop widgets |
+| **Quick** | QML/JavaScript UI |
+| **Network** | Network functions |
+| **Sql** | Database access |
+| **Multimedia** | Audio/video |
 
 ---
 
@@ -64,12 +64,12 @@
 
 ### 2.1 Qt Online Installer
 
-1. Download von [qt.io/download](https://www.qt.io/download)
-2. Qt Online Installer ausführen
-3. Qt 6.x und benötigte Module auswählen
-4. Compiler-Kit auswählen (MSVC, MinGW, GCC, Clang)
+1. Download from [qt.io/download](https://www.qt.io/download)
+2. Run the Qt Online Installer
+3. Select Qt 6.x and the required modules
+4. Select a compiler kit (MSVC, MinGW, GCC, Clang)
 
-### 2.2 Paketmanager (Linux)
+### 2.2 Package Manager (Linux)
 
 ```bash
 # Ubuntu/Debian
@@ -88,13 +88,13 @@ sudo pacman -S qt6-base qt6-declarative
 brew install qt@6
 ```
 
-### 2.4 Installationspfade
+### 2.4 Installation Paths
 
-| Platform | Typischer Pfad |
-|----------|----------------|
+| Platform | Typical Path |
+|----------|--------------|
 | **Windows** | `C:\Qt\6.6.0\msvc2019_64` |
-| **Linux** | `/usr/lib/qt6` oder `~/Qt/6.6.0/gcc_64` |
-| **macOS** | `/usr/local/opt/qt@6` oder `~/Qt/6.6.0/macos` |
+| **Linux** | `/usr/lib/qt6` or `~/Qt/6.6.0/gcc_64` |
+| **macOS** | `/usr/local/opt/qt@6` or `~/Qt/6.6.0/macos` |
 
 ---
 
@@ -107,6 +107,7 @@ brew install qt@6
     "externals": {
         "qt6": {
             "system": true,
+            "package": "Qt6",
             "components": ["Widgets"]
         }
     },
@@ -120,13 +121,14 @@ brew install qt@6
 }
 ```
 
-### 3.2 Mit mehreren Komponenten
+### 3.2 With Multiple Components
 
 ```json
 {
     "externals": {
         "qt6": {
             "system": true,
+            "package": "Qt6",
             "components": ["Widgets", "Network", "Sql"]
         }
     },
@@ -140,13 +142,14 @@ brew install qt@6
 }
 ```
 
-### 3.3 QML/Quick Anwendung
+### 3.3 QML/Quick Application
 
 ```json
 {
     "externals": {
         "qt6": {
             "system": true,
+            "package": "Qt6",
             "components": ["Quick", "QuickControls2", "Qml"]
         }
     },
@@ -160,15 +163,15 @@ brew install qt@6
 }
 ```
 
-### 3.4 CMake-Integration
+### 3.4 CMake Integration
 
-Qt6 benötigt `CMAKE_PREFIX_PATH`:
+Qt6 needs `CMAKE_PREFIX_PATH`:
 
 ```bash
-# CMake konfigurieren
+# Configure CMake
 cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64 ..
 
-# Oder in CMakeUserPresets.json
+# Or in CMakeUserPresets.json
 {
     "configurePresets": [
         {
@@ -185,7 +188,7 @@ cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64 ..
 
 ## 4. C++ Usage
 
-### 4.1 Minimale Qt Application
+### 4.1 Minimal Qt Application
 
 ```cpp
 #include <QApplication>
@@ -203,7 +206,7 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### 4.2 Mit MainWindow
+### 4.2 With MainWindow
 
 ```cpp
 #include <QApplication>
@@ -235,7 +238,7 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### 4.3 Eigene Widget-Klasse
+### 4.3 Custom Widget Class
 
 **mainwindow.h:**
 ```cpp
@@ -318,28 +321,28 @@ int main(int argc, char* argv[]) {
 
 ## 5. Qt Widgets
 
-### 5.1 Häufige Widgets
+### 5.1 Common Widgets
 
 | Widget | Description |
-|--------|--------------|
-| `QLabel` | Text/Bild anzeigen |
+|--------|-------------|
+| `QLabel` | Display text/image |
 | `QPushButton` | Button |
-| `QLineEdit` | Einzeilige Texteingabe |
-| `QTextEdit` | Mehrzeilige Texteingabe |
+| `QLineEdit` | Single-line text input |
+| `QTextEdit` | Multi-line text input |
 | `QCheckBox` | Checkbox |
-| `QRadioButton` | Radio Button |
+| `QRadioButton` | Radio button |
 | `QComboBox` | Dropdown |
-| `QSlider` | Schieberegler |
-| `QSpinBox` | Zahleneingabe |
-| `QProgressBar` | Fortschrittsbalken |
-| `QListWidget` | Liste |
-| `QTableWidget` | Tabelle |
-| `QTreeWidget` | Baumansicht |
+| `QSlider` | Slider |
+| `QSpinBox` | Number input |
+| `QProgressBar` | Progress bar |
+| `QListWidget` | List |
+| `QTableWidget` | Table |
+| `QTreeWidget` | Tree view |
 
 ### 5.2 Layouts
 
 ```cpp
-// Vertikal
+// Vertical
 QVBoxLayout* vbox = new QVBoxLayout();
 vbox->addWidget(widget1);
 vbox->addWidget(widget2);
@@ -351,9 +354,9 @@ hbox->addWidget(widget2);
 
 // Grid
 QGridLayout* grid = new QGridLayout();
-grid->addWidget(widget1, 0, 0);  // Zeile 0, Spalte 0
-grid->addWidget(widget2, 0, 1);  // Zeile 0, Spalte 1
-grid->addWidget(widget3, 1, 0, 1, 2);  // Zeile 1, 2 Spalten breit
+grid->addWidget(widget1, 0, 0);  // Row 0, column 0
+grid->addWidget(widget2, 0, 1);  // Row 0, column 1
+grid->addWidget(widget3, 1, 0, 1, 2);  // Row 1, 2 columns wide
 
 // Form
 QFormLayout* form = new QFormLayout();
@@ -361,7 +364,7 @@ form->addRow("Name:", nameEdit);
 form->addRow("Email:", emailEdit);
 ```
 
-### 5.3 Dialoge
+### 5.3 Dialogs
 
 ```cpp
 #include <QMessageBox>
@@ -369,35 +372,35 @@ form->addRow("Email:", emailEdit);
 #include <QInputDialog>
 #include <QColorDialog>
 
-// Message Box
+// Message box
 QMessageBox::information(this, "Info", "Operation completed");
 QMessageBox::warning(this, "Warning", "Something went wrong");
 
 int result = QMessageBox::question(this, "Confirm", "Are you sure?",
     QMessageBox::Yes | QMessageBox::No);
 if (result == QMessageBox::Yes) {
-    // Yes geklickt
+    // Yes clicked
 }
 
-// File Dialog
+// File dialog
 QString filename = QFileDialog::getOpenFileName(this,
     "Open File", "", "Text Files (*.txt);;All Files (*)");
 
 QString saveFile = QFileDialog::getSaveFileName(this,
     "Save File", "", "Text Files (*.txt)");
 
-// Input Dialog
+// Input dialog
 QString text = QInputDialog::getText(this, "Input", "Enter name:");
 int number = QInputDialog::getInt(this, "Input", "Enter number:", 0, 0, 100);
 
-// Color Dialog
+// Color dialog
 QColor color = QColorDialog::getColor(Qt::white, this, "Select Color");
 ```
 
-### 5.4 Menüs und Toolbars
+### 5.4 Menus and Toolbars
 
 ```cpp
-// Menübar
+// Menu bar
 QMenuBar* menuBar = this->menuBar();
 
 QMenu* fileMenu = menuBar->addMenu("&File");
@@ -413,7 +416,7 @@ QToolBar* toolbar = addToolBar("Main");
 toolbar->addAction(newAction);
 toolbar->addAction(openAction);
 
-// Statusbar
+// Status bar
 statusBar()->showMessage("Ready");
 ```
 
@@ -421,30 +424,30 @@ statusBar()->showMessage("Ready");
 
 ## 6. Signals & Slots
 
-### 6.1 Grundlagen
+### 6.1 Basics
 
 ```cpp
-// Verbindung herstellen
+// Establish a connection
 connect(sender, &SenderClass::signalName, receiver, &ReceiverClass::slotName);
 
 // Example
 connect(button, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
 ```
 
-### 6.2 Lambda als Slot
+### 6.2 Lambda as Slot
 
 ```cpp
 connect(button, &QPushButton::clicked, [this]() {
     label->setText("Button clicked!");
 });
 
-// Mit Parameters
+// With parameter
 connect(slider, &QSlider::valueChanged, [this](int value) {
     label->setText(QString("Value: %1").arg(value));
 });
 ```
 
-### 6.3 Eigene Signals & Slots
+### 6.3 Custom Signals & Slots
 
 ```cpp
 class Counter : public QObject {
@@ -486,14 +489,14 @@ connect(&counter, &Counter::valueChanged, [](int value) {
     qDebug() << "Value changed to:" << value;
 });
 
-counter.increment();  // Ausgabe: "Value changed to: 1"
+counter.increment();  // Output: "Value changed to: 1"
 ```
 
 ---
 
 ## 7. Qt Quick / QML
 
-### 7.1 QML-Grundlagen
+### 7.1 QML Basics
 
 **main.qml:**
 ```qml
@@ -543,7 +546,7 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### 7.2 C++ Backend für QML
+### 7.2 C++ Backend for QML
 
 **backend.h:**
 ```cpp
@@ -618,7 +621,7 @@ ApplicationWindow {
 
 ---
 
-## 8. Fortgeschrittene Techniken
+## 8. Advanced Techniques
 
 ### 8.1 Threading
 
@@ -631,7 +634,7 @@ class Worker : public QObject {
     
 public slots:
     void doWork() {
-        // Lange Operation
+        // Long operation
         for (int i = 0; i < 100; i++) {
             QThread::msleep(50);
             emit progress(i);
@@ -661,7 +664,7 @@ connect(worker, &Worker::progress, [](int value) {
 thread->start();
 ```
 
-### 8.2 Netzwerk
+### 8.2 Networking
 
 ```cpp
 #include <QNetworkAccessManager>
@@ -680,23 +683,23 @@ connect(manager, &QNetworkAccessManager::finished, [](QNetworkReply* reply) {
     reply->deleteLater();
 });
 
-// GET Request
+// GET request
 manager->get(QNetworkRequest(QUrl("https://api.example.com/data")));
 
-// POST Request
+// POST request
 QNetworkRequest request(QUrl("https://api.example.com/data"));
 request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 manager->post(request, "{\"key\": \"value\"}");
 ```
 
-### 8.3 Datenbank
+### 8.3 Database
 
 ```cpp
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 
-// Verbindung
+// Connection
 QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 db.setDatabaseName("mydb.sqlite");
 
@@ -705,16 +708,16 @@ if (!db.open()) {
     return;
 }
 
-// Tabelle erstellen
+// Create table
 QSqlQuery query;
 query.exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)");
 
-// Einfügen
+// Insert
 query.prepare("INSERT INTO users (name) VALUES (:name)");
 query.bindValue(":name", "John");
 query.exec();
 
-// Abfragen
+// Query
 query.exec("SELECT * FROM users");
 while (query.next()) {
     int id = query.value(0).toInt();
@@ -725,7 +728,7 @@ while (query.next()) {
 db.close();
 ```
 
-### 8.4 Ressourcen-System
+### 8.4 Resource System
 
 **resources.qrc:**
 ```xml
@@ -740,7 +743,7 @@ db.close();
 ```
 
 ```cpp
-// Zugriff
+// Access
 QPixmap pixmap(":/images/logo.png");
 QFile file(":/styles/app.css");
 ```
@@ -751,67 +754,73 @@ QFile file(":/styles/app.css");
 
 ### 9.1 "Qt6 not found"
 
-**Problem:** CMake findet Qt6 nicht
+**Problem:** CMake does not find Qt6. Configuring aborts with
+`[E503] System external 'qt6': find_package(Qt6) failed.`; if only a module from `components`
+is missing, with E504; if the version does not match `version`, with E505
+(`cmake/externals/system/Handler.cmake:91`, `:109`, `:128`; messages and fixes:
+[ErrorCodes.md](../../references/ErrorCodes.md)).
 
-**Lösung:** `CMAKE_PREFIX_PATH` setzen:
+**Solution:** Set `CMAKE_PREFIX_PATH`:
 ```bash
 cmake -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64 ..
 ```
 
-### 9.2 MOC nicht ausgeführt
+### 9.2 MOC Not Run
 
-**Problem:** Signals/Slots funktionieren nicht
+**Problem:** Signals/slots do not work
 
-**Lösung:** 
-- `Q_OBJECT` Makro in Klasse
-- Header in CMakeLists.txt auflisten
+**Solution:** 
+- `Q_OBJECT` macro in the class
+- List headers in CMakeLists.txt
 - `AUTOMOC ON` in CMake
 
 ### 9.3 "undefined reference to vtable"
 
-**Problem:** Link-Error bei Q_OBJECT-Klassen
+**Problem:** Link error with Q_OBJECT classes
 
-**Lösung:** CMake neu konfigurieren (MOC muss laufen).
+**Solution:** Reconfigure CMake (MOC must run).
 
-### 9.4 QML-Dateien nicht gefunden
+### 9.4 QML Files Not Found
 
-**Problem:** QML-Dateien werden nicht geladen
+**Problem:** QML files are not loaded
 
-**Lösung:** 
-- In .qrc einbinden
-- `qrc:/` Prefix verwenden
+**Solution:** 
+- Include them in the .qrc
+- Use the `qrc:/` prefix
 
 ---
 
-## 10. Weiterführende Informationen
+## 10. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **Website** | [qt.io](https://www.qt.io/) |
-| **Dokumentation** | [doc.qt.io](https://doc.qt.io/) |
+| **Documentation** | [doc.qt.io](https://doc.qt.io/) |
 | **Qt6 Docs** | [doc.qt.io/qt-6](https://doc.qt.io/qt-6/) |
 | **Tutorials** | [doc.qt.io/qt-6/qtexamplesandtutorials.html](https://doc.qt.io/qt-6/qtexamplesandtutorials.html) |
 | **Qt Forum** | [forum.qt.io](https://forum.qt.io/) |
 | **GitHub** | [github.com/qt](https://github.com/qt) |
 
-### Bücher & Kurse
+### Books & Courses
 
-| Ressource | Description |
-|-----------|--------------|
+| Resource | Description |
+|----------|-------------|
 | **Qt Wiki** | [wiki.qt.io](https://wiki.qt.io/) |
-| **Qt Examples** | Mitgelieferte Examples |
+| **Qt Examples** | Bundled examples |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Git_Externals_GUI.md](../../references/externals/Git_Externals_GUI.md) — Alternative: GLFW + ImGui
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für Qt6** |
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | 2026-11-09 | Aligned with the code: examples §3.1–3.3 with the required field `"package": "Qt6"` (otherwise E502, `cmake/externals/system/Handler.cmake`); §9.1 with E503/E504/E505 (CMakeCraft v0.14.1) |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| **0.5.2** | **2025-12-15** | **Initial: detailed UserGuide for Qt6** |

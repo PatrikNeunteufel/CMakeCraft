@@ -1,13 +1,13 @@
 # Implementierungsplan — Standard für Umsetzungspläne
 
-> **Version:** 1.2.0  
-> **Datum:** 2025-12-26  
+> **Version:** 1.2.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** Stabil  
 > **Basiert auf:** Doc v1.0, Blueprint v1.0  
 > **Zielgruppe:** Dokumentations-Ersteller, Projektleiter  
 > **Sprache:** Deutsch  
-> **English:** [ImplementationPlan.md](ImplementationPlan.md)
+> **English:** [ImplementationPlan.md](../../../en/autorenwerk/blueprints/ImplementationPlan.md)
 
 ---
 
@@ -61,7 +61,7 @@ Dieser Blueprint gilt für Dokumente, die:
 
 - Konkrete Umsetzungsschritte für Phasen oder Features beschreiben
 - Checklisten für Aufgaben enthalten
-- Im Ordner `docs/[lang]/projects/` oder projektspezifisch liegen
+- Im Ordner `docs/[lang]/konzepte/` (umgesetzt: `konzepte/abgeschlossen/`) oder projektspezifisch liegen
 
 **Beispiele:**
 
@@ -611,7 +611,8 @@ Zusätzlich zur Doc.md Checkliste:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **1.2.0** | **2025-12-26** | **Dokumentation als PFLICHT-Schritt am Ende jeder Phase. Review-Checkliste erweitert.** |
+| **1.2.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/konzepte/` statt `projects/` (§ 2)** |
+| 1.2.0 | 2025-12-26 | Dokumentation als PFLICHT-Schritt am Ende jeder Phase. Review-Checkliste erweitert. |
 | 1.1.0 | 2025-12-26 | Neue Felder: Methodik, Tatsächliche Dauer, Status-Varianten. TDD-spezifische Abschnitte dokumentiert. |
 | 1.0.0 | 2025-12-26 | Release-Version: Struktur, Checklisten-Format, Beispiel |
 | 0.1.0 | 2025-12-21 | Initial | |

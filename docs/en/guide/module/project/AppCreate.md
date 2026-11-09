@@ -1,77 +1,77 @@
-# AppCreate.cmake — Dokumentation
+# AppCreate.cmake — Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.3  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
 > **Status:** In Development  
-> **Target Audience:** Build System Developers  
-> **Module:** [cmake/project/AppCreate.cmake](../../../../cmake/project/AppCreate.cmake)  
+> **Target Audience:** Build system developers  
+> **Module:** [cmake/project/AppCreate.cmake](../../../../../cmake/project/AppCreate.cmake)  
 > **Module Version:** 1.0.0  
 > **Based on:** ModuleDoc v0.5  
 > **Language:** English  
-> **German:** [AppCreate.md](AppCreate.md)
+> **German:** [AppCreate.md](../../../../de/guide/module/project/AppCreate.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [API-Reference](#4-api-referenz)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [API Reference](#4-api-reference)
    - 4.1 [_create_app_core()](#41-_create_app_core)
    - 4.2 [_create_app_runner()](#42-_create_app_runner)
    - 4.3 [_create_app_tests()](#43-_create_app_tests)
    - 4.4 [_create_app_test_target()](#44-_create_app_test_target)
-5. [Verzeichnisstruktur](#5-verzeichnisstruktur)
-6. [PCH-Behandlung](#6-pch-behandlung)
-7. [Usagesbeispiele](#7-verwendungsbeispiele)
-8. [Errorbehandlung](#8-fehlerbehandlung)
+5. [Directory Structure](#5-directory-structure)
+6. [PCH Handling](#6-pch-handling)
+7. [Usage Examples](#7-usage-examples)
+8. [Error Handling](#8-error-handling)
 9. [Best Practices](#9-best-practices)
-10. [See Also](#10-siehe-auch)
+10. [See Also](#10-see-also)
 11. [Changelog](#11-changelog)
 
 ---
 
 ## 1. Overview
 
-Das `AppCreate`-Modul ist verantwortlich für die **Erstellung aller CMake-Targets** eines App-Containers. Es enthält drei Hauptfunktionen, die jeweils einen Teil des App-Containers erstellen.
+The `AppCreate` module is responsible for **creating all CMake targets** of an app container. It contains three main functions, each of which creates one part of the app container.
 
-### Zweck
+### Purpose
 
-- Erstellung der Core Library (`{AppName}.Core`)
-- Erstellung des Runner Executable (`{AppName}`)
-- Erstellung der Test Executables (`{AppName}.*Tests`)
+- Creation of the core library (`{AppName}.Core`)
+- Creation of the runner executable (`{AppName}`)
+- Creation of the test executables (`{AppName}.*Tests`)
 
-### Generierte Targets
+### Generated Targets
 
-| Funktion | Target | Typ | Description |
-|----------|--------|-----|--------------|
-| `_create_app_core()` | `{AppName}.Core` | STATIC Library | Business-Logik |
-| `_create_app_runner()` | `{AppName}` | Executable | Entry-Point mit main() |
-| `_create_app_tests()` | `{AppName}.UnitTests` | Executable | Unit Tests |
-| `_create_app_tests()` | `{AppName}.IntegrationTests` | Executable | Integration Tests |
+| Function | Target | Type | Description |
+|----------|--------|------|-------------|
+| `_create_app_core()` | `{AppName}.Core` | STATIC library | Business logic |
+| `_create_app_runner()` | `{AppName}` | Executable | Entry point with main() |
+| `_create_app_tests()` | `{AppName}.UnitTests` | Executable | Unit tests |
+| `_create_app_tests()` | `{AppName}.IntegrationTests` | Executable | Integration tests |
 
 ---
 
 ## 2. Dependencies
 
-| Abhängigkeit | Typ | Description |
-|--------------|-----|--------------|
-| CMake 3.19+ | System | JSON-Functions, FILE_SET |
-| `Context.cmake` | Modul | Context-Daten lesen |
-| `Errors.cmake` | Modul | Errorbehandlung |
-| `Debug.cmake` | Modul | Debug-Ausgabe |
-| `OutputDirs.cmake` | Modul | Ausgabeverzeichnisse |
-| `Warnings.cmake` | Modul | Warning-Configuration |
-| `CompilerOptions.cmake` | Modul | Compiler-Einstellungen |
-| `Orchestrator.cmake` | Modul | External-Integration |
+| Dependency | Type | Description |
+|------------|------|-------------|
+| CMake 3.19+ | System | JSON functions, FILE_SET |
+| `Context.cmake` | Module | Reading context data |
+| `Errors.cmake` | Module | Error handling |
+| `Debug.cmake` | Module | Debug output |
+| `OutputDirs.cmake` | Module | Output directories |
+| `Warnings.cmake` | Module | Warning configuration |
+| `CompilerOptions.cmake` | Module | Compiler settings |
+| `Orchestrator.cmake` | Module | External integration |
 
 ---
 
 ## 3. Concept
 
-### 3.1 Target-Hierarchie
+### 3.1 Target Hierarchy
 
 ```
 {AppName}.Core (STATIC Library)
@@ -85,26 +85,26 @@ Das `AppCreate`-Modul ist verantwortlich für die **Erstellung aller CMake-Targe
 (Executable)       (Test Executable)    (Test Executable)
 ```
 
-### 3.2 Dependency-Propagation
+### 3.2 Dependency Propagation
 
-| Link-Typ | Von → Zu | Bedeutung |
-|----------|----------|-----------|
-| PUBLIC | Core.Dependencies → Core | Transitiv zu Runner/Tests |
-| PUBLIC | Core.Externals → Core | Transitiv zu Runner/Tests |
-| PUBLIC | Core.pch/ Include → Core | Transitiv zu Runner/Tests |
-| PRIVATE | Runner.Externals → Runner | Nur für Runner |
-| PRIVATE | Integration.Externals → Integration | Nur für Integration Tests |
+| Link type | From → To | Meaning |
+|-----------|-----------|---------|
+| PUBLIC | Core.Dependencies → Core | Transitive to runner/tests |
+| PUBLIC | Core.Externals → Core | Transitive to runner/tests |
+| PUBLIC | Core.pch/ include → Core | Transitive to runner/tests |
+| PRIVATE | Runner.Externals → Runner | Runner only |
+| PRIVATE | Integration.Externals → Integration | Integration tests only |
 
-### 3.3 Warum STATIC Library?
+### 3.3 Why a STATIC Library?
 
-- **Testbarkeit:** Tests können gegen Core linken ohne main()-Konflikt
-- **Compilation:** Einmalige Kompilierung, mehrfache Nutzung
-- **Isolation:** Core enthält keine Entry-Point-Logik
-- **PCH-Sharing:** Runner und Tests können PCH von Core wiederverwenden
+- **Testability:** Tests can link against Core without a main() conflict
+- **Compilation:** Compiled once, used multiple times
+- **Isolation:** Core contains no entry point logic
+- **PCH sharing:** Runner and tests can reuse the PCH of Core
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 _create_app_core()
 
@@ -113,55 +113,55 @@ _create_app_core(CTX)
 ```
 
 **Description:**  
-Erstellt die `{AppName}.Core` STATIC Library mit allen Business-Logik-Sources.
+Creates the `{AppName}.Core` STATIC library with all business logic sources.
 
 **Parameters:**
 
-| Parameters | Required | Description |
-|-----------|---------|--------------|
-| `CTX` | ✓ | Context-Prefix (z.B. `APP_0`) |
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `CTX` | ✓ | Context prefix (e.g. `APP_0`) |
 
-**Erwartete Context-Keys:**
+**Expected context keys:**
 
 | Key | Usage |
-|-----|------------|
-| `NAME` | Target-Name Basis |
-| `PATH` | Basis-Verzeichnis |
-| `VERSION` | Target-Version |
-| `PCH_ENABLED` | Precompiled Headers aktivieren |
-| `PCH_HEADER` | PCH Header-Dateiname |
-| `PCH_PATH` | Optionaler Custom-Pfad für PCH |
-| `CORE_DEPENDENCIES` | Interne Libraries |
-| `CORE_EXTERNALS` | Externe Dependencies |
-| `CORE_EXTERNAL_OPTIONS` | Per-External Optionen (JSON) |
+|-----|-------|
+| `NAME` | Target name base |
+| `PATH` | Base directory |
+| `VERSION` | Target version |
+| `PCH_ENABLED` | Enable precompiled headers |
+| `PCH_HEADER` | PCH header file name |
+| `PCH_PATH` | Optional custom path for the PCH |
+| `CORE_DEPENDENCIES` | Internal libraries |
+| `CORE_EXTERNALS` | External dependencies |
+| `CORE_EXTERNAL_OPTIONS` | Per-external options (JSON) |
 
-**Erwartete Verzeichnisse:**
+**Expected directories:**
 
 ```
 {PATH}/
-├── include/    ← PUBLIC Headers (optional, W401 wenn fehlt)
-├── src/        ← Implementation (Required, E403 wenn fehlt)
-└── pch/        ← Precompiled Header (optional)
+├── include/    ← PUBLIC headers (optional, W401 if missing)
+├── src/        ← Implementation (required, E403 if missing)
+└── pch/        ← Precompiled header (optional)
 ```
 
-**Generiertes Target:**
-- `{AppName}.Core` — STATIC Library
+**Generated target:**
+- `{AppName}.Core` — STATIC library
 
-**Target Properties (gesetzt):**
+**Target properties (set):**
 
 | Property | Description |
-|----------|--------------|
-| `APP_PCH_ENABLED` | Boolean: PCH aktiv |
-| `APP_PCH_PATH` | Pfad zum PCH-Header |
+|----------|-------------|
+| `APP_PCH_ENABLED` | Boolean: PCH active |
+| `APP_PCH_PATH` | Path to the PCH header |
 
-**Error:**
-- `E402` — Pfad existiert nicht
-- `E403` — Kein src/ Verzeichnis
-- `E404` — Keine Sources in src/
-- `E405` — Dependency nicht gefunden
-- `E010` — External nicht definiert
-- `W401` — Kein include/ Verzeichnis
-- `W402` — PCH Header nicht gefunden
+**Errors:**
+- `E402` — Path does not exist
+- `E403` — No src/ directory
+- `E404` — No sources in src/
+- `E405` — Dependency not found
+- `E010` — External not defined
+- `W401` — No include/ directory
+- `W402` — PCH header not found
 
 ---
 
@@ -172,45 +172,45 @@ _create_app_runner(CTX)
 ```
 
 **Description:**  
-Erstellt das `{AppName}` Executable mit dem Entry-Point (main()). Verwendet **kein PCH** — main.cpp ist typisch minimal und profitiert kaum davon.
+Creates the `{AppName}` executable with the entry point (main()). Uses **no PCH** — main.cpp is typically minimal and hardly benefits from it.
 
 **Parameters:**
 
-| Parameters | Required | Description |
-|-----------|---------|--------------|
-| `CTX` | ✓ | Context-Prefix (z.B. `APP_0`) |
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `CTX` | ✓ | Context prefix (e.g. `APP_0`) |
 
-**Erwartete Context-Keys:**
+**Expected context keys:**
 
 | Key | Usage |
-|-----|------------|
-| `NAME` | Target-Name |
-| `PATH` | Basis-Verzeichnis |
-| `VERSION` | Target-Version |
-| `DISPLAY_NAME` | Anzeigename (macOS Bundle) |
-| `RUNNER_TYPE` | CONSOLE oder WINDOW/GUI |
-| `RUNNER_EXTERNALS` | Runner-spezifische Externals |
-| `RUNNER_EXTERNAL_OPTIONS` | Per-External Optionen (JSON) |
+|-----|-------|
+| `NAME` | Target name |
+| `PATH` | Base directory |
+| `VERSION` | Target version |
+| `DISPLAY_NAME` | Display name (macOS bundle) |
+| `RUNNER_TYPE` | CONSOLE or WINDOW/GUI |
+| `RUNNER_EXTERNALS` | Runner-specific externals |
+| `RUNNER_EXTERNAL_OPTIONS` | Per-external options (JSON) |
 
-**Erwartete Verzeichnisse:**
+**Expected directories:**
 
 ```
 {PATH}/
-└── main/    ← Entry-Point (Required, E406 wenn fehlt)
+└── main/    ← Entry point (required, E406 if missing)
 ```
 
-**Generiertes Target:**
-- `{AppName}` — Executable (WIN32/MACOSX_BUNDLE für GUI)
+**Generated target:**
+- `{AppName}` — Executable (WIN32/MACOSX_BUNDLE for GUI)
 
-**PCH-Verhalten:**
-- Erbt `pch/` Include-Directory von Core (PUBLIC)
-- Verwendet **kein** `target_precompile_headers()`
-- `#include "pch.h"` ist in main.cpp **nicht erforderlich**
+**PCH behavior:**
+- Inherits the `pch/` include directory from Core (PUBLIC)
+- Uses **no** `target_precompile_headers()`
+- `#include "pch.h"` is **not required** in main.cpp
 
-**Error:**
-- `E406` — Kein main/ Verzeichnis
-- `E407` — Keine Sources in main/
-- `E010` — External nicht definiert
+**Errors:**
+- `E406` — No main/ directory
+- `E407` — No sources in main/
+- `E010` — External not defined
 
 ---
 
@@ -221,20 +221,20 @@ _create_app_tests(CTX)
 ```
 
 **Description:**  
-Erstellt Test Executables basierend auf der Tests-Configuration im Context.
+Creates test executables based on the tests configuration in the context.
 
 **Parameters:**
 
-| Parameters | Required | Description |
-|-----------|---------|--------------|
-| `CTX` | ✓ | Context-Prefix (z.B. `APP_0`) |
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `CTX` | ✓ | Context prefix (e.g. `APP_0`) |
 
-**Erwartete Context-Keys:**
+**Expected context keys:**
 
 | Key | Usage |
-|-----|------------|
-| `NAME` | App-Name für Target-Prefix |
-| `PATH` | Basis-Verzeichnis |
+|-----|-------|
+| `NAME` | App name for the target prefix |
+| `PATH` | Base directory |
 | `TESTS_FRAMEWORK` | Default framework for all test targets (doctest, googletest, catch2) |
 | `TESTS_SKIP` | `TRUE` skips all tests of the app |
 | `TESTS_TARGETS_COUNT` | Number of entries in `tests.targets[]` |
@@ -247,13 +247,13 @@ Erstellt Test Executables basierend auf der Tests-Configuration im Context.
 | `TESTS_TARGET_{n}_LABELS` | CTest labels |
 | `TESTS_TARGET_{n}_DEPENDENCIES` | Internal libraries, linked directly |
 | `TESTS_TARGET_{n}_EXTERNALS` | Additional externals |
-| `TESTS_TARGET_{n}_EXTERNAL_OPTIONS` | Options per external in `EXTERNALS` (JSON) |
+| `TESTS_TARGET_{n}_EXTERNAL_OPTIONS` | Options per external from `EXTERNALS` (JSON) |
 | `TESTS_TARGET_{n}_PARALLEL` | Parallel execution allowed |
 | `TESTS_TARGET_{n}_COMPILE_OPTIONS` | Compiler flags for this test target only |
 
 All keys are set by [AppCollect § 5.5/5.6](AppCollect.md).
 
-**Erwartete Verzeichnisse:**
+**Expected directories:**
 
 ```
 {PATH}/
@@ -262,10 +262,10 @@ All keys are set by [AppCollect § 5.5/5.6](AppCollect.md).
         └── {name}/   ← TESTS_TARGET_{n}_PATH (default: tests/{type}/{name})
 ```
 
-**Generierte Targets:**
+**Generated targets:**
 - `{AppName}.{name}` — one per entry in `tests.targets[]`, unless `TESTS_SKIP` or `TESTS_TARGET_{n}_SKIP` is set
 
-**Error:**
+**Errors:**
 - `E301` — No framework specified (neither `tests.framework` nor `targets[].framework`)
 - `E302` — Unknown framework
 - `E305` — Path of the test target does not exist
@@ -282,40 +282,40 @@ _create_app_test_target(TARGET_NAME SRC_DIR CORE_TARGET DEPENDENCIES FRAMEWORK T
 ```
 
 **Description:**  
-Interne Hilfsfunktion zur Erstellung eines einzelnen Test-Targets.
+Internal helper function for creating a single test target.
 
 **Parameters:**
 
-| Parameters | Description |
-|-----------|--------------|
-| `TARGET_NAME` | Name des Test-Targets |
-| `SRC_DIR` | Verzeichnis mit Test-Sources |
-| `CORE_TARGET` | Core Library zum Linken |
-| `DEPENDENCIES` | Internal libraries linked directly (list) |
-| `FRAMEWORK` | Test-Framework |
-| `TIMEOUT` | CTest Timeout in Sekunden |
-| `LABELS` | CTest Labels (Liste) |
-| `EXTRA_EXTERNALS` | Zusätzliche Externals |
-| `EXTERNAL_OPTIONS` | JSON object with options per external in `EXTRA_EXTERNALS`; the framework external always gets `{}` |
-| `APP_NAME` | App-Name für IDE-Folder |
-| `PARALLEL` | `TRUE` allows parallel execution, `FALSE` forces serial |
+| Parameter | Description |
+|-----------|-------------|
+| `TARGET_NAME` | Name of the test target |
+| `SRC_DIR` | Directory with test sources |
+| `CORE_TARGET` | Core library to link |
+| `DEPENDENCIES` | Internal libraries that are linked directly (list) |
+| `FRAMEWORK` | Test framework |
+| `TIMEOUT` | CTest timeout in seconds |
+| `LABELS` | CTest labels (list) |
+| `EXTRA_EXTERNALS` | Additional externals |
+| `EXTERNAL_OPTIONS` | JSON object with options per external from `EXTRA_EXTERNALS`; the framework external always gets `{}` |
+| `APP_NAME` | App name for the IDE folder |
+| `PARALLEL` | `TRUE` allows parallel execution, `FALSE` forces serial execution |
 | `COMPILE_OPTIONS` | Compiler flags for this test target only (list, PRIVATE; set after `apply_compiler_options()`) |
 
 ---
 
-## 5. Verzeichnisstruktur
+## 5. Directory Structure
 
-### 5.1 Vollständige App-Struktur
+### 5.1 Complete App Structure
 
 ```
 projects/apps/{AppName}/
-├── include/                 ← PUBLIC Headers (Core)
+├── include/                 ← PUBLIC headers (Core)
 │   └── Application.hpp
 ├── src/                     ← Implementation (Core)
 │   └── Application.cpp
-├── main/                    ← Entry Point (Runner)
+├── main/                    ← Entry point (Runner)
 │   └── main.cpp
-├── pch/                     ← Precompiled Headers (optional)
+├── pch/                     ← Precompiled headers (optional)
 │   └── pch.h
 └── tests/                   ← Tests
     ├── unit/
@@ -324,15 +324,15 @@ projects/apps/{AppName}/
         └── Application_Integration_Tests.cpp
 ```
 
-### 5.2 Include-Verzeichnisse
+### 5.2 Include Directories
 
-| Verzeichnis | Visibility | Zweck |
-|-------------|------------|-------|
-| `include/` | PUBLIC | Öffentliche Header für Runner/Tests |
-| `pch/` | PUBLIC | PCH-Header für Runner/Tests |
-| `src/` | PRIVATE | Nur wenn private Headers existieren |
+| Directory | Visibility | Purpose |
+|-----------|------------|---------|
+| `include/` | PUBLIC | Public headers for runner/tests |
+| `pch/` | PUBLIC | PCH header for runner/tests |
+| `src/` | PRIVATE | Only if private headers exist |
 
-### 5.3 Minimale App-Struktur
+### 5.3 Minimal App Structure
 
 ```
 projects/apps/{AppName}/
@@ -344,79 +344,79 @@ projects/apps/{AppName}/
 
 ---
 
-## 6. PCH-Behandlung
+## 6. PCH Handling
 
-### 6.1 Aktivierung
+### 6.1 Activation
 
-PCH wird in Solution.json aktiviert:
+PCH is enabled in Solution.json:
 
 ```json
 "apps": [{
     "name": "MyApp",
     "pch": {
         "enabled": true,
-        "header": "pch.h"    // Optional, Default: "pch.h"
+        "header": "pch.h"    // Optional, default: "pch.h"
     }
 }]
 ```
 
-### 6.2 Suchpfad-Priorität
+### 6.2 Search Path Priority
 
-| Priorität | Pfad | Example |
-|-----------|------|----------|
+| Priority | Path | Example |
+|----------|------|---------|
 | 1 | `{PATH}/pch/{header}` | `projects/apps/MyApp/pch/pch.h` |
 | 2 | `{PATH}/src/{header}` | `projects/apps/MyApp/src/pch.h` |
 | 3 | `{PATH}/{header}` | `projects/apps/MyApp/pch.h` |
 
-### 6.3 PCH nur für Core
+### 6.3 PCH for Core Only
 
-**Importante Vereinfachung:** PCH wird **nur für Core** aktiviert, nicht für Runner oder Tests.
+**Important simplification:** PCH is enabled **for Core only**, not for the runner or tests.
 
 ```
 Core Target:
-  ├── target_include_directories(PUBLIC ${pch_dir})   ← pch/ ist sichtbar
-  └── target_precompile_headers(PRIVATE ${pch_path})  ← Kompiliert PCH
+  ├── target_include_directories(PUBLIC ${pch_dir})   ← pch/ is visible
+  └── target_precompile_headers(PRIVATE ${pch_path})  ← Compiles the PCH
 
 Runner:
-  ├── Erbt pch/ include dir via PUBLIC link           ← Könnte pch.h finden
-  └── KEIN target_precompile_headers()                ← Verwendet PCH nicht
+  ├── Inherits pch/ include dir via PUBLIC link       ← Could find pch.h
+  └── NO target_precompile_headers()                  ← Does not use the PCH
 
 Tests:
-  ├── Erbt pch/ include dir via PUBLIC link           ← Könnte pch.h finden
-  └── KEIN target_precompile_headers()                ← Verwendet PCH nicht
+  ├── Inherits pch/ include dir via PUBLIC link       ← Could find pch.h
+  └── NO target_precompile_headers()                  ← Does not use the PCH
 ```
 
-### 6.4 Warum kein PCH für Runner/Tests?
+### 6.4 Why No PCH for Runner/Tests?
 
-| Aspekt | Begründung |
-|--------|------------|
-| **Core wird nicht neu kompiliert** | Runner/Tests linken nur gegen die fertige `.lib` |
-| **main.cpp ist minimal** | Typisch 20-30 Zeilen, PCH-Gewinn vernachlässigbar |
-| **Tests haben Framework-Includes** | doctest/googletest dominieren die Kompilierzeit |
-| **Einfachere Templates** | Kein `#include "pch.h"` in main.cpp und Tests nötig |
-| **Weniger Errorquellen** | Kein "PCH not found" bei deaktiviertem PCH |
+| Aspect | Rationale |
+|--------|-----------|
+| **Core is not recompiled** | Runner/tests only link against the finished `.lib` |
+| **main.cpp is minimal** | Typically 20-30 lines, PCH gain negligible |
+| **Tests have framework includes** | doctest/googletest dominate the compile time |
+| **Simpler templates** | No `#include "pch.h"` needed in main.cpp and tests |
+| **Fewer sources of error** | No "PCH not found" when PCH is disabled |
 
-### 6.5 Warum pch/ trotzdem PUBLIC?
+### 6.5 Why Is pch/ PUBLIC Anyway?
 
-Das `pch/` Verzeichnis ist als **PUBLIC Include** konfiguriert, damit:
-- `src/*.cpp` mit `#include "pch.h"` funktioniert
-- Bei Bedarf Runner/Tests manuell `#include "pch.h"` nutzen könnten
+The `pch/` directory is configured as a **PUBLIC include** so that:
+- `src/*.cpp` works with `#include "pch.h"`
+- Runner/tests could use `#include "pch.h"` manually if needed
 
-### 6.6 Warum manuelles #include in Core nötig?
+### 6.6 Why Is a Manual #include Needed in Core?
 
-MSVC erfordert `#include "pch.h"` als erste Zeile in jeder `.cpp` die PCH nutzt. GCC/Clang können PCH via `-include` injizieren, aber für **Cross-Platform-Kompatibilität** ist das explizite Include erforderlich.
+MSVC requires `#include "pch.h"` as the first line in every `.cpp` that uses the PCH. GCC/Clang can inject the PCH via `-include`, but for **cross-platform compatibility** the explicit include is required.
 
-**Bei deaktiviertem PCH:** `#include "pch.h"` muss nur aus `src/*.cpp` entfernt werden (nicht aus main.cpp oder Tests, da diese es ohnehin nicht verwenden).
+**When PCH is disabled:** `#include "pch.h"` only has to be removed from `src/*.cpp` (not from main.cpp or tests, since they do not use it anyway).
 
 ---
 
-## 7. Usagesbeispiele
+## 7. Usage Examples
 
-### 7.1 Core Library verwenden
+### 7.1 Using the Core Library
 
 ```cpp
-// main/main.cpp (kein PCH erforderlich)
-#include "Application.hpp" // Aus include/ der Core Library
+// main/main.cpp (no PCH required)
+#include "Application.hpp" // From include/ of the core library
 
 int main(int argc, char* argv[]) {
     MyApp::Application app;
@@ -424,12 +424,12 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### 7.2 Unit Test schreiben
+### 7.2 Writing a Unit Test
 
 ```cpp
-// tests/unit/Application_Tests.cpp (kein PCH erforderlich)
+// tests/unit/Application_Tests.cpp (no PCH required)
 #include <doctest/doctest.h>
-#include "Application.hpp"        // Aus include/ der Core Library
+#include "Application.hpp"        // From include/ of the core library
 
 TEST_CASE("Application functionality") {
     MyApp::Application app;
@@ -437,48 +437,51 @@ TEST_CASE("Application functionality") {
 }
 ```
 
-### 7.3 CTest ausführen
+### 7.3 Running CTest
 
 ```bash
-# Alle App-Tests
+# All app tests
 ctest -L AudioPlayer
 
-# Nur Unit Tests
+# Unit tests only
 ctest -R "UnitTests"
 
-# Mit Timeout-Override
+# With timeout override
 ctest --timeout 60
 ```
 
 ---
 
-## 8. Errorbehandlung
+## 8. Error Handling
 
-### 8.1 Core-Error (E4xx)
+### 8.1 Core Errors (E4xx)
 
-| Code | Funktion | Bedingung |
+| Code | Function | Condition |
 |------|----------|-----------|
-| `E402` | `_create_app_core` | Pfad existiert nicht |
-| `E403` | `_create_app_core` | Kein src/ Verzeichnis |
-| `E404` | `_create_app_core` | Keine Sources in src/ |
-| `E405` | `_create_app_core` | Dependency nicht gefunden |
-| `E406` | `_create_app_runner` | Kein main/ Verzeichnis |
-| `E407` | `_create_app_runner` | Keine Sources in main/ |
+| `E402` | `_create_app_core` | Path does not exist |
+| `E403` | `_create_app_core` | No src/ directory |
+| `E404` | `_create_app_core` | No sources in src/ |
+| `E405` | `_create_app_core` | Dependency not found |
+| `E406` | `_create_app_runner` | No main/ directory |
+| `E407` | `_create_app_runner` | No sources in main/ |
 
-### 8.2 Allgemeine Error
+### 8.2 General Errors
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| `E010` | External nicht in externals-Block definiert |
-| `E301` | Unbekanntes Test-Framework |
+| `E010` | External or test framework not defined in the externals block |
+| `E101` | Dependency of a test target does not exist |
+| `E301` | No test framework specified (neither `tests.framework` nor `targets[].framework`) |
+| `E302` | Unknown test framework (valid: `doctest`, `googletest`, `catch2`) |
+| `E305` | Path of the test target does not exist |
 
-### 8.3 Warningen (W4xx)
+### 8.3 Warnings (W4xx)
 
-| Code | Funktion | Bedingung |
+| Code | Function | Condition |
 |------|----------|-----------|
-| `W401` | `_create_app_core` | Kein include/ Verzeichnis |
-| `W402` | `_create_app_core` | PCH Header nicht gefunden |
-| `W403` | `_create_app_tests` | Tests aktiviert aber keine Sources |
+| `W401` | `_create_app_core` | No include/ directory |
+| `W402` | `_create_app_core` | PCH header not found |
+| `W403` | `_create_app_tests` | Tests enabled but no sources |
 
 ---
 
@@ -486,32 +489,32 @@ ctest --timeout 60
 
 ### 9.1 Do's
 
-| Empfehlung | Begründung |
-|------------|------------|
-| Headers in include/, Implementation in src/ | Klare Trennung |
-| main.cpp minimal halten | Logik gehört in Core |
-| PCH für Standard-Includes | Reduziert Build-Zeit |
-| Framework in externals definieren | Zentrale Verwaltung |
-| Labels für Tests setzen | Einfaches Filtern |
+| Recommendation | Rationale |
+|----------------|-----------|
+| Headers in include/, implementation in src/ | Clear separation |
+| Keep main.cpp minimal | Logic belongs in Core |
+| PCH for standard includes | Reduces build time |
+| Define the framework in externals | Central management |
+| Set labels for tests | Easy filtering |
 
 ### 9.2 Don'ts
 
-| Vermeiden | Grund |
-|-----------|-------|
-| Business-Logik in main/ | Nicht testbar |
-| Tests ohne Framework-External | E010 Error |
-| Große main.cpp | Verletzt App-Container-Prinzip |
-| PCH in Core ohne #include | MSVC-Error in src/*.cpp |
+| Avoid | Reason |
+|-------|--------|
+| Business logic in main/ | Not testable |
+| Tests without framework external | E010 error |
+| Large main.cpp | Violates the app container principle |
+| PCH in Core without #include | MSVC errors in src/*.cpp |
 
-### 9.3 Example: Gute vs. Schlechte Struktur
+### 9.3 Example: Good vs. Bad Structure
 
-**Gut:**
+**Good:**
 ```cpp
-// main/main.cpp (minimal, kein PCH nötig)
+// main/main.cpp (minimal, no PCH needed)
 #include "Application.hpp"
 int main() { return MyApp::run(); }
 
-// src/Application.cpp (testbar, mit PCH)
+// src/Application.cpp (testable, with PCH)
 #include "pch.h"
 #include "Application.hpp"
 namespace MyApp {
@@ -519,11 +522,11 @@ namespace MyApp {
 }
 ```
 
-**Schlecht:**
+**Bad:**
 ```cpp
-// main/main.cpp (zu viel Logik)
+// main/main.cpp (too much logic)
 int main() {
-    // 500 Zeilen Business-Logik...
+    // 500 lines of business logic...
 }
 ```
 
@@ -532,23 +535,25 @@ int main() {
 ## 10. See Also
 
 - [Apps.cmake](Apps.md) — Orchestrator
-- [AppCollect.cmake](AppCollect.md) — JSON-Parsing
-- [ExecutableCreate.cmake](ExecutableCreate.md) — Ähnliches Pattern
-- [TestCreate.cmake](TestCreate.md) — Test-Pattern
+- [AppCollect.cmake](AppCollect.md) — JSON parsing
+- [ExecutableCreate.cmake](ExecutableCreate.md) — Similar pattern
+- [TestCreate.cmake](TestCreate.md) — Test pattern
 - [AppContainer_Concept.md](../../../konzepte/abgeschlossen/AppContainer_Concept.md) — Concept
-- [ErrorCodes.md](../../references/ErrorCodes.md) — E4xx, W4xx Codes
+- [ErrorCodes.md](../../references/ErrorCodes.md) — E4xx, W4xx codes
 
 ---
 
 ## 11. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.8.0** | **2026-10-09** | **_create_app_test_target(): new parameter COMPILE_OPTIONS — `tests.targets[].compile_options` is set as PRIVATE compiler flags on the test target (CMakeCraft v0.11.0)** |
-| **0.7.4** | **2026-10-05** | **_create_app_test_target(): new parameter EXTERNAL_OPTIONS — `tests.targets[].external_options` is applied per external instead of a fixed `{}`. Signature in § 4.4 corrected (DEPENDENCIES, PARALLEL were missing). § 4.3 updated to the tests.targets[] structure (old tests.unit/tests.integration schema removed, error list completed)** |
-| 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS und RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() mit Optionen |
-| 0.5.4 | 2025-12-18 | PCH vereinfacht: Nur für Core, nicht für Runner/Tests (kein REUSE_FROM mehr) |
-| 0.5.3 | 2025-12-18 | PCH-Include-Directory als PUBLIC hinzugefügt, APP_PCH_* Target Properties |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.3** | **2026-11-09** | **Aligned with the code: § 8.2 E301 = no framework, E302 = unknown framework (as in § 4.3); E101 and E305 added** |
+| **1.0.2** | **2026-10-09** | **_create_app_test_target(): new parameter COMPILE_OPTIONS — `tests.targets[].compile_options` is set as PRIVATE compiler flags on the test target (CMakeCraft v0.11.0)** |
+| **1.0.1** | **2026-10-05** | **_create_app_test_target(): new parameter EXTERNAL_OPTIONS — `tests.targets[].external_options` is applied per external instead of a fixed `{}`. Signature in § 4.4 corrected (DEPENDENCIES, PARALLEL were missing). § 4.3 brought up to the tests.targets[] structure (old tests.unit/tests.integration schema removed, error list completed)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.7.0 | 2025-12-20 | CORE_EXTERNAL_OPTIONS and RUNNER_EXTERNAL_OPTIONS: apply_external_to_target() with options |
+| 0.5.4 | 2025-12-18 | PCH simplified: Core only, not for runner/tests (no more REUSE_FROM) |
+| 0.5.3 | 2025-12-18 | PCH include directory added as PUBLIC, APP_PCH_* target properties |
 | 0.5.2 | 2025-12-18 | PCH 3-tier search, implicit activation |
-| 0.5.1 | 2025-12-17 | collect_sources() Integration, SourceCollect.cmake Dependency |
-| 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container Target-Erstellung |
+| 0.5.1 | 2025-12-17 | collect_sources() integration, SourceCollect.cmake dependency |
+| 0.5.0 | 2025-12-17 | Initial: Phase 8 app container target creation |

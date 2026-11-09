@@ -1,14 +1,14 @@
 # Local/Attach.cmake — Lokale External Handler
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Attach_cmake.md](Attach_cmake.md)  
-> **Modul:** [cmake/externals/Local/Attach.cmake](../../../cmake/externals/Local/Attach.cmake)  
+> **English:** [Attach_cmake.md](../../../../../en/guide/module/externals/locals/Attach_cmake.md)  
+> **Modul:** [cmake/externals/Local/Attach.cmake](../../../../../../cmake/externals/local/Attach.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -157,7 +157,7 @@ cmake/externals/includes/{name}/Include.cmake
 ## 7. Siehe auch
 
 - [Orchestrator_cmake.md](../Orchestrator_cmake.md) — Type Dispatcher
-- [Externals_Reference.md](../../reference/Externals_Reference.md) — Verzeichnisstrukturen
+- [Externals_Reference.md](../../../references/Externals.md) — Verzeichnisstrukturen
 
 ---
 
@@ -165,4 +165,5 @@ cmake/externals/includes/{name}/Include.cmake
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

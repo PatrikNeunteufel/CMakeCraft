@@ -4,51 +4,51 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Local_Externals_Scripting.md](Local_Externals_Scripting.md)
+> **German:** [Local_Externals_Scripting.md](../../../../de/guide/references/externals/Local_Externals_Scripting.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Lua 5.4 Scripting Engine](#2-lua-54-scripting-engine)
-3. [See Also](#3-siehe-auch)
-4. [Changelog](#4-changelog)
+3. [See Also](#3-see-also)
+4. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes lokale Scripting-Externals für das CMake Architecture Build-System.
+This document describes local scripting externals for the CMake Architecture build system.
 
-| Library | Description | Lizenz |
-|---------|--------------|--------|
-| **lua54** | Lua 5.4 Scripting Engine | MIT |
+| Library | Description | License |
+|---------|-------------|---------|
+| **lua54** | Lua 5.4 scripting engine | MIT |
 
 ---
 
 ## 2. Lua 5.4 Scripting Engine
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | 📝 Source-basiert |
-| **Pfad** | `externals/lua54` |
+| Aspect | Value |
+|--------|-------|
+| **Type** | 📝 Source-based |
+| **Path** | `externals/lua54` |
 | **Include.cmake** | `cmake/externals/includes/lua54/Include.cmake` |
-| **Plattformen** | Alle |
+| **Platforms** | All |
 | **Website** | [lua.org](https://www.lua.org/) |
 
-### Warum Lua?
+### Why Lua?
 
-| Vorteil | Description |
-|---------|--------------|
-| **Lightweight** | Minimaler Footprint (~300KB) |
-| **Embeddable** | Einfach in C++ einzubetten |
-| **Flexibel** | Configuration, Modding, Scripting |
-| **Schnell** | Sehr performante VM |
+| Advantage | Description |
+|-----------|-------------|
+| **Lightweight** | Minimal footprint (~300KB) |
+| **Embeddable** | Easy to embed in C++ |
+| **Flexible** | Configuration, modding, scripting |
+| **Fast** | Very performant VM |
 
 ### Solution.json
 
@@ -68,7 +68,7 @@ This document describes lokale Scripting-Externals für das CMake Architecture B
 }
 ```
 
-### Verzeichnisstruktur
+### Directory Structure
 
 ```
 externals/lua54/
@@ -79,19 +79,19 @@ externals/lua54/
     ├── lauxlib.h
     ├── lapi.c
     ├── lcode.c
-    ├── ... (weitere .c Dateien)
+    ├── ... (more .c files)
     └── lutf8lib.c
 ```
 
 ### Options
 
-| Option | Typ | Default | Description |
-|--------|-----|---------|--------------|
-| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; on Windows `true` needs a static `lua54.lib` — with an import library the target links but cannot start without `lua54.dll` |
-| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile definition `LUA_32BITS`) |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `LUA_EMBEDDED` | bool | `false` | Link statically. The default is dynamic; under Windows `true` needs a static `lua54.lib` — with an import library the target links but does not start without `lua54.dll` |
+| `LUA_32BIT_COMPAT` | bool | `false` | 32-bit integer/float (sets the compile define `LUA_32BITS`) |
 | `LUA_USE_READLINE` | bool | `false` | Readline support (Linux only; links `readline`) |
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #include <lua.h>
@@ -109,7 +109,7 @@ int main() {
 }
 ```
 
-### Configurationsdatei laden
+### Loading a Configuration File
 
 **config.lua:**
 
@@ -147,36 +147,36 @@ if (luaL_dofile(L, "config.lua") == LUA_OK) {
 lua_close(L);
 ```
 
-### C-Funktion nach Lua exportieren
+### Exporting a C Function to Lua
 
 ```cpp
-// Funktion die von Lua aufgerufen werden kann
+// Function that can be called from Lua
 int lua_add(lua_State* L) {
     double a = luaL_checknumber(L, 1);
     double b = luaL_checknumber(L, 2);
     lua_pushnumber(L, a + b);
-    return 1;  // Ein Return Value
+    return 1;  // One return value
 }
 
 int main() {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
     
-    // Funktion registrieren
+    // Register function
     lua_pushcfunction(L, lua_add);
     lua_setglobal(L, "add");
     
-    // In Lua verwenden
-    luaL_dostring(L, "print(add(2, 3))");  // Ausgabe: 5
+    // Use in Lua
+    luaL_dostring(L, "print(add(2, 3))");  // Output: 5
     
     lua_close(L);
     return 0;
 }
 ```
 
-### Kombination mit sol2 (Git)
+### Combination with sol2 (Git)
 
-Für komfortablere C++ Bindings empfiehlt sich sol2:
+For more convenient C++ bindings, sol2 is recommended:
 
 ```json
 {
@@ -194,7 +194,7 @@ int main() {
     sol::state lua;
     lua.open_libraries(sol::lib::base);
     
-    // Einfacher!
+    // Simpler!
     lua["add"] = [](int a, int b) { return a + b; };
     
     lua.script("print(add(2, 3))");
@@ -203,25 +203,25 @@ int main() {
 }
 ```
 
-### Anwendungsfälle
+### Use Cases
 
-| Anwendung | Description |
-|-----------|--------------|
-| **Configuration** | Lua-Dateien statt JSON/XML |
-| **Modding** | Spieler können Spiele erweitern |
-| **Scripting** | Gameplay-Logik in Lua |
-| **Automation** | Build-Skripte, Tools |
+| Use | Description |
+|-----|-------------|
+| **Configuration** | Lua files instead of JSON/XML |
+| **Modding** | Players can extend games |
+| **Scripting** | Gameplay logic in Lua |
+| **Automation** | Build scripts, tools |
 
-### Vergleich mit Git-Alternativen
+### Comparison with Git Alternatives
 
 | Feature | lua54 (Local) | sol2 (Git) | pybind11 (Git) |
 |---------|---------------|------------|----------------|
-| **Sprache** | Lua | Lua (C++ Wrapper) | Python |
-| **Footprint** | ~300KB | Header-Only | Größer |
-| **C++ Integration** | Manual | Automatisch | Automatisch |
-| **Anwendung** | Core Engine | C++ Bindings | Python Bindings |
+| **Language** | Lua | Lua (C++ wrapper) | Python |
+| **Footprint** | ~300KB | Header-only | Larger |
+| **C++ Integration** | Manual | Automatic | Automatic |
+| **Use case** | Core engine | C++ bindings | Python bindings |
 
-### Detail-Dokumentation
+### Detail Documentation
 
 → [lua54_Include.md](../../module/externals/includes/lua54/Lua54_Include.md)
 
@@ -229,15 +229,16 @@ int main() {
 
 ## 3. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
-- [Local_Externals.md](Local_Externals.md) — Local Externals Overview
-- [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — Git Scripting-Externals (sol2, pybind11)
-- [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/) — Offizielle Dokumentation
+- [Externals.md](../Externals.md) — Main overview of all externals
+- [Local_Externals.md](Local_Externals.md) — Local Externals overview
+- [Git_Externals_Scripting.md](Git_Externals_Scripting.md) — Git scripting externals (sol2, pybind11)
+- [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/) — Official documentation
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Scripting (parallel zu Git)** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Own category Scripting (parallel to Git) |

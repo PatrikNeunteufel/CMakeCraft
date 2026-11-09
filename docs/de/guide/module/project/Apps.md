@@ -1,15 +1,15 @@
 # Apps.cmake — Dokumentation
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung  
 > **Zielgruppe:** Build-System-Entwickler  
-> **Modul:** [cmake/project/Apps.cmake](../../../../cmake/project/Apps.cmake)  
+> **Modul:** [cmake/project/Apps.cmake](../../../../../cmake/project/Apps.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Sprache:** Deutsch  
-> **English:** [Apps.md](Apps.md)
+> **English:** [Apps.md](../../../../en/guide/module/project/Apps.md)
 
 ---
 
@@ -46,8 +46,7 @@ Das `Apps`-Modul ist der **Orchestrator für die App-Container-Pipeline**. Es it
 |--------|-----|--------------|
 | `{AppName}.Core` | STATIC Library | Business-Logik, testbar |
 | `{AppName}` | Executable | Entry-Point (main()) |
-| `{AppName}.UnitTests` | Test Executable | Unit Tests (optional) |
-| `{AppName}.IntegrationTests` | Test Executable | Integration Tests (optional) |
+| `{AppName}.{Testname}` | Test Executable | je Eintrag in `tests.targets[]` (optional, nur bei `BUILD_TESTS`), z. B. `{AppName}.UnitTests` |
 
 ---
 
@@ -130,7 +129,7 @@ Solution.json
    └─ Targets erstellen:
       ├─ _create_app_core()    → {AppName}.Core
       ├─ _create_app_runner()  → {AppName}
-      └─ _create_app_tests()   → {AppName}.*Tests (wenn BUILD_TESTS)
+      └─ _create_app_tests()   → {AppName}.{targets[].name} (wenn BUILD_TESTS)
 ```
 
 ### 4.2 Early-Exit-Bedingungen
@@ -152,8 +151,13 @@ Solution.json
 ```
 AudioPlayer.Core            ← STATIC Library
 AudioPlayer                 ← Executable
-AudioPlayer.UnitTests       ← Test (wenn tests.unit definiert)
-AudioPlayer.IntegrationTests ← Test (wenn tests.integration definiert)
+AudioPlayer.UnitTests       ← Test (Eintrag "UnitTests" in tests.targets[])
+AudioPlayer.IntegrationTests ← Test (Eintrag "IntegrationTests" in tests.targets[])
+```
+
+Der Name eines Test-Targets ist `{AppName}.{name}` mit `name` aus `tests.targets[]` (`AppCreate.cmake`, `_create_app_tests`).
+
+```
 ```
 
 ### 5.2 Target-Abhängigkeiten
@@ -161,12 +165,9 @@ AudioPlayer.IntegrationTests ← Test (wenn tests.integration definiert)
 ```
 AudioPlayer.Core
      │
-     ├──────────────────┐
-     ▼                  ▼
-AudioPlayer      AudioPlayer.UnitTests
-                        │
-                        ▼
-              AudioPlayer.IntegrationTests
+     ├──────────────────┬────────────────────────────┐
+     ▼                  ▼                            ▼
+AudioPlayer      AudioPlayer.UnitTests     AudioPlayer.IntegrationTests
 ```
 
 ---
@@ -217,11 +218,13 @@ Das Modul prüft sowohl `{AppName}` als auch `{AppName}.Core` in der BUILD_ONLY-
 
 ## 7. Verwendungsbeispiele
 
-### 7.1 CMakeLists.txt Integration
+### 7.1 Einbindung in CMakeCraft.cmake
+
+`CMakeCraft.cmake` lädt das Modul selbst; ein Projekt bindet es nicht ein.
 
 ```cmake
-# Nach Libraries und Executables
-include(cmake/project/Apps.cmake)
+# Nach Externals, Libraries und Executables
+include("${CMAKECRAFT_DIR}/project/Apps.cmake")
 ```
 
 ### 7.2 Solution.json mit Apps
@@ -249,9 +252,18 @@ include(cmake/project/Apps.cmake)
             },
             "tests": {
                 "framework": "doctest",
-                "unit": {
-                    "labels": ["unit", "audio"]
-                }
+                "targets": [
+                    {
+                        "name": "UnitTests",
+                        "type": "unit",
+                        "path": "tests/unit/UnitTests",
+                        "labels": ["unit", "audio"]
+                    },
+                    {
+                        "name": "IntegrationTests",
+                        "type": "integration"
+                    }
+                ]
             }
         }
     ]
@@ -325,4 +337,6 @@ Zusätzliche Fehler können von `AppCollect` und `AppCreate` ausgelöst werden (
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-17** | **Initial: Phase 8 App-Container Orchestrator, Skip/Platform/BUILD_ONLY Filter, Target-Erstellung via AppCreate** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Test-Targets aus `tests.targets[]` (Name `{AppName}.{name}`) statt `tests.unit`/`tests.integration`; Einbindung über `${CMAKECRAFT_DIR}` in `CMakeCraft.cmake`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-17 | Initial: Phase 8 App-Container Orchestrator, Skip/Platform/BUILD_ONLY Filter, Target-Erstellung via AppCreate |

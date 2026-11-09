@@ -4,45 +4,45 @@
 > **Date:** 2025-12-26  
 > **Type:** Guide  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [bass.md](Bass.md)
+> **German:** [Bass.md](../../../../de/guide/userguides/externals/Bass.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Installation](#2-installation)
-3. [Solution.json Configuration](#3-solutionjson-konfiguration)
-4. [C++ Usage](#4-c-verwendung)
+3. [Solution.json Configuration](#3-solutionjson-configuration)
+4. [C++ Usage](#4-c-usage)
 5. [Plugins](#5-plugins)
-6. [Effekte](#6-effekte)
-7. [Fortgeschrittene Techniken](#7-fortgeschrittene-techniken)
+6. [Effects](#6-effects)
+7. [Advanced Techniques](#7-advanced-techniques)
 8. [Troubleshooting](#8-troubleshooting)
-9. [Weiterführende Informationen](#9-weiterführende-informationen)
-10. [Changelog](#10-changelog)
+9. [Further Information](#9-further-information)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-**BASS** ist eine professionelle Audio-Library mit umfangreichem Plugin-System.
+**BASS** is a professional audio library with an extensive plugin system.
 
-| Aspekt | Wert |
-|--------|------|
-| **Typ** | Local External (Vorkompiliert) |
-| **Pfad** | `externals/bass` |
-| **Lizenz** | Free for non-commercial / Commercial |
+| Aspect | Value |
+|--------|-------|
+| **Type** | Local External (precompiled) |
+| **Path** | `externals/bass` |
+| **License** | Free for non-commercial / Commercial |
 | **Website** | [un4seen.com](https://www.un4seen.com/bass.html) |
 
-### Warum BASS?
+### Why BASS?
 
-| Vorteil | Description |
-|---------|--------------|
-| 🎵 **Plugins** | 20+ Format-Plugins |
-| 🎚️ **Effekte** | DSP, Tempo, Pitch, Reverb |
-| 🔊 **3D Audio** | Surround Sound Support |
+| Advantage | Description |
+|-----------|-------------|
+| 🎵 **Plugins** | 20+ format plugins |
+| 🎚️ **Effects** | DSP, tempo, pitch, reverb |
+| 🔊 **3D Audio** | Surround sound support |
 | 📱 **Cross-Platform** | Windows, Linux, macOS |
 
 ---
@@ -51,13 +51,13 @@
 
 ### 2.1 Download
 
-Von [un4seen.com/bass.html](https://www.un4seen.com/bass.html):
+From [un4seen.com/bass.html](https://www.un4seen.com/bass.html):
 
-1. BASS Library herunterladen
-2. Benötigte Add-ons herunterladen (FLAC, FX, etc.)
-3. Nach `externals/bass/` entpacken
+1. Download the BASS library
+2. Download the required add-ons (FLAC, FX, etc.)
+3. Extract to `externals/bass/`
 
-### 2.2 Verzeichnisstruktur
+### 2.2 Directory Structure
 
 ```
 externals/bass/
@@ -78,9 +78,9 @@ externals/bass/
         └── ...
 ```
 
-### 2.3 DLLs kopieren
+### 2.3 Copying DLLs
 
-Die DLLs müssen zur Laufzeit verfügbar sein. Das Build-System kopiert sie automatisch in das Output-Verzeichnis.
+The DLLs must be available at runtime. The build system copies them automatically into the output directory.
 
 ---
 
@@ -104,7 +104,7 @@ Die DLLs müssen zur Laufzeit verfügbar sein. Das Build-System kopiert sie auto
 }
 ```
 
-### 3.2 Mit Plugins
+### 3.2 With Plugins
 
 ```json
 {
@@ -129,54 +129,54 @@ Die DLLs müssen zur Laufzeit verfügbar sein. Das Build-System kopiert sie auto
 }
 ```
 
-### 3.3 Alle Options
+### 3.3 All Options
 
-#### Decoder
+#### Decoders
 
 | Option | Plugin | Description |
-|--------|--------|--------------|
-| `BASS_FLAC` | bassflac | FLAC Audio |
-| `BASS_OPUS` | bassopus | Opus Audio |
+|--------|--------|-------------|
+| `BASS_FLAC` | bassflac | FLAC audio |
+| `BASS_OPUS` | bassopus | Opus audio |
 | `BASS_DSD` | bassdsd | DSD (Direct Stream Digital) |
 | `BASS_WV` | basswv | WavPack |
 | `BASS_APE` | bassape | Monkey's Audio |
 | `BASS_MPC` | bass_mpc | Musepack |
 | `BASS_ALAC` | bassalac | Apple Lossless |
 | `BASS_TTA` | bass_tta | True Audio |
-| `BASS_CD` | basscd | CD Audio |
-| `BASS_WEBM` | basswebm | WebM Container |
+| `BASS_CD` | basscd | CD audio |
+| `BASS_WEBM` | basswebm | WebM container |
 
-#### Encoder
-
-| Option | Plugin | Description |
-|--------|--------|--------------|
-| `BASS_ENC` | bassenc | Encoding-Basis |
-| `BASS_ENC_MP3` | bassenc_mp3 | MP3 Encoder |
-| `BASS_ENC_OGG` | bassenc_ogg | OGG Vorbis Encoder |
-| `BASS_ENC_FLAC` | bassenc_flac | FLAC Encoder |
-
-#### Effekte & Mixing
+#### Encoders
 
 | Option | Plugin | Description |
-|--------|--------|--------------|
-| `BASS_FX` | bass_fx | DSP Effekte |
-| `BASS_MIX` | bassmix | Multi-Channel Mixing |
+|--------|--------|-------------|
+| `BASS_ENC` | bassenc | Encoding base |
+| `BASS_ENC_MP3` | bassenc_mp3 | MP3 encoder |
+| `BASS_ENC_OGG` | bassenc_ogg | OGG Vorbis encoder |
+| `BASS_ENC_FLAC` | bassenc_flac | FLAC encoder |
+
+#### Effects & Mixing
+
+| Option | Plugin | Description |
+|--------|--------|-------------|
+| `BASS_FX` | bass_fx | DSP effects |
+| `BASS_MIX` | bassmix | Multi-channel mixing |
 | `BASS_LOUD` | bassloud | Loudness (EBU R128) |
-| `BASS_MIDI` | bassmidi | MIDI Playback |
+| `BASS_MIDI` | bassmidi | MIDI playback |
 
 ---
 
 ## 4. C++ Usage
 
-### 4.1 Grundlagen
+### 4.1 Basics
 
 ```cpp
 #include <bass.h>
 #include <iostream>
 
 int main() {
-    // BASS initialisieren
-    // -1 = Default Device, 44100 Hz, 0 = Default Flags
+    // Initialize BASS
+    // -1 = default device, 44100 Hz, 0 = default flags
     if (!BASS_Init(-1, 44100, 0, nullptr, nullptr)) {
         std::cerr << "BASS_Init failed: " << BASS_ErrorGetCode() << std::endl;
         return 1;
@@ -186,15 +186,15 @@ int main() {
     std::cout << "Version: " << HIWORD(BASS_GetVersion()) << "." 
               << LOWORD(BASS_GetVersion()) << std::endl;
     
-    // ... Audio abspielen ...
+    // ... play audio ...
     
-    // BASS beenden
+    // Shut down BASS
     BASS_Free();
     return 0;
 }
 ```
 
-### 4.2 MP3/WAV abspielen
+### 4.2 Playing MP3/WAV
 
 ```cpp
 #include <bass.h>
@@ -205,12 +205,12 @@ int main() {
 int main() {
     BASS_Init(-1, 44100, 0, nullptr, nullptr);
     
-    // Stream erstellen
+    // Create stream
     HSTREAM stream = BASS_StreamCreateFile(
-        FALSE,          // Nicht aus Speicher
-        "music.mp3",    // Dateipfad
+        FALSE,          // Not from memory
+        "music.mp3",    // File path
         0,              // Offset
-        0,              // Länge (0 = ganze Datei)
+        0,              // Length (0 = whole file)
         0               // Flags
     );
     
@@ -220,12 +220,12 @@ int main() {
         return 1;
     }
     
-    // Abspielen starten
+    // Start playback
     BASS_ChannelPlay(stream, FALSE);
     
-    // Warten bis fertig
+    // Wait until finished
     while (BASS_ChannelIsActive(stream) == BASS_ACTIVE_PLAYING) {
-        // Position anzeigen
+        // Show position
         double pos = BASS_ChannelBytes2Seconds(stream, BASS_ChannelGetPosition(stream, BASS_POS_BYTE));
         double len = BASS_ChannelBytes2Seconds(stream, BASS_ChannelGetLength(stream, BASS_POS_BYTE));
         std::cout << "\rPosition: " << (int)pos << "s / " << (int)len << "s" << std::flush;
@@ -235,49 +235,49 @@ int main() {
     
     std::cout << std::endl << "Playback finished!" << std::endl;
     
-    // Aufräumen
+    // Clean up
     BASS_StreamFree(stream);
     BASS_Free();
     return 0;
 }
 ```
 
-### 4.3 Lautstärke und Position
+### 4.3 Volume and Position
 
 ```cpp
 HSTREAM stream = BASS_StreamCreateFile(FALSE, "music.mp3", 0, 0, 0);
 BASS_ChannelPlay(stream, FALSE);
 
-// Lautstärke (0.0 - 1.0)
+// Volume (0.0 - 1.0)
 BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, 0.5f);
 
-// Lautstärke auslesen
+// Read volume
 float volume;
 BASS_ChannelGetAttribute(stream, BASS_ATTRIB_VOL, &volume);
 
-// Position setzen (in Sekunden)
-double newPos = 30.0;  // 30 Sekunden
+// Set position (in seconds)
+double newPos = 30.0;  // 30 seconds
 QWORD bytes = BASS_ChannelSeconds2Bytes(stream, newPos);
 BASS_ChannelSetPosition(stream, bytes, BASS_POS_BYTE);
 
 // Pause
 BASS_ChannelPause(stream);
 
-// Fortsetzen
+// Resume
 BASS_ChannelPlay(stream, FALSE);
 
-// Stop (zurück zum Anfang)
+// Stop (back to the beginning)
 BASS_ChannelStop(stream);
 ```
 
-### 4.4 Stream aus URL
+### 4.4 Stream from URL
 
 ```cpp
-// Internet-Stream
+// Internet stream
 HSTREAM stream = BASS_StreamCreateURL(
     "http://example.com/radio.mp3",
     0,                  // Offset
-    BASS_STREAM_BLOCK,  // Download in Blöcken
+    BASS_STREAM_BLOCK,  // Download in blocks
     nullptr,            // Callback
     nullptr             // User data
 );
@@ -287,13 +287,13 @@ if (stream) {
 }
 ```
 
-### 4.5 Mehrere Streams gleichzeitig
+### 4.5 Multiple Streams at Once
 
 ```cpp
 HSTREAM music = BASS_StreamCreateFile(FALSE, "music.mp3", 0, 0, 0);
 HSTREAM sfx = BASS_StreamCreateFile(FALSE, "explosion.wav", 0, 0, 0);
 
-// Beide abspielen
+// Play both
 BASS_ChannelPlay(music, FALSE);
 BASS_ChannelSetAttribute(music, BASS_ATTRIB_VOL, 0.7f);
 
@@ -305,7 +305,7 @@ BASS_ChannelSetAttribute(sfx, BASS_ATTRIB_VOL, 1.0f);
 
 ## 5. Plugins
 
-### 5.1 FLAC abspielen
+### 5.1 Playing FLAC
 
 ```cpp
 #include <bass.h>
@@ -314,7 +314,7 @@ BASS_ChannelSetAttribute(sfx, BASS_ATTRIB_VOL, 1.0f);
 int main() {
     BASS_Init(-1, 44100, 0, nullptr, nullptr);
     
-    // FLAC-Plugin wird automatisch verwendet
+    // The FLAC plugin is used automatically
     HSTREAM stream = BASS_StreamCreateFile(FALSE, "music.flac", 0, 0, 0);
     
     if (stream) {
@@ -328,7 +328,7 @@ int main() {
 }
 ```
 
-### 5.2 Opus abspielen
+### 5.2 Playing Opus
 
 ```cpp
 #include <bass.h>
@@ -337,7 +337,7 @@ int main() {
 HSTREAM stream = BASS_StreamCreateFile(FALSE, "music.opus", 0, 0, 0);
 ```
 
-### 5.3 Format-Informationen
+### 5.3 Format Information
 
 ```cpp
 BASS_CHANNELINFO info;
@@ -347,7 +347,7 @@ std::cout << "Channels: " << info.chans << std::endl;
 std::cout << "Sample Rate: " << info.freq << " Hz" << std::endl;
 std::cout << "Original Freq: " << info.origres << " Hz" << std::endl;
 
-// Format-Typ
+// Format type
 switch (info.ctype) {
     case BASS_CTYPE_STREAM_MP3: std::cout << "MP3" << std::endl; break;
     case BASS_CTYPE_STREAM_OGG: std::cout << "OGG" << std::endl; break;
@@ -359,7 +359,7 @@ switch (info.ctype) {
 
 ---
 
-## 6. Effekte
+## 6. Effects
 
 ### 6.1 BASS_FX Setup
 
@@ -369,131 +369,131 @@ switch (info.ctype) {
 
 BASS_Init(-1, 44100, 0, nullptr, nullptr);
 
-// Stream als DECODE erstellen (für FX-Processing)
+// Create the stream as DECODE (for FX processing)
 HSTREAM original = BASS_StreamCreateFile(
     FALSE, "music.mp3", 0, 0, 
     BASS_STREAM_DECODE  // Important!
 );
 
-// Tempo-Stream erstellen
+// Create tempo stream
 HSTREAM tempo = BASS_FX_TempoCreate(original, BASS_FX_FREESOURCE);
 ```
 
-### 6.2 Tempo ändern
+### 6.2 Changing Tempo
 
 ```cpp
-// Tempo: -50% bis +100%
-// -20 = 20% langsamer
+// Tempo: -50% to +100%
+// -20 = 20% slower
 BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO, -20.0f);
 
-// Tempo auslesen
+// Read tempo
 float currentTempo;
 BASS_ChannelGetAttribute(tempo, BASS_ATTRIB_TEMPO, &currentTempo);
 ```
 
-### 6.3 Pitch ändern
+### 6.3 Changing Pitch
 
 ```cpp
-// Pitch in Halbtönen: -12 bis +12
-// 3 = 3 Halbtöne höher
+// Pitch in semitones: -12 to +12
+// 3 = 3 semitones higher
 BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO_PITCH, 3.0f);
 ```
 
 ### 6.4 Playback Rate
 
 ```cpp
-// Rate: 0.0 bis 4.0 (normal = 1.0)
-// Ändert Tempo UND Pitch (wie Vinyl)
+// Rate: 0.0 to 4.0 (normal = 1.0)
+// Changes tempo AND pitch (like vinyl)
 BASS_ChannelSetAttribute(tempo, BASS_ATTRIB_TEMPO_FREQ, 
-    44100 * 1.5f);  // 50% schneller
+    44100 * 1.5f);  // 50% faster
 ```
 
-### 6.5 Reverb-Effekt
+### 6.5 Reverb Effect
 
 ```cpp
-// Reverb hinzufügen
+// Add reverb
 HFX reverb = BASS_ChannelSetFX(stream, BASS_FX_DX8_REVERB, 1);
 
-// Parameters setzen
+// Set parameters
 BASS_DX8_REVERB params;
 params.fInGain = 0.0f;
 params.fReverbMix = -10.0f;
 params.fReverbTime = 1000.0f;
 params.fHighFreqRTRatio = 0.5f;
-BASS_FXSetParameterss(reverb, &params);
+BASS_FXSetParameters(reverb, &params);
 ```
 
 ### 6.6 Equalizer
 
 ```cpp
-// 3-Band EQ
+// 3-band EQ
 HFX eq = BASS_ChannelSetFX(stream, BASS_FX_DX8_PARAMEQ, 1);
 
 BASS_DX8_PARAMEQ params;
 params.fCenter = 100.0f;   // Bass: 100 Hz
 params.fBandwidth = 12.0f;
 params.fGain = 6.0f;       // +6 dB
-BASS_FXSetParameterss(eq, &params);
+BASS_FXSetParameters(eq, &params);
 ```
 
 ---
 
-## 7. Fortgeschrittene Techniken
+## 7. Advanced Techniques
 
 ### 7.1 Callbacks
 
 ```cpp
-// Position-Sync Callback
+// Position sync callback
 void CALLBACK SyncCallback(HSYNC handle, DWORD channel, DWORD data, void* user) {
     std::cout << "Reached sync point!" << std::endl;
 }
 
-// Bei 30 Sekunden
+// At 30 seconds
 QWORD pos = BASS_ChannelSeconds2Bytes(stream, 30.0);
 BASS_ChannelSetSync(stream, BASS_SYNC_POS, pos, SyncCallback, nullptr);
 
-// Am Ende
+// At the end
 BASS_ChannelSetSync(stream, BASS_SYNC_END, 0, SyncCallback, nullptr);
 ```
 
-### 7.2 Visualisierung (FFT)
+### 7.2 Visualization (FFT)
 
 ```cpp
 float fft[256];
 BASS_ChannelGetData(stream, fft, BASS_DATA_FFT512);
 
-// fft[0..255] enthält Frequenzdaten
+// fft[0..255] contains frequency data
 for (int i = 0; i < 256; i++) {
     float magnitude = fft[i];
-    // Visualisieren...
+    // Visualize...
 }
 ```
 
 ### 7.3 Recording
 
 ```cpp
-// Recording starten
+// Start recording
 HRECORD record = BASS_RecordStart(44100, 2, 0, nullptr, nullptr);
 
-// ... aufnehmen ...
+// ... record ...
 
-// Recording stoppen und als WAV speichern
+// Stop recording and save as WAV
 BASS_ChannelStop(record);
 
-// Manuell WAV-Datei erstellen oder bassenc verwenden
+// Create the WAV file manually or use bassenc
 ```
 
-### 7.4 Loop-Punkte
+### 7.4 Loop Points
 
 ```cpp
-// Loop setzen
+// Set loop
 QWORD loopStart = BASS_ChannelSeconds2Bytes(stream, 10.0);
 QWORD loopEnd = BASS_ChannelSeconds2Bytes(stream, 20.0);
 
 BASS_ChannelSetPosition(stream, loopStart, BASS_POS_BYTE);
 BASS_ChannelFlags(stream, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
 
-// Benutzerdefinierter Loop
+// Custom loop
 BASS_ChannelSetSync(stream, BASS_SYNC_POS | BASS_SYNC_MIXTIME, 
     loopEnd, [](HSYNC, DWORD channel, DWORD, void* start) {
         BASS_ChannelSetPosition(channel, *(QWORD*)start, BASS_POS_BYTE);
@@ -506,9 +506,9 @@ BASS_ChannelSetSync(stream, BASS_SYNC_POS | BASS_SYNC_MIXTIME,
 
 ### 8.1 BASS_Init failed
 
-**Problem:** `BASS_Init` gibt FALSE zurück
+**Problem:** `BASS_Init` returns FALSE
 
-**Lösungen:**
+**Solutions:**
 ```cpp
 int error = BASS_ErrorGetCode();
 switch (error) {
@@ -524,11 +524,11 @@ switch (error) {
 }
 ```
 
-### 8.2 Stream nicht erstellt
+### 8.2 Stream Not Created
 
-**Problem:** `BASS_StreamCreateFile` gibt 0 zurück
+**Problem:** `BASS_StreamCreateFile` returns 0
 
-**Lösungen:**
+**Solutions:**
 ```cpp
 int error = BASS_ErrorGetCode();
 switch (error) {
@@ -544,17 +544,17 @@ switch (error) {
 }
 ```
 
-### 8.3 DLL nicht gefunden
+### 8.3 DLL Not Found
 
-**Problem:** `bass.dll` nicht gefunden
+**Problem:** `bass.dll` not found
 
-**Lösung:** DLLs müssen im gleichen Verzeichnis wie die EXE sein oder im PATH.
+**Solution:** The DLLs must be in the same directory as the EXE or in the PATH.
 
-### 8.4 Plugin nicht geladen
+### 8.4 Plugin Not Loaded
 
-**Problem:** FLAC/Opus-Dateien werden nicht abgespielt
+**Problem:** FLAC/Opus files are not played
 
-**Lösung:** `external_options` in Solution.json prüfen:
+**Solution:** Check `external_options` in Solution.json:
 ```json
 "external_options": {
     "bass": { "BASS_FLAC": true }
@@ -563,28 +563,29 @@ switch (error) {
 
 ---
 
-## 9. Weiterführende Informationen
+## 9. Further Information
 
-### Offizielle Ressourcen
+### Official Resources
 
-| Ressource | Link |
-|-----------|------|
+| Resource | Link |
+|----------|------|
 | **Website** | [un4seen.com](https://www.un4seen.com/) |
 | **BASS Download** | [un4seen.com/bass.html](https://www.un4seen.com/bass.html) |
-| **Dokumentation** | [un4seen.com/doc](https://www.un4seen.com/doc/) |
+| **Documentation** | [un4seen.com/doc](https://www.un4seen.com/doc/) |
 | **Forum** | [un4seen.com/forum](https://www.un4seen.com/forum/) |
 | **Add-ons** | [un4seen.com/bass.html#addons](https://www.un4seen.com/bass.html#addons) |
 
 ### See Also
 
-- [Externals.md](../Externals.md) — Externals Kombinationen
+- [Externals.md](../Externals.md) — Externals combinations
 - [Local_Externals_Media.md](../../references/externals/Local_Externals_Media.md) — Reference
-- [Git_Externals_Media.md](../../references/externals/Git_Externals_Media.md) — Alternativen (miniaudio, openal-soft)
+- [Git_Externals_Media.md](../../references/externals/Git_Externals_Media.md) — Alternatives (miniaudio, openal-soft)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für BASS** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: detailed UserGuide for BASS |

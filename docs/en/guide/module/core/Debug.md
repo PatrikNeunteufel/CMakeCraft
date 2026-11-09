@@ -1,105 +1,105 @@
-# Debug.cmake — Modul-Dokumentation
+# Debug.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
-> **Status:** In Development (Pre-Release)  
+> **Status:** In development (pre-release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [Debug.md](Debug.md)  
-> **Module:** [`cmake/core/Debug.cmake`](../../../../cmake/core/Debug.cmake)  
+> **German:** [Debug.md](../../../../de/guide/module/core/Debug.md)  
+> **Module:** [`cmake/core/Debug.cmake`](../../../../../cmake/core/Debug.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [Globale Configuration](#4-globale-konfiguration)
-5. [API-Reference](#5-api-referenz)
-6. [Usagesbeispiele](#6-verwendungsbeispiele)
-7. [Output-Examples](#7-output-beispiele)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [Global Configuration](#4-global-configuration)
+5. [API Reference](#5-api-reference)
+6. [Usage Examples](#6-usage-examples)
+7. [Output Examples](#7-output-examples)
 8. [Best Practices](#8-best-practices)
-9. [Interne Implementation](#9-interne-implementierung)
-10. [See Also](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+9. [Internal Implementation](#9-internal-implementation)
+10. [See Also](#10-see-also)
+11. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `Debug.cmake` Modul implementiert ein **kontextbasiertes Debug-System** mit Zwei-Achsen-Filterung. Es ermöglicht granulare Kontrolle über Debug-Ausgaben ohne den Code mit `if(DEBUG)` zu übersäen.
+The `Debug.cmake` module implements a **context-based debug system** with two-axis filtering. It allows granular control over debug output without littering the code with `if(DEBUG)`.
 
-### Kernidee
+### Core Idea
 
-Jede Message hat eine Importantkeit (FREQ), jeder Kontext hat ein Sichtbarkeits-Level (SHOW). Message erscheint wenn `FREQ <= SHOW`.
+Every message has an importance (FREQ), every context has a visibility level (SHOW). A message appears if `FREQ <= SHOW`.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Filterung | Zwei-Achsen-System (SHOW × FREQ) |
-| Kontexte | Isolierte Debug-Bereiche pro Modul |
-| Kontrolle | Master-Switch, Level-Override, ONCE-Flag |
-| Struktur | Tags, Leerzeilen, Trennlinien |
+| Area | Description |
+|------|-------------|
+| Filtering | Two-axis system (SHOW × FREQ) |
+| Contexts | Isolated debug areas per module |
+| Control | Master switch, level override, ONCE flag |
+| Structure | Tags, blank lines, separator lines |
 
-### Usage durch
+### Used By
 
 - CompilerOptions.cmake, Solution.cmake, Executables.cmake
-- Alle Module die Debug-Ausgaben benötigen
+- All modules that need debug output
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
-| — | — | Keine (Basis-Modul, sollte früh geladen werden) |
+| Module | Version | Usage |
+|--------|---------|-------|
+| — | — | None (base module, should be loaded early) |
 
-**Design-Entscheidung:** Debug.cmake ist ein Basis-Modul ohne Dependencies, da es von fast allen anderen Modulen verwendet wird.
+**Design decision:** Debug.cmake is a base module without dependencies, since it is used by almost all other modules.
 
 ---
 
 ## 3. Concept
 
-### 3.1 Zwei-Achsen-Filterung
+### 3.1 Two-Axis Filtering
 
-| Achse | Frage | Werte |
-|-------|-------|-------|
-| **SHOW** | Wie viel will ich sehen? | 1-5 (wenig → alles) |
-| **FREQ** | Wie wichtig ist diese Message? | 1-5 (wichtig → Detail) |
+| Axis | Question | Values |
+|------|----------|--------|
+| **SHOW** | How much do I want to see? | 1-5 (little → everything) |
+| **FREQ** | How important is this message? | 1-5 (important → detail) |
 
-**Filterregel:** Message erscheint wenn `FREQ <= SHOW`
+**Filter rule:** A message appears if `FREQ <= SHOW`
 
-### 3.2 SHOW-Level Konstanten
+### 3.2 SHOW Level Constants
 
-| Konstante | Wert | Bedeutung |
-|-----------|------|-----------|
-| `DBG_SHOW_LITTLE` | 1 | Nur das Importantste |
-| `DBG_SHOW_SOME` | 2 | Standard (Default) |
-| `DBG_SHOW_MUCH` | 3 | Mehr Details |
-| `DBG_SHOW_LOTS` | 4 | Viele Details |
-| `DBG_SHOW_ALL` | 5 | Alles |
+| Constant | Value | Meaning |
+|----------|-------|---------|
+| `DBG_SHOW_LITTLE` | 1 | Only the most important |
+| `DBG_SHOW_SOME` | 2 | Standard (default) |
+| `DBG_SHOW_MUCH` | 3 | More details |
+| `DBG_SHOW_LOTS` | 4 | Many details |
+| `DBG_SHOW_ALL` | 5 | Everything |
 
-### 3.3 FREQ-Level Konstanten
+### 3.3 FREQ Level Constants
 
-| Konstante | Wert | Bedeutung | Example |
-|-----------|------|-----------|----------|
-| `DBG_OFTEN` | 1 | Häufig, wichtig | Modul-Start, Phase-Start |
-| `DBG_COMMON` | 2 | Übliche Info | Gefundene Dateien, Features |
-| `DBG_NORMAL` | 3 | Standard | Zwischenschritte |
-| `DBG_RARE` | 4 | Selten benötigt | Pfade, Variablen |
-| `DBG_ULTRA_RARE` | 5 | Nur tiefes Debugging | Loop-Iterationen |
+| Constant | Value | Meaning | Example |
+|----------|-------|---------|---------|
+| `DBG_OFTEN` | 1 | Frequent, important | Module start, phase start |
+| `DBG_COMMON` | 2 | Usual info | Files found, features |
+| `DBG_NORMAL` | 3 | Standard | Intermediate steps |
+| `DBG_RARE` | 4 | Rarely needed | Paths, variables |
+| `DBG_ULTRA_RARE` | 5 | Deep debugging only | Loop iterations |
 
-### 3.4 Example: Filterung
+### 3.4 Example: Filtering
 
-Mit `SHOW = DBG_SHOW_MUCH (3)`:
+With `SHOW = DBG_SHOW_MUCH (3)`:
 
-| FREQ-Level | Wert | Erscheint? | Grund |
-|------------|------|------------|-------|
+| FREQ level | Value | Appears? | Reason |
+|------------|-------|----------|--------|
 | `DBG_OFTEN` | 1 | ✅ | 1 <= 3 |
 | `DBG_COMMON` | 2 | ✅ | 2 <= 3 |
 | `DBG_NORMAL` | 3 | ✅ | 3 <= 3 |
@@ -108,35 +108,35 @@ Mit `SHOW = DBG_SHOW_MUCH (3)`:
 
 ---
 
-## 4. Globale Configuration
+## 4. Global Configuration
 
-### 4.1 Cache-Variablen
+### 4.1 Cache Variables
 
-| Variable | Typ | Default | Description |
-|----------|-----|---------|--------------|
-| `DEBUG_MESSAGES` | BOOL | ON | Master-Switch für alle Ausgaben |
-| `DEBUG_DEFAULT_LEVEL` | INT | 2 | Standard SHOW-Level für neue Kontexte |
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `DEBUG_MESSAGES` | BOOL | ON | Master switch for all output |
+| `DEBUG_DEFAULT_LEVEL` | INT | 2 | Default SHOW level for new contexts |
 
-### 4.2 Aktivierung
+### 4.2 Activation
 
 ```bash
-# Alle Debug-Ausgaben deaktivieren
+# Disable all debug output
 cmake -B build -DDEBUG_MESSAGES=OFF
 
-# Mehr Details sehen
+# See more details
 cmake -B build -DDEBUG_DEFAULT_LEVEL=4
 
-# Alles sehen
+# See everything
 cmake -B build -DDEBUG_DEFAULT_LEVEL=5
 ```
 
 ---
 
-## 5. API-Reference
+## 5. API Reference
 
 ### 5.1 dbg_init()
 
-Initialisiert einen Debug-Kontext.
+Initializes a debug context.
 
 ```cmake
 dbg_init(
@@ -149,14 +149,14 @@ dbg_init(
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `ID` | String | ✓ | Eindeutiger Kontext-Identifier |
-| `LEVEL` | Int/Konstante | — | DBG_SHOW_* oder 1-5 (Default: DEBUG_DEFAULT_LEVEL) |
-| `SWITCH` | BOOL | — | ON/OFF (Default: ON) |
-| `TAG` | String | — | Prefix in eckigen Klammern |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `ID` | String | ✓ | Unique context identifier |
+| `LEVEL` | Int/constant | — | DBG_SHOW_* or 1-5 (default: DEBUG_DEFAULT_LEVEL) |
+| `SWITCH` | BOOL | — | ON/OFF (default: ON) |
+| `TAG` | String | — | Prefix in square brackets |
 
-**Rückgabe:** Keine (speichert als DIRECTORY PROPERTY)
+**Returns:** Nothing (stores as DIRECTORY PROPERTY)
 
 **Example:**
 
@@ -164,7 +164,7 @@ dbg_init(
 # Minimal
 dbg_init(ID MY_MODULE)
 
-# Vollständig
+# Complete
 dbg_init(
     ID SOLUTION 
     LEVEL ${DBG_SHOW_MUCH} 
@@ -172,7 +172,7 @@ dbg_init(
     TAG "Solution"
 )
 
-# Deaktiviert (für temporäres Ausschalten)
+# Disabled (to switch off temporarily)
 dbg_init(ID VERBOSE SWITCH OFF)
 ```
 
@@ -180,7 +180,7 @@ dbg_init(ID VERBOSE SWITCH OFF)
 
 ### 5.2 dbg()
 
-Gibt eine Debug-Message aus (wenn Filter passt).
+Outputs a debug message (if the filter matches).
 
 ```cmake
 dbg(<freq_level> "<message>"
@@ -194,32 +194,32 @@ dbg(<freq_level> "<message>"
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `freq_level` | Int/Konstante | ✓ | DBG_* Importantkeit |
-| `message` | String | ✓ | Auszugebende Nachricht |
-| `ID` | String | — | Kontext-Reference |
-| `LEVEL` | Int | — | Override SHOW-Level |
-| `SWITCH` | BOOL | — | Override Switch |
-| `TAG` | String | — | Zusätzliches Tag |
-| `ONCE` | Flag | — | Pro Kontext nur einmal ausgeben |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `freq_level` | Int/constant | ✓ | DBG_* importance |
+| `message` | String | ✓ | Message to output |
+| `ID` | String | — | Context reference |
+| `LEVEL` | Int | — | Override SHOW level |
+| `SWITCH` | BOOL | — | Override switch |
+| `TAG` | String | — | Additional tag |
+| `ONCE` | Flag | — | Output only once per context |
 
-**Rückgabe:** Keine (gibt auf stdout aus wenn Filter passt)
+**Returns:** Nothing (prints to stdout if the filter matches)
 
 **Example:**
 
 ```cmake
-# Mit Kontext
+# With context
 dbg(${DBG_OFTEN} "=== Module Start ===" ID MY_MODULE)
 dbg(${DBG_COMMON} "Processing: ${_file}" ID MY_MODULE)
 dbg(${DBG_RARE} "Detail: ${_internal}" ID MY_MODULE)
 
-# ONCE für Warningen in Schleifen
+# ONCE for warnings in loops
 foreach(_item IN LISTS _items)
     dbg(${DBG_COMMON} "Deprecated feature used" ID MY_MODULE ONCE)
 endforeach()
 
-# Standalone (ohne Kontext)
+# Standalone (without context)
 dbg(${DBG_NORMAL} "Standalone message")
 ```
 
@@ -227,7 +227,7 @@ dbg(${DBG_NORMAL} "Standalone message")
 
 ### 5.3 dbgspace()
 
-Gibt eine Leerzeile aus.
+Outputs a blank line.
 
 ```cmake
 dbgspace([ID <context_id>] [SWITCH <ON|OFF>])
@@ -235,26 +235,26 @@ dbgspace([ID <context_id>] [SWITCH <ON|OFF>])
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `ID` | String | — | Kontext für Switch-Check |
-| `SWITCH` | BOOL | — | Override Switch |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `ID` | String | — | Context for the switch check |
+| `SWITCH` | BOOL | — | Override switch |
 
-**Rückgabe:** Keine
+**Returns:** Nothing
 
 **Example:**
 
 ```cmake
-dbg(${DBG_OFTEN} "Abschnitt 1" ID MY_DBG)
+dbg(${DBG_OFTEN} "Section 1" ID MY_DBG)
 dbgspace(ID MY_DBG)
-dbg(${DBG_OFTEN} "Abschnitt 2" ID MY_DBG)
+dbg(${DBG_OFTEN} "Section 2" ID MY_DBG)
 ```
 
 ---
 
 ### 5.4 enddbgblock()
 
-Gibt eine Trennlinie aus (visuelle Strukturierung).
+Outputs a separator line (visual structuring).
 
 ```cmake
 enddbgblock([ID <context_id>] [SWITCH <ON|OFF>])
@@ -262,14 +262,14 @@ enddbgblock([ID <context_id>] [SWITCH <ON|OFF>])
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `ID` | String | — | Kontext für Switch-Check |
-| `SWITCH` | BOOL | — | Override Switch |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `ID` | String | — | Context for the switch check |
+| `SWITCH` | BOOL | — | Override switch |
 
-**Rückgabe:** Keine
+**Returns:** Nothing
 
-**Ausgabe:**
+**Output:**
 ```
 -- -------------------------------------------
 ```
@@ -277,8 +277,8 @@ enddbgblock([ID <context_id>] [SWITCH <ON|OFF>])
 **Example:**
 
 ```cmake
-dbg(${DBG_OFTEN} "=== Modul Start ===" ID MY_DBG)
-dbg(${DBG_COMMON} "Verarbeitung..." ID MY_DBG)
+dbg(${DBG_OFTEN} "=== Module Start ===" ID MY_DBG)
+dbg(${DBG_COMMON} "Processing..." ID MY_DBG)
 enddbgblock(ID MY_DBG)
 ```
 
@@ -286,7 +286,7 @@ enddbgblock(ID MY_DBG)
 
 ### 5.5 setup_debug_from_args()
 
-Helper für Functions mit optionalen Debug-Flags.
+Helper for functions with optional debug flags.
 
 ```cmake
 setup_debug_from_args(<out_switch> <out_tag> <default_tag> [SHOW_DEBUG] [DEBUG_TAG <tag>])
@@ -294,15 +294,15 @@ setup_debug_from_args(<out_switch> <out_tag> <default_tag> [SHOW_DEBUG] [DEBUG_T
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `out_switch` | Variable | ✓ | Output für Switch (ON/OFF) |
-| `out_tag` | Variable | ✓ | Output für Tag |
-| `default_tag` | String | ✓ | Default-Tag wenn nicht angegeben |
-| `SHOW_DEBUG` | Flag | — | Debug aktivieren |
-| `DEBUG_TAG` | String | — | Optionales Tag |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `out_switch` | Variable | ✓ | Output for the switch (ON/OFF) |
+| `out_tag` | Variable | ✓ | Output for the tag |
+| `default_tag` | String | ✓ | Default tag if none is given |
+| `SHOW_DEBUG` | Flag | — | Enable debug |
+| `DEBUG_TAG` | String | — | Optional tag |
 
-**Rückgabe:** Setzt `out_switch` und `out_tag` via PARENT_SCOPE
+**Returns:** Sets `out_switch` and `out_tag` via PARENT_SCOPE
 
 **Example:**
 
@@ -317,23 +317,23 @@ function(my_function)
     enddbgblock(ID MY_FUNC_DBG)
 endfunction()
 
-# Aufruf
-my_function()                                    # Kein Debug
-my_function(SHOW_DEBUG)                          # Debug mit Default-Tag
-my_function(SHOW_DEBUG DEBUG_TAG "CustomTag")    # Debug mit eigenem Tag
+# Call
+my_function()                                    # No debug
+my_function(SHOW_DEBUG)                          # Debug with default tag
+my_function(SHOW_DEBUG DEBUG_TAG "CustomTag")    # Debug with own tag
 ```
 
 ---
 
-## 6. Usagesbeispiele
+## 6. Usage Examples
 
-### 6.1 Modul mit Debug-Support
+### 6.1 Module with Debug Support
 
 ```cmake
 # cmake/project/MyModule.cmake
 include_guard(GLOBAL)
 
-# Lokaler Switch für schnelles Ein/Ausschalten
+# Local switch for quick on/off
 set(_SHOW_MY_MODULE_DEBUG OFF)
 
 dbg_init(
@@ -354,7 +354,7 @@ dbg(${DBG_OFTEN} "MyModule loaded successfully" ID MY_MODULE)
 enddbgblock(ID MY_MODULE)
 ```
 
-### 6.2 Funktion mit optionalem Debug
+### 6.2 Function with Optional Debug
 
 ```cmake
 function(apply_compiler_options TARGET_NAME)
@@ -364,14 +364,14 @@ function(apply_compiler_options TARGET_NAME)
     dbg_init(ID CO_DBG LEVEL ${DBG_SHOW_MUCH} SWITCH ${_sw} TAG "${_tag}")
     dbg(${DBG_OFTEN} "Applying to: ${TARGET_NAME}" ID CO_DBG)
     
-    # ... Implementation ...
+    # ... implementation ...
     
     dbg(${DBG_OFTEN} "Done" ID CO_DBG)
     enddbgblock(ID CO_DBG)
 endfunction()
 ```
 
-### 6.3 Debug-Level via Preset
+### 6.3 Debug Level via Preset
 
 ```json
 {
@@ -395,12 +395,12 @@ endfunction()
 
 ---
 
-## 7. Output-Examples
+## 7. Output Examples
 
 ### 7.1 Standard (SHOW_LEVEL = 2)
 
 ```
--- [Solution] Solution.json geladen
+-- [Solution] Solution.json loaded
 -- [Solution] MySolution v0.1.0
 -- [Solution] Externals: 8
 -- -------------------------------------------
@@ -409,7 +409,7 @@ endfunction()
 ### 7.2 Verbose (SHOW_LEVEL = 5)
 
 ```
--- [Solution] Solution.json geladen
+-- [Solution] Solution.json loaded
 -- [Solution] Schema-Version: 0.1
 -- [Solution] MySolution v0.1.0
 -- [Solution] Description: Multi-Project Solution
@@ -426,75 +426,76 @@ endfunction()
 
 ## 8. Best Practices
 
-### 8.1 Konsistente FREQ-Level
+### 8.1 Consistent FREQ Levels
 
 ```cmake
-# ✅ Gut - konsistente Importantkeit
-dbg(${DBG_OFTEN} "=== Module Start ===" ID MOD)    # Immer sichtbar
-dbg(${DBG_COMMON} "Processing file X" ID MOD)       # Übliche Info
-dbg(${DBG_RARE} "Internal: ${_var}" ID MOD)         # Nur bei Bedarf
+# ✅ Good - consistent importance
+dbg(${DBG_OFTEN} "=== Module Start ===" ID MOD)    # Always visible
+dbg(${DBG_COMMON} "Processing file X" ID MOD)       # Usual info
+dbg(${DBG_RARE} "Internal: ${_var}" ID MOD)         # Only when needed
 
-# ❌ Schlecht - alles gleich wichtig
+# ❌ Bad - everything equally important
 dbg(${DBG_OFTEN} "Processing file X" ID MOD)
 dbg(${DBG_OFTEN} "Internal: ${_var}" ID MOD)
 ```
 
-### 8.2 Aussagekräftige Tags
+### 8.2 Meaningful Tags
 
 ```cmake
-# ✅ Gut
+# ✅ Good
 dbg_init(ID SOLUTION TAG "Solution")
 dbg_init(ID EXTERNALS TAG "Externals")
 
-# ❌ Schlecht
+# ❌ Bad
 dbg_init(ID DBG1 TAG "D1")
 ```
 
-### 8.3 ONCE für Schleifen-Warningen
+### 8.3 ONCE for Loop Warnings
 
 ```cmake
 foreach(_ext IN LISTS _externals)
-    # Erscheint nur einmal, nicht bei jedem Durchlauf
+    # Appears only once, not on every iteration
     dbg(${DBG_COMMON} "Deprecated feature used" ID MY_DBG ONCE)
 endforeach()
 ```
 
-### 8.4 Lokaler Switch für schnelles Debugging
+### 8.4 Local Switch for Quick Debugging
 
 ```cmake
-# Oben im Modul - schnell ein/ausschaltbar
-set(_SHOW_MODULE_DEBUG OFF)  # ← Hier ändern
+# At the top of the module - quick to switch on/off
+set(_SHOW_MODULE_DEBUG OFF)  # ← change here
 
 dbg_init(ID MOD SWITCH ${_SHOW_MODULE_DEBUG} ...)
 ```
 
 ---
 
-## 9. Interne Implementation
+## 9. Internal Implementation
 
-Das Modul verwendet **DIRECTORY PROPERTY** für Kontext-Speicherung:
+The module uses **DIRECTORY PROPERTY** for context storage:
 
 | Property | Description |
-|----------|--------------|
-| `DBG_${ID}_LEVEL` | SHOW-Level |
+|----------|-------------|
+| `DBG_${ID}_LEVEL` | SHOW level |
 | `DBG_${ID}_SWITCH` | ON/OFF |
-| `DBG_${ID}_TAG` | Tag-Prefix |
-| `DBG_${ID}_ONCE_GUARD` | Liste bereits gezeigter ONCE-Messages |
+| `DBG_${ID}_TAG` | Tag prefix |
+| `DBG_${ID}_ONCE_GUARD` | List of ONCE messages already shown |
 
 ---
 
 ## 10. See Also
 
-- [Errors.cmake](Errors.md) — Für echte Error (cmake_fatal, cmake_warn)
-- [guidelines](../../../standards/guidelines.md) — Debug-Konventionen
-- [CMake.md](../../../autorenwerk/blueprints/CMake.md) — Debug in Modulen
+- [Errors.cmake](Errors.md) — for real errors (cmake_fatal, cmake_warn)
+- [guidelines](../../../konzepte/Guidelines.md) — debug conventions
+- [CMake.md](../../../autorenwerk/blueprints/CMake.md) — debug in modules
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
-| 0.1.0 | 2025-12-04 | Initial (Clean Start): Zwei-Achsen-Filterung, dbg_init/dbg/dbgspace/enddbgblock/setup_debug_from_args API |
+| 0.1.0 | 2025-12-04 | Initial (clean start): two-axis filtering, dbg_init/dbg/dbgspace/enddbgblock/setup_debug_from_args API |

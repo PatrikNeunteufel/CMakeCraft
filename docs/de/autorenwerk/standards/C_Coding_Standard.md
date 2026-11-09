@@ -1,14 +1,14 @@
 # C Coding Standard — Stil-Richtlinien für Embedded
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-19  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Standard  
 > **Status:** Stabil  
 > **Zielgruppe:** Embedded-Entwickler, Firmware-Entwickler  
 > **Geltungsbereich:** Alle C-Projekte (Embedded, Firmware)  
 > **Durchsetzung:** clang-tidy, MISRA-Checker, Code Review  
 > **Sprache:** Deutsch  
-> **English:** [C_Coding_Standard.md](C_Coding_Standard.md)
+> **English:** [C_Coding_Standard.md](../../../en/autorenwerk/standards/C_Coding_Standard.md)
 
 ---
 
@@ -198,7 +198,7 @@ Oder `#pragma once` (falls Projektrichtlinie und Toolchain-Support).
 
 ```c
 // 1. Zugehöriger Header
-#include "timer.h"
+#include "Timer.h"
 
 // 2. Standard-Header
 #include <stdint.h>
@@ -210,8 +210,8 @@ Oder `#pragma once` (falls Projektrichtlinie und Toolchain-Support).
 #include "F28x_Project.h"
 
 // 4. Projekt-Header
-#include "hal/gpio.h"
-#include "config/board_config.h"
+#include "hal/Gpio.h"
+#include "config/BoardConfig.h"
 ```
 
 ---
@@ -295,8 +295,8 @@ function( a );    // ❌
 |---------|------------|----------|
 | Modul-Funktion | `modul_snake_case` | `timer_init()`, `gpio_set_pin()` |
 | Lokale Variable | `snake_case` | `current_index`, `buffer_size` |
-| Globale Variable | `g_` Präfix | `g_systemState` |
-| Statische Variable | `s_` Präfix | `s_bufferIndex` |
+| Globale Variable | `g_` + `snake_case` | `g_system_state` |
+| Statische Variable | `s_` + `snake_case` | `s_buffer_index` |
 | Konstante/Makro | `UPPER_CASE` | `MAX_BUFFER_SIZE`, `ADC_TIMEOUT` |
 | Typ-Alias | `PascalCase` oder `_t` Suffix | `TimerHandle`, `gpio_pin_t` |
 | Struct-Member | `snake_case` | `data_length`, `is_valid` |
@@ -325,7 +325,7 @@ void epwm_set_duty(uint16_t cmpa, uint16_t cmpb);
 
 | Präfix | Bedeutung | Beispiel |
 |--------|-----------|----------|
-| `g_` | Globale Variable | `g_systemTicks` |
+| `g_` | Globale Variable | `g_system_ticks` |
 | `s_` | Statische Variable (file scope) | `s_initialized` |
 | `p` | Pointer | `pBuffer`, `pConfig` |
 | `m_` | Member (in Struct-Kontexten, optional) | `m_state` |
@@ -706,18 +706,18 @@ Daten zwischen Interrupt und Main-Context:
 
 ```c
 // ✅ Atomic access
-static volatile uint32_t s_tickCounter;
+static volatile uint32_t s_tick_counter;
 
 void SysTick_Handler(void)
 {
-    s_tickCounter++;
+    s_tick_counter++;
 }
 
 uint32_t getTicks(void)
 {
     uint32_t ticks;
     __disable_irq();
-    ticks = s_tickCounter;
+    ticks = s_tick_counter;
     __enable_irq();
     return ticks;
 }
@@ -921,9 +921,11 @@ void shared_function(int param);
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.10.0** | **2025-12-19** | **Neu: Union-Grundlagen (8.5) mit Best Practices und Beispielen** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Beispiele folgen den eigenen Regeln — Include `Timer.h`, `hal/Gpio.h`, `config/BoardConfig.h` (§5.5 nach §5.1 PascalCase), `g_`/`s_`-Variablen in `snake_case` (§7.1, §7.3, §13); Changelog 0.8.0: TODO-Marker heute in §15.1** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.10.0 | 2025-12-19 | Neu: Union-Grundlagen (8.5) mit Best Practices und Beispielen |
 | 0.9.0 | 2025-12-19 | Neu: Bitfield-Kürzel (8.4), Kapitel Dokumentation (15) mit TODO, Code-Kommentare, Funktions-Doku |
-| 0.8.0 | 2025-12-19 | Neu: TODO-Marker (3.1), Multiple Conditions in Klammern (11.4), Division durch 0 prüfen (11.5) |
+| 0.8.0 | 2025-12-19 | Neu: TODO-Marker (3.1, seit 0.9.0 in §15.1), Multiple Conditions in Klammern (11.4), Division durch 0 prüfen (11.5) |
 | 0.7.0 | 2025-12-19 | Vereinheitlichung: Dateinamen auf PascalCase (wie C++), Präfix-Tabelle vereinfacht |
 | 0.6.0 | 2025-12-19 | Konsolidierung: Neuer Abschnitt 8 Struct-Layout, Dateinamen-Konventionen (5.1), Include-Reihenfolge (5.5), Register-Konventionen (7.4), erweiterte Präfix-Tabelle (7.3) |
 | 0.5.1 | 2025-12-18 | Neuer Abschnitt 4: Datei-Header mit Doxygen-Format, Pflichtfelder, Sprachregelung |

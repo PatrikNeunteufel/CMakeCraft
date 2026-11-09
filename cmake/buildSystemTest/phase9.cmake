@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Test:         Phase 9
-# Version:      1.0.0
-# Date:         2025-12-18
+# Version:      1.1.0
+# Date:         2026-11-09
 # Part of:      CMake Architecture
 #
 # Description:
@@ -284,16 +284,14 @@ dbg(${DBG_RARE} "  Orchestrator dispatches: path → Local/Attach.cmake" ID PHAS
 
 dbg(${DBG_COMMON} "Test 6: Error code range..." ID PHASE9_TEST)
 
-dbg(${DBG_COMMON} "  System External Errors: E501-E505" ID PHASE9_TEST)
-dbg(${DBG_RARE} "    E501: System external not found (no valid path)" ID PHASE9_TEST)
+dbg(${DBG_COMMON} "  System External Errors: E502-E505" ID PHASE9_TEST)
 dbg(${DBG_RARE} "    E502: 'package' field is required" ID PHASE9_TEST)
-dbg(${DBG_RARE} "    E503: find_package() failed" ID PHASE9_TEST)
-dbg(${DBG_RARE} "    E504: Required component not found" ID PHASE9_TEST)
-dbg(${DBG_RARE} "    E505: Version constraint not satisfied" ID PHASE9_TEST)
+dbg(${DBG_RARE} "    E503: find_package() failed (not found / no config accepted)" ID PHASE9_TEST)
+dbg(${DBG_RARE} "    E504: Package found, but not all requested components" ID PHASE9_TEST)
+dbg(${DBG_RARE} "    E505: No package with a compatible version" ID PHASE9_TEST)
 
-dbg(${DBG_COMMON} "  System External Warnings: W501-W502" ID PHASE9_TEST)
+dbg(${DBG_COMMON} "  System External Warnings: W501" ID PHASE9_TEST)
 dbg(${DBG_RARE} "    W501: Using backup location" ID PHASE9_TEST)
-dbg(${DBG_RARE} "    W502: Version mismatch (using found version)" ID PHASE9_TEST)
 
 # ==============================================================================
 # Test 7: Qt6 System External (if configured)
@@ -445,6 +443,172 @@ else()
 endif()
 
 # ==============================================================================
+# Test 11: Explicit entry point for Qt GUI executables (Qt6.cmake 1.1.0)
+# ==============================================================================
+# Qt6EntryPoint.lib defines WinMain AND wWinMain. Every executable that links
+# Qt6 gets LINKER:/ENTRY:WinMainCRTStartup (inside a generator expression on
+# WIN32_EXECUTABLE / QT_NO_ENTRYPOINT) on MSVC-ABI toolchains; executables
+# without Qt must not get it. Whether the linker then stays silent is checked
+# by building (lld-link: no "found both wWinMain and WinMain").
+
+dbg(${DBG_COMMON} "Test 11: Entry point of Qt GUI executables..." ID PHASE9_TEST)
+
+set(_p9_entry "LINKER:/ENTRY:WinMainCRTStartup")
+set(_p9_entry_checked 0)
+if(WIN32 AND (MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    foreach(_target IN LISTS _all_targets)
+        get_target_property(_target_type ${_target} TYPE)
+        if(NOT _target_type STREQUAL "EXECUTABLE")
+            continue()
+        endif()
+        get_target_property(_p9_libs ${_target} LINK_LIBRARIES)
+        set(_p9_uses_qt FALSE)
+        foreach(_lib IN LISTS _p9_libs)
+            if(_lib MATCHES "^Qt6::")
+                set(_p9_uses_qt TRUE)
+                break()
+            endif()
+        endforeach()
+        get_target_property(_p9_link_opts ${_target} LINK_OPTIONS)
+        if(NOT _p9_link_opts)
+            set(_p9_link_opts "")
+        endif()
+        string(FIND "${_p9_link_opts}" "${_p9_entry}" _p9_pos)
+        if(_p9_uses_qt)
+            if(_p9_pos EQUAL -1)
+                cmake_fatal("ASSERT" "${_target} links Qt6 but lacks ${_p9_entry}: ${_p9_link_opts}")
+            endif()
+            foreach(_p9_needle "TARGET_PROPERTY:${_target},WIN32_EXECUTABLE" "TARGET_PROPERTY:${_target},QT_NO_ENTRYPOINT")
+                string(FIND "${_p9_link_opts}" "${_p9_needle}" _p9_npos)
+                if(_p9_npos EQUAL -1)
+                    cmake_fatal("ASSERT" "${_target}: entry point must depend on ${_p9_needle}: ${_p9_link_opts}")
+                endif()
+            endforeach()
+            math(EXPR _p9_entry_checked "${_p9_entry_checked} + 1")
+            dbg(${DBG_RARE} "  ${_target}: ${_p9_entry} (conditional)" ID PHASE9_TEST)
+        elseif(NOT _p9_pos EQUAL -1)
+            cmake_fatal("ASSERT" "${_target} does not link Qt6 but has ${_p9_entry}")
+        endif()
+    endforeach()
+    dbg(${DBG_COMMON} "  Qt executables with explicit entry point: ${_p9_entry_checked}" ID PHASE9_TEST)
+else()
+    dbg(${DBG_COMMON} "  Skipped (no MSVC-ABI toolchain)" ID PHASE9_TEST)
+endif()
+
+# ==============================================================================
+# Test 12: Failure codes of system externals and complete messages (v0.14.1)
+# ==============================================================================
+# (a) cmake_warn joins all message parts, also parts with a semicolon.
+# (b) The system handler calls find_package() without REQUIRED and names the
+#     cause itself. A fake package FakePkg 1.2.0 (only component Core) is found
+#     in nested configures:
+#       ok    - components [Core], version 1.0   -> configure succeeds
+#       comp  - components [Core, Missing]       -> E504 with the package reason
+#       vers  - version 2.0                       -> E505 listing 1.2.0
+#       none  - package NoSuchPkg                 -> E503 with all solution lines
+
+dbg(${DBG_COMMON} "Test 12: System external failure codes, message parts..." ID PHASE9_TEST)
+
+set(_p9_dir "${CMAKE_BINARY_DIR}/phase9")
+file(REMOVE_RECURSE "${_p9_dir}")
+file(MAKE_DIRECTORY "${_p9_dir}")
+
+# (a) message parts
+file(WRITE "${_p9_dir}/parts.cmake"
+    "include(\"${CMAKECRAFT_DIR}/core/Errors.cmake\")\n"
+    "cmake_warn(\"W999\" \"part one: path;git\\n\" \"  part two\\n\" \"  part three\")\n")
+execute_process(
+    COMMAND "${CMAKE_COMMAND}" -P "${_p9_dir}/parts.cmake"
+    OUTPUT_VARIABLE _p9_out ERROR_VARIABLE _p9_out)
+foreach(_p9_needle "part one: path;git" "part two" "part three")
+    string(FIND "${_p9_out}" "${_p9_needle}" _p9_pos)
+    if(_p9_pos EQUAL -1)
+        cmake_fatal("ASSERT" "cmake_warn lost the message part '${_p9_needle}':\n${_p9_out}")
+    endif()
+endforeach()
+
+# (b) fake package and nested configures
+set(_p9_prefix "${_p9_dir}/prefix")
+file(WRITE "${_p9_prefix}/lib/cmake/FakePkg/FakePkgConfig.cmake" [=[
+set(FakePkg_FOUND TRUE)
+set(FakePkg_VERSION "1.2.0")
+foreach(_c IN LISTS FakePkg_FIND_COMPONENTS)
+    if(NOT _c STREQUAL "Core")
+        set(FakePkg_FOUND FALSE)
+        set(FakePkg_NOT_FOUND_MESSAGE "Failed to find required FakePkg component \"${_c}\".")
+    endif()
+endforeach()
+]=])
+file(WRITE "${_p9_prefix}/lib/cmake/FakePkg/FakePkgConfigVersion.cmake" [=[
+set(PACKAGE_VERSION "1.2.0")
+if(PACKAGE_FIND_VERSION VERSION_GREATER PACKAGE_VERSION)
+    set(PACKAGE_VERSION_COMPATIBLE FALSE)
+else()
+    set(PACKAGE_VERSION_COMPATIBLE TRUE)
+    if(PACKAGE_FIND_VERSION VERSION_EQUAL PACKAGE_VERSION)
+        set(PACKAGE_VERSION_EXACT TRUE)
+    endif()
+endif()
+]=])
+
+function(_p9_system_case NAME JSON OUT_RESULT OUT_OUTPUT)
+    set(_d "${_p9_dir}/${NAME}")
+    file(WRITE "${_d}/CMakeLists.txt"
+        "cmake_minimum_required(VERSION 3.26)\n"
+        "project(P9Sys LANGUAGES NONE)\n"
+        "set(CMAKECRAFT_DIR \"${CMAKECRAFT_DIR}\")\n"
+        "include(\"\${CMAKECRAFT_DIR}/core/Errors.cmake\")\n"
+        "include(\"\${CMAKECRAFT_DIR}/core/Debug.cmake\")\n"
+        "include(\"\${CMAKECRAFT_DIR}/core/Json.cmake\")\n"
+        "include(\"\${CMAKECRAFT_DIR}/externals/system/Handler.cmake\")\n"
+        "set(CMAKE_PREFIX_PATH \"${_p9_prefix}\")\n"
+        "_handle_system_external(\"fake\" [==[${JSON}]==])\n")
+    set(_gen -G "${CMAKE_GENERATOR}")
+    if(CMAKE_GENERATOR_PLATFORM)
+        list(APPEND _gen -A "${CMAKE_GENERATOR_PLATFORM}")
+    endif()
+    if(CMAKE_MAKE_PROGRAM)
+        list(APPEND _gen "-DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}")
+    endif()
+    execute_process(
+        COMMAND "${CMAKE_COMMAND}" -S "${_d}" -B "${_d}/build" ${_gen}
+        RESULT_VARIABLE _r OUTPUT_VARIABLE _o ERROR_VARIABLE _o)
+    set(${OUT_RESULT} "${_r}" PARENT_SCOPE)
+    set(${OUT_OUTPUT} "${_o}" PARENT_SCOPE)
+endfunction()
+
+_p9_system_case("ok" [=[{"system": true, "package": "FakePkg", "version": "1.0", "components": ["Core"]}]=] _p9_r _p9_o)
+if(NOT _p9_r EQUAL 0)
+    cmake_fatal("ASSERT" "Test 12 ok: FakePkg 1.2.0 with Core must be found:\n${_p9_o}")
+endif()
+
+# Expect a failing configure whose output contains every needle (ARGN, no ';').
+function(_p9_expect_failure NAME JSON)
+    _p9_system_case("${NAME}" "${JSON}" _r _o)
+    if(_r EQUAL 0)
+        cmake_fatal("ASSERT" "Test 12 ${NAME}: configure must fail:\n${_o}")
+    endif()
+    foreach(_needle IN LISTS ARGN)
+        string(FIND "${_o}" "${_needle}" _pos)
+        if(_pos EQUAL -1)
+            cmake_fatal("ASSERT" "Test 12 ${NAME}: output lacks '${_needle}':\n${_o}")
+        endif()
+    endforeach()
+    dbg(${DBG_RARE} "  ${NAME}: ${ARGN}" ID PHASE9_TEST)
+endfunction()
+
+_p9_expect_failure("comp"
+    [=[{"system": true, "package": "FakePkg", "components": ["Core", "Missing"]}]=]
+    "[E504]" "Missing" "Failed to find required FakePkg component")
+_p9_expect_failure("vers"
+    [=[{"system": true, "package": "FakePkg", "version": "2.0", "components": ["Core"]}]=]
+    "[E505]" "'2.0'" "(version 1.2.0)")
+_p9_expect_failure("none"
+    [=[{"system": true, "package": "NoSuchPkg"}]=]
+    "[E503]" "Possible solutions" "Install NoSuchPkg to a standard location")
+dbg(${DBG_COMMON} "  Message parts complete; E503/E504/E505 named by the handler" ID PHASE9_TEST)
+
+# ==============================================================================
 # Summary
 # ==============================================================================
 
@@ -483,3 +647,16 @@ unset(_targets_with_qt)
 unset(_hook_files)
 unset(_using_path_workaround)
 unset(_phase9_status)
+unset(_p9_entry)
+unset(_p9_entry_checked)
+unset(_p9_libs)
+unset(_p9_uses_qt)
+unset(_p9_link_opts)
+unset(_p9_pos)
+unset(_p9_npos)
+unset(_p9_dir)
+unset(_p9_out)
+unset(_p9_prefix)
+unset(_p9_r)
+unset(_p9_o)
+unset(_p9_needle)

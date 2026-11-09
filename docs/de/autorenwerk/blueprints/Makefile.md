@@ -6,6 +6,7 @@
 > **Status:** Stabil  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch
+> **English:** [Makefile.md](../../../en/autorenwerk/blueprints/Makefile.md)
 
 ---
 

@@ -1,115 +1,115 @@
-# C++ Coding Standard — Stil-Richtlinien
+# C++ Coding Standard — Style Guidelines
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Standard  
 > **Status:** Stable  
-> **Target Audience:** Alle C++ Developers  
-> **Scope:** Alle C++-Projekte (PC-Applikationen, Tools, Treiber)  
-> **Durchsetzung:** clang-format, clang-tidy, Code Review  
+> **Target Audience:** All C++ developers  
+> **Scope:** All C++ projects (PC applications, tools, drivers)  
+> **Enforcement:** clang-format, clang-tidy, code review  
 > **Language:** English  
-> **German:** [Cpp_Coding_Standard.md](Cpp_Coding_Standard.md)
+> **German:** [Cpp_Coding_Standard.md](../../../de/autorenwerk/standards/Cpp_Coding_Standard.md)
 
 ---
 
 ## Table of Contents
 
-1. [Zweck und Scope](#1-zweck-und-geltungsbereich)
-2. [Sprachversion und Features](#2-sprachversion-und-features)
-3. [Grundprinzipien](#3-grundprinzipien)
-4. [Datei-Header](#4-datei-header)
-5. [Datei- und Modul-Organisation](#5-datei--und-modul-organisation)
-6. [Formatierung](#6-formatierung)
-7. [Namenskonventionen](#7-namenskonventionen)
-8. [Klassen und Strukturen](#8-klassen-und-strukturen)
-9. [Typen, Ownership und Lifetime](#9-typen-ownership-und-lifetime)
-10. [Errorbehandlung](#10-fehlerbehandlung)
+1. [Purpose and Scope](#1-purpose-and-scope)
+2. [Language Version and Features](#2-language-version-and-features)
+3. [Basic Principles](#3-basic-principles)
+4. [File Header](#4-file-header)
+5. [File and Module Organization](#5-file-and-module-organization)
+6. [Formatting](#6-formatting)
+7. [Naming Conventions](#7-naming-conventions)
+8. [Classes and Structures](#8-classes-and-structures)
+9. [Types, Ownership and Lifetime](#9-types-ownership-and-lifetime)
+10. [Error Handling](#10-error-handling)
 11. [Concurrency](#11-concurrency)
-12. [Hardware-Zugriff (Optional)](#12-hardware-zugriff-optional)
-13. [Statische Analyse](#13-statische-analyse)
-14. [Test-Code](#14-test-code)
-15. [Dokumentation](#15-dokumentation)
-16. [Verhältnis zu C (Embedded)](#16-verhältnis-zu-c-embedded)
-17. [Legacy-Code und Ausnahmen](#17-legacy-code-und-ausnahmen)
-18. [MISRA/CERT-Alignment](#18-misracert-alignment)
-19. [See Also](#19-siehe-auch)
+12. [Hardware Access (Optional)](#12-hardware-access-optional)
+13. [Static Analysis](#13-static-analysis)
+14. [Test Code](#14-test-code)
+15. [Documentation](#15-documentation)
+16. [Relationship to C (Embedded)](#16-relationship-to-c-embedded)
+17. [Legacy Code and Exceptions](#17-legacy-code-and-exceptions)
+18. [MISRA/CERT Alignment](#18-misracert-alignment)
+19. [See Also](#19-see-also)
 20. [Changelog](#20-changelog)
 
 ---
 
-## 1. Zweck und Scope
+## 1. Purpose and Scope
 
-Dieser Standard definiert **Coding-Konventionen für C++** im Unternehmen.
+This standard defines **coding conventions for C++** in the company.
 
-### Zielgruppe
+### Target Audience
 
-Dieser Standard richtet sich an alle Entwickler, die C++ Code für PC-Applikationen schreiben. Er ist verbindlich für neue Projekte und empfohlen für bestehenden Code bei Refactoring.
+This standard is aimed at all developers who write C++ code for PC applications. It is mandatory for new projects and recommended for existing code during refactoring.
 
-### Anwendungsbereich
+### Area of Application
 
-| Sprache | Fokus | Typische Projekte |
-|---------|-------|-------------------|
-| **C++** | PC-Applikationen | Tools, GUIs, Services, Test-Programme, Libraries |
-| C | Embedded | Firmware, MCUs, sicherheitskritische Teile |
+| Language | Focus | Typical Projects |
+|----------|-------|------------------|
+| **C++** | PC applications | Tools, GUIs, services, test programs, libraries |
+| C | Embedded | Firmware, MCUs, safety-critical parts |
 
-Dieser Standard wird ergänzt durch:
-- **C_Coding_Standard** — Embedded-spezifisch
-- **CMake_Standard** — Build-System
-- **ClangFormat_Blueprint** — Formatierung
-- **ClangTidy_Blueprint** — Statische Analyse
+This standard is complemented by:
+- **C_Coding_Standard** — embedded-specific
+- **CMake_Standard** — build system
+- **ClangFormat_Blueprint** — formatting
+- **ClangTidy_Blueprint** — static analysis
 
-### Tool-Autorität
+### Tool Authority
 
-> Bei Konflikten zwischen Dokumentation und Tool-Configuration gelten `.clang-format` und `.clang-tidy` als **verbindliche Umsetzung**.
+> In case of conflicts between documentation and tool configuration, `.clang-format` and `.clang-tidy` are the **binding implementation**.
 
 ---
 
-## 2. Sprachversion und Features
+## 2. Language Version and Features
 
-### 2.1 Standard-Version
+### 2.1 Standard Version
 
-| Projekt-Typ | C++ Standard |
-|-------------|--------------|
-| Neue Projekte | **C++20** (Default) |
-| Legacy-Projekte | Dokumentiert im README |
+| Project Type | C++ Standard |
+|--------------|--------------|
+| New projects | **C++20** (default) |
+| Legacy projects | Documented in the README |
 
-### 2.2 Empfohlene Features
+### 2.2 Recommended Features
 
 | Feature | Usage |
-|---------|------------|
-| `enum class` | Stark typisierte Enums |
-| RAII | Alle Ressourcen |
-| Smart Pointer | Ownership-Management |
-| `std::string_view` | Nicht-besitzende String-Reference |
-| `std::optional` | Optionale Werte |
-| `constexpr` | Compile-Zeit-Berechnungen |
-| Concepts (C++20) | Template-Constraints |
+|---------|-------|
+| `enum class` | Strongly typed enums |
+| RAII | All resources |
+| Smart pointers | Ownership management |
+| `std::string_view` | Non-owning string reference |
+| `std::optional` | Optional values |
+| `constexpr` | Compile-time computations |
+| Concepts (C++20) | Template constraints |
 
-### 2.3 Zu vermeidende Features
+### 2.3 Features to Avoid
 
 | Feature | Alternative |
 |---------|-------------|
-| `new`/`delete` direkt | `std::make_unique`, `std::make_shared` |
-| C-Style Casts | `static_cast`, `dynamic_cast`, etc. |
-| `#define` für Konstanten | `constexpr`, `const` |
-| Raw Arrays | `std::array`, `std::vector` |
+| Direct `new`/`delete` | `std::make_unique`, `std::make_shared` |
+| C-style casts | `static_cast`, `dynamic_cast`, etc. |
+| `#define` for constants | `constexpr`, `const` |
+| Raw arrays | `std::array`, `std::vector` |
 
 ---
 
-## 3. Grundprinzipien
+## 3. Basic Principles
 
-1. **Lesbarkeit über Cleverness**
-2. **Sicherheit und Korrektheit über vorzeitige Optimierung**
-3. **Konsistenz über persönliche Präferenz**
-4. **Automatisierte Tools über manuelle Stil-Diskussionen**
+1. **Readability over cleverness**
+2. **Safety and correctness over premature optimization**
+3. **Consistency over personal preference**
+4. **Automated tools over manual style discussions**
 
 ---
 
-## 4. Datei-Header
+## 4. File Header
 
-### 4.1 Standard-Header für C++ Dateien
+### 4.1 Standard Header for C++ Files
 
-Jede `.hpp` und `.cpp` Datei **muss** mit folgendem Doxygen-kompatiblen Header beginnen:
+Every `.hpp` and `.cpp` file **must** begin with the following Doxygen-compatible header:
 
 ```cpp
 /**
@@ -124,22 +124,22 @@ Jede `.hpp` und `.cpp` Datei **muss** mit folgendem Doxygen-kompatiblen Header b
  */
 ```
 
-### 4.2 Requiredfelder
+### 4.2 Mandatory Fields
 
-| Feld | Description |
-|------|--------------|
-| `@file` | Exakter Dateiname |
-| `@brief` | Kurzbeschreibung (1-2 Zeilen) |
-| `@author` | Hauptautor |
-| `@date` | Erstellungsdatum (Monat Yeshr) |
+| Field | Description |
+|-------|-------------|
+| `@file` | Exact file name |
+| `@brief` | Short description (1-2 lines) |
+| `@author` | Main author |
+| `@date` | Creation date (month year) |
 
-### 4.3 Optionale Felder
+### 4.3 Optional Fields
 
-| Feld | Usage |
-|------|------------|
-| `@version` | Bei versionierten Komponenten |
-| `@copyright` | Bei speziellen Lizenzen |
-| `@see` | Verweise auf verwandte Dateien |
+| Field | Usage |
+|-------|-------|
+| `@version` | For versioned components |
+| `@copyright` | For special licenses |
+| `@see` | References to related files |
 
 ### 4.4 Example
 
@@ -161,99 +161,99 @@ Jede `.hpp` und `.cpp` Datei **muss** mit folgendem Doxygen-kompatiblen Header b
 // ...
 ```
 
-### 4.5 Sprache
+### 4.5 Language
 
-- **Englisch** ist Required für alle öffentlichen APIs und Templates
-- Interne/projektspezifische Dateien können German verwenden, Englisch wird empfohlen
+- **English** is mandatory for all public APIs and templates
+- Internal/project-specific files may use German; English is recommended
 
 ---
 
-## 5. Datei- und Modul-Organisation
+## 5. File and Module Organization
 
-### 5.1 Dateinamen
+### 5.1 File Names
 
-| Regel | Example |
-|-------|----------|
+| Rule | Example |
+|------|---------|
 | **PascalCase** | `FileManager.hpp`, `DataProcessor.cpp` |
-| **Gleich wie Klasse** | Klasse `Logger` → `Logger.hpp` |
-| **DLL-Ausnahme** | Suffix `Class`: `LoggerClass.hpp` |
+| **Same as the class** | Class `Logger` → `Logger.hpp` |
+| **DLL exception** | Suffix `Class`: `LoggerClass.hpp` |
 | **PIMPL** | Suffix `Impl`: `LoggerImpl.hpp` |
-| **Interface** | Präfix `I`: `ILogger.hpp` |
+| **Interface** | Prefix `I`: `ILogger.hpp` |
 
-### 5.2 Dateiendungen
+### 5.2 File Extensions
 
-| Endung | Usage |
-|--------|------------|
-| `.hpp` | C++ Header |
-| `.cpp` | C++ Implementation |
-| `.tpp` | Template-Implementation |
-| `.inl` | Inline-Definitionen |
-| `.h` | C Header (oder C-kompatible C++ Header) |
-| `.c` | C Implementation |
+| Extension | Usage |
+|-----------|-------|
+| `.hpp` | C++ header |
+| `.cpp` | C++ implementation |
+| `.tpp` | Template implementation |
+| `.inl` | Inline definitions |
+| `.h` | C header (or C-compatible C++ header) |
+| `.c` | C implementation |
 
-### 5.3 Ordnernamen
+### 5.3 Folder Names
 
-| Regel | Example |
-|-------|----------|
+| Rule | Example |
+|------|---------|
 | **lowercase** | `source/`, `include/`, `tests/` |
-| **snake_case bei Bedarf** | `user_data/` |
+| **snake_case if needed** | `user_data/` |
 
-### 5.4 Header-Guards
+### 5.4 Header Guards
 
 ```cpp
-// Pragma once (bevorzugt)
+// Pragma once (preferred)
 #pragma once
 
-// Oder klassisch
+// Or classic
 #ifndef PROJECT_MODULE_HEADER_HPP
 #define PROJECT_MODULE_HEADER_HPP
 // ...
 #endif
 ```
 
-### 5.5 Include-Reihenfolge
+### 5.5 Include Order
 
 ```cpp
-// 1. Precompiled Header (falls vorhanden)
+// 1. Precompiled header (if present)
 #include "pch/pch.h"
 
-// 2. Zugehöriger Header
+// 2. Associated header
 #include "MyClass.hpp"
 
-// 3. System-Header
+// 3. System headers
 #include <string>
 #include <vector>
 #include <memory>
 
-// 4. Projekt-Header
+// 4. Project headers
 #include "utils/Logger.hpp"
 #include "core/Config.hpp"
 ```
 
-> **Note:** clang-format sortiert Includes automatisch gemäß `.clang-format`.
+> **Note:** clang-format sorts includes automatically according to `.clang-format`.
 
 ---
 
-## 6. Formatierung
+## 6. Formatting
 
-### 6.1 Autorität
+### 6.1 Authority
 
-- Alle Formatierung via `clang-format`
-- Manuelle Abweichungen nicht erlaubt
-- Bei Problemen: `.clang-format` anpassen, nicht umgehen
+- All formatting via `clang-format`
+- Manual deviations are not allowed
+- In case of problems: adjust `.clang-format`, do not bypass it
 
 ### 6.2 Overview (Details in `.clang-format`)
 
-| Aspekt | Regel |
-|--------|-------|
-| Basis-Stil | LLVM mit Anpassungen |
-| Einrückung | 4 Spaces |
-| Tabs | Nie verwenden |
-| Klammern | **Allman-Stil** (neue Zeile) |
-| Zeilenlänge | 80 Zeichen |
-| Pointer | Links ausgerichtet (`int* ptr`) |
+| Aspect | Rule |
+|--------|------|
+| Base style | LLVM with adjustments |
+| Indentation | 4 spaces |
+| Tabs | Never use |
+| Braces | **Allman style** (new line) |
+| Line length | 80 characters |
+| Pointers | Left-aligned (`int* ptr`) |
 
-### 6.3 Klammern-Stil (Allman)
+### 6.3 Brace Style (Allman)
 
 ```cpp
 // Functions
@@ -262,14 +262,14 @@ void function()
     // ...
 }
 
-// Klassen
+// Classes
 class Example
 {
 public:
     void method();
 };
 
-// Kontrollstrukturen
+// Control structures
 if (condition)
 {
     // ...
@@ -279,98 +279,98 @@ else
     // ...
 }
 
-// Schleifen
+// Loops
 for (int i = 0; i < count; ++i)
 {
     // ...
 }
 ```
 
-### 6.4 Leerzeichen
+### 6.4 Spaces
 
 ```cpp
-// Nach Kommas
+// After commas
 function(a, b, c);
 
-// Um Operatoren
+// Around operators
 x = a + b * c;
 
-// Vor Klammern
+// Before parentheses
 if (condition)
 while (running)
 for (auto& item : items)
 
-// Keine Leerzeichen in Klammern
+// No spaces inside parentheses
 function(a);      // ✅
 function( a );    // ❌
 ```
 
 ---
 
-## 7. Namenskonventionen
+## 7. Naming Conventions
 
-### 7.1 Autorität
+### 7.1 Authority
 
-- Namensregeln via `clang-tidy` (`readability-identifier-naming`)
-- Verstöße beheben, nicht unterdrücken
+- Naming rules via `clang-tidy` (`readability-identifier-naming`)
+- Fix violations, do not suppress them
 
 ### 7.2 Overview
 
-| Entität | Konvention | Example |
-|---------|------------|----------|
+| Entity | Convention | Example |
+|--------|------------|---------|
 | Namespace | `lower_case` | `audio`, `core_utils` |
-| Klasse/Struct | `PascalCase` | `LogManager`, `AudioBuffer` |
+| Class/struct | `PascalCase` | `LogManager`, `AudioBuffer` |
 | Interface | `I` + `PascalCase` | `ILogger`, `ISerializable` |
 | Enum | `PascalCase` | `LogLevel` |
-| Enum-Konstante | `PascalCase` | `LogLevel::Info`, `LogLevel::Error` |
-| Funktion/Methode | `camelCase` | `writeLog()`, `processData()` |
-| Parameters | `camelCase` | `filePath`, `bufferSize` |
-| Lokale Variable | `camelCase` | `currentIndex`, `tempValue` |
-| Member-Variable | `m_` Präfix | `m_buffer`, `m_logger` |
-| Globale Konstante | `UPPER_CASE` | `MAX_BUFFER_SIZE` |
-| Globale Variable | `g_` Präfix | `g_logger` |
-| Statische Variable | `s_` Präfix | `s_cache` |
-| Template-Parameters | `T` + `PascalCase` | `TValue`, `TContainer` |
-| Makros | `UPPER_CASE` | `DEBUG_LOG(...)` |
+| Enum constant | `PascalCase` | `LogLevel::Info`, `LogLevel::Error` |
+| Function/method | `camelCase` | `writeLog()`, `processData()` |
+| Parameter | `camelCase` | `filePath`, `bufferSize` |
+| Local variable | `camelCase` | `currentIndex`, `tempValue` |
+| Member variable | `m_` prefix | `m_buffer`, `m_logger` |
+| Global constant | `UPPER_CASE` | `MAX_BUFFER_SIZE` |
+| Global variable | `g_` prefix | `g_logger` |
+| Static variable | `s_` prefix | `s_cache` |
+| Template parameter | `T` + `PascalCase` | `TValue`, `TContainer` |
+| Macros | `UPPER_CASE` | `DEBUG_LOG(...)` |
 
-### 7.3 Präfixe
+### 7.3 Prefixes
 
-| Präfix | Bedeutung | Example |
-|--------|-----------|----------|
-| `m_` | Member-Variable | `m_name`, `m_count` |
-| `s_` | Statische Variable | `s_instance` |
-| `g_` | Globale Variable | `g_config` (vermeiden!) |
-| `p` | Pointer (lokal oder Parameters) | `pBuffer`, `pConfig` |
-| `m_p` | Member-Pointer | `m_pImpl`, `m_pData` |
-| `s_p` | Statischer Pointer | `s_pInstance` |
-| — | Lokale Variable / Parameters | `count`, `name`, `value` |
-| — | Smart Pointer Member | `m_data` (unique_ptr ist kein "roher" Pointer) |
+| Prefix | Meaning | Example |
+|--------|---------|---------|
+| `m_` | Member variable | `m_name`, `m_count` |
+| `s_` | Static variable | `s_instance` |
+| `g_` | Global variable | `g_config` (avoid!) |
+| `p` | Pointer (local or parameter) | `pBuffer`, `pConfig` |
+| `m_p` | Member pointer | `m_pImpl`, `m_pData` |
+| `s_p` | Static pointer | `s_pInstance` |
+| — | Local variable / parameter | `count`, `name`, `value` |
+| — | Smart pointer member | `m_data` (unique_ptr is not a "raw" pointer) |
 
-### 7.4 Spezialfälle
+### 7.4 Special Cases
 
-| Element | Konvention | Example |
-|---------|------------|----------|
-| **PIMPL-Klasse** | `Impl` | `class ExampleImpl;` |
-| **Factory-Methoden** | `create...` | `createInstance()` |
-| **Getter** | `get...` oder Substantiv | `getName()` oder `name()` |
+| Element | Convention | Example |
+|---------|------------|---------|
+| **PIMPL class** | `Impl` | `class ExampleImpl;` |
+| **Factory methods** | `create...` | `createInstance()` |
+| **Getter** | `get...` or noun | `getName()` or `name()` |
 | **Setter** | `set...` | `setName()` |
-| **Boolean-Getter** | `is...`, `has...`, `can...` | `isActive()`, `hasData()` |
+| **Boolean getter** | `is...`, `has...`, `can...` | `isActive()`, `hasData()` |
 
 ---
 
-## 8. Klassen und Strukturen
+## 8. Classes and Structures
 
-### 8.1 Wann struct vs class
+### 8.1 When struct vs. class
 
-| Verwende | Für | Example |
-|----------|-----|----------|
-| `struct` | POD-Typen, DTOs, Aggregate ohne Invarianten | `struct Point { int x; int y; };` |
-| `class` | Typen mit Invarianten, Kapselung, Methoden | `class FileManager { ... };` |
+| Use | For | Example |
+|-----|-----|---------|
+| `struct` | POD types, DTOs, aggregates without invariants | `struct Point { int x; int y; };` |
+| `class` | Types with invariants, encapsulation, methods | `class FileManager { ... };` |
 
-**Faustregel:** Wenn alle Member öffentlich sind und keine Invarianten zu schützen sind → `struct`.
+**Rule of thumb:** If all members are public and there are no invariants to protect → `struct`.
 
 ```cpp
-// ✅ struct: Reiner Datencontainer
+// ✅ struct: pure data container
 struct ConfigData
 {
     std::string name;
@@ -378,7 +378,7 @@ struct ConfigData
     bool enabled;
 };
 
-// ✅ class: Kapselung und Invarianten
+// ✅ class: encapsulation and invariants
 class Connection
 {
 public:
@@ -391,9 +391,9 @@ private:
 ```
 
 
-### 8.2 Klassen-Layout
+### 8.2 Class Layout
 
-#### Reihenfolge der Sektionen
+#### Order of Sections
 
 ```cpp
 class ClassName
@@ -401,23 +401,23 @@ class ClassName
 /* ═══════════════════════════════════════════════════════════════ */
 /* Members                                                          */
 /* ═══════════════════════════════════════════════════════════════ */
-public:     /* Öffentliche Member (selten) */
-protected:  /* Geschützte Member */
-private:    /* Private Member */
+public:     /* Public members (rare) */
+protected:  /* Protected members */
+private:    /* Private members */
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* Constructors / Destructors                                       */
 /* ═══════════════════════════════════════════════════════════════ */
-public:     /* Öffentliche Konstruktoren */
-protected:  /* Geschützte Konstruktoren (für Basisklassen) */
-private:    /* Private Konstruktoren (Singleton, Factory) */
+public:     /* Public constructors */
+protected:  /* Protected constructors (for base classes) */
+private:    /* Private constructors (singleton, factory) */
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* Methods                                                          */
 /* ═══════════════════════════════════════════════════════════════ */
-public:     /* Öffentliche Methoden */
-protected:  /* Geschützte Methoden */
-private:    /* Private Methoden */
+public:     /* Public methods */
+protected:  /* Protected methods */
+private:    /* Private methods */
 };
 ```
 
@@ -456,42 +456,42 @@ private:
 };
 ```
 
-### 8.3 Struct-Layout
+### 8.3 Struct Layout
 
-Structs folgen denselben Layout-Regeln wie in C:
+Structs follow the same layout rules as in C:
 
 ```cpp
-// ✅ Gut: Größere Typen zuerst (minimiert Padding)
+// ✅ Good: larger types first (minimizes padding)
 struct Message
 {
     std::uint64_t timestamp;    // 8 bytes
     std::uint32_t id;           // 4 bytes
     std::uint16_t flags;        // 2 bytes
     std::uint8_t  priority;     // 1 byte
-    std::uint8_t  reserved;     // 1 byte (explizites Padding)
-};  // Total: 16 bytes, kein verstecktes Padding
+    std::uint8_t  reserved;     // 1 byte (explicit padding)
+};  // Total: 16 bytes, no hidden padding
 ```
 
-**C++20:** `[[no_unique_address]]` für leere Member (z.B. Allocators).
+**C++20:** `[[no_unique_address]]` for empty members (e.g. allocators).
 
-### 8.4 Union und std::variant
+### 8.4 Union and std::variant
 
-| Verwende | Für | Note |
-|----------|-----|---------|
-| `std::variant` | Typsichere Alternative | **Bevorzugt** |
-| `union` | Low-Level, Hardware-Interop, C-Kompatibilität | Mit Vorsicht |
+| Use | For | Note |
+|-----|-----|------|
+| `std::variant` | Type-safe alternative | **Preferred** |
+| `union` | Low level, hardware interop, C compatibility | With caution |
 
 ```cpp
-// ✅ Bevorzugt: std::variant (typsicher)
+// ✅ Preferred: std::variant (type-safe)
 using Value = std::variant<int, double, std::string>;
 
 Value v = 42;
 if (auto* pInt = std::get_if<int>(&v))
 {
-    // Sichere Usage
+    // Safe usage
 }
 
-// ⚠️ Nur wenn nötig: union (für Hardware-Interop)
+// ⚠️ Only if needed: union (for hardware interop)
 union RegisterValue
 {
     struct
@@ -503,20 +503,20 @@ union RegisterValue
 };
 ```
 
-### 8.5 Bitfields (für Hardware-nahe Tools)
+### 8.5 Bitfields (for Hardware-Related Tools)
 
-Für Protokoll-Parser, Hardware-Interop oder C-API-Kompatibilität:
+For protocol parsers, hardware interop or C API compatibility:
 
-| Kürzel | Typ | Bits |
-|--------|-----|------|
-| `b` | bit (struct) | variabel |
+| Abbreviation | Type | Bits |
+|--------------|------|------|
+| `b` | bit (struct) | variable |
 | `c` | char | 8 |
 | `s` | short | 16 |
 | `l` | long | 32 |
 | `ll` | long long | 64 |
 
 ```cpp
-// Register-Definition für Hardware-Tool
+// Register definition for a hardware tool
 union ControlRegister
 {
     struct
@@ -529,20 +529,20 @@ union ControlRegister
 };
 ```
 
-> **Note:** Bitfield-Layout ist implementation-defined. Für portable Protokolle besser Bit-Masken und Shifts verwenden.
+> **Note:** Bitfield layout is implementation-defined. For portable protocols, bit masks and shifts are the better choice.
 
 ### 8.6 Best Practices
 
 ```cpp
-// [[nodiscard]] für wichtige Return Values
+// [[nodiscard]] for important return values
 [[nodiscard]] bool validate();
-[[nodiscard]] std::optional<r> process();
+[[nodiscard]] std::optional<Result> process();
 
-// explicit für Ein-Parameters-Konstruktoren
+// explicit for single-parameter constructors
 class Value
 {
 public:
-    explicit Value(int v);  // Verhindert implizite Konvertierung
+    explicit Value(int v);  // Prevents implicit conversion
 };
 
 // const-correctness
@@ -556,62 +556,62 @@ public:
 
 ---
 
-## 9. Typen, Ownership und Lifetime
+## 9. Types, Ownership and Lifetime
 
-### 9.1 Fundamentale Typen
+### 9.1 Fundamental Types
 
-| Anforderung | Typ |
-|-------------|-----|
-| Größe wichtig | `std::int32_t`, `std::uint64_t` |
-| Größen/Indizes | `std::size_t` |
+| Requirement | Type |
+|-------------|------|
+| Size matters | `std::int32_t`, `std::uint64_t` |
+| Sizes/indices | `std::size_t` |
 
-### 9.2 Ownership-Modell
+### 9.2 Ownership Model
 
-| Ownership | Mechanismus | Usage |
-|-----------|-------------|------------|
-| Exklusiv | `std::unique_ptr` | **Default für Heap-Objekte** |
-| Geteilt | `std::shared_ptr` | Nur wenn echtes Shared Ownership nötig |
-| Nicht-besitzend | Raw Pointer, Reference, `std::span` | Temporäre Referenceen |
+| Ownership | Mechanism | Usage |
+|-----------|-----------|-------|
+| Exclusive | `std::unique_ptr` | **Default for heap objects** |
+| Shared | `std::shared_ptr` | Only when real shared ownership is needed |
+| Non-owning | Raw pointer, reference, `std::span` | Temporary references |
 
-### 9.3 Smart Pointer vs Raw Pointer
+### 9.3 Smart Pointers vs. Raw Pointers
 
-**Smart Pointer (bevorzugt):**
+**Smart pointers (preferred):**
 
 ```cpp
-// ✅ Ownership klar, automatisches Cleanup
+// ✅ Ownership clear, automatic cleanup
 auto pResource = std::make_unique<Resource>();
 auto pShared = std::make_shared<Config>();
 ```
 
-**Raw Pointer (erlaubt für non-owning):**
+**Raw pointers (allowed for non-owning):**
 
 ```cpp
-// ✅ Non-owning Reference (Ownership liegt woanders)
+// ✅ Non-owning reference (ownership lies elsewhere)
 void processData(const Data* pData);
 
-// ✅ Optionaler Parameters (nullptr = nicht gesetzt)
+// ✅ Optional parameter (nullptr = not set)
 void configure(const Config* pOptionalConfig = nullptr);
 
-// ✅ C-API Interop
+// ✅ C API interop
 extern "C" void legacyFunction(void* pUserData);
 
-// ❌ Verboten: Owning Raw Pointer
-Resource* pRes = new Resource();  // Wer löscht das?
+// ❌ Forbidden: owning raw pointer
+Resource* pRes = new Resource();  // Who deletes this?
 ```
 
-**Präfix-Regel:** Raw Pointer mit `p` Präfix kennzeichnen.
+**Prefix rule:** Mark raw pointers with the `p` prefix.
 
-| Typ | Präfix | Example |
-|-----|--------|----------|
-| Raw Pointer (lokal) | `p` | `pBuffer`, `pConfig` |
-| Raw Pointer (member) | `m_p` | `m_pImpl`, `m_pData` |
-| Smart Pointer (member) | `m_` | `m_resource` (kein `p`, da nicht "raw") |
+| Type | Prefix | Example |
+|------|--------|---------|
+| Raw pointer (local) | `p` | `pBuffer`, `pConfig` |
+| Raw pointer (member) | `m_p` | `m_pImpl`, `m_pData` |
+| Smart pointer (member) | `m_` | `m_resource` (no `p`, since not "raw") |
 
 ### 9.4 RAII
 
-Alle Ressourcen werden durch RAII verwaltet:
-- Dateien, Sockets, Handles
-- Speicher
+All resources are managed through RAII:
+- Files, sockets, handles
+- Memory
 - Locks
 
 ```cpp
@@ -628,41 +628,41 @@ delete res;
 ```
 ---
 
-## 10. Errorbehandlung
+## 10. Error Handling
 
 ### 10.1 Exceptions (C++ PC)
 
-Exceptions sind **erlaubt und erwartet**:
+Exceptions are **allowed and expected**:
 
-| Regel | Description |
-|-------|--------------|
-| Werfen | By Value |
-| Fangen | By (const) Reference |
-| Usage | Echte Ausnahmesituationen |
-| Nicht verwenden für | Normalen Kontrollfluss |
+| Rule | Description |
+|------|-------------|
+| Throw | By value |
+| Catch | By (const) reference |
+| Usage | Genuine exceptional situations |
+| Do not use for | Normal control flow |
 
-### 10.2 Alternative Errorbehandlung
+### 10.2 Alternative Error Handling
 
-Für Low-Level-Code (I/O, OS-Interfaces):
+For low-level code (I/O, OS interfaces):
 
-| Mechanismus | Usage |
-|-------------|------------|
-| `std::error_code` | Erwartete Error |
-| `std::optional<T>` | Optionale Rückgabe |
-| `std::expected` (C++23) | Error oder Wert |
+| Mechanism | Usage |
+|-----------|-------|
+| `std::error_code` | Expected errors |
+| `std::optional<T>` | Optional return |
+| `std::expected` (C++23) | Error or value |
 
 ### 10.3 Logging
 
-- Zentrales Logging-System verwenden (z.B. `LogManager`)
-- Keine `std::cout` / `printf` in Produktionscode
-- Exceptions an Grenzen loggen oder propagieren
+- Use the central logging system (e.g. `LogManager`)
+- No `std::cout` / `printf` in production code
+- Log or propagate exceptions at boundaries
 
 ### 10.4 Multiple Conditions
 
-Bei mehreren Bedingungen: **jede Bedingung in Klammern** für Klarheit.
+With several conditions: **put each condition in parentheses** for clarity.
 
 ```cpp
-// ✅ Richtig: Jede Bedingung in Klammern
+// ✅ Correct: each condition in parentheses
 if ((value > minValue) && (value < maxValue))
 {
     // ...
@@ -673,26 +673,26 @@ if ((condition1) && (condition2) || (condition3))
     // ...
 }
 
-// ❌ Falsch: Keine Klammern
+// ❌ Wrong: no parentheses
 if (value > minValue && value < maxValue)
 {
     // ...
 }
 ```
 
-### 10.5 Division — Divisor prüfen
+### 10.5 Division — Check the Divisor
 
-Division durch 0 führt zu undefiniertem Verhalten. **Divisor validieren** oder Exception werfen.
+Division by 0 leads to undefined behavior. **Validate the divisor** or throw an exception.
 
 ```cpp
-// ✅ Mit Exception
+// ✅ With exception
 if (divisor == 0)
 {
     throw std::invalid_argument("Division by zero");
 }
 double result = value / divisor;
 
-// ✅ Mit optional
+// ✅ With optional
 std::optional<double> safeDivide(double value, double divisor)
 {
     if (divisor == 0.0)
@@ -707,108 +707,108 @@ std::optional<double> safeDivide(double value, double divisor)
 
 ## 11. Concurrency
 
-### 11.1 Empfohlene Mechanismen
+### 11.1 Recommended Mechanisms
 
-| Mechanismus | Usage |
-|-------------|------------|
-| `std::thread` / `std::jthread` | Thread-Erzeugung |
-| `std::mutex` / `std::shared_mutex` | Synchronisation |
-| `std::lock_guard` / `std::unique_lock` | RAII-Locking |
-| `std::atomic<T>` | Atomare Operationen |
+| Mechanism | Usage |
+|-----------|-------|
+| `std::thread` / `std::jthread` | Thread creation |
+| `std::mutex` / `std::shared_mutex` | Synchronization |
+| `std::lock_guard` / `std::unique_lock` | RAII locking |
+| `std::atomic<T>` | Atomic operations |
 
-### 11.2 Richtlinien
+### 11.2 Guidelines
 
-- **Keine Data Races** — Shared Data immer schützen
-- **Kurze kritische Sektionen** — Locks minimal halten
-- **Thread-Safe Design bevorzugen** — Immutable Data, Message Passing
+- **No data races** — always protect shared data
+- **Short critical sections** — keep locks minimal
+- **Prefer thread-safe design** — immutable data, message passing
 
 ---
 
-## 12. Hardware-Zugriff (Optional)
+## 12. Hardware Access (Optional)
 
-> **Scope:** Treiber-Entwicklung, Hardware-nahe PC-Tools, System-Programmierung
+> **Scope:** Driver development, hardware-related PC tools, system programming
 
-### 12.1 Anwendungsfälle
+### 12.1 Use Cases
 
-| Kontext | Examples |
-|---------|-----------|
-| Windows-Treiber | WDK (Windows Driver Kit) |
-| Linux-Kernel | Kernel-Module |
-| Hardware-Tools | Protokoll-Analyzer, Debug-Tools |
-| Memory-Mapped I/O | Über OS-spezifische APIs |
+| Context | Examples |
+|---------|----------|
+| Windows drivers | WDK (Windows Driver Kit) |
+| Linux kernel | Kernel modules |
+| Hardware tools | Protocol analyzers, debug tools |
+| Memory-mapped I/O | Via OS-specific APIs |
 
-### 12.2 Register-Zugriff
+### 12.2 Register Access
 
-Für Hardware-Tools, die Register-Definitionen benötigen:
+For hardware tools that need register definitions:
 
 ```cpp
-// Memory-Mapped I/O (über OS-API)
+// Memory-mapped I/O (via OS API)
 volatile std::uint32_t* pRegister = 
     reinterpret_cast<volatile std::uint32_t*>(mappedAddress);
 
-// Lesen/Schreiben
+// Read/write
 std::uint32_t value = *pRegister;
 *pRegister = newValue;
 ```
 
-> **Important:** `volatile` für Hardware-Register verwenden. Zugriff nur über OS-APIs (keine direkten Adressen in User-Mode).
+> **Important:** Use `volatile` for hardware registers. Access only via OS APIs (no direct addresses in user mode).
 
-### 12.3 Interrupt-Handling
+### 12.3 Interrupt Handling
 
-Auf PC-Systemen werden Interrupts typischerweise nicht direkt behandelt:
+On PC systems, interrupts are typically not handled directly:
 
-| Plattform | Mechanismus |
-|-----------|-------------|
-| Windows User-Mode | Events, Callbacks |
-| Windows Kernel-Mode | ISR via WDK |
-| Linux User-Mode | Signals, epoll |
-| Linux Kernel-Mode | IRQ Handler |
+| Platform | Mechanism |
+|----------|-----------|
+| Windows user mode | Events, callbacks |
+| Windows kernel mode | ISR via WDK |
+| Linux user mode | Signals, epoll |
+| Linux kernel mode | IRQ handler |
 
-Für die meisten C++ PC-Applikationen sind Events/Callbacks das richtige Pattern.
+For most C++ PC applications, events/callbacks are the right pattern.
 
 ---
 
-## 13. Statische Analyse
+## 13. Static Analysis
 
-### 13.1 Default-Profil: Dev-Gentle
+### 13.1 Default Profile: Dev-Gentle
 
-Aktivierte Check-Kategorien:
-- `clang-analyzer-*` — Kritische Bugs
-- `bugprone-*` — Logik-Error
-- `performance-*` — Ineffizienzen
-- `readability-*` — Lesbarkeit
-- `modernize-*` — C++-Modernisierung
+Enabled check categories:
+- `clang-analyzer-*` — critical bugs
+- `bugprone-*` — logic errors
+- `performance-*` — inefficiencies
+- `readability-*` — readability
+- `modernize-*` — C++ modernization
 
-### 13.2 Umgang mit Warningen
+### 13.2 Handling Warnings
 
-| Warning | Anforderung |
+| Warning | Requirement |
 |---------|-------------|
-| `clang-analyzer-*`, `bugprone-*` | **Beheben** oder dokumentiert unterdrücken |
-| Stil-Warningen | Zeitnah beheben, nicht ignorieren |
+| `clang-analyzer-*`, `bugprone-*` | **Fix** or suppress with documentation |
+| Style warnings | Fix promptly, do not ignore |
 
-### 13.3 Profile
+### 13.3 Profiles
 
-| Profil | Kontext |
-|--------|---------|
-| Dev-Gentle | Tägliche Entwicklung |
-| CI-Strict | Pull Requests |
-| API-Gate | Öffentliche APIs |
-
----
-
-## 14. Test-Code
-
-- Test-Code folgt **demselben Standard**
-- Test-spezifische Abkürzungen bleiben in Tests
-- Verwendete Frameworks (GoogleTest, Catch2) respektieren Naming-Regeln
+| Profile | Context |
+|---------|---------|
+| Dev-Gentle | Daily development |
+| CI-Strict | Pull requests |
+| API-Gate | Public APIs |
 
 ---
 
-## 15. Dokumentation
+## 14. Test Code
 
-### 15.1 TODO-Marker
+- Test code follows **the same standard**
+- Test-specific abbreviations stay in tests
+- The frameworks used (GoogleTest, Catch2) respect the naming rules
 
-Für unfertige Aufgaben, Ideen oder zu behebende Probleme: `TODO` im Kommentar verwenden.
+---
+
+## 15. Documentation
+
+### 15.1 TODO Markers
+
+For unfinished tasks, ideas or problems to be fixed: use `TODO` in the comment.
 
 ```cpp
 // TODO: Implement timeout handling
@@ -816,19 +816,19 @@ Für unfertige Aufgaben, Ideen oder zu behebende Probleme: `TODO` im Kommentar v
 // TODO: Add error recovery for communication failure
 ```
 
-IDEs können TODO-Marker automatisch erkennen und auflisten (z.B. VS Code: Todo Tree Extension, Visual Studio: Task List).
+IDEs can detect and list TODO markers automatically (e.g. VS Code: Todo Tree extension, Visual Studio: Task List).
 
-### 15.2 Code-Kommentare
+### 15.2 Code Comments
 
-| Kommentar-Typ | Usage |
-|---------------|------------|
-| `//` | Kurze Inline-Kommentare, temporäre Notizen |
-| `/* */` | Mehrzeilige Kommentare, Sektions-Header |
-| `///` oder `/** */` | Doxygen-Dokumentation |
+| Comment Type | Usage |
+|--------------|-------|
+| `//` | Short inline comments, temporary notes |
+| `/* */` | Multi-line comments, section headers |
+| `///` or `/** */` | Doxygen documentation |
 
-### 15.3 Funktions- und Klassen-Dokumentation
+### 15.3 Function and Class Documentation
 
-Öffentliche APIs mit Doxygen dokumentieren:
+Document public APIs with Doxygen:
 
 ```cpp
 /**
@@ -845,95 +845,97 @@ processPackets(std::span<const std::byte> data,
 ```
 
 | Tag | Usage |
-|-----|------------|
-| `@brief` | Kurzbeschreibung (Required für public API) |
-| `@param` | Parameters-Description |
-| `@return` | Return Value |
-| `@throws` | Geworfene Exceptions |
-| `@note` | Importante Notee |
-| `@warning` | Warningen, Einschränkungen |
-| `@see` | Verwandte Functions/Klassen |
+|-----|-------|
+| `@brief` | Short description (mandatory for public API) |
+| `@param` | Parameter description |
+| `@return` | Return value |
+| `@throws` | Thrown exceptions |
+| `@note` | Important notes |
+| `@warning` | Warnings, limitations |
+| `@see` | Related functions/classes |
 
-### 15.4 Sprache
+### 15.4 Language
 
-| Kontext | Sprache |
-|---------|---------|
-| Öffentliche APIs | **Englisch** (Required) |
-| Libraries | **Englisch** (Required) |
-| Interne Tools | German erlaubt |
-| Commit-Messages | Englisch empfohlen |
+| Context | Language |
+|---------|----------|
+| Public APIs | **English** (mandatory) |
+| Libraries | **English** (mandatory) |
+| Internal tools | German allowed |
+| Commit messages | English recommended |
 
 ---
 
-## 16. Verhältnis zu C (Embedded)
+## 16. Relationship to C (Embedded)
 
-| Aspekt | C++ (PC) | C (Embedded) |
+| Aspect | C++ (PC) | C (Embedded) |
 |--------|----------|--------------|
 | Exceptions | Yes | No |
-| Dynamic Allocation | Erlaubt | Vermeiden |
-| Standard Library | Voll | Eingeschränkt |
-| MISRA/CERT | Alignment | Strikte Einhaltung |
+| Dynamic allocation | Allowed | Avoid |
+| Standard library | Full | Restricted |
+| MISRA/CERT | Alignment | Strict compliance |
 
 ### 16.1 Shared Components
 
-Libraries für PC und Embedded müssen dokumentieren:
-- Verwendete C++-Subset
-- Embedded-Einschränkungen
+Libraries for PC and embedded must document:
+- The C++ subset used
+- Embedded restrictions
 
 ---
 
-## 17. Legacy-Code und Ausnahmen
+## 17. Legacy Code and Exceptions
 
-### 17.1 Legacy-Code
+### 17.1 Legacy Code
 
-- Bleibt temporär, wenn nicht compliant
-- Neuer Code **immer** nach Standard
-- Refactoring-Chancen nutzen
+- Remains temporarily if not compliant
+- New code **always** according to the standard
+- Use refactoring opportunities
 
-### 17.2 Intentionale Abweichungen
+### 17.2 Intentional Deviations
 
-- Kommentar im Code
-- Begründung dokumentieren
-- Scope minimieren
+- Comment in the code
+- Document the justification
+- Minimize the scope
 
 ---
 
-## 18. MISRA/CERT-Alignment
+## 18. MISRA/CERT Alignment
 
-Dieser Standard orientiert sich an:
+This standard is oriented towards:
 
-| Richtlinie | Relevanz |
-|------------|----------|
-| MISRA C++ | Sicherheitskritischer Code |
-| SEI CERT C++ | Defensive Programmierung |
+| Guideline | Relevance |
+|-----------|-----------|
+| MISRA C++ | Safety-critical code |
+| SEI CERT C++ | Defensive programming |
 
-### Umgesetzte Prinzipien
+### Implemented Principles
 
-- Keine gefährlichen Casts
-- Keine implizite Truncation
-- Return Values prüfen
-- Variablen initialisieren
+- No dangerous casts
+- No implicit truncation
+- Check return values
+- Initialize variables
 
 ---
 
 ## 19. See Also
 
 - [C_Coding_Standard.md](C_Coding_Standard.md) — Embedded C
-- [CMake_Standard.md](CMake_Standard.md) — Build-System
-- [Git_Standard.md](Git_Standard.md) — Versionskontrolle
-- [ClangFormat_Blueprint.md](../blueprints/ClangFormat_Blueprint.md) — Formatierung
-- [ClangTidy_Blueprint.md](../blueprints/ClangTidy_Blueprint.md) — Statische Analyse
+- [CMake_Standard.md](CMake_Standard.md) — Build system
+- [Git_Standard.md](Git_Standard.md) — Version control
+- [ClangFormat_Blueprint.md](../blueprints/ClangFormat.md) — Formatting
+- [ClangTidy_Blueprint.md](../blueprints/ClangTidy.md) — Static analysis
 
 ---
 
 ## 20. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.9.0** | **2025-12-19** | **Neu: §8 erweitert (Struct, Union, Bitfields), §9 Raw Pointer Regeln, §12 Hardware-Zugriff, §15 Dokumentation; §2↔§3 getauscht** |
-| 0.8.0 | 2025-12-19 | Neu: TODO-Marker (2.1), Multiple Conditions in Klammern (10.4), Division durch 0 prüfen (10.5) |
-| 0.7.0 | 2025-12-19 | Vereinheitlichung: Präfix-Tabelle klargestellt (p für alle Pointer) |
-| 0.6.0 | 2025-12-19 | Konsolidierung: Neuer Abschnitt 8 Klassen-Struktur, erweiterte Präfix-Tabelle (7.3), Dateinamen-Konventionen (5.1), Interface-Präfix I, Include-Reihenfolge (5.5), nodiscard/explicit Best Practices (8.3) |
-| 0.5.1 | 2025-12-18 | Neuer Abschnitt 4: Datei-Header mit Doxygen-Format, Requiredfelder, Sprachregelung |
-| 0.5.0 | 2025-12-13 | Migration auf Blueprint v0.5: Neuer Header, Table of Contents, Encoding-Fix |
-| 0.1.0 | 2025-12-05 | Initial: Namenskonventionen, Ownership, Exceptions, MISRA-Alignment |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: §8.6 example `std::optional<Result>` (was garbled `std::optional<r>`); changelog 0.8.0: TODO markers are in §15.1 today** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.9.0 | 2025-12-19 | New: §8 extended (struct, union, bitfields), §9 raw pointer rules, §12 hardware access, §15 documentation; §2↔§3 swapped |
+| 0.8.0 | 2025-12-19 | New: TODO markers (2.1, in §15.1 since 0.9.0), multiple conditions in parentheses (10.4), check division by 0 (10.5) |
+| 0.7.0 | 2025-12-19 | Unification: prefix table clarified (p for all pointers) |
+| 0.6.0 | 2025-12-19 | Consolidation: new section 8 class structure, extended prefix table (7.3), file naming conventions (5.1), interface prefix I, include order (5.5), nodiscard/explicit best practices (8.3) |
+| 0.5.1 | 2025-12-18 | New section 4: file header with Doxygen format, mandatory fields, language rule |
+| 0.5.0 | 2025-12-13 | Migration to Blueprint v0.5: new header, table of contents, encoding fix |
+| 0.1.0 | 2025-12-05 | Initial: naming conventions, ownership, exceptions, MISRA alignment |

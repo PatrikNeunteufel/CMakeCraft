@@ -1,61 +1,62 @@
 # Makefile Blueprint
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-19  
 > **Type:** Blueprint  
 > **Status:** Stable  
-> **Target Audience:** Build System Developers  
-> **Language:** English
+> **Target Audience:** Build system developers  
+> **Language:** English  
+> **German:** [Makefile.md](../../../de/autorenwerk/blueprints/Makefile.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Datei-Struktur](#2-datei-struktur)
-3. [Modul-Template](#3-modul-template)
-4. [Haupt-Makefile-Template](#4-haupt-makefile-template)
-5. [Diagnose-Target-Template](#5-diagnose-target-template)
+1. [Overview](#1-overview)
+2. [File Structure](#2-file-structure)
+3. [Module Template](#3-module-template)
+4. [Main Makefile Template](#4-main-makefile-template)
+5. [Diagnostic Target Template](#5-diagnostic-target-template)
 6. [Best Practices](#6-best-practices)
 7. [Anti-Patterns](#7-anti-patterns)
-8. [See Also](#8-siehe-auch)
+8. [See Also](#8-see-also)
 9. [Changelog](#9-changelog)
 
 ---
 
 ## 1. Overview
 
-Dieses Blueprint definiert die Struktur und Konventionen für modulare Makefiles. Es basiert auf dem TMS320F28P65x Build-System und ist für ähnliche Embedded-Projekte anwendbar.
+This blueprint defines the structure and conventions for modular Makefiles. It is based on the TMS320F28P65x build system and is applicable to similar embedded projects.
 
-### 1.1 Ziele
+### 1.1 Goals
 
-- **Modularität** — Wiederverwendbare, unabhängige Module
-- **Transparenz** — Klare Diagnose-Möglichkeiten
-- **Robustheit** — Fail-Fast bei Configurationsfehlern
-- **Wartbarkeit** — Einheitliche Struktur und Konventionen
+- **Modularity** — Reusable, independent modules
+- **Transparency** — Clear diagnostic options
+- **Robustness** — Fail-fast on configuration errors
+- **Maintainability** — Uniform structure and conventions
 
 ---
 
-## 2. Datei-Struktur
+## 2. File Structure
 
-### 2.1 Empfohlene Verzeichnisstruktur
+### 2.1 Recommended Directory Structure
 
 ```
 Build/
-├── <Project1>_Build/          /* Einstiegspunkt Projekt 1       */
+├── <Project1>_Build/          /* Entry point project 1          */
 │   └── Makefile
-├── <Project2>_Build/          /* Einstiegspunkt Projekt 2       */
+├── <Project2>_Build/          /* Entry point project 2          */
 │   └── Makefile
 └── make/
-    ├── common/                /* Gemeinsame Module              */
-    │   ├── bootstrap.mk       /* Basis-Functions               */
-    │   ├── arguments.mk       /* Argument-Validierung           */
-    │   ├── config.mk          /* Globale Configuration          */
-    │   ├── paths.mk           /* Pfad-Definitionen              */
-    │   ├── outputs.mk         /* Output-Verzeichnisse           */
-    │   ├── toolchain.mk       /* Compiler-Configuration         */
-    │   └── diagnostics.mk     /* Diagnose-Targets               */
-    ├── <Project1>/            /* Projekt-spezifisch             */
+    ├── common/                /* Shared modules                 */
+    │   ├── bootstrap.mk       /* Base functions                 */
+    │   ├── arguments.mk       /* Argument validation            */
+    │   ├── config.mk          /* Global configuration           */
+    │   ├── paths.mk           /* Path definitions               */
+    │   ├── outputs.mk         /* Output directories             */
+    │   ├── toolchain.mk       /* Compiler configuration         */
+    │   └── diagnostics.mk     /* Diagnostic targets             */
+    ├── <Project1>/            /* Project-specific               */
     │   ├── config.mk
     │   ├── sources.mk
     │   └── rules.mk
@@ -65,43 +66,43 @@ Build/
         └── rules.mk
 ```
 
-### 2.2 Modul-Kategorien
+### 2.2 Module Categories
 
-| Kategorie | Verantwortlichkeit | Examples |
+| Category | Responsibility | Examples |
 |-----------|-------------------|-----------|
-| **Bootstrap** | Basis-Functions, Argument-Prüfung | `bootstrap.mk`, `arguments.mk` |
-| **Configuration** | Pfade, Toolchain, ABI | `config.mk`, `paths.mk`, `toolchain.mk` |
-| **Outputs** | Verzeichnisse, Artefakte | `outputs.mk` |
-| **Rules** | Compile-/Link-Regeln | `rules.mk` |
-| **Diagnostics** | Debug-/Check-Targets | `diagnostics.mk` |
+| **Bootstrap** | Base functions, argument checks | `bootstrap.mk`, `arguments.mk` |
+| **Configuration** | Paths, toolchain, ABI | `config.mk`, `paths.mk`, `toolchain.mk` |
+| **Outputs** | Directories, artifacts | `outputs.mk` |
+| **Rules** | Compile/link rules | `rules.mk` |
+| **Diagnostics** | Debug/check targets | `diagnostics.mk` |
 
 ---
 
-## 3. Modul-Template
+## 3. Module Template
 
-### 3.1 Basis-Struktur
+### 3.1 Basic Structure
 
 ```makefile
-# <module_name>.mk - <kurze Description>
-# <optionale Details>
+# <module_name>.mk - <short description>
+# <optional details>
 # !!!!!!!!!!!!!!!!!!!!!!!!! DON'T TOUCH WITHOUT ANY GOOD REASON !!!!!!!!!!!!!!!!!!!!!!
 $(info *** parsing <module_name>.mk ***)
 $(info )
 
 # ==== <Section 1> ================================================================
-# <Description der Section>
+# <Description of the section>
 
 VARIABLE1 := value1
 VARIABLE2 := value2
 
 # ==== <Section 2> ================================================================
 
-# ... weitere Definitionen ...
+# ... further definitions ...
 
-# Export für nachfolgende Module/rekursive Aufrufe
+# Export for subsequent modules/recursive calls
 export VARIABLE1 VARIABLE2
 
-# ==== Diagnose-Target ============================================================
+# ==== Diagnostic target ==========================================================
 .PHONY: check-<module>
 
 check-<module>:
@@ -112,21 +113,21 @@ check-<module>:
 	@echo ""
 ```
 
-### 3.2 Hilfs-Functions
+### 3.2 Helper Functions
 
 ```makefile
-# Pfad-Normalisierung (\ zu /, /.. auflösen)
+# Path normalization (\ to /, resolve /..)
 fwd      = $(subst \,/,$(1))
 normpath = $(strip $(call fwd,$(abspath $(call fwd,$(1)))))
 
-# Existenz-Prüfungen
+# Existence checks
 _require_dir  = $(if $(wildcard $(1)/.),,$(error [FATAL] Missing directory: "$(1)" - $(2)))
 _require_file = $(if $(wildcard $(1)),,$(error [FATAL] Missing file: "$(1)" - $(2)))
 ```
 
 ---
 
-## 4. Haupt-Makefile-Template
+## 4. Main Makefile Template
 
 ```makefile
 # Makefile for <Project>
@@ -159,9 +160,9 @@ include ${ProjectDir}/Build/make/<Project>/rules.mk
 
 ---
 
-## 5. Diagnose-Target-Template
+## 5. Diagnostic Target Template
 
-### 5.1 Einzelnes Check-Target
+### 5.1 Single Check Target
 
 ```makefile
 .PHONY: check-<aspect>
@@ -174,7 +175,7 @@ check-<aspect>:
 	@echo ""
 ```
 
-### 5.2 Meta-Target (check-all)
+### 5.2 Meta Target (check-all)
 
 ```makefile
 # diagnostics.mk
@@ -187,7 +188,7 @@ check-all: check-arguments check-paths check-outputs check-abi check-rules
 ### 5.3 Ad-hoc Variable Inspection
 
 ```makefile
-# In rules.mk oder diagnostics.mk
+# In rules.mk or diagnostics.mk
 print-%:
 	@echo '$*=$($*)'
 ```
@@ -196,48 +197,48 @@ print-%:
 
 ## 6. Best Practices
 
-### 6.1 Variablen
+### 6.1 Variables
 
-| Regel | Example |
+| Rule | Example |
 |-------|----------|
-| **UPPER_CASE** für exportierte Variablen | `CG_TOOL_ROOT`, `CFLAGS` |
-| **Sofortige Expansion (`:=`)** für Pfade | `OUT_DIR := $(ProjectDir)/out` |
-| **Verzögerte Expansion (`=`)** für abhängige Werte | `GLOBAL_LIB = $(OUT_DIR)/lib.a` |
-| **Override** für Argument-Normalisierung | `override ProjectDir := $(call normpath,...)` |
+| **UPPER_CASE** for exported variables | `CG_TOOL_ROOT`, `CFLAGS` |
+| **Immediate expansion (`:=`)** for paths | `OUT_DIR := $(ProjectDir)/out` |
+| **Deferred expansion (`=`)** for dependent values | `GLOBAL_LIB = $(OUT_DIR)/lib.a` |
+| **Override** for argument normalization | `override ProjectDir := $(call normpath,...)` |
 
-### 6.2 Kommentare
+### 6.2 Comments
 
 ```makefile
 # ==== Section Header (4 = signs, 80 chars total) =================================
-# Einzelne Zeile erklärt Zweck
+# A single line explains the purpose
 
-# Mehrzeilige Erklärung für komplexe Logik:
-# - Punkt 1
-# - Punkt 2
+# Multi-line explanation for complex logic:
+# - Point 1
+# - Point 2
 ```
 
-### 6.3 Errorbehandlung
+### 6.3 Error Handling
 
 ```makefile
-# Fail-Fast Pattern
+# Fail-fast pattern
 ifeq ($(REQUIRED_VAR),)
   $(error [FATAL] REQUIRED_VAR is empty or not set)
 endif
 
-# Validierung mit Kontext
+# Validation with context
 $(call _require_dir,$(TOOL_PATH),Toolchain not found - check TI_BASE)
 ```
 
-### 6.4 Shell-Befehle
+### 6.4 Shell Commands
 
 ```makefile
-# Immer mit @ für saubere Ausgabe
+# Always with @ for clean output
 @echo [CC] $<
 
-# Mit SHELL für Portabilität
+# With SHELL for portability
 @$(SHELL) -c 'if [ -d "$(DIR)" ]; then rm -rf "$(DIR)"; fi'
 
-# Errorprüfung nach Befehl
+# Error check after a command
 @[ -f "$@" ] || (echo "[FATAL] Compilation failed"; exit 2)
 ```
 
@@ -245,29 +246,29 @@ $(call _require_dir,$(TOOL_PATH),Toolchain not found - check TI_BASE)
 
 ## 7. Anti-Patterns
 
-### 7.1 Vermeiden
+### 7.1 Avoid
 
-| Anti-Pattern | Problem | Besser |
+| Anti-pattern | Problem | Better |
 |--------------|---------|--------|
-| Hardcoded Pfade | Nicht portabel | Argumente oder abgeleitete Pfade |
-| Tabs vs Spaces inkonsistent | Make erfordert Tabs in Rezepten | Konsequent Tabs in Rezepten |
-| Globale Variablen ohne Export | Rekursive Aufrufe scheitern | `export VAR` |
-| Fehlende `.PHONY` | Konflikte mit gleichnamigen Dateien | Immer deklarieren |
-| Keine Diagnose-Targets | Debugging erschwert | `check-*` Targets |
+| Hardcoded paths | Not portable | Arguments or derived paths |
+| Inconsistent tabs vs. spaces | Make requires tabs in recipes | Consistently tabs in recipes |
+| Global variables without export | Recursive calls fail | `export VAR` |
+| Missing `.PHONY` | Conflicts with files of the same name | Always declare |
+| No diagnostic targets | Debugging made harder | `check-*` targets |
 
 ### 7.2 Examples
 
 ```makefile
-# ❌ Schlecht: Hardcoded Pfad
+# ❌ Bad: hardcoded path
 CC := D:/TI/CCS1281/ccs/tools/compiler/bin/cl2000
 
-# ✅ Gut: Abgeleiteter Pfad
+# ✅ Good: derived path
 CC := $(CG_TOOL_ROOT)/bin/cl2000
 
-# ❌ Schlecht: Keine Errorprüfung
+# ❌ Bad: no error check
 $(CC) $(CFLAGS) -o $@ $<
 
-# ✅ Gut: Mit Errorprüfung
+# ✅ Good: with error check
 @"$(CC)" $(CFLAGS) -o "$@" "$<"
 @[ -f "$@" ] || (echo "[FATAL] Compilation failed: $<"; exit 2)
 ```
@@ -276,13 +277,13 @@ $(CC) $(CFLAGS) -o $@ $<
 
 ## 8. See Also
 
-- [Makefile_Standard.md](../standards/Makefile_Standard.md) — Coding-Konventionen
-- [Makefile_Build_System_Concept.md](../../../../archive/docs/en/makefile_buildsystem/concepts/Makefile_Build_System_Concept.md) — Reference-Implementation
+- [Makefile_Standard.md](../standards/Makefile_Standard.md) — Coding conventions
+- [Makefile_Build_System_Concept.md](../../../../archive/docs/de/makefile_buildsystem/concepts/Makefile_Build_System_Concept.md) — Reference implementation
 
 ---
 
 ## 9. Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **1.0.0** | **2025-12-19** | **Initial: Basierend auf TMS320 Build-System** |
+| **1.0.0** | **2025-12-19** | **Initial: based on the TMS320 build system** |

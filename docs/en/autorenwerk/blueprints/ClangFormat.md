@@ -1,79 +1,80 @@
-# ClangFormat Blueprint – Code-Formatierung
+# ClangFormat Blueprint – Code Formatting
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development (Pre-Release)  
-> **Scope:** Alle `.clang-format`-Configurationen  
-> **Bezug:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1  
+> **Scope:** All `.clang-format` configurations  
+> **Related to:** Cpp_Coding_Standard v0.1, C_Coding_Standard v0.1  
 > **Language:** English  
+> **German:** [ClangFormat.md](../../../de/autorenwerk/blueprints/ClangFormat.md)
 
 ---
 
-## 1. Zweck
+## 1. Purpose
 
-Dieses Blueprint definiert **Struktur und Wartung** der `.clang-format`-Configuration.
+This blueprint defines the **structure and maintenance** of the `.clang-format` configuration.
 
-**Was dieses Dokument ist:**
-- Conceptuelle Grundlage für Formatierungsregeln
-- Definition von Verantwortlichkeiten und Änderungsprozessen
-- Erklärung der Intentionen hinter den Regeln
+**What this document is:**
+- Conceptual basis for formatting rules
+- Definition of responsibilities and change processes
+- Explanation of the intentions behind the rules
 
-**Was dieses Dokument nicht ist:**
-- Die technische Configuration selbst (→ `.clang-format`-Datei)
+**What this document is not:**
+- The technical configuration itself (→ `.clang-format` file)
 
 ---
 
-## 2. Verhältnis zu anderen Standards
+## 2. Relationship to Other Standards
 
-| Dokument | Definiert |
+| Document | Defines |
 |----------|-----------|
-| **Cpp_Coding_Standard** | Stil, Sprachfeatures, Design-Regeln |
-| **C_Coding_Standard** | Stil für Embedded-C |
-| **`.clang-format`** | Technische Umsetzung der Formatierung |
+| **Cpp_Coding_Standard** | Style, language features, design rules |
+| **C_Coding_Standard** | Style for embedded C |
+| **`.clang-format`** | Technical implementation of the formatting |
 
-### Konfliktauflösung
+### Conflict Resolution
 
-> Bei Widersprüchen zwischen textlicher Dokumentation und `.clang-format` gilt **`.clang-format`** als verbindlich. Die Dokumentation wird nachgezogen, nicht das Tool umgangen.
+> If the written documentation and `.clang-format` contradict each other, **`.clang-format`** is binding. The documentation is brought up to date; the tool is not circumvented.
 
 ---
 
-## 3. Basis-Stil und Philosophie
+## 3. Base Style and Philosophy
 
-### 3.1 Grundlagen
+### 3.1 Fundamentals
 
-| Aspekt | Wert |
+| Aspect | Value |
 |--------|------|
-| Basis-Stil | `LLVM` mit projektspezifischen Anpassungen |
-| Ziele | Lesbarkeit, stabile Diffs, minimale Stil-Diskussionen |
+| Base style | `LLVM` with project-specific adjustments |
+| Goals | Readability, stable diffs, minimal style discussions |
 
-### 3.2 Verantwortlichkeit
+### 3.2 Responsibility
 
-- Die `.clang-format`-Datei im Root-Verzeichnis wird zentral gepflegt
-- Projektspezifische Overrides sind zu vermeiden
-- Changes folgen dem Prozess in Abschnitt 7
+- The `.clang-format` file in the root directory is maintained centrally
+- Project-specific overrides are to be avoided
+- Changes follow the process in section 7
 
 ---
 
-## 4. Formatierungsrichtlinien (Concept)
+## 4. Formatting Guidelines (Concept)
 
-> Die exakten Werte sind in `.clang-format` definiert. Dieser Abschnitt dokumentiert die **Intention**.
+> The exact values are defined in `.clang-format`. This section documents the **intention**.
 
-### 4.1 Einrückung und Whitespace
+### 4.1 Indentation and Whitespace
 
-| Einstellung | Wert | Begründung |
+| Setting | Value | Rationale |
 |-------------|------|------------|
-| IndentWidth | 4 | Kompromiss zwischen Dichte und Lesbarkeit |
-| TabWidth | 4 | Konsistenz |
-| UseTab | Never | Vermeidet Alignment-Probleme |
+| IndentWidth | 4 | Compromise between density and readability |
+| TabWidth | 4 | Consistency |
+| UseTab | Never | Avoids alignment problems |
 
-### 4.2 Klammern (Allman-Stil)
+### 4.2 Braces (Allman Style)
 
-Öffnende Klammern stehen auf **neuer Zeile** für:
+Opening braces go on a **new line** for:
 - Functions
-- Klassen/Structs
+- Classes/structs
 - Namespaces
-- Kontrollstrukturen (`if`, `for`, `while`, `switch`)
+- Control structures (`if`, `for`, `while`, `switch`)
 
 **Example:**
 ```cpp
@@ -87,30 +88,30 @@ else
 }
 ```
 
-**Begründung:** Klare visuelle Struktur, einfacheres Diffing.
+**Rationale:** Clear visual structure, easier diffing.
 
-### 4.3 Zeilenlänge
+### 4.3 Line Length
 
-| Einstellung | Wert |
+| Setting | Value |
 |-------------|------|
-| ColumnLimit | 80 (oder 120, projektabhängig) |
+| ColumnLimit | 80 (or 120, depending on the project) |
 
-**Begründung:** Vermeidet horizontales Scrollen, bessere Side-by-Side-Diffs.
+**Rationale:** Avoids horizontal scrolling, better side-by-side diffs.
 
-### 4.4 Include-Sortierung
+### 4.4 Include Sorting
 
-**Reihenfolge:**
-1. Precompiled Header (`pch/pch.h`) – falls vorhanden
-2. System-Header (`<...>`)
-3. Projekt-Header (`"..."`)
+**Order:**
+1. Precompiled header (`pch/pch.h`) – if present
+2. System headers (`<...>`)
+3. Project headers (`"..."`)
 
-**Einstellung:** `IncludeBlocks: Regroup`
+**Setting:** `IncludeBlocks: Regroup`
 
-**Begründung:** PCH muss zuerst, klare Trennung System/Projekt.
+**Rationale:** The PCH must come first; clear separation of system/project.
 
-### 4.5 Arrays und Initialisierungslisten
+### 4.5 Arrays and Initializer Lists
 
-**Stil:** Ein Element pro Zeile bei mehrzeiligen Arrays.
+**Style:** One element per line for multi-line arrays.
 
 ```cpp
 int values[] =
@@ -122,92 +123,94 @@ int values[] =
 };
 ```
 
-**Begründung:** Ein geändertes Element = eine geänderte Zeile im Diff.
+**Rationale:** One changed element = one changed line in the diff.
 
 ---
 
-## 5. Projektspezifische Erweiterungen
+## 5. Project-Specific Extensions
 
-Erlaubt:
-- `Language`-spezifische Sektionen (C vs. C++)
-- Embedded-Anpassungen bei Toolchain-Einschränkungen
+Allowed:
+- `Language`-specific sections (C vs. C++)
+- Embedded adjustments for toolchain restrictions
 
-Anforderungen:
-- Dokumentation im Projekt-README
-- Keine grundlosen Abweichungen vom globalen Stil
+Requirements:
+- Documentation in the project README
+- No unjustified deviations from the global style
 
 ---
 
-## 6. Tool-Integration
+## 6. Tool Integration
 
-### 6.1 Entwickler-Workflow
+### 6.1 Developer Workflow
 
-1. `clang-format` in IDE/Editor integrieren
-2. Code **vor** Commit formatieren
-3. Code-Reviews ignorieren Formatierung (delegiert an Tool)
+1. Integrate `clang-format` into the IDE/editor
+2. Format code **before** committing
+3. Code reviews ignore formatting (delegated to the tool)
 
-### 6.2 Automatisierung
+### 6.2 Automation
 
-| Methode | Description |
+| Method | Description |
 |---------|--------------|
-| Pre-Commit Hook | Automatische Formatierung vor Commit |
-| CI-Check | Validierung im Build-System |
-| IDE-Integration | Format-on-Save |
+| Pre-commit hook | Automatic formatting before commit |
+| CI check | Validation in the build system |
+| IDE integration | Format-on-save |
 
 ---
 
-## 7. Änderungsmanagement
+## 7. Change Management
 
-### 7.1 Wann ändern?
+### 7.1 When to Change?
 
-Changes nur wenn:
-- Aktuelle Regel schadet nachweislich der Lesbarkeit
-- Neue Regel verbessert Konsistenz signifikant
-- Tooling/Projekt erfordert Anpassung
+Changes only if:
+- The current rule demonstrably harms readability
+- A new rule significantly improves consistency
+- Tooling/the project requires an adjustment
 
-### 7.2 Prozess
+### 7.2 Process
 
-1. **Vorschlag:** Aktuelles Verhalten (vorher/nachher), Motivation
-2. **Review:** Architecture-/Tooling-Team
-3. **Umsetzung:**
-   - `.clang-format` aktualisieren
-   - Formatierungs-Pass auf betroffenen Code
-   - Bei konzeptueller Änderung: Blueprint aktualisieren
+1. **Proposal:** Current behavior (before/after), motivation
+2. **Review:** Architecture/tooling team
+3. **Implementation:**
+   - Update `.clang-format`
+   - Formatting pass over the affected code
+   - For a conceptual change: update the blueprint
 
 ---
 
-## 8. Versionierung
+## 8. Versioning
 
-### 8.1 Datei-Header
+### 8.1 File Header
 
-Jede `.clang-format`-Datei enthält:
+Every `.clang-format` file contains:
 
 ```yaml
 # C/C++ Formatting Standard
 # Version: 0.1.0
-# Blueprint: Documentations/Blueprints/ClangFormat_Blueprint_v0_1_0.md
+# Blueprint: docs/de/autorenwerk/blueprints/ClangFormat.md
 # Date: 2025-12-05
 ```
 
-### 8.2 Versionierungsregeln
+### 8.2 Versioning Rules
 
-| Änderung | Aktion |
+| Change | Action |
 |----------|--------|
-| Conceptuell (Klammer-Stil, Einrückung) | Version erhöhen, Blueprint aktualisieren |
-| Technisch/Kosmetisch | Version kann bleiben |
+| Conceptual (brace style, indentation) | Increment version, update blueprint |
+| Technical/cosmetic | Version may stay |
 
 ---
 
 ## 9. See Also
 
-- [Cpp_Coding_Standard](Cpp_Coding_Standard_v0_1_0.md) – C++ Stil-Richtlinien
-- [C_Coding_Standard](C_Coding_Standard_v0_1_0.md) – C Stil-Richtlinien (Embedded)
-- [ClangTidy_Blueprint](ClangTidy_Blueprint_v0_1_0.md) – Statische Analyse
+- [Cpp_Coding_Standard](../standards/Cpp_Coding_Standard.md) – C++ style guidelines
+- [C_Coding_Standard](../standards/C_Coding_Standard.md) – C style guidelines (embedded)
+- [ClangTidy_Blueprint](ClangTidy.md) – Static analysis
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.1.0** | **2025-12-05** | **Initial: Struktur, Philosophie, Änderungsprozess** |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: header pattern § 8.1 points to today's path `docs/de/autorenwerk/blueprints/ClangFormat.md`** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.1.0 | 2025-12-05 | Initial: structure, philosophy, change process |

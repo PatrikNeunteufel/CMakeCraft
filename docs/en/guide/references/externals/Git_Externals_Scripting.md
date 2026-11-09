@@ -4,30 +4,30 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_Scripting.md](Git_Externals_Scripting.md)
+> **German:** [Git_Externals_Scripting.md](../../../../de/guide/references/externals/Git_Externals_Scripting.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [sol2](#2-sol2)
 3. [pybind11](#3-pybind11)
 4. [chaiscript](#4-chaiscript)
-5. [Schnellreferenz](#5-schnellreferenz)
-6. [See Also](#6-siehe-auch)
-7. [Changelog](#7-changelog)
+5. [Quick Reference](#5-quick-reference)
+6. [See Also](#6-see-also)
+7. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Git Scripting-Externals für das CMake Architecture Build-System.
+This document describes Git scripting externals for the CMake Architecture build system.
 
 | Library | Description | CMake | Hook |
-|---------|--------------|-------|------|
+|---------|-------------|-------|------|
 | **sol2** | C++ Lua Bindings | ✅ | — |
 | **pybind11** | C++ Python Bindings | ✅ | — |
 | **chaiscript** | Embedded Scripting Language | ✅ | — |
@@ -36,15 +36,15 @@ This document describes Git Scripting-Externals für das CMake Architecture Buil
 
 ## 2. sol2
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | https://github.com/ThePhD/sol2 |
-| **Empfohlener Tag** | v3.3.1 |
-| **CMake-Support** | ✅ |
-| **Hook** | — (nicht nötig) |
-| **Typ** | Header-Only |
+| **Recommended Tag** | v3.3.1 |
+| **CMake Support** | ✅ |
+| **Hook** | — (not needed) |
+| **Type** | Header-Only |
 
 ### Solution.json
 
@@ -60,9 +60,9 @@ This document describes Git Scripting-Externals für das CMake Architecture Buil
 }
 ```
 
-> **Important:** sol2 benötigt eine Lua-Implementation (lua54 als Local External empfohlen)
+> **Important:** sol2 requires a Lua implementation (lua54 as a Local External recommended)
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #include <sol/sol.hpp>
@@ -71,7 +71,7 @@ int main() {
     sol::state lua;
     lua.open_libraries(sol::lib::base, sol::lib::math);
     
-    // Variablen
+    // Variables
     lua["x"] = 10;
     int x = lua["x"];
     
@@ -79,14 +79,14 @@ int main() {
     lua["add"] = [](int a, int b) { return a + b; };
     int result = lua["add"](2, 3);  // 5
     
-    // Skript ausführen
+    // Run script
     lua.script("print('Hello from Lua!')");
     
     return 0;
 }
 ```
 
-### Klassen exportieren
+### Exporting Classes
 
 ```cpp
 #include <sol/sol.hpp>
@@ -104,7 +104,7 @@ int main() {
     sol::state lua;
     lua.open_libraries(sol::lib::base);
     
-    // Klasse registrieren
+    // Register class
     lua.new_usertype<Player>("Player",
         "name", &Player::name,
         "health", &Player::health,
@@ -112,7 +112,7 @@ int main() {
         "isAlive", &Player::isAlive
     );
     
-    // In Lua verwenden
+    // Use in Lua
     lua.script(R"(
         local p = Player.new()
         p.name = "Hero"
@@ -127,22 +127,22 @@ int main() {
 ### Targets
 
 | Target | Description |
-|--------|--------------|
-| `sol2::sol2` | Header-Only Interface |
+|--------|-------------|
+| `sol2::sol2` | Header-only interface |
 
 ---
 
 ## 3. pybind11
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | https://github.com/pybind/pybind11 |
-| **Empfohlener Tag** | v2.12.0 |
-| **CMake-Support** | ✅ |
-| **Hook** | — (nicht nötig) |
-| **Typ** | Header-Only |
+| **Recommended Tag** | v2.12.0 |
+| **CMake Support** | ✅ |
+| **Hook** | — (not needed) |
+| **Type** | Header-Only |
 
 ### Solution.json
 
@@ -157,9 +157,9 @@ int main() {
 }
 ```
 
-> **Important:** Python Development Headers müssen installiert sein
+> **Important:** Python development headers must be installed
 
-### Usagesbeispiel (Python Module erstellen)
+### Usage Example (Creating a Python Module)
 
 ```cpp
 #include <pybind11/pybind11.h>
@@ -174,7 +174,7 @@ PYBIND11_MODULE(example, m) {
 }
 ```
 
-### Klassen exportieren
+### Exporting Classes
 
 ```cpp
 #include <pybind11/pybind11.h>
@@ -207,23 +207,23 @@ print(calc.multiply(4, 5))  # 20
 ### Targets
 
 | Target | Description |
-|--------|--------------|
-| `pybind11::module` | Für Python Module |
-| `pybind11::embed` | Für Embedded Python |
+|--------|-------------|
+| `pybind11::module` | For Python modules |
+| `pybind11::embed` | For embedded Python |
 
 ---
 
 ## 4. chaiscript
 
-### Kurzinfo
+### Quick Info
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | https://github.com/ChaiScript/ChaiScript |
-| **Empfohlener Tag** | v6.1.0 |
-| **CMake-Support** | ✅ |
-| **Hook** | — (nicht nötig) |
-| **Typ** | Header-Only |
+| **Recommended Tag** | v6.1.0 |
+| **CMake Support** | ✅ |
+| **Hook** | — (not needed) |
+| **Type** | Header-Only |
 
 ### Solution.json
 
@@ -238,7 +238,7 @@ print(calc.multiply(4, 5))  # 20
 }
 ```
 
-### Usagesbeispiel
+### Usage Example
 
 ```cpp
 #include <chaiscript/chaiscript.hpp>
@@ -246,23 +246,23 @@ print(calc.multiply(4, 5))  # 20
 int main() {
     chaiscript::ChaiScript chai;
     
-    // Variablen
+    // Variables
     chai.add(chaiscript::var(42), "x");
     
     // Functions
     chai.add(chaiscript::fun([](int a, int b) { return a + b; }), "add");
     
-    // Skript ausführen
+    // Run script
     chai.eval("print(add(2, 3))");
     
-    // Wert abrufen
+    // Retrieve value
     int result = chai.eval<int>("add(10, 20)");
     
     return 0;
 }
 ```
 
-### Klassen exportieren
+### Exporting Classes
 
 ```cpp
 #include <chaiscript/chaiscript.hpp>
@@ -278,14 +278,14 @@ public:
 int main() {
     chaiscript::ChaiScript chai;
     
-    // Klasse registrieren
+    // Register class
     chai.add(chaiscript::user_type<Player>(), "Player");
     chai.add(chaiscript::constructor<Player()>(), "Player");
     chai.add(chaiscript::fun(&Player::name), "name");
     chai.add(chaiscript::fun(&Player::health), "health");
     chai.add(chaiscript::fun(&Player::damage), "damage");
     
-    // In ChaiScript verwenden
+    // Use in ChaiScript
     chai.eval(R"(
         var p = Player()
         p.name = "Hero"
@@ -300,49 +300,50 @@ int main() {
 ### Targets
 
 | Target | Description |
-|--------|--------------|
-| `chaiscript` | Main Library |
+|--------|-------------|
+| `chaiscript` | Main library |
 
 ---
 
-## 5. Schnellreferenz
+## 5. Quick Reference
 
-| Library | Tag | CMake | Hook | Typ | Sprache |
-|---------|-----|-------|------|-----|---------|
+| Library | Tag | CMake | Hook | Type | Language |
+|---------|-----|-------|------|------|----------|
 | sol2 | v3.3.1 | ✅ | — | Header-Only | Lua |
 | pybind11 | v2.12.0 | ✅ | — | Header-Only | Python |
 | chaiscript | v6.1.0 | ✅ | — | Header-Only | ChaiScript |
 
-### Vergleich
+### Comparison
 
 | Feature | sol2 | pybind11 | chaiscript |
 |---------|------|----------|------------|
-| **Zielsprache** | Lua | Python | ChaiScript |
-| **Runtime** | lua54 (Local) | Python Interpreter | Eingebaut |
-| **Syntax** | Lua | Python | C++-ähnlich |
-| **Footprint** | Klein | Mittel | Mittel |
-| **Anwendung** | Game Scripting | Python Integration | Embedded DSL |
+| **Target language** | Lua | Python | ChaiScript |
+| **Runtime** | lua54 (Local) | Python interpreter | Built in |
+| **Syntax** | Lua | Python | C++-like |
+| **Footprint** | Small | Medium | Medium |
+| **Use case** | Game scripting | Python integration | Embedded DSL |
 
-### Vergleich mit Local-Alternative
+### Comparison with the Local Alternative
 
 | Feature | lua54 (Local) | sol2 (Git) |
 |---------|---------------|------------|
-| **Typ** | Core Engine | C++ Bindings |
-| **API** | C-Style | Modern C++ |
-| **Kombination** | ✅ Zusammen verwenden | ✅ Zusammen verwenden |
+| **Type** | Core engine | C++ bindings |
+| **API** | C-style | Modern C++ |
+| **Combination** | ✅ Use together | ✅ Use together |
 
 ---
 
 ## 6. See Also
 
-- [Externals.md](../Externals.md) — Hauptübersicht aller Externals
-- [Git_Externals.md](Git_Externals.md) — Git Externals Overview
+- [Externals.md](../Externals.md) — Main overview of all externals
+- [Git_Externals.md](Git_Externals.md) — Git Externals overview
 - [Local_Externals_Scripting.md](Local_Externals_Scripting.md) — Local Scripting (lua54)
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Eigene Kategorie Scripting (aus Git_Externals_Core ausgelagert)** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Own category Scripting (split out from Git_Externals_Core) |

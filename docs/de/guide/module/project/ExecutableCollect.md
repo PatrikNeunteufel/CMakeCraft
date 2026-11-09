@@ -1,14 +1,14 @@
 # ExecutableCollect.cmake — Modul-Dokumentation
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-18  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** In Entwicklung (Pre-Release)  
 > **Basiert auf:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [ExecutableCollect.md](ExecutableCollect.md)  
-> **Modul:** [`cmake/project/ExecutableCollect.cmake`](../../../../cmake/project/ExecutableCollect.cmake)  
+> **English:** [ExecutableCollect.md](../../../../en/guide/module/project/ExecutableCollect.md)  
+> **Modul:** [`cmake/project/ExecutableCollect.cmake`](../../../../../cmake/project/ExecutableCollect.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -202,6 +202,7 @@ Fehlende optionale Felder führen nicht zu Fehlern, sondern werden mit sinnvolle
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.1** | **2025-12-18** | **PCH_PATH hinzugefügt, implizite PCH-Aktivierung dokumentiert** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.1 | 2025-12-18 | PCH_PATH hinzugefügt, implizite PCH-Aktivierung dokumentiert |
 | 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Inhaltsverzeichnis mit Ankern, Kapitel-Nummerierung |
 | 0.1.0 | 2025-12-05 | Initial (Clean Start): JSON zu Context Mapping |

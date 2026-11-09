@@ -1,55 +1,55 @@
-# TestCreate.cmake — Modul-Dokumentation
+# TestCreate.cmake — Module Documentation
 
 > **Version:** 1.0.0  
 > **Date:** 2025-12-26  
 > **Type:** ModuleDoc  
 > **Status:** In Development (Pre-Release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [TestCreate.md](TestCreate.md)  
-> **Module:** [`cmake/project/TestCreate.cmake`](../../../../cmake/project/TestCreate.cmake)  
+> **German:** [TestCreate.md](../../../../de/guide/module/project/TestCreate.md)  
+> **Module:** [`cmake/project/TestCreate.cmake`](../../../../../cmake/project/TestCreate.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [API-Reference](#3-api-referenz)
-4. [Verarbeitung](#4-verarbeitung)
-5. [Framework-Integration](#5-framework-integration)
-6. [CTest-Registrierung](#6-ctest-registrierung)
-7. [Errorbehandlung](#7-fehlerbehandlung)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [API Reference](#3-api-reference)
+4. [Processing](#4-processing)
+5. [Framework Integration](#5-framework-integration)
+6. [CTest Registration](#6-ctest-registration)
+7. [Error Handling](#7-error-handling)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `TestCreate.cmake` Modul **erstellt Test-Targets** aus einem vorbereiteten Context. Es behandelt Framework-Integration, CTest-Registrierung und Dependencies.
+The `TestCreate.cmake` module **creates test targets** from a prepared context. It handles framework integration, CTest registration and dependencies.
 
-### Kernidee
+### Core Idea
 
-Analog zu ExecutableCreate — aber mit Test-spezifischer Logik (Framework, CTest).
+Analogous to ExecutableCreate — but with test-specific logic (framework, CTest).
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Target-Erstellung | add_executable() für Test |
-| Framework | doctest, catch2, gtest Integration |
-| CTest | add_test(), Labels, Timeout |
-| Dependencies | Target, Libraries, Externals |
+| Area | Description |
+|------|-------------|
+| Target creation | add_executable() for the test |
+| Framework | doctest, catch2, gtest integration |
+| CTest | add_test(), labels, timeout |
+| Dependencies | Target, libraries, externals |
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Context.cmake | 0.5.0 | `ctx_get` |
 | Errors.cmake | 0.5.0 | `cmake_fatal`, `cmake_warn` |
 | Debug.cmake | 0.5.0 | `dbg` |
@@ -60,11 +60,11 @@ Analog zu ExecutableCreate — aber mit Test-spezifischer Logik (Framework, CTes
 
 ---
 
-## 3. API-Reference
+## 3. API Reference
 
 ### 3.1 _create_test_target()
 
-Erstellt ein CMake-Test-Target aus dem Context.
+Creates a CMake test target from the context.
 
 ```cmake
 _create_test_target(<CTX>)
@@ -72,65 +72,65 @@ _create_test_target(<CTX>)
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `CTX` | String | ✓ | Context-Prefix (z.B. `TEST_0`) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `CTX` | String | ✓ | Context prefix (e.g. `TEST_0`) |
 
-**Erwartete Context-Keys:**
+**Expected context keys:**
 
 | Key | Usage |
-|-----|------------|
-| NAME | Test-Name |
-| PATH | Source-Verzeichnis |
+|-----|-------|
+| NAME | Test name |
+| PATH | Source directory |
 | FRAMEWORK | doctest, catch2, gtest |
-| TARGET | Zu testendes Target |
-| DEPENDENCIES | Interne Libraries |
-| EXTERNALS | Externe Dependencies |
-| TIMEOUT | CTest Timeout |
-| LABELS | CTest Labels |
-| PARALLEL | Parallel-Flag |
+| TARGET | Target under test |
+| DEPENDENCIES | Internal libraries |
+| EXTERNALS | External dependencies |
+| TIMEOUT | CTest timeout |
+| LABELS | CTest labels |
+| PARALLEL | Parallel flag |
 
 ---
 
-## 4. Verarbeitung
+## 4. Processing
 
-### 4.1 Ablauf
+### 4.1 Flow
 
 ```
 _create_test_target(CTX)
     │
-    ├── 1. Context-Daten lesen
+    ├── 1. Read context data
     │
-    ├── 2. Source-Verzeichnis validieren
+    ├── 2. Validate source directory
     │
-    ├── 3. Test-Executable erstellen
+    ├── 3. Create test executable
     │   └── add_executable(${name} ${sources})
     │
-    ├── 4. Framework-External linken
+    ├── 4. Link framework external
     │   └── apply_external_to_target(name, framework)
     │
-    ├── 5. Target-Under-Test linken
+    ├── 5. Link target under test
     │   └── target_link_libraries(name PRIVATE target)
     │
-    ├── 6. Dependencies linken
+    ├── 6. Link dependencies
     │
-    ├── 7. Andere Externals linken
+    ├── 7. Link other externals
     │
-    ├── 8. Standard-Module anwenden
+    ├── 8. Apply standard modules
     │   ├── apply_warnings()
     │   ├── apply_compiler_options()
     │   └── setup_output_dirs()
     │
-    └── 9. CTest registrieren
+    └── 9. Register with CTest
         ├── add_test(NAME name COMMAND name)
         ├── set_tests_properties(TIMEOUT)
         ├── set_tests_properties(LABELS)
-        └── set_tests_properties(RUN_SERIAL) wenn !parallel
+        └── set_tests_properties(RUN_SERIAL) if !parallel
 ```
 
 ---
 
-## 5. Framework-Integration
+## 5. Framework Integration
 
 ### 5.1 doctest (Default)
 
@@ -141,7 +141,7 @@ _create_test_target(CTX)
 }
 ```
 
-doctest muss als External definiert sein.
+doctest must be defined as an external.
 
 ### 5.2 Catch2
 
@@ -161,9 +161,9 @@ doctest muss als External definiert sein.
 
 ---
 
-## 6. CTest-Registrierung
+## 6. CTest Registration
 
-### 6.1 Basis-Registrierung
+### 6.1 Basic Registration
 
 ```cmake
 add_test(
@@ -180,7 +180,7 @@ set_tests_properties(${_name} PROPERTIES
     LABELS "${_labels}"
 )
 
-# Wenn nicht parallel
+# If not parallel
 if(NOT _parallel)
     set_tests_properties(${_name} PROPERTIES
         RUN_SERIAL TRUE
@@ -188,48 +188,49 @@ if(NOT _parallel)
 endif()
 ```
 
-### 6.3 Tests ausführen
+### 6.3 Running Tests
 
 ```bash
-ctest --test-dir build              # Alle Tests
-ctest -L unit                        # Nur Unit-Tests
-ctest -R "Core"                      # Nach Name filtern
-ctest --output-on-failure           # Output bei Errorn
+ctest --test-dir build              # All tests
+ctest -L unit                        # Unit tests only
+ctest -R "Core"                      # Filter by name
+ctest --output-on-failure           # Output on failure
 ```
 
 ---
 
-## 7. Errorbehandlung
+## 7. Error Handling
 
 ### 7.1 Fatal Errors
 
-| Code | Bedingung | Lösung |
-|------|-----------|--------|
-| E001 | Source-Pfad existiert nicht | Pfad prüfen/anlegen |
-| E010 | Framework-External nicht definiert | External hinzufügen |
-| E101 | Dependency existiert nicht | Target-Reihenfolge prüfen |
+| Code | Condition | Solution |
+|------|-----------|----------|
+| E001 | Source path does not exist | Check/create the path |
+| E010 | Framework external not defined | Add the external |
+| E101 | Dependency does not exist | Check the target order |
 
 ### 7.2 Warnings
 
-| Code | Bedingung | Empfehlung |
-|------|-----------|------------|
-| W101 | Keine Sources gefunden | Test-Dateien hinzufügen |
+| Code | Condition | Recommendation |
+|------|-----------|----------------|
+| W101 | No sources found | Add test files |
 
 ---
 
 ## 8. See Also
 
-- [Tests.cmake](Tests.md) — Ruft _create_test_target auf
-- [TestCollect.cmake](TestCollect.md) — Befüllt den Context
-- [ExecutableCreate.cmake](ExecutableCreate.md) — Analoges Modul
-- [Testing_UserGuide.md](../../../guides/Testing_UserGuide.md) — Benutzerhandbuch
+- [Tests.cmake](Tests.md) — Calls _create_test_target
+- [TestCollect.cmake](TestCollect.md) — Fills the context
+- [ExecutableCreate.cmake](ExecutableCreate.md) — Analogous module
+- [Testing_UserGuide.md](../../userguides/Testing.md) — User guide
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.1** | **2025-12-17** | **collect_sources() Integration, SourceCollect.cmake Dependency** |
-| 0.5.0 | 2025-12-15 | Migration auf Blueprint v0.5.0 |
-| 0.1.0 | 2025-12-11 | Initial (Clean Start): Test-Target-Erstellung mit CTest |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.1 | 2025-12-17 | collect_sources() integration, SourceCollect.cmake dependency |
+| 0.5.0 | 2025-12-15 | Migration to Blueprint v0.5.0 |
+| 0.1.0 | 2025-12-11 | Initial (clean start): test target creation with CTest |

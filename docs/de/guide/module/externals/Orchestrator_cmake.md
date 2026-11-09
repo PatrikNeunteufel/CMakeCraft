@@ -1,14 +1,14 @@
 # Orchestrator.cmake — External Type Dispatcher
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Version:** 1.0.2  
+> **Datum:** 2026-11-09  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5, Doc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [Orchestrator_cmake.md](Orchestrator_cmake.md)  
-> **Modul:** [cmake/externals/Orchestrator.cmake](../../../cmake/externals/Orchestrator.cmake)  
+> **English:** [Orchestrator_cmake.md](../../../../en/guide/module/externals/Orchestrator_cmake.md)  
+> **Modul:** [cmake/externals/Orchestrator.cmake](../../../../../cmake/externals/Orchestrator.cmake)  
 > **Modul-Version:** 1.0.0
 
 ---
@@ -34,8 +34,8 @@
 
 ### Kernfunktionen
 
-- **Type Detection** — Erkennt Local vs. Fetched anhand JSON-Feldern
-- **Dispatch** — Delegiert an `_attach_local_external()` oder `_handle_fetched_external()`
+- **Type Detection** — Erkennt System, Fetched, Local und Archive anhand der JSON-Felder
+- **Dispatch** — Delegiert an `_handle_system_external()`, `_handle_fetched_external()`, `_attach_local_external()` oder `_handle_archive_external()`
 - **Options Extraction** — Extrahiert target-spezifische External-Optionen
 - **Apply** — Wendet Externals auf CMake-Targets an
 
@@ -49,12 +49,12 @@ Externals.cmake (project)
 │  Orchestrator.cmake │  ← Entry-Point
 └──────────┬──────────┘
            │
-     ┌─────┴─────┐
-     ▼           ▼
-┌─────────┐ ┌──────────┐
-│ Local/  │ │ Fetched/ │
-│ Attach  │ │ Handler  │
-└─────────┘ └──────────┘
+      ┌────┴───────┬────────────┬────────────┐
+      ▼            ▼            ▼            ▼
+┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
+│ system/  │ │ local/   │ │ fetched/ │ │ archive/ │
+│ Handler  │ │ Attach   │ │ Handler  │ │ Handler  │
+└──────────┘ └──────────┘ └──────────┘ └──────────┘
 ```
 
 ---
@@ -74,9 +74,9 @@ Externals.cmake (project)
 
 | Modul | Zweck |
 |-------|-------|
-| `Local/Attach.cmake` | Handler für lokale Externals |
-| `Fetched/Handler.cmake` | Handler für Git-basierte Externals |
-| `System/Handler.cmake` | Handler für System Externals (find_package) |
+| `local/Attach.cmake` | Handler für lokale Externals |
+| `fetched/Handler.cmake` | Handler für Git-basierte Externals |
+| `system/Handler.cmake` | Handler für System Externals (find_package) |
 | `archive/Handler.cmake` | Handler für Archive Externals (vorgebautes Paket, festgelegte Version) |
 
 ---
@@ -97,8 +97,8 @@ _orchestrate_external(EXT_NAME EXT_JSON)
 | `EXT_JSON` | JSON | JSON-Definition aus Solution.json |
 
 **Verhalten:**
-1. Validiert Source-Feld (genau eines von `path` oder `git`)
-2. Erkennt Typ anhand vorhandenem Feld
+1. Validiert das Source-Feld (`validate_external_source()`: genau eines von `system`, `git`, `path`, `archive`; sonst E012)
+2. Erkennt den Typ anhand des vorhandenen Felds (Priorität system → git → path → archive)
 3. Dispatcht zu entsprechendem Handler
 
 ---
@@ -137,8 +137,12 @@ apply_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)
 **Verhalten:**
 1. Prüft ob External in `SKIPPED_EXTERNALS` → **E013 FATAL**
 2. Holt External-Definition aus `SOLUTION_EXTERNALS_JSON`
-3. Erkennt Typ (system/git/path/archive)
+3. Erkennt Typ (Prüfreihenfolge hier: system → path → git → archive)
 4. Wendet typ-spezifisch an
+
+**Für System Externals:**
+
+Ruft `_apply_system_external_to_target(TARGET_NAME EXT_NAME EXT_OPTIONS)` auf.
 
 **Für lokale Externals — setzt Variablen:**
 
@@ -227,14 +231,18 @@ Ruft `_apply_archive_external_to_target(TARGET_NAME EXT_NAME EXT_JSON EXT_OPTION
 │              _orchestrate_external()                     │
 ├─────────────────────────────────────────────────────────┤
 │  1. validate_external_source()                          │
-│     └─ E012 wenn kein path/git                          │
+│     └─ E012 wenn kein oder mehr als ein Source-Feld     │
 │                                                         │
-│  2. _json_has_key("path") → _is_local                   │
-│     _json_has_key("git")  → _is_fetched                 │
+│  2. "system": true  → _is_system                        │
+│     "git"           → _is_fetched                       │
+│     "path"          → _is_local                         │
+│     "archive": true → _is_archive                       │
 │                                                         │
-│  3. Dispatch:                                           │
-│     ├─ _is_local  → _attach_local_external()            │
-│     └─ _is_fetched → _handle_fetched_external()         │
+│  3. Dispatch (Priorität system → git → path → archive): │
+│     ├─ _is_system  → _handle_system_external()          │
+│     ├─ _is_fetched → _handle_fetched_external()         │
+│     ├─ _is_local   → _attach_local_external()           │
+│     └─ _is_archive → _handle_archive_external()         │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -263,7 +271,7 @@ endforeach()
 }
 ```
 
-> **Hinweis:** Das `include` Feld ist optional. Default: `cmake/externals/Includes/{name}/Include.cmake`
+> **Hinweis:** Das `include` Feld ist optional und relativ zu `CMAKE_SOURCE_DIR`. Default: `${CMAKECRAFT_DIR}/externals/includes/{name}/Include.cmake` (also `cmake/externals/includes/{name}/Include.cmake` im CMakeCraft-Baum).
 
 ---
 
@@ -303,25 +311,25 @@ endif()
 
 | Level | Ausgabe |
 |-------|---------|
-| `DBG_RARE` | Type: LOCAL / FETCHED / ARCHIVE |
+| `DBG_RARE` | Type: SYSTEM / FETCHED (git) / LOCAL / ARCHIVE |
 | `DBG_RARE` | Applying {ext} to {target} |
 | `DBG_ULTRA_RARE` | Options für External |
 
 ### Aktivierung
 
-```cmake
-cmake -DDEBUG_CATEGORIES="EXTERNALS" ..
-```
+Der Kontext `EXTERNALS` wird in `project/Externals.cmake` mit `LEVEL ${DBG_SHOW_MUCH}` (3) angelegt; Ausgaben auf
+`DBG_RARE` (4) und `DBG_ULTRA_RARE` (5) erscheinen erst, wenn dieses Level dort angehoben wird. Einen Cache-Schalter
+je Kontext gibt es nicht; `-DDEBUG_MESSAGES=OFF` schaltet alle Debug-Ausgaben ab.
 
 ---
 
 ## 9. Siehe auch
 
 - [Attach_cmake.md](locals/Attach_cmake.md) — Lokale Externals
-- [Handler_cmake.md](Handler_cmake.md) — Git Externals
+- [Handler_cmake.md](fetched/Handler_cmake.md) — Git Externals
 - [archive/Handler_cmake.md](archive/Handler_cmake.md) — Archive Externals
 - [Targets_cmake.md](registry/Targets_cmake.md) — Target Registry
-- [Externals_cmake.md](../project/Externals_cmake.md) — Entry-Point (Project)
+- [Externals_cmake.md](../project/Externals.md) — Entry-Point (Project)
 
 ---
 
@@ -329,7 +337,9 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" ..
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.10.0** | **2026-10-09** | **External-Art `archive`: Erkennung in `_orchestrate_external()`, Anwenden in `apply_external_to_target()`** |
+| **1.0.2** | **2026-11-09** | **An den Code angeglichen: alle vier Typen (`system`, `git`, `path`, `archive`) in Übersicht, Architektur, `_orchestrate_external()` und Ablauf; Ordner klein (`local/`, `fetched/`, `system/`); Default-Include `${CMAKECRAFT_DIR}/externals/includes/{name}/Include.cmake`; Debug-Aktivierung ohne das nicht vorhandene `DEBUG_CATEGORIES`** |
+| **1.0.1** | **2026-10-09** | **CMakeCraft v0.10.0: External-Art `archive`: Erkennung in `_orchestrate_external()`, Anwenden in `apply_external_to_target()`** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
 | 0.7.0 | 2025-12-20 | Skip-Validierung: E013 bei Verwendung geskippter Externals in apply_external_to_target() |
 | 0.6.0 | 2025-12-18 | Phase 9: System Externals Support, `_handle_system_external()` |
 | 0.5.0 | 2025-12-15 | Dokumentation auf Blueprint v0.5.0 migriert |

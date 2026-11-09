@@ -1,68 +1,68 @@
-# References — Nachschlagewerke
+# References — Lookup Documents
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-15  
 > **Language:** English  
-> **German:** [README.md](../../en/references/README.md)
+> **German:** [README.md](../../../de/guide/references/README.md)
 
 ---
 
-## Quick-Start
+## Quick Start
 
-**Errorcode nachschlagen?**
-1. [ErrorCodes.md](ErrorCodes.md) — Alle Errorcodes E0xx-E9xx
+**Looking up an error code?**
+1. [ErrorCodes.md](ErrorCodes.md) — All error codes E0xx-E9xx
 
-**JSON-Configuration verstehen?**
-1. [Solution_Schema.md](Solution_Schema.md) — Solution.json Schema
+**Understanding the JSON configuration?**
+1. [Solution_Schema.md](Solution_Schema.md) — Solution.json schema
 1. [Packages.md](Packages.md) — Building and consuming packages
 2. [CMakePresets.md](CMakePresets.md) — CMakePresets.json
-3. [CMakeUserPresets.md](CMakeUserPresets.md) — Eigene Presets
+3. [CMakeUserPresets.md](CMakeUserPresets.md) — Your own presets
 
-**Externals-Katalog durchsuchen?**
-1. [Externals.md](Externals.md) — Overview Externals-System
-2. [externals/Git_Externals.md](externals/Git_Externals.md) — Git-basierte Libraries
-3. [externals/Local_Externals.md](externals/Local_Externals.md) — Lokale Libraries
+**Browsing the externals catalog?**
+1. [Externals.md](Externals.md) — Overview of the externals system
+2. [externals/Git_Externals.md](externals/Git_Externals.md) — Git-based libraries
+3. [externals/Local_Externals.md](externals/Local_Externals.md) — Local libraries
 
-**Begriff nachschlagen?**
-1. [Glossar.md](Glossar.md) — Alle Definitionen
+**Looking up a term?**
+1. [Glossar.md](Glossar.md) — All definitions
 
 ---
 
 ## Overview
 
-Referencedokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentieren APIs, Schemas, Configurationsoptionen und Definitionen.
+Reference documents are lookup works without tutorial character. They document APIs, schemas, configuration options and definitions.
 
 ---
 
-## Dateien
+## Files
 
-| Datei | Description |
-|-------|--------------|
-| [ErrorCodes.md](ErrorCodes.md) | Vollständige Errorcode-Reference (E001-E999) |
-| [Solution_Schema.md](Solution_Schema.md) | JSON-Schema für Solution.json |
+| File | Description |
+|------|-------------|
+| [ErrorCodes.md](ErrorCodes.md) | Complete error code reference (E001-E999) |
+| [Solution_Schema.md](Solution_Schema.md) | JSON schema for Solution.json |
 | [Packages.md](Packages.md) | Building packages (`packages`) and consuming them (external kind `archive`) |
-| [CMakePresets.md](CMakePresets.md) | CMakePresets.json Reference |
-| [CMakeUserPresets.md](CMakeUserPresets.md) | CMakeUserPresets.json Reference |
-| [Externals.md](Externals.md) | Externals-System Overview |
-| [Glossar.md](Glossar.md) | Begriffsdefinitionen A-Z |
+| [CMakePresets.md](CMakePresets.md) | CMakePresets.json reference |
+| [CMakeUserPresets.md](CMakeUserPresets.md) | CMakeUserPresets.json reference |
+| [Externals.md](Externals.md) | Externals system overview |
+| [Glossar.md](Glossar.md) | Term definitions A-Z |
 
 ---
 
-## Unterordner
+## Subfolders
 
-| Ordner | Dateien | Description |
-|--------|---------|--------------|
-| [externals/](externals/README.md) | 14 | Externals-Definitionen (Git + Local) |
+| Folder | Files | Description |
+|--------|-------|-------------|
+| [externals/](Externals.md) | 14 | Externals definitions (Git + Local) |
 
 ---
 
-## Direktzugriff: Externals-Katalog
+## Direct Access: Externals Catalog
 
-### Git-basierte Externals
+### Git-Based Externals
 
-| Datei | Kategorie | Libraries |
-|-------|-----------|-----------|
-| [externals/Git_Externals.md](externals/Git_Externals.md) | Overview | Alle Git Externals |
+| File | Category | Libraries |
+|------|----------|-----------|
+| [externals/Git_Externals.md](externals/Git_Externals.md) | Overview | All Git externals |
 | [externals/Git_Externals_Core.md](externals/Git_Externals_Core.md) | Core | spdlog, fmt, nlohmann_json |
 | [externals/Git_Externals_GUI.md](externals/Git_Externals_GUI.md) | GUI | GLFW, ImGui |
 | [externals/Git_Externals_Testing.md](externals/Git_Externals_Testing.md) | Testing | doctest, Catch2, GoogleTest |
@@ -72,11 +72,11 @@ Referencedokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentie
 | [externals/Git_Externals_Data.md](externals/Git_Externals_Data.md) | Data | sqlite3, rapidjson |
 | [externals/Git_Externals_Network.md](externals/Git_Externals_Network.md) | Network | cpr, asio |
 
-### Lokale Externals
+### Local Externals
 
-| Datei | Kategorie | Libraries |
-|-------|-----------|-----------|
-| [externals/Local_Externals.md](externals/Local_Externals.md) | Overview | Alle Local Externals |
+| File | Category | Libraries |
+|------|----------|-----------|
+| [externals/Local_Externals.md](externals/Local_Externals.md) | Overview | All local externals |
 | [externals/Local_Externals_GUI.md](externals/Local_Externals_GUI.md) | GUI | Qt6 |
 | [externals/Local_Externals_Media.md](externals/Local_Externals_Media.md) | Media | BASS |
 | [externals/Local_Externals_Scripting.md](externals/Local_Externals_Scripting.md) | Scripting | Lua |
@@ -86,6 +86,6 @@ Referencedokumente sind Nachschlagewerke ohne Tutorial-Charakter. Sie dokumentie
 
 ## See Also
 
-- [../README.md](../README.md) — Germane Dokumentation Overview
-- [../blueprints/Reference.md](../../autorenwerk/blueprints/Reference.md) — Reference Blueprint
-- [../userguides/](../userguides/README.md) — Praktische Anleitungen
+- [../../README.md](../../README.md) — English documentation overview
+- [../blueprints/Reference.md](../../autorenwerk/blueprints/Reference.md) — Reference blueprint
+- [../userguides/](../userguides/README.md) — Practical guides

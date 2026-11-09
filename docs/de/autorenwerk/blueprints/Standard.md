@@ -1,13 +1,13 @@
 # Standard — Standard für Coding/Project Standards
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-13  
+> **Version:** 1.0.1  
+> **Datum:** 2026-11-09  
 > **Typ:** Blueprint  
 > **Status:** In Entwicklung  
 > **Basiert auf:** Doc v0.5, Blueprint v0.5  
 > **Zielgruppe:** Dokumentations-Ersteller  
 > **Sprache:** Deutsch  
-> **English:** [Standard.md](Standard.md)
+> **English:** [Standard.md](../../../en/autorenwerk/blueprints/Standard.md)
 
 ---
 
@@ -21,7 +21,7 @@
 6. [Beispiel: Vollständiger Standard](#6-beispiel-vollständiger-standard)
 7. [Review-Checkliste](#7-review-checkliste)
 8. [Siehe auch](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+9. [Changelog](#changelog)
 
 ---
 
@@ -54,12 +54,12 @@ Dieser Blueprint gilt für:
 - Review-Richtlinien
 - Projekt-Konventionen
 
-**Typischer Ordner:** `docs/[lang]/standards/`
+**Typischer Ordner:** `docs/[lang]/autorenwerk/standards/`
 
 **Beispiele:**
-- `Cpp_Coding_Standard_v0_1_0.md`
-- `CMake_Standard_v0_1_0.md`
-- `Git_Standard_v0_1_0.md`
+- `Cpp_Coding_Standard.md`
+- `CMake_Standard.md`
+- `Git_Standard.md`
 
 ---
 
@@ -85,7 +85,7 @@ Dieser Blueprint gilt für:
 > **Geltungsbereich:** [C++ Code | CMake Scripts | Git Workflow | ...]  
 > **Durchsetzung:** [clang-format | clang-tidy | CI | Review | ...]  
 > **Sprache:** Deutsch  
-> **English:** [Name_Standard.md](../../en/standards/Name_Standard.md)
+> **English:** [Name_Standard.md](../../../en/autorenwerk/standards/Name_Standard.md)
 ```
 
 ---
@@ -129,7 +129,7 @@ Standards verwenden diese Struktur:
 
 Jede Regel wird so dokumentiert:
 
-```markdown
+````markdown
 ### 3.2 Namenskonvention für Funktionen
 
 **Regel:** Funktionen verwenden `snake_case`.
@@ -157,7 +157,7 @@ Keine.
 
 **Prüfung:**  
 clang-tidy Check `readability-identifier-naming`
-```
+````
 
 ### 5.2 Verbindlichkeits-Stufen
 
@@ -184,7 +184,7 @@ Für Übersichten kompakte Tabellenform:
 
 ## 6. Beispiel: Vollständiger Standard
 
-```markdown
+````markdown
 # C++ Coding Standard
 
 > **Version:** 1.0.0  
@@ -195,7 +195,7 @@ Für Übersichten kompakte Tabellenform:
 > **Geltungsbereich:** Alle C++ Dateien (*.cpp, *.hpp, *.tpp)  
 > **Durchsetzung:** clang-format, clang-tidy, Code Review  
 > **Sprache:** Deutsch  
-> **English:** [Cpp_Coding_Standard.md](../standards/Cpp_Coding_Standard.md)
+> **English:** [Cpp_Coding_Standard.md](../../../en/autorenwerk/standards/Cpp_Coding_Standard.md)
 
 ---
 
@@ -210,7 +210,7 @@ Für Übersichten kompakte Tabellenform:
 7. [Tool-Konfiguration](#7-tool-konfiguration)
 8. [Checkliste](#8-checkliste)
 9. [Siehe auch](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -293,14 +293,14 @@ class audioPlayer {};   // camelCase
 ```cpp
 if (condition)
 {
-    doSomething();
+    do_something();
 }
 ```
 
 **Falsch:**
 ```cpp
 if (condition) {
-    doSomething();
+    do_something();
 }
 ```
 
@@ -369,9 +369,9 @@ Vor Code Review prüfen:
 
 ## 9. Siehe auch
 
-- [ClangFormat_Blueprint](../blueprints/ClangFormat_Blueprint_v0_1_0.md)
-- [ClangTidy_Blueprint](../blueprints/ClangTidy_Blueprint_v0_1_0.md)
-- [CMake_Standard](CMake_Standard_v0_1_0.md)
+- [ClangFormat_Blueprint](../blueprints/ClangFormat.md)
+- [ClangTidy_Blueprint](../blueprints/ClangTidy.md)
+- [CMake_Standard](CMake_Standard.md)
 
 ---
 
@@ -380,7 +380,7 @@ Vor Code Review prüfen:
 | Version | Datum | Änderungen |
 |---------|-------|------------|
 | **0.1.0** | **2025-12-13** | **Initial** |
-```
+````
 
 ---
 
@@ -407,8 +407,8 @@ Zusätzlich zur Doc.md Checkliste:
 ## 8. Siehe auch
 
 - [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [ClangFormat_Blueprint.md](ClangFormat_Blueprint.md) — Formatierungs-Standard
-- [ClangTidy_Blueprint.md](ClangTidy_Blueprint.md) — Statische Analyse
+- [ClangFormat_Blueprint.md](ClangFormat.md) — Formatierungs-Standard
+- [ClangTidy_Blueprint.md](ClangTidy.md) — Statische Analyse
 
 ---
 
@@ -416,5 +416,7 @@ Zusätzlich zur Doc.md Checkliste:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Regel-Format mit Verbindlichkeitsstufen, Tool-Konfiguration, Checkliste** |
+| **1.0.1** | **2026-11-09** | **An den Code angeglichen: Ablageort `docs/[lang]/autorenwerk/standards/` (§ 2), Dateinamen ohne Version, Sprungpfad `../../../en/`; Beispiel § 4.2 `do_something()` nach der eigenen `snake_case`-Regel (§ 3.1 des Beispiels)** |
+| 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | Neu: Regel-Format mit Verbindlichkeitsstufen, Tool-Konfiguration, Checkliste |
 | 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |

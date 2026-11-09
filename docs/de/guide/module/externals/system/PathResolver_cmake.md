@@ -1,14 +1,14 @@
 # PathResolver.cmake — System External Path Resolution
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-20  
+> **Datum:** 2025-12-26  
 > **Typ:** ModuleDoc  
 > **Status:** Aktiv  
 > **Basiert auf:** ModuleDoc v0.5  
 > **Zielgruppe:** Build-System-Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [PathResolver_cmake.md](PathResolver_cmake.md)  
-> **Modul:** [cmake/externals/system/PathResolver.cmake](../../../../../cmake/externals/system/PathResolver.cmake)  
+> **English:** [PathResolver_cmake.md](../../../../../en/guide/module/externals/system/PathResolver_cmake.md)  
+> **Modul:** [cmake/externals/system/PathResolver.cmake](../../../../../../cmake/externals/system/PathResolver.cmake)  
 > **Modul-Version:** 1.0.0  
 > **Phase:** 9 (System Externals)
 
@@ -252,4 +252,5 @@ cmake -DDEBUG_CATEGORIES="EXTERNALS" -DDEBUG_LEVEL=3 ..
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.6.0** | **2025-12-18** | **Initial: Mehrstufige Pfadauflösung, ENV-Expansion, ${VAR} Syntax in hints** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.6.0 | 2025-12-18 | Initial: Mehrstufige Pfadauflösung, ENV-Expansion, ${VAR} Syntax in hints |

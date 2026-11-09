@@ -1,123 +1,123 @@
-# ModuleDoc — Standard für CMake-Modul-Dokumentation
+# ModuleDoc — Standard for CMake Module Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** Blueprint  
 > **Status:** In Development  
 > **Based on:** Doc v0.5, Blueprint v0.5  
 > **Target Audience:** Documentation Authors, Build System Developers  
 > **Language:** English  
-> **German:** [ModuleDoc.md](ModuleDoc.md)
+> **German:** [ModuleDoc.md](../../../de/autorenwerk/blueprints/ModuleDoc.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Scope](#2-geltungsbereich)
-3. [Header-Erweiterungen](#3-header-erweiterungen)
-4. [Requiredabschnitte](#4-pflichtabschnitte)
-5. [API-Reference-Format](#5-api-referenz-format)
-6. [Versionskopplung](#6-versionskopplung)
-7. [Example: Vollständige ModuleDoc](#7-beispiel-vollständige-moduledoc)
-8. [Review Checklist](#8-review-checkliste)
-9. [See Also](#9-siehe-auch)
-10. [Changelog](#10-changelog)
+1. [Overview](#1-overview)
+2. [Scope](#2-scope)
+3. [Header Extensions](#3-header-extensions)
+4. [Mandatory Sections](#4-mandatory-sections)
+5. [API Reference Format](#5-api-reference-format)
+6. [Version Coupling](#6-version-coupling)
+7. [Example: Complete ModuleDoc](#7-example-complete-moduledoc)
+8. [Review Checklist](#8-review-checklist)
+9. [See Also](#9-see-also)
+10. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-This blueprint defines die **Struktur für CMake-Modul-Dokumentationen**. Er erweitert den allgemeinen Doc-Blueprint um modulspezifische Anforderungen.
+This blueprint defines the **structure for CMake module documentation**. It extends the general Doc blueprint with module-specific requirements.
 
-### Zielgruppe
+### Target Audience
 
-- Build System Developers
-- Personen, die CMake-Module verstehen oder erweitern wollen
+- Build system developers
+- People who want to understand or extend CMake modules
 
-### Was wird dokumentiert?
+### What Is Documented?
 
 | Element | Example |
 |---------|----------|
-| Core-Module | `Errors.cmake`, `Context.cmake`, `Json.cmake` |
-| Project-Module | `Executables.cmake`, `Libraries.cmake` |
-| Externals-Module | `Orchestrator.cmake`, `Fetch.cmake` |
-| Include-Files | `externals/*/Include.cmake` |
+| Core modules | `Errors.cmake`, `Context.cmake`, `Json.cmake` |
+| Project modules | `Executables.cmake`, `Libraries.cmake` |
+| Externals modules | `Orchestrator.cmake`, `Fetch.cmake` |
+| Include files | `externals/*/Include.cmake` |
 
 ---
 
 ## 2. Scope
 
-Dieser Blueprint gilt für alle Dokumentationen, die:
-- Ein einzelnes CMake-Modul (`.cmake`-Datei) beschreiben
-- Im Ordner `docs/[lang]/modules/` liegen
+This blueprint applies to all documentation that:
+- Describes a single CMake module (`.cmake` file)
+- Lives in the folder `docs/[lang]/guide/module/`
 
-**Nicht betroffen:**
+**Not affected:**
 - CMakeLists.txt (→ Reference)
 - CMakePresets.json (→ Reference)
-- Conceptuelle Architecture-Dokumente (→ Concept)
+- Conceptual architecture documents (→ Concept)
 
 ---
 
-## 3. Header-Erweiterungen
+## 3. Header Extensions
 
-### 3.1 Zusätzliche Requiredfelder
+### 3.1 Additional Mandatory Fields
 
-Zusätzlich zu den Feldern aus Doc.md:
+In addition to the fields from Doc.md:
 
-| Feld | Required | Description |
+| Field | Mandatory | Description |
 |------|---------|--------------|
-| `Module:` | ✓ | Relativer Pfad zum Modul |
-| `Module Version:` | ✓ | Version des dokumentierten Moduls |
+| `Module:` | ✓ | Relative path to the module |
+| `Module Version:` | ✓ | Version of the documented module |
 
-### 3.2 Vollständiger Header
+### 3.2 Complete Header
 
 ```markdown
-# [ModulName].cmake — Dokumentation
+# [ModuleName].cmake — Documentation
 
 > **Version:** X.Y.Z (doc vN)  
 > **Date:** YYYY-MM-DD  
 > **Type:** ModuleDoc  
 > **Status:** [In Development | Stable | Deprecated]  
 > **Target Audience:** Build System Developers  
-> **Module:** cmake/[pfad]/[ModulName].cmake  
+> **Module:** cmake/[path]/[ModuleName].cmake  
 > **Module Version:** X.Y.Z  
 > **Based on:** ModuleDoc v0.5  
 > **Language:** English  
-> **German:** [ModulName.md](../../en/modules/[pfad]/ModulName.md)
+> **German:** [ModuleName.md](../../../../de/guide/module/[path]/ModuleName.md)
 ```
 
-### 3.3 Modul-Link
+### 3.3 Module Link
 
-Das `Module:`-Feld kann auch als Link formatiert werden:
+The `Module:` field can also be formatted as a link:
 
 ```markdown
-> **Module:** [cmake/core/Context.cmake](../../../cmake/core/Context.cmake)
+> **Module:** [cmake/core/Context.cmake](../../../../../cmake/core/Context.cmake)
 ```
 
-### 3.4 Versionierung erklärt
+### 3.4 Versioning Explained
 
-Die Dokumentations-Version folgt dem Schema:
+The documentation version follows the scheme:
 
 ```
 X.Y.Z (doc vN)
 │ │ │      │
-│ │ │      └── Dokumentations-Revision (nur Doku-Changes)
-│ │ └── PATCH der Modul-Version
-│ └── MINOR der Modul-Version  
-└── MAJOR der Modul-Version
+│ │ │      └── Documentation revision (documentation changes only)
+│ │ └── PATCH of the module version
+│ └── MINOR of the module version  
+└── MAJOR of the module version
 ```
 
 **Example:**
-- Modul `Context.cmake` ist Version 0.1.1
-- Dokumentation wurde 2x überarbeitet ohne Modul-Änderung
-- → Dokumentations-Version: `0.1.1 (doc v2)`
+- Module `Context.cmake` is version 0.1.1
+- The documentation was revised twice without a module change
+- → Documentation version: `0.1.1 (doc v2)`
 
 ---
 
-## 4. Requiredabschnitte
+## 4. Mandatory Sections
 
-ModuleDoc verwendet diese Struktur:
+ModuleDoc uses this structure:
 
 ```
 ## Table of Contents
@@ -125,40 +125,40 @@ ModuleDoc verwendet diese Struktur:
 ## 1. Overview
 ## 2. Dependencies
 ## 3. Concept / Design
-## 4. API-Reference
-## 5. Usagesbeispiele
-## 6. Errorbehandlung / Error Codes
+## 4. API Reference
+## 5. Usage Examples
+## 6. Error Handling / Error Codes
 ## 7. Best Practices
-## 8. Bekannte Einschränkungen (optional)
-## 9. Migration (wenn Breaking Changes)
+## 8. Known Limitations (optional)
+## 9. Migration (if breaking changes)
 ## 10. See Also
 ## Changelog
 ```
 
-### 4.1 Abschnitts-Details
+### 4.1 Section Details
 
-| # | Abschnitt | Inhalt |
+| # | Section | Content |
 |---|-----------|--------|
-| 1 | Overview | Kurze Description, Zweck, was das Modul löst |
-| 2 | Dependencies | `include()`-Dependencies, CMake-Version |
-| 3 | Concept | Design-Entscheidungen, Architecture |
-| 4 | API-Reference | Alle Functions/Macros mit Parametersn |
-| 5 | Examples | Konkrete Anwendungsfälle |
-| 6 | Error Codes | Alle Error, die das Modul auslösen kann |
-| 7 | Best Practices | Empfehlungen, Dos and Don'ts |
-| 8 | Einschränkungen | Bekannte Limitierungen (optional) |
-| 9 | Migration | Bei Breaking Changes (optional) |
-| 10 | See Also | Verwandte Module/Dokumente |
+| 1 | Overview | Short description, purpose, what the module solves |
+| 2 | Dependencies | `include()` dependencies, CMake version |
+| 3 | Concept | Design decisions, architecture |
+| 4 | API Reference | All functions/macros with parameters |
+| 5 | Examples | Concrete use cases |
+| 6 | Error Codes | All errors the module can raise |
+| 7 | Best Practices | Recommendations, dos and don'ts |
+| 8 | Limitations | Known limitations (optional) |
+| 9 | Migration | On breaking changes (optional) |
+| 10 | See Also | Related modules/documents |
 
 ---
 
-## 5. API-Reference-Format
+## 5. API Reference Format
 
-### 5.1 Funktions-Dokumentation
+### 5.1 Function Documentation
 
-Jede Funktion/Macro wird so dokumentiert:
+Every function/macro is documented like this:
 
-```markdown
+````markdown
 ### 4.1 function_name()
 
 ```cmake
@@ -166,32 +166,32 @@ function_name(PARAM1 PARAM2 [OPTIONAL_PARAM])
 ```
 
 **Description:**  
-Was die Funktion tut.
+What the function does.
 
 **Parameters:**
 
-| Parameters | Required | Description |
+| Parameter | Mandatory | Description |
 |-----------|---------|--------------|
 | `PARAM1` | ✓ | Description |
 | `PARAM2` | ✓ | Description |
-| `OPTIONAL_PARAM` | — | Description (Default: `...`) |
+| `OPTIONAL_PARAM` | — | Description (default: `...`) |
 
-**Rückgabe:**  
-Was zurückgegeben wird (Variable, PARENT_SCOPE, etc.)
+**Returns:**  
+What is returned (variable, PARENT_SCOPE, etc.)
 
 **Example:**
 
 ```cmake
-function_name("wert1" "wert2")
+function_name("value1" "value2")
 ```
 
-**Error:**  
-- `E0xxx` wenn Bedingung nicht erfüllt
-```
+**Errors:**  
+- `E0xxx` if a condition is not met
+````
 
 ### 5.2 Example: ctx_set()
 
-```markdown
+````markdown
 ### 4.2 ctx_set()
 
 ```cmake
@@ -199,19 +199,19 @@ ctx_set(PREFIX KEY VALUE)
 ```
 
 **Description:**  
-Speichert einen Wert im Context unter dem angegebenen Schlüssel.
-Verwendet GLOBAL PROPERTY für zuverlässige Propagation.
+Stores a value in the context under the given key.
+Uses GLOBAL PROPERTY for reliable propagation.
 
 **Parameters:**
 
-| Parameters | Required | Description |
+| Parameter | Mandatory | Description |
 |-----------|---------|--------------|
-| `PREFIX` | ✓ | Context-Namespace (z.B. `EXE_MyApp`) |
-| `KEY` | ✓ | Schlüssel (UPPER_SNAKE_CASE empfohlen) |
-| `VALUE` | ✓ | Wert (String oder `;`-getrennte Liste) |
+| `PREFIX` | ✓ | Context namespace (e.g. `EXE_MyApp`) |
+| `KEY` | ✓ | Key (UPPER_SNAKE_CASE recommended) |
+| `VALUE` | ✓ | Value (string or `;`-separated list) |
 
-**Rückgabe:**  
-Keine direkte Rückgabe. Wert wird als GLOBAL PROPERTY gespeichert.
+**Returns:**  
+No direct return. The value is stored as a GLOBAL PROPERTY.
 
 **Example:**
 
@@ -221,102 +221,102 @@ ctx_set(EXE_MyApp VERSION "1.0.0")
 ctx_set(EXE_MyApp EXTERNALS "bass;imgui;glfw")
 ```
 
-**Error:**  
-Keine — leere Werte sind erlaubt.
-```
+**Errors:**  
+None — empty values are allowed.
+````
 
 ---
 
-## 6. Versionskopplung
+## 6. Version Coupling
 
-### 6.1 Wann Dokumentation aktualisieren?
+### 6.1 When to Update the Documentation?
 
-| Modul-Änderung | Dokumentations-Aktion |
+| Module change | Documentation action |
 |----------------|----------------------|
-| Neue Funktion | Doku hinzufügen, doc vN+1 |
-| Parameters geändert | Doku aktualisieren, doc vN+1 |
-| Bugfix (API gleich) | Doku prüfen, optional doc vN+1 |
-| Breaking Change | Migration-Abschnitt, doc vN+1 |
+| New function | Add documentation, doc vN+1 |
+| Parameters changed | Update documentation, doc vN+1 |
+| Bugfix (same API) | Check documentation, optionally doc vN+1 |
+| Breaking change | Migration section, doc vN+1 |
 
-### 6.2 Dateinamen
+### 6.2 File Names
 
-Aktuelle Dokumentationen haben **keine Version im Dateinamen**:
+Current documentation has **no version in the file name**:
 
 ```
-cmake/core/Context.cmake          ← Modul (Version im Header: 0.1.1)
-docs/de/modules/core/Context.md   ← Dokumentation (Version im Header)
+cmake/core/Context.cmake          ← module (version in header: 0.1.1)
+docs/de/guide/module/core/Context.md   ← documentation (version in header)
 ```
 
-### 6.3 Bei Modul-Version-Bump
+### 6.3 On a Module Version Bump
 
-1. Alte Dokumentation archivieren (falls gewünscht): `Context.md` → `Context_v0_1_0.md`
-2. `Context.md` aktualisieren mit neuer Version
-3. Links bleiben unverändert
+1. Do not create a copy of the old documentation — earlier versions are in the Git history
+2. Update `Context.md` with the new version
+3. Links remain unchanged
 
 ---
 
-## 7. Example: Vollständige ModuleDoc
+## 7. Example: Complete ModuleDoc
 
 ```markdown
-# Context.cmake — Dokumentation
+# Context.cmake — Documentation
 
 > **Version:** 1.0.0 (doc v2)  
-> **Date:** 2025-12-26  
+> **Date:** 2025-12-13  
 > **Type:** ModuleDoc  
 > **Status:** Stable  
 > **Target Audience:** Build System Developers  
-> **Module:** [cmake/core/Context.cmake](../../../cmake/core/Context.cmake)  
+> **Module:** [cmake/core/Context.cmake](../../../../../cmake/core/Context.cmake)  
 > **Module Version:** 1.0.0  
 > **Based on:** ModuleDoc v0.5  
 > **Language:** English  
-> **German:** [Context.md](../../guide/module/core/Context.md)
+> **German:** [Context.md](../../../../de/guide/module/core/Context.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [API-Reference](#4-api-referenz)
-5. [Usagesbeispiele](#5-verwendungsbeispiele)
-6. [Errorbehandlung](#6-fehlerbehandlung)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [API Reference](#4-api-reference)
+5. [Usage Examples](#5-usage-examples)
+6. [Error Handling](#6-error-handling)
 7. [Best Practices](#7-best-practices)
-8. [See Also](#8-siehe-auch)
-9. [Changelog](#9-changelog)
+8. [See Also](#8-see-also)
+9. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das Context-Modul implementiert ein **Context-Object-Pattern** für CMake.
-Es ermöglicht isolierte Namespaces zum Sammeln von Daten während der
-Pipeline-Verarbeitung.
+The Context module implements a **context object pattern** for CMake.
+It provides isolated namespaces for collecting data during
+pipeline processing.
 
 ### Features
 
-- Isolierte Namespaces pro Executable/Library/Test
-- Zuverlässige Propagation über Funktionsebenen
-- Debug-Dump für Diagnose
+- Isolated namespaces per executable/library/test
+- Reliable propagation across function levels
+- Debug dump for diagnostics
 
 ---
 
 ## 2. Dependencies
 
-| Abhängigkeit | Typ | Description |
+| Dependency | Type | Description |
 |--------------|-----|--------------|
-| CMake 3.19+ | System | Für `include_guard(GLOBAL)` |
+| CMake 3.19+ | System | For `include_guard(GLOBAL)` |
 
-**Keine** anderen Module als Abhängigkeit.
+**No** other modules as dependencies.
 
 ---
 
 ## 3. Concept
 
-### 3.1 Warum Context?
+### 3.1 Why Context?
 
-CMake-Variablen haben Funktions-Scope. Bei verschachtelten Aufrufen
-gehen Werte verloren. GLOBAL PROPERTY löst dieses Problem.
+CMake variables have function scope. With nested calls,
+values get lost. GLOBAL PROPERTY solves this problem.
 
 ### 3.2 Architecture
 
@@ -328,39 +328,39 @@ ctx_create(EXE_MyApp)
     │
     └── ctx_get(EXE_MyApp, NAME, _var)
             └── _var = "MyApp"
-```
+````
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 ctx_create()
 
-[... wie in Abschnitt 5.1 beschrieben ...]
+[... as described in section 5.1 ...]
 
 ### 4.2 ctx_set()
 
-[... wie in Abschnitt 5.2 beschrieben ...]
+[... as described in section 5.2 ...]
 
 ---
 
-## 5. Usagesbeispiele
+## 5. Usage Examples
 
-### 5.1 Executable-Daten sammeln
+### 5.1 Collecting Executable Data
 
 ```cmake
 ctx_create(EXE_MyApp)
 ctx_set(EXE_MyApp NAME "MyApp")
 ctx_set(EXE_MyApp VERSION "1.0.0")
 ctx_set(EXE_MyApp TYPE "GUI")
-ctx_dump(EXE_MyApp)  # Debug-Ausgabe
+ctx_dump(EXE_MyApp)  # debug output
 ```
 
 ---
 
-## 6. Errorbehandlung
+## 6. Error Handling
 
-Dieses Modul wirft keine eigenen Error.
+This module raises no errors of its own.
 
 ---
 
@@ -368,62 +368,64 @@ Dieses Modul wirft keine eigenen Error.
 
 | Do | Don't |
 |----|-------|
-| `ctx_create()` vor erstem `ctx_set()` | Ohne Create direkt setzen |
-| UPPER_SNAKE_CASE für Keys | lowercase-keys |
-| Eindeutige Prefixes (EXE_, LIB_, TEST_) | Generische Prefixes |
+| `ctx_create()` before the first `ctx_set()` | Set directly without create |
+| UPPER_SNAKE_CASE for keys | lowercase keys |
+| Unique prefixes (EXE_, LIB_, TEST_) | Generic prefixes |
 
 ---
 
 ## 8. See Also
 
-- [Errors.cmake](Errors_cmake_v0_1_1_doc_v1.md) — Errorbehandlung
-- [ExecutableCollect.cmake](../project/ExecutableCollect_cmake_v0_1_0_doc_v1.md) — Verwendet Context
+- [Errors.cmake](Errors.md) — Error handling
+- [ExecutableCollect.cmake](../project/ExecutableCollect.md) — Uses Context
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.1.1 (doc v2)** | **2025-12-13** | **Format nach ModuleDoc v0.5 aktualisiert** |
-| 0.1.1 (doc v1) | 2025-12-05 | Initial für Modul v0.1.1 |
-```
+| **0.1.1 (doc v2)** | **2025-12-13** | **Format updated to ModuleDoc v0.5** |
+| 0.1.1 (doc v1) | 2025-12-05 | Initial for module v0.1.1 |
+````
 
 ---
 
 ## 8. Review Checklist
 
-Zusätzlich zur Doc.md Checkliste:
+In addition to the Doc.md checklist:
 
 **Header:**
-- [ ] `Module:`-Feld vorhanden mit korrektem Pfad
-- [ ] `Module Version:`-Feld vorhanden
-- [ ] Link zum Modul funktioniert
+- [ ] `Module:` field present with correct path
+- [ ] `Module Version:` field present
+- [ ] Link to the module works
 
-**Inhalt:**
-- [ ] Alle Functions des Moduls dokumentiert
-- [ ] Alle Parameters jeder Funktion beschrieben
-- [ ] Return Values dokumentiert
-- [ ] Error/Error Codes aufgelistet
-- [ ] Mindestens ein Example pro Funktion
+**Content:**
+- [ ] All functions of the module documented
+- [ ] All parameters of each function described
+- [ ] Return values documented
+- [ ] Errors/error codes listed
+- [ ] At least one example per function
 
-**Kopplung:**
-- [ ] Dateiname entspricht Modul-Version
-- [ ] doc vN korrekt
+**Coupling:**
+- [ ] File name corresponds to module version
+- [ ] doc vN correct
 
 ---
 
 ## 9. See Also
 
-- [Doc.md](Doc.md) — Allgemeine Dokumentations-Regeln
-- [CMake.md](CMake.md) — Standard für CMake-Scripts
-- [Context.md](../../guide/module/core/Context.md) — Example-Dokumentation
+- [Doc.md](Doc.md) — General documentation rules
+- [CMake.md](CMake.md) — Standard for CMake scripts
+- [Context.md](../../guide/module/core/Context.md) — Example documentation
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
+| Version | Date | Changes |
 |---------|-------|------------|
-| **0.5.0** | **2025-12-13** | **Neu: Modul-Link im Header, API-Reference-Format, Versionskopplung, vollständiges Example** |
-| 0.1.0 | 2025-12-03 | Initial (Teil von Documentation_Blueprint) |
+| **1.0.1** | **2026-11-09** | **Aligned with the code: location `docs/[lang]/guide/module/` (§ 2, § 6.2), jump and module paths per today's depth (§ 3.2, § 3.3, § 7), no archive copies anymore (§ 6.3), example references without versions in the file name (§ 7)** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-13 | New: module link in the header, API reference format, version coupling, complete example |
+| 0.1.0 | 2025-12-03 | Initial (part of Documentation_Blueprint) |

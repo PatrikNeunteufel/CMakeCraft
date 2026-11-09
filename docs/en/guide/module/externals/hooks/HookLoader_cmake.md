@@ -1,78 +1,85 @@
 # hooks/HookLoader.cmake — Pre/PostFetch Hook System
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-09  
 > **Type:** ModuleDoc  
-> **Status:** Aktiv  
+> **Status:** Active  
 > **Based on:** ModuleDoc v0.5, Doc v0.5  
 > **Target Audience:** Build System Developers  
 > **Language:** English  
-> **German:** [HookLoader_cmake.md](HookLoader_cmake.md)  
-> **Module:** [cmake/externals/hooks/HookLoader.cmake](../../../cmake/externals/hooks/HookLoader.cmake)  
+> **German:** [HookLoader_cmake.md](../../../../../de/guide/module/externals/hooks/HookLoader_cmake.md)  
+> **Module:** [cmake/externals/hooks/HookLoader.cmake](../../../../../../cmake/externals/hooks/HookLoader.cmake)  
 > **Module Version:** 1.0.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
 3. [Convention Paths](#3-convention-paths)
-4. [API-Reference](#4-api-referenz)
-5. [Hook-Variablen](#5-hook-variablen)
-6. [Hook-Typen](#6-hook-typen)
+4. [API Reference](#4-api-reference)
+5. [Hook Variables](#5-hook-variables)
+6. [Hook Types](#6-hook-types)
 7. [Hook Reuse](#7-hook-reuse)
-8. [Usagesbeispiele](#8-verwendungsbeispiele)
-9. [Errorbehandlung](#9-fehlerbehandlung)
-10. [See Also](#10-siehe-auch)
+8. [Usage Examples](#8-usage-examples)
+9. [Error Handling](#9-error-handling)
+10. [See Also](#10-see-also)
 11. [Changelog](#11-changelog)
 
 ---
 
 ## 1. Overview
 
-`hooks/HookLoader.cmake` implementiert das Hook-System für Fetched Externals.
+`hooks/HookLoader.cmake` implements the hook system for fetched externals.
 
-### Kernfunktionen
+### Core Functions
 
-- **PreFetch** — CMake-Optionen setzen bevor External konfiguriert wird
-- **PostFetch** — Targets erstellen für Externals ohne CMakeLists.txt
-- **Hook Reuse** — Gleiche Hooks für Varianten (z.B. imgui/imgui_docking)
+- **PreFetch** — Set CMake options before the external is configured
+- **PostFetch** — Create targets for externals without a CMakeLists.txt
+- **Hook Reuse** — Same hooks for variants (e.g. imgui/imgui_docking)
 
 ### Convention over Configuration
 
 ```
 cmake/externals/hooks/
+├── HookLoader.cmake
 ├── prefetch/
+│   ├── catch2.cmake
 │   ├── glfw.cmake
-│   └── spdlog.cmake
+│   ├── googletest.cmake
+│   ├── qt-ads.cmake
+│   └── qt-ads110.cmake
 └── postfetch/
-    └── imgui.cmake
+    ├── imgui.cmake
+    ├── qt-ads.cmake
+    ├── qt-ads110.cmake
+    └── stb.cmake
 ```
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Zweck |
-|-------|-------|
-| `Errors.cmake` | Errorbehandlung |
-| `Debug.cmake` | Debug-Ausgaben |
-| `Json.cmake` | JSON-Parsing |
-| `Core/Fetch.cmake` | `_get_external_source_dir()` |
+| Module | Purpose |
+|--------|---------|
+| `Errors.cmake` | Error handling |
+| `Debug.cmake` | Debug output |
+| `Json.cmake` | JSON parsing |
+| `core/Fetch.cmake` | `_get_external_source_dir()` |
 
 ---
 
 ## 3. Convention Paths
 
-| Typ | Pfad |
-|-----|------|
+| Type | Path |
+|------|------|
 | PreFetch | `cmake/externals/hooks/prefetch/{name}.cmake` |
 | PostFetch | `cmake/externals/hooks/postfetch/{name}.cmake` |
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### 4.1 _load_prefetch_hook()
 
@@ -80,7 +87,7 @@ cmake/externals/hooks/
 _load_prefetch_hook(EXT_NAME EXT_JSON)
 ```
 
-Lädt einen PreFetch Hook (vor FetchContent_MakeAvailable).
+Loads a PreFetch hook (before FetchContent_MakeAvailable).
 
 ---
 
@@ -90,7 +97,7 @@ Lädt einen PreFetch Hook (vor FetchContent_MakeAvailable).
 _load_postfetch_hook(EXT_NAME EXT_JSON)
 ```
 
-Lädt einen PostFetch Hook (nach FetchContent_MakeAvailable).
+Loads a PostFetch hook (after FetchContent_MakeAvailable).
 
 ---
 
@@ -100,32 +107,32 @@ Lädt einen PostFetch Hook (nach FetchContent_MakeAvailable).
 _get_hook_name(EXT_NAME EXT_JSON OUT_HOOK_NAME)
 ```
 
-Bestimmt welcher Hook verwendet werden soll (eigener Name oder `hook` Override).
+Determines which hook is to be used (own name or `hook` override).
 
 ---
 
-## 5. Hook-Variablen
+## 5. Hook Variables
 
-### In allen Hooks verfügbar
-
-| Variable | Description |
-|----------|--------------|
-| `HOOK_EXTERNAL_NAME` | Name des Externals (für Target-Namen verwenden!) |
-| `HOOK_EXTERNAL_JSON` | JSON-Definition des Externals |
-
-### Nur in PostFetch Hooks
+### Available in All Hooks
 
 | Variable | Description |
-|----------|--------------|
-| `HOOK_SOURCE_DIR` | Pfad zum Source-Verzeichnis |
+|----------|-------------|
+| `HOOK_EXTERNAL_NAME` | Name of the external (use it for target names!) |
+| `HOOK_EXTERNAL_JSON` | JSON definition of the external |
+
+### Only in PostFetch Hooks
+
+| Variable | Description |
+|----------|-------------|
+| `HOOK_SOURCE_DIR` | Path to the source directory |
 
 ---
 
-## 6. Hook-Typen
+## 6. Hook Types
 
 ### PreFetch Hooks
 
-Laufen **vor** `FetchContent_MakeAvailable()`.
+Run **before** `FetchContent_MakeAvailable()`.
 
 ```cmake
 # cmake/externals/hooks/prefetch/glfw.cmake
@@ -135,7 +142,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 ### PostFetch Hooks
 
-Laufen **nach** `FetchContent_MakeAvailable()`.
+Run **after** `FetchContent_MakeAvailable()`.
 
 ```cmake
 # cmake/externals/hooks/postfetch/imgui.cmake
@@ -166,11 +173,11 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 }
 ```
 
-→ Beide verwenden `imgui.cmake` Hooks, erstellen aber unterschiedliche Targets.
+→ Both use the `imgui.cmake` hooks, but create different targets.
 
 ---
 
-## 8. Usagesbeispiele
+## 8. Usage Examples
 
 ### Minimal PreFetch
 
@@ -179,7 +186,7 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 set(CATCH_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 ```
 
-### PostFetch mit Target
+### PostFetch with Target
 
 ```cmake
 # cmake/externals/hooks/postfetch/stb.cmake
@@ -190,25 +197,27 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 
 ---
 
-## 9. Errorbehandlung
+## 9. Error Handling
 
 | Code | Error | Description |
-|------|--------|--------------|
-| E216 | Hook nicht gefunden | Explizit angegebener Hook existiert nicht |
+|------|-------|-------------|
+| E216 | Hook not found | Explicitly specified hook does not exist |
 
 ---
 
 ## 10. See Also
 
-- [Handler_cmake.md](Handler_cmake.md) — Hook-Aufrufer
-- [Targets_cmake.md](../registry/Targets_cmake.md) — Target-Registrierung
-- [glfw_PreFetch.md](glfw_PreFetch.md) — GLFW PreFetch Hook
-- [imgui_PostFetch.md](imgui_PostFetch.md) — ImGui PostFetch Hook
+- [Handler_cmake.md](../fetched/Handler_cmake.md) — Hook caller
+- [Targets_cmake.md](../registry/Targets_cmake.md) — Target registration
+- [Glfw.md](prefetch/Glfw.md) — GLFW PreFetch hook
+- [Imgui.md](postfetch/Imgui.md) — ImGui PostFetch hook
 
 ---
 
 ## 11. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-15** | **Dokumentation auf Blueprint v0.5.0 migriert** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-09** | **Aligned with the code: example tree with the existing hooks (instead of the non-existent `prefetch/spdlog.cmake`); `core/Fetch.cmake` in lowercase** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | Documentation migrated to Blueprint v0.5.0 |

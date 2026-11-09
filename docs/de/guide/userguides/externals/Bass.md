@@ -1,12 +1,12 @@
 # BASS — UserGuide
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-15  
+> **Datum:** 2025-12-26  
 > **Typ:** Guide  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
 > **Sprache:** Deutsch  
-> **English:** [bass.md](Bass.md)
+> **English:** [bass.md](../../../../en/guide/userguides/externals/Bass.md)
 
 ---
 
@@ -21,7 +21,7 @@
 7. [Fortgeschrittene Techniken](#7-fortgeschrittene-techniken)
 8. [Troubleshooting](#8-troubleshooting)
 9. [Weiterführende Informationen](#9-weiterführende-informationen)
-10. [Changelog](#10-changelog)
+10. [Changelog](#changelog)
 
 ---
 
@@ -587,4 +587,5 @@ switch (error) {
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
-| **0.5.2** | **2025-12-15** | **Initial: Detaillierter UserGuide für BASS** |
+| **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
+| 0.5.2 | 2025-12-15 | Initial: Detaillierter UserGuide für BASS |

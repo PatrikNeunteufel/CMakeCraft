@@ -4,33 +4,33 @@
 > **Date:** 2025-12-26  
 > **Type:** Reference  
 > **Status:** Stable  
-> **Target Audience:** Alle Entwickler  
+> **Target Audience:** All developers  
 > **Language:** English  
-> **German:** [Git_Externals_Media.md](Git_Externals_Media.md)
+> **German:** [Git_Externals_Media.md](../../../../de/guide/references/externals/Git_Externals_Media.md)
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
+1. [Overview](#1-overview)
 2. [Audio](#2-audio)
 3. [Image](#3-image)
 4. [Math / Geometry](#4-math--geometry)
 5. [Entity Component Systems](#5-entity-component-systems)
-6. [Schnellreferenz](#6-schnellreferenz)
-7. [See Also](#7-siehe-auch)
+6. [Quick Reference](#6-quick-reference)
+7. [See Also](#7-see-also)
 8. [Changelog](#8-changelog)
 
 ---
 
 ## 1. Overview
 
-This document describes Bibliotheken für Audio, Bild-Verarbeitung und Mathematik.
+This document describes libraries for audio, image processing and mathematics.
 
-### Kategorien
+### Categories
 
-| Kategorie | Bibliotheken |
-|-----------|--------------|
+| Category | Libraries |
+|----------|-----------|
 | Audio | miniaudio, openal-soft |
 | Image | stb |
 | Math | glm, Eigen |
@@ -42,14 +42,14 @@ This document describes Bibliotheken für Audio, Bild-Verarbeitung und Mathemati
 
 ### 2.1 miniaudio
 
-> **Zweck:** Single-file Audio-Bibliothek für Playback, Capture und Mixing.
+> **Purpose:** Single-file audio library for playback, capture and mixing.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/mackron/miniaudio.git` |
-| **Aktueller Tag** | `0.11.21` |
-| **CMake Support** | ❌ (Single-header) |
-| **Hook** | PostFetch erforderlich 🔧 |
+| **Current Tag** | `0.11.21` |
+| **CMake Support** | ❌ (single-header) |
+| **Hook** | PostFetch required 🔧 |
 
 ```json
 "miniaudio": {
@@ -69,11 +69,11 @@ message(STATUS "[${HOOK_EXTERNAL_NAME}] Note: Define MINIAUDIO_IMPLEMENTATION in
 
 **Usage:**
 ```cpp
-// In EINER .cpp Datei:
+// In ONE .cpp file:
 #define MINIAUDIO_IMPLEMENTATION
 #include <miniaudio.h>
 
-// Audio initialisieren
+// Initialize audio
 ma_device_config config = ma_device_config_init(ma_device_type_playback);
 config.playback.format = ma_format_f32;
 config.playback.channels = 2;
@@ -89,14 +89,14 @@ ma_device_start(&device);
 
 ### 2.2 openal-soft
 
-> **Zweck:** Software-Implementation der OpenAL 3D Audio API.
+> **Purpose:** Software implementation of the OpenAL 3D audio API.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/kcat/openal-soft.git` |
-| **Aktueller Tag** | `1.23.1` |
+| **Current Tag** | `1.23.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 
 ```json
 "openal-soft": {
@@ -136,14 +136,14 @@ alSourcePlay(source);
 
 ### 3.1 stb
 
-> **Zweck:** Single-file Libraries für Bilder, Fonts, Vorbis und mehr.
+> **Purpose:** Single-file libraries for images, fonts, Vorbis and more.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/nothings/stb.git` |
-| **Aktueller Tag** | – (branch: master) |
-| **CMake Support** | ❌ (Single-headers) |
-| **Hook** | PostFetch erforderlich 🔧 |
+| **Current Tag** | – (branch: master) |
+| **CMake Support** | ❌ (single headers) |
+| **Hook** | PostFetch required 🔧 |
 
 ```json
 "stb": {
@@ -161,29 +161,29 @@ _register_external_target("${HOOK_EXTERNAL_NAME}" "${HOOK_EXTERNAL_NAME}" PRIMAR
 message(STATUS "[${HOOK_EXTERNAL_NAME}] Note: Define STB_*_IMPLEMENTATION in ONE .cpp file")
 ```
 
-**Verfügbare Header:**
-- `stb_image.h` - Bild laden (JPG, PNG, BMP, GIF, ...)
-- `stb_image_write.h` - Bild speichern
-- `stb_image_resize2.h` - Bild skalieren
-- `stb_truetype.h` - TrueType Font Rendering
-- `stb_vorbis.c` - Ogg Vorbis Audio
+**Available headers:**
+- `stb_image.h` - load images (JPG, PNG, BMP, GIF, ...)
+- `stb_image_write.h` - save images
+- `stb_image_resize2.h` - resize images
+- `stb_truetype.h` - TrueType font rendering
+- `stb_vorbis.c` - Ogg Vorbis audio
 
 **Usage:**
 ```cpp
-// In EINER .cpp Datei:
+// In ONE .cpp file:
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
-// Bild laden
+// Load image
 int width, height, channels;
 unsigned char* data = stbi_load("image.png", &width, &height, &channels, 0);
 
-// Verarbeiten...
+// Process...
 
-// Bild speichern
+// Save image
 stbi_write_png("output.png", width, height, channels, data, width * channels);
 stbi_image_free(data);
 ```
@@ -194,14 +194,14 @@ stbi_image_free(data);
 
 ### 4.1 glm (OpenGL Mathematics)
 
-> **Zweck:** Header-only Mathematik-Bibliothek für Grafik-Programmierung (GLSL-ähnliche Syntax).
+> **Purpose:** Header-only mathematics library for graphics programming (GLSL-like syntax).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/g-truc/glm.git` |
-| **Aktueller Tag** | `1.0.1` |
+| **Current Tag** | `1.0.1` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -234,14 +234,14 @@ glm::mat4 mvp = proj * view * model;
 
 ### 4.2 Eigen
 
-> **Zweck:** Template-Bibliothek für Lineare Algebra (Matrizen, Vektoren, Solver).
+> **Purpose:** Template library for linear algebra (matrices, vectors, solvers).
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://gitlab.com/libeigen/eigen.git` |
-| **Aktueller Tag** | `3.4.0` |
+| **Current Tag** | `3.4.0` |
 | **CMake Support** | ✅ |
-| **Hook** | PreFetch empfohlen |
+| **Hook** | PreFetch recommended |
 | **Header-only** | ✅ |
 
 ```json
@@ -270,7 +270,7 @@ A << 1, 2, 3,
 Eigen::Vector3f b(3, 3, 4);
 Eigen::Vector3f x = A.colPivHouseholderQr().solve(b);
 
-// Auch: SVD, LU, Cholesky, Eigenvalues, ...
+// Also: SVD, LU, Cholesky, Eigenvalues, ...
 ```
 
 ---
@@ -279,12 +279,12 @@ Eigen::Vector3f x = A.colPivHouseholderQr().solve(b);
 
 ### 5.1 entt
 
-> **Zweck:** Schnelle, moderne Entity Component System (ECS) Bibliothek.
+> **Purpose:** Fast, modern Entity Component System (ECS) library.
 
-| Aspekt | Wert |
-|--------|------|
+| Aspect | Value |
+|--------|-------|
 | **Repository** | `https://github.com/skypjack/entt.git` |
-| **Aktueller Tag** | `v3.13.2` |
+| **Current Tag** | `v3.13.2` |
 | **CMake Support** | ✅ |
 | **Hook** | – |
 | **Header-only** | ✅ |
@@ -319,10 +319,10 @@ for (auto [entity, pos, vel] : view.each()) {
 
 ---
 
-## 6. Schnellreferenz
+## 6. Quick Reference
 
-| Bibliothek | Tag | CMake | Hook | Hauptverwendung |
-|------------|-----|-------|------|-----------------|
+| Library | Tag | CMake | Hook | Main Use |
+|---------|-----|-------|------|----------|
 | miniaudio | 0.11.21 | ❌ | PostFetch 🔧 | Cross-platform audio |
 | openal-soft | 1.23.1 | ✅ | PreFetch | 3D audio API |
 | stb | master | ❌ | PostFetch 🔧 | Image loading/saving |
@@ -334,7 +334,7 @@ for (auto [entity, pos, vel] : view.each()) {
 
 ## 7. See Also
 
-- [Git_Externals_Reference.md](Git_Externals.md) — Hauptübersicht
+- [Git_Externals_Reference.md](Git_Externals.md) — Main overview
 - [Git_Externals_GUI.md](Git_Externals_GUI.md) — GUI & Graphics
 - [Externals.md](../Externals.md) — Local Externals (BASS Audio)
 
@@ -342,6 +342,7 @@ for (auto [entity, pos, vel] : view.each()) {
 
 ## 8. Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.5.0** | **2025-12-14** | **Initial: Ausgelagert aus Git_Externals_Reference** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.0** | **2025-12-26** | **Release 1 (carried over from newCMake, `2e00db7`)** |
+| 0.5.0 | 2025-12-14 | Initial: extracted from Git_Externals_Reference |

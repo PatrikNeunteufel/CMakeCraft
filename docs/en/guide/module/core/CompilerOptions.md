@@ -1,54 +1,54 @@
-# CompilerOptions.cmake — Modul-Dokumentation
+# CompilerOptions.cmake — Module Documentation
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-26  
+> **Version:** 1.0.1  
+> **Date:** 2026-11-07  
 > **Type:** ModuleDoc  
-> **Status:** In Development (Pre-Release)  
+> **Status:** In development (pre-release)  
 > **Based on:** ModuleDoc v0.5, master_concept v0.5, guidelines v0.5  
-> **Target Audience:** Build System Developers  
+> **Target Audience:** Build system developers  
 > **Language:** English  
-> **German:** [CompilerOptions.md](CompilerOptions.md)  
-> **Module:** [`cmake/core/CompilerOptions.cmake`](../../../../cmake/core/CompilerOptions.cmake)  
+> **German:** [CompilerOptions.md](../../../../de/guide/module/core/CompilerOptions.md)  
+> **Module:** [`cmake/core/CompilerOptions.cmake`](../../../../../cmake/core/CompilerOptions.cmake)  
 > **Module Version:** 1.3.0
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#1-übersicht)
-2. [Dependencies](#2-abhängigkeiten)
-3. [Concept](#3-konzept)
-4. [API-Reference](#4-api-referenz)
-5. [Usagesbeispiele](#5-verwendungsbeispiele)
-6. [Cache-Variablen](#6-cache-variablen)
-7. [Plattform-Details](#7-plattform-details)
+1. [Overview](#1-overview)
+2. [Dependencies](#2-dependencies)
+3. [Concept](#3-concept)
+4. [API Reference](#4-api-reference)
+5. [Usage Examples](#5-usage-examples)
+6. [Cache Variables](#6-cache-variables)
+7. [Platform Details](#7-platform-details)
 8. [Best Practices](#8-best-practices)
-9. [Performance-Impact](#9-performance-impact)
-10. [See Also](#10-siehe-auch)
-11. [Changelog](#11-changelog)
+9. [Performance Impact](#9-performance-impact)
+10. [See Also](#10-see-also)
+11. [Changelog](#changelog)
 
 ---
 
 ## 1. Overview
 
-Das `CompilerOptions.cmake` Modul konfiguriert compiler-spezifische Optionen für Targets. Es unterstützt präzise Compiler-Erkennung und Per-Target Overrides.
+The `CompilerOptions.cmake` module configures compiler-specific options for targets. It supports precise compiler detection and per-target overrides.
 
-### Verantwortlichkeiten
+### Responsibilities
 
-| Bereich | Description |
-|---------|--------------|
-| Compiler-Erkennung | MSVC, GCC, Clang (inkl. Apple/Clang-CL) |
-| Strict Conformance | `/permissive-`, `/Zc:*` (MSVC) |
-| Feature-Kontrolle | Exceptions, RTTI |
-| Code-Qualität | Clang-Tidy Integration |
-| Per-Target Overrides | Flags für spezielle Targets |
+| Area | Description |
+|------|-------------|
+| Compiler detection | MSVC, GCC, Clang (incl. Apple/Clang-CL) |
+| Strict conformance | `/permissive-`, `/Zc:*` (MSVC) |
+| Feature control | Exceptions, RTTI |
+| Code quality | Clang-Tidy integration |
+| Per-target overrides | Flags for special targets |
 
 ---
 
 ## 2. Dependencies
 
-| Modul | Version | Usage |
-|-------|---------|------------|
+| Module | Version | Usage |
+|--------|---------|-------|
 | Debug.cmake | 0.1.1 | `dbg_init`, `dbg`, `enddbgblock` |
 | Errors.cmake | 0.1.2 | `cmake_warn` |
 
@@ -56,7 +56,7 @@ Das `CompilerOptions.cmake` Modul konfiguriert compiler-spezifische Optionen fü
 
 ## 3. Concept
 
-### 3.1 Präzise Compiler-Erkennung
+### 3.1 Precise Compiler Detection
 
 ```cmake
 if(MSVC)                                    # Windows MSVC
@@ -71,21 +71,21 @@ endif()
 
 ### 3.2 Per-Target Override Flags
 
-| Flag | Funktion |
+| Flag | Function |
 |------|----------|
-| `SKIP_STRICT_CONFORMANCE` | MSVC `/permissive-` überspringen |
-| `SKIP_NOMINMAX` | `NOMINMAX` nicht definieren |
-| `FORCE_EXCEPTIONS` | Exceptions aktiviert lassen |
-| `FORCE_RTTI` | RTTI aktiviert lassen |
-| `SKIP_CLANG_TIDY` | Clang-Tidy überspringen |
+| `SKIP_STRICT_CONFORMANCE` | Skip MSVC `/permissive-` |
+| `SKIP_NOMINMAX` | Do not define `NOMINMAX` |
+| `FORCE_EXCEPTIONS` | Keep exceptions enabled |
+| `FORCE_RTTI` | Keep RTTI enabled |
+| `SKIP_CLANG_TIDY` | Skip Clang-Tidy |
 
 ---
 
-## 4. API-Reference
+## 4. API Reference
 
 ### apply_compiler_options()
 
-Wendet Compiler-Optionen auf ein Target an.
+Applies compiler options to a target.
 
 ```cmake
 apply_compiler_options(<TARGET_NAME>
@@ -101,24 +101,24 @@ apply_compiler_options(<TARGET_NAME>
 
 **Parameters:**
 
-| Parameters | Typ | Required | Description |
-|-----------|-----|---------|--------------|
-| `TARGET_NAME` | String | ✓ | CMake Target |
-| `SKIP_STRICT_CONFORMANCE` | Flag | — | MSVC strict mode überspringen |
-| `SKIP_NOMINMAX` | Flag | — | min/max Makros erlauben |
-| `FORCE_EXCEPTIONS` | Flag | — | Exceptions erzwingen (ignoriert `NO_EXCEPTIONS`) |
-| `FORCE_RTTI` | Flag | — | RTTI erzwingen (ignoriert `NO_RTTI`) |
-| `SKIP_CLANG_TIDY` | Flag | — | Clang-Tidy überspringen |
-| `SHOW_DEBUG` | Flag | — | Debug-Ausgaben aktivieren |
-| `DEBUG_TAG` | String | — | Custom Tag für Debug-Ausgaben |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `TARGET_NAME` | String | ✓ | CMake target |
+| `SKIP_STRICT_CONFORMANCE` | Flag | — | Skip MSVC strict mode |
+| `SKIP_NOMINMAX` | Flag | — | Allow min/max macros |
+| `FORCE_EXCEPTIONS` | Flag | — | Force exceptions (ignores `NO_EXCEPTIONS`) |
+| `FORCE_RTTI` | Flag | — | Force RTTI (ignores `NO_RTTI`) |
+| `SKIP_CLANG_TIDY` | Flag | — | Skip Clang-Tidy |
+| `SHOW_DEBUG` | Flag | — | Enable debug output |
+| `DEBUG_TAG` | String | — | Custom tag for debug output |
 
-**Rückgabe:** Keine (modifiziert Target-Properties)
+**Returns:** Nothing (modifies target properties)
 
-**Error:**
+**Errors:**
 
-| Code | Bedingung |
+| Code | Condition |
 |------|-----------|
-| W201 | `ENABLE_CLANG_TIDY=ON` aber clang-tidy nicht gefunden |
+| W201 | `ENABLE_CLANG_TIDY=ON` but clang-tidy not found |
 
 **Example:**
 
@@ -129,7 +129,13 @@ apply_compiler_options(LegacyLib SKIP_STRICT_CONFORMANCE FORCE_EXCEPTIONS)
 
 ### craft_language_rules() (since v0.14.0)
 
-Single source of the switches that set **language rules** — strict conformance, `NOMINMAX`, exceptions, RTTI — for all compiler families at once. `apply_compiler_options()` applies the list of the current compiler; a source package ([SourcePackage.cmake](../project/SourcePackage.md)) writes all lists into its generated `CMakeLists.txt`, so that the consumer compiles under the same rules. Warnings (`Warnings.cmake`), `/MP` and `/bigobj` are not language rules and stay in `apply_compiler_options()`.
+Single source of the switches that set **language rules** — strict conformance, `NOMINMAX`,
+exceptions, RTTI — for all compiler families at once. `apply_compiler_options()` applies the
+list of the current compiler; a source package
+([SourcePackage.cmake](../project/SourcePackage.md)) writes all lists into its generated
+`CMakeLists.txt`, so that the consumer compiles under the same rules. Warnings
+(`Warnings.cmake`), `/MP` and `/bigobj` are not language rules and stay in
+`apply_compiler_options()`.
 
 ```cmake
 craft_language_rules(<PREFIX>
@@ -146,49 +152,49 @@ The flags have the same meaning as for `apply_compiler_options()`.
 
 ---
 
-## 5. Usagesbeispiele
+## 5. Usage Examples
 
-### 5.1 Basis-Usage
+### 5.1 Basic Usage
 
 ```cmake
 apply_compiler_options(MyTarget)
 ```
 
-**Resultat (MSVC):**
+**Result (MSVC):**
 - `/permissive-`
 - `/Zc:preprocessor`
 - `/Zc:__cplusplus`
 - `NOMINMAX`
 
-### 5.2 Legacy-Code
+### 5.2 Legacy Code
 
 ```cmake
-# Strikte Konformität würde Legacy-Code brechen
+# Strict conformance would break legacy code
 apply_compiler_options(LegacyApp SKIP_STRICT_CONFORMANCE)
 ```
 
 ### 5.3 Win32 API
 
 ```cmake
-# Win32 API nutzt min/max Makros
+# The Win32 API uses min/max macros
 apply_compiler_options(Win32App SKIP_NOMINMAX)
 ```
 
-### 5.4 Externe Library mit Exceptions
+### 5.4 External Library with Exceptions
 
 ```cmake
-# Globales NO_EXCEPTIONS=ON, aber diese Library braucht Exceptions
+# Global NO_EXCEPTIONS=ON, but this library needs exceptions
 apply_compiler_options(ThirdPartyLib FORCE_EXCEPTIONS)
 ```
 
-### 5.5 Tests ohne Clang-Tidy
+### 5.5 Tests without Clang-Tidy
 
 ```cmake
-# Clang-Tidy würde Tests langsamer machen
+# Clang-Tidy would make tests slower
 apply_compiler_options(SlowTests SKIP_CLANG_TIDY)
 ```
 
-### 5.6 Kombiniert
+### 5.6 Combined
 
 ```cmake
 apply_compiler_options(SpecialApp
@@ -200,97 +206,98 @@ apply_compiler_options(SpecialApp
 
 ---
 
-## 6. Cache-Variablen
+## 6. Cache Variables
 
-### 6.1 Globale Optionen
+### 6.1 Global Options
 
-| Variable | Typ | Default | Description |
-|----------|-----|---------|--------------|
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
 | `ENABLE_STRICT_CONFORMANCE` | BOOL | ON | MSVC `/permissive-` |
-| `NO_EXCEPTIONS` | BOOL | OFF | `-fno-exceptions` / `/EHs-c-` global |
-| `NO_RTTI` | BOOL | OFF | `-fno-rtti` / `/GR-` global |
+| `NO_EXCEPTIONS` | BOOL | OFF | `-fno-exceptions` / `/EHs-c-` globally |
+| `NO_RTTI` | BOOL | OFF | `-fno-rtti` / `/GR-` globally |
 
-### 6.2 Code-Qualität
+### 6.2 Code Quality
 
-| Variable | Typ | Default | Description |
-|----------|-----|---------|--------------|
-| `ENABLE_CLANG_TIDY` | BOOL | OFF | Clang-Tidy aktivieren |
-| `CLANG_TIDY_STRICT` | BOOL | OFF | Warnings = Errors |
-| `ENABLE_CLANG_FORMAT_CHECK` | BOOL | OFF | Format-Check (Phase 7) |
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `ENABLE_CLANG_TIDY` | BOOL | OFF | Enable Clang-Tidy |
+| `CLANG_TIDY_STRICT` | BOOL | OFF | Warnings = errors |
+| `ENABLE_CLANG_FORMAT_CHECK` | BOOL | OFF | Format check (phase 7) |
 
 ---
 
-## 7. Plattform-Details
+## 7. Platform Details
 
 ### 7.1 Windows
 
-| Compiler | Erkannt als | Optionen |
-|----------|-------------|----------|
+| Compiler | Detected as | Options |
+|----------|-------------|---------|
 | MSVC | `MSVC` | `/permissive-`, `/Zc:*`, `NOMINMAX` |
-| MinGW GCC | `GNU` + `WIN32` | GCC-Standard |
-| Clang-CL | `Clang` + `WIN32` | Wie MSVC |
+| MinGW GCC | `GNU` + `WIN32` | GCC standard |
+| Clang-CL | `Clang` + `WIN32` | Same as MSVC |
 
 ### 7.2 Linux
 
-| Compiler | Erkannt als | Optionen |
-|----------|-------------|----------|
-| GCC | `GNU` | GCC-Standard |
-| Clang | `Clang` | Clang-Standard |
+| Compiler | Detected as | Options |
+|----------|-------------|---------|
+| GCC | `GNU` | GCC standard |
+| Clang | `Clang` | Clang standard |
 
 ### 7.3 macOS
 
-| Compiler | Erkannt als | Optionen |
-|----------|-------------|----------|
-| Apple Clang | `Clang` + `APPLE` | Apple-spezifisch |
-| Homebrew GCC | `GNU` + `APPLE` | GCC-Standard |
+| Compiler | Detected as | Options |
+|----------|-------------|---------|
+| Apple Clang | `Clang` + `APPLE` | Apple-specific |
+| Homebrew GCC | `GNU` + `APPLE` | GCC standard |
 
 ---
 
 ## 8. Best Practices
 
-1. **Default = Strict** — Nur bei Bedarf überspringen
-2. **Globale Defaults via Cache** — `-DNO_EXCEPTIONS=ON`
-3. **Lokale Overrides sparsam** — Nur wo nötig
-4. **Clang-Tidy nur für Quality-Checks** — Zu langsam für tägliche Builds
-5. **.clang-tidy im Projekt-Root** — Wird automatisch verwendet
+1. **Default = strict** — only skip when needed
+2. **Global defaults via cache** — `-DNO_EXCEPTIONS=ON`
+3. **Use local overrides sparingly** — only where necessary
+4. **Clang-Tidy only for quality checks** — too slow for daily builds
+5. **.clang-tidy in the project root** — is used automatically
 
 ---
 
-## 9. Performance-Impact
+## 9. Performance Impact
 
 ### 9.1 Clang-Tidy
 
-| Configuration | Build-Zeit | Faktor |
+| Configuration | Build time | Factor |
 |---------------|------------|--------|
-| Ohne | 1:00 min | 1.0x |
-| Mit | 3:30 min | 3.5x |
+| Without | 1:00 min | 1.0x |
+| With | 3:30 min | 3.5x |
 
 ### 9.2 NO_EXCEPTIONS/NO_RTTI
 
-| Configuration | Binary Size | Performance |
+| Configuration | Binary size | Performance |
 |---------------|-------------|-------------|
 | Standard | 2.4 MB | Baseline |
 | NO_EXCEPTIONS | 2.1 MB (-12%) | +2% |
 | NO_RTTI | 2.3 MB (-4%) | +1% |
-| Beide | 2.0 MB (-17%) | +3% |
+| Both | 2.0 MB (-17%) | +3% |
 
 ---
 
 ## 10. See Also
 
-- [Warnings.cmake](Warnings.md) — Warning-Level
-- [Debug.cmake](Debug.md) — Debug-System
-- [Errors.cmake](Errors.md) — Errorbehandlung
-- [guidelines](../../../concepts/guidelines.md) — Konventionen
-- [CMakePresets_Reference](../../../reference/CMakePresets_Reference.md) — Presets
+- [Warnings.cmake](Warnings.md) — warning levels
+- [Debug.cmake](Debug.md) — debug system
+- [Errors.cmake](Errors.md) — error handling
+- [guidelines](../../../konzepte/Guidelines.md) — conventions
+- [CMakePresets_Reference](../../references/CMakePresets.md) — presets
 
 ---
 
 ## Changelog
 
-| Version | Datum | Changes |
-|---------|-------|------------|
-| **0.14.0** | **2026-11-07** | **`craft_language_rules()`: language-rule switches of all compiler families in one place, used by `apply_compiler_options()` and source packages; module version 1.3.0** |
-| 0.5.0 | 2025-12-15 | **Migration auf Blueprint v0.5.0: Neuer Header mit Zielgruppe/Sprache/English-Link/Modul-Link, nummeriertes Table of Contents mit Ankern, Kapitel-Nummerierung, korrigierte Dependencies** |
+| Version | Date | Changes |
+|---------|------|---------|
+| **1.0.1** | **2026-11-07** | **CMakeCraft v0.14.0: `craft_language_rules()`: language-rule switches of all compiler families in one place, used by `apply_compiler_options()` and source packages; module version 1.3.0** |
+| 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
+| 0.5.0 | 2025-12-15 | **Migration to Blueprint v0.5.0: new header with target audience/language/English link/module link, numbered table of contents with anchors, chapter numbering, corrected dependencies** |
 | 0.1.1 | 2025-12-05 | English translation (Language Standards v0.1.1) |
-| 0.1.0 | 2025-12-03 | Initial (Clean Start): Inhalte aus v2.0 übernommen, Blueprint-Format, Per-Target Overrides |
+| 0.1.0 | 2025-12-03 | Initial (clean start): content taken over from v2.0, blueprint format, per-target overrides |
