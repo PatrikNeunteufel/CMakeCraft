@@ -1,7 +1,7 @@
 # Project — Projekt-Pipeline-Module
 
 > **Version:** 1.0.0  
-> **Datum:** 2025-12-17  
+> **Datum:** 2026-11-26  
 > **Sprache:** Deutsch  
 > **English:** [README.md](../../../../en/guide/module/project/project_README.md)
 
@@ -34,6 +34,9 @@
 2. [PackageBuild.md](PackageBuild.md) — Build-Zeit-Skript (Ordner, Zip, Prüfsumme)
 3. [SourcePackage.md](SourcePackage.md) — Quellpaket einer Bibliothek mit einfachem `CMakeLists.txt` (Phase 11)
 
+**API-Referenz bauen?** (Phase 12)
+1. [Documentation.md](Documentation.md) — Block `documentation.doxygen` → Ziel `docs`
+
 ---
 
 ## Übersicht
@@ -65,6 +68,8 @@ Solution.cmake          ← Lädt und parst Solution.json
      ├── Packages.cmake       ← Package-Pipeline (Phase 10)
      │   ├── SourcePackage    → Quellpaket einer Bibliothek (Phase 11)
      │   └── PackageBuild     → Build-Zeit-Skript (cmake -P)
+     │
+     ├── Documentation.cmake  ← Ziel docs, Doxygen (Phase 12)
      │
      └── Tests.cmake          ← Test-Pipeline
          ├── TestCollect      → JSON → Context
@@ -121,6 +126,12 @@ Solution.cmake          ← Lädt und parst Solution.json
 | [Packages.md](Packages.md) | Block `packages` → Target `package_<name>` (Manifest, Versionsdatei) |
 | [PackageBuild.md](PackageBuild.md) | Build-Zeit-Skript: Paketordner, Zip-Archiv, SHA256 |
 | [SourcePackage.md](SourcePackage.md) | Quellpaket einer Bibliothek: erzeugtes einfaches `CMakeLists.txt`, übertragene lokale Externals, `SHA256SUMS` |
+
+### Documentation (Phase 12)
+
+| Datei | Beschreibung |
+|-------|--------------|
+| [Documentation.md](Documentation.md) | Block `documentation.doxygen` → Ziel `docs` (Doxyfile des Projekts, nicht Teil von `ALL`) |
 
 ---
 

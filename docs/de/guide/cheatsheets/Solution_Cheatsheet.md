@@ -1,7 +1,7 @@
 # Solution.json — Cheatsheet
 
-> **Version:** 1.0.0  
-> **Letzte Aktualisierung:** 2025-12-18  
+> **Version:** 1.1.0  
+> **Letzte Aktualisierung:** 2026-11-26  
 > **Für:** CMake Architecture  
 > **Sprache:** Deutsch  
 > **English:** [Solution_Cheatsheet.md](../../../en/guide/cheatsheets/Solution_Cheatsheet.md)
@@ -34,6 +34,8 @@
 | `executables` | — | Monolithische Executables |
 | `tests` | — | Standalone Tests |
 | `apps` | — | App-Container (Core/Runner) |
+| `packages` | — | Pakete schnüren: Target `package_<name>` |
+| `documentation` | — | Ziel `docs` für die API-Referenz (Doxygen) |
 
 ---
 
@@ -199,6 +201,24 @@ Datei liegt in: `{app}/pch/pch.h`
 
 ---
 
+## Dokumentation (Doxygen)
+
+```json
+"documentation": { "doxygen": { "doxyfile": "Doxyfile" } }
+```
+
+| Feld | Default | Wirkung |
+|------|---------|---------|
+| `doxyfile` | — (Pflicht) | Doxyfile des Projekts, relativ zum Root, unverändert übergeben |
+| `target` | `docs` | Name des Bauziels |
+
+- 🔧 `cmake --build <build> --target docs` — nicht Teil von `ALL`
+- 📂 Doxygen läuft im Projekt-Root; relative Pfade der Doxyfile gelten wie bei `doxygen Doxyfile`
+- ⚠️ `WARN_AS_ERROR = YES` gehört in die Doxyfile — das Ziel scheitert dann an einer Warnung
+- Doxygen fehlt → W202, das Ziel scheitert beim Bauen · Doxyfile fehlt → E107
+
+---
+
 ## Verzeichnisstruktur
 
 ```
@@ -228,6 +248,8 @@ projects/
 | E2xx | External | External-Fehler |
 | E3xx | Test | Test-Fehler |
 | E4xx | App | App-Container-Fehler |
+| E5xx | System | System-Externals |
+| W2xx | Tools | Fehlende Werkzeuge (W202: Doxygen) |
 
 ---
 

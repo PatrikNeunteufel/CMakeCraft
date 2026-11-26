@@ -1,7 +1,7 @@
 # Project — Project Pipeline Modules
 
 > **Version:** 1.0.0  
-> **Date:** 2025-12-17  
+> **Date:** 2026-11-26  
 > **Language:** English  
 > **German:** [README.md](../../../../de/guide/module/project/project_README.md)
 
@@ -34,6 +34,9 @@
 2. [PackageBuild.md](PackageBuild.md) — Build-time script (folder, zip, checksum)
 3. [SourcePackage.md](SourcePackage.md) — Source package of a library with a plain `CMakeLists.txt` (Phase 11)
 
+**Building the API reference?** (Phase 12)
+1. [Documentation.md](Documentation.md) — Block `documentation.doxygen` → target `docs`
+
 ---
 
 ## Overview
@@ -65,6 +68,8 @@ Solution.cmake          ← Loads and parses Solution.json
      ├── Packages.cmake       ← Package pipeline (Phase 10)
      │   ├── SourcePackage    → Source package of a library (Phase 11)
      │   └── PackageBuild     → Build-time script (cmake -P)
+     │
+     ├── Documentation.cmake  ← Target docs, Doxygen (Phase 12)
      │
      └── Tests.cmake          ← Test pipeline
          ├── TestCollect      → JSON → Context
@@ -121,6 +126,12 @@ Solution.cmake          ← Loads and parses Solution.json
 | [Packages.md](Packages.md) | Block `packages` → target `package_<name>` (manifest, version file) |
 | [PackageBuild.md](PackageBuild.md) | Build-time script: package folder, zip archive, SHA256 |
 | [SourcePackage.md](SourcePackage.md) | Source package of a library: generated plain `CMakeLists.txt`, carried-over local externals, `SHA256SUMS` |
+
+### Documentation (Phase 12)
+
+| File | Description |
+|------|-------------|
+| [Documentation.md](Documentation.md) | Block `documentation.doxygen` → target `docs` (the project's Doxyfile, not part of `ALL`) |
 
 ---
 

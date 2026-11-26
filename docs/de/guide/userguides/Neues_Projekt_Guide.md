@@ -1,7 +1,7 @@
 # Neues Projekt mit CMakeCraft — Bedienungsanleitung
 
-> **Version:** 1.4.2
-> **Datum:** 2026-11-09
+> **Version:** 1.4.3
+> **Datum:** 2026-11-26
 > **Typ:** Guide
 > **Status:** Entwurf
 > **Zielgruppe:** Entwickler, die ein neues, eigenständiges Projekt-Repo auf Basis von CMakeCraft aufsetzen
@@ -101,7 +101,7 @@ In `cmakecraft.pin` die gewünschte CMakeCraft-Version (Git-Tag) eintragen — d
 **einzige** Ort, an dem die Build-System-Version steht:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.14.1")
+set(CMAKECRAFT_VERSION "v0.15.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -353,6 +353,7 @@ Mehr: [Getting_Started.md](Getting_Started.md) Abschnitt 12–13 · Debug-Ausgab
 
 ## Changelog
 
+- **1.4.3** (2026-11-26): Pin-Beispiel v0.15.0 (Ziel `docs` für die API-Referenz mit der Doxyfile des Projekts)
 - **1.4.2** (2026-11-09): An den Code angeglichen: Reste des Snapshot-Verfahrens auf den Bezug mit `cmakecraft.pin` umgestellt (§1, §5.3, §6, Schritt 8, Troubleshooting Qt6/AUTOMOC), „drei Pflichtdateien“ gegen die Tabelle berichtigt (Schritt 2), Troubleshooting-Zeile `No project() command is present` durch E005 ersetzt; `QT_ROOT` als `environment` statt `cacheVariables` (der Resolver liest nur Umgebungsvariablen, `PathResolver.cmake:108-116`), vorhandene Preset-Namen (Schritt 7)
 - **1.4.1** (2026-11-09): Pin-Beispiel v0.14.1 (ausdrücklicher Einstiegspunkt für Qt-GUI-Programme unter Windows)
 - **1.4.0** (2026-11-07): Pin-Beispiel v0.14.0 (`compile_options` je Bibliothek, Quellpaket einer Bibliothek)

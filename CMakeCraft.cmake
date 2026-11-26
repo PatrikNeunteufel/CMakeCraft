@@ -3,8 +3,8 @@
 # ==============================================================================
 #
 # Project:      CMakeCraft (CMake Architecture V2)
-# Version:      0.14.1
-# Date:         2026-11-09
+# Version:      0.15.0
+# Date:         2026-11-26
 #
 # Description:
 #   Single entry point of the CMakeCraft build system. Self-locating: all
@@ -24,11 +24,20 @@
 #   -DBUILD_TESTS=ON|OFF          Build project tests (default: OFF)
 #   -DRUN_BUILD_SYSTEM_TESTS=ON   Run phase tests (default: OFF; CMakeCraft
 #                                 repo itself: use preset "craft-selftest")
-#   -DTEST_PHASE=1..11            Specific phase(s) to test (default: all)
+#   -DTEST_PHASE=1..12            Specific phase(s) to test (default: all)
 #   -DDEBUG_MESSAGES=ON|OFF       Debug output on/off (default: ON)
 #   -DDEBUG_DEFAULT_LEVEL=1-5     Debug verbosity (default: 2)
 #
 # Changelog:
+#   v0.15.0 (2026-11-26): Target "docs" for the API reference. New block
+#                        "documentation": { "doxygen": { "doxyfile": "...",
+#                        "target": "docs" } } runs Doxygen with the project's
+#                        own Doxyfile, unchanged, in the project root; not
+#                        part of ALL; Doxygen's exit code is passed through.
+#                        Doxygen missing -> W202, the target fails when built;
+#                        Doxyfile missing -> E107. Without the block nothing
+#                        changes. schemaVersion stays 1.0. New:
+#                        Documentation.cmake, phase 12.
 #   v0.14.1 (2026-11-09): Explicit entry point /ENTRY:WinMainCRTStartup for
 #                        Windows GUI executables that link Qt6 (MSVC and
 #                        clang, MSVC ABI; Qt6.cmake 1.1.0). Qt6EntryPoint.lib
@@ -246,6 +255,12 @@ include("${CMAKECRAFT_DIR}/project/Apps.cmake")
 include("${CMAKECRAFT_DIR}/project/Packages.cmake")
 
 # ==============================================================================
+# Phase 12: Documentation (target docs from "documentation.doxygen")
+# ==============================================================================
+
+include("${CMAKECRAFT_DIR}/project/Documentation.cmake")
+
+# ==============================================================================
 # Phase 7: Tests (only when BUILD_TESTS is enabled)
 # ==============================================================================
 
@@ -276,7 +291,7 @@ if(RUN_BUILD_SYSTEM_TESTS)
         dbg(${DBG_COMMON} "Testing all completed phases" ID BUILD_TEST)
     endif()
 
-    foreach(_craft_phase RANGE 1 11)
+    foreach(_craft_phase RANGE 1 12)
         if("${TEST_PHASE}" STREQUAL "" OR "${_craft_phase}" IN_LIST TEST_PHASE)
             dbgspace(ID BUILD_TEST)
             include("${CMAKECRAFT_DIR}/buildSystemTest/phase${_craft_phase}.cmake")

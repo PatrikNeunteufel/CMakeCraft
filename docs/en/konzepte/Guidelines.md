@@ -1,7 +1,7 @@
 # Guidelines — CMake Build System
 
-> **Version:** 1.0.1  
-> **Date:** 2026-11-09  
+> **Version:** 1.0.2  
+> **Date:** 2026-11-26  
 > **Type:** Standard  
 > **Status:** Stable  
 > **Target Audience:** Build System Developers  
@@ -119,20 +119,20 @@ include_guard(GLOBAL)
 | Area | Prefix | Description |
 |---------|--------|--------------|
 | JSON/parsing | `E0xx` | E001-E005, E010, E012, E013 |
-| Target creation | `E1xx` | E101, E102, E104-E106 |
+| Target creation | `E1xx` | E101, E102, E104-E107 |
 | Externals | `E2xx` | E201-E203, E213-E216, E218-E220 |
 | Tests | `E3xx` | E301-E305 |
 | AppContainer | `E4xx` | E400-E407 |
 | System externals | `E5xx` | E502-E505 |
 | Deprecation | `W0xx` | — |
 | Configuration | `W1xx` | W101-W104, W109-W112 |
-| Tools/setup | `W2xx` | W201 |
+| Tools/setup | `W2xx` | W201, W202 |
 | Externals | `W3xx` | W302-W304 |
 | AppContainer | `W4xx` | W401-W403 |
 | System externals | `W5xx` | W501 |
 | Self-test | `W6xx`-`W9xx` | W601, W602, W701, W801-W803, W901, W902, W999 — only in `cmake/buildSystemTest/` |
 
-The table lists the codes that the code raises with `cmake_fatal`/`cmake_warn` (`cmake/`, `CMakeCraft.cmake`; as of 2026-11-09). `cmake/core/Errors.cmake` additionally describes E103, E217, W001, W002, W105-W108 and W301, which are never raised, and marks them as such there (W001 only appears in `validate_solution_schema()`, which nothing calls). The system handler raises E504 and E505 since CMakeCraft v0.14.1 (`cmake/externals/system/Handler.cmake:91`, `:109`); E501 and W502 are dropped with it. The completed concepts also name E306, E501 and W502.
+The table lists the codes that the code raises with `cmake_fatal`/`cmake_warn` (`cmake/`, `CMakeCraft.cmake`; as of 2026-11-26). `cmake/core/Errors.cmake` additionally describes E103, E217, W001, W002, W105-W108 and W301, which are never raised, and marks them as such there (W001 only appears in `validate_solution_schema()`, which nothing calls). The system handler raises E504 and E505 since CMakeCraft v0.14.1 (`cmake/externals/system/Handler.cmake:91`, `:109`); E501 and W502 are dropped with it. The completed concepts also name E306, E501 and W502.
 
 ---
 
@@ -489,6 +489,7 @@ Check before code review:
 
 | Version | Date | Changes |
 |---------|-------|------------|
+| **1.0.2** | **2026-11-26** | **CMakeCraft v0.15.0: §3.3 with E107 and W202 (`cmake/project/Documentation.cmake`)** |
 | **1.0.1** | **2026-11-09** | **Aligned with the code: §3.3 lists the error codes actually raised (E0xx–E5xx, W0xx–W5xx, self-test W6xx–W9xx); CMakeCraft v0.14.1: E5xx with E502–E505, W001 as not raised (W0xx empty), E501/W502 dropped** |
 | 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 (Standard), error codes extended (E3xx-E5xx, W3xx-W5xx), externals caching variables, app container pipeline, checklist added |

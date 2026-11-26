@@ -1,7 +1,7 @@
 # Future Enhancements — Geplante Erweiterungen
 
-> **Version:** 1.0.0  
-> **Datum:** 2025-12-26  
+> **Version:** 1.1.0  
+> **Datum:** 2026-11-26  
 > **Typ:** Concept  
 > **Status:** Sammlung  
 > **Zielgruppe:** Build-System-Entwickler, Architekten  
@@ -541,8 +541,14 @@ cmake --build . --target tidy-fix
 > **Priorität:** 🟡 Mittel  
 > **Komplexität:** 🔵 Mittel
 
+> **Teilweise umgesetzt in v0.15.0:** Das Build-Target gibt es, mit der **Doxyfile des Projekts**
+> (`documentation.doxygen.doxyfile`, [Solution_Schema.md](../guide/references/Solution_Schema.md) §10).
+> Offen ist nur noch die **erzeugte** Konfiguration unten. Entscheid C3 a (Patrik, 2026-11-26): sie kommt
+> nicht in v0.15.0, weil kein Konsument sie braucht. Das Schema hält ihr den Platz frei: Ein Eintrag ohne
+> `doxyfile` führt heute zu E001 und kann später diesen Weg nehmen.
+
 **Beschreibung:**  
-Automatische Doxygen-Konfiguration und Build-Target.
+Automatische Doxygen-Konfiguration für Projekte ohne eigene Doxyfile.
 
 ```json
 {
@@ -555,6 +561,8 @@ Automatische Doxygen-Konfiguration und Build-Target.
     }
 }
 ```
+
+Kipppunkt: Ein Konsument ohne eigene Doxyfile will die API-Referenz.
 
 ---
 
@@ -667,6 +675,7 @@ cmake --generate-ci github
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.1.0** | **2026-11-26** | **§8.3: Ziel mit der Doxyfile des Projekts umgesetzt (CMakeCraft v0.15.0); offen bleibt die erzeugte Konfiguration (Entscheid C3 a)** |
 | **1.0.0** | **2025-12-26** | **Release 1 (aus newCMake übernommen, `2e00db7`)** |
 | 0.5.0 | 2025-12-14 | Blueprint v0.5.0 (Concept), bereits beschlossene Konzepte entfernt (App-Container Basis, System-Externals Basis), Verweis auf separate Konzept-Dokumente |
 | 0.2.0 | 2025-12-12 | App-Container (Phase 8), Lockfile-Details, Settings-Erweiterungen |

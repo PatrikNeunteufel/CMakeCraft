@@ -29,7 +29,7 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 | Kategorie | Beschreibung | Module |
 |-----------|--------------|--------|
 | **Core** | Grundlegende Funktionen | 10 Module |
-| **Project** | Projekt-Erstellung | 17 Module |
+| **Project** | Projekt-Erstellung | 18 Module |
 | **Externals** | Dependency-Management | 9 Module + Hooks, Includes, Systempakete |
 
 ---
@@ -47,7 +47,7 @@ Die Modul-Dokumentation beschreibt alle CMake-Module des Build-Systems. Jedes Mo
 
 | Ordner | Beschreibung |
 |--------|--------------|
-| [buildSystemTest/](buildSystemTest/buildSystemTest_README.md) | Phasen-Testdokumentation (Phase 1–11) |
+| [buildSystemTest/](buildSystemTest/buildSystemTest_README.md) | Phasen-Testdokumentation (Phase 1–12) |
 | [core/](core/core_README.md) | Kern-Module (Errors, Debug, Context, etc.) |
 | [externals/](externals/README.md) | External-Management-System |
 | [project/](project/project_README.md) | Projekt-Pipeline (Executables, Libraries, Apps, Tests) |
@@ -125,5 +125,6 @@ externals/
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.2** | **2026-11-26** | **CMakeCraft v0.15.0: Project 18 Module (`Documentation.cmake`), Phasentests 1–12** |
 | **1.0.1** | **2026-11-09** | **An den Code angeglichen: Phasentests 1–11; Modulzahlen (Core 10 mit `Configurations.cmake`, Project 17); Phasen der Modulgruppen; Externals-Baum mit `local/` und `system/`** |
 | 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |

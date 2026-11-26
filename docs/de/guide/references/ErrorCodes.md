@@ -1,7 +1,7 @@
 # ErrorCodes — Referenz
 
-> **Version:** 1.6.1  
-> **Datum:** 2026-11-09  
+> **Version:** 1.7.0  
+> **Datum:** 2026-11-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -349,6 +349,25 @@ und -Features. Die Meldung nennt die Library und gegebenenfalls das External.
 
 **Lösung:** Die Library oder das External so umstellen, dass es passt, oder kein Quellpaket
 schnüren (Binärpaket mit `contents`). Siehe [Packages.md](Packages.md) §2.5.
+
+---
+
+#### E107 — Doxyfile nicht gefunden
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⛔ FATAL |
+| **Seit** | v0.15.0 |
+
+**Beschreibung:** Der Block `documentation.doxygen` nennt in `doxyfile` eine Datei, die es
+nicht gibt (relativ zum Projekt-Root). Die Meldung nennt den vollständigen Pfad.
+
+```
+[E107] documentation.doxygen: Doxyfile not found: <Projekt-Root>/Doxyfile
+```
+
+**Lösung:** Den Pfad in `doxyfile` berichtigen oder die Doxyfile anlegen. Siehe
+[Solution_Schema.md](Solution_Schema.md) §10.
 
 ---
 
@@ -1046,6 +1065,25 @@ wird dann nicht angelegt.
 
 ---
 
+#### W202 — Doxygen nicht gefunden
+
+| Aspekt | Wert |
+|--------|------|
+| **Schweregrad** | ⚠️ WARNING |
+| **Seit** | v0.15.0 |
+
+**Beschreibung:** Solution.json hat den Block `documentation.doxygen`, aber `find_package(Doxygen)`
+findet Doxygen nicht. Das Konfigurieren läuft weiter; das Ziel (`docs` oder der Name aus
+`target`) gibt es trotzdem und scheitert beim Bauen mit der Meldung, dass Doxygen fehlt.
+
+```
+[W202] documentation.doxygen: Doxygen not found - target 'docs' fails when built. Install Doxygen or set DOXYGEN_EXECUTABLE, then configure again.
+```
+
+**Lösung:** Doxygen installieren (oder `DOXYGEN_EXECUTABLE` setzen) und neu konfigurieren.
+
+---
+
 ### 4.4 W3xx — External-Caching Warnings
 
 #### W301 — External aus Cache verwendet (Offline-Modus)
@@ -1241,6 +1279,7 @@ Nur im Selbsttest (`RUN_BUILD_SYSTEM_TESTS=ON`, Preset `craft-selftest`); Dateie
 | E104 | Target | Source.cmake nicht gefunden (mode=explicit) |
 | E105 | Target | compile_options an einer INTERFACE-Library |
 | E106 | Target | Quellpaket nicht in einfachem CMake abbildbar |
+| E107 | Target | Doxyfile aus `documentation.doxygen` nicht gefunden |
 | E201 | External | Fetched External: kein Target in Registry |
 | E202 | External | External Fetch fehlgeschlagen |
 | E203 | External | Target eines Externals nicht gefunden |
@@ -1286,6 +1325,7 @@ Nur im Selbsttest (`RUN_BUILD_SYSTEM_TESTS=ON`, Preset `craft-selftest`); Dateie
 | W111 | Config | Source.cmake vorhanden, aber leer |
 | W112 | Config | Paket nennt ein Target, das es nicht gibt |
 | W201 | Tools | Clang-Tidy nicht gefunden |
+| W202 | Tools | Doxygen nicht gefunden — Ziel `docs` scheitert beim Bauen |
 | W301 | Caching | External aus Cache (Offline-Modus; derzeit nicht ausgelöst) |
 | W302 | Caching | Version weicht ab, Offline-Modus nutzt den Cache |
 | W303 | Caching | Unvollständiger Klon im Cache — entfernt und neu geholt |
@@ -1333,6 +1373,7 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.7.0** | **2026-11-26** | **E107 (Doxyfile nicht gefunden) und W202 (Doxygen nicht gefunden) hinzugefügt, CMakeCraft v0.15.0** |
 | **1.6.1** | **2026-11-09** | **An den Code angeglichen: Meldungen von E001, E002, E003, E010, E012, E201, E301–E303, E401, W101, W102, W303, W403 wörtlich; E003 mit Schema `1.0` (`cmake/project/Solution.cmake:50`); weitere Auslöser von E003, E302, E303, W101, W401, W402; E203, E304, E305, E400, W111 und die Phasentest-Warnungen W601–W999 (§4.7) ergänzt; E217-Hook-Pfad klein; §6 mit dreistelligen Codes. CMakeCraft v0.14.1: E501 und W502 entfallen; E503 mit den drei Fassungen aus `system/Handler.cmake`, E504 und E505 ausgelöst und mit Meldung; Meldungen von E502 und W501; E103, E217, W001, W002, W105 (W106–W108) und W301 als derzeit nicht ausgelöst gekennzeichnet; §6 mit mehrteiliger Meldung** |
 | **1.6.0** | **2026-11-07** | **E105 (compile_options an INTERFACE-Library) und E106 (Quellpaket nicht abbildbar) hinzugefügt, CMakeCraft v0.14.0** |
 | 1.5.0 | 2026-10-24 | **E005 hinzugefügt (Top-Level-CMakeLists.txt ohne project(), CMakeCraft v0.13.0)** |

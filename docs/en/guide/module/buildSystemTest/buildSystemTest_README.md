@@ -1,7 +1,7 @@
 # Build System Tests — Phase Test Documentation
 
-> **Version:** 1.0.1  
-> **Date:** 2026-11-09  
+> **Version:** 1.0.2  
+> **Date:** 2026-11-26  
 > **Language:** English  
 > **German:** [buildSystemTest_README.md](../../../../de/guide/module/buildSystemTest/buildSystemTest_README.md)
 
@@ -32,7 +32,7 @@ The build system tests validate the correct functioning of all CMake modules. Ea
 CMakeCraft.cmake  (after the pipeline)
      │
      └── if(RUN_BUILD_SYSTEM_TESTS)          ← Default OFF
-             │   foreach 1..11, filtered by TEST_PHASE
+             │   foreach 1..12, filtered by TEST_PHASE
              │
              ├── phase1.cmake  → Core modules
              ├── phase2.cmake  → Solution
@@ -44,7 +44,8 @@ CMakeCraft.cmake  (after the pipeline)
              ├── phase8.cmake  → App container (new)
              ├── phase9.cmake  → System Externals
              ├── phase10.cmake → Packages, archive externals
-             └── phase11.cmake → compile_options per library, source packages
+             ├── phase11.cmake → compile_options per library, source packages
+             └── phase12.cmake → target docs (Doxygen)
 
 Files: cmake/buildSystemTest/phase<n>.cmake
 ```
@@ -66,6 +67,7 @@ Files: cmake/buildSystemTest/phase<n>.cmake
 | [Phase9_doc.md](Phase9_doc.md) | 9 | System Externals, entry point of Qt GUI programs |
 | [Phase10_doc.md](Phase10_doc.md) | 10 | Packages, CMakeCraftPackage, archive externals |
 | [Phase11_doc.md](Phase11_doc.md) | 11 | compile_options per library, source package, E105, E106 |
+| [Phase12_doc.md](Phase12_doc.md) | 12 | Target `docs` from `documentation.doxygen`, W202, E107 |
 
 ---
 
@@ -84,6 +86,7 @@ Files: cmake/buildSystemTest/phase<n>.cmake
 | **9** | ✅ Stable | Externals (System), system/Handler, system/PathResolver, system/packages/Qt6 | Type detection, fields, type priority, package hooks, entry point of Qt GUI programs |
 | **10** | ✅ Stable | Packages, CMakeCraftPackage, archive/Handler | Package target, output_name/defines, fetch via URL/cache/fallback path, apply to target |
 | **11** | ✅ Stable | LibraryCreate, SourcePackage, PackageBuild, CompilerOptions | compile_options on the target, generated CMakeLists.txt, build the package, build and run a consumer without CMakeCraft, E105, E106 |
+| **12** | ✅ Stable | Documentation | Doxyfile in the project root, not part of ALL, `target`, exit code passed through, W202, E107, E001 |
 
 ---
 
@@ -92,7 +95,7 @@ Files: cmake/buildSystemTest/phase<n>.cmake
 | Flag | Default | Description |
 |------|---------|-------------|
 | `RUN_BUILD_SYSTEM_TESTS` | OFF | Enable build system tests (in the CMakeCraft repo: preset `craft-selftest`) |
-| `TEST_PHASE` | "" (all) | Test specific phase(s) (`1`–`11`, list separated by `;`); only takes effect with `RUN_BUILD_SYSTEM_TESTS=ON` |
+| `TEST_PHASE` | "" (all) | Test specific phase(s) (`1`–`12`, list separated by `;`); only takes effect with `RUN_BUILD_SYSTEM_TESTS=ON` |
 | `BUILD_TESTS` | OFF | Enable project tests (for phase 7/8) |
 
 ### Examples
@@ -149,6 +152,7 @@ Each phase sets a cache flag on success:
 | 9 | `PHASE9_TEST_PASSED` |
 | 10 | `PHASE10_TEST_PASSED` |
 | 11 | `PHASE11_TEST_PASSED` |
+| 12 | `PHASE12_TEST_PASSED` |
 
 ---
 
@@ -164,5 +168,6 @@ Each phase sets a cache flag on success:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| **1.0.2** | **2026-11-26** | **CMakeCraft v0.15.0: phase 12 (target `docs`, Doxygen)** |
 | **1.0.1** | **2026-11-09** | **Aligned with the code: `RUN_BUILD_SYSTEM_TESTS` default `OFF`, preset `craft-selftest`; phase tests run from `CMakeCraft.cmake`, file names `phase<n>.cmake` in lowercase; `TEST_PHASE` only takes effect together with `RUN_BUILD_SYSTEM_TESTS=ON`** |
 | 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |

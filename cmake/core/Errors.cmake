@@ -2,8 +2,8 @@
 # ========================
 # Unified error handling for the entire build system
 #
-# Version: 1.1.0
-# Date:    2026-11-09
+# Version: 1.1.1
+# Date:    2026-11-26
 # Status:  Release
 # Author:  CMake Architecture Team
 #
@@ -35,6 +35,9 @@
 #   W4xx - Apps (Warnings)
 #   W5xx - System externals (Warnings)
 #   W6xx-W9xx - Phase tests (cmake/buildSystemTest/ only)
+#
+# Changes v1.1.1 (CMakeCraft v0.15.0):
+#   - Catalog: E107 (Doxyfile not found), W202 (Doxygen not found)
 #
 # Changes v1.1.0 (CMakeCraft v0.14.1):
 #   - cmake_fatal/cmake_warn join all message parts after CODE. Before, only
@@ -99,6 +102,7 @@ include_guard(GLOBAL)
             E104 - Source.cmake not found (mode=explicit)
             E105 - compile_options on an INTERFACE library
             E106 - Source package: library cannot be described in plain CMake
+            E107 - documentation.doxygen: Doxyfile not found
 
         E2xx - Externals
             E201 - Fetched external: no target in registry
@@ -190,6 +194,8 @@ endfunction()
         
         W2xx - Tools/Setup
             W201 - Clang-Tidy enabled but not found
+            W202 - documentation.doxygen: Doxygen not found (target fails
+                   when built)
         
         W3xx - Externals
             W301 - Offline mode: using existing external (currently not raised -

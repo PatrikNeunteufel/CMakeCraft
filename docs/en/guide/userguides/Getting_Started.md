@@ -1,7 +1,7 @@
 # Getting Started – User Guide
 
-> **Version:** 1.0.1  
-> **Date:** 2026-11-09  
+> **Version:** 1.0.2  
+> **Date:** 2026-11-26  
 > **Type:** Guide  
 > **Status:** Stable  
 > **Target Audience:** C++ developers (beginners and advanced)  
@@ -120,7 +120,7 @@ cp ../CMakeCraft/CMakePresets.json .
 ```
 
 - `CMakeCraftBootstrap.cmake` — take it over unchanged.
-- `cmakecraft.pin` — the CMakeCraft version as a Git tag, e.g. `set(CMAKECRAFT_VERSION "v0.14.1")`.
+- `cmakecraft.pin` — the CMakeCraft version as a Git tag, e.g. `set(CMAKECRAFT_VERSION "v0.15.0")`.
 - `CMakeLists.txt` — only adjust the name in `project(<Name> LANGUAGES NONE)`. The line is
   required (since v0.13.0, otherwise E005); CMakeCraft sets name and version from Solution.json.
 
@@ -935,6 +935,7 @@ cmake --build out/build/... --target help
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.0.2 | 2026-11-26 | Pin example v0.15.0 |
 | 1.0.1 | 2026-11-09 | Aligned with the code: consumption via `templates/consumer/` and `cmakecraft.pin` (§3.1, §4), `CMakeLists.txt` as a thin version with the required line `project(<Name> LANGUAGES NONE)`, `schemaVersion` `1.0`, default paths `projects/exec/…` and `projects/libs/…`, `Source.cmake` (explicit sources), output path `exec/<Name>/bin/<Config>/`, existing presets, error messages E001/E101/E104 instead of `[E0401]`, `settings.output` and `all_tests` removed |
 | 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |
 | **0.5.0** | **2025-12-14** | **Initial: comprehensive getting-started guide for CMake Architecture** |

@@ -1,7 +1,7 @@
 # New Project with CMakeCraft — Operating Instructions
 
-> **Version:** 1.4.2
-> **Date:** 2026-11-09
+> **Version:** 1.4.3
+> **Date:** 2026-11-26
 > **Type:** Guide
 > **Status:** Draft
 > **Target Audience:** Developers who set up a new, standalone project repo based on CMakeCraft
@@ -101,7 +101,7 @@ Enter the desired CMakeCraft version (Git tag) in `cmakecraft.pin` — this is t
 **only** place where the build system version is stated:
 
 ```cmake
-set(CMAKECRAFT_VERSION "v0.14.1")
+set(CMAKECRAFT_VERSION "v0.15.0")
 set(CMAKECRAFT_GIT_URL "https://github.com/PatrikNeunteufel/CMakeCraft.git")
 set(CMAKECRAFT_FALLBACK_PATHS "../CMakeCraft")
 ```
@@ -353,6 +353,7 @@ More: [Getting_Started.md](Getting_Started.md) sections 12–13 · debug output 
 
 ## Changelog
 
+- **1.4.3** (2026-11-26): Pin example v0.15.0 (target `docs` for the API reference with the project's Doxyfile)
 - **1.4.2** (2026-11-09): Aligned with the code: remnants of the snapshot procedure switched to consumption via `cmakecraft.pin` (§1, §5.3, §6, step 8, troubleshooting Qt6/AUTOMOC), "three mandatory files" corrected against the table (step 2), troubleshooting row `No project() command is present` replaced by E005; `QT_ROOT` as `environment` instead of `cacheVariables` (the resolver reads environment variables only, `PathResolver.cmake:108-116`), existing preset names (step 7)
 - **1.4.1** (2026-11-09): Pin example v0.14.1 (explicit entry point for Qt GUI programs under Windows)
 - **1.4.0** (2026-11-07): Pin example v0.14.0 (`compile_options` per library, source package of a library)

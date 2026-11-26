@@ -1,7 +1,7 @@
 # Build-System-Tests — Phasen-Testdokumentation
 
-> **Version:** 1.0.1  
-> **Datum:** 2026-11-09  
+> **Version:** 1.0.2  
+> **Datum:** 2026-11-26  
 > **Sprache:** Deutsch  
 > **English:** [buildSystemTest_README.md](../../../../en/guide/module/buildSystemTest/buildSystemTest_README.md)
 
@@ -32,7 +32,7 @@ Die Build-System-Tests validieren die korrekte Funktion aller CMake-Module. Jede
 CMakeCraft.cmake  (nach der Pipeline)
      │
      └── if(RUN_BUILD_SYSTEM_TESTS)          ← Default OFF
-             │   foreach 1..11, gefiltert über TEST_PHASE
+             │   foreach 1..12, gefiltert über TEST_PHASE
              │
              ├── phase1.cmake  → Core-Module
              ├── phase2.cmake  → Solution
@@ -44,7 +44,8 @@ CMakeCraft.cmake  (nach der Pipeline)
              ├── phase8.cmake  → App-Container (neu)
              ├── phase9.cmake  → System Externals
              ├── phase10.cmake → Packages, Archive Externals
-             └── phase11.cmake → compile_options je Library, Quellpakete
+             ├── phase11.cmake → compile_options je Library, Quellpakete
+             └── phase12.cmake → Ziel docs (Doxygen)
 
 Dateien: cmake/buildSystemTest/phase<n>.cmake
 ```
@@ -66,6 +67,7 @@ Dateien: cmake/buildSystemTest/phase<n>.cmake
 | [Phase9_doc.md](Phase9_doc.md) | 9 | System Externals, Einstiegspunkt von Qt-GUI-Programmen |
 | [Phase10_doc.md](Phase10_doc.md) | 10 | Packages, CMakeCraftPackage, Archive Externals |
 | [Phase11_doc.md](Phase11_doc.md) | 11 | compile_options je Library, Quellpaket, E105, E106 |
+| [Phase12_doc.md](Phase12_doc.md) | 12 | Ziel `docs` aus `documentation.doxygen`, W202, E107 |
 
 ---
 
@@ -84,6 +86,7 @@ Dateien: cmake/buildSystemTest/phase<n>.cmake
 | **9** | ✅ Stabil | Externals (System), system/Handler, system/PathResolver, system/packages/Qt6 | Typ-Erkennung, Felder, Typ-Priorität, Package-Hooks, Einstiegspunkt von Qt-GUI-Programmen |
 | **10** | ✅ Stabil | Packages, CMakeCraftPackage, archive/Handler | Package-Target, output_name/defines, Bezug über URL/Cache/Ausweichpfad, Anwenden auf Target |
 | **11** | ✅ Stabil | LibraryCreate, SourcePackage, PackageBuild, CompilerOptions | compile_options am Ziel, erzeugtes CMakeLists.txt, Paket bauen, Bezieher ohne CMakeCraft bauen und ausführen, E105, E106 |
+| **12** | ✅ Stabil | Documentation | Doxyfile im Projekt-Root, nicht Teil von ALL, `target`, Exitcode durchgereicht, W202, E107, E001 |
 
 ---
 
@@ -92,7 +95,7 @@ Dateien: cmake/buildSystemTest/phase<n>.cmake
 | Flag | Default | Beschreibung |
 |------|---------|--------------|
 | `RUN_BUILD_SYSTEM_TESTS` | OFF | Build-System-Tests aktivieren (im CMakeCraft-Repo: Preset `craft-selftest`) |
-| `TEST_PHASE` | "" (alle) | Spezifische Phase(n) testen (`1`–`11`, Liste mit `;`); wirkt nur mit `RUN_BUILD_SYSTEM_TESTS=ON` |
+| `TEST_PHASE` | "" (alle) | Spezifische Phase(n) testen (`1`–`12`, Liste mit `;`); wirkt nur mit `RUN_BUILD_SYSTEM_TESTS=ON` |
 | `BUILD_TESTS` | OFF | Projekt-Tests aktivieren (für Phase 7/8) |
 
 ### Beispiele
@@ -149,6 +152,7 @@ Jede Phase setzt ein Cache-Flag bei Erfolg:
 | 9 | `PHASE9_TEST_PASSED` |
 | 10 | `PHASE10_TEST_PASSED` |
 | 11 | `PHASE11_TEST_PASSED` |
+| 12 | `PHASE12_TEST_PASSED` |
 
 ---
 
@@ -164,5 +168,6 @@ Jede Phase setzt ein Cache-Flag bei Erfolg:
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.2** | **2026-11-26** | **CMakeCraft v0.15.0: Phase 12 (Ziel `docs`, Doxygen)** |
 | **1.0.1** | **2026-11-09** | **An den Code angeglichen: `RUN_BUILD_SYSTEM_TESTS` Default `OFF`, Preset `craft-selftest`; Phasentests laufen aus `CMakeCraft.cmake`, Dateinamen `phase<n>.cmake` klein; `TEST_PHASE` wirkt nur zusammen mit `RUN_BUILD_SYSTEM_TESTS=ON`** |
 | 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |

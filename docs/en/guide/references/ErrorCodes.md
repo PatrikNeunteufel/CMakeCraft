@@ -1,7 +1,7 @@
 # ErrorCodes — Reference
 
-> **Version:** 1.6.1  
-> **Date:** 2026-11-09  
+> **Version:** 1.7.0  
+> **Date:** 2026-11-26  
 > **Type:** Reference  
 > **Status:** Stable  
 > **Target Audience:** All developers  
@@ -349,6 +349,25 @@ applicable, the external.
 
 **Fix:** Rearrange the library or the external so that it fits, or do not build a source
 package (binary package with `contents`). See [Packages.md](Packages.md) §2.5.
+
+---
+
+#### E107 — Doxyfile not found
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⛔ FATAL |
+| **Since** | v0.15.0 |
+
+**Description:** The block `documentation.doxygen` names in `doxyfile` a file that does not
+exist (relative to the project root). The message names the full path.
+
+```
+[E107] documentation.doxygen: Doxyfile not found: <project root>/Doxyfile
+```
+
+**Fix:** Correct the path in `doxyfile` or create the Doxyfile. See
+[Solution_Schema.md](Solution_Schema.md) §10.
 
 ---
 
@@ -1042,6 +1061,25 @@ back to GLOB (`SourceCollect.cmake:435`).
 
 ---
 
+#### W202 — Doxygen not found
+
+| Aspect | Value |
+|--------|-------|
+| **Severity** | ⚠️ WARNING |
+| **Since** | v0.15.0 |
+
+**Description:** Solution.json has the block `documentation.doxygen`, but `find_package(Doxygen)`
+does not find Doxygen. Configuring continues; the target (`docs` or the name from `target`)
+still exists and fails when built with the message that Doxygen is missing.
+
+```
+[W202] documentation.doxygen: Doxygen not found - target 'docs' fails when built. Install Doxygen or set DOXYGEN_EXECUTABLE, then configure again.
+```
+
+**Fix:** Install Doxygen (or set `DOXYGEN_EXECUTABLE`) and configure again.
+
+---
+
 ### 4.4 W3xx — External Caching Warnings
 
 #### W301 — External used from cache (offline mode)
@@ -1236,6 +1274,7 @@ Only in the self-test (`RUN_BUILD_SYSTEM_TESTS=ON`, preset `craft-selftest`); fi
 | E104 | Target | Source.cmake not found (mode=explicit) |
 | E105 | Target | compile_options on an INTERFACE library |
 | E106 | Target | Source package cannot be expressed in plain CMake |
+| E107 | Target | Doxyfile from `documentation.doxygen` not found |
 | E201 | External | Fetched external: no target in registry |
 | E202 | External | External fetch failed |
 | E203 | External | Target of an external not found |
@@ -1281,6 +1320,7 @@ Only in the self-test (`RUN_BUILD_SYSTEM_TESTS=ON`, preset `craft-selftest`); fi
 | W111 | Config | Source.cmake present but empty |
 | W112 | Config | Package names a target that does not exist |
 | W201 | Tools | Clang-Tidy not found |
+| W202 | Tools | Doxygen not found — target `docs` fails when built |
 | W301 | Caching | External from cache (offline mode; currently not raised) |
 | W302 | Caching | Version differs, offline mode uses the cache |
 | W303 | Caching | Incomplete clone in the cache — removed and fetched again |
@@ -1328,6 +1368,7 @@ cmake_assert(condition "Internal error: invalid state")
 
 | Version | Date | Changes |
 |---------|------|---------|
+| **1.7.0** | **2026-11-26** | **E107 (Doxyfile not found) and W202 (Doxygen not found) added, CMakeCraft v0.15.0** |
 | **1.6.1** | **2026-11-09** | **Aligned with the code: messages of E001, E002, E003, E010, E012, E201, E301–E303, E401, W101, W102, W303, W403 verbatim; E003 with schema `1.0` (`cmake/project/Solution.cmake:50`); further triggers of E003, E302, E303, W101, W401, W402; E203, E304, E305, E400, W111 and the phase test warnings W601–W999 (§4.7) added; E217 hook path in lower case; §6 with three-digit codes. CMakeCraft v0.14.1: E501 and W502 dropped; E503 with the three variants from `system/Handler.cmake`, E504 and E505 raised and with message; messages of E502 and W501; E103, E217, W001, W002, W105 (W106–W108) and W301 marked as currently not raised; §6 with a multi-part message** |
 | **1.6.0** | **2026-11-07** | **E105 (compile_options on an INTERFACE library) and E106 (source package cannot be expressed) added, CMakeCraft v0.14.0** |
 | 1.5.0 | 2026-10-24 | **E005 added (top-level CMakeLists.txt without project(), CMakeCraft v0.13.0)** |

@@ -1,7 +1,7 @@
 # Solution.json — Cheatsheet
 
-> **Version:** 1.0.0  
-> **Date:** 2025-12-18  
+> **Version:** 1.1.0  
+> **Date:** 2026-11-26  
 > **For:** CMake Architecture  
 > **Language:** English  
 > **German:** [Solution_Cheatsheet.md](../../../de/guide/cheatsheets/Solution_Cheatsheet.md)
@@ -34,6 +34,8 @@
 | `executables` | — | Monolithic executables |
 | `tests` | — | Standalone tests |
 | `apps` | — | App containers (Core/Runner) |
+| `packages` | — | Build packages: target `package_<name>` |
+| `documentation` | — | Target `docs` for the API reference (Doxygen) |
 
 ---
 
@@ -199,6 +201,24 @@ File location: `{app}/pch/pch.h`
 
 ---
 
+## Documentation (Doxygen)
+
+```json
+"documentation": { "doxygen": { "doxyfile": "Doxyfile" } }
+```
+
+| Field | Default | Effect |
+|-------|---------|--------|
+| `doxyfile` | — (required) | The project's Doxyfile, relative to the root, passed unchanged |
+| `target` | `docs` | Name of the build target |
+
+- 🔧 `cmake --build <build> --target docs` — not part of `ALL`
+- 📂 Doxygen runs in the project root; relative paths in the Doxyfile apply as with `doxygen Doxyfile`
+- ⚠️ `WARN_AS_ERROR = YES` belongs in the Doxyfile — the target then fails on a warning
+- Doxygen missing → W202, the target fails when built · Doxyfile missing → E107
+
+---
+
 ## Directory Structure
 
 ```
@@ -228,6 +248,8 @@ projects/
 | E2xx | External | External errors |
 | E3xx | Test | Test errors |
 | E4xx | App | App container errors |
+| E5xx | System | System externals |
+| W2xx | Tools | Missing tools (W202: Doxygen) |
 
 ---
 

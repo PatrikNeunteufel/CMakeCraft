@@ -1,8 +1,8 @@
 # Solution Schema — Referenz
 
-> **Version:** 1.0.7  
+> **Version:** 1.0.8  
 > **Solution Schema Version:** 1.0  
-> **Datum:** 2026-11-09  
+> **Datum:** 2026-11-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -22,11 +22,12 @@
 7. [libraries Array](#7-libraries-array)
 8. [tests Array](#8-tests-array)
 9. [apps Array](#9-apps-array)
-10. [Schnellreferenz](#10-schnellreferenz)
-11. [Vollständiges Beispiel](#11-vollständiges-beispiel)
-12. [Fehler-Codes](#12-fehler-codes)
-13. [Siehe auch](#13-siehe-auch)
-14. [Changelog](#14-changelog)
+10. [documentation Block](#10-documentation-block)
+11. [Schnellreferenz](#11-schnellreferenz)
+12. [Vollständiges Beispiel](#12-vollständiges-beispiel)
+13. [Fehler-Codes](#13-fehler-codes)
+14. [Siehe auch](#14-siehe-auch)
+15. [Changelog](#15-changelog)
 
 ---
 
@@ -47,7 +48,8 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
     "executables": [ ],
     "tests": [ ],
     "apps": [ ],
-    "packages": [ ]
+    "packages": [ ],
+    "documentation": { }
 }
 ```
 
@@ -65,6 +67,7 @@ Diese Referenz beschreibt das vollständige Schema der Solution.json für das CM
 | `tests` | – | Test-Targets |
 | `apps` | – | App-Container (Core/Runner Separation) |
 | `packages` | – | Pakete schnüren: Target `package_<name>` (siehe [Packages.md](Packages.md)) |
+| `documentation` | – | Ziel `docs` für die API-Referenz mit der Doxyfile des Projekts (§10) |
 
 ---
 
@@ -1035,9 +1038,52 @@ projects/apps/{AppName}/
 
 ---
 
-## 10. Schnellreferenz
+## 10. documentation Block
 
-### 10.1 Pflichtfelder
+> **Seit:** CMakeCraft v0.15.0 · Modul: `cmake/project/Documentation.cmake`
+
+Der optionale Block legt ein Bauziel für die API-Referenz an. Doxygen läuft mit der **Doxyfile des Projekts**; CMakeCraft übergibt sie unverändert und erzeugt keine eigene Konfiguration.
+
+```json
+"documentation": {
+    "doxygen": {
+        "doxyfile": "Doxyfile",
+        "target": "docs"
+    }
+}
+```
+
+### 10.1 Felder von documentation.doxygen
+
+| Feld | Pflicht | Default | Beschreibung |
+|------|---------|---------|--------------|
+| `doxyfile` | ✅ | – | Pfad der Doxyfile, relativ zum Projekt-Root (`CMAKE_SOURCE_DIR`) |
+| `target` | – | `docs` | Name des Bauziels |
+
+### 10.2 Verhalten
+
+- **Arbeitsverzeichnis ist der Projekt-Root.** Relative Pfade der Doxyfile (`INPUT`, `OUTPUT_DIRECTORY`, `USE_MDFILE_AS_MAINPAGE` …) gelten wie bei `doxygen <doxyfile>` aus dem Root.
+- **Nicht Teil von `ALL`.** Gebaut wird das Ziel ausdrücklich: `cmake --build <build> --target docs`. Unter Visual Studio baut „Projektmappe erstellen“ es nicht mit.
+- **Der Exitcode von Doxygen wird durchgereicht.** Steht `WARN_AS_ERROR = YES` (oder `FAIL_ON_WARNINGS`) in der Doxyfile, scheitert das Ziel an einer Warnung. Die Einstellung gehört in die Doxyfile, nicht in Solution.json.
+- **Doxygen** wird mit `find_package(Doxygen)` gesucht, ohne Mindestfassung — welche Tags gebraucht werden, steht in der Doxyfile. Die gefundene Fassung steht in der Ausgabe des Konfigurierens. Fehlt Doxygen, warnt das Konfigurieren mit W202; das Ziel gibt es trotzdem, beim Bauen meldet es, dass Doxygen fehlt, und scheitert.
+- Doxygen legt von `OUTPUT_DIRECTORY` nur die **letzte Ebene** an: `out/docs` braucht ein vorhandenes `out/`.
+- **Ohne den Block** wird Doxygen nicht gesucht und kein Ziel angelegt.
+- Eine von CMakeCraft **erzeugte** Konfiguration gibt es nicht ([Future_Enhancements.md](../../konzepte/Future_Enhancements.md) §8.3); `doxyfile` ist Pflicht.
+
+### 10.3 Fehler
+
+| Code | Beschreibung |
+|------|--------------|
+| E001 | `doxyfile` fehlt, oder `documentation` bzw. `documentation.doxygen` ist kein Objekt |
+| E102 | Ein Ziel mit dem Namen aus `target` gibt es schon |
+| E107 | Doxyfile nicht gefunden |
+| W202 | Doxygen nicht gefunden — das Ziel scheitert beim Bauen |
+
+---
+
+## 11. Schnellreferenz
+
+### 11.1 Pflichtfelder
 
 | Block | Feld |
 |-------|------|
@@ -1053,9 +1099,10 @@ projects/apps/{AppName}/
 | externals (system) | `system: true`, `package` |
 | externals (archive) | `archive: true`, `pin` |
 | packages[] | `name`, `contents` oder `library` |
+| documentation.doxygen | `doxyfile` |
 
 
-### 10.2 Defaults
+### 11.2 Defaults
 
 | Einstellung | Default-Wert |
 |-------------|--------------|
@@ -1068,10 +1115,11 @@ projects/apps/{AppName}/
 | App runner.type | CONSOLE |
 | App PCH | disabled |
 | App tests.skip | false |
+| documentation.doxygen.target | docs |
 
 ---
 
-## 11. Vollständiges Beispiel
+## 12. Vollständiges Beispiel
 
 ```json
 {
@@ -1151,9 +1199,9 @@ projects/apps/{AppName}/
 ---
 
 
-## 12. Fehler-Codes
+## 13. Fehler-Codes
 
-### 12.1 External-bezogene Fehler
+### 13.1 External-bezogene Fehler
 
 | Code | Beschreibung |
 |------|--------------|
@@ -1170,7 +1218,7 @@ projects/apps/{AppName}/
 | **E504** | **System external: Paket gefunden, aber nicht alle Komponenten aus `components`** |
 | **E505** | **System external: keine Version passend zu `version` gefunden** |
 
-### 12.2 Test-bezogene Fehler (standalone tests[])
+### 13.2 Test-bezogene Fehler (standalone tests[])
 
 | Code | Beschreibung |
 |------|--------------|
@@ -1178,7 +1226,7 @@ projects/apps/{AppName}/
 | E302 | source_from Executable existiert nicht |
 | E303 | Test-Source-Verzeichnis nicht gefunden |
 
-### 12.3 App-Container Fehler (apps[])
+### 13.3 App-Container Fehler (apps[])
 
 | Code | Beschreibung |
 |------|--------------|
@@ -1190,7 +1238,7 @@ projects/apps/{AppName}/
 | E406 | App hat kein `main/` Verzeichnis |
 | E407 | App hat keine Source-Dateien in `main/` |
 
-### 12.4 App-Tests Fehler (apps[].tests.targets[])
+### 13.4 App-Tests Fehler (apps[].tests.targets[])
 
 | Code | Beschreibung |
 |------|--------------|
@@ -1202,11 +1250,12 @@ projects/apps/{AppName}/
 | E305 | Test-Pfad existiert nicht |
 | E306 | Keine Source-Dateien im Test-Pfad |
 
-### 12.5 Warnungen
+### 13.5 Warnungen
 
 | Code | Bereich | Beschreibung |
 |------|---------|--------------|
 | W112 | Packages | Paket nennt ein Target, das es nicht gibt — `package_<name>` wird nicht angelegt |
+| W202 | Documentation | Doxygen nicht gefunden — das Ziel `docs` scheitert beim Bauen |
 | W302 | Externals | Version weicht ab, Offline-Modus nutzt den Cache |
 | W304 | Externals | Archive external nicht verfügbar — Targets bauen ohne es |
 | W401 | App-Container | App hat kein `include/` Verzeichnis |
@@ -1221,7 +1270,7 @@ projects/apps/{AppName}/
 
 ---
 
-## 13. Siehe auch
+## 14. Siehe auch
 
 - [Packages.md](Packages.md) — Pakete schnüren und beziehen
 - [Externals.md](Externals.md) — External Libraries Referenz
@@ -1231,10 +1280,11 @@ projects/apps/{AppName}/
 
 ---
 
-## 14. Changelog
+## 15. Changelog
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.8** | **2026-11-26** | **CMakeCraft v0.15.0: Block `documentation` (§10) — Ziel `docs` mit der Doxyfile des Projekts (`doxyfile`, `target`), E107, W202. Abschnitte 10–14 werden 11–15; ältere Einträge unten nennen die alte Nummerierung** |
 | **1.0.7** | **2026-11-09** | **An den Code angeglichen: `schemaVersion` im vollständigen Beispiel §11 ist `"1.0"` (`cmake/project/Solution.cmake:50`); CMakeCraft v0.14.1: `required` ohne `find_package(… REQUIRED)`, E504/E505 in §12.1, E217 als nicht ausgelöst** |
 | **1.0.6** | **2026-11-07** | **CMakeCraft v0.14.0: `compile_options` für libraries[] (§7, E105 bei INTERFACE); Quellpaket einer Library im Block `packages` (`library` statt `contents`, [Packages.md](Packages.md) §2.5, E106)** |
 | **1.0.5** | **2026-10-23** | **CMakeCraft v0.12.0: Block `settings.msvc` mit `parallel_compile` (§4.4, Vorgabe 8), E004** |

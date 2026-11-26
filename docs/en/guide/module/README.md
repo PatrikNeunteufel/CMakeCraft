@@ -29,7 +29,7 @@ The module documentation describes all CMake modules of the build system. Each m
 | Category | Description | Modules |
 |----------|-------------|---------|
 | **Core** | Basic functions | 10 modules |
-| **Project** | Project creation | 17 modules |
+| **Project** | Project creation | 18 modules |
 | **Externals** | Dependency management | 9 modules + hooks, includes, system packages |
 
 ---
@@ -47,7 +47,7 @@ The module documentation describes all CMake modules of the build system. Each m
 
 | Folder | Description |
 |--------|-------------|
-| [buildSystemTest/](buildSystemTest/buildSystemTest_README.md) | Phase test documentation (phase 1–11) |
+| [buildSystemTest/](buildSystemTest/buildSystemTest_README.md) | Phase test documentation (phase 1–12) |
 | [core/](core/core_README.md) | Core modules (Errors, Debug, Context, etc.) |
 | [externals/](externals/README.md) | External management system |
 | [project/](project/project_README.md) | Project pipeline (Executables, Libraries, Apps, Tests) |
@@ -125,5 +125,6 @@ externals/
 
 | Version | Date | Changes |
 |---------|------|---------|
+| **1.0.2** | **2026-11-26** | **CMakeCraft v0.15.0: project 18 modules (`Documentation.cmake`), phase tests 1–12** |
 | **1.0.1** | **2026-11-09** | **Aligned with the code: phase tests 1–11; module counts (core 10 with `Configurations.cmake`, project 17); phases of the module groups; externals tree with `local/` and `system/`** |
 | 1.0.0 | 2025-12-26 | Release 1 (carried over from newCMake, `2e00db7`) |

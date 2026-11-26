@@ -1,7 +1,7 @@
 # CMakeLists.txt — Referenz
 
-> **Version:** 1.0.2  
-> **Datum:** 2026-11-09  
+> **Version:** 1.0.3  
+> **Datum:** 2026-11-26  
 > **Typ:** Reference  
 > **Status:** Stabil  
 > **Zielgruppe:** Alle Entwickler  
@@ -87,8 +87,9 @@ mit `-DCMAKECRAFT_LOCAL_DIR=<checkout>`), beschreibt der [Neues_Projekt_Guide](.
 | **Phase 3** | Executables |
 | **Phase 8** | App-Container |
 | **Phase 10** | Packages (braucht die Targets davor) |
+| **Phase 12** | Documentation: Ziel `docs` aus `documentation.doxygen` |
 | **Phase 7** | Tests (nur bei `BUILD_TESTS`) |
-| **Build-System-Tests** | Phasentests 1–11 (nur bei `RUN_BUILD_SYSTEM_TESTS`) |
+| **Build-System-Tests** | Phasentests 1–12 (nur bei `RUN_BUILD_SYSTEM_TESTS`) |
 | **Cleanup** | Temporäre Variablen aufräumen |
 
 ### 2.2 Phasen-Nummern
@@ -115,6 +116,7 @@ mit `-DCMAKECRAFT_LOCAL_DIR=<checkout>`), beschreibt der [Neues_Projekt_Guide](.
 | **9** | System-Externals | system/Handler, system/PathResolver, system/packages (Qt6, Boost) | ✅ |
 | **10** | Packages & Archiv-Externals | Packages, PackageBuild (Build-Zeit-Skript), archive/Handler, `CMakeCraftPackage.cmake` | ✅ |
 | **11** | Bibliotheks-`compile_options` & Quellpaket | LibraryCreate, SourcePackage | ✅ |
+| **12** | Dokumentation (Doxygen) | Documentation | ✅ |
 
 ### Ausführungsreihenfolge
 
@@ -128,8 +130,9 @@ mit `-DCMAKECRAFT_LOCAL_DIR=<checkout>`), beschreibt der [Neues_Projekt_Guide](.
  7. Executables      (Phase 3)
  8. Apps             (Phase 8)
  9. Packages         (Phase 10, 11) ← braucht die Targets davor
-10. Tests            (Phase 7)  ← nur bei BUILD_TESTS
-11. Phasentests 1–11            ← nur bei RUN_BUILD_SYSTEM_TESTS
+10. Documentation    (Phase 12) ← nur mit Block documentation
+11. Tests            (Phase 7)  ← nur bei BUILD_TESTS
+12. Phasentests 1–12            ← nur bei RUN_BUILD_SYSTEM_TESTS
 ```
 
 ---
@@ -271,7 +274,15 @@ include("${CMAKECRAFT_DIR}/project/Packages.cmake")
 
 Legt die Targets `package_<name>` an (lädt `SourcePackage.cmake` für Quellpakete, Phase 11).
 
-### 5.9 Phase 7: Tests
+### 5.9 Phase 12: Documentation
+
+```cmake
+include("${CMAKECRAFT_DIR}/project/Documentation.cmake")
+```
+
+Legt aus `documentation.doxygen` das Ziel `docs` an (Doxygen mit der Doxyfile des Projekts, nicht Teil von `ALL`). Ohne den Block geschieht nichts.
+
+### 5.10 Phase 7: Tests
 
 ```cmake
 if(BUILD_TESTS)
@@ -300,6 +311,7 @@ endif()
 | `EXECUTABLES` | Executables.cmake | Executable-Pipeline |
 | `APPS` | Apps.cmake | App-Container-Pipeline |
 | `PACKAGES` | Packages.cmake | Package-Pipeline |
+| `DOCUMENTATION` | Documentation.cmake | Ziel `docs` (Doxygen) |
 | `TESTS` | TestCollect.cmake | Test-Sammlung; `Tests.cmake` selbst schreibt mit `message(STATUS "[Tests] …")` |
 
 ### 6.3 Beispiel-Ausgabe
@@ -348,6 +360,7 @@ Die Phasentests liegen unter `cmake/buildSystemTest/` und laufen nach der Pipeli
 | 9 | `phase9.cmake` | System-Externals |
 | 10 | `phase10.cmake` | Packages und Archiv-Externals |
 | 11 | `phase11.cmake` | `compile_options` von Bibliotheken und Quellpakete |
+| 12 | `phase12.cmake` | Ziel `docs` aus `documentation.doxygen` |
 
 ### 7.2 Test-Flags
 
@@ -405,6 +418,7 @@ CMakeCraft/
 │   │   ├── Externals.cmake
 │   │   ├── Apps.cmake, AppCollect.cmake, AppCreate.cmake
 │   │   ├── Packages.cmake, PackageBuild.cmake, SourcePackage.cmake
+│   │   ├── Documentation.cmake
 │   │   └── Tests.cmake, TestCollect.cmake, TestCreate.cmake
 │   ├── externals/              ← Externals-System (Phase 5, 6, 9, 10)
 │   │   ├── Orchestrator.cmake
@@ -422,7 +436,7 @@ CMakeCraft/
 │   │       └── lua54/
 │   └── buildSystemTest/        ← Build-System-Tests
 │       ├── README.md
-│       └── phase1.cmake … phase11.cmake
+│       └── phase1.cmake … phase12.cmake
 ├── externals/                  ← Lokale Externals der Demo-Solution
 │   ├── bass/
 │   ├── calcext/
@@ -581,6 +595,7 @@ cmake -B build -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64
 - [Externals.md](project/Externals.md)
 - [Apps.md](project/Apps.md)
 - [Packages.md](project/Packages.md)
+- [Documentation.md](project/Documentation.md)
 - [Tests.md](project/Tests.md)
 
 ### Build-System-Tests
@@ -600,6 +615,7 @@ cmake -B build -DCMAKE_PREFIX_PATH=/path/to/Qt/6.6.0/gcc_64
 
 | Version | Datum | Änderungen |
 |---------|-------|------------|
+| **1.0.3** | **2026-11-26** | **CMakeCraft v0.15.0: Phase 12 (Documentation.cmake, Ziel `docs`) und Phasentest 12; Abschnitt 5.9 neu, Tests jetzt 5.10** |
 | **1.0.2** | **2026-11-09** | **An den Code angeglichen: Einstieg `CMakeCraft.cmake` (selbst-lokalisierend, `CMAKECRAFT_DIR`), `CMakeLists.txt` als Dünnfassung mit Pflichtzeile `project()`; Ausführungsreihenfolge Externals → Libraries → Executables → Apps → Packages → Tests; Phasen 1–11 und Phasentests 1–11; `RUN_BUILD_SYSTEM_TESTS` Default `OFF`, Preset `craft-selftest`; `BUILD_TESTS`, Debug-Level, Debug-IDs, Verzeichnisbaum und Fehlermeldungen (E005, E101, E010) wie im Code** |
 | 1.0.1 | 2026-10-09 | CMakeCraft v0.10.0: Phase 10 (Packages) und Phasentest 10 nachgetragen; CMake-Minimum 3.26 |
 | 1.0.0 | 2025-12-26 | Release 1 (aus newCMake übernommen, `2e00db7`) |
